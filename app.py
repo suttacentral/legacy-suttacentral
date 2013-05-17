@@ -54,5 +54,7 @@ class App:
 if __name__ == '__main__':
     cherrypy.quickstart(App(), config=config)
 else:
-    cherrypy.config.update({'engine.autoreload.on': False})
+    # For some reason, this mode requires global settings to be explicitly
+    # injected.
+    cherrypy.config.update(config['global'])
     cherrypy.tree.mount(App(), config=config)

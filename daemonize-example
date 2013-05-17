@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# Copy to daemonize and edit.
+
+HOME=/path/to/home
+source $HOME/.virtualenvs/suttacentral/bin/activate
+cd $HOME/path/to/suttacentral
+exec cherryd -i app
