@@ -22,7 +22,7 @@ def deep_update(a, b):
 config = cherrypy.lib.reprconf.as_dict(CONFIG_PATH)
 try:
     deep_update(config, cherrypy.lib.reprconf.as_dict(LOCALCONFIG_PATH))
-except FileNotFoundError:
+except IOError:
     pass
 deep_update(config, {'/': {
     'tools.staticdir.root': os.path.join(BASE_PATH, 'static')
