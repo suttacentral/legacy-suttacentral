@@ -4,6 +4,7 @@
 # Copy this file to local.conf and edit as you like.
 
 [global]
+    # server.socket_host: '127.0.0.1'
     # server.socket_port: 8088
     # engine.autoreload.on: False
 [db]
