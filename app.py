@@ -42,7 +42,7 @@ class App:
     @cherrypy.expose
     def index(self):
         cursor = db.cursor()
-        cursor.execute("SELECT sutta_acronym, sutta_name from sutta LIMIT 10;")
+        cursor.execute("SELECT sutta_acronym, sutta_name from sutta LIMIT 15;")
         suttas = cursor.fetchall()
         tmpl = env.get_template('index.html')
         return tmpl.render(suttas=suttas)

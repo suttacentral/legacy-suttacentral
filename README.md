@@ -7,3 +7,9 @@ Assumes a Python 3 `virtualenv` (e.g., `python` and `pip` pointing to a Python 3
 ## Start the server
 
     python app.py
+
+## Deploy code to staging
+
+    make deploy-staging
+
+Then visit <http://staging.suttacentral.net/>.
