@@ -4,38 +4,55 @@ import mysql.connector
 from jinja2 import Environment, FileSystemLoader
 
 BASE_PATH = os.path.realpath(os.path.dirname(__file__))
+CONFIG_PATH = os.path.join(BASE_PATH, 'app.conf')
+LOCALCONFIG_PATH = os.path.join(BASE_PATH, 'local.conf')
 
-config = {
-    '/': {
-        'tools.staticdir.root': os.path.join(BASE_PATH, 'static'),
-    },
-    '/css': {
-        'tools.staticdir.on': True,
-        'tools.staticdir.dir': 'css'
-    },
-    '/js': {
-        'tools.staticdir.on': True,
-        'tools.staticdir.dir': 'js'
-    }
-}
+#
+# Configuration
+#
 
-dbconfig = {
-    'user': 'suttacentral',
-    'password': 'suttacentral',
-    'database': 'suttacentral'
-}
+def deep_update(a, b):
+    for k, v in b.items():
+        if k in a and isinstance(a[k], dict) and isinstance(b[k], dict):
+            deep_update(a[k], b[k])
+        else:
+            a[k] = v
+    return a
+
+config = cherrypy.lib.reprconf.as_dict(CONFIG_PATH)
+try:
+    deep_update(config, cherrypy.lib.reprconf.as_dict(LOCALCONFIG_PATH))
+except FileNotFoundError:
+    pass
+deep_update(config, {'/': {
+    'tools.staticdir.root': os.path.join(BASE_PATH, 'static')
+}})
+
+cherrypy.engine.autoreload.files.add(os.path.join(BASE_PATH, 'app.conf'))
+cherrypy.engine.autoreload.files.add(os.path.join(BASE_PATH, 'local.conf'))
+
+#
+# App
+#
 
 env = Environment(loader=FileSystemLoader('templates'))
-db = mysql.connector.connect(**dbconfig)
+db = mysql.connector.connect(**config['db'])
 
 class App:
     @cherrypy.expose
     def index(self):
-        tmpl = env.get_template('index.html')
         cursor = db.cursor()
         cursor.execute("SELECT sutta_acronym, sutta_name from sutta LIMIT 10;")
         suttas = cursor.fetchall()
+        tmpl = env.get_template('index.html')
         return tmpl.render(suttas=suttas)
+
+#
+# Start
+#
 
 if __name__ == '__main__':
     cherrypy.quickstart(App(), config=config)
+else:
+    cherrypy.config.update({'engine.autoreload.on': False})
+    cherrypy.tree.mount(App(), config=config)
