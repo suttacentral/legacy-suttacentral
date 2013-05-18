@@ -1,6 +1,6 @@
 import os
 import cherrypy
-import mysql.connector
+import sqlalchemy
 from jinja2 import Environment, FileSystemLoader
 
 BASE_PATH = os.path.realpath(os.path.dirname(__file__))
@@ -39,11 +39,33 @@ cherrypy.engine.autoreload.files.add(os.path.join(BASE_PATH, 'app.conf'))
 cherrypy.engine.autoreload.files.add(os.path.join(BASE_PATH, 'local.conf'))
 
 #
-# App
+# Database Setup
 #
 
+db_connection = ('mysql+mysqlconnector://' +
+    '%(user)s:%(password)s@%(host)s:%(port)s/%(database)s') % config['db']
+# Automatically recycle connections after one hour because the MySQL server
+# automatically disconnects connections after about 8 hours of non-use.
+db_engine = sqlalchemy.create_engine(db_connection, pool_recycle=3600)
+
+def db_connection():
+    """
+        Return a db connection pessimistically.
+        See http://docs.sqlalchemy.org/en/rel_0_8/core/pooling.html
+    """
+    global db_engine
+    cursor = db_engine.connect()
+    try:
+        cursor.execute('SELECT 1')
+    except sqlalchemy.exc.OperationalError as e:
+        print('Lost connection to database, trying to reconnect')
+        cursor.close()
+        cursor = db_engine.connect()
+    return cursor
+
+# App
+
 env = Environment(loader=FileSystemLoader('templates'))
-db = mysql.connector.connect(**config['db'])
 
 def error_page_404(status, message, traceback, version):
     return open(os.path.join(STATIC_BASE_PATH, '404.html'), 'r').read()
@@ -56,9 +78,9 @@ class App:
 
     @cherrypy.expose
     def index(self):
-        cursor = db.cursor()
-        cursor.execute("SELECT sutta_acronym, sutta_name from sutta LIMIT 15;")
-        suttas = cursor.fetchall()
+        cursor = db_connection()
+        suttas = cursor.execute(
+            "SELECT sutta_acronym, sutta_name from sutta LIMIT 15;").fetchall()
         tmpl = env.get_template('index.html')
         return tmpl.render(suttas=suttas)
 
