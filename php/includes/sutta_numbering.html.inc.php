@@ -1,0 +1,48 @@
+<div id="onecol">
+<section>
+<article>
+<h1>Sutta Numbering</h1>
+<h2>Pali Sutta Numbers</h2>
+<p>The numbering of Pali suttas generally follows that used in the Pali Text Society (<span class="smallcaps">PTS</span>) editions. However, there are the following three exceptions.</p>
+<p>1) In the first two <i>nipātas</i> of AN the PTS numbering recognises three levels of grouping (for <i>nipāta</i>, <i>vagga</i>, <i>sutta</i>). In such cases we follow the widely accepted practice of dispensing with the second level. This involves applying a simple mechanical principle, illustrated in the following examples:</p>
+<p>AN 1.1.6 becomes AN 1.6</p>
+<p>AN 1.8.1 becomes AN 1.71</p>
+<p>AN 2.2.9 becomes AN 2.19</p>
+<p>Nevertheless, in the SuttaCentral tables the <span class="smallcaps">PTS</span> sutta number with three levels is included, within square brackets, after the two-level number. For example, regardless of whether you type AN 1.71 or AN 1.8.1 into the “Search” box, the “Search results” screen will show the following:</p>
+<table>
+<tr><td>AN 1.71 [AN 1.8.1]</td><td>Kalyāṇamitta</td><td>AN i 14</td></tr>
+</table>
+<p>That is, a search based on either of the two number formats will take you to the required discourse.</p>
+<p>2) For Volume i of SN, Sagātha-Vagga, there are again two numbers shown for each sutta. For example:</p>
+<table>
+<tr><td>SN 3.13 [SN 124]</td><td>Doṇapāka</td><td>SN i 81 &lt;SN i 185&gt;</td></tr>
+</table>
+<p>The sutta number without brackets refers to Feer’s 1884 edition of this vagga. The sutta number enclosed in square brackets (running from 1 to 271) refers to Somaratne’s 1998 edition. In this example, regardless of whether you type SN 3.13 or SN 124 in the “Search” box, you will be taken to the entry for the Doṇapāka-sutta.</p>
+<p>Here there are two corresponding page numbers. The page number within angle brackets refers to the Somaratne edition (following the practice in Bhikkhu Bodhi’s English translation). If you are searching by volume and page number within SN volume i, then the “Search results” screen may show two possible outcomes. For example, searching for SN i 185 will return this:</p>
+<table>
+<tr><td>SN 3.13 [SN 124]</td><td>Doṇapāka</td><td>SN i 81 &lt;SN i 185&gt;</td></tr>
+<tr><td>SN 8.1 [SN 209]</td><td>Nikkhanta</td><td>SN i 185 &lt;SN i 398&gt;</td></tr>
+</table>
+<p>You can then choose the one you require. For page numbers higher than 241 in SN vol. i, only one row will appear, since these higher page numbers exist only in the new Somaratne edition.</p>
+<p>3) Throughout SN and AN we follow the sutta numbering adopted in Bhikkhu Bodhi’s English translations, which in some sections differs from the <span class="smallcaps">PTS</span> numbering. This is a more rational system based mainly on what is found in native-script editions and the Chaṭṭha Saṅgāyana edition. Here again, wherever there is a difference, both numbers are shown, with the <span class="smallcaps">PTS</span> number in square brackets; e.g., SN 35.228 [SN 35.188], AN 3.34 [AN 3.35]. The sections affected in this way are the following:</p>
+<p>SN: from SN 22.150 [SN 22.149] to end of <i>saṃyutta</i></p>
+<p>from SN 35.136 [SN 35.135] to end of <i>saṃyutta</i></p>
+<p>from SN 36.26 [SN 36.25] to end of <i>saṃyutta</i></p>
+<p>AN: from AN 1.98 [AN 1.10.1] to end of <i>nipāta</i></p>
+<p>from AN 2.23 [AN 2.3.3 + 2.3.4] to end of <i>nipāta</i></p>
+<p>from AN 3.34 [AN 3.33] to end of <i>nipāta</i></p>
+<p>from AN 4.227 [AN 4.226] to end of <i>nipāta</i></p>
+<p>from AN 7.19 [AN 7.17] to end of <i>nipāta</i></p>
+<p>from AN 10.211 [AN 10.200] to end of <i>nipāta</i></p>
+<p>from AN 11.8 [AN 11.9] to end of <i>nipāta</i></p>
+<p>For example, in the <span class="smallcaps">PTS</span> edition of SN, the sutta titled “Etaṃ mama” in Khandha-saṃyutta is numbered SN 22.150; and in Bhikkhu Bodhi’s English translation (as also in several native-script editions of the Pali text) this sutta is instead numbered SN 22.151. However, if you type the <span class="smallcaps">PTS</span> number SN 22.150 in the “Search” box, you will still get to the sutta you require, because the “Search results” screen will return both possible results:</p>
+<table>
+<tr><td>SN 22.150 [SN 22.149]</td><td>Ajjhatta</td><td>SN iii 180</td></tr>
+<tr><td>SN 22.151 [SN 22.150]</td><td>Etaṃ mama</td><td>SN iii 181</td></tr>
+</table>
+<p>You can then choose the relevant one, bearing in mind that the sutta number in square brackets is the <span class="smallcaps">PTS</span> number.</p>
+<p>In most cases there is no such ambiguity about the sutta number and therefore no alternative number within square brackets.</p>
+
+</article>
+</section>
+</div>
