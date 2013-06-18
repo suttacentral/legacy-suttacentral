@@ -9,7 +9,7 @@ deploy-staging:
 		sudo supervisorctl restart sc-staging'
 
 deploy-production:
-	ssh sc-staging@vps.suttacentral.net \
+	ssh sc-production@vps.suttacentral.net \
 		cd $$HOME/suttacentral && \
 		git pull && \
 		cd text && \
