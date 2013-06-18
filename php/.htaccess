@@ -4,7 +4,7 @@ RewriteEngine on
 #   Output: /browse.php?show=text&text_acronym=sutta
 
 # Redirect
-RewriteRule ^new/(.*) $1 [R]
+RewriteRule ^new/(.*) /$1 [R]
 
 #Special pages
 RewriteRule ^(about|contacts|methodology|bibliography|abbreviations|sutta_numbering|help)/?$ index.php?show=$1 [NC,L]
