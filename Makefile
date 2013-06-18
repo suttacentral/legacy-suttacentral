@@ -8,8 +8,9 @@ deploy-staging:
 		pip install -r requirements.txt && \
 		sudo supervisorctl restart sc-staging'
 
-deploy-php:
-	TODO
-
 deploy-production:
-	TODO
+	ssh sc-staging@vps.suttacentral.net \
+		cd $$HOME/suttacentral && \
+		git pull && \
+		cd text && \
+		git pull
