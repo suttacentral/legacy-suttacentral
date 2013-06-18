@@ -10,7 +10,7 @@ deploy-staging:
 
 deploy-production:
 	ssh sc-production@vps.suttacentral.net \
-		cd $$HOME/suttacentral && \
+		'cd $$HOME/suttacentral && \
 		git pull && \
 		cd text && \
-		git pull
+		git pull'
