@@ -1,0 +1,21 @@
+{% extends "base.html" -%}
+
+{% import 'macros.html' as macros with context %}
+{%- block content -%}
+<div id='onecol'>
+<table>
+<caption>Collection: <strong>{{division.collection.name}}</strong> — Division: 
+<strong>
+<a href='/{{division.uid}}/full'>{{division.name}}</a> ({{division.acronym}})
+</strong>
+<thead>
+{% for subdivision in division.subdivisions -%}
+<tr>
+<td>{{division.acronym}} {{subdivision.acronym}}</td>
+<td><a href='/{{subdivision.uid}}'>{{subdivision.name}}</a></td>
+</tr>
+{%- endfor %}
+{{macros.table_footer()}}
+</table>
+</div>
+{%- endblock -%}

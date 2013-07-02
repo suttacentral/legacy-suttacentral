@@ -1,0 +1,59 @@
+{# This file contains all the Jinja macros for the project #}
+
+{# Linkafy acronym if possible and replace spaces with non-breakers.
+   Optionally show the alt_sutta_acronym #}
+{% macro sutta_acronym(sutta, show_alt) %}
+{%- if sutta.url -%}{# TODO: Insert nbsp where needed #}
+<a href='{{sutta.url}}' title='Go to original text for {{sutta.acronym}}'>
+{{sutta.acronym|replace(" ", "&nbsp;")}}</a>
+{%- else -%}
+{{sutta.acronym|replace(" ", "&nbsp;")}}
+{%- endif -%}
+{%- if sutta.alt_acronym and show_alt-%}
+ <span class='altAcronym'>{{sutta.alt_acronym|replace(" ", "&nbsp;")}}</span>
+{%- endif -%}
+{% endmacro %}
+
+{# sutta_row: A macro to display a sutta row #}
+{% macro sutta_row(sutta) -%}
+<tr>
+<td>
+{{sutta_acronym(sutta, show_alt=True)}}
+</td>
+<td>{{sutta.name}}</td>
+<td>{{sutta.volpage_info}}
+{%- if sutta.alt_volpage_info %} <span class='altVolPage'>{{sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
+{%- endif %}
+</td>
+<td>
+{%- for parallel in sutta.parallels -%}
+{{sutta_acronym(parallel.sutta, show_alt=False)}}
+{%- if parallel.partial -%}*{%- endif -%}
+{% if not loop.last %}, {% else %} <a href='/{{sutta.uid}}' 
+ title='Correspondence details for {{sutta.acronym}}' class="details">▶</a>
+{% endif %}
+{%- endfor %}
+</td>
+<td>
+{% for translation in sutta.translations -%}
+<a href='{{translation.url}}' class='tran' title='{{translation.abstract}}'>{{translation.lang.code}}</a>{% if not loop.last %} | {% endif %} 
+{% endfor -%}
+</td>
+</tr>
+{%- endmacro -%}
+
+{# This macro should be called with the context.
+   If either or both flags are set in the context
+   then the extra footer info is included in the page #}
+{% macro table_footer() -%}
+{% if has_alt_acronym or has_alt_volpage -%} 
+<tfoot>
+{% if has_alt_acronym -%}
+<tr><td colspan="4">[...] indicates alternative PTS or Taishō numbering.</td><tr>
+{%- endif -%}
+{% if has_alt_volpage %}
+<tr><td colspan="4">&lt;...> refers to PTS 1998 (Somaratne) edition of SN Vol I.</td></tr>
+{% endif -%}
+</tfoot>
+{% endif -%}
+{% endmacro %}

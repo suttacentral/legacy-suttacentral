@@ -1,0 +1,30 @@
+{% extends "base.html" -%}
+{% import 'macros.html' as macros with context %}
+{%- block content -%}
+<div id='onecol'>
+<table>
+<caption>Collection: <strong>{{subdivision.division.collection.name}}</strong> — Division: <strong>
+{{subdivision.division.name}} ({{subdivision.division.acronym}}) </strong> — Sub-Division: <strong>
+{{subdivision.name}}</strong>
+</caption>
+<thead>
+<tr>
+<th>Identifier</th>
+<th>Title</th>
+<th>Vol/Page</th>
+<th>Parallels</th>
+<th class='transcol'>Translations</th>
+</tr>
+</thead>
+{% for vagga in subdivision.vaggas %}
+{% if vagga.name -%}
+<tr><td colspan='5' class='vagga'>{{vagga.name}}</td></tr>
+{%- endif %}
+{% for sutta in vagga.suttas -%}
+{{macros.sutta_row(sutta)}}
+{%- endfor %}
+{%- endfor %}
+{{macros.table_footer()}}
+</table>
+</div>
+{%- endblock -%}
