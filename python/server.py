@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 
 import os, sys
-
-# See http://stackoverflow.com/questions/10095037/why-use-sys-path-appendpath-instead-of-sys-path-insert1-path
-sys.path.insert(1, os.path.join(os.path.realpath(os.path.dirname(__file__)), 'python'))
-
 import cherrypy
 import config, logger, root
 

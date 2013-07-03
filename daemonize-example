@@ -4,5 +4,5 @@
 
 HOME=/path/to/home
 source $HOME/.virtualenvs/suttacentral/bin/activate
-cd $HOME/path/to/suttacentral
+cd $HOME/path/to/suttacentral/python
 exec cherryd -i server

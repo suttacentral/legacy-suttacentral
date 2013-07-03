@@ -1,4 +1,7 @@
-all:
+all: server
+
+server:
+	cd python && ./server.py
 
 deploy-staging:
 	ssh sc-staging@vps.suttacentral.net \

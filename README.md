@@ -42,7 +42,9 @@ Copy `local.conf-example` to `local.conf` and update the `mysql` database settin
 
 ### Start
 
-    python server.py
+    make server
+
+Then visit <http://localhost:8800/>.
 
 ## Deploy
 

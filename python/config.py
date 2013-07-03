@@ -55,8 +55,8 @@ class Config(dict):
     """
 
     ABSOLUTE_PATHS = [
-        ['global', 'access_file'],
-        ['global', 'error_file'],
+        ['global', 'log.access_file'],
+        ['global', 'log.error_file'],
         ['app', 'app_log_file'],
         ['app', 'dbr_cache_file'],
         ['app', 'static_root'],
