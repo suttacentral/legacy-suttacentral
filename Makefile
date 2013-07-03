@@ -17,3 +17,15 @@ deploy-production:
 		git pull && \
 		cd text && \
 		git pull'
+
+clean:
+	rm -rf \
+		__pycache__ \
+		python/__pycache__ \
+		log/*.log \
+		tmp/dbr.cache
+
+clean-db:
+	rm -f db/sc.sqlite
+
+clean-all: clean clean-db
