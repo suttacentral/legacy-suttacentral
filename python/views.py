@@ -2,13 +2,13 @@ from menu import menu_data
 from classes import Parallel, Sutta
 from jinja2 import Environment, FileSystemLoader
 
-import setup, regex
+import config, regex
 
 # The base class for all SuttaCentral views.
 class ViewBase:
     def __init__(self):
         # Subclasses use this object to obtain templates.
-        self.env = Environment(loader=FileSystemLoader('templates'))
+        self.env = Environment(loader=FileSystemLoader(config.templates_root))
 
         # Subclasses assign a template
         self.template = None
@@ -75,14 +75,14 @@ class TextView(ViewBase):
         ViewBase.makeContext(self)
         import os.path
 
-        filename = os.path.join(setup.text_root, self.lang, self.uid) + '.html'
+        filename = os.path.join(config.text_root, self.lang, self.uid) + '.html'
         try:
             f = open(filename)
         except OSError:
             try:
                 url = scdb.getDBR().suttas[uid].url
                 m = regex.search(r'/([^/]*)/([^/]*)/([^/]*)', url)
-                filename = os.path.join(setup.text_root, lang, m[1]) + '.html'
+                filename = os.path.join(config.text_root, lang, m[1]) + '.html'
                 if os.path.exists(filename):
                     cherrypy.lib.cptools.redirect(url=url, internal=False)
                 else:

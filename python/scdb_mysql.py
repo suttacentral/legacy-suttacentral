@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.3
 
 # Import user modules.
-import setup, textfunctions
+import config, textfunctions
 from classes import Sutta, Translation, Parallel, Vagga, BiblioEntry, Subdivision, Division, Collection, Language
 
 from mysql import connector as mysql
@@ -9,7 +9,8 @@ from mysql import connector as mysql
 import collections, functools, itertools, time, regex, hashlib, os, threading, math, datetime, cherrypy
 from collections import OrderedDict, defaultdict, namedtuple
 
-logger = setup.logging.getLogger(__name__)
+from logger import getLogger
+logger = getLogger(__name__)
 
 def numsort(input, index=0):
     """ Numerical sort. Handles identifiers well.
@@ -448,7 +449,7 @@ class _DBR:
     def build_file_data(self):
         self.static_pages = []
         return
-        self.static_pages = ([a[:-5] for a in os.listdir(setup.static_root)
+        self.static_pages = ([a[:-5] for a in os.listdir(config.static_root)
                                 if a.endswith('.html')])
 
     def deep_md5(self, ids=False):
@@ -581,7 +582,7 @@ def _buildDBR(timestamp):
     # from the very start of the process, so if the database changes
     # while the build is happening, we will know to re-build.
     start=time.time()
-    con = mysql.connect(**setup.mysql_settings)
+    con = mysql.connect(**config.mysql)
     db = db_grab(con)
     bstart=time.time()
     _dbr = _DBR(db, timestamp)
@@ -603,7 +604,7 @@ def getDBR():
 
     """
     
-    con = mysql.connect(**setup.mysql_settings)
+    con = mysql.connect(**config.mysql)
     timestamp = db_modified(con)
     con.close()
 
@@ -623,7 +624,7 @@ def getDBR():
         except (NameError, AttributeError):
             buildthread.join(timeout=30) # Wait if we can't.
             dbr = _dbr
-    if setup.RUNTIME_TESTS:
+    if config.runtime_tests:
         checkDBR()
     return dbr
 

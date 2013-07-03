@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.3
 
-import regex, setup, scdb, cherrypy, os, os.path
+import regex, scdb, cherrypy, os, os.path
 
 from jinja2 import Environment, FileSystemLoader
 

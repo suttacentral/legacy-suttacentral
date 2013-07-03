@@ -1,4 +1,3 @@
-#!/usr/bin/env python3.3
 import cherrypy
 import suttacen, show, time
 
@@ -25,12 +24,3 @@ class Root(object):
     def index(self):
         return suttacen.home()
         return 'Hello and welcome to Sutta Central!'
-
-
-cherrypy.tree.mount(Root(), "/", config="suttacen.conf")
-
-if __name__ == '__main__':
-    cherrypy.config['server.socket_port'] = 8800
-    cherrypy.engine.autoreload.on = True
-    cherrypy.engine.start()
-    cherrypy.engine.block()

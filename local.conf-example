@@ -4,12 +4,25 @@
 # Copy this file to local.conf and edit as you like.
 
 [global]
+    # engine.autoreload.on: True
+    # log.access_file: 'log/access.log'
+    # log.error_file: 'log/error.log'
+    # log.screen: True
     # server.socket_host: '127.0.0.1'
-    # server.socket_port: 8088
-    # engine.autoreload.on: False
-[db]
-    # user: 'suttacentral'
-    # password: 'suttacentral'
-    # database: 'suttacentral'
+    # server.socket_port: 8800
+[app]
+    # app_log_file: 'log/app.log'
+    # dbr_cache_file: 'tmp/dbr.cache'
+    # debug: True
+    # runtime_tests: True
+    # static_root: 'static'
+    # templates_root: 'python/templates'
+    # text_root: 'text'
+[mysql]
     # host: 'localhost'
     # port: 3306
+    # user: 'sc'
+    # password: 'sc'
+    # db: 'sc'
+[sqlite]
+    # db: 'db/sc.sqlite'

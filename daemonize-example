@@ -5,4 +5,4 @@
 HOME=/path/to/home
 source $HOME/.virtualenvs/suttacentral/bin/activate
 cd $HOME/path/to/suttacentral
-exec cherryd -i app
+exec cherryd -i server

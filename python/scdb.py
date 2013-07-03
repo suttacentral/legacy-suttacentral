@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.3
 
 # Import user modules.
-import setup, textfunctions
+import config, textfunctions
 from classes import Sutta, Translation, Parallel, Vagga, BiblioEntry, Subdivision, Division, Collection, CollectionLanguage, ReferenceLanguage
 
 from mysql import connector as mysql
@@ -10,7 +10,8 @@ import sqlite3
 import collections, functools, itertools, time, regex, hashlib, os, threading, math, datetime, pickle, cherrypy
 from collections import OrderedDict, defaultdict, namedtuple
 
-logger = setup.logging.getLogger(__name__)
+from logger import getLogger
+logger = getLogger(__name__)
 
 def numsortkey(input, index=0):
     """ Numerical sort. Handles identifiers well.
@@ -83,14 +84,14 @@ class _DBR:
     warnings = []
     
     def __init__(self, timestamp):
-        #con = mysql.connect(**setup.mysql_settings)
-        con = sqlite3.connect(setup.sqlite3_settings['db'])
+        #con = mysql.connect(**config.mysql)
+        con = sqlite3.connect(config.sqlite['db'])
         db = db_grab(con)
         self.build_suttas(db)
         self.build_references(db)
         self.build_parallels_data(db)
         self.timestamp = timestamp
-        pickle.dump(self, open(setup.dbr_cache, 'wb'))
+        pickle.dump(self, open(config.dbr_cache_file, 'wb'))
         self.build_stage2()
         
     def build_stage2(self):
@@ -491,7 +492,7 @@ class _DBR:
         
     def build_file_data(self):
         self.static_pages = ()
-        #([a[:-5] for a in os.listdir(setup.static_root) if a.endswith('.html')])
+        #([a[:-5] for a in os.listdir(config.static_root) if a.endswith('.html')])
 
     def deep_md5(self, ids=False):
         """ Calculate a md5 for the data. Takes ~0.5s on a fast cpu.
@@ -664,20 +665,20 @@ class Updater(threading.Thread):
     build_completed = threading.Event() # Signal that the dbr is ready.
     
     def get_sqlite_timestamp(self):
-        with sqlite3.connect(setup.sqlite3_settings['db']) as con:
+        with sqlite3.connect(config.sqlite['db']) as con:
             try:
                 return con.execute('SELECT value FROM dbr_info WHERE label=?', ('mysql_timestamp', )).fetchone()[0]
             except (TypeError, sqlite3.OperationalError):
                 return 'NOTFOUND'
     
     def set_sqlite_timestamp(self, timestamp):
-        with sqlite3.connect(setup.sqlite3_settings['db']) as con:
+        with sqlite3.connect(config.sqlite['db']) as con:
             con.execute('CREATE TABLE dbr_info (label UNIQUE, value)')
             con.execute('INSERT INTO dbr_info VALUES (?, ?)', ('mysql_timestamp', timestamp) )
     
     def convertdb(self, mysql_timestamp):
         from mysql2sqlite3 import convert
-        convert(setup.mysql_settings, lite_db=setup.sqlite3_settings['db'], cull_list=('timestamp', 'login'), no_index=True)
+        convert(config.mysql, lite_db=config.sqlite['db'], cull_list=('timestamp', 'login'), no_index=True)
         self.set_sqlite_timestamp(mysql_timestamp)
         
     def run(self):
@@ -688,7 +689,7 @@ class Updater(threading.Thread):
             sqlite_timestamp = self.get_sqlite_timestamp()
 
             try:
-                con = mysql.connect(**setup.mysql_settings)
+                con = mysql.connect(**config.mysql)
                 mysql_timestamp = db_modified(con)
                 logger.debug('Checking mysql timestamp took {} seconds'.format(time.time()-start))
                 if mysql_timestamp != sqlite_timestamp:
@@ -700,7 +701,7 @@ class Updater(threading.Thread):
             except:
                 # We can continue if mysql is not available, but sqlite
                 # is. But for the moment, we will raise here.
-                if setup.DEBUG:
+                if config.debug:
                     raise
             finally:
                 con.close()
