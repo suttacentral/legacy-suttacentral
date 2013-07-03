@@ -3,7 +3,7 @@
 ## Dependencies
 
 - MySQL
-- Python 3.2+ and `virtualenv` (e.g., `python` and `pip` pointing to a Python 3 environment) (if developing the Python version)
+- Python 3.3+ and `virtualenv` (e.g., `python` and `pip` pointing to a Python 3 environment) (if developing the Python version)
 - Apache + PHP (if developing the PHP version)
 
 ## Getting the repository
