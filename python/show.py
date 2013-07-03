@@ -6,6 +6,9 @@ from jinja2 import Environment, FileSystemLoader
 
 from views import *
 
+from logger import getLogger
+logger = getLogger(__name__)
+
 def sanitize(string):
     string = string.replace('<', '&lt;')
     string = string.replace('>', '&gt;')
@@ -32,7 +35,7 @@ def dispatch(*args, **kwargs):
         lang = next(a for a in args if a in dbr.lang_codes)
     except StopIteration:
         lang = None
-    print("Display uid={}, lang={}".format(uid, lang))
+    logger.debug("Display uid={}, lang={}".format(uid, lang))
 
     if uid is None and lang is None:
         raise cherrypy.HTTPError(404, "No collection, division, subdivision, sutta or language group by that id exists.")
