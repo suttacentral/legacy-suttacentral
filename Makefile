@@ -5,6 +5,9 @@ deploy-staging:
 		'source $$HOME/.virtualenvs/suttacentral/bin/activate && \
 		cd $$HOME/suttacentral && \
 		git pull && \
+		cd text && \
+		git pull && \
+		cd .. \
 		pip install -r requirements.txt && \
 		sudo supervisorctl restart sc-staging'
 
