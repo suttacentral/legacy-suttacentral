@@ -12,6 +12,8 @@
     # server.socket_port: 8800
 [app]
     # app_log_file: 'log/app.log'
+    # app_log_level: 'DEBUG'
+    # console_log_level: 'DEBUG'
     # dbr_cache_file: 'tmp/dbr.cache'
     # debug: True
     # runtime_tests: True
