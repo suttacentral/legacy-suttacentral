@@ -10,8 +10,8 @@ import sqlite3
 import collections, functools, itertools, time, regex, hashlib, os, threading, math, datetime, pickle, cherrypy
 from collections import OrderedDict, defaultdict, namedtuple
 
-from logger import getLogger
-logger = getLogger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 def numsortkey(input, index=0):
     """ Numerical sort. Handles identifiers well.

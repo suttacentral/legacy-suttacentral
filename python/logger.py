@@ -2,8 +2,8 @@
 
 Usage:
 
-    from logger import getLogger
-    logger = getLogger(__name__)
+    import logging
+    logger = logging.getLogger(__name__)
     ...
     logger.info('my message')
 
@@ -35,9 +35,7 @@ console_log.setLevel(getattr(logging, config.console_log_level))
 console_log.addFilter(cherrypy_filter)
 console_log.setFormatter(formatter)
 
-def __setup():
+def setup():
     logging.root.setLevel(logging.NOTSET)
     logging.root.addHandler(app_log)
     logging.root.addHandler(console_log)
-
-__setup()

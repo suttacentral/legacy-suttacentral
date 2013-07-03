@@ -6,7 +6,9 @@ import os, sys
 sys.path.insert(1, os.path.join(os.path.realpath(os.path.dirname(__file__)), 'python'))
 
 import cherrypy
-import config, root
+import config, logger, root
+
+logger.setup()
 
 cherrypy.engine.autoreload.files.add(config.global_conf_path)
 cherrypy.engine.autoreload.files.add(config.local_conf_path)

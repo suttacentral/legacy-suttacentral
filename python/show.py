@@ -6,8 +6,8 @@ from jinja2 import Environment, FileSystemLoader
 
 from views import *
 
-from logger import getLogger
-logger = getLogger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 def sanitize(string):
     string = string.replace('<', '&lt;')
