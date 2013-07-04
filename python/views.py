@@ -77,7 +77,7 @@ class TextView(ViewBase):
 
         filename = os.path.join(config.text_root, self.lang, self.uid) + '.html'
         try:
-            f = open(filename)
+            f = open(filename, 'r', encoding='utf-8')
         except OSError:
             try:
                 url = scdb.getDBR().suttas[uid].url
