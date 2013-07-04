@@ -32,3 +32,10 @@ clean-db:
 	rm -f db/sc.sqlite
 
 clean-all: clean clean-db
+
+fetch-db-export:
+	cd tmp && curl -O http://suttacentral.net/db-exports/sc-latest.sql.gz
+	echo 'The database is now available in tmp/sc-latest.sql.gz'
+
+regenerate-db-export:
+	ssh sc-production@vps.suttacentral.net '$$HOME/create-db-export'

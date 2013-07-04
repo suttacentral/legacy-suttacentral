@@ -22,13 +22,15 @@ Create the database as MySQL `root` (i.e., `mysql -u root`):
     GRANT ALL PRIVILEGES ON sc.* TO sc@localhost;
     FLUSH PRIVILEGES;
 
-Then preload a database dump with:
+Fetch a copy of the latest database with:
 
-    mysql -u sc -psc sc < sc.sql
+    make fetch-db
 
-Ask somebody on the project if you don't have a copy of the database.
+Then load a database dump with:
 
-**TODO: Auto-dump database and make available by URL.**
+    gunzip tmp/sc-latest.sql.gz | mysql -u sc -psc sc
+
+**TODO: Add db mod needed for new python database.**
 
 ## Python SuttaCentral
 
