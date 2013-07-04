@@ -24,4 +24,4 @@ Deploying the PHP version is similar:
 
     make deploy-production
 
-Then visit <http://php.suttacentral.net/>.
+Then visit <http://suttacentral.net/>.
