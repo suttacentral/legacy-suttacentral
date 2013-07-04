@@ -9,6 +9,9 @@ from views import *
 import logging
 logger = logging.getLogger(__name__)
 
+STATIC_PAGES = ['about', 'abbreviations', 'bibliography', 'contacts', 'help',
+                'methodology', 'sutta_numbering']
+
 def sanitize(string):
     string = string.replace('<', '&lt;')
     string = string.replace('>', '&gt;')
@@ -24,7 +27,7 @@ def dispatch(*args, **kwargs):
     """
     
     dbr = scdb.getDBR()
-    if args[0] in dbr.static_pages:
+    if args[0] in STATIC_PAGES:
         # Static page (i.e. help) view!
         return static_view(args[0])
     try:
