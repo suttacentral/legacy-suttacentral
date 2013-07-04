@@ -16,7 +16,10 @@
 
 <!-- Collections/Divisions go here -->
 <section>
-{% for collection in collections -%}
+{# HACK: We use reverse to collections because its defined in reverse in
+   menu.py. When menu.py gets updated to use the database, this should
+   reflect the proper ordering. #}
+{% for collection in collections|reverse -%}
 <ul>
     <li><h2>{{collection.name}}</h2></li>
 {%- for division in collection.divisions %}
