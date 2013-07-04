@@ -10,7 +10,7 @@ deploy-staging:
 		git pull && \
 		cd text && \
 		git pull && \
-		cd .. \
+		cd .. && \
 		pip install -r requirements.txt && \
 		sudo supervisorctl restart sc-staging'
 
