@@ -1,4 +1,7 @@
+# Install these requirements with pip install -r requirements.txt
 CherryPy>=3.2.4
 mysql-connector-python>=1.0.9
 Jinja2>=2.6
 regex
+plumbum>=1.2.0
+colorama>=0.2.5

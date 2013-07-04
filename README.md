@@ -1,62 +1,72 @@
 # SuttaCentral
 
+# Setup
+
 ## Dependencies
 
-- MySQL
-- Python 3.3+ and `virtualenv` (e.g., `python` and `pip` pointing to a Python 3 environment) (if developing the Python version)
-- Apache + PHP (if developing the PHP version)
+- Python 3.3+
+- Python virtualenv (i.e., `python` and `pip` pointing to a Python 3.3+ environment)
+- MySQL 5.5+
+- Apache + PHP (if developing on the PHP version)
 
-## Getting the repository
+## Repository
 
     cd path/to/working/directory
     git clone git@git.suttacentral.net:suttacentral.git
     cd suttacentral
     git clone git@git.suttacentral.net:suttacentral-text.git text
 
-## Database Setup
-
-Create the database as MySQL `root` (i.e., `mysql -u root`):
-
-    CREATE DATABASE sc CHARACTER SET utf8;
-    CREATE USER sc@localhost IDENTIFIED BY '...';
-    GRANT ALL PRIVILEGES ON sc.* TO sc@localhost;
-    FLUSH PRIVILEGES;
-
-Fetch a copy of the latest database with:
-
-    make fetch-db
-
-Then load a database dump with:
-
-    gunzip tmp/sc-latest.sql.gz | mysql -u sc -psc sc
-
-**TODO: Add db mod needed for new python database.**
-
-## Python SuttaCentral
-
-### Setup
-
-Install the required python packages:
+## Requirements
 
     pip install -r requirements.txt
 
-Copy `local.conf-example` to `local.conf` and update the `mysql` database settings.
+## Configuration
 
-### Start
+Copy `local.conf-example` to `local.conf` and edit accordingly. If you're
+starting from scratch, you probably don't need edit anything as the
+defaults are suitable.
+
+## Database
+
+Create a database user:
+
+    make create-db-user
+
+Set its authorization:
+
+    make setup-db-auth
+
+Fetch a copy of the latest database dump:
+
+    make fetch-db-export
+
+Create the database:
+
+    make create-db
+
+Load the database dump into the database:
+
+    make load-db
+
+# Developing
+
+## Running the Server
 
     make server
 
 Then visit <http://localhost:8800/>.
 
-## Deploy
+## Making Changes
+
+**TODO: git stuff in here?**
+
+## Deployment
 
     make deploy-staging
 
 Then visit <http://staging.suttacentral.net/>.
 
-## PHP SuttaCentral
-
-### Setup
+# PHP Setup
 
 Create an Apache config for your local environment:
 
@@ -76,7 +86,7 @@ Copy `php/includes/db.inc.php-example` to `php/includes/db.inc.php` and update i
 
     sudo apachectl restart
 
-## Deploy
+## Deployment
 
     make deploy-production
 

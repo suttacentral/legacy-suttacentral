@@ -33,9 +33,20 @@ clean-db:
 
 clean-all: clean clean-db
 
-fetch-db-export:
-	cd tmp && curl -O http://suttacentral.net/db-exports/sc-latest.sql.gz
-	echo 'The database is now available in tmp/sc-latest.sql.gz'
-
 regenerate-db-export:
 	ssh sc-production@vps.suttacentral.net '$$HOME/create-db-export'
+
+create-db-user:
+	python/dbutil.py create-db-user
+setup-db-auth:
+	python/dbutil.py setup-db-auth
+fetch-db-export:
+	python/dbutil.py fetch-db-export
+create-db:
+	python/dbutil.py create-db
+load-db:
+	python/dbutil.py load-db
+drop-db:
+	python/dbutil.py drop-db
+reset-db:
+	python/dbutil.py reset-db
