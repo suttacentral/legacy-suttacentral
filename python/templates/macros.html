@@ -9,9 +9,9 @@
 {%- else -%}
 {{sutta.acronym|replace(" ", "&nbsp;")}}
 {%- endif -%}
-{%- if sutta.alt_acronym and show_alt-%}
+{%- if sutta.alt_acronym and show_alt %}
  <span class='altAcronym'>{{sutta.alt_acronym|replace(" ", "&nbsp;")}}</span>
-{%- endif -%}
+{% endif -%}
 {% endmacro %}
 
 {# sutta_row: A macro to display a sutta row #}

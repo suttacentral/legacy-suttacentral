@@ -60,7 +60,8 @@ def dispatch(*args, **kwargs):
         if uid in dbr.collections:
             return collection_view(dbr.collections[uid])
         elif uid in dbr.divisions:
-            return division_view(dbr.divisions[uid])
+            full = len(args) > 1 and args[1] == 'full'
+            return division_view(dbr.divisions[uid], full)
         elif uid in dbr.subdivisions:
             return subdivision_view(dbr.subdivisions[uid])
         elif uid in dbr.suttas:
@@ -76,10 +77,7 @@ def text_view(uid, lang):
 def collection_view(collection):
     return sanitize(str(collection))
 
-def division_view(division, full=False):
-    # Testing: This should be passed in by the controller
-    # full = True
-
+def division_view(division, full):
     # HACK: This is just to do "What the old site did". 
     # Can we do this with some sort of sane logic?
     if division.uid in ["sn", "an", "kn", "ea", "t", "sht", "sa", "oa"] and not full:
