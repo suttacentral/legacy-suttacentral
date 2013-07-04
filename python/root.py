@@ -30,5 +30,4 @@ class Root(object):
     #  /  Home page
     @cherrypy.expose
     def index(self):
-        return suttacen.home()
-        return 'Hello and welcome to Sutta Central!'
+        return show.static_view('home')
