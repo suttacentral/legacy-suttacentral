@@ -2,7 +2,7 @@
 
 """A utility to perform MySQL database functions"""
 
-import colorama, os, sys, plumbum, textwrap
+import colorama, os, sys, plumbum, textwrap, urllib
 import config
 
 DB_EXPORT_URL = 'http://suttacentral.net/db-exports/sc-latest.sql.gz'
@@ -28,9 +28,6 @@ def indent(str):
     indent_str = '    '
     return textwrap.fill(str, 80,
         initial_indent=indent_str, subsequent_indent=indent_str)
-
-def fetch_db_cmd():
-    return plumbum.local['curl']['-s', '-o', LOCAL_DB_EXPORT_PATH, DB_EXPORT_URL]
 
 def mysql_cmd(root=False, db=False):
     args = [ '-h', config.mysql['host'],
@@ -86,7 +83,9 @@ def setup_db_auth():
 
 def fetch_db_export():
     print('Fetching database export...')
-    run(fetch_db_cmd())
+    r = urllib.request.urlopen(DB_EXPORT_URL)
+    with open(LOCAL_DB_EXPORT_PATH, 'b+w') as f:
+        f.write(r.read())
 
 def create_db():
     print('Creating database...')
