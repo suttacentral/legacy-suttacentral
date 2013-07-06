@@ -96,6 +96,20 @@ class Parallel(ParallelBase):
         "partial={self.partial}, "
         "footnote={self.footnote}>").format(self=self)
 
+    @staticmethod
+    def sort_key(p):
+        """The canonical ordering as follows:
+            1) full, then partial
+            2) sutta language id,
+            3) sutta subdivision id,
+            4) sutta number.
+        To be used with sort() or sorted()."""
+        s = p.sutta
+        return (p.partial,
+                s.lang.id,
+                s.subdivision.id,
+                s.number)
+
 class Collection(CollectionBase):
     __slots__ = ()
     def __repr__(self):

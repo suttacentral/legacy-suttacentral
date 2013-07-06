@@ -448,21 +448,8 @@ class _DBR:
                 p_sutta = self.suttas[p_uid]
                 sutta.parallels.append(Parallel(p_sutta, True, False, note))
 
-        def parallel_sort_key(p):
-            # To do multisort in python, return a tuple, tuples are ordered
-            # in the sanest way imaginable.
-            mapping = {2: 1,
-                       1: 2}
-            top = p.sutta.lang.id
-            try:
-                top = mapping[top]
-            except KeyError:
-                pass
-            return (top, p.partial, p.sutta.subdivision.id, numsortkey(p.sutta.uid))
-            #return (p.p.partial, p.sutta.subdivision.id, numsortkey(p.sutta.uid))
-        
         for sutta in self.suttas.values():
-            sutta.parallels.sort(key=parallel_sort_key)
+            sutta.parallels.sort(key=Parallel.sort_key)
 
     def build_search_data(self):
         """ Build useful search data.
