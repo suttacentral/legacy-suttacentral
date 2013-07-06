@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-Translation = namedtuple('Translation',
+TranslationBase = namedtuple('Translation',
                                      'seq_nbr, lang, url, abstract')
 
 ParallelBase = namedtuple('ParallelBase',
@@ -109,6 +109,17 @@ class Parallel(ParallelBase):
                 s.lang.id,
                 s.subdivision.id,
                 s.number)
+
+class Translation(TranslationBase):
+    __slots__ = ()
+
+    @staticmethod
+    def sort_key(t):
+        """The canonical ordering as follows:
+            1) language id
+            2) sequence number
+        To be used with sort() or sorted()."""
+        return (t.lang.id, t.seq_nbr)
 
 class Collection(CollectionBase):
     __slots__ = ()

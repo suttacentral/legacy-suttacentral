@@ -95,6 +95,7 @@ class _DBR:
         self.build_stage2()
         
     def build_stage2(self):
+        self.sort_translations()
         self.build_parallels()
         self.build_search_data()
         self.build_file_data()
@@ -424,6 +425,11 @@ class _DBR:
                         [(db.sutta[p_id].sutta_uid, note) for p_id, note in parallels])
                         for (s_id, parallels) in partials.items()],
             }
+
+    def sort_translations(self):
+        for sutta in self.suttas.values():
+            sutta.translations.sort(key=Translation.sort_key)
+
     def build_parallels(self):
         fulls = self.parallels_data['fulls']
         indirects = self.parallels_data['indirects']
