@@ -6,9 +6,6 @@ import config, logger, root
 
 logger.setup()
 
-cherrypy.engine.autoreload.files.add(config.global_conf_path)
-cherrypy.engine.autoreload.files.add(config.local_conf_path)
-
 if __name__ == '__main__':
     cherrypy.quickstart(root.Root(), config=config)
 else:

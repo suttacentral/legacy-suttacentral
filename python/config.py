@@ -124,5 +124,15 @@ class Config(dict):
                         base = self.base_dir
                     self[key][subkey] = os.path.join(base, path)
 
+__config = Config()
+
+# Add the configuration files to trigger autoreload.
+cherrypy.engine.autoreload.files.add(__config.global_conf_path)
+cherrypy.engine.autoreload.files.add(__config.local_conf_path)
+
+# We manually add this file because cherrypy autoreloader doesn't recognize
+# it, probably because of the module munging.
+cherrypy.engine.autoreload.files.add(os.path.realpath(__file__))
+
 # See http://mail.python.org/pipermail/python-ideas/2012-May/014969.html
-sys.modules[__name__] = Config()
+sys.modules[__name__] = __config
