@@ -180,3 +180,20 @@ class Subdivision(SubdivisionBase):
         vaggas=", ".join(str(len(a)) for a in self.vaggas),
         suttas=", ".join("<{}>".format(a.uid) for a in self.suttas),
         )
+
+class SearchResults:
+    def __init__(self, query, categories=None):
+        self.query = query
+        self.categories = categories or []
+    def add(self, category):
+        self.categories.append(category)
+        
+class ResultsCategory:
+    html = None # If not none, dump this into output.
+
+class SuttaResultsCategory(ResultsCategory):
+    def __init__(self, sections=None, total=None):
+        self.sections = sections or []
+        self.total = total
+    def add(self, title, suttas):
+        self.sections.append( (title, suttas) )
