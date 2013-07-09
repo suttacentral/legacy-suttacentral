@@ -1,0 +1,23 @@
+{% extends "base.html" -%}
+{% import 'macros.html' as macros with context %}
+{%- block content -%}
+<div id='onecol'>
+<table>
+<caption>Query: <strong>{{result.query.query}}</strong></caption>
+<thead>
+<tr>
+<th>Identifier</th>
+<th>Title</th>
+<th>Vol/Page</th>
+<th>Parallels</th>
+<th class='transcol'>Translations</th>
+</tr>
+{% for category in result.categories -%}
+{% for section in category.sections -%}
+<tr><td colspan='5' class='subdivision'>{{section}}</td></tr>
+{%- endfor %}
+{%- endfor %}
+</thead>
+</table>
+</div>
+{%- endblock -%}
