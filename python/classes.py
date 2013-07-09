@@ -104,9 +104,15 @@ class Parallel(ParallelBase):
             3) sutta subdivision id,
             4) sutta number.
         To be used with sort() or sorted()."""
+        def langhack(lang_id):
+            if lang_id == 2:
+                return 1
+            if lang_id == 1:
+                return 2
+            return lang_id
         s = p.sutta
-        return (p.partial,
-                s.lang.id,
+        return (langhack(s.lang.id),
+                p.partial,
                 s.subdivision.id,
                 s.number)
 
@@ -174,3 +180,20 @@ class Subdivision(SubdivisionBase):
         vaggas=", ".join(str(len(a)) for a in self.vaggas),
         suttas=", ".join("<{}>".format(a.uid) for a in self.suttas),
         )
+
+class SearchResults:
+    def __init__(self, query, categories=None):
+        self.query = query
+        self.categories = categories or []
+    def add(self, category):
+        self.categories.append(category)
+        
+class ResultsCategory:
+    html = None # If not none, dump this into output.
+
+class SuttaResultsCategory(ResultsCategory):
+    def __init__(self, sections=None, total=None):
+        self.sections = sections or []
+        self.total = total
+    def add(self, title, suttas):
+        self.sections.append( (title, suttas) )

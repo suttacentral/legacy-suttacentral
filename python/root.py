@@ -1,5 +1,5 @@
 import cherrypy, os
-import config, suttacen, show, time
+import config, show, time
 
 # We expose everything we need to here.
 
@@ -17,17 +17,10 @@ class Root(object):
         result = show.dispatch(*args, **kwargs)
         return result
 
-    find = suttacen.Find()
-    #  /find/  where the search queries go.
-    #def find(self, **kwargs):
-        #return suttacen.find(**kwargs)
-
-    #  /debug/  Provides debug information
     @cherrypy.expose
-    def debug(self, *args, **kwargs):
-        return suttacen.debug(*args, **kwargs)
+    def search(self, **kwargs):
+        return show.search(**kwargs)
 
-    #  /  Home page
     @cherrypy.expose
     def index(self):
         return show.static_view('home')
