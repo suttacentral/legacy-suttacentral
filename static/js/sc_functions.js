@@ -716,8 +716,8 @@ function generateMarkupCallback() {
     setTimeout(generateMarkupCallback, 5);
 }
 
-var paliRex = /([aiueokgcjtdnpbmyrlvshāīūṭḍṅṇṁñḷ’­”]+)/i
-var splitRex = /([^  ,.– —:;?!"'“‘-]+)/
+var paliRex = /([aiueokgcjtdnpbmyrlvshāīūṭḍṅṇṁñḷ’­”]+)/i;
+var splitRex = /([^  ,.– —:;?!"'“‘-]+)/;
 function toLookupMarkup(startNode)
 {
     var parts, i, out = "", proxy, node;

@@ -7,7 +7,9 @@
 <meta name="description" content="Correspondence tables, references, text, and translations for early Buddhist discourses in all schools of Buddhism">
 <meta name="viewport" content="width=device-width">
 <!--[if lt IE 10]><script src="/js/vendor/modernizr-2.6.2.min.js"></script><![endif]-->
-<link rel="stylesheet" href="/css/sc.css">
+{% assets 'css_all' -%}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets -%}
 <!--[if lt IE 9]><style>header {display:inline-block; width:90%;}</style><![endif]-->
 </head>
 <body>
@@ -68,11 +70,9 @@
 </footer>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-<script src="/js/easytabs.js"></script>
-<script src="/js/nav.js"></script>
-<script src="/js/sc_functions.js"></script>
-<script src="/js/sc_init.js"></script>
-<script src="/js/sc_formatter.js"></script>
+{% assets 'js_core' -%}
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets -%}
 <script type='text/javascript'>
 
 var _ues = {

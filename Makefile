@@ -29,12 +29,20 @@ clean:
 		__pycache__ \
 		python/__pycache__ \
 		log/*.log \
-		tmp/dbr.cache
+		tmp/*
+
+clean-assets:
+	rm -rf \
+		static/css/compiled/*.css \
+		static/js/compiled/*.js
 
 clean-db:
 	rm -f db/sc.sqlite
 
-clean-all: clean clean-db
+clean-all: clean clean-assets clean-db
+
+build-assets:
+	cd python && python -c 'import assets;assets.build()'
 
 regenerate-db-export:
 	ssh sc-production@vps.suttacentral.net '$$HOME/create-db-export'

@@ -7,3 +7,6 @@ plumbum>=1.2.0
 colorama>=0.2.5
 httplib2
 selenium>=2.33.0
+webassets==dev
+jsmin
+cssutils
