@@ -104,9 +104,15 @@ class Parallel(ParallelBase):
             3) sutta subdivision id,
             4) sutta number.
         To be used with sort() or sorted()."""
+        def langhack(lang_id):
+            if lang_id == 2:
+                return 1
+            if lang_id == 1:
+                return 2
+            return lang_id
         s = p.sutta
-        return (p.partial,
-                s.lang.id,
+        return (langhack(s.lang.id),
+                p.partial,
                 s.subdivision.id,
                 s.number)
 
