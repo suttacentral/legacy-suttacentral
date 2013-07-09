@@ -29,7 +29,7 @@ sc_formatter = {
     shove: function(){
         var start = (new Date()).getTime();
         $("q").each(function(){sc_formatter.rePosition($(this))});
-        console.log("Resize took: ", (new Date()).getTime() - start, " milliseconds");
+        //console.log("Resize took: ", (new Date()).getTime() - start, " milliseconds");
     },
     rePosition: function($element){
         return $element;
@@ -112,14 +112,14 @@ sc_formatter = {
             }
             textualControls.enable();
             if (sc_formatter.markOfTheBeast % 2 == 0) {
-                console.log("It took " + (Date.now() - startTime) + "ms but the world is safe once again.");
+                //console.log("It took " + (Date.now() - startTime) + "ms but the world is safe once again.");
             } else {
                 var num = 1 + Math.ceil(sc_formatter.markOfTheBeast / 2);
                 var suffix = 'th';
                 if (num % 10 == 1 && num % 100 != 11) suffix = 'st';
                 if (num % 10 == 2 && num % 100 != 12) suffix = 'nd';
                 if (num % 10 == 3 && num % 100 != 13) suffix = 'rd';
-                console.log("For the "+ num + suffix + " time the world is plunged into darkness.");
+                //console.log("For the "+ num + suffix + " time the world is plunged into darkness.");
             }
             sc_formatter.markOfTheBeast += 1
         }

@@ -88,14 +88,14 @@ var chineseLookup = {
             for (var i = 0; i < 10; i++){
                 var node = this.iter.next();
                 if (node === undefined) {
-                    this.finally();
+                    this.andfinally();
                     return;
                 }
                 this.textNodeToMarkup(node);
             }
             setTimeout('chineseLookup.markupGenerator.step.call(chineseLookup.markupGenerator)', 5);
         },
-        finally: function(){
+        andfinally: function(){
             textualControls.enable()
         },
         textNodeToMarkup: function(node) {
@@ -400,7 +400,7 @@ function toggleTextualInfo(force) {
                         break;
                     }
                 } else if (child.nodeType == 1) {
-                    console.log(child);
+                    //console.log(child);
                     if ($(child).not(".hidden").length > 0){
                         content = true;
                         break;
@@ -408,7 +408,7 @@ function toggleTextualInfo(force) {
                 }
             }
             if (content){
-                console.log('Content found');
+                //console.log('Content found');
                 $(meta).addClass("infomode");
             }
         }
@@ -1001,12 +1001,12 @@ function timeprecision(delay, times){
 timeprecision.callback = function(){
     timeprecision.results.push(Date.now());
     if (timeprecision.times-- <= 0) {
-        timeprecision.finally();
+        timeprecision.andfinally();
         return;
     }
     setTimeout(timeprecision.callback, timeprecision.delay);
 }
-timeprecision.finally = function(){
+timeprecision.andfinally = function(){
     var freq = {};
     var results = timeprecision.results;
     for (var i = results.length; i > 0; i--)
@@ -1015,7 +1015,7 @@ timeprecision.finally = function(){
         if (diff in freq) {freq[diff]++}
         else freq[diff] = 1;
     }
-    console.log(freq);
+    //console.log(freq);
 }
 
 function _IterPermissions(permissables){

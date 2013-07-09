@@ -8,7 +8,7 @@ textualControls = {
     marginClasses: "a.pts, a.wp, a.ms, a.msdiv, a.sc, a.vnS, a.vn, a.vimula, a.tu, a.gatn, a.t, a.tlinehead, a.bb, a.da",
     popupClasses: ".pub, .var, .cross, .end",
     contentClasses: ".insertion",
-    metaarea: "#metaarea",
+    metaarea: "#metaarea"
 }
 
 var sc = {
@@ -245,7 +245,7 @@ function ohInternetExplorerLetMeCountTheWaysILoveYou(){
             count += 1;
         }
     }
-    if (count > 0) console.log("Oh Internet Explorer, I love you in " + count + " ways.");
+    //if (count > 0) console.log("Oh Internet Explorer, I love you in " + count + " ways.");
 };
 
 ohInternetExplorerLetMeCountTheWaysILoveYou();
