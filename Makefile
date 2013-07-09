@@ -16,7 +16,8 @@ deploy-staging:
 		pip install -r requirements.txt && \
 		make build-assets && \
 		rm -f tmp/maintenance && \
-		sudo supervisorctl start sc-staging'
+		sudo supervisorctl start sc-staging && \
+		sudo service apache2 reload'
 
 deploy-production:
 	ssh sc-production@vps.suttacentral.net \
