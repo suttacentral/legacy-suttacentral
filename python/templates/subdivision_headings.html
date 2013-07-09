@@ -8,7 +8,14 @@
 <strong>
 <a href='/{{division.uid}}/full'>{{division.name}}</a> ({{division.acronym}})
 </strong>
+</caption>
 <thead>
+<tr>
+<th>Identifier</th>
+<th>Subdivision</th>
+</tr>
+</thead>
+<tbody>
 {% for subdivision in division.subdivisions -%}
 <tr>
 <td>{{division.acronym}} {{subdivision.acronym}}</td>
@@ -16,6 +23,7 @@
 </tr>
 {%- endfor %}
 {{macros.table_footer()}}
+</tbody>
 </table>
 </div>
 {%- endblock -%}
