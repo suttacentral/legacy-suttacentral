@@ -105,5 +105,8 @@ def search(query, target=None, limit=-1, offset=0, ajax=0):
         if slimit == -1:
             slimit = 10 if ajax else 25
         search_result.add(suttasearch.search(query=query, limit=slimit, offset=offset))
-
-    return SearchResultView(search_result).render()
+    
+    if not ajax:
+        return SearchResultView(search_result).render()
+    else:
+        return AjaxSearchResultView(search_result).render()

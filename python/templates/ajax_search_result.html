@@ -1,0 +1,22 @@
+{% import 'macros.html' as macros with context %}
+{% for category in result.categories -%}
+<table>
+<caption>Query: <strong>{{result.query.query}}</strong></caption>
+<thead>
+<tr>
+<th>Identifier</th>
+<th>Title</th>
+<th>Vol/Page</th>
+<th>Parallels</th>
+<th class='transcol'>Translations</th>
+</thead>
+</tr>
+{% for section in category.sections -%}
+<tr><td colspan='5' class='subdivision'>{{section.title}}</td></tr>
+{% for sutta in section.suttas -%}
+{{macros.sutta_row(sutta)}}
+{%- endfor %}
+{%- endfor %}
+</table>
+{%- endfor %}
+

@@ -162,3 +162,10 @@ class SearchResultView(ViewBase):
     def makeContext(self):
         ViewBase.makeContext(self)
         self.context["result"] = self.search_result
+
+class AjaxSearchResultView(SearchResultView):
+    def __init__(self, search_result):
+        SearchResultView.__init__(self, search_result)
+
+        self.template = self.env.get_template('ajax_search_result.html')
+
