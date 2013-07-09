@@ -2,6 +2,7 @@
 {% import 'macros.html' as macros with context %}
 {%- block content -%}
 <div id='onecol'>
+{% for category in result.categories -%}
 <table>
 <caption>Query: <strong>{{result.query.query}}</strong></caption>
 <thead>
@@ -12,9 +13,11 @@
 <th>Parallels</th>
 <th class='transcol'>Translations</th>
 </tr>
-{% for category in result.categories -%}
 {% for section in category.sections -%}
-<tr><td colspan='5' class='subdivision'>{{section}}</td></tr>
+<tr><td colspan='5' class='subdivision'>{{section.title}}</td></tr>
+{% for sutta in section.suttas -%}
+{{macros.sutta_row(sutta)}}
+{%- endfor %}
 {%- endfor %}
 {%- endfor %}
 </thead>
