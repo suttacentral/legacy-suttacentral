@@ -53,3 +53,12 @@ drop-db:
 	python/dbutil.py drop-db
 reset-db:
 	python/dbutil.py reset-db
+
+test: test-local
+
+test-local:
+	python tests/sc_test.py
+test-staging:
+	URL='http://staging.suttacentral.net/' python tests/sc_test.py
+test-production:
+	URL='http://suttacentral.net/' python tests/sc_test.py
