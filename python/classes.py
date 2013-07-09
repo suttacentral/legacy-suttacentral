@@ -191,9 +191,10 @@ class SearchResults:
 class ResultsCategory:
     html = None # If not none, dump this into output.
 
+SuttaSection = namedtuple('SuttaSection', 'title, suttas')
 class SuttaResultsCategory(ResultsCategory):
     def __init__(self, sections=None, total=None):
         self.sections = sections or []
         self.total = total
     def add(self, title, suttas):
-        self.sections.append( (title, suttas) )
+        self.sections.append( SuttaSection(title, suttas) )
