@@ -7,13 +7,14 @@ deploy-staging:
 	ssh sc-staging@vps.suttacentral.net \
 		'source $$HOME/.virtualenvs/suttacentral/bin/activate && \
 		cd $$HOME/suttacentral && \
-		sudo supervisorctl stop sc-staging && \
 		touch tmp/maintenance && \
+		sudo supervisorctl stop sc-staging && \
 		git pull && \
 		cd text && \
 		git pull && \
 		cd .. && \
 		pip install -r requirements.txt && \
+		make build-assets && \
 		rm -f tmp/maintenance && \
 		sudo supervisorctl start sc-staging'
 
