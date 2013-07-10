@@ -720,7 +720,7 @@ class Updater(threading.Thread):
 
             # Do consistency checking.
             _dbr.check_md5()
-            time.sleep(10)
+            time.sleep(90)
 
 updater = Updater(name='dbr_updater', daemon=True)
 updater.start()

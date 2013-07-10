@@ -5,7 +5,7 @@ import regex, scdb, cherrypy, os, os.path
 from jinja2 import Environment, FileSystemLoader
 
 from views import *
-import suttasearch, classes
+import classes, suttasearch, dictsearch
 
 import logging
 logger = logging.getLogger(__name__)
@@ -94,13 +94,24 @@ def parallels_view(sutta):
     return view.render()
 
 def search(query, target=None, limit=-1, offset=0, ajax=0):
+    limit = int(limit)
+    offset = int(offset)
+    ajax = not ajax in (None, 0, '0')
     qdict = {'query':query, 'target':'all', 'limit':limit, 'offset':offset, 'ajax':ajax}
 
     search_result = classes.SearchResults(query=qdict)
     if not query:
         return search_result
-
-    if not target or target == 'all' or target == 'suttas':
+    search_all = (not target or taget == 'all')
+    #if search_all or target="dict":
+        #if search_all and ajax:
+            #dlimit = 1
+        #else:
+            #dlimit = 10
+        #results = dictsearch.omni.get_terms_info(query, dlimit, offset)
+        #if results:
+        
+    if search_all or target == 'suttas':
         slimit = limit
         if slimit == -1:
             slimit = 10 if ajax else 25

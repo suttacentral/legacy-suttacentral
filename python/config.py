@@ -63,6 +63,8 @@ class Config(dict):
         ['app', 'templates_root'],
         ['app', 'text_root'],
         ['sqlite', 'db'],
+        ['dict', 'db'],
+        ['dict', 'sources'],
     ]
 
     base_dir         = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
