@@ -181,20 +181,36 @@ class Subdivision(SubdivisionBase):
         suttas=", ".join("<{}>".format(a.uid) for a in self.suttas),
         )
 
+
+
 class SearchResults:
     def __init__(self, query, categories=None):
         self.query = query
         self.categories = categories or []
     def add(self, category):
         self.categories.append(category)
-        
-class ResultsCategory:
-    html = None # If not none, dump this into output.
 
-SuttaSection = namedtuple('SuttaSection', 'title, suttas')
-class SuttaResultsCategory(ResultsCategory):
+ResultSection = namedtuple('ResultSection', 'title, results')
+class ResultsCategory:
+    type = None # Stringly typing :).
+    caption = None
     def __init__(self, sections=None, total=None):
         self.sections = sections or []
         self.total = total
+    def add(self, title, entries):
+        self.sections.append( ResultSection(title, entries) )
+        
+SuttaSection = namedtuple('SuttaSection', 'title, suttas')
+class SuttaResultsCategory(ResultsCategory):
+    type = 'sutta'
+    caption = 'Suttas:'
     def add(self, title, suttas):
         self.sections.append( SuttaSection(title, suttas) )
+
+class DictionaryResultsCategory(ResultsCategory):
+    type = 'dict'
+    caption = 'Dictionaries:'
+
+class FulltextResultsCategory(ResultsCategory):
+    type = 'fulltext'
+    caption = 'Texts:'

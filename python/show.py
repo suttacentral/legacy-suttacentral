@@ -93,31 +93,32 @@ def parallels_view(sutta):
     view = ParallelView(sutta)
     return view.render()
 
-def search(query, target=None, limit=-1, offset=0, ajax=0):
+def search(query, target='all', limit=10, offset=0, ajax=0):
     limit = int(limit)
     offset = int(offset)
     ajax = not ajax in (None, 0, '0')
-    qdict = {'query':query, 'target':'all', 'limit':limit, 'offset':offset, 'ajax':ajax}
+    qdict = {'query':query, 'target':target, 'limit':limit, 'offset':offset, 'ajax':ajax}
 
     search_result = classes.SearchResults(query=qdict)
     if not query:
         return search_result
-    search_all = (not target or taget == 'all')
-    #if search_all or target="dict":
-        #if search_all and ajax:
-            #dlimit = 1
-        #else:
-            #dlimit = 10
-        #results = dictsearch.omni.get_terms_info(query, dlimit, offset)
-        #if results:
-        
-    if search_all or target == 'suttas':
+
+    if target in ('all', 'dict'):
+        dict_results = dictsearch.search(query=query, target=target, limit=limit, offset=offset, ajax=ajax)
+        if dict_results:
+            search_result.add(dict_results)
+
+    if target in ('all', 'suttas'):
         slimit = limit
         if slimit == -1:
             slimit = 10 if ajax else 25
         search_result.add(suttasearch.search(query=query, limit=slimit, offset=offset))
-    
-    if not ajax:
+
+    search.last = search_result
+    return search_view(search_result)
+
+def search_view(search_result):
+    if not search_result.query['ajax']:
         return SearchResultView(search_result).render()
     else:
         return AjaxSearchResultView(search_result).render()

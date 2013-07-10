@@ -65,7 +65,7 @@ def get_and_rank_results(query):
 
 def search(query=None, limit=25, offset=0):
     out = classes.SuttaResultsCategory()
-    if len(query) <= 2:
+    if len(query) < 3:
         out.total = 0
         out.add("Search term too short.", [])
         return out
@@ -84,6 +84,13 @@ def search(query=None, limit=25, offset=0):
     breakpoint = bisect.bisect(ranks, 700)
     e_results = suttas[:breakpoint]
     s_results = suttas[breakpoint:]
+
+    if count > offset+limit:
+        start = limit + offset
+        href = '/search/?query={}&target=suttas&limit={}&offset={}'.format(
+            query, limit, start)
+        out.footurl = '<a href="{}">Results {}–{}</a>'.format(
+            href, start + 1, min(count, start + limit))
     
     if e_results:
         out.add("Exact results", e_results)

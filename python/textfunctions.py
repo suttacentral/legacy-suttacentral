@@ -282,6 +282,6 @@ def mangle(string, _trans=str.maketrans(_uni, _ascii)):
 
 def demangle(string, _trans=str.maketrans(_ascii, _uni)):
     "Demangle unused ascii characters into unicode puncuation"
-    return string.translate(_trans)
+    return string.translate(_trans).replace('«br»', '<br>')
 
 del _ascii, _uni, _unused

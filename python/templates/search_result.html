@@ -2,9 +2,33 @@
 {% import 'macros.html' as macros with context %}
 {%- block content -%}
 <div id='onecol'>
+<div>You searched: <strong>{{result.query.query}}</strong>
+</div>
 {% for category in result.categories -%}
+{% if category.type == "dict" -%}
+{% for section in category.sections -%}
+{% if section.title == "Terms" %}
+<dl class="terms">
+{% for row in section.results %}
+<dt>{{row.term}} ({{row.abbrev}})</dt>
+<dd>{{row.full if result.query.target=='dict' else row.brief}}</dd>
+{% endfor %}
+</dl>
+{% endif %}
+
+{% if section.title == "Entries" %}
+<dl class="entries">
+{% for row in section.results %}
+<dt>{{row.term}}</dt>
+<dd>{{row.full if result.query.target=='dict' else row.brief}}</dd>
+{% endfor %}
+</dl>
+{% endif %}
+
+{%- endfor %}
+{%- endif %}
+{% if category.type == "sutta" -%}
 <table>
-<caption>Query: <strong>{{result.query.query}}</strong></caption>
 <thead>
 <tr>
 <th>Identifier</th>
@@ -19,8 +43,12 @@
 {{macros.sutta_row(sutta)}}
 {%- endfor %}
 {%- endfor %}
-{%- endfor %}
 </thead>
 </table>
+{%- endif %}
+{% if category.footurl %}
+{{category.footurl}}
+{% endif %}
+{%- endfor %}
 </div>
 {%- endblock -%}

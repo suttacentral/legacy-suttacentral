@@ -1,5 +1,10 @@
 {% import 'macros.html' as macros with context %}
 {% for category in result.categories -%}
+{% if category.type == "dict" -%}
+<p>{{category.sections[0].results[0]['brief']}}<br>{{category.footurl}}</p>
+{% endif %}
+
+{% if category.type == "sutta" -%}
 <table>
 <caption>Query: <strong>{{result.query.query}}</strong></caption>
 <thead>
@@ -18,5 +23,6 @@
 {%- endfor %}
 {%- endfor %}
 </table>
+{% endif %}
 {%- endfor %}
 

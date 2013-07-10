@@ -65,6 +65,7 @@ class Config(dict):
         ['sqlite', 'db'],
         ['dict', 'db'],
         ['dict', 'sources'],
+        ['textsearch', 'dbpath'],
     ]
 
     base_dir         = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))

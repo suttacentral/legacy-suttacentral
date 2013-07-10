@@ -1,0 +1,305 @@
+import lxml.html, collections, sqlite3, os, itertools, regex, math
+
+import textfunctions, config
+
+import sys
+sys.path.append(config['dict']['sources'])
+import cped_data
+
+class PrettyRow(sqlite3.Row):
+    def __repr__(self):
+        out = []
+        out.append("<PrettyRow:")
+        for key in self.keys():
+            out.append("['{}']={}".format(key, self[key]))
+        out[-1] += ' >'
+        return "\n".join(out)
+
+# Create the database.
+dbname = config['dict']['db']
+tmpdb = dbname + '.tmp'
+try:
+    os.remove(tmpdb)
+except OSError:
+    pass
+con = sqlite3.connect(tmpdb)
+#con.execute('PRAGMA foreign_keys = ON')
+con.execute('PRAGMA synchronous = 0') # Much faster and we don't want a partial database.
+con.row_factory = PrettyRow
+
+# An entry must contain 'text', it may contain 'brief' and 'html'
+# 'text' should be treated as a fallback for output if 'brief' and 'html'
+# aren't defined. Only text is indexed in fts4.
+con.execute('''CREATE TABLE entries_base (
+    entry_id INTEGER PRIMARY KEY,
+    term_id INTEGER,
+    html HTMLTEXT, --recognized as 'TEXT' by sqlite
+    text TEXT,
+    brief TEXT,
+    info TEXT,
+    dict_id INTEGER)''')
+
+# Create an external content fts4 table which mirrors entries.
+# We will use this table for all actual queries.
+# The reason for this sleight of hand is that you can insert lowercase
+# entries into an external content fts4 table, but it will return the
+# properly-cased results from the content table. This even works with
+# snippets! This handily works around sqlite3's case-sensitivity for
+# codepoints > 127 and there is virtually no overhead.
+# The other benefit is that only those fields which actually need to be
+# indexed by fts4 get indexed.
+con.execute('''CREATE VIRTUAL TABLE entries USING fts4(
+    content="entries_base",
+    tokenize=porter,
+    entry_id,
+    term_id,
+    html,
+    text,
+    brief,
+    info,
+    dict_id)
+    ''')
+
+# Note that more than one term may reference an entry. Every entry
+# must be linked with at least one term.
+con.execute('''CREATE TABLE terms_base (
+    term_id INTEGER PRIMARY KEY,
+    base_id INTEGER,
+    term TEXT,
+    number INTEGER,
+    phon_hash TEXT,
+    boost REAL,
+    entry_id INTEGER)''')
+
+con.execute('''CREATE VIRTUAL TABLE terms USING fts4(
+    content="terms_base",
+    tokenize=simple,
+    term_id,
+    base_id,
+    term,
+    number,
+    phon_hash,
+    boost,
+    entry_id)''')
+
+# References are optional.
+con.execute('''CREATE TABLE refs (
+    entry_id INTEGER,
+    collection TEXT,
+    vol INTEGER,
+    page_start INTEGER,
+    page_end INTEGER)''')
+
+
+con.execute('''CREATE TABLE dicts (
+    dict_id INTEGER PRIMARY KEY,
+    abbrev TEXT,
+    name TEXT,
+    author TEXT,
+    about TEXT,
+    details TEXT
+    )''')
+
+class Ref:
+        def __init__(self, vol, book, page, page_end):
+            self.div = vol
+            self.book = book
+            self.page = int(page) if page else None
+            self.page_end = int(page_end) if page_end else self.page
+        def __iter__(self):
+            return [self.vol, self.book, self.page, self.page_end]
+
+dict_id = 0
+entry_id = 0
+term_id = 0
+
+def build_dppn():
+    global dict_id, entry_id, term_id, con
+
+    dom = lxml.html.fromstring(open(os.path.join(config['dict']['sources'], 'sc_dppn.html')).read())
+
+    # Perform sanity-correction
+    items = list(dom.cssselect('meta, person, place, thing'))
+    for e in items:
+        if e.getparent() != dom:
+            dom.append(e)
+
+    # Populate dictionary information.
+    dict_id += 1
+    metas = dom.cssselect('meta')
+    author = metas[1].attrib['content']
+    about = metas[0].attrib['content']
+    details = metas[2].attrib['content']
+    con.execute('INSERT INTO dicts VALUES(?, ?, ?, ?, ?, ?)',
+        (dict_id, 'EBPN', 'Early Buddhism Proper Names',
+        author, about, details))
+
+    # Used to process references in DPPN
+    refrex = regex.compile(r'(\w+)(?:[.]([ivxml]+|p))?[.](\d+)(?:–(\d+))?')
+
+    count = collections.Counter()
+
+    for entry in dom.cssselect('person, place, thing'):
+        entry_id += 1
+
+        html = lxml.html.tostring(entry, encoding='utf8').decode()
+        
+        name_rows = []
+        for i, e in enumerate(entry.iter('name')):
+            name = e.text_content().strip()
+            try:
+                html_id = e.attrib['id']
+            except KeyError:
+                html_id = None
+            count.update([name])
+            boost = textfunctions.mc4_boost(len(html), 1000)
+            if i > 0:
+                boost = (1 + i + boost) / (2 + i)
+            term_id += 1
+            name_rows.append([
+                            term_id,
+                            0,
+                            name,
+                            count[name],
+                            textfunctions.phonhash(name) if name else None,
+                            boost,
+                            entry_id])
+
+        # Remove the first name entry.
+        next(entry.iter('name')).drop_tree()
+
+        html = lxml.html.tostring(entry, encoding='utf8').decode()
+
+        # Destructively modify the element
+        refstrs = list(t.text.strip() for t in entry.iter('ref'))
+        for ref in entry.iter('ref'):
+            ref.text = " " + ref.text + " "
+            ref.drop_tag()
+
+        paras = [p.text_content() for p in entry.iter('p')]
+        text = " ".join(paras)
+        text = regex.sub(" {2,}", " ", text)
+        if paras:
+            brief = regex.match(r'.{,70}[^.,]*', paras[0])[0]
+            if len(brief) < len(text) - 1:
+                brief += ' … '
+            else:
+                brief += '.'
+        else:
+            brief = None
+
+
+        # terms:
+        # term_id, base_id, term, number, phon_hash, boost, entry_id
+
+        con.executemany('INSERT INTO terms_base VALUES(?, ?, ?, ?, ?, ?, ?)',
+            name_rows)
+
+        # entries:
+        # entry_id, term_id, html, text, brief, info, dict_id
+        con.execute('INSERT INTO entries_base VALUES (?, ?, ?, ?, ?, ?, ?)',
+            (entry_id, name_rows[0][0], html, textfunctions.mangle(text), brief, entry.tag, dict_id))
+
+        # Populate references.
+        for refstr in refstrs:
+            m = refrex.match(refstr)
+            try:
+                values = [entry_id]
+                values.extend(m[1:])
+                con.execute('INSERT INTO refs VALUES (?, ?, ?, ?, ?)', values)
+            except TypeError:
+                print("Malformed ref: {}, ignoring.".format(refstr))
+            except:
+                print(values)
+                raise
+
+def build_cped():
+    global dict_id, entry_id, term_id, con
+    entries = cped_data.entries
+
+    # Perform corrections and stuff on the entries data.
+    # -> utf8
+    rules = (
+        ('aa', 'ā'),
+        ('ii', 'ī'),
+        ('uu', 'ū'),
+        ('.t', 'ṭ'),
+        ('.d', 'ḍ'),
+        ('~n', 'ñ'),
+        ('.n', 'ṇ'),
+        ('"n', 'ṅ'),
+        ('.l', 'ḷ'),
+        ('.m', 'ṁ'),
+        )
+
+    for entry in entries:
+        for rule, repl in rules:
+            entry[0] = entry[0].replace(rule, repl)
+        # Generate phonetic hash, and boost factor. Boost is ignored for CPED.
+        entry[1:1] = [textfunctions.phonhash(entry[0]), 1]
+    CPEDRow = collections.namedtuple('CPEDRow', 'pali phonhash boost defn grammar meaning source inflectgroup inflectinfo baseword basedefn funcstem regular')
+    rows = tuple(CPEDRow._make(entry) for entry in entries)
+
+    # Populate dictionary information.
+    dict_id += 1
+    author = "A.P.Buddhadatta Mahāthera"
+    about = ""
+    details = ""
+    con.execute('INSERT INTO dicts VALUES(?, ?, ?, ?, ?, ?)',
+        (dict_id, 'CPED', 'Concise Pali-English Dictionary',
+        author, about, details))
+    terms = []
+    entries = []
+    search_entries = []
+    for row in rows:
+        term_id += 1
+        entry_id += 1
+        terms.append((term_id, None, row.pali, 1, row.phonhash, row.boost, entry_id))
+        entries.append((entry_id, term_id, None, textfunctions.mangle(row.meaning), None, row.grammar, dict_id))
+        search_entries.append((entry_id, row.meaning))
+    print(len(terms), len(entries))
+    # term_id, base_id, term, number, phon_hash, boost, entry_id
+    con.executemany('INSERT INTO terms_base VALUES(?, ?, ?, ?, ?, ?, ?)', terms)
+
+    # entry_id, term_id, html, text, brief, info, dict_id
+    con.executemany('INSERT INTO entries_base VALUES (?, ?, ?, ?, ?, ?, ?)', entries)
+
+build_dppn()
+# Generate aliases
+entries = con.execute('SELECT * FROM terms ORDER BY boost').fetchall()
+names = [t['term'] for t in entries]
+allterms = [t[0] for t in con.execute('SELECT term FROM terms')]
+allterms = set(allterms)
+
+for entry in entries:
+    aname = textfunctions.asciify(entry['term'])
+    if aname != entry['term']:
+        term_id += 1
+        con.execute('INSERT INTO terms_base VALUES(?, ?, ?, ?, ?, ?, ?)',
+            (term_id,
+            0,
+            aname,
+            None,
+            entry['phon_hash'],
+            entry['boost'] * 1.01,
+            entry['entry_id']))
+
+build_cped()
+
+# Populate the fts4 tables with lowercased text using python str.lower
+con.create_function('ulower', 1, str.casefold) # Python love :).
+
+con.execute('INSERT INTO terms(docid, term) SELECT rowid, ulower(term) FROM terms_base')
+
+con.execute('INSERT INTO entries(docid, text) SELECT rowid, ulower(text) FROM entries_base')
+
+con.execute('CREATE INDEX phon_x ON terms_base(phon_hash)')
+con.execute('CREATE INDEX term_id_x ON entries_base(term_id)')
+con.execute('CREATE INDEX entry_id_x ON terms_base(entry_id)')
+con.execute('CREATE INDEX ref_entry_id_x ON refs(entry_id)')
+
+con.execute('ANALYZE')
+
+con.commit()
+os.replace(tmpdb, dbname)
+
