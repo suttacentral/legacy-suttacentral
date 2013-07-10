@@ -2,8 +2,12 @@ var sc_nav = {
     search_element: $('#search_box input'),
     lastXHR: null,
     init: function(){
-        sc_nav.search_element.keypress(sc_nav.handleSearch)
-                             .mouseover(sc_nav.handleSearch);
+        if (sc_nav_search.element.oninput != undefined) {
+            sc_nav_search.element.oninput(sc_name.handleSearch)
+        } else {
+            sc_nav.search_element.keypress(sc_nav.handleSearch)
+        };
+        sc_nav.search_element.mouseover(sc_nav.handleSearch);
     },
     handleSearch: function(e) {
         var input = e.target.value;
