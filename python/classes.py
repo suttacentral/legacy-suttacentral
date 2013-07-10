@@ -1,7 +1,8 @@
+import regex
 from collections import namedtuple
 
 TranslationBase = namedtuple('Translation',
-                                     'seq_nbr, lang, url, abstract')
+                                     'seq_nbr, lang, url, abstract, sutta')
 
 ParallelBase = namedtuple('ParallelBase',
                                   'sutta, partial, indirect, footnote')
@@ -162,6 +163,9 @@ class Division(DivisionBase):
             ", ".join("<{}>".format(a.uid)
                 for a in self.subdivisions)),
         )
+    def has_subdivisions(self):
+        return len(self.subdivisions) > 1
+
 class Subdivision(SubdivisionBase):
     __slots__ = ()
     def __repr__(self):
@@ -214,3 +218,52 @@ class DictionaryResultsCategory(ResultsCategory):
 class FulltextResultsCategory(ResultsCategory):
     type = 'fulltext'
     caption = 'Texts:'
+
+class InvalidTextCollectionPathException(Exception):
+    pass
+
+class TextCollection(dict):
+    """A dictionary of lists of internally hosted suttas or translations
+       keyed by their internally hosted path."""
+
+    def add(self, obj):
+        """Adds a Sutta or Translation if possible."""
+        url = obj.url
+        if url and url.startswith('/'):
+            path = self._normalize_path(url)
+            if self._valid_path(path):
+                self.setdefault(path, []).append(obj)
+            else:
+                raise InvalidTextCollectionPathException(
+                    'Unexpected path {}'.format(path))
+
+    def sort_lists(self):
+        """Sorts each list of suttas or translations."""
+        for lst in self.values():
+            lst.sort(key=self.list_sort_key)
+
+    def _normalize_path(self, path):
+        """Strip the leading / and any trailing / or fragment"""
+        return regex.sub(r'/?(#.+)?$', '', path[1:])
+
+    def _valid_path(self, path):
+        return regex.match(r'^[-.a-z0-9]+/[a-z]+$', path)
+
+class SuttaTextCollection(TextCollection):
+
+    @staticmethod
+    def list_sort_key(sutta):
+        return sutta.number
+
+class TranslationTextCollection(TextCollection):
+
+    @staticmethod
+    def list_sort_key(translation):
+        # The only reasonable differentiator seems to be the url
+        # fragment, which will (hopefully) be of the form <number> or
+        # <number>-<number>, so we use that for now..."""
+        matches = regex.match(r'^.+#([0-9]+)(?:-([0-9]+))?$', translation.url)
+        if matches:
+            return (int(matches[1]), int(matches[2] or 0))
+        else:
+            return (0, 0)

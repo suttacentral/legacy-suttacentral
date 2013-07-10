@@ -6,7 +6,7 @@ import sys
 sys.path.insert(1, join(dirname(dirname(realpath(__file__))), 'python'))
 
 import cherrypy
-import config, logger, root, scdb, show
+import config, logger, regex, root, scdb, show
 
 def paths():
     dbr = scdb.getDBR()
@@ -29,6 +29,7 @@ def paths():
                 yield (translation.url, translation)
 
 def get_path(path):
+    path = regex.sub(r'#.*$', '', path) # chop fragment
     app = cherrypy.tree.apps['']
     local = cherrypy.lib.httputil.Host('127.0.0.1', 50000, '')
     remote = cherrypy.lib.httputil.Host('127.0.0.1', 50001, '')
