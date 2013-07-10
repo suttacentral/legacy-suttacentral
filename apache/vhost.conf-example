@@ -1,0 +1,30 @@
+# An example Apache configuration for a SuttaCentral installation. Be sure to
+# modify SERVER_NAME, PATH_TO_SUTTACENTRAL and PORT.
+
+<VirtualHost *:80>
+
+  ServerName SERVER_NAME
+  CustomLog ${APACHE_LOG_DIR}/SERVER_NAME-access.log combined
+  ErrorLog ${APACHE_LOG_DIR}/SERVER_NAME-error.log
+
+  DocumentRoot /PATH_TO_SUTTACENTRAL/static
+  <Directory /PATH_TO_SUTTACENTRAL/static>
+    Order Deny,Allow
+    Allow from all
+    AllowOverride None
+  </Directory>
+
+  Include /PATH_TO_SUTTACENTRAL/apache/common.conf
+
+  ProxyPassMatch ^/(css/|fonts/|img/|js/|404.html|apple-touch-icon.*\.png|favicon\.ico$|humans\.txt$|maintenance\.html|robots\.txt$) !
+
+  <Proxy *>
+    Order Deny,Allow
+    Allow from all
+  </Proxy>
+
+  ProxyPass / http://localhost:PORT/ max=1 retry=0
+  ProxyPassReverse / http://localhost:PORT/
+  ProxyPreserveHost On
+
+</VirtualHost>

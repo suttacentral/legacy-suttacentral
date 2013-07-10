@@ -1,14 +1,19 @@
 from menu import menu_data
 from classes import Parallel, Sutta
 from jinja2 import Environment, FileSystemLoader
+from webassets.ext.jinja2 import AssetsExtension
 
-import config, regex
+import assets, config, regex
 
 # The base class for all SuttaCentral views.
 class ViewBase:
     def __init__(self):
         # Subclasses use this object to obtain templates.
-        self.env = Environment(loader=FileSystemLoader(config.templates_root))
+        self.env = Environment(
+            loader=FileSystemLoader(config.templates_root),
+            extensions=[AssetsExtension]
+        )
+        self.env.assets_environment = assets.env
 
         # Subclasses assign a template
         self.template = None

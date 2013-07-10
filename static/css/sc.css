@@ -26,7 +26,7 @@
 
 @font-face {
     font-family: 'skolarsuttaweb';
-    src: url('s/fonts/kolarsuttaweb_regular.eot');
+    src: url('/fonts/skolarsuttaweb_regular.eot');
     src: url('/fonts/skolarsuttaweb_regular.eot?#iefix') format('embedded-opentype'),
          url('/fonts/skolarsuttaweb_regular.woff') format('woff'),
          url('/fonts/skolarsuttaweb_regular.ttf') format('truetype'),
@@ -52,9 +52,9 @@
     font-family: 'source_sans_pro';
     src: url('/fonts/sourcesanspro-bold-webfont.eot');
     src: url('/fonts/sourcesanspro-bold-webfont.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/sourcesanspro-bold-webfont.woff') format('woff'),
-    url('/fonts/sourcesanspro-bold-webfont.ttf') format('truetype'),
-    url('/fonts/sourcesanspro-bold-webfont.svg#source_sans_probold') format('svg');
+         url('/fonts/sourcesanspro-bold-webfont.woff') format('woff'),
+         url('/fonts/sourcesanspro-bold-webfont.ttf') format('truetype'),
+         url('/fonts/sourcesanspro-bold-webfont.svg#source_sans_probold') format('svg');
     font-weight: bold;
     font-style: normal;
 

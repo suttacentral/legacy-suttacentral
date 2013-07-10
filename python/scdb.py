@@ -70,15 +70,6 @@ def db_grab(con):
     database = namedtuple('Database', table_names)(*tuple(grab_tables(table_names)));
     return database
 
-def db_modified(con):
-    """ Return the timestamp of the last modification.
-
-    This is a fast function, it only takes a few milliseconds"""
-
-    cur = con.cursor(raw=True)
-    cur.execute('SHOW table status')
-    return sorted((a[11] for a in cur.fetchall()), key=lambda m: tuple(int(a) for a in regex.findall(rb'\d+', m)), reverse=True)[0].decode()
-
 class _DBR:
     errors = []
     warnings = []
@@ -525,7 +516,7 @@ class _DBR:
             logger.info('Generating md5 {}.'.format(new_md5))
         else:
             if self.dbr_md5 == new_md5:
-                logger.info('md5s match')
+                logger.debug('md5s match')
             else:
                 logger.error('md5 mismatch')
                 if exception:
@@ -663,7 +654,22 @@ class Updater(threading.Thread):
                 return con.execute('SELECT value FROM dbr_info WHERE label=?', ('mysql_timestamp', )).fetchone()[0]
             except (TypeError, sqlite3.OperationalError):
                 return 'NOTFOUND'
-    
+
+    def get_mysql_timestamp(self):
+        """ Return the timestamp of the last modification.
+
+        This is a fast function, it only takes a few milliseconds"""
+        con = mysql.connect(**config.mysql)
+        cur = con.cursor(raw=True)
+        cur.execute("""
+            SELECT MAX(Update_time)
+            FROM information_schema.tables
+            WHERE table_schema = '%s';
+        """ % config.mysql['db'])
+        timestamp = cur.fetchone()[0].decode()
+        con.close()
+        return timestamp
+
     def set_sqlite_timestamp(self, timestamp):
         with sqlite3.connect(config.sqlite['db']) as con:
             con.execute('CREATE TABLE dbr_info (label UNIQUE, value)')
@@ -673,21 +679,20 @@ class Updater(threading.Thread):
         from mysql2sqlite3 import convert
         convert(config.mysql, lite_db=config.sqlite['db'], cull_list=('timestamp', 'login'), no_index=True)
         self.set_sqlite_timestamp(mysql_timestamp)
-        
+
     def run(self):
         global _dbr
         while True:
             # Check if sqlite db is up to date
             start=time.time()
             sqlite_timestamp = self.get_sqlite_timestamp()
-
             try:
-                con = mysql.connect(**config.mysql)
-                mysql_timestamp = db_modified(con)
-                logger.debug('Checking mysql timestamp took {} seconds'.format(time.time()-start))
+                mysql_timestamp = self.get_mysql_timestamp()
                 if mysql_timestamp != sqlite_timestamp:
+                    logger.info(('SQLite database (t=%s) out of sync with' +
+                                ' MySQL database (t=%s); converting...') %
+                                (sqlite_timestamp, mysql_timestamp))
                     start_build=time.time()
-                    logger.info('Sqlite database is out of sync. Converting.')
                     self.convertdb(mysql_timestamp)
                     sqlite_timestamp = mysql_timestamp
                     logger.info('Conversion took {} seconds'.format(time.time()-start_build))
@@ -696,8 +701,6 @@ class Updater(threading.Thread):
                 # is. But for the moment, we will raise here.
                 if config.debug:
                     raise
-            finally:
-                con.close()
             # Check if dbr is up to date
             try:
                 if _dbr.timestamp != sqlite_timestamp:

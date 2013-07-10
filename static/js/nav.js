@@ -1,12 +1,9 @@
-sc_nav = {
-    search_element: document.getElementsByName("query")[0],
+var sc_nav = {
+    search_element: $('#search_box input'),
     lastXHR: null,
     init: function(){
-        this.search_element.oninput = sc_nav.handleSearch;
-        this.search_element.onmouseover = sc_nav.handleSearch;
-    },
-    ready: function(){
-
+        sc_nav.search_element.keypress(sc_nav.handleSearch)
+                             .mouseover(sc_nav.handleSearch);
     },
     handleSearch: function(e) {
         var input = e.target.value;
