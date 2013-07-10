@@ -1,16 +1,13 @@
 var sc_nav = {
-    search_element: $('#search_box input'),
-    lastXHR: null,
-    init: function(){
-        if (sc_nav_search.element.oninput != undefined) {
-            sc_nav_search.element.oninput(sc_name.handleSearch)
-        } else {
-            sc_nav.search_element.keypress(sc_nav.handleSearch)
-        };
-        sc_nav.search_element.mouseover(sc_nav.handleSearch);
-    },
-    handleSearch: function(e) {
-        var input = e.target.value;
+     search_element: $('#search_box input'),
+     lastXHR: null,
+     init: function(){
+        sc_nav.search_element.keyup(sc_nav.handleSearch)
+                             .mouseover(sc_nav.handleSearch);
+     },
+     handleSearch: function(e) {
+         
+         var input = e.target.value;
         if (sc_nav.lastXHR)
             sc_nav.lastXHR.abort();
         if (input.length < 2) {
@@ -18,6 +15,7 @@ var sc_nav = {
             return;
         }
         url = "/search?query=" +input+"&ajax=1";
+        console.log(url)
         ajax = jQuery.ajax(url,{"cache":"true"});
         ajax.done(sc_nav.done);
         sc_nav.lastXHR = ajax;
