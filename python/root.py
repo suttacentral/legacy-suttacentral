@@ -1,5 +1,5 @@
 import cherrypy, os
-import config, show, time
+import config, show
 
 # We expose everything we need to here.
 
@@ -14,8 +14,7 @@ class Root(object):
 
     @cherrypy.expose
     def default(self, *args, **kwargs):
-        result = show.dispatch(*args, **kwargs)
-        return result
+        return show.default(*args, **kwargs)
 
     @cherrypy.expose
     def search(self, **kwargs):
@@ -23,4 +22,4 @@ class Root(object):
 
     @cherrypy.expose
     def index(self):
-        return show.static_view('home')
+        return show.home()

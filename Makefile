@@ -67,8 +67,8 @@ reset-db:
 test: test-local
 
 test-local:
-	python tests/sc_test.py
+	python -m unittest discover -s tests -p '*_test.py'
 test-staging:
-	URL='http://staging.suttacentral.net/' python tests/sc_test.py
+	URL='http://staging.suttacentral.net/' python -m unittest discover -s tests -p '*_test.py'
 test-production:
-	URL='http://suttacentral.net/' python tests/sc_test.py
+	URL='http://suttacentral.net/' python -m unittest discover -s tests -p '*_test.py'

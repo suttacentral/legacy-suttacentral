@@ -2,7 +2,7 @@
 
 # Import user modules.
 import config, textfunctions
-from classes import Sutta, Translation, Parallel, Vagga, BiblioEntry, Subdivision, Division, Collection, CollectionLanguage, ReferenceLanguage
+from classes import *
 
 from mysql import connector as mysql
 import sqlite3
@@ -288,6 +288,15 @@ class _DBR:
         # Populate subdivisions.suttas
         for sutta in self.suttas.values():
             sutta.subdivision.suttas.append(sutta)
+        
+        # Populate sutta_texts
+        self.sutta_texts = SuttaTextCollection()
+        for sutta in self.suttas.values():
+            try:
+                self.sutta_texts.add(sutta)
+            except InvalidTextCollectionPathException:
+                logger.warning('Could not add sutta {} to texts with url {}'.format(sutta.uid, sutta.url))
+        self.sutta_texts.sort_lists()
 
         # Build tree from bottom up:
 
@@ -330,6 +339,9 @@ class _DBR:
             collection.lang.collections.append(collection)
 
     def build_references(self, db):
+
+        self.translation_texts = TranslationTextCollection()
+
         for key, row in db.reference.items():
             try:
                 uid = db.sutta[row.sutta_id].sutta_uid
@@ -340,8 +352,19 @@ class _DBR:
             seq_nbr = row.reference_seq_nbr
             url = row.reference_url_link
             abstract = row.abstract_text
-            translation = Translation(seq_nbr, lang, url, abstract)
-            self.suttas[uid].translations.append(translation)
+            sutta = self.suttas[uid]
+            translation = Translation(seq_nbr, lang, url, abstract, sutta)
+            sutta.translations.append(translation)
+
+            # Populate translation_texts
+            try:
+                self.translation_texts.add(translation)
+            except InvalidTextCollectionPathException:
+                logger.warning(('Could not add translation {} {} to ' +
+                    'translation texts with url {}').format(
+                    translation.seq_nbr, translation.lang, url))
+
+        self.translation_texts.sort_lists()
 
     def build_parallels_data(self, db):
         db = db

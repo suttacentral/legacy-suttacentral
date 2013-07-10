@@ -3,7 +3,9 @@ from classes import Parallel, Sutta
 from jinja2 import Environment, FileSystemLoader
 from webassets.ext.jinja2 import AssetsExtension
 
-import assets, config, regex
+import assets, config, logging, os.path, regex, scdb
+
+logger = logging.getLogger(__name__)
 
 # The base class for all SuttaCentral views.
 class ViewBase:
@@ -76,31 +78,46 @@ class TextView(ViewBase):
         self.lang = lang
         self.template = self.env.get_template('text.html')
 
+    @property
+    def filename(self):
+        return os.path.join(self.lang, self.uid) + '.html'
+
+    @property
+    def path(self):
+        return os.path.join(config.text_root, self.filename)
+
+    def get_file_content(self):
+        try:
+            with open(self.path, 'r', encoding='utf-8') as f:
+                return f.read()
+        except OSError:
+            return False
+
+    def try_alt_sutta_url(self):
+        # TODO: Not sure if this code is valid or not...
+        sutta = scdb.getDBR().suttas.get(self.uid)
+        if sutta and sutta.url:
+            logger.info('Found sutta {} without text view file {}'.format(
+                sutta.uid, self.filename))
+            m = regex.search(r'/([^/]*)/([^/]*)/([^/]*)', url)
+            if m:
+                alt_filename = os.path.join(config.text_root, lang, m[1]) + '.html'
+                if os.path.exists(alt_filename):
+                    logger.info(('Redirecting to alt sutta url {} for missing ' +
+                        ' file {}').format(url, self.filename))
+                    cherrypy.lib.cptools.redirect(url=url, internal=False)
+            return False
+
     def makeContext(self):
         ViewBase.makeContext(self)
-        import os.path
+        content = self.get_file_content()
+        if not content:
+            self.try_alt_sutta_url()
+            raise cherrypy.HTTPError(404,
+                'No text with filename {}'.format(self.filename))
 
-        filename = os.path.join(config.text_root, self.lang, self.uid) + '.html'
-        try:
-            f = open(filename, 'r', encoding='utf-8')
-        except OSError:
-            try:
-                url = scdb.getDBR().suttas[uid].url
-                m = regex.search(r'/([^/]*)/([^/]*)/([^/]*)', url)
-                filename = os.path.join(config.text_root, lang, m[1]) + '.html'
-                if os.path.exists(filename):
-                    cherrypy.lib.cptools.redirect(url=url, internal=False)
-                else:
-                    raise OSError('File not found')
-            except OSError:
-                raise cherrypy.HTTPError(501, "That url is theoretically valid, \
-                                            but we don't have an original or translation \
-                                            available in that language.")
-            
-        text = regex.search(r'(?mx)<body[^>]*>(.*)</body>', f.read(),
+        text = regex.search(r'(?mx)<body[^>]*>(.*)</body>', content,
                             regex.MULTILINE + regex.DOTALL)[1]
-        f.close()
-        
         self.context["text"] = text
 
 class DivisionView(ViewBase):
