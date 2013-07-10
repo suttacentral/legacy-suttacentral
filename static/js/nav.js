@@ -1,12 +1,9 @@
-sc_nav = {
-    search_element: document.getElementsByName("ya")[0],
+var sc_nav = {
+    search_element: $('#search_box input'),
     lastXHR: null,
     init: function(){
-        this.search_element.oninput = sc_nav.handleSearch;
-        this.search_element.onmouseover = sc_nav.handleSearch;
-    },
-    ready: function(){
-
+        sc_nav.search_element.keypress(sc_nav.handleSearch)
+                             .mouseover(sc_nav.handleSearch);
     },
     handleSearch: function(e) {
         var input = e.target.value;
@@ -17,7 +14,7 @@ sc_nav = {
             return;
         }
         url = "/find?ya=" +input+"&ajax=1";
-        console.log(url);
+        //console.log(url);
         ajax = jQuery.ajax(url,{"cache":"true"});
         ajax.done(sc_nav.done);
         sc_nav.lastXHR = ajax;
@@ -43,7 +40,7 @@ sc_nav = {
         }
         $("#search_results").html(results).slideDown();
         $("#search_results tr").filter(":even").addClass("even");
-    },
+    }
 }; sc_nav.init();
 /*
         

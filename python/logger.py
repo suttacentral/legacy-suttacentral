@@ -26,16 +26,16 @@ formatter = logging.Formatter(
 )
 
 app_log = logging.FileHandler(config.app_log_file)
-app_log.setLevel(getattr(logging, config.app_log_level))
 app_log.addFilter(cherrypy_filter)
 app_log.setFormatter(formatter)
 
 console_log = logging.StreamHandler()
-console_log.setLevel(getattr(logging, config.console_log_level))
 console_log.addFilter(cherrypy_filter)
 console_log.setFormatter(formatter)
 
 def setup():
+    app_log.setLevel(getattr(logging, config.app_log_level))
+    console_log.setLevel(getattr(logging, config.console_log_level))
     logging.root.setLevel(logging.NOTSET)
     logging.root.addHandler(app_log)
     logging.root.addHandler(console_log)

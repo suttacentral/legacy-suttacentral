@@ -7,15 +7,17 @@ deploy-staging:
 	ssh sc-staging@vps.suttacentral.net \
 		'source $$HOME/.virtualenvs/suttacentral/bin/activate && \
 		cd $$HOME/suttacentral && \
-		sudo supervisorctl stop sc-staging && \
 		touch tmp/maintenance && \
+		sudo supervisorctl stop sc-staging && \
 		git pull && \
 		cd text && \
 		git pull && \
 		cd .. && \
 		pip install -r requirements.txt && \
+		make build-assets && \
 		rm -f tmp/maintenance && \
-		sudo supervisorctl start sc-staging'
+		sudo supervisorctl start sc-staging && \
+		sudo service apache2 reload'
 
 deploy-production:
 	ssh sc-production@vps.suttacentral.net \
@@ -29,12 +31,20 @@ clean:
 		__pycache__ \
 		python/__pycache__ \
 		log/*.log \
-		tmp/dbr.cache
+		tmp/*
+
+clean-assets:
+	rm -rf \
+		static/css/compiled/*.css \
+		static/js/compiled/*.js
 
 clean-db:
 	rm -f db/sc.sqlite
 
-clean-all: clean clean-db
+clean-all: clean clean-assets clean-db
+
+build-assets:
+	cd python && python -c 'import assets;assets.build()'
 
 regenerate-db-export:
 	ssh sc-production@vps.suttacentral.net '$$HOME/create-db-export'
@@ -53,3 +63,12 @@ drop-db:
 	python/dbutil.py drop-db
 reset-db:
 	python/dbutil.py reset-db
+
+test: test-local
+
+test-local:
+	python tests/sc_test.py
+test-staging:
+	URL='http://staging.suttacentral.net/' python tests/sc_test.py
+test-production:
+	URL='http://suttacentral.net/' python tests/sc_test.py
