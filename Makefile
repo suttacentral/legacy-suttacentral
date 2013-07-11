@@ -15,6 +15,7 @@ deploy-staging:
 		cd .. && \
 		pip install -r requirements.txt && \
 		make build-assets && \
+		make build-dict && \
 		rm -f tmp/maintenance && \
 		sudo supervisorctl start sc-staging && \
 		sudo service apache2 reload'
@@ -44,9 +45,10 @@ clean-db:
 clean-all: clean clean-assets clean-db
 
 build-assets:
-	cd python && python -c 'import assets;assets.build();' && \
-	python build_dict_db.py
-	
+	cd python && python -c 'import assets;assets.build()'
+
+build-dict:
+	cd python && python build_dict_db.py
 
 regenerate-db-export:
 	ssh sc-production@vps.suttacentral.net '$$HOME/create-db-export'
