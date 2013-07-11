@@ -1,3 +1,4 @@
+from selenium.common.exceptions import NoSuchElementException
 from environment import SCTestCase
 
 class UrlTestCase(SCTestCase):
@@ -36,8 +37,27 @@ class UrlTestCase(SCTestCase):
         self.goto('/up2/en')
         self.assertIn('Upāyikā 2.071', self.article_header_text())
 
+    def test_bug_42_regression(self):
+        self.goto('/dq')
+        self.assertTableHasRows()
+        self.goto('/up')
+        self.assertTableHasRows()
+        self.goto('/avs')
+        self.assertTableHasRows()
+        self.goto('/div')
+        self.assertTableHasRows()
+        self.goto('/lal')
+        self.assertTableHasRows()
+        self.goto('/mvu')
+        self.assertTableHasRows()
+        self.goto('/sbh')
+        self.assertTableHasRows()
+
     def table_heading_text(self):
         return self.css('caption').text
 
     def article_header_text(self):
         return self.css('article h1').text
+
+    def assertTableHasRows(self, n=1):
+        self.css('table tr:nth-child({})'.format(n+1))

@@ -5,3 +5,32 @@ UPDATE collection_language SET language_code = 'bo' WHERE collection_language_ab
 UPDATE collection_language SET language_code = 'sa' WHERE collection_language_abbrev_name = 'Skt';
 UPDATE collection_language SET language_code = 'en' WHERE collection_language_abbrev_name = 'Oth';
 UPDATE sutta SET collection_language_id = 3 WHERE collection_language_id = 7;
+
+-- Fix NULL subdivision_uid rows in subdivision (Bug 42)
+UPDATE subdivision SET subdivision_uid = 'vv' WHERE subdivision_id = 75;
+UPDATE subdivision SET subdivision_uid = 'pv' WHERE subdivision_id = 76;
+UPDATE subdivision SET subdivision_uid = 'thag' WHERE subdivision_id = 77;
+UPDATE subdivision SET subdivision_uid = 'thig' WHERE subdivision_id = 78;
+UPDATE subdivision SET subdivision_uid = 'jat' WHERE subdivision_id = 79;
+UPDATE subdivision SET subdivision_uid = 'nm' WHERE subdivision_id = 80;
+UPDATE subdivision SET subdivision_uid = 'ps' WHERE subdivision_id = 81;
+UPDATE subdivision SET subdivision_uid = 'ap' WHERE subdivision_id = 82;
+UPDATE subdivision SET subdivision_uid = 'bv' WHERE subdivision_id = 83;
+UPDATE subdivision SET subdivision_uid = 'cp' WHERE subdivision_id = 84;
+UPDATE subdivision SET subdivision_uid = 'prv-nosub' WHERE subdivision_id = 87;
+UPDATE subdivision SET subdivision_uid = 'svbh-nosub' WHERE subdivision_id = 88;
+UPDATE subdivision SET subdivision_uid = 'dhs-nosub' WHERE subdivision_id = 89;
+UPDATE subdivision SET subdivision_uid = 'vbh-nosub' WHERE subdivision_id = 90;
+UPDATE subdivision SET subdivision_uid = 'dhatuk-nosub' WHERE subdivision_id = 91;
+UPDATE subdivision SET subdivision_uid = 'pp-nosub' WHERE subdivision_id = 92;
+UPDATE subdivision SET subdivision_uid = 'kv-nosub' WHERE subdivision_id = 93;
+UPDATE subdivision SET subdivision_uid = 'yam-nosub' WHERE subdivision_id = 94;
+UPDATE subdivision SET subdivision_uid = 'patth-nosub' WHERE subdivision_id = 95;
+UPDATE subdivision SET subdivision_uid = 'dq-nosub' WHERE subdivision_id = 179;
+UPDATE subdivision SET subdivision_uid = 'up-nosub' WHERE subdivision_id = 180;
+UPDATE subdivision SET subdivision_uid = 'avs-nosub' WHERE subdivision_id = 185;
+UPDATE subdivision SET subdivision_uid = 'div-nosub' WHERE subdivision_id = 187;
+UPDATE subdivision SET subdivision_uid = 'lal-nosub' WHERE subdivision_id = 188;
+UPDATE subdivision SET subdivision_uid = 'mvu-nosub' WHERE subdivision_id = 189;
+UPDATE subdivision SET subdivision_uid = 'sbh-nosub' WHERE subdivision_id = 190;
+UPDATE subdivision SET subdivision_uid = 'sht10' WHERE subdivision_id = 203;

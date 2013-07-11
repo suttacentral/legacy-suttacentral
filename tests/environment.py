@@ -6,6 +6,7 @@ sys.path.insert(1, join(dirname(dirname(realpath(__file__))), 'python'))
 import atexit, os, time, unittest
 from urllib.parse import urljoin
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 import config
 
 base_url = None
@@ -44,4 +45,5 @@ class SCTestCase(unittest.TestCase):
             # This is a bug in selenium. It raises a NameError with
             # global name 'basestring' is not defined.
             # See https://code.google.com/p/selenium/issues/detail?id=5701
-            raise Exception('Could not find element by css selector: %s' % selector)
+            raise NoSuchElementException(
+                'Could not find by css selector {}'.format(selector))
