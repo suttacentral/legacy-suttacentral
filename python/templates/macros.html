@@ -21,7 +21,7 @@
 {{sutta_acronym(sutta, show_alt=True)}}
 </td>
 <td>{{sutta.name}}</td>
-<td>{{sutta.volpage_info}}
+<td>{{sutta.volpage_info|replace(" ", "&nbsp;")}}
 {%- if sutta.alt_volpage_info %} <span class='altVolPage'>{{sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
 {%- endif %}
 </td>
