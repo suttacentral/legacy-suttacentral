@@ -44,7 +44,9 @@ clean-db:
 clean-all: clean clean-assets clean-db
 
 build-assets:
-	cd python && python -c 'import assets;assets.build()'
+	cd python && python -c 'import assets;assets.build();' && \
+	python build_dict_db.py
+	
 
 regenerate-db-export:
 	ssh sc-production@vps.suttacentral.net '$$HOME/create-db-export'
