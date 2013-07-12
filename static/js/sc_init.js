@@ -16,25 +16,59 @@ var sc = {
     'pi2en_dict_url' : '/js/pi2en_dict_0.03.js'
 }
 
-//Used for different 'modes', such as interface language (defaults to 'en')
+// Used for different 'modes', such as interface language (defaults to 'en')
+// Also partly to save on transfer and ease of updating titles.
 scMode = {
     'lang':'en',
     'en':{
         'strings':{
-            'sc':'Sutta Central paragraph number',
-            'wp':'Wisdom Publications paragraph number',
-            'vn':'Vietnamese translation paragraph number',
-            'ms':'Mahāsaṅgīti paragraph number',
-            'altVolPage': 'Alternative PTS or Taisho numbering.',
-            'altAcronym': 'PTS 1998 (Somaratne) edition of SN Vol I.'
-        }
-    },
-    'kaka':{
-        'strings':{
-            'sc':'caw caw caw',
-            'wp':'caw caw caw',
-            'vn':'caw caw caw',
-            'ms':'caw caw caw'
+            'sc': "Sutta Central paragraph number.",
+            'wp': "Wisdom Publications paragraph number.",
+            'vn': "Vietnamese translation paragraph number.",
+            'ms': "Mahāsaṅgīti paragraph number.",
+            'altVolPage': "Alternative PTS or Taisho numbering.",
+            'altAcronym': "PTS 1998 (Somaratne) edition of SN Vol I.",
+            'eno89': "Paragraph numbers in Enomoto, 1989.",
+            'hoe16': "Verse numbers in Hoernle, 1916.",
+            'mat85': "Paragraph numbers in Matsumura, 1985.",
+            'mat88': "Paragraph numbers in Matsumura, 1988.",
+            'mit57': "Paragraph numbers in Mittal, 1957.",
+            'san89': "Paragraph numbers in Sander, 1987.",
+            'tri62': "Sūtra and paragraph number in Tripāṭhi, 1962.",
+            'tri95': "Section and paragraph number in Tripāṭhi, 1995.",
+            'har04': "Paragraph number in Hartmann, 2004.",
+            'fuk03': "Page numbers in Fukita, 2003",
+            'wal50': "Paragraph numbers in Waldschmidt, 1950 (etc.).",
+            'wal48': "Paragraph numbers for sondertext in Waldschmidt, 1948 (ST.ii).",
+            'wal61': "Paragraph numbers for sondertext in Waldschmidt, 1961 (ST.i).",
+            'wal55b': "Paragraph numbers in Waldschmidt, 1955b, “Die Einleitung des Saṅgītisūtra.”",
+            'wal57c': "Paragraph numbers in Waldschmidt, 1957c, “Das Upasenasūtra.”",
+            'wal52': "Paragraph numbers in Waldschmidt, 1952, 1956, 1960.",
+            'wal58': "Paragraph numbers in Waldschmidt, 1958.",
+            'wal59a': "Paragraph numbers in Waldschmidt, 1959a, “Kleine Brahmi-Schriftrolle.”",
+            'wal68a': "Paragraph numbers in Waldschmidt, 1958a, “Drei Fragmente buddhistischer Sūtras aus den Turfanhandschriften.”",
+            'wal70a': "Paragraph numbers in Waldschmidt, 1970a, Buddha frees the disc of the moon.",
+            'wal70b': "Paragraph numbers in Waldschmidt, 1970b, “Fragment of a Buddhist Sanskrit text on cosmogony.”",
+            'wal76': "Paragraph numbers in Waldschmidt, 1976.",
+            'wal78': "Paragraph numbers in Waldschmidt, 1978.",
+            'wal80c': "Paragraph numbers in Waldschmidt, 1980c, “On a Sanskrit version of the Verahaccāni Sutta.”",
+            'mat88': "Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988.",
+            'san87': "Paragraph numbers in Sander, 1987.",
+            'gno78': "Paragraph numbers in Gnoli, 1978.",
+            'yam72': "Paragraph numbers in Yamada, 1972.",
+            'wal60': "Paragraph numbers in Waldschmidt, 1960/1.",
+            'hos89a': "Paragraph numbers in Hosoda, 1989, “Sanskrit Fragments from the Parivrājakasaṃyukta of the Saṃyuktāgama I.”",
+            'hos89b': "Paragraph numbers in Hosoda, 1989, “Sanskrit Fragments from the Parivrājakasaṃyukta of the Saṃyuktāgama II.”",
+            'hos91': "Paragraph numbers in Hosoda, 1991.",
+            'vai59': "Page and line numbers in Vaidya, 1959.",
+            'vai58': "Page numbers in Vaidya, 1958.",
+            'sen82': "Section and paragraph numbers in Senart, 1882.",
+            'hs': "(Not defined in GRETIL source.)",
+            'bl': "(Not defined in GRETIL source.)",
+            'as': "Page numbers in Yamada, 1972.",
+            'sht': "References for SHT fragments.",
+            'gbm': "Section numbers in Gilgit Buddhist Manscripts.",
+            'fol': "Folio number in the manuscript."
         }
     }
 }
