@@ -15,6 +15,23 @@ class PrettyRow(sqlite3.Row):
         out[-1] += ' >'
         return "\n".join(out)
 
+def create_brief(string, max_length=150):
+    # Filter out references. 'remove any string of alphanumerical and periods
+    # which doesn't consist soley of alphabetical characters.
+    #string = regex.sub(r'[\w.]+', lambda m: m[0] if m[0].isalpha() else '', string)
+    string = regex.sub(r'\b[\w.]+\b(?<!\b\p{alpha}+\b)', '', string)
+    
+    if len(string) <= max_length:
+        return string
+    
+    string = string[:max_length + 1]
+    # 'r' flag causes the regex to search in reverse
+    m = regex.search(r'(?r)(.*)[^,—.]*', string)
+    if m and m[1]:
+        return m[1]
+    else:
+        return regex.sub(r'\S+$', '', string)
+
 # Create the database.
 dbname = config['dict']['db']
 tmpdb = dbname + '.tmp'
@@ -27,15 +44,14 @@ con = sqlite3.connect(tmpdb)
 con.execute('PRAGMA synchronous = 0') # Much faster and we don't want a partial database.
 con.row_factory = PrettyRow
 
-# An entry must contain 'text', it may contain 'brief' and 'html'
-# 'text' should be treated as a fallback for output if 'brief' and 'html'
-# aren't defined. Only text is indexed in fts4.
+# html is what should be delivered to the web browser. text is what
+# should be used to generate snippets. Only text is searched.
 con.execute('''CREATE TABLE entries_base (
     entry_id INTEGER PRIMARY KEY,
     term_id INTEGER,
+    alt_terms TEXT,
     html HTMLTEXT, --recognized as 'TEXT' by sqlite
     text TEXT,
-    brief TEXT,
     info TEXT,
     dict_id INTEGER)''')
 
@@ -53,9 +69,9 @@ con.execute('''CREATE VIRTUAL TABLE entries USING fts4(
     tokenize=porter,
     entry_id,
     term_id,
+    alt_terms,
     html,
     text,
-    brief,
     info,
     dict_id)
     ''')
@@ -164,9 +180,8 @@ def build_dppn():
                             textfunctions.phonhash(name) if name else None,
                             boost,
                             entry_id])
-
-        # Remove the first name entry.
-        next(entry.iter('name')).drop_tree()
+            e.drop_tree()
+        alt_names = ", ".join(r[2] for r in name_rows[1:])
 
         html = lxml.html.tostring(entry, encoding='utf8').decode()
 
@@ -180,14 +195,9 @@ def build_dppn():
         text = " ".join(paras)
         text = regex.sub(" {2,}", " ", text)
         if paras:
-            brief = regex.match(r'.{,70}[^.,]*', paras[0])[0]
-            if len(brief) < len(text) - 1:
-                brief += ' … '
-            else:
-                brief += '.'
+            brief = create_brief(paras[0])
         else:
             brief = None
-
 
         # terms:
         # term_id, base_id, term, number, phon_hash, boost, entry_id
@@ -198,7 +208,7 @@ def build_dppn():
         # entries:
         # entry_id, term_id, html, text, brief, info, dict_id
         con.execute('INSERT INTO entries_base VALUES (?, ?, ?, ?, ?, ?, ?)',
-            (entry_id, name_rows[0][0], html, textfunctions.mangle(text), brief, entry.tag, dict_id))
+            (entry_id, name_rows[0][0], alt_names, html, textfunctions.mangle(text), entry.tag, dict_id))
 
         # Populate references.
         for refstr in refstrs:
@@ -255,7 +265,7 @@ def build_cped():
         term_id += 1
         entry_id += 1
         terms.append((term_id, None, row.pali, 1, row.phonhash, row.boost, entry_id))
-        entries.append((entry_id, term_id, None, textfunctions.mangle(row.meaning), None, row.grammar, dict_id))
+        entries.append((entry_id, term_id, None, textfunctions.mangle(row.meaning), row.meaning, row.grammar, dict_id))
         search_entries.append((entry_id, row.meaning))
     print(len(terms), len(entries))
     # term_id, base_id, term, number, phon_hash, boost, entry_id

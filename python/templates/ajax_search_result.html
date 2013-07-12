@@ -6,15 +6,15 @@
 
 {% if category.type == "sutta" -%}
 <table>
-<caption>Query: <strong>{{result.query.query}}</strong></caption>
-<thead>
+<!--<caption>Query: <strong>{{result.query.query}}</strong></caption>-->
+<!--<thead>
 <tr>
 <th>Identifier</th>
 <th>Title</th>
 <th>Vol/Page</th>
 <th>Parallels</th>
 <th class='transcol'>Translations</th>
-</thead>
+</thead>-->
 </tr>
 {% for section in category.sections -%}
 <tr><td colspan='5' class='subdivision'>{{section.title}}</td></tr>

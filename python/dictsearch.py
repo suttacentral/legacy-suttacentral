@@ -83,19 +83,19 @@ class OmniDictSearcher:
 
     def get_matching_terms(self, query):
         return self.execute('''
-            SELECT terms_base.term as term, dicts.name, dicts.abbrev, terms_base.number, coalesce(html, demangle(text)) AS full, coalesce(brief, text) AS brief
+            SELECT terms_base.term as term, alt_terms, dicts.name, dicts.abbrev, terms_base.number, html AS entry, terms_base.boost
                 FROM terms INNER JOIN
                 entries_base USING(entry_id)
                 JOIN dicts ON entries_base.dict_id = dicts.dict_id
                 JOIN terms_base ON entries_base.term_id=terms_base.term_id
                 WHERE terms.term MATCH ?
-                GROUP BY terms.entry_id
-                ORDER BY terms.boost''',
+                GROUP BY terms_base.entry_id
+                ORDER BY terms_base.boost''',
                 (query.casefold(), )).fetchall()
                 
     def get_matching_entries(self, query):
         return self.execute('''
-            SELECT entries.entry_id, dicts.name, dicts.abbrev, term, number, coalesce(brief, demangle(text)) AS brief, coalesce(html, demangle(text)) AS full, snippet(entries) AS snip
+            SELECT entries.entry_id, dicts.name, dicts.abbrev, term, alt_terms, number, html AS entry
                 FROM entries INNER JOIN terms_base USING(term_id)
                 JOIN dicts ON entries.dict_id = dicts.dict_id
                 WHERE entries MATCH :query
@@ -107,8 +107,12 @@ class OmniDictSearcher:
         terms = self.get_matching_terms(query)
         entries = self.get_matching_entries(query)
         lquery = query.casefold()
-        terms.sort(key=lambda r: r['term'].casefold() == lquery, reverse=True)
-        entries.sort(key=lambda r: r['full'].lower().count(lquery), reverse=True)
+        #closure :)
+
+        tsk = TermSortKey(query)
+        esk = EntrySortKey(query)
+        terms.sort(key=tsk)
+        entries.sort(key=esk)
 
         return terms, entries
 
@@ -116,42 +120,94 @@ class OmniDictSearcher:
         "This is (generally) no faster than the above."
         return self.execute('SELECT count(*) FROM entries WHERE entries MATCH ?', (query.casefold(),)).fetchone()[0]
 
+class EntrySortKey:
+    def __init__(self, query):
+        self.query = query.casefold()
+        self.terms = self.query.split()
+    def __call__(self, row):
+        score = 0
+        entry = row['entry'].casefold()
+
+        for term in self.terms:
+            score -= 0.1 * (1 - min(10, entry.count(term))/10)
+            try:
+                score -= 0.7 * (1 - entry.index(term, 0, 50) / 50)
+                score -= 0.3 * (1 - entry.index(term, 0, 300) / 300)
+            except:
+                pass
+
+        return 1 + score / len(self.terms)
+
+class TermSortKey:
+    def __init__(self, query):
+        self.query = query.casefold()
+        self.terms = self.query.split()
+    def __call__(self, row):
+        score = row['boost']
+        if self.query in row['term']:
+            if row['boost'] == 1:
+                score -= 0.1 / len(row['term'])
+            else:
+                score -= 0.1
+        return score
+        
 omni = OmniDictSearcher(dbname=config['dict']['db'])
 
 def search(query, target='dict', limit=10, offset=0, ajax=0):
     dictResults = classes.DictionaryResultsCategory()
     terms, entries = omni.get_terms_and_entries(query)
     total = len(terms) + len(entries)
+    if offset > total:
+        offset = max(0, total - limit)
+        
+    navtarget = None
+
+    see_all_terms = None
+    see_all_entries = None
+    see_all = None
+    see_more = None
+    if len(terms) > 0:
+        href = '/search/?query={}&target=terms&limit=25&offset=0'.format(query)
+        see_all_terms = '<a href="{}">{} term{} match{}</a>'.format(
+                href, len(terms), '' if len(terms)==1 else 's', 'es' if len(terms)==1 else '')
+    if len(entries) > 0:
+        href = '/search/?query={}&target=entries&limit=25&offset=0'.format(query)
+        see_all_entries = '<a href="{}">{} entr{} match{}</a>'.format(
+            href, len(entries), 'y' if len(terms) == 1 else 'ies', 'es' if len(terms) == 1 else '')
+    
+    if see_all_entries and see_all_terms:
+        href = 'search/?query={}&target=terms,entries&limit=25&offset=0'.format(query)
+        see_all = '<a href={}>{} total</a>'.format(href, total)
+    if terms and entries:
+        see_more = '{} and {}, {}'.format(see_all_terms, see_all_entries, see_all)
+    elif terms:
+        see_more = see_all_terms
+    elif entries:
+        see_more = see_all_entries
+    if see_more:            #alpha preceeded by >  :)
+        see_more = regex.sub('(?<=>)\p{alpha}', lambda m: m[0].upper(), see_more, 1) + '.'
+        
     if target == 'all' and ajax:
-        if len(terms) > 0:
-            href = "/search/?query={}&target=dict&limit=25&offset=0".format(query)
-            strings = []
-            if terms:
-                strings.append('{} terms'.format(len(terms)))
-            if entries:
-                strings.append('{} entries'.format(len(entries)))
-            dictResults.footurl = '<a href="{}">{} match {}</a>'.format(
-                href, " and ".join(strings),
-                query)
-            dictResults.add("", terms[0:1])
-        else:
-            return None
+        if terms:
+            terms_list = terms[0:1]
+            if see_more:
+                terms_list.append(classes.HTMLRow(see_more))
+            dictResults.add("", terms_list)
 
     elif target == 'all':
-        footurl = None
-        total = len(entries) + len(terms)
-        if total > 0:
-            href = '/search/?query={}&target=dict&limit=10&offset=0'.format(query)
-            footurl = '<a href="{}">Show full dictionary results ({} total)</a>'.format(href, total)
+        maxterms = 3
+        maxentries = 0 if terms else 1
 
-        dictResults.footurl = footurl
-        if terms:
-            dictResults.add("Terms", terms[:5])
-        if entries:
-            dictResults.add("Entries", entries[:5])
-            
-    elif target == "dict":
-        footurl = ""
+        if terms and maxterms > 0:
+            terms_list = terms[:maxterms]
+            dictResults.add("Terms", terms_list)
+        if entries and maxentries > 0:
+            entries_list = entries[:maxentries]
+            dictResults.add("Entries", entries_list)
+        if see_more:
+            dictResults.add_row(classes.HTMLRow(see_more))
+
+    elif 'terms' in target and 'entries' in target:
         r_terms = terms[offset:offset+limit]
         if r_terms:
             dictResults.add("Terms", r_terms)
@@ -161,34 +217,31 @@ def search(query, target='dict', limit=10, offset=0, ajax=0):
             r_entries = entries[e_offset: e_offset + e_limit]
             if r_entries:
                 dictResults.add("Entries", r_entries)
-        if offset > 0:
-            #Prev link
-            start = max(0, offset - limit)
-            href ='/search/?query={}&target=dict&limit={}&offset={}'.format(
-                query, limit, start)
-            footurl += '<a href="{}"> « Results {}–{}</a>'.format(
-                href, start + 1, min(total, start + limit))
-        if limit + offset < total:
-            start = offset + limit
-            href ='/search/?query={}&target=dict&limit={}&offset={}'.format(
-                query, limit, start)
-            footurl += '<a href="{}">Results {}—{} »</a>'.format(
-                href, start, min(total, start + limit))
-        dictResults.footurl = footurl
+        navtarget = "terms,entries"
+    elif 'terms' in target:
+        dictResults.add("Terms", terms[offset:offset+limit])
+        total = len(terms)
+        navtarget="terms"
 
+    elif 'entries' in target:
+        dictResults.add("Entries", entries[offset:offset+limit])
+        total = len(entries)
+        navtarget="entries"
+
+    footurl = ""
+    if navtarget and offset > 0:
+        #Prev link
+        start = max(0, offset - limit)
+        href ='/search/?query={}&target={}&limit={}&offset={}'.format(
+            query, navtarget, limit, start)
+        footurl += '<a href="{}"> « Results {}–{}</a>'.format(
+            href, start + 1, min(total, start + limit))
+    if navtarget and limit + offset < total:
+        start = offset + limit
+        href ='/search/?query={}&target={}&limit={}&offset={}'.format(
+            query, navtarget, limit, start)
+        footurl += '<a href="{}">Results {}—{} of {} »</a>'.format(
+            href, start, min(total, start + limit), total)
+    if footurl:
+        dictResults.add_row(classes.HTMLRow(footurl))
     return dictResults
-
-def stress():
-    "Search all terms. Helps expose problems."
-    import random, concurrent.futures as futures, time
-    terms = [t[0] for t in omni.execute('SELECT term FROM terms')]
-    queries = (random.sample(terms, 50) * 50)[:25000]
-    
-    getter = futures.ThreadPoolExecutor(4)
-    start=time.time()
-    results = list(getter.map(omni.get_matching_terms, queries))
-    done = time.time()
-    print("{} queries executed in {} seconds.".format(len(terms), done-start))
-    print("{} queries per second.".format(len(terms) / (done-start)))
-    return results
-    

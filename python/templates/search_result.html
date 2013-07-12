@@ -5,28 +5,26 @@
 <div>You searched: <strong>{{result.query.query}}</strong>
 </div>
 {% for category in result.categories -%}
+
 {% if category.type == "dict" -%}
-{% for section in category.sections -%}
-{% if section.title == "Terms" %}
-<dl class="terms">
-{% for row in section.results %}
-<dt>{{row.term}} ({{row.abbrev}})</dt>
-<dd>{{row.full if result.query.target=='dict' else row.brief}}</dd>
-{% endfor %}
-</dl>
+    {% for section in category.sections -%}
+        <ul class="terms">
+        {% for row in section.results %}
+            {% if row.html %}
+                <li class="moreresults">{{row.html}}</li>
+            {% else %}
+                <li><h3>{{row.term}} {{row.number if row.number > 1}} <span class="alt_terms">{{'<span class="alt_terms">(' + row.alt_terms + ')</span>' if row.alt_terms}}</h3>
+                {% if result.query.target=='dict' %}
+                    {{row.entry}}
+                {% else %}
+                    <div class=truncate>{{row.entry}}</div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        </ul>
+    {%- endfor %}
 {% endif %}
 
-{% if section.title == "Entries" %}
-<dl class="entries">
-{% for row in section.results %}
-<dt>{{row.term}}</dt>
-<dd>{{row.full if result.query.target=='dict' else row.brief}}</dd>
-{% endfor %}
-</dl>
-{% endif %}
-
-{%- endfor %}
-{%- endif %}
 {% if category.type == "sutta" -%}
 <table>
 <thead>
@@ -50,5 +48,9 @@
 {{category.footurl}}
 {% endif %}
 {%- endfor %}
+
 </div>
 {%- endblock -%}
+<script>
+$('.entry  p').truncate({max_length: 100});
+</script>

@@ -203,6 +203,9 @@ class ResultsCategory:
         self.total = total
     def add(self, title, entries):
         self.sections.append( ResultSection(title, entries) )
+    def add_row(self, row):
+        "Add a row to the most recently added section"
+        self.sections[-1][1].append(row)
         
 SuttaSection = namedtuple('SuttaSection', 'title, suttas')
 class SuttaResultsCategory(ResultsCategory):
@@ -218,6 +221,16 @@ class DictionaryResultsCategory(ResultsCategory):
 class FulltextResultsCategory(ResultsCategory):
     type = 'fulltext'
     caption = 'Texts:'
+
+class HTMLRow:
+    """Insert a row of arbitary HTML code into a results listing.
+
+    It is the responsibility of the template to put it in the correct
+    containing element (i.e. a <li>, or a <tr><td>...)
+
+    """
+    def __init__(self, html):
+        self.html=html
 
 class InvalidTextCollectionPathException(Exception):
     pass

@@ -86,7 +86,7 @@ def search(query, target='all', limit=10, offset=0, ajax=0):
     if not query:
         return search_result
 
-    if target in ('all', 'dict'):
+    if target=='all' or 'terms' in target or 'entries' in target:
         dict_results = dictsearch.search(query=query, target=target, limit=limit, offset=offset, ajax=ajax)
         if dict_results:
             search_result.add(dict_results)
