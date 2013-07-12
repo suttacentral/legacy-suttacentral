@@ -1,115 +1,100 @@
+
 /* GENERAL */
-
 @font-face {
-    font-family: 'skolarsuttaweb';
-    src: url('/fonts/skolarsuttaweb_bold.eot');
-    src: url('/fonts/skolarsuttaweb_bold.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/skolarsuttaweb_bold.woff') format('woff'),
-         url('/fonts/skolarsuttaweb_bold.ttf') format('truetype'),
-         url('/fonts/skolarsuttaweb_bold.svg#skolarsuttawebbold') format('svg');
+    font-family: "Skolar Sutta Web";
+    src: url('skolarsuttaweb_bold.eot');
+    src: url('skolarsuttaweb_bold.eot?#iefix') format('embedded-opentype'),
+         url('skolarsuttaweb_bold.woff') format('woff'),
+         url('skolarsuttaweb_bold.ttf') format('truetype'),
+         url('skolarsuttaweb_bold.svg#ted_to_alter_the_fon') format('svg');
     font-weight: bold;
     font-style: normal;
-
 }
 
 @font-face {
-    font-family: 'skolarsuttaweb';
-    src: url('/fonts/skolarsuttaweb_italic.eot');
-    src: url('/fonts/skolarsuttaweb_italic.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/skolarsuttaweb_italic.woff') format('woff'),
-         url('/fonts/skolarsuttaweb_italic.ttf') format('truetype'),
-         url('/fonts/skolarsuttaweb_italic.svg#skolar_webitalic') format('svg');
+    font-family: 'Skolar Sutta Web';
+    src: url('skolarsuttaweb_italic.eot');
+    src: url('skolarsuttaweb_italic.eot?#iefix') format('embedded-opentype'),
+         url('skolarsuttaweb_italic.woff') format('woff'),
+         url('skolarsuttaweb_italic.ttf') format('truetype'),
+         url('skolarsuttaweb_italic.svg#er_the_font_soft') format('svg');
     font-weight: normal;
     font-style: italic;
-
 }
 
 @font-face {
-    font-family: 'skolarsuttaweb';
-    src: url('/fonts/skolarsuttaweb_regular.eot');
-    src: url('/fonts/skolarsuttaweb_regular.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/skolarsuttaweb_regular.woff') format('woff'),
-         url('/fonts/skolarsuttaweb_regular.ttf') format('truetype'),
-         url('/fonts/skolarsuttaweb_regular.svg#skolarsuttawebregular') format('svg');
+    font-family: 'Skolar Sutta Web';
+    src: url('skolarsuttaweb_regular.eot');
+    src: url('skolarsuttaweb_regular.eot?#iefix') format('embedded-opentype'),
+         url('skolarsuttaweb_regular.woff') format('woff'),
+         url('skolarsuttaweb_regular.ttf') format('truetype'),
+         url('skolarsuttaweb_regular.svg#alter_the_font_software') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
 
 @font-face {
-    font-family: 'skolarsuttawebsc';
-    font-style: normal;
+    font-family: 'Skolar Sutta Web SC';
+    src: url('skolarsuttawebsc_regular.eot');
+    src: url('skolarsuttawebsc_regular.eot?#iefix') format('embedded-opentype'),
+         url('skolarsuttawebsc_regular.woff') format('woff'),
+         url('skolarsuttawebsc_regular.ttf') format('truetype'),
+         url('skolarsuttawebsc_regular.svg#ted_to_alter_the_font_soft') format('svg');
     font-weight: normal;
-    src: url('/fonts/skolarsuttawebsc_regular.eot'); /* IE9 Compat Modes */
-    src: url('/fonts/skolarsuttawebsc_regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('/fonts/skolarsuttawebsc_regular.woff') format('woff'), /* Modern Browsers */
-         url('/fonts/skolarsuttawebsc_regular.svg#skolarsuttawebsc-Regular') format('svg'), /* Legacy iOS */
-         url('/fonts/skolarsuttawebsc_regular.ttf') format('truetype'); /* Safari, Android, iOS */
+    font-style: normal;
 }
 
-}
 @font-face {
     font-family: 'source_sans_pro';
-    src: url('/fonts/sourcesanspro-bold-webfont.eot');
-    src: url('/fonts/sourcesanspro-bold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/sourcesanspro-bold-webfont.woff') format('woff'),
-         url('/fonts/sourcesanspro-bold-webfont.ttf') format('truetype'),
-         url('/fonts/sourcesanspro-bold-webfont.svg#source_sans_probold') format('svg');
+    src: url('sourcesanspro-bold-webfont.eot');
+    src: url('sourcesanspro-bold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('sourcesanspro-bold-webfont.woff') format('woff'),
+    url('sourcesanspro-bold-webfont.ttf') format('truetype'),
+    url('sourcesanspro-bold-webfont.svg#source_sans_probold') format('svg');
     font-weight: bold;
     font-style: normal;
-
 }
-
-
-
 
 @font-face {
     font-family: 'source_sans_pro';
-    src: url('/fonts/sourcesanspro-it-webfont.eot');
-    src: url('/fonts/sourcesanspro-it-webfont.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/sourcesanspro-it-webfont.woff') format('woff'),
-    url('/fonts/sourcesanspro-it-webfont.ttf') format('truetype'),
-    url('/fonts/sourcesanspro-it-webfont.svg#source_sans_proitalic') format('svg');
+    src: url('sourcesanspro-it-webfont.eot');
+    src: url('sourcesanspro-it-webfont.eot?#iefix') format('embedded-opentype'),
+    url('sourcesanspro-it-webfont.woff') format('woff'),
+    url('sourcesanspro-it-webfont.ttf') format('truetype'),
+    url('sourcesanspro-it-webfont.svg#source_sans_proitalic') format('svg');
     font-weight: normal;
     font-style: italic;
-
 }
-
-
-
 
 @font-face {
     font-family: 'source_sans_pro';
-    src: url('/fonts/sourcesanspro-regular-webfont.eot');
-    src: url('/fonts/sourcesanspro-regular-webfont.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/sourcesanspro-regular-webfont.woff') format('woff'),
-    url('/fonts/sourcesanspro-regular-webfont.ttf') format('truetype'),
-    url('/fonts/sourcesanspro-regular-webfont.svg#source_sans_proregular') format('svg');
+    src: url('sourcesanspro-regular-webfont.eot');
+    src: url('sourcesanspro-regular-webfont.eot?#iefix') format('embedded-opentype'),
+    url('sourcesanspro-regular-webfont.woff') format('woff'),
+    url('sourcesanspro-regular-webfont.ttf') format('truetype'),
+    url('sourcesanspro-regular-webfont.svg#source_sans_proregular') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
-
 
 @font-face {
-    font-family: 'hetusc';
-    src: url('/fonts/hetusc-webfont.eot');
-    src: url('/fonts/hetu-webfont.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/hetusc-webfont.woff') format('woff'),
-    url('/fonts/hetusc-webfont.ttf') format('truetype'),
-    url('/fonts/hetusc-webfont.svg#source_sans_proregular') format('svg');
+    font-family: 'hetu_schetu_sc';
+    src: url('hetusc-webfont.eot');
+    src: url('hetusc-webfont.eot?#iefix') format('embedded-opentype'),
+         url('hetusc-webfont.woff') format('woff'),
+         url('hetusc-webfont.ttf') format('truetype'),
+         url('hetusc-webfont.svg#hetu_schetu_sc') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
 
-*   {
-    margin:0;
-    padding:0;
+* {
+    margin: 0;
+    padding: 0;
 }
 
 html,body {
-    height:100%;
+    height: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-font-variant-ligatures: common-ligatures;
     -webkit-font-variant-ligatures: common-ligatures;
@@ -117,14 +102,16 @@ html,body {
 }
 
 body {
-    font-family:'skolarsuttaweb',Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,"Microsoft JhengHei",serif;
-    text-align:left;
-    color:#2B2B2B;
-    line-height:1.5;
-    background:#fcfcfc;
+    font-family: "Skolar Sutta Web",Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,"Microsoft JhengHei",serif;
+    text-align: left;
+    color: #2B2B2B;
+    line-height: 1.5;
+    background: #fcfcfc;
 }
 
-.hidden {display:none;}
+.hidden {
+    display: none;
+}
 
 /*! Include relevant items from normalize.css v2.0.1 | MIT License | git.io/normalize */
 
@@ -134,7 +121,9 @@ html, body {
 }
 
 b,
-strong { font-weight: bold;}
+strong {
+    font-weight: bold;
+}
 
 sub,
 sup {
@@ -143,11 +132,18 @@ sup {
     position: relative;
     vertical-align: baseline;
 }
-sup { top: -0.5em;}
 
-sub { bottom: -0.25em}
+sup {
+    top: -0.5em;
+}
 
-img {border: 0;}
+sub {
+    bottom: -0.25em
+}
+
+img {
+    border: 0;
+}
 
 /* ==========================================================================
 
@@ -316,7 +312,7 @@ p, ul {margin-bottom:1.5em;}
 
 section h1 {line-height:1;
     font-size:1.6em;
-    margin:0.25em 0 0 0;
+    margin:0.25em 0 1em 0;
     font-weight:normal;
 }
 
@@ -376,7 +372,7 @@ header {
 
 header h1   {
     line-height:1.2;
-    font-family: 'skolarsuttawebsc','skolarsuttaweb',serif;
+    font-family: 'Skolar Sutta Web SC','Skolar Sutta Web',serif;
     font-weight:normal;
     letter-spacing:0.02em;
     display:table;
@@ -407,7 +403,7 @@ header h1 a:link, header h1 a:visited, header h1 a:hover, header h1 a:active {co
 .search {
     float:right;
     margin-left:1.5em;
-    
+
 }
 
 .searchspace {
@@ -420,7 +416,7 @@ header h1 a:link, header h1 a:visited, header h1 a:hover, header h1 a:active {co
     padding:0 4px;
     box-shadow:inset 0px 0px 7px rgba(136, 136, 136, 0.3);
 }
-    
+
 .searchbutton {
     margin-left: -4px;
     border-radius: 0px 3px 3px 0px;
@@ -429,7 +425,7 @@ header h1 a:link, header h1 a:visited, header h1 a:hover, header h1 a:active {co
     box-shadow: 0 0 3px rgba(136, 136, 136, 0.3);
     width:4.5em;
     height:1.63em;
-    
+
 }
 
 .searchbutton img {vertical-align:-0.1em;}
@@ -450,7 +446,7 @@ nav {
     margin:0 0 0 -1px;
     box-shadow: 0px 0px 5px rgba(136, 136, 136, 0.1);
     border:1px solid #a1a1a1;
-    
+
     -webkit-transition: border-radius,box-shadow, padding 0.1s ease;
     -moz-transition:border-radius,box-shadow,padding 0.1s ease;
     -o-transition:border-radius,box-shadow,padding 0.1s ease;
@@ -564,16 +560,25 @@ nav li span {
 #search_results tr, #search_results td {
     margin-right:1em;
     padding: 0.4em 0.4em 0.4em 0em;
-    
+
+}
+#search_results td:nth-of-type(2) {
+    max-width:15em;
 }
 #search_results td:nth-of-type(3), #search_results td:nth-of-type(2) {
     padding-left: 1em;
 }
+#search_results td:nth-of-type(4) {
+    padding-left: 0.6em;
+    padding-right:0.6em;
+}
+
 #search_results tr.even {
     background-color: #f0f0f0;
 }
 #search_results td a {
-padding:0.5em 0.6em;
+padding:0.2em 0.3em;
+margin: -0.2em -0.3em;
 }
 #search_results a:hover {
     background: #e5e5e5;
@@ -599,7 +604,7 @@ padding:0.5em 0.6em;
     margin:0 auto 5em auto;
     max-width: 80%;
 
-    
+
 }
 
 #twocol {
@@ -651,7 +656,7 @@ blockquote {margin:1.3em 1em 1.3em 1em;}
     width: 100%;
     height: 1.5em;
     padding-bottom:1em;
-    
+
 }
 .tabs li {
     width:24.5%;
@@ -703,7 +708,7 @@ blockquote {margin:1.3em 1em 1.3em 1em;}
 
 #main li a:hover{
     background-color: #f6f6f6;
-    
+
 }
 
 .noborder {border:none !important;}
@@ -715,10 +720,10 @@ blockquote {margin:1.3em 1em 1.3em 1em;}
     font-weight:bold;
     letter-spacing:0.1em;
     font-size:1.2em;
-    
+
 }
 
-#home h2, #home h3	{
+#home h2, #home h3      {
     color:#b6b6b6;
     margin-bottom:0;
     padding-bottom:0.8em;
@@ -728,7 +733,7 @@ blockquote {margin:1.3em 1em 1.3em 1em;}
     border-bottom: 1px solid #d9d9d9;
 }
 
-#home section h2, #home section h3	{font-weight:bold;}
+#home section h2, #home section h3      {font-weight:bold;}
 
 #home section {
     display:table;
@@ -757,7 +762,7 @@ table {
 }
 
 caption {
-    margin: -1em 0 1em 0; 
+    margin: -1em 0 1em 0;
     white-space:nowrap;
 }
 
@@ -953,25 +958,25 @@ a.pub {
 }
 
 .author {
-    font-family:'skolarsuttawebsc', 'skolarsuttaweb', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
+    font-family:'Skolar Sutta Web SC', 'Skolar Sutta Web', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
     font-style:normal;
     letter-spacing:0.02em;
 }
 
 .smallcaps {
-    font-family:'skolarsuttawebsc', 'skolarsuttaweb', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
+    font-family:'Skolar Sutta Web SC', 'Skolar Sutta Web', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
     text-transform:lowercase;
     letter-spacing:0.02em;
 }
 
 .deets .author, #metaarea .author {
- font-family: 'hetusc', 'source_sans_pro', sans-serif;
+ font-family: 'hetu_schetu_sc', 'source_sans_pro', sans-serif;
         letter-spacing:0.02em;}
 
 
 .roman_numerals {
   text-transform:lowercase;
-    font-family:'skolarsuttawebsc', 'skolarsuttaweb', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
+    font-family:'Skolar Sutta Web SC', 'Skolar Sutta Web', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
     font-style:normal;
     letter-spacing:0.02em;
 }
@@ -1088,7 +1093,7 @@ span.lookup:hover > span.meaning {
     box-shadow: 0 0 3px rgba(136, 136, 136, 0.3);
     letter-spacing: 0px;
     word-spacing: 0px;
-    
+
 }
 
 #metaarea {
@@ -1129,10 +1134,10 @@ span.lookup:hover > span.meaning {
     float:left;
 }
 
-#toc #toRoman	{border-radius: 3px 0px 0px 3px;
-		border-left:1px solid #aaa;}
+#toc #toRoman   {border-radius: 3px 0px 0px 3px;
+                border-left:1px solid #aaa;}
 
-#toc #toSyllables	{border-radius: 0px 3px 3px 0px;}
+#toc #toSyllables       {border-radius: 0px 3px 3px 0px;}
 
 
 #pali_lookup_log {
@@ -1192,7 +1197,7 @@ span.lookup:hover > span.meaning {
 }
 .sutta h1,.sutta h2,.sutta h3,.sutta h4,.sutta h5,.sutta h6
     {
-    font-family:'skolarsuttawebsc', 'skolarsuttaweb', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
+    font-family:'Skolar Sutta Web SC', 'Skolar Sutta Web', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
     text-align:center;
     font-weight:normal;
     letter-spacing:0.02em;
@@ -1234,31 +1239,31 @@ article h2 a, article h3 a, article h4 a, article h5 a, article h6 a{color:#b2b2
 
 
 .evam {
-    font-family: 'skolarsuttawebsc', 'skolarsuttaweb', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
+    font-family: 'Skolar Sutta Web SC', 'Skolar Sutta Web', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
     letter-spacing:0.02em;
 }
 
-.sutta hgroup h2		{	text-transform:uppercase;
-					letter-spacing:0.2em;
-					font-size:0.8em;
-					color:#b2b2b2;
-					margin:0;
-					font-family:'source_sans_pro', sans-serif;
-					}
+.sutta hgroup h2                {       text-transform:uppercase;
+                                        letter-spacing:0.2em;
+                                        font-size:0.8em;
+                                        color:#b2b2b2;
+                                        margin:0;
+                                        font-family:'source_sans_pro', sans-serif;
+                                        }
 
 
-.sutta hgroup h3		{	text-transform:uppercase;
-					letter-spacing:0.2em;
-					font-size:0.8em;
-					color:#b2b2b2;
-					margin:0;
+.sutta hgroup h3                {       text-transform:uppercase;
+                                        letter-spacing:0.2em;
+                                        font-size:0.8em;
+                                        color:#b2b2b2;
+                                        margin:0;
 font-family:'source_sans_pro', sans-serif;
-					}
+                                        }
 
-.sutta hgroup h4		{margin-top:-2em;
-					  color:#b2b2b2;
-					  font-style:italic;
-					}
+.sutta hgroup h4                {margin-top:-2em;
+                                          color:#b2b2b2;
+                                          font-style:italic;
+                                        }
 .sutta ul {
     list-style-type: none;
 }
@@ -1272,7 +1277,7 @@ font-family:'source_sans_pro', sans-serif;
      padding:0 0 0 1em;
      margin:0 0 0 0;
 }
-    
+
 
 .gatha {
     font-size: inherit;
@@ -1293,10 +1298,10 @@ font-family:'source_sans_pro', sans-serif;
     font-style:italic !important;color:#b2b2b2;
 }
 
-.endh2, .endh3, .endh4, .endh5, .endh6, .endsutta, .endvagga, .endsubdivision, .endsection, .enddivision, .bhanavara, .enduddesa 
+.endh2, .endh3, .endh4, .endh5, .endh6, .endsutta, .endvagga, .endsubdivision, .endsection, .enddivision, .bhanavara, .enduddesa
     {
     text-align:center;
-    font-family: 'skolarsuttaweb',serif !important;
+    font-family: 'Skolar Sutta Web',serif !important;
     font-style:italic !important;color:#b2b2b2;
 }
 
@@ -1304,13 +1309,13 @@ font-family:'source_sans_pro', sans-serif;
     text-align:center !important;
     font-size:0.8em !important;
     margin-bottom:0;
-    font-family:'skolarsuttaweb',serif !important;
+    font-family:'Skolar Sutta Web',serif !important;
     font-style:italic !important;color:#b2b2b2;
 }
 
 .endbook {
     text-align:center;
-    font-family: 'skolarsuttaweb',serif !important;
+    font-family: 'Skolar Sutta Web',serif !important;
     font-weight:bold;color:#b2b2b2;
 }
 
@@ -1377,17 +1382,17 @@ font-size: .7em;
 
 
 
-.next				{	float:right;}
+.next                           {       float:right;}
 
-.previous			{
-					float:left;}
+.previous                       {
+                                        float:left;}
 
 
 
-.top					{
-					position:absolute;text-align:center;
-						left:45%;
-						right:45%;}
+.top                                    {
+                                        position:absolute;text-align:center;
+                                                left:45%;
+                                                right:45%;}
 
 .next:hover, .previous:hover, .top:hover {
         border: 0 solid #99f;
@@ -1402,7 +1407,7 @@ footer{
     text-align:center;
     height:70px;
     clear:both;
-    
+
 }
 
 #clearfooter {
@@ -1420,11 +1425,7 @@ footer p {
 
 /* VIETNAMESE */
 
-section:lang(vn), section:lang(vn) h1, section:lang(vn) h2, section:lang(vn) h3, section:lang(vn) #menu li, section:lang(vn) p {
-    font-family:"Gentium Basic", "Gentium Book Basic","Gentium Plus", "Gentium Alt", "Gentium", Cambria, serif !important;
 
-
-}
 
 /*CHINESE*/
 
@@ -1449,6 +1450,240 @@ section:lang(zh) q {
 
 .tlineheadnote {color:red;}
 
+
+/*NEW CLASSES ADDED FOR VERSION 3.0 (PYTHON). THESE ARE MAINLY FOR SANSKRIT TEXTS> I PLACE THEM HERE FOR NOW, BUT ULTIMATELY THEY SHOUL BE INTEGRATED PROPERLY. UNDER THE DESCRIPTION IS TH ETITLE ATTRIBUTE.*/
+
+.surplus        {display:none;}
+.surplus.infomode       {display:inline;color:#4805A2}
+/*For Mahaparinirvana text, marks apparently random phrases that are marked in bold in GRETIL.
+
+Surplus text.
+*/
+
+.supplied
+.supplied.infomode      {color:#B3A72D}
+/*In almost all Sanskrit texts, there is reconstruction by the editor. These are marked <span class="supplied"></span>. In CSS this should by default display normally, and optionally, use
+
+
+Text reconstructed by the editor.
+*/
+
+.supplied2
+.supplied2.infomode     {color:#9B8D00}
+/*In some cases there are two forms of supplied text, usually differentiated in the original by () and []. This difference is retained by using supplied2 for the []. Actually these should be marked more clearly to differnentiate them, but this will differ according to the various publications, which I don't have. So for now let them behave as for .supplied, except use
+
+Text reconstructed by the editor.
+*/
+
+.add {
+    display: none;
+    ]
+.add.infomode   {display: inline;
+    font-family: 'source_sans_pro';
+    color: #b2b2b2;
+    font-size: 80%;
+}
+/*There are some editorial additions marked <span class="add"></span>. These should be hidden by default.
+
+Editorial comment.
+*/
+
+.suppliedmetre {
+    color: #b2b2b2;
+    font-family: 'hetu_schetu_sc'
+}
+/*This is for cases where the editor has "filled in the blanks" (hence "supplied") with metrical notation (hence "metre").
+
+Metre reconstructed by the editor.
+*/
+
+.gap {
+    color: #B2AF8C
+}
+/*For marking gaps in the text, which are filled in with + or the like.
+
+Gaps in the manuscript.
+*/
+
+.corr
+corr.infomode {
+    color: #00751A
+}
+/*A corrected reading that has been adopted in the text (usually by the latest editor mentioned in the meta). By default display normally.
+
+
+
+Reading corrected by the editor.
+*/
+
+.sic {
+    display: none
+}
+
+.sic.infomode {
+    display: inline;
+    color: #9B0F00;
+}
+/*An apparently incorrect reading that has been suppressed in the text. By default no display.
+
+Apparently incorrect reading determined by the editor.
+*/
+
+.lem
+.lem.infomode {
+    color: #432769
+}
+/*The adopted main reading in a text. Display normally.
+
+
+
+Accepted reading in this text.
+*/
+
+.rdg
+/*A variant reading. Use the same color as for "var" above. In fact, these var should be merged under rdg (which is the TEI terminology.)
+
+Variant reading.
+*/
+
+cite.book {
+    font-style: italic;
+}
+/*A book title.*/
+
+cite.article {
+    font-style: normal
+}
+/*An article title.*/
+
+.gatha-number
+/*As it says. Style as for other refs.*/
+
+.del {
+    display: none;
+}
+
+.del.infomode {
+    color: EE1700;
+}
+/*(deletion) contains a letter, word, or passage deleted, marked as deleted, or otherwise indicated as superfluous or spurious in the copy text by an author, scribe, annotator, or corrector.
+
+Text deleted by the editor as superfluous.
+*/
+
+.namo {
+    font-style: italic
+}
+/*dedication at the start of texts*/
+
+hr {
+    width: 50%;
+    color: #b2b2b2
+}
+
+/*      Various ref classes. In some cases the text uses different ref numbering in different parts, where they are sourced from various manuscripts or additions. In such cases I have already marked up the numbers appropriately.
+
+The classes are usually named according to the surname and year of publication. Here they are followed by the title, which is to be inserted with javascript.
+
+CSS Class       HTML Title
+
+.eno89          "Paragraph numbers in Enomoto, 1989."
+
+.hoe16          "Verse numbers in Hoernle, 1916."
+
+.mat85          "Paragraph numbers in Matsumura, 1985."
+
+.mat88          "Paragraph numbers in Matsumura, 1988."
+
+.mit57          "Paragraph numbers in Mittal, 1957."
+
+.san89          "Paragraph numbers in Sander, 1987."
+
+.tri62          "Sūtra and paragraph number in Tripāṭhi, 1962."
+
+.tri95          "Section and paragraph number in Tripāṭhi, 1995."
+
+.har04          "Paragraph number in Hartmann, 2004."
+
+.fuk03          "Page numbers in Fukita, 2003"
+
+.wal50          "Paragraph numbers in Waldschmidt, 1950 (etc.)."
+
+.wal48          "Paragraph numbers for sondertext in Waldschmidt, 1948 (ST.ii)."
+
+.wal61          "Paragraph numbers for sondertext in Waldschmidt, 1961 (ST.i)."
+
+.wal55b         "Paragraph numbers in Waldschmidt, 1955b, “Die Einleitung des Saṅgītisūtra.”"
+
+.wal57c         "Paragraph numbers in Waldschmidt, 1957c, “Das Upasenasūtra.”"
+
+.wal52          "Paragraph numbers in Waldschmidt, 1952, 1956, 1960."
+
+.wal58          "Paragraph numbers in Waldschmidt, 1958."
+
+.wal59a         "Paragraph numbers in Waldschmidt, 1959a, “Kleine Brahmi-Schriftrolle.”"
+
+.wal68a         "Paragraph numbers in Waldschmidt, 1958a, “Drei Fragmente buddhistischer Sūtras aus den Turfanhandschriften.”"
+
+.wal70a         "Paragraph numbers in Waldschmidt, 1970a, Buddha frees the disc of the moon."
+
+.wal70b         "Paragraph numbers in Waldschmidt, 1970b, “Fragment of a Buddhist Sanskrit text on cosmogony.”"
+
+.wal76          "Paragraph numbers in Waldschmidt, 1976."
+
+.wal78          "Paragraph numbers in Waldschmidt, 1978."
+
+.wal80c         "Paragraph numbers in Waldschmidt, 1980c, “On a Sanskrit version of the Verahaccāni Sutta.”"
+
+.mat88          "Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988."
+
+.san87          "Paragraph numbers in Sander, 1987."
+
+.gno78          "Paragraph numbers in Gnoli, 1978."
+
+.yam72          "Paragraph numbers in Yamada, 1972."
+
+.wal60          "Paragraph numbers in Waldschmidt, 1960/1."
+
+.hos89a         "Paragraph numbers in Hosoda, 1989, “Sanskrit Fragments from the Parivrājakasaṃyukta of the Saṃyuktāgama I.”"
+
+.hos89b "Paragraph numbers in Hosoda, 1989, “Sanskrit Fragments from the Parivrājakasaṃyukta of the Saṃyuktāgama II.”"
+
+.hos91          "Paragraph numbers in Hosoda, 1991."
+
+.vai59          "Page and line numbers in Vaidya, 1959."
+
+.vai58          "Page numbers in Vaidya, 1958."
+
+.sen82          "Section and paragraph numbers in Senart, 1882."
+
+The following references are secondary. They appear in the same files as some of the ones above, and should be styled as more distant from the text.
+
+.hs                     (Not defined in GRETIL source.)
+
+.bl                     (Not defined in GRETIL source.)
+
+.as                     "Page numbers in Yamada, 1972."
+
+.sht                    "References for SHT fragments."
+
+.gbm            "Section numbers in Gilgit Buddhist Manscripts."
+
+.fol                    "Folio number in the manuscript."
+
+In a few cases there are no paragraph numbers, these should be added as "SC" numbers. These texts are:
+
+Mahavadana
+Śroṇa 1
+Śroṇa 2
+Dahra
+Sakrapasna
+Āryānityatāsūtra
+Avadanasataka
+Lalitavistara
+Sanghabhedavastu
+
+
 /*
 
 * print styles
@@ -1456,50 +1691,76 @@ section:lang(zh) q {
 
 */
 @media print {
-* {
-    
-    background: transparent !important; color: #black !important;
-}
-    
-
-    a, a:visited, .vagga { color: #black !important; }
-    header, footer, .deets, .tri, #toc, .previous, .next, .top, .details, .transcol {display:none !important;}
-
-    tr {position: relative;page-break-before: auto;}
-
-    td {border: 1px solid #aaa;}
-
-    th {border: 1px solid #000;}
-
-table {position: relative;}
-
-#onecol, #text {position: relative;}
-
-th, td {
-    border-left: none;
-    border-right: none;
-    padding:0.2em;
-}
-
-    tfoot tr{border: none;}
-
-    body, td, th, caption
-    {
-    font-size: 11pt;
-    font-family:'skolarsuttaweb',"Gentium Basic",Cambria,"Times New Roman","DejaVu Serif",Helvetica,Arial,serif;
-}
-    
-    
-    #onecol, #text {margin-top:-3cm;}
-    
-    @page { margin: 2cm 1cm; }
-    p, h2, h3, h4, h5, h6 { orphans: 3; widows: 3; color:black;}
-    h2, h3	{ page-break-after: avoid; }
-
-    .ue-tab-container {
-        display:none;
+    * {
+        background: transparent !important;
+        color: #black !important;
     }
 
+    a, a:visited, .vagga {
+        color: #black !important;
+    }
+
+    header, footer, .deets, .tri, #toc, .previous, .next, .top, .details, .transcol {
+        display: none !important;
+    }
+
+    tr {
+        position: relative;
+        page-break-before: auto;
+    }
+
+    td {
+        border: 1px solid #aaa;
+    }
+
+    th {
+        border: 1px solid #000;
+    }
+
+    table {
+        position: relative;
+    }
+
+    #onecol, #text {
+        position: relative;
+    }
+
+    th, td {
+        border-left: none;
+        border-right: none;
+        padding: 0.2em;
+    }
+
+    tfoot tr {
+        border: none;
+    }
+
+    body, td, th, caption {
+        font-size: 11pt;
+        font-family: 'Skolar Sutta Web',"Gentium Basic",Cambria,"Times New Roman","DejaVu Serif",Helvetica,Arial,serif;
+    }
+
+    #onecol, #text {
+        margin-top: -3cm;
+    }
+
+    @    page {
+        margin: 2cm 1cm;
+    }
+
+    p, h2, h3, h4, h5, h6 {
+        orphans: 3;
+        widows: 3;
+        color: black;
+    }
+
+    h2, h3 {
+        page-break-after: avoid;
+    }
+
+    .ue-tab-container {
+        display: none;
+    }
 }
 
 
@@ -1507,81 +1768,89 @@ th, td {
 
 
 
-* NARROW SCREEN 
+* NARROW SCREEN
 
 
 */
 @media only screen and (max-width: 65em) {
-    
-header h1 {
-    margin-bottom:0;
-    padding-top:0em;
-}
 
-header h2	{visibility:hidden;}
+    header h1 {
+        margin-bottom: 0;
+        padding-top: 0em;
+    }
 
-.wheel {
-    font-size:2.5em;
-    
-}
+    header h2 {
+        visibility: hidden;
+    }
 
-.search {
-    margin-left:1.5em;
-}
+    .wheel {
+        font-size: 2.5em;
+    }
 
-
+    .search {
+        margin-left: 1.5em;
+    }
 }
 
 @media only screen and (max-width : 45em) {
-.searchspace {width:8em;}
-    
-.searchbutton {width:3em;}
+    .searchspace {
+        width: 8em;
+    }
 
+    .searchbutton {
+        width: 3em;
+    }
 }
 
 @media only screen and (max-width : 35em) {
-    
-header h1 {
-    margin-bottom:0;
-    padding-top:0em;font-size:1.2em;
-}
 
-header h2	{visibility:hidden;}
+    header h1 {
+        margin-bottom: 0;
+        padding-top: 0em;
+        font-size: 1.2em;
+    }
 
-.wheel {
-    font-size:1.2em;
-    margin-top:0.1em;
-    margin-right:0.2em;
-}
+    header h2 {
+        visibility: hidden;
+    }
 
-#navbar {
-    float:left;
-    font-size:0.7em;
-    display:block
-}
+    .wheel {
+        font-size: 1.2em;
+        margin-top: 0.1em;
+        margin-right: 0.2em;
+    }
 
-.search {
-    float:left;
-    margin-left:0;
-    font-size:0.7em;
-    margin-bottom:0.3em;
-    margin-right:10em;
-    
-}
+    #navbar {
+        float: left;
+        font-size: 0.7em;
+        display: block
+    }
 
-.searchspace {width:13.3em;}
-    
-.searchbutton {width:4.5em;}
+    .search {
+        float: left;
+        margin-left: 0;
+        font-size: 0.7em;
+        margin-bottom: 0.3em;
+        margin-right: 10em;
+    }
 
-.searchbutton img {height:1em;}
+    .searchspace {
+        width: 13.3em;
+    }
 
+    .searchbutton {
+        width: 4.5em;
+    }
 
+    .searchbutton img {
+        height: 1em;
+    }
 }
 
 
 /*
 
-* Mobile 
+* Mobile
 
 */
 
@@ -1590,17 +1859,25 @@ header h2	{visibility:hidden;}
 
 
 
-.search {margin-right:0em;}
+    .search {
+        margin-right: 0em;
+    }
 
-#home ul {width:100%;}
+    #home ul {
+        width: 100%;
+    }
 
-caption {text-align:left;}
-.abhidhamma {
-    width:100% !important;
-    margin:0 auto;
+    caption {
+        text-align: left;
+    }
+
+    .abhidhamma {
+        width: 100% !important;
+        margin: 0 auto;
+    }
+
+    .abhidhamma ul {
+        width: 100% !important;
+    }
 }
-
-.abhidhamma ul {width:100% !important;}
-
-
-}
+ 
