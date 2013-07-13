@@ -13,10 +13,11 @@ class ViewBase:
         # Subclasses use this object to obtain templates.
         self.env = Environment(
             loader=FileSystemLoader(config.templates_root),
-            extensions=[AssetsExtension]
+            extensions=[AssetsExtension],
+            trim_blocks=True,
+            lstrip_blocks=True,
         )
         self.env.assets_environment = assets.env
-
         # Subclasses assign a template
         self.template = None
 

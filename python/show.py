@@ -1,7 +1,7 @@
 import cherrypy, os, regex
 import classes, scdb, suttasearch
 from views import *
-import classes, suttasearch, dictsearch
+import classes, suttasearch, dictsearch, textsearch
 
 import logging
 logger = logging.getLogger(__name__)
@@ -76,20 +76,28 @@ def default(*args, **kwargs):
 
     raise cherrypy.HTTPError(404, 'Unknown path {}'.format(' '.join(args)))
 
-def search(query, target='all', limit=10, offset=0, ajax=0):
+def search(query, target=None, limit=10, offset=0, ajax=0, **kwargs):
     limit = int(limit)
     offset = int(offset)
+    if not target:
+        target = 'all'
     ajax = not ajax in (None, 0, '0')
     qdict = {'query':query, 'target':target, 'limit':limit, 'offset':offset, 'ajax':ajax}
+    qdict.update(kwargs)
 
     search_result = classes.SearchResults(query=qdict)
     if not query:
         return search_result
 
     if target=='all' or 'terms' in target or 'entries' in target:
-        dict_results = dictsearch.search(query=query, target=target, limit=limit, offset=offset, ajax=ajax)
+        dict_results = dictsearch.search(query=query, target=target, limit=limit, offset=offset, ajax=ajax, **kwargs)
         if dict_results:
             search_result.add(dict_results)
+
+    if target == 'all' or 'texts' in target:
+        text_results = textsearch.search(query=query, target=target, limit=limit, offset=offset, **kwargs)
+        if text_results:
+            search_result.add(text_results)
 
     if target in ('all', 'suttas'):
         slimit = limit

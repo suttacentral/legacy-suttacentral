@@ -1,20 +1,48 @@
 {% import 'macros.html' as macros with context %}
 {% for category in result.categories -%}
-{% if category.type == "dict" -%}
-<p>{{category.sections[0].results[0]['brief']}}<br>{{category.footurl}}</p>
-{% endif %}
-
+    {%- if category.type == "dict" -%}
+        {% for section in category.sections -%}
+            <ul class="terms">
+            {% for row in section.results -%}
+                {% if row.html -%}
+                    <li class="moreresults">{{row.html}}</li>
+                {% else -%}
+                    <li><h3>{{row.term}}{{row.number if row.number > 1}}{{' <span class="alt_terms">(' + row.alt_terms + ')</span>' if row.alt_terms}}</h3>
+                    {% if result.query.target=='dict' -%}
+                        {{row.entry}}
+                    {% else -%}
+                        <div class=truncate>{{row.entry}}</div>
+                    {%- endif -%}
+                {%- endif -%}
+            {%- endfor -%}
+            </ul>
+        {% endfor -%}
+    {%- endif -%}
+    {%- if category.type == 'fulltext' -%}
+        {% for section in category.sections -%}
+            <ul class="text_results>">
+            {% for row in section.results -%}
+                {% if row.html -%}
+                    <li class="moreresults">{{row.html}}</li>
+                {% else -%}
+                    <li><h3><a href="/{{row.uid}}/{{result.query.lang}}/#{{row.bookmark}}">{{row.heading}} »</a></h3>
+                    <p>{{row.snippet}}</p>
+                    </li>
+                {% endif -%}
+            {% endfor %}
+        {% endfor %}
+    {%- endif -%}
 {% if category.type == "sutta" -%}
 <table>
-<!--<caption>Query: <strong>{{result.query.query}}</strong></caption>-->
-<!--<thead>
+{#<caption>Query: <strong>{{result.query.query}}</strong></caption>
+<thead>
 <tr>
 <th>Identifier</th>
 <th>Title</th>
 <th>Vol/Page</th>
 <th>Parallels</th>
 <th class='transcol'>Translations</th>
-</thead>-->
+</thead>#}
 </tr>
 {% for section in category.sections -%}
 <tr><td colspan='5' class='subdivision'>{{section.title}}</td></tr>
@@ -25,4 +53,3 @@
 </table>
 {% endif %}
 {%- endfor %}
-

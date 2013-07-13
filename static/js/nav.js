@@ -41,6 +41,7 @@ var sc_nav = {
             td.append(lastchild);
         }
         $("#search_results").html(results).slideDown();
+        sc_truncate.apply($("#search_results"), 125)
         $("#search_results tr").filter(":even").addClass("even");
     },
 };
@@ -83,8 +84,8 @@ sc_truncate = {
                 return
             }
 
-            var brief = sc_truncate.brief(text);
-            if (brief===null) return; // No enbriefing needed.
+            var brief = sc_truncate.brief(this, max_length);
+            if (brief===false) return; // No enbriefing needed.
             var parent = $(this).parent()
             var showmore = $('<div class="showmore"/>').appendTo(parent);
             showmore.append(this);
@@ -98,13 +99,14 @@ sc_truncate = {
         $('a.showless').text('[less]');
         $('a.showmore').text('[…more]');
     },
-    brief: function(element) {
+    brief: function(element, max_length) {
         //may return text or html
         var text = $(element).text();
         if (text.length < max_length) {
             //Nothing to do.
-            return
+            return false
         }
+        var brief = text
         //Remove references which contain a number:
         brief = brief.replace(/(^| )(?=[a-zA-Z.]*\d)([^, ]+)/g, '');
         brief = brief.replace(/\s{2,}/g, ' ') //Normalize whitespace
@@ -116,6 +118,7 @@ sc_truncate = {
             //Remove trailing characters, which might be a broken word:
             brief = brief.replace(/[^ —,.]*$/, '')
         }
+        return brief
     },
 }
 

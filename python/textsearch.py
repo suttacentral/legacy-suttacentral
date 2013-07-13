@@ -1,7 +1,17 @@
-import os, threading, sqlite3, regex, lxml.html, shutil
+import os, threading, sqlite3, regex, lxml.html, shutil, functools, collections
 from array import array
 from contextlib import contextmanager
 import textfunctions, declensions, config
+from classes import FulltextResultsCategory, HTMLRow
+
+class PrettyRow(sqlite3.Row):
+    def __repr__(self):
+        out = []
+        out.append("<PrettyRow:")
+        for key in self.keys():
+            out.append("['{}']={}".format(key, self[key]))
+        out[-1] += ' >\n'
+        return "\n".join(out)
 
 tlocals = threading.local()
 tlocals.con = {}
@@ -9,8 +19,8 @@ tlocals.con = {}
 textroot = config.app['text_root']
 searchroot = config.textsearch['dbpath']
 
-
 def rank(data):
+    "Taken from SQLite3 fts3/4 documentation c -> python"
     aMatchInfo = array('i', data)
     nPhrase = aMatchInfo[0]
     nCol = aMatchInfo[1]
@@ -131,6 +141,7 @@ class SectionSearch:
             con = tlocals.con[self.dbname]
         except KeyError:
             con = sqlite3.connect(self.dbname)
+            con.row_factory=PrettyRow
             con.create_function('rank', 1, rank)
             con.create_function('demangle', 1, textfunctions.demangle)
             tlocals.con[self.dbname] = con
@@ -157,8 +168,21 @@ class SectionSearch:
     def sanitize(self, string):
         return regex.sub(r'[\u200b]', '', string)
 
+    def stemmer(self, string, query=False):
+        """stemmer should pre-stem text before passing it to fts4
+
+        It is important to use the right python tokenizer which matches
+        the chosen fts4 tokenizer.
+
+        if query is true, that means a query is being processed. doing
+        something special with queries is optional.
+
+        """
+        
+        return string.casefold()
+    
     def parse_entries(self):
-        uidfind = regex.compile(r'.*/([\w-]+)').findall
+        uidfind = regex.compile(r'.*/([\w-]+(?:\.[\d-]+)?)').findall
         entries = []
         stemmed_entries = []
         original_entries = []
@@ -182,7 +206,7 @@ class SectionSearch:
                         # Add this entry.
                         entry_id += 1
                         mang_text = " «br» ".join(text_l)
-                        orig_text = mang_text
+                        orig_text = mang_text.casefold()
                         stem_text = self.stemmer(mang_text)
 
                         entries.append( (entry_id, uid, title, best_id, mang_text) )
@@ -203,13 +227,20 @@ class SectionSearch:
                             title = htext
                         elif len(title) > len(htext):
                                 title = htext
+                    if not best_id:
+                        node = e
+                        if e.getparent() is not None and e.getparent().tag in ('a', 'hgroup'):
+                            node = e.getparent()
+                        for a in node.iter():
+                            try:
+                                best_id = a.attrib['id']
+                                break
+                            except KeyError:
+                                pass
+
                 for a in e.iter('a'):
-                    if not best_id and 'id' in a.attrib:
-                    # Choose the best id (closest to start)
-                        best_id = a.attrib['id']
-                        if a.text is None or regex.search('\d', a.text):
-                            a.text = None
-                            a.drop_tag()
+                    if a.text is None or regex.search('\d', a.text):
+                        a.drop_tree()
                 text = e.text_content()
                 text = self.sanitize(text)
                 text = textfunctions.mangle(text)
@@ -239,6 +270,8 @@ class SectionSearch:
 
         entries, original_entries, stemmed_entries = self.parse_entries()
 
+        self.last = (entries, original_entries, stemmed_entries)
+
         print(len(entries))
         con.executemany('INSERT INTO entries values(?, ?, ?, ?, ?)',
             entries)
@@ -246,6 +279,8 @@ class SectionSearch:
             stemmed_entries)
         con.executemany('INSERT INTO original (docid, text) values (?, ?)',
             original_entries)
+
+        con.commit() # Optimize requires commit beforehand.
         
         con.execute("INSERT INTO stemmed(stemmed) VALUES('optimize')")
         con.execute("INSERT INTO original(original) VALUES('optimize')")
@@ -281,7 +316,7 @@ class SectionSearch:
     def search_exact(self, query, limit=10, offset=0):
         query = query.lower()
         rows = self.execute('''
-            SELECT uid, heading, bookmark, demangle(snippet(original, "<b>", "</b> ", " … ", -1, -40)) as snippet FROM original JOIN (
+            SELECT uid, heading, bookmark, demangle(snippet(original, "<b>", "</b>", " … ", -1, -40)) as snippet FROM original JOIN (
                 SELECT docid, rank(matchinfo(original)) AS rank
                 FROM original
                 WHERE original MATCH :query
@@ -303,7 +338,7 @@ class SectionSearch:
         if to_fetch > 0:
             exact_results = self.search_exact(query, limit, offset)
             if len(exact_results) == limit:
-                return (exact_results, [], exact_count, stemmed_count)
+                return (exact_results, [])
 
         # We already have len(exact_results) results
         offset -= exact_count
@@ -311,7 +346,7 @@ class SectionSearch:
 
         if stemmed_count - offset > 0:
             stemmed_results = self.search_stemmed(query, limit, offset)
-        return (exact_results, stemmed_results, exact_count, stemmed_count)
+        return (exact_results, stemmed_results)
 
 class PaliStemFilter:
     " A stemmer for pali. "
@@ -364,21 +399,110 @@ class PaliStemFilter:
     
 class PaliTextSearch(SectionSearch):
     fts_tokenizer = 'simple'
-    rex_tokenizer = regex.compile(r'([\p{ascii}--[A-Za-z0-9_]]+)', flags=regex.V1)
+    rex_tokenizer = regex.compile(r'([\p{ascii}--[A-Za-z0-9]]+)', flags=regex.V1)
     stemmer = PaliStemFilter()
     stemmer.tokenizer = rex_tokenizer
 
-p = PaliTextSearch('pi')
+class EnglishTextSearch(SectionSearch):
+    @staticmethod
+    def repl(m):
+        " Normalize common sanskrit terms into pali "
+        string = m[0]
+        string = string.replace('dharm', 'dhamm')
+        string = string.replace('karm', 'kamm')
+        string = string.replace('karm', 'kamm')
+        string = string.replace('nirv', 'nibb')
+        string = string.replace('ttva', 'tta')
+        string = string.replace('bhiks', 'bhikkh')
+        string = string.replace('bhikkhuni', 'nun')
+        string = string.replace('bhikkhu', 'monk')
+        return string
 
-def stress_test(count):
-    import random, time
-    terms = 'buddha dhamma sangha ānanda sariputta moggallana kassapa anuruddha'.split()
-    queries = [" ".join(random.sample(terms, 2)) for i in range(count)]
+    rex_tokenizer = regex.compile(r'[\P{ascii}A-Za-z0-9_]+', flags=regex.V1)
+    def stemmer(self, string, query=False):
+        string = textfunctions.asciify(string)
+        string = self.rex_tokenizer.sub(EnglishTextSearch.repl, string)
+        return string
 
-    requesters = concurrent.futures.ThreadPoolExecutor(10)
-    def gimmie(query):
-        res = p.search(query, 10, 0)
-        return len(res[0])+len(res[1])
-    start=time.time()
-    results = list(requesters.map(gimmie, queries))
-    return time.time() - start
+class VietnameseTextSearch(SectionSearch):
+    fts_tokenizer = 'simple'
+    rex_tokenizer = regex.compile(r'([\p{ascii}--[A-Za-z0-9]]+)', flags=regex.V1)
+
+    # Todo: stemmer : When stemming vietnamese, all pali words should be
+    # turned into plain ascii. This can be accomplished by generating a
+    # list of all words, subtracting from it all vietnamese words, all
+    # english words. What's left over can be safely asciified.
+    # VN probably doesn't need much stemming otherwise.
+    
+pi = PaliTextSearch('pi')
+en = EnglishTextSearch('en')
+vn = VietnameseTextSearch('vn')
+
+all_searchers = {pi.lang_code:pi, en.lang_code:en, vn.lang_code:vn}
+
+def build(all_searchers=all_searchers):
+    for lang in sorted(all_searchers):
+        all_searchers[lang].generate_search_db()
+
+def count_all(query, _cache={}):
+    try:
+        # Use a cache because this function should be callable willy-nilly
+        return _cache[query]
+    except KeyError:
+        pass
+    out = {}
+    for lang in all_searchers:
+        out[lang] = all_searchers[lang].count_stemmed(query)
+    if max(out.values()) == 0:
+        try:
+            # Use the same dict for all null results (optimization)
+            out = _cache[None]
+        except:
+            _cache[None] = out
+    _cache[query] = out
+    return out
+
+def search(query, target="texts", limit=25, offset=0, lang='en'):
+    result = FulltextResultsCategory()
+    counts = count_all(query)
+    if target=='all':
+        urls = []
+        for lang_code in sorted(counts):
+            if counts[lang_code] > 0:
+                urls.append('<a href="/search/?query={query}&target=texts&lang={lang}&limit=25&offset=0">{lang}: {count}</a>'.format(
+                    query=query,
+                    lang=lang_code,
+                    count=counts[lang_code]))
+        if urls:
+            result.add("", [HTMLRow(" | ".join(urls))])
+        else:
+            return None
+    
+    elif 'texts' in target:
+        if lang in counts and counts[lang] > 0:
+            total = counts[lang]
+            results = all_searchers[lang].search(query, limit, offset)
+            results = results[0] + results[1]
+            search.results = results
+            result.add("", results)
+            links = []
+            if offset > 0:
+                # Prev link
+                start = max(0, offset - limit)
+                end = min(start + limit, total)
+                href = "/search/?query={}&target=texts&lang={}&limit={}&offset={}".format(query, lang, limit, start)
+                links.append('<a href="{}">« Results {}–{}</a>'.format(
+                    href, start + 1, end))
+            if total > offset + len(results):
+                # Next link
+                start = offset + limit
+                end = min(start + limit, total)
+                href = "/search/?query={}&target=texts&lang={}&limit={}&offset={}".format(query, lang, limit, start)
+                links.append('<a href="{}">Results {}–{} »</a>'.format(
+                    href, start + 1, end))
+            if links:
+                result.add_row(HTMLRow(" ".join(links)))
+        else:
+            return None
+
+    return result
