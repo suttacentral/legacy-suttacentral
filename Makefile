@@ -40,7 +40,7 @@ clean-assets:
 		static/js/compiled/*.js
 
 clean-db:
-	rm -f db/sc.sqlite
+	rm -f db/*.sqlite
 
 clean-all: clean clean-assets clean-db
 
