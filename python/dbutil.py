@@ -112,6 +112,7 @@ def drop_db():
 
 def reset_db():
     print('Resetting database...')
+    fetch_db_export()
     drop_db()
     create_db()
     load_db()

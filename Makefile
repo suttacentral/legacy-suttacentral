@@ -14,6 +14,8 @@ deploy-staging:
 		git pull && \
 		cd .. && \
 		pip install -r requirements.txt && \
+		make clean-all && \
+		make reset-db && \
 		make build-assets && \
 		make build-dict && \
 		rm -f tmp/maintenance && \
