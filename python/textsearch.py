@@ -1,8 +1,10 @@
 import os, threading, sqlite3, regex, lxml.html, shutil, functools, collections
 from array import array
 from contextlib import contextmanager
-import textfunctions, declensions, config
+import declensions, config
 from classes import FulltextResultsCategory, HTMLRow
+
+from textfunctions import *
 
 class PrettyRow(sqlite3.Row):
     def __repr__(self):
@@ -68,6 +70,10 @@ def find_best_id(tag):
         if tag is None:
             return '#'
 
+class SearchTermNotFound(Exception):
+    def __init__(self, term):
+        self.term = term
+
 class SectionSearch:
     """ Full text search class based on SQLite fts4 extension.
 
@@ -112,6 +118,7 @@ class SectionSearch:
     rex_tokenizer = regex.compile(r'([\p{ascii}--[A-Za-z0-9_]]+)', flags=regex.V1)
     #fts_tokenizer = 'simple'
     #rex_tokenizer = regex.compile(r'[A-Za-z0-9]+')
+    aliases = []
 
     def __init__(self, lang_code, extensions='html', tags='h1, h2, p'):
         self.lang_code = lang_code
@@ -122,6 +129,14 @@ class SectionSearch:
             raise Exception("Path {} does not exist".format(self.path))
         self.dbname = os.path.join(searchroot,
             'search_{}.sqlite'.format(lang_code))
+        self.alias_map = {}
+        for group in self.aliases:
+            stemmed = [self.stemmer(t) for t in group]
+            alias_text = '(' + " OR ".join(stemmed) + ')'
+            #alias_expanded = [alias for alias in group]
+            #alias_expanded = [alias + 's' for alias in group]
+            #print(alias_expanded)
+            self.alias_map.update((alias, alias_text) for alias in stemmed)
 
     @contextmanager
     def getcon(self):
@@ -143,7 +158,7 @@ class SectionSearch:
             con = sqlite3.connect(self.dbname)
             con.row_factory=PrettyRow
             con.create_function('rank', 1, rank)
-            con.create_function('demangle', 1, textfunctions.demangle)
+            con.create_function('demangle', 1, demangle)
             tlocals.con[self.dbname] = con
         try:
             yield con
@@ -156,10 +171,13 @@ class SectionSearch:
     def execute(self, sql, args=()):
         with self.getcon() as con:
             return con.execute(sql, args)
+    def executemany(self, sql, args=()):
+        with self.getcon() as con:
+            return con.executemany(sql, args)
 
     def files(self):
         "Returns a sorted list of all files to be indexed"
-        return sorted(fileiter(self.path, self.extensions), key=textfunctions.numsortkey)
+        return sorted(fileiter(self.path, self.extensions), key=numsortkey)
 
     def checksum(self):
         "Returns an integer which can be compared to see if the files have changed"
@@ -167,19 +185,6 @@ class SectionSearch:
 
     def sanitize(self, string):
         return regex.sub(r'[\u200b]', '', string)
-
-    def stemmer(self, string, query=False):
-        """stemmer should pre-stem text before passing it to fts4
-
-        It is important to use the right python tokenizer which matches
-        the chosen fts4 tokenizer.
-
-        if query is true, that means a query is being processed. doing
-        something special with queries is optional.
-
-        """
-        
-        return string.casefold()
     
     def parse_entries(self):
         uidfind = regex.compile(r'.*/([\w-]+(?:\.[\d-]+)?)').findall
@@ -193,6 +198,9 @@ class SectionSearch:
 
             dom = lxml.html.fromstring(open(filename).read())
             self.dom = dom
+            for e in dom.cssselect('#metaarea, .hidden'):
+                e.drop_tree()
+                
             elements = dom.cssselect(self.tags)
             elements.append(dom.makeelement('SENTINEL'))
             lasttag = 'p'
@@ -206,7 +214,7 @@ class SectionSearch:
                         # Add this entry.
                         entry_id += 1
                         mang_text = " «br» ".join(text_l)
-                        orig_text = mang_text.casefold()
+                        orig_text = mang_text.casefold().replace('\xad','')
                         stem_text = self.stemmer(mang_text)
 
                         entries.append( (entry_id, uid, title, best_id, mang_text) )
@@ -243,7 +251,7 @@ class SectionSearch:
                         a.drop_tree()
                 text = e.text_content()
                 text = self.sanitize(text)
-                text = textfunctions.mangle(text)
+                text = mangle(text)
                 text_l.append(text)
                 lasttag = e.tag
         return (entries, original_entries, stemmed_entries)
@@ -284,15 +292,154 @@ class SectionSearch:
         
         con.execute("INSERT INTO stemmed(stemmed) VALUES('optimize')")
         con.execute("INSERT INTO original(original) VALUES('optimize')")
+
+        con.execute("CREATE VIRTUAL TABLE ft_terms USING fts4aux(original)")
+        # We create a real table which can be indexed.
+        terms = con.execute('SELECT term, occurrences FROM ft_terms WHERE col="*"').fetchall()
+
+        con.execute('CREATE TABLE terms(ascii TEXT, simplified TEXT, phonetic TEXT, original TEXT, freq INT)')
+        con.execute('DROP TABLE ft_terms')
+
+        terms2 = [
+            (asciify(term)[:24],
+            simplify(term, self.lang_code, None) if len(term) < 24 else None,
+            phonhash(term) if len(term) < 24 else None,
+            term,
+            occurrences) for term, occurrences in terms if not regex.search(r'\d', term) and term[0].isalpha()]
+
+        con.executemany('INSERT INTO terms VALUES (?,?,?,?,?)', terms2)
+        con.execute('CREATE INDEX terms_ascii_x ON terms(ascii)')
+        con.execute('CREATE INDEX terms_simp_x ON terms(simplified)')
+        con.execute('CREATE INDEX terms_phon_x ON terms(phonetic)')
+        con.execute('CREATE UNIQUE INDEX terms_orig_x ON terms(original)')
         
         con.commit()
         os.replace(tmpfile, self.dbname)
 
-    def count_stemmed(self, query):
-        return self.execute('SELECT count(*) FROM stemmed WHERE stemmed MATCH ?', (self.stemmer(query, True), )).fetchone()[0]
+    def stemmer(self, string, query=False):
+        """stemmer should pre-stem text before passing it to fts4
 
-    def search_stemmed(self, query, limit=10, offset=0):
-        query = query.lower()
+        It is important to use the right python tokenizer which matches
+        the chosen fts4 tokenizer.
+
+        if query is true, that means a query is being processed. doing
+        something special with queries is optional.
+
+        stemmer need only casefold if a built-in fts3 stemmer is used.
+
+        """
+
+        stem = string.casefold()
+
+    def vel_term_correction(self, term):
+        return vel_to_uni(term)
+
+    def expand_term(self, term):
+        return [term]
+
+    def ascii_term_correction(self, term, prune_ratio=50):
+        """Converts an ascii form to probably intended true form.
+
+        This works for any language/script based on ascii. It obviously
+        wont work for Thai, Sinhala script etc.
+
+        """
+    
+        wildcard = term.endswith('*')
+        negated = term.startswith('-')
+        o_term = term
+        if wildcard:
+            term = term[:-1]
+        if negated:
+            term = term[1:]
+        s_term = simplify(term, self.lang_code)
+        
+        if wildcard:
+            rows = self.execute('''SELECT original, freq FROM terms
+            WHERE ascii >= ? AND ascii <= ?
+            ORDER BY freq DESC''', (term, term+'~')).fetchall()
+            if not rows and s_term is not None:
+                rows = self.execute('''SELECT original, freq FROM terms
+                WHERE simplified >= ? AND simplified <= ?
+                ORDER BY freq DESC''',
+                    (s_term, s_term+'~')).fetchall()
+        else:
+            forms = self.expand_term(term)
+            sql = ('SELECT original, freq FROM terms '
+                'WHERE ascii=? {}'.format('OR ascii=? ' * (len(forms)-1))+
+                'ORDER BY freq DESC')
+
+            rows = self.execute(sql, forms).fetchall()
+
+            if not rows and s_term is not None:
+                rows = self.execute('''SELECT original, freq FROM terms
+                    WHERE simplified=? ORDER BY freq DESC''',
+                        (s_term,)).fetchall()
+        if not rows:
+            raise SearchTermNotFound(term=o_term)
+        best = rows[0][1]
+        # Prune terms with low occurences
+        terms = [row[0] for row in rows if best / row[1] < prune_ratio]
+        stemmed_terms = set(self.stemmer(term) for term in terms)
+        stemmed_terms -= {None}
+        
+        prefix ='-' if negated else ''
+        joiner = ' ' if negated else ' OR ' 
+
+        if wildcard:
+            # Return in stem + '*' form - using '*' is much more effecient
+            # than OR'ing all full-length possibilities.
+            exact_query = joiner.join(set(prefix + t[:len(term)] + '*' for t in terms))
+            stemmed_query = joiner.join(set(prefix + t[:len(term)] + '*' for t in stemmed_terms))
+        else:
+            exact_query = joiner.join(prefix + t for t in terms[:3])
+            stemmed_query = joiner.join(prefix + t for t in stemmed_terms)
+
+        return (exact_query, stemmed_query)
+
+    @functools.lru_cache(50)
+    def prepare_query(self, query):
+        "Prepare the query in a way which preserves control words"
+        terms = regex.split(r'((?:\s+(?:OR|NEAR(?:/\d+)?)\s+|[,\s]+|"[^"]*")+)', query)
+        exact_out = []
+        stemmed_out = []
+        is_near = query.find('NEAR') != -1
+
+        for i, term in enumerate(terms):
+            if i % 2 == 1:
+                exact_out.append(term)
+                stemmed_out.append(term)
+                continue
+            term = term.casefold()
+            term = self.vel_term_correction(term)
+            
+            if max(term) <= '~':
+                exact, stemmed = self.ascii_term_correction(term, 1 if is_near else 50)
+            else:
+                exact = term
+                stemmed = self.stemmer(term)
+                
+                try:
+                    stemmed = self.alias_map(stemmed)
+                except:
+                    pass
+            print(term, stemmed)
+            exact_out.append(exact)
+            if stemmed:
+                stemmed_out.append(stemmed)
+                
+        return ("".join(exact_out), "".join(stemmed_out))
+
+    @functools.lru_cache(50)
+    def get_match_count(self, e_query, s_query):
+        exacts = set(t[0] for t in self.execute('SELECT docid FROM original WHERE original MATCH ?', (e_query,)).fetchall()) if e_query else set()
+        stemmed = set(t[0] for t in self.execute('SELECT docid FROM stemmed WHERE stemmed MATCH ?', (s_query,))) if s_query else frozenset()
+        #assert not stemmed or stemmed.issuperset(exacts), "Exact results not contained within stemmed results"
+        stemmed -= exacts
+        
+        return (len(exacts), len(stemmed))
+
+    def search_stemmed(self, e_query, s_query, limit=10, offset=0):
 
         rows = self.execute('''
             SELECT uid, heading, bookmark, demangle(snippet(stemmed, "<b>", "</b> ", " … ", -1, -40)) as snippet FROM stemmed JOIN (
@@ -306,15 +453,11 @@ class SectionSearch:
             ) AS ranktable USING (docid)
             WHERE stemmed MATCH :squery
             ORDER BY ranktable.rank DESC''',
-                        {'query':query, 'squery':self.stemmer(query, True), 'limit':limit, 'offset':offset}).fetchall()
+                        {'query':e_query, 'squery':s_query, 'limit':limit, 'offset':offset}).fetchall()
 
         return rows
-
-    def count_exact(self, query):
-        return self.execute('SELECT count(*) FROM original WHERE original MATCH ?', (query,)).fetchone()[0]
     
     def search_exact(self, query, limit=10, offset=0):
-        query = query.lower()
         rows = self.execute('''
             SELECT uid, heading, bookmark, demangle(snippet(original, "<b>", "</b>", " … ", -1, -40)) as snippet FROM original JOIN (
                 SELECT docid, rank(matchinfo(original)) AS rank
@@ -330,23 +473,46 @@ class SectionSearch:
         return rows
 
     def search(self, query, limit=10, offset=0):
-        exact_count = self.count_exact(query)
-        stemmed_count = self.count_stemmed(query) - exact_count
-        to_fetch = exact_count - offset
-        exact_results = []
-        stemmed_results = []
-        if to_fetch > 0:
-            exact_results = self.search_exact(query, limit, offset)
-            if len(exact_results) == limit:
-                return (exact_results, [])
+        if limit == 0:
+            return None
+        e_query, s_query = self.prepare_query(query)
+        print(e_query, s_query)
+        e_total, s_total = self.get_match_count(e_query, s_query)
+        if (e_total + s_total) < offset:
+            return None
+            
+        print(e_total, s_total)
+        exacts, stemmed = [], []
+        # How many exact results to fetch?
+        tofetch = limit
+        if offset < e_total and e_total > 0:
+            exacts = self.search_exact(e_query, limit=tofetch, offset=offset)
 
-        # We already have len(exact_results) results
-        offset -= exact_count
-        limit -= len(exact_results)
+        tofetch -= len(exacts)
+        
+        if tofetch > 0 and s_total > 0:
+            stemmed = self.search_stemmed(e_query, s_query, limit=tofetch, offset=offset - e_total)
 
-        if stemmed_count - offset > 0:
-            stemmed_results = self.search_stemmed(query, limit, offset)
-        return (exact_results, stemmed_results)
+        return (exacts, stemmed)
+
+    #def search(self, query, limit=10, offset=0):
+        #exact_count = self.count_exact(query)
+        #stemmed_count = self.count_stemmed(query) - exact_count
+        #to_fetch = exact_count - offset
+        #exact_results = []
+        #stemmed_results = []
+        #if to_fetch > 0:
+            #exact_results = self.search_exact(query, limit, offset)
+            #if len(exact_results) == limit:
+                #return (exact_results, [])
+
+        ## We already have len(exact_results) results
+        #offset -= exact_count
+        #limit -= len(exact_results)
+
+        #if stemmed_count - offset > 0:
+            #stemmed_results = self.search_stemmed(query, limit, offset)
+        #return (exact_results, stemmed_results)
 
 class PaliStemFilter:
     " A stemmer for pali. "
@@ -362,10 +528,10 @@ class PaliStemFilter:
     def __init__(self):
         if len(self.qsuffixes) == 0:
             self.qsuffixes.update(self.suffixes)
-            self.qsuffixes.update(textfunctions.asciify(t) for t in self.suffixes)
+            self.qsuffixes.update(asciify(t) for t in self.suffixes)
 
             self.qindeclineables.update(self.indeclineables)
-            self.qindeclineables.update(textfunctions.asciify(t) for t in self.indeclineables)
+            self.qindeclineables.update(asciify(t) for t in self.indeclineables)
 
     def __call__(self, text, query=False):
         if query:
@@ -384,16 +550,14 @@ class PaliStemFilter:
                 for skt, pli in self.sanskrit_to_pali:
                     token = token.replace(skt, pli)
                 if token[:-1] == 'n':
-                    token = token[:-1] + 'ṁ'
+                    token = token[:-1] + 'ṃ'
                 for i in range(min(7, int(len(token)/2 - 0.5)), 0, -1):
                     sfx = token[-i:]
                     if sfx in suffixes:
                         token = token[:-i]
                         break
             
-            token = textfunctions.asciify(token)
-            token = regex.sub(r'(.)\1h?', r'\1', token)
-            token = regex.sub(r'(?<=[kgcjtdbp])h', r'', token)
+            #token = asciify(token)
             pieces[place] = token
         return "".join(pieces)
     
@@ -402,8 +566,17 @@ class PaliTextSearch(SectionSearch):
     rex_tokenizer = regex.compile(r'([\p{ascii}--[A-Za-z0-9]]+)', flags=regex.V1)
     stemmer = PaliStemFilter()
     stemmer.tokenizer = rex_tokenizer
+    def expand_term(self, term):
+        # 'a stem' also attempts to match o/aṁ for pali only.
+        if term.endswith('a'):
+            forms = [term, term[:-1] + 'o', term[:-1] + 'am']
+        else:
+            forms = [term]
+        return forms
 
 class EnglishTextSearch(SectionSearch):
+    aliases =[('bhikkhu', 'monk', 'biksu'), ('bhikkhuni', 'nun', 'biksuni')]
+    
     @staticmethod
     def repl(m):
         " Normalize common sanskrit terms into pali "
@@ -420,7 +593,7 @@ class EnglishTextSearch(SectionSearch):
 
     rex_tokenizer = regex.compile(r'[\P{ascii}A-Za-z0-9_]+', flags=regex.V1)
     def stemmer(self, string, query=False):
-        string = textfunctions.asciify(string)
+        string = asciify(string)
         string = self.rex_tokenizer.sub(EnglishTextSearch.repl, string)
         return string
 
@@ -428,11 +601,7 @@ class VietnameseTextSearch(SectionSearch):
     fts_tokenizer = 'simple'
     rex_tokenizer = regex.compile(r'([\p{ascii}--[A-Za-z0-9]]+)', flags=regex.V1)
 
-    # Todo: stemmer : When stemming vietnamese, all pali words should be
-    # turned into plain ascii. This can be accomplished by generating a
-    # list of all words, subtracting from it all vietnamese words, all
-    # english words. What's left over can be safely asciified.
-    # VN probably doesn't need much stemming otherwise.
+    # Todo: stemmer? Perhaps not needed for VN.
     
 pi = PaliTextSearch('pi')
 en = EnglishTextSearch('en')
@@ -444,22 +613,11 @@ def build(all_searchers=all_searchers):
     for lang in sorted(all_searchers):
         all_searchers[lang].generate_search_db()
 
-def count_all(query, _cache={}):
-    try:
-        # Use a cache because this function should be callable willy-nilly
-        return _cache[query]
-    except KeyError:
-        pass
+def count_all(query):
     out = {}
-    for lang in all_searchers:
-        out[lang] = all_searchers[lang].count_stemmed(query)
-    if max(out.values()) == 0:
-        try:
-            # Use the same dict for all null results (optimization)
-            out = _cache[None]
-        except:
-            _cache[None] = out
-    _cache[query] = out
+    for lang, searcher in all_searchers.items():
+        # Note: Both below functions are cached.
+        out[lang] = sum(searcher.get_match_count(*searcher.prepare_query(query)))
     return out
 
 def search(query, target="texts", limit=25, offset=0, lang='en'):
@@ -482,6 +640,7 @@ def search(query, target="texts", limit=25, offset=0, lang='en'):
         if lang in counts and counts[lang] > 0:
             total = counts[lang]
             results = all_searchers[lang].search(query, limit, offset)
+            search.last = results
             results = results[0] + results[1]
             search.results = results
             result.add("", results)
@@ -498,8 +657,8 @@ def search(query, target="texts", limit=25, offset=0, lang='en'):
                 start = offset + limit
                 end = min(start + limit, total)
                 href = "/search/?query={}&target=texts&lang={}&limit={}&offset={}".format(query, lang, limit, start)
-                links.append('<a href="{}">Results {}–{} »</a>'.format(
-                    href, start + 1, end))
+                links.append('<a href="{}">Results {}–{} (of {}) »</a>'.format(
+                    href, start + 1, end, total))
             if links:
                 result.add_row(HTMLRow(" ".join(links)))
         else:

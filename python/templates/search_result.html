@@ -30,7 +30,7 @@
                 {% if row.html -%}
                     <li class="moreresults">{{row.html}}</li>
                 {% else -%}
-                    <li><h3><a href="/{{row.uid}}/{{result.query.lang}}/#{{row.bookmark}}">{{row.heading}} »</a></h3>
+                    <li><h3><a href="/{{row.uid}}/{{result.query.lang}}/{{'#' + row.bookmark if row.bookmark else ''}}">{{row.heading}} »</a></h3>
                     <p>{{row.snippet}}</p>
                     </li>
                 {% endif -%}

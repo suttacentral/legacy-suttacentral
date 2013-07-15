@@ -17,18 +17,18 @@ endings_data = (
 # masc a
 ('o'       ,'a','n'),
 ('ā'       ,'a','n'),
-('aṁ'      ,'a','n'),
-('aṁ'       ,'a','n'),
+('aṃ'      ,'a','n'),
+('aṃ'       ,'a','n'),
 ('e'       ,'a','n'),
 ('ena'     ,'a','n'),
 ('ehi'     ,'a','n'),
 ('ebhi'    ,'a','n'),
 ('āya'     ,'a','n'),
 ('assa'     ,'a','n'),
-('ānaṁ'    ,'a','n'),
+('ānaṃ'    ,'a','n'),
 ('asmā'     ,'a','n'),
 ('amhā'     ,'a','n'),
-('asmiṁ'    ,'a','n'),
+('asmiṃ'    ,'a','n'),
 ('amhi'     ,'a','n'),
 ('esu'     ,'a','n'),
 
@@ -41,13 +41,13 @@ endings_data = (
 ('ībhi'    ,'i','n'),
 ('ibhi'     ,'i','n'),
 ('ino'     ,'i','n'),
-('īnaṁ'    ,'i','n'),
+('īnaṃ'    ,'i','n'),
 ('īsu'     ,'i','n'),
 
 # masc ī
 
 ('i'       ,'i','n'),
-('inaṁ'    ,'i','n'),
+('inaṃ'    ,'i','n'),
 
 # masc u
 
@@ -58,7 +58,7 @@ endings_data = (
 ('ūhi'     ,'u','n'),
 ('ūbhi'    ,'u','n'),
 ('uno'     ,'u','n'),
-('ūnaṁ'    ,'u','n'),
+('ūnaṃ'    ,'u','n'),
 ('ūsu'     ,'u','n'),
 
 # masc ū
@@ -77,19 +77,19 @@ endings_data = (
 ('āyo'     ,'','n'),
 ('āhi'     ,'','n'),
 ('ābhi'    ,'','n'),
-('āyaṁ'    ,'','n'),
+('āyaṃ'    ,'','n'),
 ('āsu'     ,'','n'),
 # f. i
 ('iyo'     ,'','n'),
 ('iyā'     ,'','n'),
-('iyaṁ'    ,'','n'),
+('iyaṃ'    ,'','n'),
 # f. ī
 ('ī'       ,'a','n'),
 ('inī'     ,'a','n'),
 # f. u
 ('uyo'     ,'','n'),
 ('uyā'     ,'','n'),
-('uyaṁ'    ,'','n'),
+('uyaṃ'    ,'','n'),
 # f. ū
 
 
@@ -98,31 +98,31 @@ endings_data = (
 # vant, mant
 ('ā'       ,'nt','n'),
 ('a'       ,'nt','n'),
-('ataṁ'    ,'nt','n'),
-('antaṁ'   ,'nt','n'),
+('ataṃ'    ,'nt','n'),
+('antaṃ'   ,'nt','n'),
 ('anto'    ,'nt','n'),
 ('antā'    ,'nt','n'),
 ('ante'    ,'nt','n'),
 ('atā'     ,'nt','n'),
 ('antehi'  ,'nt','n'),
 ('ato'     ,'nt','n'),
-('antānaṁ' ,'nt','n'),
+('antānaṃ' ,'nt','n'),
 ('ati'     ,'nt','n'),
 ('antesu'  ,'nt','n'),
 
 # anta (CPED)
 ('ā'       ,'nta','n'),
 ('a'       ,'nta','n'),
-('ataṁ'    ,'nta','n'),
-('ataṁ'    ,'ti','n'),
-('antaṁ'   ,'nta','n'),
+('ataṃ'    ,'nta','n'),
+('ataṃ'    ,'ti','n'),
+('antaṃ'   ,'nta','n'),
 ('anto'    ,'nta','n'),
 ('antā'    ,'nta','n'),
 ('ante'    ,'nta','n'),
 ('atā'     ,'nta','n'),
 ('antehi'  ,'nta','n'),
 ('ato'     ,'nta','n'),
-('antānaṁ' ,'nta','n'),
+('antānaṃ' ,'nta','n'),
 ('ati'     ,'nta','n'),
 ('antesu'  ,'nta','n'),
 
@@ -130,7 +130,7 @@ endings_data = (
 # kattar
 
 ('ā'       ,'ar','n'),
-('āraṁ'    ,'ar','n'),
+('āraṃ'    ,'ar','n'),
 ('ārā'     ,'ar','n'),
 ('u'       ,'ar','n'),
 ('uno'     ,'ar','n'),
@@ -138,12 +138,12 @@ endings_data = (
 ('āro'     ,'ar','n'),
 ('ūhi'     ,'ar','n'),
 ('ūbhi'    ,'ar','n'),
-('ūnaṁ'    ,'ar','n'),
-('ārānaṁ'  ,'ar','n'),
+('ūnaṃ'    ,'ar','n'),
+('ārānaṃ'  ,'ar','n'),
 ('ūsu'     ,'ar','n'),
 ('ā'       ,'ar','n'),
 ('a'       ,'ar','n'),
-('araṁ'    ,'ar','n'),
+('araṃ'    ,'ar','n'),
 ('arā'     ,'ar','n'),
 
 # pitar
@@ -152,17 +152,17 @@ endings_data = (
 ('unā'     ,'ar','n'),
 ('arehi'   ,'ar','n'),
 ('arebhi'  ,'ar','n'),
-('ānaṁ'    ,'ar','n'),
-('arānaṁ'  ,'ar','n'),
-('unnaṁ'   ,'ar','n'),
+('ānaṃ'    ,'ar','n'),
+('arānaṃ'  ,'ar','n'),
+('unnaṃ'   ,'ar','n'),
 ('ito'     ,'ar','n'),
 
 # matar
 
 ('uyā'     ,'ar','n'),
 ('ūyā'      ,'ar','n'),
-('ūyaṁ'     ,'ar','n'),
-('uyaṁ'    ,'ar','n'),
+('ūyaṃ'     ,'ar','n'),
+('uyaṃ'    ,'ar','n'),
 
 
 # mano
@@ -174,17 +174,17 @@ endings_data = (
 ('asi'     ,'o','n'),
 
 ('ā'       ,'o','n'),
-('aṁ'      ,'o','n'),
+('aṃ'      ,'o','n'),
 ('e'       ,'o','n'),
 ('ena'     ,'o','n'),
 ('ehi'     ,'o','n'),
 ('ebhi'    ,'o','n'),
 ('āya'     ,'o','n'),
 ('assa'    ,'o','n'),
-('ānaṁ'    ,'o','n'),
+('ānaṃ'    ,'o','n'),
 ('asmā'    ,'o','n'),
 ('amhā'    ,'o','n'),
-('asmiṁ'   ,'o','n'),
+('asmiṃ'   ,'o','n'),
 ('amhi'    ,'o','n'),
 ('esu'     ,'o','n'),
 
@@ -216,14 +216,14 @@ endings_data = (
 
 ('ahi'     ,'','n'),
 ('ato'      ,'','n'),
-('annaṁ'   ,'','n'),
-('unnaṁ'   ,'','n'),
-('innaṁ'   ,'','n'),
+('annaṃ'   ,'','n'),
+('unnaṃ'   ,'','n'),
+('innaṃ'   ,'','n'),
 ('atā'     ,'i','n'),
 ('iya'     ,'a','n'),
-('uyaṁ'    ,'','n'),
+('uyaṃ'    ,'','n'),
 
-#('abbaṁ'  ,''),
+#('abbaṃ'  ,''),
 
 
 
@@ -327,9 +327,9 @@ endings_data = (
 ('āya'     ,'ati','v'),
 ('āya'     ,'āti','v'),
 ('āya'     ,'eti','v'),
-('tuṁ'     ,'ti','v'),
-('ituṁ'    ,'ati','v'),
-('ituṁ'    ,'āti','v'),
+('tuṃ'     ,'ti','v'),
+('ituṃ'    ,'ati','v'),
+('ituṃ'    ,'āti','v'),
 
 # past a
 
@@ -337,12 +337,12 @@ endings_data = (
 ('i'       ,'ati','v'),
 ('imha'    ,'ati','v'),
 ('imhā'    ,'ati','v'),
-('iṁsu'    ,'ati','v'),
+('iṃsu'    ,'ati','v'),
 ('ittha'   ,'ati','v'),
-('uṁ'      ,'ati','v'),
-('asuṁ'     ,'ati','v'),
-('asiṁ'     ,'ati','v'),
-('iṁ'      ,'ati','v'),
+('uṃ'      ,'ati','v'),
+('asuṃ'     ,'ati','v'),
+('asiṃ'     ,'ati','v'),
+('iṃ'      ,'ati','v'),
 
 # past ā
 
@@ -350,10 +350,10 @@ endings_data = (
 ('i'       ,'āti','v'),
 ('imha'    ,'āti','v'),
 ('imhā'    ,'āti','v'),
-('iṁsu'    ,'āti','v'),
+('iṃsu'    ,'āti','v'),
 ('ittha'   ,'āti','v'),
-('uṁ'      ,'āti','v'),
-('iṁ'      ,'āti','v'),
+('uṃ'      ,'āti','v'),
+('iṃ'      ,'āti','v'),
 
 # past e
 
@@ -361,17 +361,17 @@ endings_data = (
 ('i'       ,'eti','v'),
 ('imha'    ,'eti','v'),
 ('imhā'    ,'eti','v'),
-('iṁsu'    ,'eti','v'),
-('ayiṁsu'  ,'eti','v'),
+('iṃsu'    ,'eti','v'),
+('ayiṃsu'  ,'eti','v'),
 ('ittha'   ,'eti','v'),
-('uṁ'      ,'eti','v'),
-('iṁ'      ,'eti','v'),
+('uṃ'      ,'eti','v'),
+('iṃ'      ,'eti','v'),
 
 # optative a
 
 ('eyya'    ,'ati','v'),
-('eyyaṁ'   ,'ati','v'),
-('eyyuṁ'   ,'ati','v'),
+('eyyaṃ'   ,'ati','v'),
+('eyyuṃ'   ,'ati','v'),
 ('eyyati'  ,'ati','v'),
 ('eyyasi'  ,'ati','v'),
 ('eyyātha' ,'ati','v'),
@@ -383,8 +383,8 @@ endings_data = (
 # optative ā
 
 ('eyya'    ,'āti','v'),
-('eyyaṁ'   ,'āti','v'),
-('eyyuṁ'   ,'āti','v'),
+('eyyaṃ'   ,'āti','v'),
+('eyyuṃ'   ,'āti','v'),
 ('eyyati'  ,'āti','v'),
 ('eyyasi'  ,'āti','v'),
 ('eyyātha' ,'āti','v'),
@@ -396,8 +396,8 @@ endings_data = (
 # optative e
 
 ('eyya'    ,'ti','v'),
-('eyyaṁ'   ,'ti','v'),
-('eyyuṁ'   ,'ti','v'),
+('eyyaṃ'   ,'ti','v'),
+('eyyuṃ'   ,'ti','v'),
 ('eyyati'  ,'ti','v'),
 ('eyyasi'  ,'ti','v'),
 ('eyyātha' ,'ti','v'),
@@ -409,8 +409,8 @@ endings_data = (
 # optative o
 
 ('eyya'    ,'oti','v'),
-('eyyaṁ'   ,'oti','v'),
-('eyyuṁ'   ,'oti','v'),
+('eyyaṃ'   ,'oti','v'),
+('eyyuṃ'   ,'oti','v'),
 ('eyyati'  ,'oti','v'),
 ('eyyasi'  ,'oti','v'),
 ('eyyātha' ,'oti','v'),
@@ -424,29 +424,29 @@ endings_data = (
 
 ('issa'    ,'ati','v'),
 ('issā'    ,'ati','v'),
-('issaṁsu' ,'ati','v'),
+('issaṃsu' ,'ati','v'),
 ('issatha' ,'ati','v'),
-('issaṁ'   ,'ati','v'),
+('issaṃ'   ,'ati','v'),
 ('issāma'  ,'ati','v'),
 
 ('issa'    ,'āti','v'),
 ('issā'    ,'āti','v'),
-('issaṁsu' ,'āti','v'),
+('issaṃsu' ,'āti','v'),
 ('issa'    ,'āti','v'),
 ('issatha' ,'āti','v'),
-('issaṁ'   ,'āti','v'),
+('issaṃ'   ,'āti','v'),
 ('issāma'  ,'āti','v'),
 
 ('essa'    ,'ti','v'),
 ('essā'    ,'ti','v'),
-('essaṁsu' ,'ti','v'),
+('essaṃsu' ,'ti','v'),
 ('essa'    ,'ti','v'),
 ('essatha' ,'ti','v'),
-('essaṁ'   ,'ti','v'),
+('essaṃ'   ,'ti','v'),
 ('essāma'  ,'ti','v'),
 )
 
-indeclineables = {'evaṁ', 'kho', 'taṁ', 'tena', 'yena', 'hi', 'ti', 'idaṁ', 'tatrā', 'sutaṁ'}
+indeclineables = {'evaṃ', 'kho', 'taṃ', 'tena', 'yena', 'hi', 'ti', 'idaṃ', 'tatrā', 'sutaṃ'}
 
 
 def _build_endings():

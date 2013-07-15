@@ -229,24 +229,12 @@ def build_cped():
 
     # Perform corrections and stuff on the entries data.
     # -> utf8
-    rules = (
-        ('aa', 'ā'),
-        ('ii', 'ī'),
-        ('uu', 'ū'),
-        ('.t', 'ṭ'),
-        ('.d', 'ḍ'),
-        ('~n', 'ñ'),
-        ('.n', 'ṇ'),
-        ('"n', 'ṅ'),
-        ('.l', 'ḷ'),
-        ('.m', 'ṁ'),
-        )
 
     for entry in entries:
-        for rule, repl in rules:
-            entry[0] = entry[0].replace(rule, repl)
         # Generate phonetic hash, and boost factor. Boost is ignored for CPED.
+        entry[0] = textfunctions.vel_to_uni(entry)
         entry[1:1] = [textfunctions.phonhash(entry[0]), 1]
+        
     CPEDRow = collections.namedtuple('CPEDRow', 'pali phonhash boost defn grammar meaning source inflectgroup inflectinfo baseword basedefn funcstem regular')
     rows = tuple(CPEDRow._make(entry) for entry in entries)
 

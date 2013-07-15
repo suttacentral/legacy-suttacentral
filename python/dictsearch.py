@@ -107,7 +107,6 @@ class OmniDictSearcher:
         terms = self.get_matching_terms(query)
         entries = self.get_matching_entries(query)
         lquery = query.casefold()
-        #closure :)
 
         tsk = TermSortKey(query)
         esk = EntrySortKey(query)
@@ -149,6 +148,8 @@ class TermSortKey:
                 score -= 0.1 / len(row['term'])
             else:
                 score -= 0.1
+        if self.query == row['term']:
+            score -= 0.05
         return score
         
 omni = OmniDictSearcher(dbname=config['dict']['db'])

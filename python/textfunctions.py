@@ -20,9 +20,8 @@ def simplify_pali(string):
         (r'\P{alpha}', r''), #Non-alphabetical characters
         (r'nny', 'nn'), # nny (ññ) -> n
         (r'(.)(?=\1)', r''), #Remove duplicates
-        (r'[ṁṃṅ](?=[gk])', r'n'), # 'n' before a 'g' or 'k'
+        (r'[mṁṃṅ](?=[gk])', r'n'), # 'n' before a 'g' or 'k'
         (r'by', 'vy'), # vy always, never by
-
     )
 
     out = string.casefold()
@@ -36,11 +35,26 @@ def simplify_pali(string):
     return out
     return ''
 
-def simplify(string, langcode):
+def simplify_english(string):
+    rules = (
+        (r'(.)(?=\1)', r''),
+        (r'(?<=\w)[sc]', r'c'),
+        (r'(?<=\w)[aou]+', r'a'),
+        (r'(?<=\w)[ie]+', r'i'),
+        (r'ia', 'ai'),
+        )
+    out = string
+    for rule in rules:
+        out = _regex.sub(rule[0], rule[1], out)
+    return out
+
+def simplify(string, langcode, default=None):
     if langcode == 'pi':
         return simplify_pali(string)
+    elif langcode == 'en':
+        return simplify_english(string)
     else:
-        return None
+        return default
 
 def normalize(string):
     return _unicodedata.normalize('NFC', string)
@@ -48,14 +62,30 @@ def normalize(string):
 def asciify(string):
     out = _unicodedata.normalize('NFD', string)
     out = _regex.sub(r'\p{dia}', '', out)
+    out = out.replace('\xad', '')
     #out = _regex.sub(r'\p{dash}', '-', out)
     return out
 
-def a_stem(string):
-    if string.endswith('am'):
-        return string[:-2] + 'a'
-    if string.endswith('o'):
-        return string[:-1] + 'a'
+def vel_to_uni(string):
+    # Note: In python, literals/constants (such as tuples) in a function
+    # are compiled into the function - the tuple is not re-created on each
+    # call. Python is basically awesome :).
+    rules = (
+        ('aa', 'ā'),
+        ('ii', 'ī'),
+        ('uu', 'ū'),
+        ('.t', 'ṭ'),
+        ('.d', 'ḍ'),
+        ('~n', 'ñ'),
+        ('.n', 'ṇ'),
+        ('"n', 'ṅ'),
+        ('.l', 'ḷ'),
+        ('.m', 'ṃ'),
+        )
+
+    for rule, repl in rules:
+        string = string.replace(rule, repl)
+    return string
 
 def _build_phonhashdata():
     # Generate Phonetic Hash Data
@@ -102,6 +132,8 @@ def phonhash(word, length=4):
     rest = word
     for reg, repl in _phonhashdata[1]:
         rest = reg.sub(repl, rest, pos=1)
+    if len(rest) == 1:
+        return start
     if start == 'A' == rest[1]:
         return rest[1:1+length]
     else:
@@ -121,11 +153,10 @@ def _build_transform_cost():
     vowel_costs_map = {tuple(sorted(key)): value for key, value in vowel_costs_table.items()}
 
     # This is a Counter of all naturally occuring consonant clusters in the pali canon
-    nat_cons = {'t', 's', 'n', 'ṁ', 'v', 'p', 'm', 'r', 'y', 'k', 'bh', 'd', 'h', 'ss', 'c', 'kkh', 'tt', 'g', 'nt', 'dh', 'l', 'kh', 'ṇ', 'mm', 'j', 'th', 'ññ', 'tth', 'bb', 'pp', 'ṭ', 'cc', 'ṭṭh', 'nn', 'yy', 'ñc', 'tv', 'cch', 'jj', 'ddh', 'gg', 'mp', 'kk', 'sm', 'b', 'nd', 'br', 'hm', 'ṁs', 'jjh', 'ṅk', 'ṁgh', 'ṅg', 'ṇḍ', 'dd', 'ṇṇ', 'ṭh', 'ṁv', 'ch', 'gh', 'll', 'ṅkh', 'mb', 'ph', 'by', 'ndh', 'mh', 'ḷ', 'ṇh', 'dv', 'ñj', 'bbh', 'mbh', 'tr', 'ñ', 'ñh', 'ṁy', 'jh', 'ndr', 'yh', 'sv', 'ḍḍh', 'ly', 'ḷh', 'ṭṭ', 'mph', 'ṁk', 'pph', 'vh', 'ṇṭh', 'ṁh', 'ky', 'nth', 'ṅgh', 'ntv', 'ggh', 'khv', 'nv', 'ṁkh', 'nh', 'ṁp', 'dr', 'ḍḍ', 'ṁd', 'ḍ', 'yv', 'gr', 'ṁm', 'ñch', 'ṁn', 'ty', 'ṇṭ', 'ṁg', 'gy', 'my', 'kl', 'ṅkhy', 'sn', 'ṁr', 'ṁj', 'ṁbh', 'kv', 'ṁdh', 'st', 'ñjh', 'ṁc', 'ṁnh', 'ṁt', 'pl', 'nty', 'ṁb', 'hv', 'ṁph', 'ṇy', 'sy', 'kr', 'ṁch', 'ṁsv', 'ṁsm', 'ṁl', 'ṁtv', 'ṁdv', 'hy', 'tthy', 'dm', 'ny', 'tn', 'ṅkhv', 'khy', 'ṁṭh', 'dhv', 'kkhy', 'pv', 'ḍh', 'ṁth'}
+    nat_cons = {'t', 's', 'n', 'ṃ', 'v', 'p', 'm', 'r', 'y', 'k', 'bh', 'd', 'h', 'ss', 'c', 'kkh', 'tt', 'g', 'nt', 'dh', 'l', 'kh', 'ṇ', 'mm', 'j', 'th', 'ññ', 'tth', 'bb', 'pp', 'ṭ', 'cc', 'ṭṭh', 'nn', 'yy', 'ñc', 'tv', 'cch', 'jj', 'ddh', 'gg', 'mp', 'kk', 'sm', 'b', 'nd', 'br', 'hm', 'ṃs', 'jjh', 'ṅk', 'ṃgh', 'ṅg', 'ṇḍ', 'dd', 'ṇṇ', 'ṭh', 'ṃv', 'ch', 'gh', 'll', 'ṅkh', 'mb', 'ph', 'by', 'ndh', 'mh', 'ḷ', 'ṇh', 'dv', 'ñj', 'bbh', 'mbh', 'tr', 'ñ', 'ñh', 'ṃy', 'jh', 'ndr', 'yh', 'sv', 'ḍḍh', 'ly', 'ḷh', 'ṭṭ', 'mph', 'ṃk', 'pph', 'vh', 'ṇṭh', 'ṃh', 'ky', 'nth', 'ṅgh', 'ntv', 'ggh', 'khv', 'nv', 'ṃkh', 'nh', 'ṃp', 'dr', 'ḍḍ', 'ṃd', 'ḍ', 'yv', 'gr', 'ṃm', 'ñch', 'ṃn', 'ty', 'ṇṭ', 'ṃg', 'gy', 'my', 'kl', 'ṅkhy', 'sn', 'ṃr', 'ṃj', 'ṃbh', 'kv', 'ṃdh', 'st', 'ñjh', 'ṃc', 'ṃnh', 'ṃt', 'pl', 'nty', 'ṃb', 'hv', 'ṃph', 'ṇy', 'sy', 'kr', 'ṃch', 'ṃsv', 'ṃsm', 'ṃl', 'ṃtv', 'ṃdv', 'hy', 'tthy', 'dm', 'ny', 'tn', 'ṅkhv', 'khy', 'ṃṭh', 'dhv', 'kkhy', 'pv', 'ḍh', 'ṃth'}
 
     transform_cost = dict()
-
-
+    
     # Transform from double to single (20)
     for key in nat_cons:
         if len(key) > 1 and key[0] == key[1]:
@@ -150,7 +181,7 @@ def _build_transform_cost():
     transform_cost[ ('bb', 'rv') ] = 5
 
     # Special cases
-    transform_cost[ ('ṁ', 'ṅ') ] = 5
+    transform_cost[ ('ṃ', 'ṅ') ] = 5
     transform_cost[ ('m', 'ṅ') ] = 5
     transform_cost[ ('c', 'j') ] = 20
     transform_cost[ ('b', 'p') ] = 30
@@ -231,7 +262,7 @@ def mc4_boost(freq, factor=100):
 _unused = set(range(1, 31))
 _unused.remove(1)
 _unused = sorted(_unused)
-_uni   = '–—‘’“”…'
+_uni   = '–—‘’“”… '
 _ascii = "".join(chr(_unused[i]) for i in range(1, 1+len(_uni)))
 
 def mangle(string, _trans=str.maketrans(_uni, _ascii)):

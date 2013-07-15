@@ -178,12 +178,12 @@ class SubdivisionHeadingsView(ViewBase):
 class SearchResultView(ViewBase):
     def __init__(self, search_result):
         ViewBase.__init__(self)
-
         self.template = self.env.get_template('search_result.html')
         self.search_result = search_result
 
     def makeContext(self):
         ViewBase.makeContext(self)
+
         self.context["result"] = self.search_result
 
 class AjaxSearchResultView(SearchResultView):
