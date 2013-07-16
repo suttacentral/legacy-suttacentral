@@ -70,7 +70,8 @@ def find_best_id(tag):
         if tag is None:
             return '#'
 
-class SearchTermNotFound(Exception):
+class SearchTermNotFound(BaseException):
+    #Inherits from BaseException because it's not an error.
     def __init__(self, term):
         self.term = term
 
@@ -405,6 +406,8 @@ class SectionSearch:
         stemmed_out = []
         is_near = query.find('NEAR') != -1
 
+        terms_not_found = []
+
         for i, term in enumerate(terms):
             if i % 2 == 1:
                 exact_out.append(term)
@@ -414,7 +417,13 @@ class SectionSearch:
             term = self.vel_term_correction(term)
             
             if max(term) <= '~':
-                exact, stemmed = self.ascii_term_correction(term, 1 if is_near else 50)
+                try:
+                    exact, stemmed = self.ascii_term_correction(term, 1 if is_near else 50)
+                except SearchTermNotFound as e:
+                    terms_not_found.append(e)
+                    exact = term
+                    stemmed = self.stemmer(term)
+                    
             else:
                 exact = term
                 stemmed = self.stemmer(term)
@@ -423,7 +432,7 @@ class SectionSearch:
                     stemmed = self.alias_map(stemmed)
                 except:
                     pass
-            print(term, stemmed)
+            
             exact_out.append(exact)
             if stemmed:
                 stemmed_out.append(stemmed)

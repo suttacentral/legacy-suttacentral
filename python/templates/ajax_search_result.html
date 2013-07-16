@@ -23,7 +23,7 @@
             <ul class="text_results>">
             {% for row in section.results -%}
                 {% if row.html -%}
-                    <li class="moreresults">{{row.html}}</li>
+                    <li class="moreresults">Text Search: {{row.html}}</li>
                 {% else -%}
                     <li><h3><a href="/{{row.uid}}/{{result.query.lang}}/#{{row.bookmark}}">{{row.heading}} »</a></h3>
                     <p>{{row.snippet}}</p>
