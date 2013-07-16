@@ -32,10 +32,6 @@ class OmniDictSearcher:
     discovering what matches. However, if ranking is added, then the count
     function might be a lot faster so it should be preferred when only a
     count is needed.
-
-    Rolling the count into the search incurs very little overhead,
-    particulary when nothing matches, so all queries return total as the
-    total number of matches.
     
     """
     def __init__(self, dbname):
