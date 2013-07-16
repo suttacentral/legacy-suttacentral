@@ -31,12 +31,14 @@
                 {% if row.html -%}
                     <li class="moreresults">Text Search: {{row.html}}</li>
                 {% else -%}
-                    <li><h3> <a href="/{{row.file}}/{{result.query.lang}}/{{'#' + row.bookmark if row.bookmark else ''}}">{{row.heading}} »</a><small> (<a href="/{{row.uid}}/">{{row.uid
-                    |upper}}
-                    </a>)
+                    <li><h3> <a href="/{{row.file}}/{{result.query.lang}}/{{'#' + row.bookmark if row.bookmark else ''}}">{{row.heading}} » </a> </h3>
+                    <small>
+                    {{row.uid
+                    |upper}} {{dbr(row.uid).name}}
+                    {%- if dbr(row.uid) -%}
+                    (Sutta Details: <a href="/{{row.uid}}/">►</a>)
+                    {%- endif -%}
                     </small>
-                    </h3>
-                    
                     <p>{{row.snippet}}</p>
                     </li>
                 {% endif -%}

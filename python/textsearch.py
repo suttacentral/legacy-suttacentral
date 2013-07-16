@@ -224,9 +224,14 @@ class SectionSearch:
                     # but the below bodge works in practise.
                     try:
                         
-                        article = next(e.iterancestors('article'))
-                        hgroup = next(article.iter('hgroup'))
-                        sutta_uid = hgroup.cssselect('[id]')[0].attrib['id']
+                        section = next(e.iterancestors('section'))
+                        if 'id' in section.attrib:
+                            t_uid = section.attrib['id']
+                            if t_uid[0].isalpha():
+                                sutta_uid = t_uid
+                        if sutta_uid is None:
+                            hgroup = next(section.iter('hgroup'))
+                            sutta_uid = hgroup.cssselect('[id]')[0].attrib['id']
                     except (StopIteration, IndexError):
                         sutta_uid = file_uid
 
