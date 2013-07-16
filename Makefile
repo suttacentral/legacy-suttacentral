@@ -18,6 +18,7 @@ deploy-staging:
 		make reset-db && \
 		make build-assets && \
 		make build-dict && \
+		make build-search-indexes && \
 		rm -f tmp/maintenance && \
 		sudo supervisorctl start sc-staging && \
 		sudo service apache2 reload'
@@ -51,6 +52,9 @@ build-assets:
 
 build-dict:
 	cd python && python build_dict_db.py
+
+build-search-indexes:
+	cd python && python -c 'import textsearch; textsearch.build()'
 
 regenerate-db-export:
 	ssh sc-production@vps.suttacentral.net '$$HOME/create-db-export'
