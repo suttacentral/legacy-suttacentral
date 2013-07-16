@@ -232,7 +232,7 @@ def build_cped():
 
     for entry in entries:
         # Generate phonetic hash, and boost factor. Boost is ignored for CPED.
-        entry[0] = textfunctions.vel_to_uni(entry)
+        entry[0] = textfunctions.vel_to_uni(entry[0])
         entry[1:1] = [textfunctions.phonhash(entry[0]), 1]
         
     CPEDRow = collections.namedtuple('CPEDRow', 'pali phonhash boost defn grammar meaning source inflectgroup inflectinfo baseword basedefn funcstem regular')
