@@ -70,11 +70,6 @@ def find_best_id(tag):
         if tag is None:
             return '#'
 
-class SearchTermNotFound(BaseException):
-    #Inherits from BaseException because it's not an error.
-    def __init__(self, term):
-        self.term = term
-
 class SectionSearch:
     """ Full text search class based on SQLite fts4 extension.
 
@@ -377,10 +372,11 @@ class SectionSearch:
                     WHERE simplified=? ORDER BY freq DESC''',
                         (s_term,)).fetchall()
         if not rows:
-            raise SearchTermNotFound(term=o_term)
+            return (None,None)
+
         best = rows[0][1]
         # Prune terms with low occurences
-        terms = [row[0] for row in rows if best / row[1] < prune_ratio]
+        terms = [row[0] for row in rows if best / row[1] <= prune_ratio]
         stemmed_terms = set(self.stemmer(term) for term in terms)
         stemmed_terms -= {None}
         
@@ -406,7 +402,8 @@ class SectionSearch:
         stemmed_out = []
         is_near = query.find('NEAR') != -1
 
-        terms_not_found = []
+        exact_bad = False
+        stemmed_bad = False
 
         for i, term in enumerate(terms):
             if i % 2 == 1:
@@ -417,16 +414,17 @@ class SectionSearch:
             term = self.vel_term_correction(term)
             
             if max(term) <= '~':
-                try:
-                    exact, stemmed = self.ascii_term_correction(term, 1 if is_near else 50)
-                except SearchTermNotFound as e:
-                    terms_not_found.append(e)
-                    exact = term
-                    stemmed = self.stemmer(term)
+                exact, stemmed = self.ascii_term_correction(term, 1 if is_near else 50)
+                if not exact:
+                    exact_bad = True
+                if not stemmed:
+                    stemmed_bad = True
                     
             else:
                 exact = term
                 stemmed = self.stemmer(term)
+                if not stemmed:
+                    stemmed_bad = True
                 
                 try:
                     stemmed = self.alias_map(stemmed)
@@ -436,8 +434,11 @@ class SectionSearch:
             exact_out.append(exact)
             if stemmed:
                 stemmed_out.append(stemmed)
+
+        exact_query = "".join(exact_out) if not exact_bad else ''
+        stemmed_query = "".join(stemmed_out) if not stemmed_bad else ''
                 
-        return ("".join(exact_out), "".join(stemmed_out))
+        return (exact_query, stemmed_query)
 
     @functools.lru_cache(50)
     def get_match_count(self, e_query, s_query):
