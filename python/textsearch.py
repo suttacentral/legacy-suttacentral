@@ -129,9 +129,6 @@ class SectionSearch:
         for group in self.aliases:
             stemmed = [self.stemmer(t) for t in group]
             alias_text = '(' + " OR ".join(stemmed) + ')'
-            #alias_expanded = [alias for alias in group]
-            #alias_expanded = [alias + 's' for alias in group]
-            #print(alias_expanded)
             self.alias_map.update((alias, alias_text) for alias in stemmed)
 
     @contextmanager
@@ -276,7 +273,6 @@ class SectionSearch:
 
         self.last = (entries, original_entries, stemmed_entries)
 
-        print(len(entries))
         con.executemany('INSERT INTO entries values(?, ?, ?, ?, ?)',
             entries)
         con.executemany('INSERT INTO stemmed (docid, text) values (?, ?)',
@@ -486,12 +482,11 @@ class SectionSearch:
         if limit == 0:
             return None
         e_query, s_query = self.prepare_query(query)
-        print(e_query, s_query)
+
         e_total, s_total = self.get_match_count(e_query, s_query)
         if (e_total + s_total) < offset:
             return None
             
-        print(e_total, s_total)
         exacts, stemmed = [], []
         # How many exact results to fetch?
         tofetch = limit
