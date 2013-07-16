@@ -1,6 +1,6 @@
 import lxml.html, collections, sqlite3, os, itertools, regex, math
 
-import textfunctions, config
+import textfunctions, config, textsearch
 
 import sys
 sys.path.append(config['dict']['sources'])
@@ -301,3 +301,4 @@ con.execute('ANALYZE')
 con.commit()
 os.replace(tmpdb, dbname)
 
+textsearch.build()
