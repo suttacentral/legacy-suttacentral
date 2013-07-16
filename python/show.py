@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 STATIC_PAGES = ['about', 'abbreviations', 'bibliography', 'contacts', 'help',
-                'methodology', 'sutta_numbering']
+                'methodology', 'sutta_numbering', 'copyright']
 
 def home():
     return InfoView('home').render()
