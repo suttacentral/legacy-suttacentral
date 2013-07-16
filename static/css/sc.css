@@ -1,96 +1,98 @@
+/* FONTS */
 
-/* GENERAL */
 @font-face {
-    font-family: "Skolar Sutta Web";
-    src: url('skolarsuttaweb_bold.eot');
-    src: url('skolarsuttaweb_bold.eot?#iefix') format('embedded-opentype'),
-         url('skolarsuttaweb_bold.woff') format('woff'),
-         url('skolarsuttaweb_bold.ttf') format('truetype'),
-         url('skolarsuttaweb_bold.svg#ted_to_alter_the_fon') format('svg');
+    font-family: 'Skolar Sutta Web';
+    src: url('/fonts/skolar-sutta-web-bold-1.eot');
+    src: url('/fonts/skolar-sutta-web-bold-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/skolar-sutta-web-bold-1.woff') format('woff'),
+         url('/fonts/skolar-sutta-web-bold-1.ttf') format('truetype'),
+         url('/fonts/skolar-sutta-web-bold-1.svg#skolar-sutta-web-bold') format('svg');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Skolar Sutta Web';
-    src: url('skolarsuttaweb_italic.eot');
-    src: url('skolarsuttaweb_italic.eot?#iefix') format('embedded-opentype'),
-         url('skolarsuttaweb_italic.woff') format('woff'),
-         url('skolarsuttaweb_italic.ttf') format('truetype'),
-         url('skolarsuttaweb_italic.svg#er_the_font_soft') format('svg');
+    src: url('/fonts/skolar-sutta-web-italic-1.eot');
+    src: url('/fonts/skolar-sutta-web-italic-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/skolar-sutta-web-italic-1.woff') format('woff'),
+         url('/fonts/skolar-sutta-web-italic-1.ttf') format('truetype'),
+         url('/fonts/skolar-sutta-web-italic-1.svg#skolar-sutta-web-italic') format('svg');
     font-weight: normal;
     font-style: italic;
 }
 
 @font-face {
     font-family: 'Skolar Sutta Web';
-    src: url('skolarsuttaweb_regular.eot');
-    src: url('skolarsuttaweb_regular.eot?#iefix') format('embedded-opentype'),
-         url('skolarsuttaweb_regular.woff') format('woff'),
-         url('skolarsuttaweb_regular.ttf') format('truetype'),
-         url('skolarsuttaweb_regular.svg#alter_the_font_software') format('svg');
+    src: url('/fonts/skolar-sutta-web-regular-1.eot');
+    src: url('/fonts/skolar-sutta-web-regular-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/skolar-sutta-web-regular-1.woff') format('woff'),
+         url('/fonts/skolar-sutta-web-regular-1.ttf') format('truetype'),
+         url('/fonts/skolar-sutta-web-regular-1.svg#skolar-sutta-web-regular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Skolar Sutta Web SC';
-    src: url('skolarsuttawebsc_regular.eot');
-    src: url('skolarsuttawebsc_regular.eot?#iefix') format('embedded-opentype'),
-         url('skolarsuttawebsc_regular.woff') format('woff'),
-         url('skolarsuttawebsc_regular.ttf') format('truetype'),
-         url('skolarsuttawebsc_regular.svg#ted_to_alter_the_font_soft') format('svg');
+    src: url('/fonts/skolar-sutta-web-sc-regular-1.eot');
+    src: url('/fonts/skolar-sutta-web-sc-regular-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/skolar-sutta-web-sc-regular-1.woff') format('woff'),
+         url('/fonts/skolar-sutta-web-sc-regular-1.ttf') format('truetype'),
+         url('/fonts/skolar-sutta-web-sc-regular-1.svg#skolar-sutta-web-sc-regular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'source_sans_pro';
-    src: url('sourcesanspro-bold-webfont.eot');
-    src: url('sourcesanspro-bold-webfont.eot?#iefix') format('embedded-opentype'),
-    url('sourcesanspro-bold-webfont.woff') format('woff'),
-    url('sourcesanspro-bold-webfont.ttf') format('truetype'),
-    url('sourcesanspro-bold-webfont.svg#source_sans_probold') format('svg');
+    src: url('/fonts/source-sans-pro-bold-1.eot');
+    src: url('/fonts/source-sans-pro-bold-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/source-sans-pro-bold-1.woff') format('woff'),
+         url('/fonts/source-sans-pro-bold-1.ttf') format('truetype'),
+         url('/fonts/source-sans-pro-bold-1.svg#source-sans-pro-bold') format('svg');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'source_sans_pro';
-    src: url('sourcesanspro-it-webfont.eot');
-    src: url('sourcesanspro-it-webfont.eot?#iefix') format('embedded-opentype'),
-    url('sourcesanspro-it-webfont.woff') format('woff'),
-    url('sourcesanspro-it-webfont.ttf') format('truetype'),
-    url('sourcesanspro-it-webfont.svg#source_sans_proitalic') format('svg');
+    src: url('/fonts/source-sans-pro-italic-1.eot');
+    src: url('/fonts/source-sans-pro-italic-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/source-sans-pro-italic-1.woff') format('woff'),
+         url('/fonts/source-sans-pro-italic-1.ttf') format('truetype'),
+         url('/fonts/source-sans-pro-italic-1.svg#source-sans-pro-italic') format('svg');
     font-weight: normal;
     font-style: italic;
 }
 
 @font-face {
     font-family: 'source_sans_pro';
-    src: url('sourcesanspro-regular-webfont.eot');
-    src: url('sourcesanspro-regular-webfont.eot?#iefix') format('embedded-opentype'),
-    url('sourcesanspro-regular-webfont.woff') format('woff'),
-    url('sourcesanspro-regular-webfont.ttf') format('truetype'),
-    url('sourcesanspro-regular-webfont.svg#source_sans_proregular') format('svg');
+    src: url('/fonts/source-sans-pro-regular-1.eot');
+    src: url('/fonts/source-sans-pro-regular-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/source-sans-pro-regular-1.woff') format('woff'),
+         url('/fonts/source-sans-pro-regular-1.ttf') format('truetype'),
+         url('/fonts/source-sans-pro-regular-1.svg#source-sans-pro-regular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'hetu_schetu_sc';
-    src: url('hetusc-webfont.eot');
-    src: url('hetusc-webfont.eot?#iefix') format('embedded-opentype'),
-         url('hetusc-webfont.woff') format('woff'),
-         url('hetusc-webfont.ttf') format('truetype'),
-         url('hetusc-webfont.svg#hetu_schetu_sc') format('svg');
+    src: url('/fonts/hetu-schetu-sc-1.eot');
+    src: url('/fonts/hetu-schetu-sc-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/hetu-schetu-sc-1.woff') format('woff'),
+         url('/fonts/hetu-schetu-sc-1.ttf') format('truetype'),
+         url('/fonts/hetu-schetu-sc-1.svg#hetu-schetu-sc') format('svg');
     font-weight: normal;
     font-style: normal;
 }
+/* FONTS */
 
-* {
-    margin: 0;
-    padding: 0;
+/* GENERAL */
+*   {
+    margin:0;
+    padding:0;
 }
 
 html,body {
@@ -109,9 +111,7 @@ body {
     background: #fcfcfc;
 }
 
-.hidden {
-    display: none;
-}
+.hidden {display:none;}
 
 /*! Include relevant items from normalize.css v2.0.1 | MIT License | git.io/normalize */
 
@@ -121,9 +121,7 @@ html, body {
 }
 
 b,
-strong {
-    font-weight: bold;
-}
+strong { font-weight: bold;}
 
 sub,
 sup {
@@ -132,18 +130,11 @@ sup {
     position: relative;
     vertical-align: baseline;
 }
+sup { top: -0.5em;}
 
-sup {
-    top: -0.5em;
-}
+sub { bottom: -0.25em}
 
-sub {
-    bottom: -0.25em
-}
-
-img {
-    border: 0;
-}
+img {border: 0;}
 
 /* ==========================================================================
 
@@ -801,7 +792,7 @@ tfoot td{
     color:#aaa;
     text-transform:uppercase;
     letter-spacing:0.1em;
-    padding-top:2em;
+    padding-top:1em;
     font-weight:bold;
 }
 
@@ -1450,65 +1441,51 @@ section:lang(zh) q {
 
 .tlineheadnote {color:red;}
 
-
 /*NEW CLASSES ADDED FOR VERSION 3.0 (PYTHON). THESE ARE MAINLY FOR SANSKRIT TEXTS> I PLACE THEM HERE FOR NOW, BUT ULTIMATELY THEY SHOUL BE INTEGRATED PROPERLY. UNDER THE DESCRIPTION IS TH ETITLE ATTRIBUTE.*/
 
-.surplus        {display:none;}
-.surplus.infomode       {display:inline;color:#4805A2}
-/*For Mahaparinirvana text, marks apparently random phrases that are marked in bold in GRETIL.
+.surplus	{display:none;}
+.surplus.infomode	{display:inline;color:#4805A2}
+/*For Mahaparinirvana text, marks apparently random phrases that are marked in bold in GRETIL. 
 
 Surplus text.
 */
 
-.supplied
-.supplied.infomode      {color:#B3A72D}
-/*In almost all Sanskrit texts, there is reconstruction by the editor. These are marked <span class="supplied"></span>. In CSS this should by default display normally, and optionally, use
+.supplied	
+.supplied.infomode	{color:#B3A72D}
+/*In almost all Sanskrit texts, there is reconstruction by the editor. These are marked <span class="supplied"></span>. In CSS this should by default display normally, and optionally, use 
 
 
 Text reconstructed by the editor.
 */
 
 .supplied2
-.supplied2.infomode     {color:#9B8D00}
-/*In some cases there are two forms of supplied text, usually differentiated in the original by () and []. This difference is retained by using supplied2 for the []. Actually these should be marked more clearly to differnentiate them, but this will differ according to the various publications, which I don't have. So for now let them behave as for .supplied, except use
+.supplied2.infomode	{color:#9B8D00}
+/*In some cases there are two forms of supplied text, usually differentiated in the original by () and []. This difference is retained by using supplied2 for the []. Actually these should be marked more clearly to differnentiate them, but this will differ according to the various publications, which I don't have. So for now let them behave as for .supplied, except use 
 
 Text reconstructed by the editor.
 */
 
-.add {
-    display: none;
-    ]
-.add.infomode   {display: inline;
-    font-family: 'source_sans_pro';
-    color: #b2b2b2;
-    font-size: 80%;
-}
+.add	{display:none;]
+.add.infomode	{display:inline;font-family:'source_sans_pro'; color:#b2b2b2;font-size:80%;}
 /*There are some editorial additions marked <span class="add"></span>. These should be hidden by default.
 
 Editorial comment.
 */
 
-.suppliedmetre {
-    color: #b2b2b2;
-    font-family: 'hetu_schetu_sc'
-}
-/*This is for cases where the editor has "filled in the blanks" (hence "supplied") with metrical notation (hence "metre").
+.suppliedmetre	{color:#b2b2b2;font-family:'hetu_schetu_sc'}
+/*This is for cases where the editor has "filled in the blanks" (hence "supplied") with metrical notation (hence "metre"). 
 
 Metre reconstructed by the editor.
 */
 
-.gap {
-    color: #B2AF8C
-}
-/*For marking gaps in the text, which are filled in with + or the like.
+.gap	{color:#B2AF8C}
+/*For marking gaps in the text, which are filled in with + or the like. 
 
 Gaps in the manuscript.
 */
 
 .corr
-corr.infomode {
-    color: #00751A
-}
+corr.infomode	{color:#00751A} 
 /*A corrected reading that has been adopted in the text (usually by the latest editor mentioned in the meta). By default display normally.
 
 
@@ -1516,23 +1493,15 @@ corr.infomode {
 Reading corrected by the editor.
 */
 
-.sic {
-    display: none
-}
-
-.sic.infomode {
-    display: inline;
-    color: #9B0F00;
-}
+.sic	{display:none}
+.sic.infomode	{display:inline; color:#9B0F00;}
 /*An apparently incorrect reading that has been suppressed in the text. By default no display.
 
 Apparently incorrect reading determined by the editor.
 */
 
 .lem
-.lem.infomode {
-    color: #432769
-}
+.lem.infomode	{color:#432769}
 /*The adopted main reading in a text. Display normally.
 
 
@@ -1546,130 +1515,124 @@ Accepted reading in this text.
 Variant reading.
 */
 
-cite.book {
-    font-style: italic;
-}
+cite.book	{font-style:italic;}
 /*A book title.*/
 
-cite.article {
-    font-style: normal
-}
+cite.article	{font-style:normal}
 /*An article title.*/
 
 .gatha-number
 /*As it says. Style as for other refs.*/
 
-.del {
-    display: none;
-}
-
-.del.infomode {
-    color: EE1700;
-}
+.del	{display:none;}
+.del.infomode	{color:EE1700;}
 /*(deletion) contains a letter, word, or passage deleted, marked as deleted, or otherwise indicated as superfluous or spurious in the copy text by an author, scribe, annotator, or corrector.
 
 Text deleted by the editor as superfluous.
 */
 
-.namo {
-    font-style: italic
-}
+.namo		{font-style:italic}
 /*dedication at the start of texts*/
 
-hr {
-    width: 50%;
-    color: #b2b2b2
-}
+hr		{width:50%;color:#b2b2b2}
 
-/*      Various ref classes. In some cases the text uses different ref numbering in different parts, where they are sourced from various manuscripts or additions. In such cases I have already marked up the numbers appropriately.
+/*	Various ref classes. In some cases the text uses different ref numbering in different parts, where they are sourced from various manuscripts or additions. In such cases I have already marked up the numbers appropriately. 
 
 The classes are usually named according to the surname and year of publication. Here they are followed by the title, which is to be inserted with javascript.
 
-CSS Class       HTML Title
+CSS Class	HTML Title
 
-.eno89          "Paragraph numbers in Enomoto, 1989."
+.ud-vagga-sutta	"Chapter/sutta number."
 
-.hoe16          "Verse numbers in Hoernle, 1916."
+.ud-sutta			"Sutta number."
 
-.mat85          "Paragraph numbers in Matsumura, 1985."
+.snp-vagga-verse	"Chapter/verse number."
 
-.mat88          "Paragraph numbers in Matsumura, 1988."
+.snp-verse-num-anandajoti		"Verse number in Ānandajoti’s translation."
 
-.mit57          "Paragraph numbers in Mittal, 1957."
+.eno89		"Paragraph numbers in Enomoto, 1989."
 
-.san89          "Paragraph numbers in Sander, 1987."
+.hoe16		"Verse numbers in Hoernle, 1916."
 
-.tri62          "Sūtra and paragraph number in Tripāṭhi, 1962."
+.mat85		"Paragraph numbers in Matsumura, 1985."
 
-.tri95          "Section and paragraph number in Tripāṭhi, 1995."
+.mat88		"Paragraph numbers in Matsumura, 1988."
 
-.har04          "Paragraph number in Hartmann, 2004."
+.mit57		"Paragraph numbers in Mittal, 1957."
 
-.fuk03          "Page numbers in Fukita, 2003"
+.san89		"Paragraph numbers in Sander, 1987."
 
-.wal50          "Paragraph numbers in Waldschmidt, 1950 (etc.)."
+.tri62		"Sūtra and paragraph number in Tripāṭhi, 1962."
 
-.wal48          "Paragraph numbers for sondertext in Waldschmidt, 1948 (ST.ii)."
+.tri95		"Section and paragraph number in Tripāṭhi, 1995."
 
-.wal61          "Paragraph numbers for sondertext in Waldschmidt, 1961 (ST.i)."
+.har04		"Paragraph number in Hartmann, 2004."
 
-.wal55b         "Paragraph numbers in Waldschmidt, 1955b, “Die Einleitung des Saṅgītisūtra.”"
+.fuk03		"Page numbers in Fukita, 2003"
 
-.wal57c         "Paragraph numbers in Waldschmidt, 1957c, “Das Upasenasūtra.”"
+.wal50		"Paragraph numbers in Waldschmidt, 1950 (etc.)."
 
-.wal52          "Paragraph numbers in Waldschmidt, 1952, 1956, 1960."
+.wal48		"Paragraph numbers for sondertext in Waldschmidt, 1948 (ST.ii)."
 
-.wal58          "Paragraph numbers in Waldschmidt, 1958."
+.wal61		"Paragraph numbers for sondertext in Waldschmidt, 1961 (ST.i)."
 
-.wal59a         "Paragraph numbers in Waldschmidt, 1959a, “Kleine Brahmi-Schriftrolle.”"
+.wal55b		"Paragraph numbers in Waldschmidt, 1955b, “Die Einleitung des Saṅgītisūtra.”"
 
-.wal68a         "Paragraph numbers in Waldschmidt, 1958a, “Drei Fragmente buddhistischer Sūtras aus den Turfanhandschriften.”"
+.wal57c		"Paragraph numbers in Waldschmidt, 1957c, “Das Upasenasūtra.”"
 
-.wal70a         "Paragraph numbers in Waldschmidt, 1970a, Buddha frees the disc of the moon."
+.wal52		"Paragraph numbers in Waldschmidt, 1952, 1956, 1960."
 
-.wal70b         "Paragraph numbers in Waldschmidt, 1970b, “Fragment of a Buddhist Sanskrit text on cosmogony.”"
+.wal58		"Paragraph numbers in Waldschmidt, 1958."
 
-.wal76          "Paragraph numbers in Waldschmidt, 1976."
+.wal59a		"Paragraph numbers in Waldschmidt, 1959a, “Kleine Brahmi-Schriftrolle.”"
 
-.wal78          "Paragraph numbers in Waldschmidt, 1978."
+.wal68a		"Paragraph numbers in Waldschmidt, 1958a, “Drei Fragmente buddhistischer Sūtras aus den Turfanhandschriften.”"
 
-.wal80c         "Paragraph numbers in Waldschmidt, 1980c, “On a Sanskrit version of the Verahaccāni Sutta.”"
+.wal70a		"Paragraph numbers in Waldschmidt, 1970a, Buddha frees the disc of the moon."
 
-.mat88          "Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988."
+.wal70b		"Paragraph numbers in Waldschmidt, 1970b, “Fragment of a Buddhist Sanskrit text on cosmogony.”"
 
-.san87          "Paragraph numbers in Sander, 1987."
+.wal76		"Paragraph numbers in Waldschmidt, 1976."
 
-.gno78          "Paragraph numbers in Gnoli, 1978."
+.wal78		"Paragraph numbers in Waldschmidt, 1978."
 
-.yam72          "Paragraph numbers in Yamada, 1972."
+.wal80c		"Paragraph numbers in Waldschmidt, 1980c, “On a Sanskrit version of the Verahaccāni Sutta.”"
 
-.wal60          "Paragraph numbers in Waldschmidt, 1960/1."
+.mat88		"Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988."
 
-.hos89a         "Paragraph numbers in Hosoda, 1989, “Sanskrit Fragments from the Parivrājakasaṃyukta of the Saṃyuktāgama I.”"
+.san87		"Paragraph numbers in Sander, 1987."
 
-.hos89b "Paragraph numbers in Hosoda, 1989, “Sanskrit Fragments from the Parivrājakasaṃyukta of the Saṃyuktāgama II.”"
+.gno78		"Paragraph numbers in Gnoli, 1978."
 
-.hos91          "Paragraph numbers in Hosoda, 1991."
+.yam72		"Paragraph numbers in Yamada, 1972."
 
-.vai59          "Page and line numbers in Vaidya, 1959."
+.wal60		"Paragraph numbers in Waldschmidt, 1960/1."
 
-.vai58          "Page numbers in Vaidya, 1958."
+.hos89a		"Paragraph numbers in Hosoda, 1989, “Sanskrit Fragments from the Parivrājakasaṃyukta of the Saṃyuktāgama I.”"
 
-.sen82          "Section and paragraph numbers in Senart, 1882."
+.hos89b	"Paragraph numbers in Hosoda, 1989, “Sanskrit Fragments from the Parivrājakasaṃyukta of the Saṃyuktāgama II.”"
+
+.hos91		"Paragraph numbers in Hosoda, 1991."
+
+.vai59		"Page and line numbers in Vaidya, 1959."
+
+.vai58		"Page numbers in Vaidya, 1958."
+
+.sen82		"Section and paragraph numbers in Senart, 1882."
 
 The following references are secondary. They appear in the same files as some of the ones above, and should be styled as more distant from the text.
 
-.hs                     (Not defined in GRETIL source.)
+.hs			(Not defined in GRETIL source.)
 
-.bl                     (Not defined in GRETIL source.)
+.bl			(Not defined in GRETIL source.)
 
-.as                     "Page numbers in Yamada, 1972."
+.as			"Page numbers in Yamada, 1972."
 
-.sht                    "References for SHT fragments."
+.sht			"References for SHT fragments."
 
-.gbm            "Section numbers in Gilgit Buddhist Manscripts."
+.gbm		"Section numbers in Gilgit Buddhist Manscripts."
 
-.fol                    "Folio number in the manuscript."
+.fol			"Folio number in the manuscript."
 
 In a few cases there are no paragraph numbers, these should be added as "SC" numbers. These texts are:
 
@@ -1683,6 +1646,7 @@ Avadanasataka
 Lalitavistara
 Sanghabhedavastu
 
+*/
 
 /*
 
@@ -1692,38 +1656,23 @@ Sanghabhedavastu
 */
 @media print {
     * {
-        background: transparent !important;
-        color: #black !important;
+
+    background: transparent !important; color: #black !important;
     }
 
-    a, a:visited, .vagga {
-        color: #black !important;
-    }
 
-    header, footer, .deets, .tri, #toc, .previous, .next, .top, .details, .transcol {
-        display: none !important;
-    }
+    a, a:visited, .vagga { color: #black !important; }
+    header, footer, .deets, .tri, #toc, .previous, .next, .top, .details, .transcol {display:none !important;}
 
-    tr {
-        position: relative;
-        page-break-before: auto;
-    }
+    tr {position: relative;page-break-before: auto;}
 
-    td {
-        border: 1px solid #aaa;
-    }
+    td {border: 1px solid #aaa;}
 
-    th {
-        border: 1px solid #000;
-    }
+    th {border: 1px solid #000;}
 
-    table {
-        position: relative;
-    }
+table {position: relative;}
 
-    #onecol, #text {
-        position: relative;
-    }
+#onecol, #text {position: relative;}
 
     th, td {
         border-left: none;
@@ -1731,32 +1680,20 @@ Sanghabhedavastu
         padding: 0.2em;
     }
 
-    tfoot tr {
-        border: none;
-    }
+    tfoot tr{border: none;}
 
-    body, td, th, caption {
+    body, td, th, caption
+    {
         font-size: 11pt;
         font-family: 'Skolar Sutta Web',"Gentium Basic",Cambria,"Times New Roman","DejaVu Serif",Helvetica,Arial,serif;
     }
 
-    #onecol, #text {
-        margin-top: -3cm;
-    }
 
-    @    page {
-        margin: 2cm 1cm;
-    }
+    #onecol, #text {margin-top:-3cm;}
 
-    p, h2, h3, h4, h5, h6 {
-        orphans: 3;
-        widows: 3;
-        color: black;
-    }
-
-    h2, h3 {
-        page-break-after: avoid;
-    }
+    @page { margin: 2cm 1cm; }
+    p, h2, h3, h4, h5, h6 { orphans: 3; widows: 3; color:black;}
+    h2, h3	{ page-break-after: avoid; }
 
     .ue-tab-container {
         display: none;
@@ -1779,9 +1716,7 @@ Sanghabhedavastu
         padding-top: 0em;
     }
 
-    header h2 {
-        visibility: hidden;
-    }
+header h2	{visibility:hidden;}
 
     .wheel {
         font-size: 2.5em;
@@ -1793,26 +1728,19 @@ Sanghabhedavastu
 }
 
 @media only screen and (max-width : 45em) {
-    .searchspace {
-        width: 8em;
-    }
+.searchspace {width:8em;}
 
-    .searchbutton {
-        width: 3em;
-    }
+.searchbutton {width:3em;}
 }
 
 @media only screen and (max-width : 35em) {
 
     header h1 {
         margin-bottom: 0;
-        padding-top: 0em;
-        font-size: 1.2em;
+    padding-top:0em;font-size:1.2em;
     }
 
-    header h2 {
-        visibility: hidden;
-    }
+header h2	{visibility:hidden;}
 
     .wheel {
         font-size: 1.2em;
@@ -1832,19 +1760,14 @@ Sanghabhedavastu
         font-size: 0.7em;
         margin-bottom: 0.3em;
         margin-right: 10em;
+
     }
 
-    .searchspace {
-        width: 13.3em;
-    }
+.searchspace {width:13.3em;}
 
-    .searchbutton {
-        width: 4.5em;
-    }
+.searchbutton {width:4.5em;}
 
-    .searchbutton img {
-        height: 1em;
-    }
+.searchbutton img {height:1em;}
 }
 
 
@@ -1859,25 +1782,16 @@ Sanghabhedavastu
 
 
 
-    .search {
-        margin-right: 0em;
-    }
+.search {margin-right:0em;}
 
-    #home ul {
-        width: 100%;
-    }
+#home ul {width:100%;}
 
-    caption {
-        text-align: left;
-    }
+caption {text-align:left;}
 
     .abhidhamma {
         width: 100% !important;
         margin: 0 auto;
     }
 
-    .abhidhamma ul {
-        width: 100% !important;
-    }
+.abhidhamma ul {width:100% !important;}
 }
- 

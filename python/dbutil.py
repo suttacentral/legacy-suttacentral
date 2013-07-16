@@ -8,6 +8,8 @@ import config
 DB_EXPORT_URL = 'http://suttacentral.net/db-exports/sc-latest.sql.gz'
 LOCAL_DB_EXPORT_PATH = os.path.join(config.base_dir, 'tmp', 'sc-latest.sql.gz')
 NEW_CHANGES_SQL_PATH = os.path.join(config.base_dir, 'db', 'new-python-changes.sql')
+UDANA_UPDATES_SQL_PATH = os.path.join(config.base_dir, 'db', 'udana.sql')
+DHAMMAPADA_UPDATES_SQL_PATH = os.path.join(config.base_dir, 'db', 'dhammapada.sql')
 
 def print_notice(str, **kwargs):
     print(colorama.Fore.BLUE, end='')
@@ -97,8 +99,11 @@ def load_db():
     input_cmd = plumbum.local['gunzip']['-c', LOCAL_DB_EXPORT_PATH]
     run(mysql_cmd(db=True), input=input_cmd)
     print('Applying changes to work with new Python code...')
-    sql = open(NEW_CHANGES_SQL_PATH, 'r').read()
-    run(mysql_cmd(db=True), input=sql)
+    input_cmd = plumbum.local['cat'][NEW_CHANGES_SQL_PATH]
+    run(mysql_cmd(db=True), input=input_cmd)
+    print('Applying updates for new suttas...')
+    input_cmd = plumbum.local['cat'][UDANA_UPDATES_SQL_PATH, DHAMMAPADA_UPDATES_SQL_PATH]
+    run(mysql_cmd(db=True), input=input_cmd)
 
 def drop_db():
     print('Dropping database...')
@@ -107,6 +112,7 @@ def drop_db():
 
 def reset_db():
     print('Resetting database...')
+    fetch_db_export()
     drop_db()
     create_db()
     load_db()

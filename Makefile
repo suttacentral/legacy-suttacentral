@@ -14,6 +14,8 @@ deploy-staging:
 		git pull && \
 		cd .. && \
 		pip install -r requirements.txt && \
+		make clean-all && \
+		make reset-db && \
 		make build-assets && \
 		make build-dict && \
 		rm -f tmp/maintenance && \
@@ -40,7 +42,7 @@ clean-assets:
 		static/js/compiled/*.js
 
 clean-db:
-	rm -f db/sc.sqlite
+	rm -f db/*.sqlite db/*.sqlite.tmp*
 
 clean-all: clean clean-assets clean-db
 
