@@ -13,7 +13,7 @@ deploy-staging:
 		cd text && \
 		git pull && \
 		cd .. && \
-		pip install -r requirements.txt && \
+		pip install -q -r requirements.txt && \
 		make clean-all && \
 		make reset-db && \
 		make build-assets && \
@@ -25,10 +25,21 @@ deploy-staging:
 
 deploy-production:
 	ssh sc-production@vps.suttacentral.net \
-		'cd $$HOME/suttacentral && \
+		'source $$HOME/.virtualenvs/suttacentral/bin/activate && \
+		cd $$HOME/suttacentral && \
+		touch tmp/maintenance && \
+		sudo supervisorctl stop sc-production && \
 		git pull && \
 		cd text && \
-		git pull'
+		git pull && \
+		cd .. && \
+		pip install -q -r requirements.txt && \
+		make build-assets && \
+		make build-dict && \
+		make build-search-indexes && \
+		rm -f tmp/maintenance && \
+		sudo supervisorctl start sc-production && \
+		sudo service apache2 reload'
 
 clean:
 	rm -rf \

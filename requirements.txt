@@ -9,6 +9,6 @@ lxml
 cssselect
 httplib2
 selenium>=2.33.0
-webassets==dev
+webassets==0.9.dev
 jsmin
 cssutils
