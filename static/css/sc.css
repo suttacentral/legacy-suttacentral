@@ -584,6 +584,10 @@ margin: -0.2em -0.3em;
     margin: auto;
 }
 
+.text_results .details {
+    float: none;
+}
+
 .terms, .text_results {
     list-style: none;
 }

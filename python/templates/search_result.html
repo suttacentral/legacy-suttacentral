@@ -32,11 +32,8 @@
                     <li class="moreresults">Text Search: {{row.html}}</li>
                 {% else -%}
                     <li><h3> <a href="/{{row.file}}/{{result.query.lang}}/{{'#' + row.bookmark if row.bookmark else ''}}">{{row.heading}} » </a> </h3>
-                    <small>
-                    {{row.uid
-                    |upper}} {{dbr(row.uid).name}}
-                    {%- if dbr(row.uid) -%}
-                    (Sutta Details: <a href="/{{row.uid}}/">►</a>)
+                    <small>{{ dbr(row.uid).acronym|replace(" ", " ") }} {{ dbr(row.uid).name }}
+                    {%- if dbr(row.uid) %} <a class="details" href="/{{row.uid}}/">►</a>
                     {%- endif -%}
                     </small>
                     <p>{{row.snippet}}</p>
