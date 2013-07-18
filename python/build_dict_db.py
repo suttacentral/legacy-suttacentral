@@ -132,7 +132,9 @@ term_id = 0
 def build_dppn():
     global dict_id, entry_id, term_id, con
 
-    dom = lxml.html.fromstring(open(os.path.join(config['dict']['sources'], 'sc_dppn.html')).read())
+    dict_path = os.path.join(config['dict']['sources'], 'sc_dppn.html')
+    with open(dict_path, 'r', encoding='utf-8') as f:
+        dom = lxml.html.fromstring(f.read())
 
     # Perform sanity-correction
     items = list(dom.cssselect('meta, person, place, thing'))

@@ -187,9 +187,9 @@ class SectionSearch:
         entry_id = 0
         for filename in self.files():
 
-            uid = uidfind(filename)[0]
+            file_uid = uidfind(filename)[0]
 
-            dom = lxml.html.fromstring(open(filename).read())
+            dom = lxml.html.fromstring(open(filename, 'r', encoding='utf-8').read())
             self.dom = dom
             for e in dom.cssselect('#metaarea, .hidden'):
                 e.drop_tree()
@@ -198,25 +198,42 @@ class SectionSearch:
             elements.append(dom.makeelement('SENTINEL'))
             lasttag = 'p'
             text_l = []
-            best_id = None
-            title = None
+            best_id = title = sutta_uid = None
 
             for i, e in enumerate(elements):
                 if e.tag != 'p' and lasttag == 'p':
                     if text_l:
                         # Add this entry.
+
                         entry_id += 1
                         mang_text = " «br» ".join(text_l)
                         orig_text = mang_text.casefold().replace('\xad','')
                         stem_text = self.stemmer(mang_text)
 
-                        entries.append( (entry_id, uid, title, best_id, mang_text) )
+                        entries.append( (entry_id, file_uid, sutta_uid, title, best_id, mang_text) )
                         stemmed_entries.append( (entry_id, stem_text) )
                         original_entries.append( (entry_id, orig_text) )
 
                         text_l = []
-                        best_id = None
-                        title = None
+                        best_id = title = sutta_uid = None
+                if e.tag == 'SENTINEL':
+                    continue
+                if sutta_uid is None:
+                    # Attempt to discover true sutta_uid
+                    # This really needs improvement in the source texts
+                    # but the below bodge works in practise.
+                    try:
+                        
+                        section = next(e.iterancestors('section'))
+                        if 'id' in section.attrib:
+                            t_uid = section.attrib['id']
+                            if t_uid[0].isalpha():
+                                sutta_uid = t_uid
+                        if sutta_uid is None:
+                            hgroup = next(section.iter('hgroup'))
+                            sutta_uid = hgroup.cssselect('[id]')[0].attrib['id']
+                    except (StopIteration, IndexError):
+                        sutta_uid = file_uid
 
                 if e.tag.startswith('h'):
                     # Choose the best title (prefer shorter, no numbers)
@@ -260,20 +277,21 @@ class SectionSearch:
         con.execute('PRAGMA synchronous = 0')
         con.execute('''CREATE TABLE entries (
             entry_id INTEGER PRIMARY KEY,
+            file TEXT,
             uid TEXT,
             heading TEXT,
             bookmark TEXT,
             text TEXT)''')
         con.execute('''CREATE VIRTUAL TABLE stemmed
-            USING fts4(content=entries, tokenize={}, uid, heading, bookmark, text)'''.format(self.fts_tokenizer))
+            USING fts4(content=entries, tokenize={}, file, uid, heading, bookmark, text)'''.format(self.fts_tokenizer))
         con.execute('''CREATE VIRTUAL TABLE original
-            USING fts4(content=entries, tokenize=simple, uid, heading, bookmark, text)''')
+            USING fts4(content=entries, tokenize=simple, file, uid, heading, bookmark, text)''')
 
         entries, original_entries, stemmed_entries = self.parse_entries()
 
         self.last = (entries, original_entries, stemmed_entries)
 
-        con.executemany('INSERT INTO entries values(?, ?, ?, ?, ?)',
+        con.executemany('INSERT INTO entries values(?, ?, ?, ?, ?, ?)',
             entries)
         con.executemany('INSERT INTO stemmed (docid, text) values (?, ?)',
             stemmed_entries)
@@ -448,7 +466,7 @@ class SectionSearch:
     def search_stemmed(self, e_query, s_query, limit=10, offset=0):
 
         rows = self.execute('''
-            SELECT uid, heading, bookmark, demangle(snippet(stemmed, "<b>", "</b> ", " … ", -1, -40)) as snippet FROM stemmed JOIN (
+            SELECT file, uid, heading, bookmark, demangle(snippet(stemmed, "<b>", "</b> ", " … ", -1, 40)) as snippet FROM stemmed JOIN (
                 SELECT docid, rank(matchinfo(stemmed)) AS rank
                 FROM stemmed
                 WHERE docid NOT IN (SELECT docid FROM original WHERE
@@ -465,7 +483,7 @@ class SectionSearch:
     
     def search_exact(self, query, limit=10, offset=0):
         rows = self.execute('''
-            SELECT uid, heading, bookmark, demangle(snippet(original, "<b>", "</b>", " … ", -1, -40)) as snippet FROM original JOIN (
+            SELECT file, uid, heading, bookmark, demangle(snippet(original, "<b>", "</b>", " … ", -1, 40)) as snippet FROM original JOIN (
                 SELECT docid, rank(matchinfo(original)) AS rank
                 FROM original
                 WHERE original MATCH :query

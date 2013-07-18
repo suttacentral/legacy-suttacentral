@@ -185,6 +185,7 @@ class SearchResultView(ViewBase):
         ViewBase.makeContext(self)
 
         self.context["result"] = self.search_result
+        self.context["dbr"] = scdb.getDBR()
 
 class AjaxSearchResultView(SearchResultView):
     def __init__(self, search_result):

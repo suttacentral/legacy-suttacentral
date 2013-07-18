@@ -781,7 +781,7 @@ function lookupWordHandler(event){
 
     if ($(this).children().is("span.meaning")) return;
 
-    var word = $(this).text().toLowerCase();
+    var word = $(this).text().toLowerCase().trim();
     word = word.replace(/­/g, '').replace(RegExp(syllSpacer, 'g'), '');//optional hyphen, syllable-breaker
 
     if (reverseMap[word]) {

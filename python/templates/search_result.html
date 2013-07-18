@@ -2,6 +2,7 @@
 {% import 'macros.html' as macros with context %}
 {%- block content -%}
 <div id='onecol'>
+<div id="main_search_results">
 <div>You searched: <strong>{{result.query.query}}</strong>
 </div>
 {% for category in result.categories -%}
@@ -25,12 +26,16 @@
     {%- endif -%}
     {%- if category.type == 'fulltext' -%}
         {% for section in category.sections -%}
-            <ul class="text_results>">
+            <ul class="text_results">
             {% for row in section.results -%}
                 {% if row.html -%}
                     <li class="moreresults">Text Search: {{row.html}}</li>
                 {% else -%}
-                    <li><h3><a href="/{{row.uid}}/{{result.query.lang}}/{{'#' + row.bookmark if row.bookmark else ''}}">{{row.heading}} »</a></h3>
+                    <li><h3> <a href="/{{row.file}}/{{result.query.lang}}/{{'#' + row.bookmark if row.bookmark else ''}}">{{row.heading}} » </a> </h3>
+                    <small>{{ dbr(row.uid).acronym|replace(" ", " ") }} {{ dbr(row.uid).name }}
+                    {%- if dbr(row.uid) %} <a class="details" href="/{{row.uid}}/">►</a>
+                    {%- endif -%}
+                    </small>
                     <p>{{row.snippet}}</p>
                     </li>
                 {% endif -%}
@@ -60,9 +65,6 @@
 {{category.footurl}}
 {% endif %}
 {%- endfor %}
-
+</div>
 </div>
 {%- endblock -%}
-<script>
-$('.entry  p').truncate({max_length: 100});
-</script>
