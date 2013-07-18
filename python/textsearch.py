@@ -189,7 +189,7 @@ class SectionSearch:
 
             file_uid = uidfind(filename)[0]
 
-            dom = lxml.html.fromstring(open(filename).read())
+            dom = lxml.html.fromstring(open(filename, 'r', encoding='utf-8').read())
             self.dom = dom
             for e in dom.cssselect('#metaarea, .hidden'):
                 e.drop_tree()
