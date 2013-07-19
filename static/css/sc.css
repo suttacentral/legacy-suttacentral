@@ -299,6 +299,8 @@ a:visited {color:#006699;}
 a:hover {color:#DF00FF;}
 a:active {color:purple;}
 
+a.tran:not([href^="/"]) {font-size: 90%; color: #2179a9}
+
 p, ul {margin-bottom:1.5em;}
 
 section h1 {line-height:1;
