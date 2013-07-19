@@ -76,7 +76,7 @@ def default(*args, **kwargs):
 
     raise cherrypy.HTTPError(404, 'Unknown path {}'.format(' '.join(args)))
 
-def search(query, target=None, limit=10, offset=0, ajax=0, **kwargs):
+def search(query, target=None, limit=25, offset=0, ajax=0, **kwargs):
     limit = int(limit)
     offset = int(offset)
     if not target:

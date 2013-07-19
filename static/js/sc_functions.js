@@ -441,7 +441,7 @@ function buildTextualInformation() {
 
         var aClass = a.className;
         if (aClass == 'sc') {
-            $(a).html(a.id.replace(/[a-z]+(?:[0-9]+\.)?(?:[0-9-]+\.)?([0-9]+)/, "$1.")).attr("href", "#"+a.id)
+            $(a).html(a.id.replace(/(?:sc\.)?[a-z]+(?:[0-9]+\.)?(?:[0-9-]+\.)?([0-9]+)/, "$1.")).attr("href", "#"+a.id)
         } else if (aClass == 'ms') {
             $(a).html( a.id.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2.")).attr("href", "#"+a.id)
         } else if (aClass == 'msdiv') {

@@ -486,7 +486,7 @@ class _DBR:
                                 sutta.plain_name,
                                 sutta.volpage_info,
                                 sutta.alt_volpage_info or '',
-                                ", ".join( t.lang.code
+                                "  ".join( t.lang.code
                                     for t in sutta.translations,) or '',]))
                             for sutta in self.suttas.values()])
         suttastrings = [s.lower() for s in suttastringsU]

@@ -2,31 +2,44 @@ import bisect, math, functools
 import scdb, classes, textfunctions
 
 class Ranker:
-    def __init__(self, query):
+    def __init__(self, query, lang):
         self.query_cased = query
         self.query = query.casefold()
         self.query_whole = ' ' + self.query.strip() + ' '
         self.query_starts = ' ' + self.query.strip()
         self.query_simple = textfunctions.simplify_pali(self.query)
+        self.lang = lang
 
     def __call__(self, input):
         query = self.query
         sutta = input[0]
+        lang = self.lang
         query_simple = self.query_simple
-        if self.query_whole in input[1]:
-            rank = 100
-        elif self.query_starts in input[1]:
-            rank = 200
-        elif self.query in input[1]:
-            rank = 300
-        elif ' ' + self.query_simple + ' ' in input[3]:
-            rank = 1000
-        elif ' ' + self.query_simple in input[3]:
-            rank = 1100
-        elif self.query_simple in input[3]:
-            rank = 1200
+        if self.query:
+            if self.query_whole in input[1]:
+                rank = 100
+            elif self.query_starts in input[1]:
+                rank = 200
+            elif self.query in input[1]:
+                rank = 300
+            elif ' ' + self.query_simple + ' ' in input[3]:
+                rank = 1000
+            elif ' ' + self.query_simple in input[3]:
+                rank = 1100
+            elif self.query_simple in input[3]:
+                rank = 1200
+            else:
+                rank = 10000
         else:
-            rank = 10000
+            rank = 200
+
+        if lang:
+            if lang == sutta.lang.code or any(
+                lang == t.lang.code and t.url.startswith('/')
+                    for t in sutta.translations):
+                rank -= 100
+            else:
+                rank += 1200
 
         # Add bonus rank for suttas with more parallels.
         pbonus = sum(3 - 2 * t.partial for t in sutta.parallels)
@@ -55,22 +68,29 @@ class Ranker:
 # Results are not large, so there's little harm in caching a lot of them.
 
 @functools.lru_cache(500)
-def get_and_rank_results(query):
-    results = search_dbr(query)
+def get_and_rank_results(query, lang=None):
+    results = search_dbr(query, lang)
     if len(results) == 0:
         return ((),())
-    ranker = Ranker(query)
+    ranker = Ranker(query, lang)
     ranks, suttas = zip(*sorted((ranker(s), s[0]) for s in results))
     return (ranks, suttas)
 
 def search(query=None, limit=25, offset=0):
     out = classes.SuttaResultsCategory()
-    if len(query) < 3:
-        out.total = 0
-        out.add("Search term too short.", [])
-        return out
-
-    ranks, suttas = get_and_rank_results(query)
+    searchlang = None
+    if len(query) <= 3:
+        dbr = scdb.getDBR()
+        if query in dbr.lang_codes:
+            searchlang = query
+        if not searchlang and len(query) <= 2:
+            out.total = 0
+            out.add("Search term too short.", [])
+            return out
+    if searchlang:
+        ranks, suttas = get_and_rank_results(query='', lang=searchlang)
+    else:
+        ranks, suttas = get_and_rank_results(query)
     
     count = len(ranks)
     out.total = count
@@ -98,18 +118,22 @@ def search(query=None, limit=25, offset=0):
         out.add("Similiar results", s_results)
     return out
         
-def search_dbr(query):
+def search_dbr(query, lang):
     dbr = scdb.getDBR()
     # The structure of dbr.searchstrings is :
     # ( sutta, searchstring, searchstring_cased, suttaname simplified)
 
     # First try matching query as a whole
-    cf_query = query.casefold()
-    sm_query = textfunctions.simplify_pali(query)
+    if lang:
+        cf_query = " " + lang + " "
+        sm_query = None
+    else:
+        cf_query = query.casefold()
+        sm_query = textfunctions.simplify_pali(query)
     results = set(s for s in dbr.searchstrings if cf_query in s[1])
-    results_s = set(s for s in dbr.searchstrings if sm_query in s[3])
-
-    results.update(results_s)
+    if sm_query and cf_query != sm_query:
+        results_s = set(s for s in dbr.searchstrings if sm_query in s[3])
+        results.update(results_s)
 
     return results
 

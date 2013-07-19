@@ -5,9 +5,9 @@
 //The id of the page element which gets populated with the textual control elements.
 textualControls = {
     id: "textual_controls",
-    marginClasses: "a.pts, a.wp, a.ms, a.msdiv, a.sc, a.vnS, a.vn, a.vimula, a.tu, a.gatn, a.t, a.tlinehead, a.bb, a.da",
+    marginClasses: "a.pts, a.bps, a.wp, a.ms, a.msdiv, a.sc, a.vnS, a.vn, a.vimula, a.tu, a.gatn, a.gatha-number, a.kel, a.t, a.tlinehead, a.bb, a.da",
     popupClasses: ".pub, .var, .cross, .end",
-    contentClasses: ".insertion",
+    contentClasses: ".supplied, .supplied2",
     metaarea: "#metaarea"
 }
 
