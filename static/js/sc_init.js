@@ -5,9 +5,9 @@
 //The id of the page element which gets populated with the textual control elements.
 textualControls = {
     id: "textual_controls",
-    marginClasses: "a.pts, a.bps, a.wp, a.ms, a.msdiv, a.sc, a.vnS, a.vn, a.vimula, a.tu, a.gatn, a.gatha-number, a.kel, a.t, a.tlinehead, a.bb, a.da",
-    popupClasses: ".pub, .var, .cross, .end",
-    contentClasses: ".supplied, .supplied2",
+    marginClasses: "a.pts, a.bps, a.wp, a.ms, a.msdiv, a.sc, a.vnS, a.vn, a.vimula, a.tu, a.gatn, a.gatha-number, a.kel, a.t, a.tlinehead, a.bb, a.da, a.snp-vagga-verse, a.verse-num-pts, a.snp-vagga-section-verse",
+    popupClasses: ".pub, .var, .rdg, .cross, .end",
+    contentClasses: ".supplied, .supplied2, .add, .corr, .del, .end, .lem, .sic, .surplus",
     metaarea: "#metaarea"
 }
 
@@ -68,7 +68,13 @@ scMode = {
             'as': "Page numbers in Yamada, 1972.",
             'sht': "References for SHT fragments.",
             'gbm': "Section numbers in Gilgit Buddhist Manscripts.",
-            'fol': "Folio number in the manuscript."
+            'fol': "Folio number in the manuscript.",
+            'kel': "Paragraph numbers in Kelly, Sawyer, and Yareham.",
+            'ud-vagga-sutta': "Chapter/sutta number.",
+            'ud-sutta':  "Sutta number.",
+            'snp-vagga-verse':  "Chapter, and verse number within the chapter.",
+            'snp-vagga-section-verse':  "Chapter, section, and verse number within the section.",
+            'verse-num-pts':  "Verse number in the Pali Text Society edition."
         }
     }
 }

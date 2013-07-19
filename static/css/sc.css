@@ -932,7 +932,7 @@ a.da {
     display: none;
 }
 
-a.ms, a.sc, a.bps, a.vimula, a.tu, a.vn, a.vnS, a.gatn, a.gatha-number, a.t, a.tlinehead, a.wp, a.kel
+a.ms, a.sc, a.bps, a.vimula, a.tu, a.vn, a.vnS, a.gatn, a.gatha-number, a.t, a.tlinehead, a.wp, a.kel, a.snp-vagga-verse, a.verse-num-pts, a.snp-vagga-section-verse
     {
     visibility:hidden;
     position:absolute;
@@ -953,6 +953,8 @@ a.sc {margin:0.7em 0 0 -5.3em; color:#B3A72D;}
 a.t {margin:0.7em 0 0 -5.3em; color:#00B428;}
 
 a.wp {margin:0.7em 0 0 -5.3em; color:red;}
+
+a.snp-vagga-verse, a.verse-num-pts, a.snp-vagga-section-verse {display: none;}
 
 a.vimula {color:blue;}
 
@@ -1482,7 +1484,7 @@ Text reconstructed by the editor.
 Text reconstructed by the editor.
 */
 
-.add	{display:none;]
+.add	{display:none;}
 .add.infomode	{display:inline;font-family:'source_sans_pro'; color:#b2b2b2;font-size:80%;}
 /*There are some editorial additions marked <span class="add"></span>. These should be hidden by default.
 
@@ -1501,7 +1503,7 @@ Metre reconstructed by the editor.
 Gaps in the manuscript.
 */
 
-.corr
+.corr {}
 corr.infomode	{color:#00751A} 
 /*A corrected reading that has been adopted in the text (usually by the latest editor mentioned in the meta). By default display normally.
 
@@ -1517,7 +1519,7 @@ Reading corrected by the editor.
 Apparently incorrect reading determined by the editor.
 */
 
-.lem
+.lem {}
 .lem.infomode	{color:#432769}
 /*The adopted main reading in a text. Display normally.
 
@@ -1526,7 +1528,7 @@ Apparently incorrect reading determined by the editor.
 Accepted reading in this text.
 */
 
-.rdg
+.rdg {}
 /*A variant reading. Use the same color as for "var" above. In fact, these var should be merged under rdg (which is the TEI terminology.)
 
 Variant reading.
@@ -1538,7 +1540,7 @@ cite.book	{font-style:italic;}
 cite.article	{font-style:normal}
 /*An article title.*/
 
-.gatha-number
+.gatha-number {}
 /*As it says. Style as for other refs.*/
 
 .del	{display:none;}
@@ -1563,9 +1565,11 @@ CSS Class	HTML Title
 
 .ud-sutta			"Sutta number."
 
-.snp-vagga-verse	"Chapter/verse number."
+.snp-vagga-verse	"Chapter, and verse number within the chapter."
 
-.snp-verse-num-anandajoti		"Verse number in Ānandajoti’s translation."
+.snp-vagga-section-verse	"Chapter, section, and verse number within the section."
+
+.verse-num-pts		"Verse number in the Pali Text Society edition."
 
 .eno89		"Paragraph numbers in Enomoto, 1989."
 
@@ -1650,6 +1654,7 @@ The following references are secondary. They appear in the same files as some of
 .gbm		"Section numbers in Gilgit Buddhist Manscripts."
 
 .fol			"Folio number in the manuscript."
+.kel		"Paragraph numbers in Kelly, Sawyer, and Yareham."
 
 In a few cases there are no paragraph numbers, these should be added as "SC" numbers. These texts are:
 
