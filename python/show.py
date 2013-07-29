@@ -73,6 +73,8 @@ def default(*args, **kwargs):
         translations = dbr.translation_texts.get(path)
         if translations:
             return TextView(uid, lang).render()
+        else:
+            return TextView(uid, lang).render()
 
     raise cherrypy.HTTPError(404, 'Unknown path {}'.format(' '.join(args)))
 

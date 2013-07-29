@@ -4,6 +4,8 @@ from jinja2 import Environment, FileSystemLoader
 from webassets.ext.jinja2 import AssetsExtension
 
 import assets, config, logging, os.path, regex, scdb
+from cherrypy.lib.cptools import redirect as http_redirect
+import cherrypy
 
 logger = logging.getLogger(__name__)
 
@@ -97,7 +99,10 @@ class TextView(ViewBase):
     def try_alt_sutta_url(self):
         # TODO: Not sure if this code is valid or not...
         sutta = scdb.getDBR().suttas.get(self.uid)
+
         if sutta and sutta.url:
+            url = sutta.url
+            lang = sutta.lang.code
             logger.info('Found sutta {} without text view file {}'.format(
                 sutta.uid, self.filename))
             m = regex.search(r'/([^/]*)/([^/]*)/([^/]*)', url)
@@ -106,14 +111,15 @@ class TextView(ViewBase):
                 if os.path.exists(alt_filename):
                     logger.info(('Redirecting to alt sutta url {} for missing ' +
                         ' file {}').format(url, self.filename))
-                    cherrypy.lib.cptools.redirect(url=url, internal=False)
+                    
+                    http_redirect(url=url, internal=False)
             return False
 
     def makeContext(self):
         ViewBase.makeContext(self)
         content = self.get_file_content()
         if not content:
-            self.try_alt_sutta_url()
+            #self.try_alt_sutta_url()
             raise cherrypy.HTTPError(404,
                 'No text with filename {}'.format(self.filename))
 
