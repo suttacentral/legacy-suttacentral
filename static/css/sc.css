@@ -593,6 +593,22 @@ margin: -0.2em -0.3em;
 .terms, .text_results {
     list-style: none;
 }
+
+.terms a.ref, .terms span.precision {
+    color: gray;
+    font-style: italic;
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+    top: -0.5em;
+}
+
+.terms span.precision{ color: gray}
+/*.terms span.precision:before{ content: ' (~'}
+.terms span.precision:after{ content: ') '}*/
+.terms .type {visibility: hidden}
+
     
 
 
@@ -1474,14 +1490,14 @@ Surplus text.
 /*In almost all Sanskrit texts, there is reconstruction by the editor. These are marked <span class="supplied"></span>. In CSS this should by default display normally, and optionally, use 
 
 
-Text reconstructed by the editor.
+Text supplied by the editor.
 */
 
 .supplied2 {}
 .supplied2.infomode	{color:#9B8D00}
 /*In some cases there are two forms of supplied text, usually differentiated in the original by () and []. This difference is retained by using supplied2 for the []. Actually these should be marked more clearly to differnentiate them, but this will differ according to the various publications, which I don't have. So for now let them behave as for .supplied, except use 
 
-Text reconstructed by the editor.
+Text supplied by the editor.
 */
 
 .add	{display:none;}
@@ -1550,6 +1566,11 @@ cite.article	{font-style:normal}
 Text deleted by the editor as superfluous.
 */
 
+.unclear	{color:#b2b2b2}
+/*Text marked as uncertain, usually with a "?", in the transcribed text.
+
+Unclear reading.
+*/
 .namo		{font-style:italic}
 /*dedication at the start of texts*/
 

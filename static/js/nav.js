@@ -7,8 +7,7 @@ var sc_nav = {
                              .mouseover(sc_nav.handleSearch);
      },
      handleSearch: function(e) {
-         
-         var input = e.target.value;
+        var input = e.target.value;
         if (sc_nav.lastXHR)
             sc_nav.lastXHR.abort();
         if (input.length < 2) {
@@ -36,13 +35,16 @@ var sc_nav = {
         for (i = 0; i < tds.length; i++)
         {
             td = $(tds[i]);
+            count = td.children().length
             lastchild = td.children().last().clone();
+            lastchild.text(count + ' ' + lastchild.text());
             td.empty();
             td.append(lastchild);
         }
         $("#search_results").html(results).slideDown();
         sc_truncate.apply($("#search_results"), 125)
         $("#search_results tr").filter(":even").addClass("even");
+        $("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'})
     },
 };
 

@@ -78,12 +78,14 @@ def default(*args, **kwargs):
 
     raise cherrypy.HTTPError(404, 'Unknown path {}'.format(' '.join(args)))
 
-def search(query, target=None, limit=25, offset=0, ajax=0, **kwargs):
+def search(query, target=None, limit=0, offset=0, ajax=0, **kwargs):
     limit = int(limit)
     offset = int(offset)
     if not target:
         target = 'all'
     ajax = not ajax in (None, 0, '0')
+    if not limit:
+        limit = 10 if ajax else 25
     qdict = {'query':query, 'target':target, 'limit':limit, 'offset':offset, 'ajax':ajax}
     qdict.update(kwargs)
 

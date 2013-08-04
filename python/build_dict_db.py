@@ -157,6 +157,20 @@ def build_dppn():
 
     count = collections.Counter()
 
+    def loc(e):
+        e.tag = 'a'
+        e.attrib['href'] = 'http://maps.google.com.au/maps?ll={}'.format(e.text)
+        e.text = '^ see location '
+        
+    tfn = {'ref': ('a', 'ref'),
+            'description': None,
+            'place': ('div', 'place'),
+            'person': ('div', 'person'),
+            'thing': ('div', 'thing'),
+            'location': loc,
+            'precision': ('span', 'precision'),
+            'type': ('span', 'type'),}            
+
     for entry in dom.cssselect('person, place, thing'):
         entry_id += 1
 
@@ -185,8 +199,22 @@ def build_dppn():
             e.drop_tree()
         alt_names = ", ".join(r[2] for r in name_rows[1:])
 
+        for e in entry.iter():
+            if e.tag in tfn:
+                value = tfn[e.tag]
+                if value is None:
+                    e.drop_tag()
+                elif callable(value):
+                    value(e)
+                elif len(value) == 2:
+                    e.tag = value[0]
+                    e.attrib['class'] = value[1]
+                else:
+                    raise NotImplementedError
+                
         html = lxml.html.tostring(entry, encoding='utf8').decode()
-
+        html = html.replace('</a>', '</a> ').replace('<a', ' <a').replace('  ', ' ')
+        
         # Destructively modify the element
         refstrs = list(t.text.strip() for t in entry.iter('ref'))
         for ref in entry.iter('ref'):

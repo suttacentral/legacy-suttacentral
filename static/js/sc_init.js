@@ -74,7 +74,9 @@ scMode = {
             'ud-sutta':  "Sutta number.",
             'snp-vagga-verse':  "Chapter, and verse number within the chapter.",
             'snp-vagga-section-verse':  "Chapter, section, and verse number within the section.",
-            'verse-num-pts':  "Verse number in the Pali Text Society edition."
+            'verse-num-pts':  "Verse number in the Pali Text Society edition.",
+            'supplied': "Text supplied by editor",
+            'precision': "Estimated precision of this location (1 = best)"
         }
     }
 }
