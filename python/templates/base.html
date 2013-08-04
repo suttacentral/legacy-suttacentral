@@ -20,14 +20,14 @@
 <h1><a href="/">SuttaCentral</a></h1>
 <h2><a href="/">Early Buddhist texts, translations, and parallels</a></h2>
 </hgroup>
-<!-- Drop down menus start here -->
-<div id="navsearch">
 
+<div id="navsearch">
 <form id="search_box" action="/search" class="search" />
   <input type="text" name="query" size="25" class="searchspace" placeholder="Search" autocomplete="off" />
   <button class="searchbutton"><img src="/img/search-icon.png" height="15" alt="Search" title="Search"></button>
 </form>
-
+</div><!-- navsearch -->
+<!-- Drop down menus start here -->
 <div id="navbar">
 {% for collection in collections -%}
 <nav>
@@ -46,7 +46,7 @@
 </nav>
 {% endfor -%}
 </div><!-- navbar -->
-</div><!-- navsearch -->
+
 </header>
 {% block content %}
 <div id="onecol">

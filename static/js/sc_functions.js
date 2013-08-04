@@ -441,7 +441,11 @@ function buildTextualInformation() {
 
         var aClass = a.className;
         if (aClass == 'sc') {
-            $(a).html(a.id.replace(/(?:sc\.)?[a-z]+(?:[0-9]+\.)?(?:[0-9-]+\.)?([0-9]+)/, "$1.")).attr("href", "#"+a.id)
+            m = a.id.match(/.*\.(.+)/)
+            if (!m) m = a.id.match(/\D+(\d+)/)
+            if (m.length == 2) {
+                $(a).html(m[1]).attr("href", "#"+a.id)
+            }
         } else if (aClass == 'ms') {
             $(a).html( a.id.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2.")).attr("href", "#"+a.id)
         } else if (aClass == 'msdiv') {
@@ -471,6 +475,7 @@ function buildTextualInformation() {
         das[i].innerHTML = das[i].id;
     buildVariantNotes();
     $("#metaarea a").filter(textualControls.marginClasses).each(function(){this.className = ""; this.innerHTML = ""});
+    $(".supplied").attr("title", scMode[scMode.lang]["strings"]["supplied"])
 
 }
 

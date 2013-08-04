@@ -44,28 +44,6 @@ db = mysql.connector.connect(**config.mysql)
 
 entries = []
 
-#for filename in files:
-    #text = open(filename, encoding='utf-8').read()
-    #lang, fileuid = regex.match(r'.*/(.*)/(.*)\.html', filename)[1:]
-
-    ##uids = [uid for uid in regex.findall(r'<section[^>]+id="([^"]+)"', text) if uid not in ('vagga',)]
-
-    ##if not uids:
-    #uids = [fileuid]
-    #dom = lxml.html.fromstring(text)
-
-    #metaarea = dom.get_element_by_id('metaarea')
-
-    #if metaarea is not None:
-        #meta = metaarea.text_content()
-        #brief = regex.match(r'[^.]+\.', meta)[0].strip()
-    #else:
-        #print("No metadata for {} :(".format(filename))
-        #metaarea = None
-
-    #entries.append( (fileuid, "/{}/{}/".format(fileuid, lang), brief) )
-
-
 mapping = {}
 
 textroot = config['app']['text_root']
@@ -129,13 +107,13 @@ for id, uid, lang in cur.fetchall():
         destroy_ids[lang_id].add(id)
 
 destroyers = []
+
 for lang_id, sutta_ids in destroy_ids.items():
     if len(sutta_ids) == 1:
         sutta_ids = list(sutta_ids) * 2
     destroyers.append('''
 DELETE FROM reference WHERE sutta_id IN {} AND reference_language_id={} AND reference_url_link LIKE '/%';'''.format(tuple(sorted(sutta_ids)), lang_id))
     
-
 sql_f = gzip.open('auto_urls.sql.gz', 'wb')
 sql_f.write('\n'.join(destroyers + entries).encode(encoding='utf-8'))
 
