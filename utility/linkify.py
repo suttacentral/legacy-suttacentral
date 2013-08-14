@@ -45,8 +45,17 @@ db = mysql.connector.connect(**config.mysql)
 entries = []
 
 mapping = {}
+transby = {}
 
 textroot = config['app']['text_root']
+
+def dedup(item):
+    out = []
+    for i in item:
+        if i not in out:
+            out.append(i)
+    return out
+            
 
 for dirpath, dirnames, filenames in os.walk(textroot):
     lang = os.path.basename(dirpath)
@@ -68,8 +77,22 @@ for dirpath, dirnames, filenames in os.walk(textroot):
             end = start
         for i in range(start, end + 1):
             mapping[(lang, prefix + str(i))] = (lang, fileuid)
+        text = open(os.path.join(dirpath, filename), encoding='utf8').read()
+        m = dedup(regex.findall(r'<span class="author">([^>]+)</span>', text))
+        if m:
+            if lang == 'en':
+                transby[(lang, fileuid)] = "Translated by: {}.".format(", ".join(m))
+            else:
+                #Localize!
+                transby[(lang, fileuid)] = "Translated by: {}.".format(", ".join(m))
+        else:
+            if lang == 'vn':
+                m = regex.search('Hòa thượng[^.<]+', text)
+                if m:
+                    transby[(lang,fileuid)] = m[0] + '.'
+        
 
-files = os.walk(textroot)
+#files = os.walk(textroot)
 cur = db.cursor()
 
 cur.execute('SELECT iso_code_2, reference_language_id FROM reference_language')
@@ -98,12 +121,12 @@ for id, uid, lang in cur.fetchall():
             target = mapping[(rlang, base_uid)]
         except KeyError:
             continue
-        print("Translation for {} in {}.".format(uid, rlang))
+        trans = transby.get(target, None)
+        print("Translation for {} in {}, {}".format(uid, rlang, trans))
         href = '/{}/{}/'.format(target[1], target[0])
-        brief = ''
         type_id = 1
         lang_id = ref_lang[rlang]
-        entries.append(make_ref_sql(id, href, brief, lang_id))
+        entries.append(make_ref_sql(id, href, trans, lang_id))
         destroy_ids[lang_id].add(id)
 
 destroyers = []
