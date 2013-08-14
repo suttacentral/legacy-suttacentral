@@ -26,13 +26,20 @@
 {%- endif %}
 </td>
 <td>
+{% if result and result.query.ajax %}
+{%- if sutta.translations -%}
+<a href='/{{sutta.uid}}/'
+ title='Correspondence details for {{sutta.acronym}}' class="details">{{sutta.translations|length}} ►</a>
+{%- endif -%}
+{%- else -%}
 {%- for parallel in sutta.parallels -%}
 {{sutta_acronym(parallel.sutta, show_alt=False)}}
 {%- if parallel.partial -%}*{%- endif -%}
-{% if not loop.last %}, {% else %} <a href='/{{sutta.uid}}' 
+{% if not loop.last %}, {% else %} <a href='/{{sutta.uid}}/' 
  title='Correspondence details for {{sutta.acronym}}' class="details">►</a>
 {% endif %}
 {%- endfor %}
+{%- endif -%}
 </td>
 <td>
 {% for translation in sutta.translations -%}
