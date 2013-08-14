@@ -126,7 +126,7 @@ class Translation(TranslationBase):
             1) language id
             2) sequence number
         To be used with sort() or sorted()."""
-        return (t.lang.id, t.seq_nbr)
+        return (not t.url.startswith('/'), t.lang.id, t.seq_nbr)
 
 class Collection(CollectionBase):
     __slots__ = ()
