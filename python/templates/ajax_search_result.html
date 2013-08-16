@@ -7,7 +7,7 @@
                 {% if row.html -%}
                     <li class="moreresults">{{row.html}}</li>
                 {% else -%}
-                    <li><h3>{{row.term}}{{row.number if row.number > 1}}{{' <span class="alt_terms">(' + row.alt_terms + ')</span>' if row.alt_terms}}</h3>
+                    <li><h3>{{row.term}} {% if row.number > 1 %}<span class="name_number">{{row.number}}</span>{% endif %}{{' <span class="alt_terms">(' + row.alt_terms + ')</span>' if row.alt_terms}}</h3>
                     {% if result.query.target=='dict' -%}
                         {{row.entry}}
                     {% else -%}
