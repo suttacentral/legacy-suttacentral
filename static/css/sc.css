@@ -342,7 +342,7 @@ header {
     z-index:2;
     border-bottom:4px solid #9B0F00;
     background:#EEE8AA;
-    min-height:4em;overflow:none;
+    min-height:4em;
 }
 
 
@@ -1051,7 +1051,6 @@ span.lookup > span.meaning {
     max-width: 20em;
     color:#1d1d1d;
     padding:0em 1em 0em 1em;
-    font-size:normal;
     font-family:'source_sans_pro', sans-serif;
     box-shadow:3px 2px 5px rgba(136, 136, 136, 0.3);
     background-color:#F7D1C2;
@@ -1190,7 +1189,7 @@ span.lookup:hover > span.meaning {
 #menu ul {list-style:none;line-height:1.46;margin-bottom:0;}
 
 #menu li {
-    font-family: "source_sans_pro",sans-serif; !important;
+    font-family: "source_sans_pro",sans-serif !important;
     font-size:11px !important;
 
     margin:0 !important;
@@ -1563,7 +1562,7 @@ cite.article	{font-style:normal}
 /*As it says. Style as for other refs.*/
 
 .del	{display:none;}
-.del.infomode	{color:EE1700;}
+.del.infomode	{color:#EE1700;}
 /*(deletion) contains a letter, word, or passage deleted, marked as deleted, or otherwise indicated as superfluous or spurious in the copy text by an author, scribe, annotator, or corrector.
 
 Text deleted by the editor as superfluous.
@@ -1703,11 +1702,11 @@ Sanghabhedavastu
 @media print {
     * {
 
-    background: transparent !important; color: #black !important;
+    background: transparent !important; color: black !important;
     }
 
 
-    a, a:visited, .vagga { color: #black !important; }
+    a, a:visited, .vagga { color: black !important; }
     header, footer, .deets, .tri, #toc, .previous, .next, .top, .details, .transcol {display:none !important;}
 
     tr {position: relative;page-break-before: auto;}
@@ -1737,7 +1736,6 @@ table {position: relative;}
 
     #onecol, #text {margin-top:-3cm;}
 
-    @page { margin: 2cm 1cm; }
     p, h2, h3, h4, h5, h6 { orphans: 3; widows: 3; color:black;}
     h2, h3	{ page-break-after: avoid; }
 
