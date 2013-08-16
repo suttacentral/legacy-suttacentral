@@ -158,9 +158,20 @@ def build_dppn():
     count = collections.Counter()
 
     def loc(e):
-        e.tag = 'a'
-        e.attrib['href'] = 'http://maps.google.com.au/maps?ll={}'.format(e.text.replace(' ', ''))
-        e.text = '^ see location '
+        e.attrib['class'] = 'location'
+        ll = e.text
+        if ll and ll[0].isdigit():
+            e.tag = 'a'
+            ll = ll.replace(' ', '')
+            e.attrib['href'] = 'http://maps.google.com.au/maps?ll={}'.format(ll)
+            e.text = '^ see location '
+        else:
+            if ll:
+                e.tag = 'span'
+            else:
+                if e.getnext().tag == "precision":
+                    e.getnext().drop_tree()
+                e.drop_tree()
         
     tfn = {'ref': ('a', 'ref'),
             'description': None,
