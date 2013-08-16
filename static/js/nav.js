@@ -32,15 +32,6 @@ var sc_nav = {
         }
         results = $("<div>" + data + "</div>");
         tds = results.find("td:nth-of-type(4)")
-        for (i = 0; i < tds.length; i++)
-        {
-            td = $(tds[i]);
-            count = td.children().length
-            lastchild = td.children().last().clone();
-            lastchild.text(count + ' ' + lastchild.text());
-            td.empty();
-            td.append(lastchild);
-        }
         $("#search_results").html(results).slideDown();
         sc_truncate.apply($("#search_results"), 125)
         $("#search_results tr").filter(":even").addClass("even");
