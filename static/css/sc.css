@@ -109,6 +109,7 @@ body {
     color: #2B2B2B;
     line-height: 1.5;
     background: #fcfcfc;
+	text-rendering: optimizeLegibility;
 }
 
 .hidden {display:none;}
@@ -303,7 +304,7 @@ a.tran:not([href^="/"]) {font-size: 90%; color: #99aabb; font-style:italic}
 
 p, ul {margin-bottom:1.5em;}
 
-section h1 {line-height:1;
+section  {line-height:1;
     font-size:1.6em;
     margin:0.25em 0 1em 0;
     font-weight:normal;
@@ -371,7 +372,7 @@ header h1   {
     display:table;
     margin-bottom:-0.3em;
     padding-top:0.1em;
-    position:static;
+    position:relative;
     z-index:-1;
 }
 
@@ -552,7 +553,7 @@ nav li span {
 
 #search_results tr, #search_results td {
     margin-right:1em;
-    padding: 0.4em 0.4em 0.4em 0em;
+    padding: 0.4em 0.4em 0.4em 0.4em;
 
 }
 #search_results td:nth-of-type(2) {
@@ -609,8 +610,10 @@ margin: -0.2em -0.3em;
 .terms span.precision:after{ content: ') '}*/
 .terms .type {visibility: hidden}
 
+.text_results	{margin-bottom:-1em}
     
 
+.text_results table {margin-top:1em}
 
 /* MAIN */
 
@@ -986,6 +989,11 @@ a.t:before {content:"T "}
 a.wp:before {content:"WP "}
 a.kel:before {content:"Kel "}
 
+#metaarea  .author {
+    font-family:'hetu_schetu_sc', 'source_sans_pro', sans-serif;
+    font-style:normal;
+    letter-spacing:0.02em;
+}
 
 .author {
     font-family:'Skolar Sutta Web SC', 'Skolar Sutta Web', Garuda,"Browallia New",Thonburi,Loma,Waree,Kinnari,serif;
