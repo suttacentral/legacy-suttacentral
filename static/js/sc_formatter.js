@@ -74,7 +74,6 @@ sc_formatter = {
             }
             if (node.nodeType == 3) {
                 text = node.nodeValue.trimLeft()
-                console.log(text);
                 var firstChar = text[0];
                 if (firstChar == '“' || firstChar == '‘')
                 {

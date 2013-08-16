@@ -304,7 +304,7 @@ a.tran:not([href^="/"]) {font-size: 90%; color: #99aabb; font-style:italic}
 
 p, ul {margin-bottom:1.5em;}
 
-section  {line-height:1;
+section h1 {line-height:1;
     font-size:1.6em;
     margin:0.25em 0 1em 0;
     font-weight:normal;
