@@ -159,7 +159,7 @@ def build_dppn():
 
     def loc(e):
         e.tag = 'a'
-        e.attrib['href'] = 'http://maps.google.com.au/maps?ll={}'.format(e.text)
+        e.attrib['href'] = 'http://maps.google.com.au/maps?ll={}'.format(e.text.replace(' ', ''))
         e.text = '^ see location '
         
     tfn = {'ref': ('a', 'ref'),
