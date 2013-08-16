@@ -61,32 +61,39 @@ sc_formatter = {
     quoteHanger: function(){
         $('p').each(function(){
             children = this.childNodes
-            for (i=0; i < children.length; i++)
-            {
-                child = children[i]
-                if (child.nodeType == 3)
+            node = this.childNodes[0];
+            //Find the start of the actual text.
+            while (node.nodeType == 1) {
+                if (node.nodeName == 'A') {
+                    node = node.nextSibling
+                }
+                else {
+                    node = nextInOrder(node, '1,3');
+                }
+                if (!node) return;
+            }
+            if (node.nodeType == 3) {
+                text = node.nodeValue.trimLeft()
+                console.log(text);
+                var firstChar = text[0];
+                if (firstChar == '“' || firstChar == '‘')
                 {
-                    text = child.nodeValue.trimLeft()
-                    var firstChar = text[0];
-                    if (firstChar == '“' || firstChar == '‘')
+                    var secondChar = text[1];
+                    if (secondChar == '“' || secondChar == '‘')
                     {
-                        var secondChar = text[1];
-                        if (secondChar == '“' || secondChar == '‘')
-                        {
-                            child.nodeValue = text.slice(2);
-                            $(this).prepend('<span class="dsquo">' + firstChar + secondChar + '</span>');
+                        node.nodeValue = text.slice(2);
+                        $(this).prepend('<span class="dsquo">' + firstChar + secondChar + '</span>');
+                    } else {
+                        node.nodeValue = text.slice(1);
+                        if (firstChar == '‘') {
+                            $(this).prepend('<span class="squo">' + firstChar + '</span>');
                         } else {
-                            child.nodeValue = text.slice(1);
-                            if (firstChar == '‘') {
-                                $(this).prepend('<span class="squo">' + firstChar + '</span>');
-                            } else {
-                                $(this).prepend('<span class="dquo">' + firstChar + '</span>');
-                            }
+                            $(this).prepend('<span class="dquo">' + firstChar + '</span>');
                         }
                     }
-                    break
                 }
             }
+
         });
     },
     markOfTheBeast: 0,
