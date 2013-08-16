@@ -70,13 +70,13 @@ for dirpath, dirnames, filenames in os.walk(textroot):
         except TypeError:
             print("FAIL!")
             continue
-        start = int(start)
         if end:
-            end = int(end)
+            start = int(start)
+            for i in range(start, int(end) + 1):
+                mapping[(lang, prefix + str(i))] = (lang, fileuid)
         else:
-            end = start
-        for i in range(start, end + 1):
-            mapping[(lang, prefix + str(i))] = (lang, fileuid)
+            mapping[(lang, prefix + start)] = (lang, fileuid)
+
         text = open(os.path.join(dirpath, filename), encoding='utf8').read()
         m = dedup(regex.findall(r'<span class="author">([^>]+)</span>', text))
         if m:
