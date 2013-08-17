@@ -11,14 +11,14 @@ logger = logging.getLogger(__name__)
 
 # The base class for all SuttaCentral views.
 class ViewBase:
-    def __init__(self):
-        # Subclasses use this object to obtain templates.
-        self.env = Environment(
+    # Subclasses use this object to obtain templates.
+    env = Environment(
             loader=FileSystemLoader(config.templates_root),
             extensions=[AssetsExtension],
             trim_blocks=True,
             lstrip_blocks=True,
         )
+    def __init__(self):
         self.env.assets_environment = assets.env
         # Subclasses assign a template
         self.template = None
