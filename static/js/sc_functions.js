@@ -391,9 +391,9 @@ function toggleTextualInfo(force) {
         var meta = $(textualControls.metaarea)[0]
         if (meta.innerHTML) {
             var content = false;
-            for (i = 0; i < meta.childNodes.length; i++)
+            for (var i = 0; i < meta.childNodes.length; i++)
             {
-                child = meta.childNodes[i]
+                var child = meta.childNodes[i]
                 if (child.nodeType == 3) {
                     if (child.nodeValue.trim()){
                         content = true;
