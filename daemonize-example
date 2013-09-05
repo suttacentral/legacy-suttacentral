@@ -5,4 +5,6 @@
 HOME=/path/to/home
 source $HOME/.virtualenvs/suttacentral/bin/activate
 cd $HOME/path/to/suttacentral/python
-exec cherryd -i server
+export NEW_RELIC_CONFIG_FILE=$HOME/path/to/suttacentral/newrelic.ini
+export NEW_RELIC_ENVIRONMENT=production
+exec newrelic-admin run-program cherryd -i server

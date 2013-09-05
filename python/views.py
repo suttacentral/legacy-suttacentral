@@ -6,8 +6,29 @@ from webassets.ext.jinja2 import AssetsExtension
 import assets, config, logging, os.path, regex, scdb
 from cherrypy.lib.cptools import redirect as http_redirect
 import cherrypy
+import newrelic.agent
 
 logger = logging.getLogger(__name__)
+
+class NewRelicBrowserTimingProxy:
+    """
+        New Relic real user monitoring proxy. See:
+        https://newrelic.com/docs/python/real-user-monitoring-in-python
+    """
+
+    @property
+    def header(self):
+        if config.newrelic_real_user_monitoring:
+            return newrelic.agent.get_browser_timing_header()
+        else:
+            return ''
+
+    @property
+    def footer(self):
+        if config.newrelic_real_user_monitoring:
+            return newrelic.agent.get_browser_timing_footer()
+        else:
+            return ''
 
 # The base class for all SuttaCentral views.
 class ViewBase:
@@ -25,8 +46,11 @@ class ViewBase:
 
     # This makes the basic context that all pages need.
     def makeContext(self):
-        self.context = {"page_lang": "en",
-                        "collections": menu_data}
+        self.context = {
+            "page_lang": "en",
+            "collections": menu_data,
+            "newrelic_browser_timing": NewRelicBrowserTimingProxy()
+        }
 
     # Combine template and context to produce an HTML page.
     def render(self):
