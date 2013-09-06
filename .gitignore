@@ -5,3 +5,5 @@ daemonize
 text
 *.log
 *~
+utility/out/
+utility/suttacen/
