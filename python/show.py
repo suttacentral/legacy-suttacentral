@@ -91,7 +91,7 @@ def search(query, target=None, limit=0, offset=0, ajax=0, **kwargs):
 
     search_result = classes.SearchResults(query=qdict)
     if not query:
-        return search_result
+        return search_view(search_result)
 
     if target=='all' or 'terms' in target or 'entries' in target:
         dict_results = dictsearch.search(query=query, target=target, limit=limit, offset=offset, ajax=ajax, **kwargs)
