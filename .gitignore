@@ -6,3 +6,5 @@ newrelic.ini
 text
 *.log
 *~
+utility/out/
+utility/suttacen/

@@ -165,11 +165,11 @@ def search(query, target='dict', limit=10, offset=0, ajax=0):
     see_more = None
     if len(terms) > 0:
         href = '/search/?query={}&target=terms&limit=25&offset=0'.format(query)
-        see_all_terms = '<a href="{}">{} term{} match{}</a>'.format(
+        see_all_terms = '<a href={}>{} term{} match{}</a>'.format(
                 href, len(terms), '' if len(terms)==1 else 's', 'es' if len(terms)==1 else '')
     if len(entries) > 0:
         href = '/search/?query={}&target=entries&limit=25&offset=0'.format(query)
-        see_all_entries = '<a href="{}">{} entr{} match{}</a>'.format(
+        see_all_entries = '<a href={}>{} entr{} match{}</a>'.format(
             href, len(entries), 'y' if len(terms) == 1 else 'ies', 'es' if len(terms) == 1 else '')
     
     if see_all_entries and see_all_terms:
@@ -231,13 +231,13 @@ def search(query, target='dict', limit=10, offset=0, ajax=0):
         start = max(0, offset - limit)
         href ='/search/?query={}&target={}&limit={}&offset={}'.format(
             query, navtarget, limit, start)
-        footurl += '<a href="{}"> « Results {}–{}</a>'.format(
+        footurl += '<a href={}> « Results {}–{}</a>'.format(
             href, start + 1, min(total, start + limit))
     if navtarget and limit + offset < total:
         start = offset + limit
         href ='/search/?query={}&target={}&limit={}&offset={}'.format(
             query, navtarget, limit, start)
-        footurl += '<a href="{}">Results {}—{} of {} »</a>'.format(
+        footurl += '<a href={}>Results {}—{} of {} »</a>'.format(
             href, start, min(total, start + limit), total)
     if footurl:
         dictResults.add_row(classes.HTMLRow(footurl))

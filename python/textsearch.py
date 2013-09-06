@@ -424,6 +424,8 @@ class SectionSearch:
                 exact_out.append(term)
                 stemmed_out.append(term)
                 continue
+            if term == '':
+                continue
             term = term.casefold()
             term = self.vel_term_correction(term)
             
@@ -650,7 +652,7 @@ def search(query, target="texts", limit=25, offset=0, lang='en'):
         urls = []
         for lang_code in sorted(counts):
             if counts[lang_code] > 0:
-                urls.append('<a href="/search/?query={query}&target=texts&lang={lang}&limit=25&offset=0">{lang}: {count}</a>'.format(
+                urls.append('<a href=/search/?query={query}&target=texts&lang={lang}&limit=25&offset=0>{lang}: {count}</a>'.format(
                     query=query,
                     lang=lang_code,
                     count=counts[lang_code]))

@@ -5,8 +5,8 @@ class Ranker:
     def __init__(self, query, lang):
         self.query_cased = query
         self.query = query.casefold()
-        self.query_whole = ' ' + self.query.strip() + ' '
-        self.query_starts = ' ' + self.query.strip()
+        self.query_whole = ' ' + self.query + ' '
+        self.query_starts = ' ' + self.query
         self.query_simple = textfunctions.simplify_pali(self.query)
         self.lang = lang
 
@@ -79,6 +79,8 @@ def get_and_rank_results(query, lang=None):
 def search(query=None, limit=25, offset=0):
     out = classes.SuttaResultsCategory()
     searchlang = None
+    quoted = '"' in query
+    query = query.replace('"', '')
     if len(query) <= 3:
         dbr = scdb.getDBR()
         if query in dbr.lang_codes:
@@ -92,11 +94,7 @@ def search(query=None, limit=25, offset=0):
     else:
         ranks, suttas = get_and_rank_results(query)
     
-    count = len(ranks)
-    out.total = count
-    if count == 0:
-        out.add("No results", [])
-        return out
+
 
     ranks = ranks[offset:offset+limit]
     suttas = suttas[offset:offset+limit]
@@ -104,17 +102,25 @@ def search(query=None, limit=25, offset=0):
     breakpoint = bisect.bisect(ranks, 700)
     e_results = suttas[:breakpoint]
     s_results = suttas[breakpoint:]
+    if quoted:
+        s_results = []
+    
+    count = len(e_results) + len(s_results)
+    out.total = count
+    if count == 0:
+        out.add("No results", [])
+        return out
 
     if count > offset+limit:
         start = limit + offset
         href = '/search/?query={}&target=suttas&limit={}&offset={}'.format(
             query, limit, start)
-        out.footurl = '<a href="{}">Results {}–{}</a>'.format(
+        out.footurl = '<a href={}>Results {}–{}</a>'.format(
             href, start + 1, min(count, start + limit))
     
     if e_results:
         out.add("Exact results", e_results)
-    if s_results:
+    if s_results and not quoted:
         out.add("Similiar results", s_results)
     return out
         
