@@ -12,3 +12,4 @@ selenium>=2.33.0
 webassets==dev
 jsmin
 cssutils
+newrelic>=2.0.0.1
