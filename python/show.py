@@ -117,15 +117,29 @@ def search_view(search_result):
     else:
         return AjaxSearchResultView(search_result).render()
 
-def fallback_disp_correspondence(sutta_id=None, **kwargs):
+
+def fallback_disp_handler(id, collection):
     try:
-        sutta_id = int(sutta_id)
+        id = int(id)
     except (TypeError, ValueError) as e:
-        sutta_id = None
-    if sutta_id:
+        id = None
+    if id:
+        objects = getattr(scdb.getDBR(), collection).values()
         # Looping is awful but it's all we have for now...
-        for sutta in scdb.getDBR().suttas.values():
-            if sutta.id == sutta_id:
-                path = '/{}'.format(sutta.uid)
+        for object in objects:
+            if object.id == id:
+                path = '/{}'.format(object.uid)
                 raise cherrypy.HTTPRedirect(path, 301)
     raise cherrypy.NotFound()
+
+def fallback_disp_correspondence(sutta_id=None, **kwargs):
+    fallback_disp_handler(sutta_id, 'suttas')
+
+def fallback_disp_subdivision(division_id=None, **kwargs):
+    fallback_disp_handler(division_id, 'divisions')
+
+def fallback_disp_sutta(division_id=None, subdivision_id=None, **kwargs):
+    if subdivision_id:
+        fallback_disp_handler(subdivision_id, 'subdivisions')
+    else:
+        fallback_disp_handler(division_id, 'divisions')
