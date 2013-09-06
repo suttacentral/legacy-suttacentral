@@ -116,3 +116,16 @@ def search_view(search_result):
         return SearchResultView(search_result).render()
     else:
         return AjaxSearchResultView(search_result).render()
+
+def fallback_disp_correspondence(sutta_id=None, **kwargs):
+    try:
+        sutta_id = int(sutta_id)
+    except (TypeError, ValueError) as e:
+        sutta_id = None
+    if sutta_id:
+        # Looping is awful but it's all we have for now...
+        for sutta in scdb.getDBR().suttas.values():
+            if sutta.id == sutta_id:
+                path = '/{}'.format(sutta.uid)
+                raise cherrypy.HTTPRedirect(path, 301)
+    raise cherrypy.NotFound()

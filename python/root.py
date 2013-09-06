@@ -23,3 +23,8 @@ class Root(object):
     @cherrypy.expose
     def index(self):
         return show.home()
+
+    # Fallback for old site URL
+    @cherrypy.expose
+    def disp_correspondence_php(self, **kwargs):
+        return show.fallback_disp_correspondence(**kwargs)
