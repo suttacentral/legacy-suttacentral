@@ -1839,3 +1839,8 @@ caption {text-align:left;}
 
 .abhidhamma ul {width:100% !important;}
 }
+
+/* 2013-09-07 - Do not show UserEcho tab until we need it. */
+.ue-tab-container {
+    display: none !important;
+}

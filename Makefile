@@ -41,6 +41,22 @@ deploy-production:
 		sudo supervisorctl start sc-production && \
 		sudo service apache2 reload'
 
+quick-deploy-production:
+	ssh sc-production@vps.suttacentral.net \
+		'source $$HOME/.virtualenvs/suttacentral/bin/activate && \
+		cd $$HOME/suttacentral && \
+		touch tmp/maintenance && \
+		sudo supervisorctl stop sc-production && \
+		git pull && \
+		cd text && \
+		git pull && \
+		cd .. && \
+		pip install -q -r requirements.txt && \
+		make build-assets && \
+		rm -f tmp/maintenance && \
+		sudo supervisorctl start sc-production && \
+		sudo service apache2 reload'
+
 clean:
 	rm -rf \
 		__pycache__ \

@@ -21,5 +21,27 @@ class Root(object):
         return show.search(**kwargs)
 
     @cherrypy.expose
-    def index(self):
+    def index(self, **kwargs):
         return show.home()
+
+    # Redirect for old site URL: disp_correspondence.php?sutta_id=...
+    @cherrypy.expose
+    def disp_correspondence_php(self, **kwargs):
+        return show.fallback_disp_correspondence(**kwargs)
+
+    # Redirect for old site URL: disp_division.php?collection_id=...
+    @cherrypy.expose
+    def disp_division_php(self, **kwargs):
+        raise cherrypy.HTTPRedirect('/', 302)
+
+    # Redirect for old site URL: disp_subdivision.php?division_id=...
+    @cherrypy.expose
+    def disp_subdivision_php(self, **kwargs):
+        return show.fallback_disp_subdivision(**kwargs)
+
+    # Redirect for old site URL: disp_sutta.php?division_id=... or
+    #                            disp_sutta.php?subdivision_id=...
+    @cherrypy.expose
+    def disp_sutta_php(self, **kwargs):
+        return show.fallback_disp_sutta(**kwargs)
+
