@@ -5,12 +5,12 @@
 {% macro sutta_acronym(sutta, show_alt) %}
 {%- if sutta.url -%}{# TODO: Insert nbsp where needed #}
 <a href='{{sutta.url}}' title='Go to original text for {{sutta.acronym}}'>
-{{sutta.acronym|replace(" ", "&nbsp;")}}</a>
+{{sutta.acronym|sub("(?<![,;]) ", "&nbsp;")}}</a>
 {%- else -%}
-{{sutta.acronym|replace(" ", "&nbsp;")}}
+{{sutta.acronym|sub("(?<![,;]) ", "&nbsp;")}}
 {%- endif -%}
 {%- if sutta.alt_acronym and show_alt %}
- <span class='altAcronym'>{{sutta.alt_acronym|replace(" ", "&nbsp;")}}</span>
+ <span class='altAcronym'>{{sutta.alt_acronym|sub("(?<![,;]) ", "&nbsp;")}}</span>
 {% endif -%}
 {% endmacro %}
 
@@ -21,8 +21,8 @@
 {{sutta_acronym(sutta, show_alt=True)}}
 </td>
 <td>{{sutta.name}}</td>
-<td>{{sutta.volpage_info|replace(" ", "&nbsp;")}}
-{%- if sutta.alt_volpage_info %} <span class='altVolPage'>{{sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
+<td>{{sutta.volpage_info|sub("(?<![,;]) ", "&nbsp;")}}
+{%- if sutta.alt_volpage_info %} <span class='altVolPage'>{{sutta.alt_volpage_info|sub("(?<![,;]) ", "&nbsp;")}}</span>
 {%- endif %}
 </td>
 <td>

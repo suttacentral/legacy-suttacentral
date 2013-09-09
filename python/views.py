@@ -7,6 +7,7 @@ import assets, config, logging, os.path, regex, scdb
 from cherrypy.lib.cptools import redirect as http_redirect
 import cherrypy
 import newrelic.agent
+import regex
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +57,10 @@ class ViewBase:
     def render(self):
         self.makeContext()
         return self.template.render(self.context)
+
+def sub(string, pattern, repl):
+    return regex.sub(pattern, repl, string)
+ViewBase.env.filters['sub'] = sub
 
 # A simple view that injects some static text 
 # between the header and footer.
