@@ -149,8 +149,7 @@ class TextView(ViewBase):
         content = self.get_file_content()
         if not content:
             #self.try_alt_sutta_url()
-            raise cherrypy.HTTPError(404,
-                'No text with filename {}'.format(self.filename))
+            raise cherrypy.NotFound()
 
         text = regex.search(r'(?mx)<body[^>]*>(.*)</body>', content,
                             regex.MULTILINE + regex.DOTALL)[1]

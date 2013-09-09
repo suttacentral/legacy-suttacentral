@@ -76,7 +76,7 @@ def default(*args, **kwargs):
         else:
             return TextView(uid, lang).render()
 
-    raise cherrypy.HTTPError(404, 'Unknown path {}'.format(' '.join(args)))
+    raise cherrypy.NotFound()
 
 def search(query, target=None, limit=0, offset=0, ajax=0, **kwargs):
     limit = int(limit)
