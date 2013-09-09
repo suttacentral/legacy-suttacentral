@@ -125,30 +125,10 @@ class TextView(ViewBase):
         except OSError:
             return False
 
-    def try_alt_sutta_url(self):
-        # TODO: Not sure if this code is valid or not...
-        sutta = scdb.getDBR().suttas.get(self.uid)
-
-        if sutta and sutta.url:
-            url = sutta.url
-            lang = sutta.lang.code
-            logger.info('Found sutta {} without text view file {}'.format(
-                sutta.uid, self.filename))
-            m = regex.search(r'/([^/]*)/([^/]*)/([^/]*)', url)
-            if m:
-                alt_filename = os.path.join(config.text_root, lang, m[1]) + '.html'
-                if os.path.exists(alt_filename):
-                    logger.info(('Redirecting to alt sutta url {} for missing ' +
-                        ' file {}').format(url, self.filename))
-                    
-                    http_redirect(url=url, internal=False)
-            return False
-
     def makeContext(self):
         ViewBase.makeContext(self)
         content = self.get_file_content()
         if not content:
-            #self.try_alt_sutta_url()
             raise cherrypy.NotFound()
 
         text = regex.search(r'(?mx)<body[^>]*>(.*)</body>', content,
