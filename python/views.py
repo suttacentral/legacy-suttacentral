@@ -68,8 +68,17 @@ ViewBase.env.filters['sub'] = sub
 class InfoView(ViewBase):
     def __init__(self, page_name):
         ViewBase.__init__(self)
-    
+
+        self.page_name = page_name
         self.template = self.env.get_template(page_name + ".html")
+
+    def makeContext(self):
+        ViewBase.makeContext(self)
+        if self.page_name != 'home':
+            title = self.page_name.replace('_', ' ').capitalize()
+            if title == 'Contacts':
+                title = 'People'
+            self.context["title"] = title
 
 # Given a Sutta object produces a Parallel page.
 class ParallelView(ViewBase):
@@ -99,6 +108,8 @@ class ParallelView(ViewBase):
                 has_alt_acronym = True
         
         # Add data specific to the parallel page to the context.
+        self.context["title"] = "{}: {}".format(
+            self.sutta.acronym, self.sutta.name)
         self.context["sutta"] = self.sutta
         self.context["parallels"] = parallels
         self.context["has_alt_volpage"] = has_alt_volpage
@@ -146,6 +157,8 @@ class DivisionView(ViewBase):
     def makeContext(self):
         ViewBase.makeContext(self)
 
+        self.context["title"] = "{}: {}".format(self.division.acronym,
+            self.division.name)
         self.context["has_alt_volpage"] = False
         self.context["has_alt_acronym"] = False
 
@@ -168,6 +181,9 @@ class SubdivisionView(ViewBase):
     def makeContext(self):
         ViewBase.makeContext(self)
 
+        self.context["title"] = "{} {}: {} - {}".format(
+            self.subdivision.division.acronym, self.subdivision.acronym,
+            self.subdivision.name, self.subdivision.division.name)
         self.context["has_alt_volpage"] = False
         self.context["has_alt_acronym"] = False
 
@@ -188,6 +204,8 @@ class SubdivisionHeadingsView(ViewBase):
 
     def makeContext(self):
         ViewBase.makeContext(self)
+        self.context["title"] = "{}: {}".format(self.division.acronym,
+            self.division.name)
         self.context["division"] = self.division
 
 class SearchResultView(ViewBase):
@@ -201,6 +219,8 @@ class SearchResultView(ViewBase):
         ViewBase.makeContext(self)
 
         self.context["search_query"] = self.search_query
+        self.context["title"] = 'Search: "{}"'.format(
+            self.search_query)
         self.context["result"] = self.search_result
         self.context["dbr"] = scdb.getDBR()
 

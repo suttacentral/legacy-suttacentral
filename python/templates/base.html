@@ -3,7 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>SuttaCentral—Correspondence of early Buddhist discourses</title>
+<title>
+  {%- if title -%}
+    {{ title }} - SuttaCentral
+  {%- else -%}
+    SuttaCentral, Correspondence of early Buddhist discourses
+  {%- endif -%}
+</title>
 <meta name="description" content="Correspondence tables, references, text, and translations for early Buddhist discourses in all schools of Buddhism">
 <meta name="viewport" content="width=device-width">
 {{ newrelic_browser_timing.header }}
