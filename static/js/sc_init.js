@@ -291,3 +291,5 @@ function ohInternetExplorerLetMeCountTheWaysILoveYou(){
 };
 
 ohInternetExplorerLetMeCountTheWaysILoveYou();
+
+$('#search_box_input').select().focus();

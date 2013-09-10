@@ -91,7 +91,7 @@ def search(query, target=None, limit=0, offset=0, ajax=0, **kwargs):
 
     search_result = classes.SearchResults(query=qdict)
     if not query:
-        return search_view(search_result)
+        return search_view(query, search_result)
 
     if target=='all' or 'terms' in target or 'entries' in target:
         dict_results = dictsearch.search(query=query, target=target, limit=limit, offset=offset, ajax=ajax, **kwargs)
@@ -109,13 +109,13 @@ def search(query, target=None, limit=0, offset=0, ajax=0, **kwargs):
             slimit = 10 if ajax else 25
         search_result.add(suttasearch.search(query=query, limit=slimit, offset=offset))
 
-    return search_view(search_result)
+    return search_view(query, search_result)
 
-def search_view(search_result):
+def search_view(search_query, search_result):
     if not search_result.query['ajax']:
-        return SearchResultView(search_result).render()
+        return SearchResultView(search_query, search_result).render()
     else:
-        return AjaxSearchResultView(search_result).render()
+        return AjaxSearchResultView(search_query, search_result).render()
 
 
 def fallback_disp_handler(id, collection):

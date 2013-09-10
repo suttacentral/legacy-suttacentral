@@ -48,9 +48,10 @@ class ViewBase:
     # This makes the basic context that all pages need.
     def makeContext(self):
         self.context = {
-            "page_lang": "en",
             "collections": menu_data,
-            "newrelic_browser_timing": NewRelicBrowserTimingProxy()
+            "newrelic_browser_timing": NewRelicBrowserTimingProxy(),
+            "page_lang": "en",
+            "search_query": ""
         }
 
     # Combine template and context to produce an HTML page.
@@ -190,20 +191,22 @@ class SubdivisionHeadingsView(ViewBase):
         self.context["division"] = self.division
 
 class SearchResultView(ViewBase):
-    def __init__(self, search_result):
+    def __init__(self, search_query, search_result):
         ViewBase.__init__(self)
         self.template = self.env.get_template('search_result.html')
+        self.search_query = search_query
         self.search_result = search_result
 
     def makeContext(self):
         ViewBase.makeContext(self)
 
+        self.context["search_query"] = self.search_query
         self.context["result"] = self.search_result
         self.context["dbr"] = scdb.getDBR()
 
 class AjaxSearchResultView(SearchResultView):
-    def __init__(self, search_result):
-        SearchResultView.__init__(self, search_result)
+    def __init__(self, search_query, search_result):
+        SearchResultView.__init__(self, search_query, search_result)
 
         self.template = self.env.get_template('ajax_search_result.html')
 
