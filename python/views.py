@@ -116,15 +116,15 @@ class ParallelView(ViewBase):
         self.context["has_alt_acronym"] = has_alt_acronym
 
 class TextView(ViewBase):
-    def __init__(self, uid, lang):
+    def __init__(self, uid, lang_code):
         ViewBase.__init__(self)
         self.uid = uid
-        self.lang = lang
+        self.lang_code = lang_code
         self.template = self.env.get_template('text.html')
 
     @property
     def filename(self):
-        return os.path.join(self.lang, self.uid) + '.html'
+        return os.path.join(self.lang_code, self.uid) + '.html'
 
     @property
     def path(self):
@@ -137,15 +137,39 @@ class TextView(ViewBase):
         except OSError:
             return False
 
+    def get_tag(self, content, tag):
+        re = r'(?mx)<{}[^>]*>(.*)</{}>'.format(tag, tag)
+        return regex.search(re, content, regex.MULTILINE | regex.DOTALL)[1]
+
     def makeContext(self):
         ViewBase.makeContext(self)
         content = self.get_file_content()
         if not content:
             raise cherrypy.NotFound()
 
-        text = regex.search(r'(?mx)<body[^>]*>(.*)</body>', content,
-                            regex.MULTILINE + regex.DOTALL)[1]
+        text = self.get_tag(content, 'body')
         self.context["text"] = text
+
+class SuttaView(TextView):
+
+    def __init__(self, sutta, lang, uid, lang_code):
+        self.sutta = sutta
+        self.lang = lang
+        super().__init__(uid, lang_code)
+
+    @property
+    def subdivision(self):
+        subdivision = self.sutta.subdivision
+        if subdivision.uid.endswith('-nosub'):
+            return subdivision.division
+        else:
+            return subdivision
+
+    def makeContext(self):
+        super().makeContext()
+        self.context["title"] = "{}: {} ({}) - {}".format(
+            self.sutta.acronym, self.sutta.name, self.lang.name,
+            self.subdivision.name)
 
 class DivisionView(ViewBase):
     def __init__(self, division):

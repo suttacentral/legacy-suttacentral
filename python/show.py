@@ -65,16 +65,18 @@ def default(*args, **kwargs):
             return ParallelView(sutta).render()
     elif len(args) == 2:
         # Sutta or Translation Texts
-        lang = args[1]
-        path = '%s/%s' % (uid, lang)
+        lang_code = args[1]
+        path = '%s/%s' % (uid, lang_code)
         suttas = dbr.sutta_texts.get(path)
-        if suttas:
-            return TextView(uid, lang).render()
+        if suttas and suttas[0]:
+            sutta = suttas[0]
+            return SuttaView(sutta, sutta.lang, uid, lang_code).render()
         translations = dbr.translation_texts.get(path)
-        if translations:
-            return TextView(uid, lang).render()
+        if translations and translations[0]:
+            translation = translations[0]
+            return SuttaView(translation.sutta, translation.lang, uid, lang_code).render()
         else:
-            return TextView(uid, lang).render()
+            return TextView(uid, lang_code).render()
 
     raise cherrypy.NotFound()
 
