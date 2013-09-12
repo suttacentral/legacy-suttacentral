@@ -32,9 +32,9 @@ class UrlTestCase(SCTestCase):
         self.assertIn('Saṃyuktāgama', self.table_heading_text())
 
     def test_bug_35_regression(self):
-        self.goto('/up1/en')
+        self.goto('/up1.021/en')
         self.assertIn('Upāyikā 1.021', self.article_header_text())
-        self.goto('/up2/en')
+        self.goto('/up2.071/en')
         self.assertIn('Upāyikā 2.071', self.article_header_text())
 
     def test_bug_42_regression(self):
