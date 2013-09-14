@@ -291,7 +291,7 @@ textarea {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -70px;
+    margin: 0 auto -90px;
 }
 
 a {text-decoration:none;}
@@ -300,7 +300,7 @@ a:visited {color:#006699;}
 a:hover {color:#DF00FF;}
 a:active {color:purple;}
 
-a.tran:not([href^="/"]) {font-size: 90%; color: #99aabb; font-style:italic}
+a.tran[href^="http"] {font-size: 90%; color: #99aabb; font-style:italic}
 
 p, ul {margin-bottom:1.5em;}
 
@@ -1433,13 +1433,13 @@ font-size: .7em;
 footer{
     background:#B0D1C3;
     text-align:center;
-    height:70px;
+    height:90px;
     clear:both;
 
 }
 
 #clearfooter {
-    height: 70px;
+    height: 90px;
     clear: both;
 }
 

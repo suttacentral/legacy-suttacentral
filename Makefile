@@ -86,6 +86,11 @@ build-search-indexes:
 regenerate-db-export:
 	ssh sc-production@vps.suttacentral.net '$$HOME/create-db-export'
 
+create-local-offline:
+	utility/offline-generator.py --force localhost:8800
+create-production-offline:
+	utility/offline-generator.py --quiet production
+
 create-db-user:
 	python/dbutil.py create-db-user
 setup-db-auth:

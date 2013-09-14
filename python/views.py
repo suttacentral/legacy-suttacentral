@@ -3,7 +3,7 @@ from classes import Parallel, Sutta
 from jinja2 import Environment, FileSystemLoader
 from webassets.ext.jinja2 import AssetsExtension
 
-import assets, config, logging, os.path, regex, scdb
+import assets, config, logging, os.path, regex, time, scdb
 from cherrypy.lib.cptools import redirect as http_redirect
 import cherrypy
 import newrelic.agent
@@ -50,8 +50,9 @@ class ViewBase:
         self.context = {
             "collections": menu_data,
             "newrelic_browser_timing": NewRelicBrowserTimingProxy(),
+            "offline": cherrypy.request.offline,
             "page_lang": "en",
-            "search_query": ""
+            "search_query": "",
         }
 
     # Combine template and context to produce an HTML page.
@@ -79,6 +80,50 @@ class InfoView(ViewBase):
             if title == 'Contacts':
                 title = 'People'
             self.context["title"] = title
+
+class DownloadsView(InfoView):
+    def __init__(self):
+        super().__init__('downloads')
+
+    def getctime(self, path):
+        return time.localtime(os.path.getctime(path))
+
+    @property
+    def offline_data(self):
+        zip_path = os.path.realpath(os.path.join(
+            config.offline_exports_root, 'suttacentral-offline-latest.zip'))
+        x7z_path = os.path.realpath(os.path.join(
+            config.offline_exports_root, 'suttacentral-offline-latest.7z'))
+        zip_file = os.path.basename(zip_path)
+        x7z_file = os.path.basename(x7z_path)
+        try:
+            return [
+                {
+                    'filename': zip_file,
+                    'url': '/exports/offline/{}'.format(zip_file),
+                    'time': time.strftime('%Y-%m-%d', self.getctime(zip_path)),
+                    'size': '{}MB'.format(round(os.path.getsize(zip_path) / (1024 ** 2), 1)),
+                    'format': 'Zip',
+                },
+                {
+                    'filename': x7z_file,
+                    'url': '/exports/offline/{}'.format(x7z_file),
+                    'time': time.strftime('%Y-%m-%d', self.getctime(x7z_path)),
+                    'size': '{}MB'.format(round(os.path.getsize(x7z_path) / (1024 ** 2), 1)),
+                    'format': '7z',
+                },
+            ]
+        except FileNotFoundError as e:
+            return []
+
+    @property
+    def db_data(self):
+        return []
+
+    def makeContext(self):
+        super().makeContext()
+        self.context["offline_data"] = self.offline_data
+        self.context["db_data"] = self.db_data
 
 # Given a Sutta object produces a Parallel page.
 class ParallelView(ViewBase):
@@ -170,6 +215,7 @@ class SuttaView(TextView):
         self.context["title"] = "{}: {} ({}) - {}".format(
             self.sutta.acronym, self.sutta.name, self.lang.name,
             self.subdivision.name)
+        self.context["sutta_lang_code"] = self.lang_code
 
 class DivisionView(ViewBase):
     def __init__(self, division):

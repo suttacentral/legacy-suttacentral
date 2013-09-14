@@ -119,6 +119,8 @@ def search_view(search_query, search_result):
     else:
         return AjaxSearchResultView(search_query, search_result).render()
 
+def downloads():
+    return DownloadsView().render()
 
 def fallback_disp_handler(id, collection):
     try:

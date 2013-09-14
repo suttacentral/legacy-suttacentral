@@ -17,23 +17,34 @@
 {% assets 'css_all' -%}
 <link rel="stylesheet" href="{{ ASSET_URL }}">
 {% endassets -%}
+{% if offline -%}
+  <style>a[href^="http"] { color: #99aabb; }</style>
+{% endif %}
 <!--[if lt IE 9]><style>header {display:inline-block; width:90%;}</style><![endif]-->
 </head>
 <body>
 <div id="wrap">
 <header>
 <div class="wheel"><a href="/">☸</a></div>
+
 <hgroup>
-<h1><a href="/">SuttaCentral</a></h1>
+<h1><a href="/">SuttaCentral
+  {%- if offline -%}
+    <em>Offline</em>
+  {%- endif -%}
+</a></h1>
 <h2><a href="/">Early Buddhist texts, translations, and parallels</a></h2>
 </hgroup>
 
+{% if not offline -%}
 <div id="navsearch">
 <form id="search_box" action="/search" class="search" />
   <input id="search_box_input" type="text" name="query" size="25" class="searchspace" placeholder="Search" autocomplete="off" value="{{ search_query }}" />
   <button class="searchbutton"><img src="/img/search-icon.png" height="15" alt="Search" title="Search"></button>
 </form>
 </div><!-- navsearch -->
+{%- endif -%}
+
 <!-- Drop down menus start here -->
 <div id="navbar">
 {% for collection in collections -%}
@@ -61,6 +72,7 @@
 </div>
 {% endblock %}
 </div><!-- wrap -->
+
 <div id="clearfooter"></div>
 <footer>
 <p>
@@ -69,18 +81,37 @@
 <a href="/contacts">People</a> |
 <a href="/methodology">Methodology</a> |
 <a href="/bibliography">Bibliography</a> |
-<a href="/abbreviations">Abbreviations</a> |
+<a href="/abbreviations">Abbreviations</a><br>
 <a href="/sutta_numbering">Sutta Numbering</a> |
 <a href="/copyright">Copyright</a> |
 <a href="/help">Help</a>
-| <a onmouseover="UE.Popin.preload();" href="#" onclick="UE.Popin.show(); return false;">feedback</a>
+{%- if not offline -%} | 
+<a href="/downloads">Downloads</a> |
+<a onmouseover="UE.Popin.preload();" href="#" onclick="UE.Popin.show(); return false;">Feedback</a>
+{% endif %}
 </p>
 </footer>
+
+{% if offline -%}
+<script src="/js/vendor/jquery-1.9.1.min.js"></script>
+{% else -%}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-{% assets 'js_core' -%}
+{% endif %}
+
+{% assets 'js_core' %}
 <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-{% endassets -%}
+{% endassets %}
+
+{% if offline -%}
+  {%- if sutta_lang_code == 'pi' -%}
+    <script type="text/javascript" src="/js/pi2en_dict_0.03.js"></script>
+  {%- elif sutta_lang_code == 'zh' -%}
+    <script type="text/javascript" src="/js/zh2en_dict_0.04s.js"></script>
+  {%- endif -%}
+{% endif %}
+
 {{ newrelic_browser_timing.footer }}
+
 </body>
 </html>

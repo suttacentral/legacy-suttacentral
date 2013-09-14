@@ -6,10 +6,28 @@ import config, show
 def error_page_404(status, message, traceback, version):
     return open(os.path.join(config.static_root, '404.html'), 'r').read()
 
+def get_cookie_or_param(name):
+    if name in cherrypy.request.cookie:
+        return cherrypy.request.cookie[name].value
+    elif name in cherrypy.request.params:
+        return cherrypy.request.params[name]
+    else:
+        return None
+
+def set_offline():
+    if get_cookie_or_param('offline'):
+        offline = True
+    else:
+        offline = False
+    cherrypy.request.offline = offline
+
+cherrypy.tools.set_offline = cherrypy.Tool('before_handler', set_offline)
+
 class Root(object):
 
     _cp_config = {
-        'error_page.404': error_page_404
+        'error_page.404': error_page_404,
+        'tools.set_offline.on': True,
     }
 
     @cherrypy.expose
@@ -23,6 +41,10 @@ class Root(object):
     @cherrypy.expose
     def index(self, **kwargs):
         return show.home()
+
+    @cherrypy.expose
+    def downloads(self, **kwargs):
+        return show.downloads()
 
     # Redirect for old site URL: disp_correspondence.php?sutta_id=...
     @cherrypy.expose

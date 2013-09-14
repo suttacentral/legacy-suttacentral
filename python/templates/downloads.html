@@ -1,0 +1,44 @@
+{% extends "base.html" -%}
+{% block content %}
+<div id="onecol">
+<section>
+<article>
+
+<h1>Downloads</h1>
+
+{% if offline %}
+<p>Why would you want to download anything offline?</p>
+{% else %}
+
+<h2>Offline SuttaCentral</h2>
+<p>An offline version of SuttaCentral suitable for when you don't have an Internet connection. Some features are missing, in particular search functionality.</p>
+<ul>
+{% if offline_data %}
+  {% for d in offline_data %}
+  <li><a href="{{ d.url }}"><code>{{ d.filename }}</code></a> -
+      {{ d.size }}, {{ d.format}} format, created {{ d.time }}</li>
+  {% endfor %}
+{% else %}
+  <li><em>No offline versions available.</em></li>
+{% endif %}
+</ul>
+
+<h2>SuttaCentral Database</h2>
+<p>This is the SQL database used with SuttaCentral.</p>
+<ul>
+{% if db_data %}
+  {% for d in db_data %}
+  <li><a href="{{ d.url }}"><code>{{ d.filename }}</code></a> -
+      {{ d.size }}, {{ d.format}} format, created {{ d.time }}</li>
+  {% endfor %}
+{% else %}
+  <li><em>No databases available.</em></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+</article>
+</section>
+</div>
+{%- endblock %}
