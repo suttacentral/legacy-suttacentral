@@ -74,7 +74,7 @@ clean-db:
 clean-exports:
 	rm -f static/exports/*
 clean-old-exports:
-	find static/exports -type f -mtime -7 -exec rm {} \;
+	find static/exports -type f -mtime +7 -exec rm {} \;
 
 clean-all: clean clean-assets clean-db clean-exports
 
