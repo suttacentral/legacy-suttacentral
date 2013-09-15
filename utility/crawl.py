@@ -67,7 +67,7 @@ def fixcss(text):
     def callback(m):
         url = m[2]
         addtotaskqueue(url)
-        return 'url({}..{}{})'.format(m[1], url, m[3])
+        return 'url({}..{}{})'.format(m[1] or '', url, m[3] or '')
     return regex.sub(r'url\(([\'"])?(/[^\'")]+)([\'"])?\)', callback, text,
         flags=regex.MULTILINE)
 
