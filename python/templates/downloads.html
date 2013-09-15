@@ -1,5 +1,22 @@
 {% extends "base.html" -%}
 {% block content %}
+
+{% macro file_items(file_list) %}
+<table>
+<thead><tr><th>File</th><th>Size</th><th>Format</th><th>Created</th></tr></thead>
+<tbody>
+{% for file in file_list %}
+<tr>
+<td><a href="{{ file.url }}"><code>{{ file.filename }}</code></a></td>
+<td>{{ file.size | filesizeformat }}</td>
+<td>{{ file.format | capitalize }}</td>
+<td>{{ file.time | datetime }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endmacro %}
+
 <div id="onecol">
 <section>
 <article>
@@ -12,27 +29,20 @@
 
 <h2>Offline SuttaCentral</h2>
 <p>An offline version of SuttaCentral suitable for when you don't have an Internet connection. Some features are missing, in particular search functionality.</p>
-<ul>
 {% if offline_data %}
-  {% for d in offline_data %}
-  <li><a href="{{ d.url }}"><code>{{ d.filename }}</code></a> -
-      {{ d.size }}, {{ d.format}} format, created {{ d.time }}</li>
-  {% endfor %}
+{{ file_items(offline_data) }}
 {% else %}
-  <li><em>No offline versions available.</em></li>
+<p><em>No offline versions available.</em></p>
 {% endif %}
 </ul>
 
 <h2>SuttaCentral Database</h2>
-<p>This is the SQL database used with SuttaCentral.</p>
+<p>This is a MySQL database dump of SuttaCentral's database.</p>
 <ul>
 {% if db_data %}
-  {% for d in db_data %}
-  <li><a href="{{ d.url }}"><code>{{ d.filename }}</code></a> -
-      {{ d.size }}, {{ d.format}} format, created {{ d.time }}</li>
-  {% endfor %}
+{{ file_items(db_data) }}
 {% else %}
-  <li><em>No databases available.</em></li>
+<p><em>No databases available.</em></p>
 {% endif %}
 </ul>
 

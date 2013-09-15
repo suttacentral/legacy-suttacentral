@@ -71,8 +71,12 @@ clean-assets:
 
 clean-db:
 	rm -f db/*.sqlite db/*.sqlite.tmp*
+clean-exports:
+	rm -f static/exports/*
+clean-old-exports:
+	find static/exports -type f -mtime -7 -exec rm {} \;
 
-clean-all: clean clean-assets clean-db
+clean-all: clean clean-assets clean-db clean-exports
 
 build-assets:
 	cd python && python -c 'import assets;assets.build()'
@@ -83,13 +87,15 @@ build-dict:
 build-search-indexes:
 	cd python && python -c 'import textsearch; textsearch.build()'
 
-regenerate-db-export:
-	ssh sc-production@vps.suttacentral.net '$$HOME/create-db-export'
+create-dev-offline-export:
+	utility/export/offline.py --force localhost:8800
+create-dev-db-export:
+	utility/export/db.py --force
 
-create-local-offline:
-	utility/offline-generator.py --force localhost:8800
-create-production-offline:
-	utility/offline-generator.py --quiet production
+create-production-offline-export:
+	utility/export/offline.py --quiet --wait 0.05 suttacentral.net
+create-production-db-export:
+	utility/export/db.py --quiet
 
 create-db-user:
 	python/dbutil.py create-db-user

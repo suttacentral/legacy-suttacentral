@@ -26,10 +26,10 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('host', type=str, help='the host to crawl')
     parser.add_argument('dir', type=str, help='output directory')
-    parser.add_argument('-q', '--quiet', action='store_true',
-        help='suppress non-errors from output')
     parser.add_argument('-w', '--wait', type=float, default=0.0,
         help='time to wait between requests in seconds')
+    parser.add_argument('-q', '--quiet', action='store_true',
+        help='suppress non-errors from output')
     return parser.parse_args()
 
 def readurl(url):
@@ -38,19 +38,20 @@ def readurl(url):
     with opener.open(url) as f:
         return f.read()
 
-def fixurl(old_url):
-    url = old_url
-    fixurl.url = url
+def addtotaskqueue(url):
+    global taskqueue, seen
+    url = fixurl(url)
+    if url not in seen:
+        taskqueue.append(url)
+        seen.add(url)
 
-    if url == '/':
-        url = 'index'
-    elif url.endswith('/'):
-        url = url[:-1]
-    elif '/#' in url:
-        url = url.replace('/#', '#')
-    if url[0] == '/':
-        url = url[1:]
-    return url
+def fixurl(url):
+    """
+        /a/b/   -> /a/b
+        /a/b/#c -> /a/b
+        /a/b/?c=1 -> /a/b
+    """
+    return regex.sub(r'(.)/?([#?].*)?$', r'\1', url)
 
 def getending(url):
     if '.' in url:
@@ -62,25 +63,25 @@ def getending(url):
     return ending
 
 def fixcss(text, url, _cache={}):
-    global taskqueue, seen
     try:
         return _cache[url]
     except KeyError:
         pass
     def callback(m):
         url = m[0]
-        if url not in seen:
-            taskqueue.append(regex.match('[^#?]+', url)[0])
+        addtotaskqueue(url)
         return url[0].replace('/', '../') + url[1:]
     result = regex.sub(r"(?<=url\(')[^']+(?='\))", callback, text)
     _cache[url] = result
     return result
 
 def process(host, url):
-    global taskqueue, seen, output_dir
+    global output_dir
     fullurl = urljoin(host, url)
     ending = getending(url)
-    new_url = fixurl(url)
+    new_url = fixurl(url)[1:]
+    if new_url == '':
+        new_url = 'index'
     if not ending:
         ending = 'html'
         new_url += '.html'
@@ -118,15 +119,12 @@ def process(host, url):
             href = a.attrib[attr]
         except KeyError:
             continue
-        if not href:
+        if not href or not href.startswith('/'):
             continue
-        if href.startswith('#'):
-            continue
-        if href.startswith('/'):
-            if href not in seen:
-                taskqueue.append(href)
-                seen.add(href)
-        new_href = fixurl(href)
+        addtotaskqueue(href)
+        new_href = fixurl(href)[1:]
+        if new_href == '':
+            new_href = 'index'
         if depth > 0:
             new_href = '../' * depth + new_href
         ending = getending(href)
@@ -148,8 +146,8 @@ if __name__ == '__main__':
     wait = args.wait
 
     taskqueue = collections.deque()
-    taskqueue.append('/')
     seen = set()
+    addtotaskqueue('/')
 
     start = time.time()
     count = 0
@@ -164,6 +162,7 @@ if __name__ == '__main__':
             sys.stderr.write("{}: {}\n".format(path, str(e)))
         if wait > 0:
             time.sleep(wait)
+
     total = time.time() - start
     if not quiet:
         print('{} pages downloaded in {} seconds, {} pages per second.'.format(count, total, round(count / total)))

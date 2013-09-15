@@ -1,15 +1,37 @@
-from menu import menu_data
-from classes import Parallel, Sutta
-from jinja2 import Environment, FileSystemLoader
+import babel.dates, cherrypy, jinja2, newrelic.agent, os.path, regex, time
 from webassets.ext.jinja2 import AssetsExtension
 
-import assets, config, logging, os.path, regex, time, scdb
-from cherrypy.lib.cptools import redirect as http_redirect
-import cherrypy
-import newrelic.agent
-import regex
+import assets, config, logging, scdb
+from menu import menu_data
+from classes import Parallel, Sutta
 
 logger = logging.getLogger(__name__)
+
+def jinja2_environment():
+    """ Returns the Jinja2 environment singleton used by all views.
+    
+        For information on Jinja2 custom filters, see
+        http://jinja.pocoo.org/docs/api/#custom-filters
+    """
+
+    env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(config.templates_root),
+        extensions=[AssetsExtension],
+        trim_blocks=True,
+        lstrip_blocks=True,
+    )
+    env.assets_environment = assets.env
+
+    def datetime_filter(value, format='short', locale='en_AU'):
+        return babel.dates.format_datetime(value,
+            format=format, locale=locale)
+    env.filters['datetime'] = datetime_filter
+
+    def sub_filter(string, pattern, repl):
+        return regex.sub(pattern, repl, string)
+    env.filters['sub'] = sub_filter
+
+    return env
 
 class NewRelicBrowserTimingProxy:
     """
@@ -34,14 +56,9 @@ class NewRelicBrowserTimingProxy:
 # The base class for all SuttaCentral views.
 class ViewBase:
     # Subclasses use this object to obtain templates.
-    env = Environment(
-            loader=FileSystemLoader(config.templates_root),
-            extensions=[AssetsExtension],
-            trim_blocks=True,
-            lstrip_blocks=True,
-        )
+    env = jinja2_environment()
+
     def __init__(self):
-        self.env.assets_environment = assets.env
         # Subclasses assign a template
         self.template = None
 
@@ -59,10 +76,6 @@ class ViewBase:
     def render(self):
         self.makeContext()
         return self.template.render(self.context)
-
-def sub(string, pattern, repl):
-    return regex.sub(pattern, repl, string)
-ViewBase.env.filters['sub'] = sub
 
 # A simple view that injects some static text 
 # between the header and footer.
@@ -82,48 +95,39 @@ class InfoView(ViewBase):
             self.context["title"] = title
 
 class DownloadsView(InfoView):
+
+    formats = ['zip', '7z']
+
     def __init__(self):
         super().__init__('downloads')
 
-    def getctime(self, path):
-        return time.localtime(os.path.getctime(path))
+    def __file_data(self, basename, exports_path):
+        data = []
+        for format in self.formats:
+            latest_filename = '{}-latest.{}'.format(basename, format)
+            latest_path = os.path.join(exports_path, latest_filename)
+            local_path = os.path.realpath(latest_path)
+            logger.debug(latest_path)
+            if os.path.exists(local_path):
+                data.append({
+                    'filename': os.path.basename(local_path),
+                    'url': local_path[len(config.static_root):],
+                    'time': os.path.getctime(local_path),
+                    'size': os.path.getsize(local_path),
+                    'format': format,
+                })
+        return data
 
-    @property
     def offline_data(self):
-        zip_path = os.path.realpath(os.path.join(
-            config.offline_exports_root, 'suttacentral-offline-latest.zip'))
-        x7z_path = os.path.realpath(os.path.join(
-            config.offline_exports_root, 'suttacentral-offline-latest.7z'))
-        zip_file = os.path.basename(zip_path)
-        x7z_file = os.path.basename(x7z_path)
-        try:
-            return [
-                {
-                    'filename': zip_file,
-                    'url': '/exports/offline/{}'.format(zip_file),
-                    'time': time.strftime('%Y-%m-%d', self.getctime(zip_path)),
-                    'size': '{}MB'.format(round(os.path.getsize(zip_path) / (1024 ** 2), 1)),
-                    'format': 'Zip',
-                },
-                {
-                    'filename': x7z_file,
-                    'url': '/exports/offline/{}'.format(x7z_file),
-                    'time': time.strftime('%Y-%m-%d', self.getctime(x7z_path)),
-                    'size': '{}MB'.format(round(os.path.getsize(x7z_path) / (1024 ** 2), 1)),
-                    'format': '7z',
-                },
-            ]
-        except FileNotFoundError as e:
-            return []
+        return self.__file_data('sc-offline', config.exports_root)
 
-    @property
     def db_data(self):
-        return []
+        return self.__file_data('sc-db', config.exports_root)
 
     def makeContext(self):
         super().makeContext()
-        self.context["offline_data"] = self.offline_data
-        self.context["db_data"] = self.db_data
+        self.context["offline_data"] = self.offline_data()
+        self.context["db_data"] = self.db_data()
 
 # Given a Sutta object produces a Parallel page.
 class ParallelView(ViewBase):

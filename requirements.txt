@@ -13,3 +13,4 @@ webassets==dev
 jsmin
 cssutils
 newrelic>=2.0.0.1
+Babel>=1.3
