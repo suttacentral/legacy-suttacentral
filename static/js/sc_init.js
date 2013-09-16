@@ -22,6 +22,7 @@ scMode = {
     'lang':'en',
     'en':{
         'strings':{
+            'add': "Text added by editor or translator.",
             'altAcronym': "PTS 1998 (Somaratne) edition of SN Vol I.",
             'altVolPage': "Alternative PTS or Taisho numbering.",
             'as': "Page numbers in Yamada, 1972.",

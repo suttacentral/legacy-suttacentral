@@ -963,6 +963,7 @@ a.bps, a.eno89, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16,
     font-style:normal;
     font-weight:normal;
     margin: 0.7em 0 0 -5em;
+    white-space:nowrap;
 }
 
 a.ms {margin:0.7em 0 0 -14.5em; color:#00B428;}
@@ -988,6 +989,7 @@ a.bps:before {content:"BPS "}
 a.t:before {content:"T "}
 a.wp:before {content:"WP "}
 a.kel:before {content:"Kel "}
+
 
 #metaarea  .author {
     font-family:'hetu_schetu_sc', 'source_sans_pro', sans-serif;
@@ -1510,7 +1512,24 @@ Text supplied by the editor.
 */
 
 .add	{display:none;}
-.add.infomode	{display:inline;font-family:'source_sans_pro'; color:#b2b2b2;font-size:80%;}
+#text h1>.add, #text h2>.add, #text h3>.add, #text h4>.add,#text h5>.add,#text h6>.add,#text h7>.add {
+    display: inline;
+    font-family: 'Skolar Sutta Web SC','Skolar Sutta Web',serif;
+    padding-left: 0.15em;
+    padding-right: 0.15em;
+    
+}
+.add.infomode {background:#fefefe; box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);}
+
+.add.infomode	{
+    display:inline;
+    font-family:'source_sans_pro';
+    color:#b2b2b2;
+    
+}
+.add.infomode .author{
+    font-family:'hetu_schetu_sc';
+}
 /*There are some editorial additions marked <span class="add"></span>. These should be hidden by default.
 
 Editorial comment.

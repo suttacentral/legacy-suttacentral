@@ -475,6 +475,8 @@ function buildTextualInformation() {
     buildVariantNotes();
     $("#metaarea a").filter(textualControls.marginClasses).each(function(){this.className = ""; this.innerHTML = ""});
     $(".supplied").attr("title", scMode[scMode.lang]["strings"]["supplied"]);
+    $(".add").attr("title", scMode[scMode.lang]["strings"]["add"]);
+    
     $("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'})
 
 }
