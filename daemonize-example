@@ -3,8 +3,15 @@
 # Copy to daemonize and edit.
 
 HOME=/path/to/home
-source $HOME/.virtualenvs/suttacentral/bin/activate
-cd $HOME/path/to/suttacentral/python
-export NEW_RELIC_CONFIG_FILE=$HOME/path/to/suttacentral/newrelic.ini
+SC_VIRTUALENV="$HOME/.virtualenvs/suttacentral"
+SC_ROOT="$HOME/suttacentral"
+export NEW_RELIC_CONFIG_FILE="$SC_ROOT/newrelic.ini"
 export NEW_RELIC_ENVIRONMENT=production
+
+source "$SC_VIRTUALENV/bin/activate"
+cd "$SC_ROOT"
+if [ ! -f "$NEW_RELIC_CONFIG_FILE" ]; then
+   make generate-newrelic-ini
+fi
+cd python
 exec newrelic-admin run-program cherryd -i server

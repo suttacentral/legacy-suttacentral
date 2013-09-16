@@ -112,6 +112,9 @@ drop-db:
 reset-db:
 	python/dbutil.py reset-db
 
+create-newrelic-ini:
+	utility/create_newrelic_ini.py
+
 test: test-local
 
 test-local:
