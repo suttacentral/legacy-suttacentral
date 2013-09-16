@@ -439,7 +439,10 @@ function buildTextualInformation() {
     for (var i = 0; i < anchors.length; i++) {
         var a = anchors[i];
 
-        var aClass = a.className;
+        var aClass = a.className.split(' ')[0];
+        var title = scMode[scMode.lang]["strings"][aClass];
+        $(a).attr("title", title);
+        
         if (aClass == 'sc') {
             m = a.id.match(/.*\.(.+)/)
             if (!m) m = a.id.match(/\D+(\d+)/)
@@ -465,10 +468,6 @@ function buildTextualInformation() {
         }
 
         a.innerHTML = a.innerHTML.replace(/(\d)-(\d)/, '$1\u2060—\u2060$2')
-
-        var title = scMode[scMode.lang]["strings"][aClass];
-        $(a).attr("title", title);
-
     }
     var das = $('a.da');
     for (i = 0; i < das.length; i += 3)

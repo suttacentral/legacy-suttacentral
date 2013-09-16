@@ -951,7 +951,7 @@ a.da {
     display: none;
 }
 
-a.ms, a.sc, a.bps, a.vimula, a.tu, a.vn, a.vnS, a.gatn, a.gatha-number, a.t, a.tlinehead, a.wp, a.kel, a.snp-vagga-verse, a.verse-num-pts, a.snp-vagga-section-verse
+a.bps, a.eno89, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.san87, a.sc, a.sen82, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus-random, a.tlinehead, a.tri62, a.tri95, a.tu, a.uv, a.vai59, a.verse-num-pts, a.vimula, a.vn, a.vnS, a.wal50, a.wal58, a.wal59a, a.wal60, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72
     {
     visibility:hidden;
     position:absolute;
@@ -1051,6 +1051,7 @@ span.lookup > span.meaning {
     max-width: 20em;
     color:#1d1d1d;
     padding:0em 1em 0em 1em;
+    font-size:normal;
     font-family:'source_sans_pro', sans-serif;
     box-shadow:3px 2px 5px rgba(136, 136, 136, 0.3);
     background-color:#F7D1C2;
@@ -1478,8 +1479,14 @@ section:lang(zh) q {
 
 .tlineheadnote {color:red;}
 
-/*NEW CLASSES ADDED FOR VERSION 3.0 (PYTHON). THESE ARE MAINLY FOR SANSKRIT TEXTS> I PLACE THEM HERE FOR NOW, BUT ULTIMATELY THEY SHOUL BE INTEGRATED PROPERLY. UNDER THE DESCRIPTION IS TH ETITLE ATTRIBUTE.*/
 
+/*NEW CLASSES ADDED FOR VERSION 3.0 (PYTHON). THESE ARE MAINLY FOR SANSKRIT TEXTS. I PLACE THEM HERE FOR NOW, BUT ULTIMATELY THEY SHOUL BE INTEGRATED PROPERLY. UNDER THE DESCRIPTION IS THE TITLE ATTRIBUTE.*/
+
+.ref
+/*references external, eg to other books. Used in IBH.*/
+
+.cr
+/*cross-reference, i.e. internal references. Used in IBH.*/
 .surplus	{display:none;}
 .surplus.infomode	{display:inline;color:#4805A2}
 /*For Mahaparinirvana text, marks apparently random phrases that are marked in bold in GRETIL. 
@@ -1516,9 +1523,9 @@ Metre reconstructed by the editor.
 */
 
 .gap	{color:#B2AF8C}
-/*For marking gaps in the text, which are filled in with + or the like. 
+/*For marking gaps in the text, which are filled in with + or the like.  In IB Horner's translation, deliberate gaps were marked by the translator with an *. Accidental omissions are marked with +.
 
-Gaps in the manuscript.
+<ibh>Gaps in the <gap>*</gap>manuscript or <gap>+</gap></ibh><bli>,jg/hergm kh lgih</bli><ibh> translation.
 */
 
 .corr {}
@@ -1576,7 +1583,83 @@ Unclear reading.
 .namo		{font-style:italic}
 /*dedication at the start of texts*/
 
+.scribe		{font-style:italic}
+/*note in the text recording who copied the text*/
 hr		{width:50%;color:#b2b2b2}
+.rule	{font-weight:bold}
+/*text in vibhanga, etc., of the rule itself.*/
+
+
+#vinita {}
+/*Discussion of various cases in Vinaya vibhangas.*/
+
+#restatement {}
+/*Restatement of the rule in some Vinaya vibhangas.*/
+
+#pannatti-prelim {}
+/*Preliminary laying down of the rule in Vinaya vibhangas*/
+
+#pannatti {}
+/*Final laying down of the rule in Vinaya vibhangas.*/
+
+#cakka {}
+/*Permutations of rule application.*/
+
+#pada {}
+/*Definitions of terms.*/
+
+.term {}
+/*term to be defined.*/
+
+.gloss {}
+/*Definition of a term. The relevant gloss and term should be linked with id.*/
+
+.kamma {}
+/*Words spoken during a formal act of the Sangha.*/
+
+.counter {}
+/*Token, number, or syllable used in some texts as a counter. Use only for counters found in text, not added.*/
+
+.rule {}
+/*Vinaya rule or precept.*/
+
+#nidana {}
+/*Origin story.*/
+
+#nidana-sub {}
+/*Subsidiary origin story*/
+
+/*CBETA tags
+
+Generally, eliminate inline styles, and retain semantic markup. Transform all classes inherited from CBETA by prefixing with t-. This is to avoid clashing with SC classes, and also to clarify the source of the markup.. NEED TO CHANGE PREVIOUS HANDLING OF CBETA TAGS*/
+
+.t-note	{}
+/*= .note in CBETA text. Changed to avoid confusion with SC's .note. Indicates usually bracketed note or comment in the text. No need to indicate.*/
+
+.t-gaiji	{color:darkcyan}
+/*Rare character indicated in Chinese text of CBETA. These are coded thus:
+<span class="t-gaiji">勅<!--gaiji,敕,1[束*力],2&#x52C5;,3--></span>
+
+Rare character.
+*/
+
+.t-juannum {}
+/*Sutra number, possibly other numbers.*/
+
+.t-juanname {}
+/*Title of sutra, end of sutra.*/
+
+.t-byline {}
+/*attribution in CBETA.*/
+
+.titus {}
+/*reference numbers that appear in some titus editions, eg. sf217. I don't know what these refer to. set display:none.*/
+
+
+.titus-random {}
+/*inexplicable numbers that appear to serve the purpose of clunking up the text in Titus editions. display:none.
+
+I cannot find any explanation for either of the above two ref systems, and they are kept solely for legacy purposes.*/
 
 /*	Various ref classes. In some cases the text uses different ref numbering in different parts, where they are sourced from various manuscripts or additions. In such cases I have already marked up the numbers appropriately. 
 
@@ -1595,6 +1678,9 @@ CSS Class	HTML Title
 .verse-num-pts		"Verse number in the Pali Text Society edition."
 
 .eno89		"Paragraph numbers in Enomoto, 1989."
+.uv			"Chapter and verse numbers for the Udānavarga."
+
+.dp			"Verse numbers for Dhammapada."
 
 .hoe16		"Verse numbers in Hoernle, 1916."
 
@@ -1663,6 +1749,7 @@ CSS Class	HTML Title
 .vai58		"Page numbers in Vaidya, 1958."
 
 .sen82		"Section and paragraph numbers in Senart, 1882."
+.roth		"Paragraph numbers in Roth, 1970."
 
 The following references are secondary. They appear in the same files as some of the ones above, and should be styled as more distant from the text.
 
@@ -1679,6 +1766,7 @@ The following references are secondary. They appear in the same files as some of
 .fol			"Folio number in the manuscript."
 .kel		"Paragraph numbers in Kelly, Sawyer, and Yareham."
 
+.skt-mg-bu-pm	"Rule numbers in the Sanskrit Mahāsaṅghika Bhikhhu Pātimokkha."
 In a few cases there are no paragraph numbers, these should be added as "SC" numbers. These texts are:
 
 Mahavadana
@@ -1736,6 +1824,7 @@ table {position: relative;}
 
     #onecol, #text {margin-top:-3cm;}
 
+    @page { margin: 2cm 1cm; }
     p, h2, h3, h4, h5, h6 { orphans: 3; widows: 3; color:black;}
     h2, h3	{ page-break-after: avoid; }
 
