@@ -27,7 +27,9 @@ def zip(out_path, in_path, quiet=False):
 
 def x7z(out_path, in_path, quiet=False):
     plumbum_chdir(os.path.dirname(in_path))
-    cmd = plumbum.local['7z']['a', '-t7z', '-mx=9', out_path,
+    # -mx=5 or greater uses up a lot of memory. Currently the vps
+    # is memory starved so we keep this low for now.
+    cmd = plumbum.local['7z']['a', '-t7z', '-mx=4', out_path,
         os.path.basename(in_path)]
     if quiet:
         cmd()
