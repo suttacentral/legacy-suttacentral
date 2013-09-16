@@ -746,7 +746,7 @@ class Updater(threading.Thread):
 
             # Do consistency checking.
             _dbr.check_md5()
-            time.sleep(90)
+            time.sleep(config.db_refresh_interval)
 
 updater = Updater(name='dbr_updater', daemon=True)
 updater.start()
