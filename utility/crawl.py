@@ -62,12 +62,12 @@ def getending(url):
         ending = ''
     return ending
 
-def fixcss(text):
+def fixcss(text, depth):
     """A hack that only works on sc.css."""
     def callback(m):
         url = m[2]
         addtotaskqueue(url)
-        return 'url({}..{}{})'.format(m[1] or '', url, m[3] or '')
+        return 'url({}{}{}{})'.format(m[1] or '', '../' * depth, url[1:], m[3] or '')
     return regex.sub(r'url\(([\'"])?(/[^\'")]+)([\'"])?\)', callback, text,
         flags=regex.MULTILINE)
 
@@ -97,7 +97,7 @@ def process(host, url):
     if ending in ('css', 'js'):
         text = bytes.decode(encoding='utf8')
         if ending == 'css':
-            text = fixcss(text)
+            text = fixcss(text, depth)
         with open(filename, 'w', encoding='utf8') as f:
             f.write(text)
         return
@@ -158,6 +158,8 @@ if __name__ == '__main__':
             sys.stderr.write("{}: {}\n".format(path, str(e)))
         if wait > 0:
             time.sleep(wait)
+        if count > 100:
+            break
 
     total = time.time() - start
     if not quiet:

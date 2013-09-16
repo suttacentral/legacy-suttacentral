@@ -49,11 +49,16 @@ def generate(host, wait=0.0, force=False, quiet=False):
     crawler_output_dir = os.path.join(output_dir, 'sc')
     crawl(host, crawler_output_dir, wait=wait, quiet=quiet)
 
-    # Compress the output directory to the targets
-    ensure_not_exists(output_zip, force=True, quiet=True)
-    zip(output_zip, output_dir, quiet=quiet)
-    ensure_not_exists(output_7z, force=True, quiet=True)
-    x7z(output_7z, output_dir, quiet=quiet)
+    tmp_output_zip = os.path.join(tmp_dir, basename + '.zip')
+    tmp_output_7z = os.path.join(tmp_dir, basename + '.7z')
+
+    # Compress the output to the temporary directory
+    zip(tmp_output_zip, output_dir, quiet=quiet)
+    x7z(tmp_output_7z, output_dir, quiet=quiet)
+
+    # Copy the files to the final location
+    shutil.copyfile(tmp_output_zip, output_zip)
+    shutil.copyfile(tmp_output_7z, output_7z)
 
     # Remove the temporary directory and the crawled files
     shutil.rmtree(tmp_dir)

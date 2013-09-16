@@ -39,7 +39,6 @@ def ensure_not_exists(path, force=False, quiet=False):
         if force:
             if not quiet:
                 print('{} exists, overwriting'.format(path))
-            os.unlink(path)
         else:
             sys.stderr.write('ERROR: {} exists\n'.format(path))
             sys.exit(1)
