@@ -5,8 +5,9 @@
 import colorama, os, sys, plumbum, textwrap, urllib
 import config
 
-DB_EXPORT_URL = 'http://suttacentral.net/db-exports/sc-latest.sql.gz'
-LOCAL_DB_EXPORT_PATH = os.path.join(config.base_dir, 'tmp', 'sc-latest.sql.gz')
+DB_EXPORT_ZIP_URL = 'http://suttacentral.net/exports/sc-db-latest.zip'
+LOCAL_DB_EXPORT_ZIP_PATH = os.path.join(config.base_dir, 'tmp',
+    'sc-db-latest.zip')
 
 def print_notice(str, **kwargs):
     print(colorama.Fore.BLUE, end='')
@@ -82,8 +83,8 @@ def setup_db_auth():
 
 def fetch_db_export():
     print('Fetching database export...')
-    r = urllib.request.urlopen(DB_EXPORT_URL)
-    with open(LOCAL_DB_EXPORT_PATH, 'b+w') as f:
+    r = urllib.request.urlopen(DB_EXPORT_ZIP_URL)
+    with open(LOCAL_DB_EXPORT_ZIP_PATH, 'b+w') as f:
         f.write(r.read())
 
 def create_db():
@@ -93,7 +94,8 @@ def create_db():
 
 def load_db():
     print('Loading database...')
-    input_cmd = plumbum.local['gunzip']['-c', LOCAL_DB_EXPORT_PATH]
+    input_cmd = plumbum.local['unzip']['-p', LOCAL_DB_EXPORT_ZIP_PATH,
+        '*/suttacentral.sql']
     run(mysql_cmd(db=True), input=input_cmd)
 
 def drop_db():
