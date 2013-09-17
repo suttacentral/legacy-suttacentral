@@ -27,7 +27,7 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 {%- if parallel.partial -%}*{%- endif -%}
 </td>
 <td>{{parallel.sutta.name}}</td>
-<td>{{parallel.sutta.volpage_info}}
+<td>{{parallel.sutta.volpage_info | sht_expansion }}
 {%- if parallel.sutta.alt_volpage_info %} <span class='altVolPage'>{{parallel.sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
 {%- endif -%}
 {%- if parallel.footnote %}

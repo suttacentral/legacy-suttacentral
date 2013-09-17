@@ -37,6 +37,16 @@ def jinja2_environment():
         return regex.sub(pattern, repl, string)
     env.filters['sub'] = sub_filter
 
+    def sht_expansion(string):
+        """An experimental attempt to link SHT vol/page references to fragment
+        images."""
+        if 'SHT' in string:
+            baseurl = 'http://idp.bl.uk:80/database/oo_loader.a4d?pm=SHT%20'
+            string = regex.sub(r'([0-9]{3,4}[a-z]?)',
+                r'<a href="{}\1">\1</a>'.format(baseurl), string)
+        return string
+    env.filters['sht_expansion'] = sht_expansion
+
     __jinja2_environment = env
     return env
 
