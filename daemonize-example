@@ -11,7 +11,7 @@ export NEW_RELIC_ENVIRONMENT=production
 source "$SC_VIRTUALENV/bin/activate"
 cd "$SC_ROOT"
 if [ ! -f "$NEW_RELIC_CONFIG_FILE" ]; then
-   make generate-newrelic-ini
+   make create-newrelic-ini
 fi
 cd python
 exec newrelic-admin run-program cherryd -i server
