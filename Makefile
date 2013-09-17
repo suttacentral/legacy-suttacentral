@@ -57,6 +57,17 @@ quick-deploy-production:
 		sudo supervisorctl start sc-production && \
 		sudo service apache2 reload'
 
+quickest-deploy-production:
+	ssh sc-production@vps.suttacentral.net \
+		'source $$HOME/.virtualenvs/suttacentral/bin/activate && \
+		cd $$HOME/suttacentral && \
+		git pull && \
+		cd text && \
+		git pull && \
+		cd .. && \
+		make build-assets && \
+		sudo supervisorctl restart sc-production'
+
 clean:
 	rm -rf \
 		__pycache__ \
