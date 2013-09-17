@@ -5,7 +5,7 @@
 //The id of the page element which gets populated with the textual control elements.
 textualControls = {
     id: "textual_controls",
-    marginClasses: "a.bps, a.eno89, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.san87, a.sc, a.sen82, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus-random, a.tlinehead, a.tri62, a.tri95, a.tu, a.uv, a.vai59, a.verse-num-pts, a.vimula, a.vn, a.vnS, a.wal50, a.wal58, a.wal59a, a.wal60, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72",
+    marginClasses: "a.bps, a.eno89, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.san87, a.sc, a.sen82, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus-random, a.tlinehead, a.tri62, a.tri95, a.tu, a.uv, a.vai59, a.verse-num-pts, a.vimula, a.vn, a.vnS, a.wal48, a.wal50, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72",
     popupClasses: ".pub, .var, .rdg, .cross, .end",
     contentClasses: ".supplied, .supplied2, .add, .corr, .del, .end, .lem, .sic, .surplus",
     metaarea: "#metaarea"
@@ -22,7 +22,7 @@ scMode = {
     'lang':'en',
     'en':{
         'strings':{
-            'add': "Text added by editor or translator.",
+            'add': "Text added by the editor or translator for clarification.",
             'altAcronym': "PTS 1998 (Somaratne) edition of SN Vol I.",
             'altVolPage': "Alternative PTS or Taisho numbering.",
             'as': "Page numbers in Yamada, 1972.",
@@ -53,9 +53,10 @@ scMode = {
             'skt-mg-bu-pm': "Rule numbers in the Sanskrit Mahāsaṅghika Bhikhhu Pātimokkha.",
             'snp-vagga-section-verse': "Chapter, section, and verse number within the section.",
             'snp-vagga-verse': "Chapter, and verse number within the chapter.",
-            'supplied': "Text supplied by editor or translator.",
-            'tri62': "Sūtra and paragraph number in Tripāṭhi, 1962.",
-            'tri95': "Section and paragraph number in Tripāṭhi, 1995.",
+            'supplied': "Text hypothetically reconstructed by the editor or translator.",
+            'surplus': "Surplus text.",
+            'tri62': "Sūtra and paragraph number in Tripāṭhī, 1962.",
+            'tri95': "Section and paragraph number in Tripāṭhī, 1995.",
             'ud-sutta': "Sutta number.",
             'ud-vagga-sutta': "Chapter/sutta number.",
             'uv': "Chapter and verse numbers for the Udānavarga.",

@@ -438,33 +438,42 @@ function buildTextualInformation() {
     var anchors = $(textualControls.marginClasses);
     for (var i = 0; i < anchors.length; i++) {
         var a = anchors[i];
+        var da = $(a);
 
         var aClass = a.className.split(' ')[0];
         var title = scMode[scMode.lang]["strings"][aClass];
         $(a).attr("title", title);
+        var aid = da.attr('id');
         
         if (aClass == 'sc') {
-            m = a.id.match(/.*\.(.+)/)
-            if (!m) m = a.id.match(/\D+(\d+)/)
+            m = aid.match(/.*\.(.+)/)
+            if (!m) m = aid.match(/\D+(\d+)/)
             if (m.length == 2) {
-                $(a).html(m[1]).attr("href", "#"+a.id)
+                $(a).html(m[1])
             }
         } else if (aClass == 'ms') {
-            $(a).html( a.id.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2.")).attr("href", "#"+a.id)
+            $(a).html( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
         } else if (aClass == 'msdiv') {
-            a.innerHTML = a.id.replace(/msdiv([0-9]+)/, "$1.")
+            a.innerHTML = aid.replace(/msdiv([0-9]+)/, "$1.")
         } else if (aClass == 'wp') {
-            $(a).html(a.id + '.').attr("href", "#"+a.id)
+            $(a).html(aid + '.')
         } else if (aClass == 'vn') {
         } else if (aClass == 'vnS') {
-            $(a).html(a.id.replace(/S.([iv]+),([0-9])/, "S $1 $2")).attr("href", "#"+a.id)
+            $(a).html(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
         } else if (aClass == 't') {
-            $(a).html(a.id.replace(/ /, ' '));
+            $(a).html(aid.replace(/ /, ' '));
         } else if (aClass = 'da'){
             //Special case
         }
         else {
-            a.innerHTML = a.id
+            a.innerHTML = aid
+        }
+        
+        if (da.text() == '') {
+            da.text(aid);
+            if (!da.attr('href')) {
+                da.attr('href', '#' + aid);
+            }
         }
 
         a.innerHTML = a.innerHTML.replace(/(\d)-(\d)/, '$1\u2060—\u2060$2')
@@ -478,6 +487,7 @@ function buildTextualInformation() {
     $(".add").attr("title", scMode[scMode.lang]["strings"]["add"]);
     
     $("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'})
+    $(".surplus").attr("title", scMode[scMode.lang]["strings"]["surplus"]);
 
 }
 
