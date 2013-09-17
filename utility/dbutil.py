@@ -2,6 +2,7 @@
 
 """A utility to perform MySQL database functions"""
 
+import env
 import colorama, os, sys, plumbum, textwrap, urllib
 import config
 
