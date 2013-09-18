@@ -385,10 +385,12 @@ function toggleTextualInfo(force) {
 
     if (showTextInfo)
     {
-        $(textualControls.marginClasses).addClass("infomode")
-        $(textualControls.popupClasses).addClass("infomode")
-        $(textualControls.contentClasses).addClass("infomode")
-        var meta = $(textualControls.metaarea)[0]
+        //The tlinehead thing is a nasty little bodge to cull the excessive
+        //numbers of that type.
+        $(textualControls.marginClasses).not('.tlinehead:odd').addClass("infomode");
+        $(textualControls.popupClasses).addClass("infomode");
+        $(textualControls.contentClasses).addClass("infomode");
+        var meta = $(textualControls.metaarea)[0];
         if (meta.innerHTML) {
             var content = false;
             for (var i = 0; i < meta.childNodes.length; i++)
@@ -445,35 +447,17 @@ function buildTextualInformation() {
         $(a).attr("title", title);
         var aid = da.attr('id');
         
-        if (aClass == 'sc') {
-            m = aid.match(/.*\.(.+)/)
-            if (!m) m = aid.match(/\D+(\d+)/)
-            if (m.length == 2) {
-                $(a).html(m[1])
-            }
-        } else if (aClass == 'ms') {
-            $(a).html( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
-        } else if (aClass == 'msdiv') {
-            a.innerHTML = aid.replace(/msdiv([0-9]+)/, "$1.")
-        } else if (aClass == 'wp') {
-            $(a).html(aid + '.')
-        } else if (aClass == 'vn') {
+        if (aClass == 'ms') {
+            $(a).text( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
         } else if (aClass == 'vnS') {
-            $(a).html(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
-        } else if (aClass == 't') {
-            $(a).html(aid.replace(/ /, ' '));
-        } else if (aClass = 'da'){
-            //Special case
-        }
-        else {
-            a.innerHTML = aid
+            $(a).text(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
         }
         
         if (da.text() == '') {
-            da.text(aid);
-            if (!da.attr('href')) {
-                da.attr('href', '#' + aid);
-            }
+            da.text(aid.replace(/\d+_/, '').replace(aClass+'_', ''));
+        }
+        if (!da.attr('href') && aid) {
+            da.attr('href', '#' + aid);
         }
 
         a.innerHTML = a.innerHTML.replace(/(\d)-(\d)/, '$1\u2060—\u2060$2')
@@ -483,11 +467,11 @@ function buildTextualInformation() {
         das[i].innerHTML = das[i].id;
     buildVariantNotes();
     $("#metaarea a").filter(textualControls.marginClasses).each(function(){this.className = ""; this.innerHTML = ""});
-    $(".supplied").attr("title", scMode[scMode.lang]["strings"]["supplied"]);
-    $(".add").attr("title", scMode[scMode.lang]["strings"]["add"]);
-    
-    $("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'})
-    $(".surplus").attr("title", scMode[scMode.lang]["strings"]["surplus"]);
+    $(textualControls.titleClasses).each(function(){
+        var class_ = this.className.split(' ')[0];
+        $(this).attr("title", scMode[scMode.lang]["strings"][class_])
+    });
+
 
 }
 

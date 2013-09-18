@@ -5,11 +5,15 @@
 //The id of the page element which gets populated with the textual control elements.
 textualControls = {
     id: "textual_controls",
-    marginClasses: "a.bps, a.eno89, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.san87, a.sc, a.sen82, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus-random, a.tlinehead, a.tri62, a.tri95, a.tu, a.uv, a.vai59, a.verse-num-pts, a.vimula, a.vn, a.vnS, a.wal48, a.wal50, a.wal52, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72",
+    marginClasses: "a.bl, a.bps, a.eno89, a.fol, a.fuk03, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.pts, a.san87, a.sc, a.sen82, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus-random, a.tlinehead, a.tri62, a.tri95, a.tu, a.uv, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.vnS, a.wal48, a.wal50, a.wal52, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72",
     popupClasses: ".pub, .var, .rdg, .cross, .end",
     contentClasses: ".supplied, .supplied2, .add, .corr, .del, .end, .lem, .sic, .surplus",
+    titleClasses: ".supplied, .add, .precision, .surplus, .unclear, .gap, .sic, .corr, .suppliedmetre, .sht",
     metaarea: "#metaarea"
 }
+
+
+
 
 var sc = {
     'zh2en_dict_url' : '/js/zh2en_dict_0.04s.js',
@@ -27,9 +31,11 @@ scMode = {
             'altVolPage': "Alternative PTS or Taisho numbering.",
             'as': "Page numbers in Yamada, 1972.",
             'bl': "(Not defined in GRETIL source.)",
+            'corr': "Reading corrected by the editor.",
             'eno89': "Paragraph numbers in Enomoto, 1989.",
             'fol': "Folio number in the manuscript.",
             'fuk03': "Page numbers in Fukita, 2003",
+            'gap': "Gap in the manuscript.",
             'gbm': "Section numbers in Gilgit Buddhist Manscripts.",
             'gno78': "Paragraph numbers in Gnoli, 1978.",
             'har04': "Paragraph number in Hartmann, 2004.",
@@ -43,6 +49,7 @@ scMode = {
             'mat88': "Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988.",
             'mit57': "Paragraph numbers in Mittal, 1957.",
             'ms': "Mahāsaṅgīti paragraph number.",
+            'pts': "Pali Text Society vol/page number.",
             'precision': "Estimated precision of this location (1 = known, 6 = unknowable)",
             'roth': "Paragraph numbers in Roth, 1970.",
             'san87': "Paragraph numbers in Sander, 1987.",
@@ -53,16 +60,20 @@ scMode = {
             'skt-mg-bu-pm': "Rule numbers in the Sanskrit Mahāsaṅghika Bhikhhu Pātimokkha.",
             'snp-vagga-section-verse': "Chapter, section, and verse number within the section.",
             'snp-vagga-verse': "Chapter, and verse number within the chapter.",
+            'sic': "Apparently incorrect reading determined by the editor.",
             'supplied': "Text hypothetically reconstructed by the editor or translator.",
             'surplus': "Surplus text.",
+            'suppliedmetre': "Metre reconstructed by the editor.",
             'tri62': "Sūtra and paragraph number in Tripāṭhī, 1962.",
             'tri95': "Section and paragraph number in Tripāṭhī, 1995.",
             'ud-sutta': "Sutta number.",
             'ud-vagga-sutta': "Chapter/sutta number.",
+            'unclear': "Unclear reading.",
             'uv': "Chapter and verse numbers for the Udānavarga.",
             'dp': "Verse numbers for Dhammapada.",
             'vai58': "Page numbers in Vaidya, 1958.",
             'vai59': "Page and line numbers in Vaidya, 1959.",
+            'vai61': "Page and line numbers in Vaidya, 1961.",
             'verse-num-pts': "Verse number in the Pali Text Society edition.",
             'vn': "Vietnamese translation paragraph number.",
             'wal48': "Paragraph numbers for sondertext in Waldschmidt, 1948 (ST.ii).",

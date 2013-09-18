@@ -79,11 +79,11 @@
 
 @font-face {
     font-family: 'hetu_schetu_sc';
-    src: url('/fonts/hetu-schetu-sc-1.eot');
-    src: url('/fonts/hetu-schetu-sc-1.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/hetu-schetu-sc-1.woff') format('woff'),
-         url('/fonts/hetu-schetu-sc-1.ttf') format('truetype'),
-         url('/fonts/hetu-schetu-sc-1.svg#hetu-schetu-sc') format('svg');
+    src: url('/fonts/hetu-schetu-sc-2.eot');
+    src: url('/fonts/hetu-schetu-sc-2.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/hetu-schetu-sc-2.woff') format('woff'),
+         url('/fonts/hetu-schetu-sc-2.ttf') format('truetype'),
+         url('/fonts/hetu-schetu-sc-2.svg#hetu-schetu-sc') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -951,7 +951,7 @@ a.da {
     display: none;
 }
 
-a.bps, a.eno89, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.san87, a.sc, a.sen82, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t,  a.tlinehead, a.tri62, a.tri95, a.tu, a.uv, a.vai59, a.verse-num-pts, a.vimula, a.vn, a.vnS, a.wal48, a.wal50, a.wal52, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72
+a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.pts, a.san87, a.sc, a.sen82, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t,  a.tlinehead, a.tri62, a.tri95, a.tu, a.uv, a.vai58, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.vnS, a.wal48, a.wal50, a.wal52, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72
     {
     visibility:hidden;
     position:absolute;
@@ -962,8 +962,9 @@ a.bps, a.eno89, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16,
     display:table;
     font-style:normal;
     font-weight:normal;
-    margin: 0.7em 0 0 -5em;
+    margin: 1.8em 0 0 -8em;
     white-space:nowrap;
+    color: #2DB3A7;
 }
 
 a.ms {margin:0.7em 0 0 -14.5em; color:#00B428;}
@@ -973,6 +974,10 @@ a.sc {margin:0.7em 0 0 -5.3em; color:#B3A72D;}
 a.t {margin:0.7em 0 0 -5.3em; color:#00B428;}
 
 a.wp {margin:0.7em 0 0 -5.3em; color:red;}
+
+a.pts {margin:-0.2em 0 0 -12.1em; color:#B2AF8C;}
+
+a.vn {margin:0.7em 0 0 -6em; color:#9B0F00;}
 
 a.snp-vagga-verse, a.verse-num-pts, a.snp-vagga-section-verse {display: none;}
 
@@ -989,9 +994,11 @@ a.bps:before {content:"BPS "}
 a.t:before {content:"T "}
 a.wp:before {content:"WP "}
 a.kel:before {content:"Kel "}
+a.pts:before {content:"PTS "}
+a.vn:before {content:"Vn "}
 
 
-#metaarea  .author {
+#metaarea .author, #metaarea .smallcaps, #metaarea .roman_numerals {
     font-family:'hetu_schetu_sc', 'source_sans_pro', sans-serif;
     font-style:normal;
     letter-spacing:0.02em;
@@ -1518,6 +1525,7 @@ p .add.infomode  {
     padding: 0 0.5em;
     font-family:'source_sans_pro';
     color:#b2b2b2;
+    font-size: 80%;
 }
 
 .add.infomode {background:#fefefe; box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);}
@@ -1545,7 +1553,6 @@ Gap in the manuscript.
 .corr {}
 corr.infomode	{color:#00751A} 
 /*A corrected reading that has been adopted in the text (usually by the latest editor mentioned in the meta). By default display normally.
-
 
 
 Reading corrected by the editor.
