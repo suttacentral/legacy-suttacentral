@@ -5,10 +5,10 @@
 //The id of the page element which gets populated with the textual control elements.
 textualControls = {
     id: "textual_controls",
-    marginClasses: "a.bl, a.bps, a.eno89, a.fol, a.fuk03, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.pts, a.san87, a.sc, a.sen82, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus-random, a.tlinehead, a.tri62, a.tri95, a.tu, a.uv, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.vnS, a.wal48, a.wal50, a.wal52, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72",
+    marginClasses: "a.bl, a.bps, a.eno89, a.fol, a.fuk03, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.pts, a.san87, a.san89, a.sc, a.sen82, a.sht, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus-random, a.tlinehead, a.tri62, a.tri95, a.ud-sutta, a.ud-vagga-sutta, a.tu, a.uv, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.wal48, a.wal50, a.wal52, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72",
     popupClasses: ".pub, .var, .rdg, .cross, .end",
     contentClasses: ".supplied, .supplied2, .add, .corr, .del, .end, .lem, .sic, .surplus",
-    titleClasses: ".supplied, .add, .precision, .surplus, .unclear, .gap, .sic, .corr, .suppliedmetre, .sht",
+    titleClasses: ".supplied, .add, .precision, .surplus, .unclear, .gap, .sic, .corr, .suppliedmetre",
     metaarea: "#metaarea"
 }
 
