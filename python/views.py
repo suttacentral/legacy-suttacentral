@@ -70,16 +70,29 @@ class NewRelicBrowserTimingProxy:
         else:
             return ''
 
+class ViewContext(dict):
+    """A dictionary with easy object-style setters/getters.
+    
+    >>> context = ViewContext()
+    >>> context['a'] = 1
+    >>> context.b = 2
+    >>> context
+    {'a': 1, 'b': 2}
+    """
+
+    def __getattr__(self, attr):
+        return self[attr]
+
+    def __setattr__(self, attr, value):
+        self[attr] = value
+
 class ViewBase:
     """The base class for all SuttaCentral views.
 
-    Views must define a get_template() method that should return a Jinja2
-    template.
+    Views must set or override the template_name property.
 
     Views can optionally define a setup_context() method that will be executed
     during the render() method.
-
-    The context property is a dictionary of template accessible variables.
 
     Views should assign the 'title' context variable so that the page will have
     a (reasonably) relavent title.
@@ -87,31 +100,37 @@ class ViewBase:
 
     env = jinja2_environment()
 
+    @property
+    def template_name(self):
+        """Returns the template name for this view."""
+        raise NotImplementedError('Views must define template_name')
+
     def get_template(self):
         """Returns the Jinja2 template for this view."""
-        raise NotImplementedError()
+        return self.env.get_template(self.template_name + ".html")
 
     def setup_context(self, context):
         """Optional method for subclasses to assign additional context
-        variables. This is executed during the render() method."""
+        variables. This is executed during the render() method. The context
+        variable is a dictionary with magic setters (see ViewContext)."""
         pass
 
     def get_global_context(self):
         """Return a dictionary of variables accessible by all templates."""
-        return {
+        return ViewContext({
             'collections': menu_data,
             'newrelic_browser_timing': NewRelicBrowserTimingProxy(),
             'offline': cherrypy.request.offline,
             'page_lang': 'en',
             'search_query': '',
-        }
+        })
 
     def render(self):
         """Return the HTML for this view."""
         template = self.get_template()
         context = self.get_global_context()
         self.setup_context(context)
-        return template.render(context)
+        return template.render(dict(context))
 
 class InfoView(ViewBase):
     """A simple view that renders the template page_name; mostly used for
@@ -119,16 +138,17 @@ class InfoView(ViewBase):
 
     def __init__(self, page_name):
         self.page_name = page_name
-
-    def get_template(self):
-        return self.env.get_template(self.page_name + ".html")
+    
+    @property
+    def template_name(self):
+        return self.page_name
 
     def setup_context(self, context):
         if self.page_name != 'home':
             title = self.page_name.replace('_', ' ').capitalize()
             if title == 'Contacts':
                 title = 'People'
-            context['title'] = title
+            context.title = title
 
 class DownloadsView(InfoView):
     """The view for the downloads page."""
@@ -140,8 +160,8 @@ class DownloadsView(InfoView):
 
     def setup_context(self, context):
         super().setup_context(context)
-        context['offline_data'] = self.__offline_data()
-        context['db_data'] = self.__db_data()
+        context.offline_data = self.__offline_data()
+        context.db_data = self.__db_data()
 
     def __file_data(self, basename, exports_path):
         data = []
@@ -169,16 +189,15 @@ class DownloadsView(InfoView):
 class ParallelView(ViewBase):
     """The view for the sutta parallels page."""
 
+    template_name = 'parallel'
+
     def __init__(self, sutta):
         self.sutta = sutta
 
-    def get_template(self):
-        return self.env.get_template('parallel.html')
-
     def setup_context(self, context):
-        context['title'] = "{}: {}".format(
+        context.title = "{}: {}".format(
             self.sutta.acronym, self.sutta.name)
-        context['sutta'] = self.sutta
+        context.sutta = self.sutta
 
         # Add the origin to the beginning of the list of 
         # parallels. The template will display this at the
@@ -197,26 +216,25 @@ class ParallelView(ViewBase):
                 has_alt_acronym = True
         
         # Add data specific to the parallel page to the context.
-        context['parallels'] = parallels
-        context['has_alt_volpage'] = has_alt_volpage
-        context['has_alt_acronym'] = has_alt_acronym
+        context.parallels = parallels
+        context.has_alt_volpage = has_alt_volpage
+        context.has_alt_acronym = has_alt_acronym
 
 class TextView(ViewBase):
     """The view for showing the text of a sutta or tranlsation."""
 
+    template_name = 'text'
+
     def __init__(self, uid, lang_code):
         self.uid = uid
         self.lang_code = lang_code
-
-    def get_template(self):
-        return self.env.get_template('text.html')
 
     def setup_context(self, context):
         # TODO: Figure out title
         content = self.get_file_content()
         if not content:
             raise cherrypy.NotFound()
-        context['text'] = self.get_tag(content, 'body')
+        context.text = self.get_tag(content, 'body')
 
     @property
     def filename(self):
@@ -247,10 +265,10 @@ class SuttaView(TextView):
 
     def setup_context(self, context):
         super().setup_context(context)
-        context['title'] = '{}: {} ({}) - {}'.format(
+        context.title = '{}: {} ({}) - {}'.format(
             self.sutta.acronym, self.sutta.name, self.lang.name,
             self.subdivision.name)
-        context['sutta_lang_code'] = self.lang_code
+        context.sutta_lang_code = self.lang_code
 
     @property
     def subdivision(self):
@@ -263,25 +281,24 @@ class SuttaView(TextView):
 class DivisionView(ViewBase):
     """Thew view for a division."""
 
+    template_name = 'division'
+
     def __init__(self, division):
         self.division = division
 
-    def get_template(self):
-        return self.env.get_template('division.html')
-
     def setup_context(self, context):
-        context['title'] = "{}: {}".format(self.division.acronym,
+        context.title = "{}: {}".format(self.division.acronym,
             self.division.name)
-        context['division'] = self.division
-        context['has_alt_volpage'] = False
-        context['has_alt_acronym'] = False
+        context.division = self.division
+        context.has_alt_volpage = False
+        context.has_alt_acronym = False
 
         for subdivision in self.division.subdivisions:
             for sutta in subdivision.suttas:
                 if sutta.alt_volpage_info:
-                    context['has_alt_volpage'] = True
+                    context.has_alt_volpage = True
                 if sutta.alt_acronym:
-                    context['has_alt_acronym'] = True
+                    context.has_alt_acronym = True
 
 
 class SubdivisionView(ViewBase):
@@ -290,57 +307,53 @@ class SubdivisionView(ViewBase):
     def __init__(self, subdivision):
         self.subdivision = subdivision
 
-    def get_template(self):
-        return self.env.get_template('subdivision.html')
+    template_name = 'subdivision'
 
     def setup_context(self, context):
-        context['title'] = "{} {}: {} - {}".format(
+        context.title = "{} {}: {} - {}".format(
             self.subdivision.division.acronym, self.subdivision.acronym,
             self.subdivision.name, self.subdivision.division.name)
-        context['subdivision'] = self.subdivision
-        context['has_alt_volpage'] = False
-        context['has_alt_acronym'] = False
+        context.subdivision = self.subdivision
+        context.has_alt_volpage = False
+        context.has_alt_acronym = False
 
         for sutta in self.subdivision.suttas:
             if sutta.alt_volpage_info:
-                context['has_alt_volpage'] = True
+                context.has_alt_volpage = True
             if sutta.alt_acronym:
-                context['has_alt_acronym'] = True
+                context.has_alt_acronym = True
 
 class SubdivisionHeadingsView(ViewBase):
     """The view for the list of subdivisions for a division."""
 
+    template_name = 'subdivision_headings'
+
     def __init__(self, division):
         self.division = division
 
-    def get_template(self):
-        return self.env.get_template('subdivision_headings.html')
-
     def setup_context(self, context):
-        context['title'] = "{}: {}".format(self.division.acronym,
+        context.title = "{}: {}".format(self.division.acronym,
             self.division.name)
-        context['division'] = self.division
+        context.division = self.division
 
 class SearchResultView(ViewBase):
     """The view for the search page."""
+
+    template_name = 'search_result'
 
     def __init__(self, search_query, search_result):
         super().__init__()
         self.search_query = search_query
         self.search_result = search_result
 
-    def get_template(self):
-        return self.env.get_template('search_result.html')
-
     def setup_context(self, context):
-        context['search_query'] = self.search_query
-        context['title'] = 'Search: "{}"'.format(
+        context.search_query = self.search_query
+        context.title = 'Search: "{}"'.format(
             self.search_query)
-        context['result'] = self.search_result
-        context['dbr'] = scdb.getDBR()
+        context.result = self.search_result
+        context.dbr = scdb.getDBR()
 
 class AjaxSearchResultView(SearchResultView):
     """The view for /search?ajax=1."""
 
-    def get_template(self):
-        return self.env.get_template('ajax_search_result.html')
+    template_name = 'ajax_search_result'
