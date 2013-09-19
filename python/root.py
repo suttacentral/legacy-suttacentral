@@ -46,6 +46,10 @@ class Root(object):
     def downloads(self, **kwargs):
         return show.downloads()
 
+    @cherrypy.expose
+    def sht_lookup(self, query, **kwargs):
+        return show.sht_lookup(query)
+
     # Redirect for old site URL: disp_correspondence.php?sutta_id=...
     @cherrypy.expose
     def disp_correspondence_php(self, **kwargs):

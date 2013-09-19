@@ -1,4 +1,5 @@
-import babel.dates, cherrypy, jinja2, newrelic.agent, os.path, regex, time
+import babel.dates, cherrypy, http.client, jinja2, newrelic.agent, os.path
+import regex, time, urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
 
 import assets, config, scdb
@@ -38,12 +39,13 @@ def jinja2_environment():
     env.filters['sub'] = sub_filter
 
     def sht_expansion(string):
-        """An experimental attempt to link SHT vol/page references to fragment
-        images."""
+        """Add links from SHT vol/page references to the sht-lookup page."""
         if 'SHT' in string:
-            baseurl = 'http://idp.bl.uk:80/database/oo_loader.a4d?pm=SHT%20'
-            string = regex.sub(r'([0-9]{3,4}[a-z]?)',
-                r'<a href="{}\1">\1</a>'.format(baseurl), string)
+            # Replace m-dash with a regular dash
+            string = string.replace('−', '-')
+            baseurl = '/sht-lookup/'
+            string = regex.sub(r'([0-9]{1,4}(?:\.?[\-\+0-9a-zA-Z]+)?)',
+                r'<a href="{}\1" target="_blank">\1</a>'.format(baseurl), string)
         return string
     env.filters['sht_expansion'] = sht_expansion
 
@@ -357,3 +359,41 @@ class AjaxSearchResultView(SearchResultView):
     """The view for /search?ajax=1."""
 
     template_name = 'ajax_search_result'
+
+class ShtLookupView(ViewBase):
+    """The view for the SHT lookup page."""
+
+    template_name = 'sht_lookup'
+
+    def __init__(self, query):
+        self.sht_id = self.parse_first_id(query)
+        if self.sht_id:
+            self.redir_url = self.get_idp_url(self.sht_id)
+
+    def parse_first_id(self, query):
+        m = regex.match(r'^([0-9]{1,4}(?:\.?[0-9a-zA-Z]+)?)', query)
+        if m:
+            return m[1]
+        else:
+            return None
+
+    def get_idp_url(self, sht_id):
+        conn = http.client.HTTPConnection('idp.bl.uk')
+        path = '/database/oo_loader.a4d?pm=SHT%20{}'.format(
+            urllib.parse.quote_plus(sht_id)
+        )
+        conn.request('GET', path)
+        response = conn.getresponse()
+        if response.status in [301, 302, 303]:
+            location = response.headers['Location']
+            if 'itemNotFound' not in location:
+                return 'http://idp.bl.uk/database/' + location
+        return False
+
+    def setup_context(self, context):
+        context.title = 'SHT Lookup {}'.format(self.sht_id)
+        context.sht_id = self.sht_id
+        context.redir_url = self.redir_url
+        if self.redir_url:
+            raise cherrypy.HTTPRedirect(self.redir_url, 302)
+

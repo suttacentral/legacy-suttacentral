@@ -122,6 +122,9 @@ def search_view(search_query, search_result):
 def downloads():
     return DownloadsView().render()
 
+def sht_lookup(query):
+    return ShtLookupView(query).render()
+
 def fallback_disp_handler(id, collection):
     try:
         id = int(id)

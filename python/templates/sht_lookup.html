@@ -1,0 +1,24 @@
+{% extends "base.html" -%}
+{% block content %}
+<div id="onecol">
+<section>
+
+<article>
+{% if sht_id %}
+    {% if not redir_url %}
+        <form action="http://idp.bl.uk/database/search_wait.a4d" method="post" enctype="multipart/form-data" id="sht-redir-form">
+            <input type="hidden" name="f_quickSearchValue" value="SHT {{ sht_id }}"> 
+        </form>
+        <script>
+            document.getElementById('sht-redir-form').submit();
+        </script>
+    {% endif %}
+{% else %}
+    <p><em>Invalid SHT #: <code>{{ sht_id }}</code>
+{% endif %}
+<p>Hello</p>
+</article>
+
+</section>
+</div>
+{%- endblock %}
