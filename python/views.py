@@ -1,6 +1,7 @@
 import babel.dates, cherrypy, http.client, jinja2, newrelic.agent, os.path
 import regex, time, urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
+from bs4 import BeautifulSoup
 
 import assets, config, scdb
 from menu import menu_data
@@ -104,11 +105,11 @@ class ViewBase:
 
     @property
     def template_name(self):
-        """Returns the template name for this view."""
+        """Return the template name for this view."""
         raise NotImplementedError('Views must define template_name')
 
     def get_template(self):
-        """Returns the Jinja2 template for this view."""
+        """Return the Jinja2 template for this view."""
         return self.env.get_template(self.template_name + ".html")
 
     def setup_context(self, context):
@@ -232,11 +233,10 @@ class TextView(ViewBase):
         self.lang_code = lang_code
 
     def setup_context(self, context):
-        # TODO: Figure out title
-        content = self.get_file_content()
-        if not content:
-            raise cherrypy.NotFound()
-        context.text = self.get_tag(content, 'body')
+        doc = self.get_document()
+        context.title = self.get_title(doc) or '?'
+        self.annotate_heading(doc)
+        context.text = str(doc.body)
 
     @property
     def filename(self):
@@ -246,16 +246,42 @@ class TextView(ViewBase):
     def path(self):
         return os.path.join(config.text_root, self.filename)
 
-    def get_file_content(self):
+    def get_document(self):
+        """Return the BeuatifulSoup document object of the text or raise
+        a cherrypy.NotFound exception"""
         try:
             with open(self.path, 'r', encoding='utf-8') as f:
-                return f.read()
+                return BeautifulSoup(f)
         except OSError:
-            return False
+            raise cherrypy.NotFound()
 
-    def get_tag(self, content, tag):
-        re = r'(?mx)<{}[^>]*>(.*)</{}>'.format(tag, tag)
-        return regex.search(re, content, regex.MULTILINE | regex.DOTALL)[1]
+    def get_title(self, doc):
+        hgroup = doc.hgroup
+        if hgroup:
+            h1 = hgroup.h1
+            if h1:
+                return h1.text
+
+    def annotate_heading(self, doc):
+        """Add navigation links to the header h1 and h2"""
+        hgroup = doc.hgroup
+        if not hgroup:
+            return
+        h1 = hgroup.h1
+        if h1:
+            href = '/{}'.format(self.uid)
+            a = doc.new_tag('a', href=href)
+            h1.wrap(a)
+            h1.unwrap()
+            a.wrap(h1)
+        if hasattr(self, 'subdivision'):
+            h2 = hgroup.h2
+            if h2:
+                href = '/{}'.format(self.subdivision.uid)
+                a = doc.new_tag('a', href=href)
+                h2.wrap(a)
+                h2.unwrap()
+                a.wrap(h2)
 
 class SuttaView(TextView):
     """The view for showing the sutta text in original sutta langauge."""
@@ -268,7 +294,7 @@ class SuttaView(TextView):
     def setup_context(self, context):
         super().setup_context(context)
         context.title = '{}: {} ({}) - {}'.format(
-            self.sutta.acronym, self.sutta.name, self.lang.name,
+            self.sutta.acronym, context.title, self.lang.name,
             self.subdivision.name)
         context.sutta_lang_code = self.lang_code
 
