@@ -1,5 +1,5 @@
 import babel.dates, cherrypy, http.client, jinja2, newrelic.agent, os.path
-import regex, time, urllib.parse
+import regex, socket, time, urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
 from bs4 import BeautifulSoup
 
@@ -42,11 +42,22 @@ def jinja2_environment():
     def sht_expansion(string):
         """Add links from SHT vol/page references to the sht-lookup page."""
         if 'SHT' in string:
-            # Replace m-dash with a regular dash
-            string = string.replace('−', '-')
+            # Replace &nbsp; with spaces
+            string = string.replace('&nbsp;', ' ')
             baseurl = '/sht-lookup/'
-            string = regex.sub(r'([0-9]{1,4}(?:\.?[\-\+0-9a-zA-Z]+)?)',
-                r'<a href="{}\1" target="_blank">\1</a>'.format(baseurl), string)
+            def replacement(m):
+                # Ignore 'also cf. ix p. 393ff' and ' A'
+                first, second = m[1], m[2]
+                if regex.match(r'.+p\.\s*', first) or \
+                   regex.match(r'.+A', first):
+                    return '{}{}'.format(first, second)
+                else:
+                    # replace n-dash with dash
+                    path = second.replace('−', '-')
+                    return '{}<a href="{}{}" target="_blank">{}</a>'.format(
+                        first, baseurl, path, second)
+            string = regex.sub(r'([^0-9]+)([0-9]{1,4}(?:\.?[\−\+0-9a-zA-Z]+)?)',
+                replacement, string)
         return string
     env.filters['sht_expansion'] = sht_expansion
 
@@ -399,22 +410,37 @@ class ShtLookupView(ViewBase):
     def parse_first_id(self, query):
         m = regex.match(r'^([0-9]{1,4}(?:\.?[0-9a-zA-Z]+)?)', query)
         if m:
-            return m[1]
+            # replace . with /
+            return m[1].replace('.', '/')
         else:
             return None
 
     def get_idp_url(self, sht_id):
-        conn = http.client.HTTPConnection('idp.bl.uk')
+        host = 'idp.bl.uk'
         path = '/database/oo_loader.a4d?pm=SHT%20{}'.format(
             urllib.parse.quote_plus(sht_id)
         )
+        url = 'http://{}{}'.format(host, path)
+        timeout = 1.0
+        conn = http.client.HTTPConnection(host, timeout=timeout)
         conn.request('GET', path)
-        response = conn.getresponse()
+        try:
+            response = conn.getresponse()
+        except socket.timeout:
+            logger.error('SHT Lookup {} timed out after {}s'.format(
+                url, timeout))
+            return False
         if response.status in [301, 302, 303]:
             location = response.headers['Location']
             if 'itemNotFound' not in location:
                 return 'http://idp.bl.uk/database/' + location
-        return False
+            else:
+                logger.info('SHT Lookup ID {} not found'.format(sht_id))
+                return False
+        else:
+            logger.error('SHT Lookup {} returned unexpected response {}'.format(
+                url, response.status))
+            return False
 
     def setup_context(self, context):
         context.title = 'SHT Lookup {}'.format(self.sht_id)
