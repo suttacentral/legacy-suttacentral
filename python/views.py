@@ -270,7 +270,7 @@ class TextView(ViewBase):
         h1 = hgroup.h1
         if h1:
             href = '/{}'.format(self.uid)
-            a = doc.new_tag('a', href=href)
+            a = doc.new_tag('a', href=href, title='See other translations and correspondence details')
             h1.wrap(a)
             h1.unwrap()
             a.wrap(h1)
@@ -278,7 +278,7 @@ class TextView(ViewBase):
             h2 = hgroup.h2
             if h2:
                 href = '/{}'.format(self.subdivision.uid)
-                a = doc.new_tag('a', href=href)
+                a = doc.new_tag('a', href=href, title='Go to the sutta\'s (sub)division page')
                 h2.wrap(a)
                 h2.unwrap()
                 a.wrap(h2)
