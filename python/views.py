@@ -247,7 +247,7 @@ class TextView(ViewBase):
         doc = self.get_document()
         context.title = self.get_title(doc) or '?'
         self.annotate_heading(doc)
-        context.text = str(doc.body)
+        context.text = self.content_html(doc.body)
 
     @property
     def filename(self):
@@ -258,7 +258,7 @@ class TextView(ViewBase):
         return os.path.join(config.text_root, self.filename)
 
     def get_document(self):
-        """Return the BeuatifulSoup document object of the text or raise
+        """Return the BeautifulSoup document object of the text or raise
         a cherrypy.NotFound exception"""
         try:
             with open(self.path, 'r', encoding='utf-8') as f:
@@ -295,6 +295,14 @@ class TextView(ViewBase):
                 h2.wrap(a)
                 h2.unwrap()
                 a.wrap(h2)
+
+    def content_html(self, el):
+        """Return the HTML of the contents of el."""
+        output = []
+        for c in el.contents:
+            output.append(str(c))
+        output.append('\n')
+        return '\n'.join(output)
 
 class SuttaView(TextView):
     """The view for showing the sutta text in original sutta langauge."""
