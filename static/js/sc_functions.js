@@ -451,6 +451,8 @@ function buildTextualInformation() {
             $(a).text( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
         } else if (aClass == 'vnS') {
             $(a).text(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
+        } else if (aClass == 'pts_pn'){
+            $(a).text( aid.toUpperCase() )
         }
         
         if (da.text() == '') {
