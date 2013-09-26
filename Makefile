@@ -68,6 +68,15 @@ quickest-deploy-production:
 		make build-assets && \
 		sudo supervisorctl restart sc-production'
 
+deploy-texts-production:
+	ssh sc-production@vps.suttacentral.net \
+		'source $$HOME/.virtualenvs/suttacentral/bin/activate && \
+		cd $$HOME/suttacentral && \
+		cd text && \
+		git pull && \
+		cd .. &&\
+		make build-search-indexes'
+		
 clean:
 	rm -rf \
 		__pycache__ \
