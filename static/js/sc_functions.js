@@ -452,7 +452,9 @@ function buildTextualInformation() {
         } else if (aClass == 'vnS') {
             $(a).text(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
         } else if (aClass == 'pts_pn'){
-            $(a).text( aid.toUpperCase() )
+            var m = aid.split('.')
+            m[0] = m[0].toUpperCase();
+            $(a).text( m.join('.') )
         }
         
         if (da.text() == '') {
