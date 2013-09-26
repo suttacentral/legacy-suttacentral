@@ -233,13 +233,13 @@ def search(query, target='dict', limit=10, offset=0, ajax=0):
         href ='/search/?query={}&target={}&limit={}&offset={}'.format(
             query, navtarget, limit, start)
         footurl += '<a href="{}"> « Results {}–{}</a>'.format(
-            href, start + 1, min(total, start + limit))
+            escape(href), start + 1, min(total, start + limit))
     if navtarget and limit + offset < total:
         start = offset + limit
         href ='/search/?query={}&target={}&limit={}&offset={}'.format(
             query, navtarget, limit, start)
-        footurl += '<a href={}>Results {}—{} of {} »</a>'.format(
-            href, start, min(total, start + limit), total)
+        footurl += '<a href="{}">Results {}—{} of {} »</a>'.format(
+            escape(href), start, min(total, start + limit), total)
     if footurl:
         dictResults.add_row(classes.HTMLRow(footurl))
     return dictResults
