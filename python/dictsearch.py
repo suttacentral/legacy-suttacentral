@@ -1,5 +1,6 @@
 import sqlite3, threading, time, collections, functools, concurrent.futures, unicodedata, time, regex, jinja2
 from contextlib import contextmanager
+from html import escape
 
 import textfunctions, config, classes
 
@@ -231,7 +232,7 @@ def search(query, target='dict', limit=10, offset=0, ajax=0):
         start = max(0, offset - limit)
         href ='/search/?query={}&target={}&limit={}&offset={}'.format(
             query, navtarget, limit, start)
-        footurl += '<a href={}> « Results {}–{}</a>'.format(
+        footurl += '<a href="{}"> « Results {}–{}</a>'.format(
             href, start + 1, min(total, start + limit))
     if navtarget and limit + offset < total:
         start = offset + limit

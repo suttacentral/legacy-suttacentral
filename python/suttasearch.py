@@ -1,5 +1,6 @@
 import bisect, math, functools
 import scdb, classes, textfunctions
+from html import escape
 
 class Ranker:
     def __init__(self, query, lang):
@@ -115,8 +116,8 @@ def search(query=None, limit=25, offset=0):
         start = limit + offset
         href = '/search/?query={}&target=suttas&limit={}&offset={}'.format(
             query, limit, start)
-        out.footurl = '<a href={}>Results {}–{}</a>'.format(
-            href, start + 1, min(count, start + limit))
+        out.footurl = '<a href="{}">Results {}–{}</a>'.format(
+            escape(href), start + 1, min(count, start + limit))
     
     if e_results:
         out.add("Exact results", e_results)

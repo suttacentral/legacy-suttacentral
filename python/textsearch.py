@@ -3,6 +3,7 @@ from array import array
 from contextlib import contextmanager
 import declensions, config
 from classes import FulltextResultsCategory, HTMLRow
+from html import escape
 
 from textfunctions import *
 
@@ -652,8 +653,8 @@ def search(query, target="texts", limit=25, offset=0, lang='en'):
         urls = []
         for lang_code in sorted(counts):
             if counts[lang_code] > 0:
-                urls.append('<a href=/search/?query={query}&target=texts&lang={lang}&limit=25&offset=0>{lang}: {count}</a>'.format(
-                    query=query,
+                urls.append('<a href="/search/?query={query}&target=texts&lang={lang}&limit=25&offset=0">{lang}: {count}</a>'.format(
+                    query=escape(query),
                     lang=lang_code,
                     count=counts[lang_code]))
         if urls:
@@ -676,14 +677,14 @@ def search(query, target="texts", limit=25, offset=0, lang='en'):
                 end = min(start + limit, total)
                 href = "/search/?query={}&target=texts&lang={}&limit={}&offset={}".format(query, lang, limit, start)
                 links.append('<a href="{}">« Results {}–{}</a>'.format(
-                    href, start + 1, end))
+                    escape(href), start + 1, end))
             if total > offset + len(results):
                 # Next link
                 start = offset + limit
                 end = min(start + limit, total)
                 href = "/search/?query={}&target=texts&lang={}&limit={}&offset={}".format(query, lang, limit, start)
                 links.append('<a href="{}">Results {}–{} (of {}) »</a>'.format(
-                    href, start + 1, end, total))
+                    escape(href), start + 1, end, total))
             if links:
                 result.add_row(HTMLRow(" ".join(links)))
         else:
