@@ -18,6 +18,7 @@ sc_formatter = {
         $(document).on('keydown', sc_formatter.deathToTheBeast);
         this.apply();
         this.operaFix();
+        this.highlightBookmark();
     },
     apply: function(){
         $("tr").filter(":even").addClass("even"); //Add the .even class to every second tr element
@@ -128,6 +129,11 @@ sc_formatter = {
                 //console.log("For the "+ num + suffix + " time the world is plunged into darkness.");
             }
             sc_formatter.markOfTheBeast += 1
+        }
+    },
+    highlightBookmark: function() {
+        if (window.location.hash) {
+            e = $(window.location.hash).addClass('bookmarkeded');
         }
     }
 }

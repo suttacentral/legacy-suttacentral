@@ -853,6 +853,7 @@ td .altAcronym:before {content:"[";}
 td .altAcronym:after {content:"]";}
 td .altVolPage, td .altAcronym {font-size: 80%; color: #555}
 
+table.divtable td:nth-of-type(1) > a {white-space:nowrap;}
 
 /* NOTES, TEXT DATA & BIBLIOGRAPHY */
 
@@ -1087,6 +1088,15 @@ a.yam72:before {content:"Yam "}
 }
 
 a.infomode {visibility:visible;}
+
+
+
+/* BOOKMARKED SECTION HIGHLIGHTING */
+.embeddedparallel.bookmarkeded {
+    padding: 0.4em;
+    border-radius: 1em;
+    background-color: #f7f2c2;
+}
 
 /* POPUP DICTIONARY LOOKUP */
 
