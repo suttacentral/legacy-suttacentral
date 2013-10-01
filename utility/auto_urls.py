@@ -68,6 +68,7 @@ for dirpath, dirnames, filenames in os.walk(textroot):
             prefix, start, end = regex.match(r'(sa-[23]\.|\p{alpha}+(?:\d+\.)?)(\d+)-?(\d*)', fileuid)[1:]
         except TypeError:
             print("Uid form not recognized: " + filename)
+            continue
         if end:
             start = int(start)
             for i in range(start, int(end) + 1):
@@ -78,9 +79,10 @@ for dirpath, dirnames, filenames in os.walk(textroot):
         text = open(os.path.join(dirpath, filename), encoding='utf8').read()
 
         # Discover embedded parallels
-        for m in regex.finditer(r'<div class="embeddedparallel" data-uid="([^"]+)" id="([^"]+)">', text):
-            uid = m[1]
-            bookmark = m[2]
+        for m in regex.finditer(r'<div[^>]+embeddedparallel[^>]+>', text):
+            frag = lxml.html.fragment_fromstring(m[0])
+            uid = frag.attrib['data-uid'];
+            bookmark = frag.attrib['id'];
             embedded_parallels[(lang, uid)] = (fileuid, bookmark)
         
         m = dedup(regex.findall(r'<span class="author">([^>]+)</span>', text))
