@@ -355,7 +355,6 @@ header {
     text-shadow: 0 0 5px rgba(255,255,255,0.5);
     display:inline;
     padding-top:0;
-    z-index:-1;
 }
 
 .wheel a:link, .wheel a:visited, .wheel a:hover, .wheel a:active
@@ -373,7 +372,6 @@ header h1   {
     margin-bottom:-0.3em;
     padding-top:0.1em;
     position:relative;
-    z-index:-1;
 }
 
 header h2  {
@@ -382,7 +380,6 @@ header h2  {
     font-weight:normal;
     display:inline;
     position:absolute;
-    z-index:-1;
 }
 
 header hgroup {display:table;}
