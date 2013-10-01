@@ -433,8 +433,8 @@ class ShtLookupView(ViewBase):
         url = 'http://{}{}'.format(host, path)
         timeout = 1.0
         conn = http.client.HTTPConnection(host, timeout=timeout)
-        conn.request('GET', path)
         try:
+            conn.request('GET', path)
             response = conn.getresponse()
         except socket.timeout:
             logger.error('SHT Lookup {} timed out after {}s'.format(
