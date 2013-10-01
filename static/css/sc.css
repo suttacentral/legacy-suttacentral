@@ -1093,9 +1093,14 @@ a.infomode {visibility:visible;}
 
 /* BOOKMARKED SECTION HIGHLIGHTING */
 .embeddedparallel.bookmarkeded {
-    padding: 0.4em;
+    padding: 0.5em 0.1em 0.5em 0.5em;
     border-radius: 1em;
     background-color: #f7f2c2;
+    margin-bottom: 1.5em;
+}
+/* The bottom margin is transfered to the highlighting element */
+.embeddedparallel.bookmarkeded p:last-child {
+    margin-bottom: 0em;
 }
 
 /* POPUP DICTIONARY LOOKUP */

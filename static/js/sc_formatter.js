@@ -119,21 +119,36 @@ sc_formatter = {
             }
             textualControls.enable();
             if (sc_formatter.markOfTheBeast % 2 == 0) {
-                //console.log("It took " + (Date.now() - startTime) + "ms but the world is safe once again.");
             } else {
                 var num = 1 + Math.ceil(sc_formatter.markOfTheBeast / 2);
                 var suffix = 'th';
                 if (num % 10 == 1 && num % 100 != 11) suffix = 'st';
                 if (num % 10 == 2 && num % 100 != 12) suffix = 'nd';
                 if (num % 10 == 3 && num % 100 != 13) suffix = 'rd';
-                //console.log("For the "+ num + suffix + " time the world is plunged into darkness.");
             }
             sc_formatter.markOfTheBeast += 1
         }
     },
     highlightBookmark: function() {
-        if (window.location.hash) {
-            e = $(window.location.hash).addClass('bookmarkeded');
+        // Highlight the elements that are bookmarked.
+        // If these elements contain a 'data-also-ids' those
+        // elements (comma seperated) are also highlighted.
+        var toHighlight = [window.location.hash], i=0;
+        while (i < toHighlight.length)
+        {
+            e = $(toHighlight[i].replace(/\./g, '\\.'));
+            if (e.length > 0) {
+                e.addClass('bookmarkeded');
+                alsoIds = e.attr('data-also-ids');
+                if (alsoIds){
+                    ids = alsoIds.split(/,\s*/g);
+                    for (j in ids) {
+                        toHighlight.push('#' + ids[j]);
+                    }
+                }
+            }
+            i++;
+            if (i > 100) return;
         }
     }
 }
