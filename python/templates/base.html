@@ -17,9 +17,6 @@
 {% assets 'css_all' -%}
 <link rel="stylesheet" href="{{ ASSET_URL }}">
 {% endassets -%}
-{% if offline -%}
-  <style>a[href^="http"] { color: #99aabb; }</style>
-{% endif %}
 <!--[if lt IE 9]><style>header {display:inline-block; width:90%;}</style><![endif]-->
 </head>
 <body>
@@ -102,14 +99,6 @@
 {% assets 'js_core' %}
 <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
-
-{% if offline -%}
-  {%- if sutta_lang_code == 'pi' -%}
-    <script type="text/javascript" src="/js/pi2en_dict_0.03.js"></script>
-  {%- elif sutta_lang_code == 'zh' -%}
-    <script type="text/javascript" src="/js/zh2en_dict_0.04s.js"></script>
-  {%- endif -%}
-{% endif %}
 
 {{ newrelic_browser_timing.footer }}
 

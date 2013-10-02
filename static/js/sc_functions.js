@@ -60,7 +60,7 @@ var chineseLookup = {
             }
             if (!window.zh2en_dict) {
                 scMessage.show("Requesting Chinese Dictionary, this may take some time...", 1000000);
-                jQuery.ajax(sc.zh2en_dict_url).done(function() {
+                jQuery.getScript(sc.zh2en_dict_url, function() {
                     scMessage.show("Analyzing Text...", 2000);
                     chineseLookup.generateMarkup();
                     scMessage.show("Hover with the mouse to display meaning.<br> Click a compound to break it up.", 10000);
@@ -769,7 +769,7 @@ function enablePaliLookup(){
             return
         } else {
             scMessage.show("Requesting Pali Dictionary...", 10000);
-            jQuery.ajax(sc.pi2en_dict_url).done(function(){
+            jQuery.getScript(sc.pi2en_dict_url, function(){
                 scPersistantStorage.store('pi2en_dict', pi2en_dict, sc.pi2en_dict_url);
                 generateLookupMarkup();
                 scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
