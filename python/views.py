@@ -335,10 +335,36 @@ class DivisionView(ViewBase):
     def __init__(self, division):
         self.division = division
 
+    @property
+    def division_lang_code(self):
+        """Ugly hack to handle sk/skt discrepancy..."""
+        code = self.division.collection.lang.code
+        if code == 'sk':
+            return 'skt'
+        else:
+            return code
+
+    @property
+    def division_text_url(self):
+        """Division-level text URL (if it exists)"""
+        if os.path.exists(self.division_text_path):
+            return '/{}/{}'.format(self.division.uid,
+                self.division_lang_code)
+        else:
+            return None
+
+    @property
+    def division_text_path(self):
+        """Division-level text path"""
+        return os.path.join(config.text_root,
+            self.division_lang_code,
+            self.division.uid) + '.html'
+
     def setup_context(self, context):
         context.title = "{}: {}".format(self.division.acronym,
             self.division.name)
         context.division = self.division
+        context.division_text_url = self.division_text_url
         context.has_alt_volpage = False
         context.has_alt_acronym = False
 
@@ -348,7 +374,6 @@ class DivisionView(ViewBase):
                     context.has_alt_volpage = True
                 if sutta.alt_acronym:
                     context.has_alt_acronym = True
-
 
 class SubdivisionView(ViewBase):
     """The view for a subdivision."""
