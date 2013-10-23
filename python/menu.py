@@ -5,11 +5,13 @@ other_divisions = [{"name": "Prākrit", "link": "/pf/"},
 			       {"name": "Khotanese", "link": "/kf/"},
 			       {"name": "Uighur", "link": "/uf/"}]
 
-sanskrit_divisions = [{"name": "Avadānaśataka", "link": "/avs/"},
-				      {"name": "Divyāvadāna", "link": "/div/"},
+sanskrit_divisions = [
+							{"name": "Arthaviniścayasūtra", "link": "/arv/"},
+							{"name": "Avadānaśataka", "link": "/avs/"},
+				      {"name": "Divyāvadāna", "link": "/divy/"},
 				      {"name": "Lalitavistara", "link": "/lal/"},
 				      {"name": "Mahāvastu", "link": "/mvu/"},
-				      {"name": "Saṅghabhedavastu", "link": "/sbh/"},
+				      {"name": "Saṅghabhedavastu", "link": "/sbv/"},
 				      {"name": "Udānavarga", "link": "/uv/"},
 				      {"name": "SHT fragments", "link": "/sht/"},
 				      {"name": "Other fragments", "link": "/sf/"}]
