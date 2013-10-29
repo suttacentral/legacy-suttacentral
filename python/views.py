@@ -134,6 +134,7 @@ class ViewBase:
         return ViewContext({
             'collections': menu_data,
             'newrelic_browser_timing': NewRelicBrowserTimingProxy(),
+            'nonfree_fonts': config.nonfree_fonts and not cherrypy.request.offline,
             'offline': cherrypy.request.offline,
             'page_lang': 'en',
             'search_query': '',

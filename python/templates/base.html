@@ -14,9 +14,15 @@
 <meta name="viewport" content="width=device-width">
 {{ newrelic_browser_timing.header }}
 <!--[if lt IE 10]><script src="/js/vendor/modernizr-2.6.2.min.js"></script><![endif]-->
-{% assets 'css_all' -%}
-<link rel="stylesheet" href="{{ ASSET_URL }}">
-{% endassets -%}
+{% if nonfree_fonts -%}
+  {%- assets 'css_nonfree' -%}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+  {% endassets -%}
+{%- else -%}
+  {%- assets 'css_basic' -%}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+  {% endassets -%}
+{%- endif -%}
 <!--[if lt IE 9]><style>header {display:inline-block; width:90%;}</style><![endif]-->
 </head>
 <body>

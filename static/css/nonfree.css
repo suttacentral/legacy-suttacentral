@@ -1,0 +1,45 @@
+/* Proprietary fonts that are not allowed for free distribution */
+
+@font-face {
+    font-family: 'Skolar Sutta Web';
+    src: url('/fonts/nonfree/skolar-sutta-web-bold-1.eot');
+    src: url('/fonts/nonfree/skolar-sutta-web-bold-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/nonfree/skolar-sutta-web-bold-1.woff') format('woff'),
+         url('/fonts/nonfree/skolar-sutta-web-bold-1.ttf') format('truetype'),
+         url('/fonts/nonfree/skolar-sutta-web-bold-1.svg#skolar-sutta-web-bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Skolar Sutta Web';
+    src: url('/fonts/nonfree/skolar-sutta-web-italic-1.eot');
+    src: url('/fonts/nonfree/skolar-sutta-web-italic-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/nonfree/skolar-sutta-web-italic-1.woff') format('woff'),
+         url('/fonts/nonfree/skolar-sutta-web-italic-1.ttf') format('truetype'),
+         url('/fonts/nonfree/skolar-sutta-web-italic-1.svg#skolar-sutta-web-italic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Skolar Sutta Web';
+    src: url('/fonts/nonfree/skolar-sutta-web-regular-1.eot');
+    src: url('/fonts/nonfree/skolar-sutta-web-regular-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/nonfree/skolar-sutta-web-regular-1.woff') format('woff'),
+         url('/fonts/nonfree/skolar-sutta-web-regular-1.ttf') format('truetype'),
+         url('/fonts/nonfree/skolar-sutta-web-regular-1.svg#skolar-sutta-web-regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Skolar Sutta Web SC';
+    src: url('/fonts/nonfree/skolar-sutta-web-sc-regular-1.eot');
+    src: url('/fonts/nonfree/skolar-sutta-web-sc-regular-1.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/nonfree/skolar-sutta-web-sc-regular-1.woff') format('woff'),
+         url('/fonts/nonfree/skolar-sutta-web-sc-regular-1.ttf') format('truetype'),
+         url('/fonts/nonfree/skolar-sutta-web-sc-regular-1.svg#skolar-sutta-web-sc-regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

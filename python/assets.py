@@ -15,12 +15,20 @@ env.auto_build = not config.compile_assets
 env.cache = cache_dir
 env.debug = not config.compile_assets
 env.manifest = 'json:%s' % manifest_path
-css_all = webassets.Bundle(
+css_basic = webassets.Bundle(
     'css/sc.css',
     filters='cssutils',
     output='css/compiled/all-%(version)s.css'
 )
-env.register('css_all', css_all)
+env.register('css_basic', css_basic)
+
+css_nonfree = webassets.Bundle(
+    'css/nonfree.css',
+    'css/sc.css',
+    filters='cssutils',
+    output='css/compiled/all-%(version)s.css'
+)
+env.register('css_nonfree', css_nonfree)
 
 js_core = webassets.Bundle(
     'js/easytabs.js',
