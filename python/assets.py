@@ -18,7 +18,7 @@ env.manifest = 'json:%s' % manifest_path
 css_basic = webassets.Bundle(
     'css/sc.css',
     filters='cssutils',
-    output='css/compiled/all-%(version)s.css'
+    output='css/compiled/basic-%(version)s.css'
 )
 env.register('css_basic', css_basic)
 
@@ -26,7 +26,7 @@ css_nonfree = webassets.Bundle(
     'css/nonfree.css',
     'css/sc.css',
     filters='cssutils',
-    output='css/compiled/all-%(version)s.css'
+    output='css/compiled/nonfree-%(version)s.css'
 )
 env.register('css_nonfree', css_nonfree)
 
