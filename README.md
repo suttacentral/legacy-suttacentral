@@ -2,7 +2,7 @@
 
 # Setup
 
-See <http://wiki.suttacentral.net/SuttaCentral-Dev-Setup.html>.
+See <https://github.com/suttacentral/suttacentral/wiki/SuttaCentral-Dev-Setup>.
 
 # Running the Server
 
@@ -10,18 +10,12 @@ See <http://wiki.suttacentral.net/SuttaCentral-Dev-Setup.html>.
 
 Then visit <http://localhost:8800/>.
 
-# Making Changes
-
-**TODO: git stuff in here?**
-
 # Deployment
+
+To deploy changes to [staging](http://staging.suttacentral.net/):
 
     make deploy-staging
 
-Then visit <http://staging.suttacentral.net/>.
-
-Deploying the PHP version is similar:
+To deploy changes to [production](http://suttacentral.net/):
 
     make deploy-production
-
-Then visit <http://suttacentral.net/>.
