@@ -9,7 +9,7 @@ lxml>=3.2.3
 cssselect
 httplib2
 selenium>=2.33.0
-webassets==dev
+webassets==0.9
 jsmin
 cssutils
 newrelic>=2.0.0.1
