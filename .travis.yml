@@ -6,7 +6,8 @@ install:
   - pip install --use-mirrors -r requirements.txt
 before_script: 
   - mysql -e 'create database suttacentral;'
-  - echo -e "[mysql]\n    user: 'travis'\n    password: ''\n    db: 'suttacentral'" > local.conf
+  - >
+    echo -e "[mysql]\n    user: 'travis'\n    password: ''\n    db: 'suttacentral'" > local.conf
   - make server &
   - sleep 10
 after_script: pkill -f server.py
