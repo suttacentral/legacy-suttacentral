@@ -44,13 +44,13 @@ class UrlTestCase(SCTestCase):
         self.assertTableHasRows()
         self.goto('/avs')
         self.assertTableHasRows()
-        self.goto('/div')
+        self.goto('/divy')
         self.assertTableHasRows()
         self.goto('/lal')
         self.assertTableHasRows()
         self.goto('/mvu')
         self.assertTableHasRows()
-        self.goto('/sbh')
+        self.goto('/sbv')
         self.assertTableHasRows()
 
     def table_heading_text(self):
