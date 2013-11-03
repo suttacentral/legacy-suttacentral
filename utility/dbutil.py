@@ -36,8 +36,9 @@ def mysql_cmd(root=False, db=False):
     if root:
         args += [ '-u', 'root', '-p' ]
     else:
-        args += [ '-u', config.mysql['user'],
-                 '-p' + config.mysql['password'] ]
+        args += [ '-u', config.mysql['user'] ]
+        if config.mysql['password']:
+            args += [ '-p' + config.mysql['password'] ]
     if db:
         args.append(config.mysql['db'])
     return plumbum.local['mysql'][tuple(args)]
