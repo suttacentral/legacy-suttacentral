@@ -16,6 +16,11 @@
 
   Include /PATH_TO_SUTTACENTRAL/apache/common.conf
 
+  # Prevent hotlinking to nonfree fonts
+  RewriteEngine On
+  RewriteCond %{HTTP_REFERER} !^https?://SERVER_NAME/ [NC]
+  RewriteRule ^/fonts/nonfree/ - [F,NC,L]
+
   ProxyPassMatch ^/(css/|fonts/|img/|js/|404.html|apple-touch-icon.*\.png|favicon\.ico$|humans\.txt$|maintenance\.html|robots\.txt$) !
 
   <Proxy *>
