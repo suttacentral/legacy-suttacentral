@@ -1,0 +1,9 @@
+language: python
+python:
+  - '3.3'
+install:
+  - git clone https://github.com/suttacentral/suttacentral-text.git text
+  - pip install --use-mirrors -r requirements.txt
+before_script: (make server &); sleep 10
+after_script: pkill -f server.py
+script: PHANTOMJS=1 make test

@@ -31,7 +31,10 @@ class SCTestCase(unittest.TestCase):
     def browser(self):
         global browser
         if not browser:
-            browser = webdriver.Firefox()
+            if os.getenv('PHANTOMJS'):
+                browser = webdriver.PhantomJS()
+            else:
+                browser = webdriver.Firefox()
             atexit.register(browser.close)
         return browser
 
