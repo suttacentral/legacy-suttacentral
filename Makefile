@@ -17,11 +17,11 @@ deploy-staging:
 		make clean-all && \
 		make reset-db && \
 		make build-assets && \
-		make build-dict && \
-		make build-search-indexes && \
-		rm -f tmp/maintenance && \
 		sudo supervisorctl start sc-staging && \
-		sudo service apache2 reload'
+		sudo service apache2 reload && \
+		rm -f tmp/maintenance && \
+		make build-dict && \
+		make build-search-indexes'
 
 deploy-production:
 	ssh sc-production@vps.suttacentral.net \
@@ -35,27 +35,11 @@ deploy-production:
 		cd .. && \
 		pip install -q -r requirements.txt && \
 		make build-assets && \
+		sudo supervisorctl start sc-production && \
+		sudo service apache2 reload && \
+		rm -f tmp/maintenance && \
 		make build-dict && \
-		make build-search-indexes && \
-		rm -f tmp/maintenance && \
-		sudo supervisorctl start sc-production && \
-		sudo service apache2 reload'
-
-quick-deploy-production:
-	ssh sc-production@vps.suttacentral.net \
-		'source $$HOME/.virtualenvs/suttacentral/bin/activate && \
-		cd $$HOME/suttacentral && \
-		touch tmp/maintenance && \
-		sudo supervisorctl stop sc-production && \
-		git pull && \
-		cd text && \
-		git pull && \
-		cd .. && \
-		pip install -q -r requirements.txt && \
-		make build-assets && \
-		rm -f tmp/maintenance && \
-		sudo supervisorctl start sc-production && \
-		sudo service apache2 reload'
+		make build-search-indexes'
 
 quickest-deploy-production:
 	ssh sc-production@vps.suttacentral.net \
@@ -65,6 +49,7 @@ quickest-deploy-production:
 		cd text && \
 		git pull && \
 		cd .. && \
+		pip install -q -r requirements.txt && \
 		make build-assets && \
 		sudo supervisorctl restart sc-production'
 
