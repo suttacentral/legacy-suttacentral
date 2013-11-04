@@ -18,11 +18,13 @@
     # db_refresh_interval: 90
     # dbr_cache_file: 'tmp/dbr.cache'
     # debug: True
+    # exports_root: 'static/exports'
     # newrelic_license_key: '...'
     # newrelic_real_user_monitoring: False
+    # nonfree_fonts: False
     # runtime_tests: True
     # static_root: 'static'
-    # templates_root: 'python/templates'
+    # templates_root: 'templates'
     # text_root: 'text'
 [mysql]
     # host: 'localhost'
@@ -32,3 +34,8 @@
     # db: 'sc'
 [sqlite]
     # db: 'db/sc.sqlite'
+[dict]
+    # db: 'db/dictionaries.sqlite'
+    # sources: 'dicts'
+[textsearch]
+    # dbpath: 'db'
