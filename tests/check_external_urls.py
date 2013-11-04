@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 
-from os.path import dirname, join, realpath
-import sys
-
-sys.path.insert(1, join(dirname(dirname(realpath(__file__))), 'python'))
-
+import env
 import cherrypy, httplib2, random, re, time, threading
 from urllib.parse import urlparse
 import config, logger, root, scdb

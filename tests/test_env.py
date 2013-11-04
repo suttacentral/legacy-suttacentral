@@ -1,8 +1,4 @@
-from os.path import dirname, join, realpath
-import sys
-
-sys.path.insert(1, join(dirname(dirname(realpath(__file__))), 'python'))
-
+import env
 import atexit, os, time, unittest
 from urllib.parse import urljoin
 from selenium import webdriver

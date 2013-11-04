@@ -4,11 +4,8 @@
 # This check is for Bug 48...
 #
 
-from os.path import dirname, join, realpath
-import sys
-
-sys.path.insert(1, join(dirname(dirname(realpath(__file__))), 'python'))
-
+import env
+from os.path import join
 import glob, mysql.connector, regex, textwrap
 import config
 

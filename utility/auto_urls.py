@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 
+import env
 import sys, lxml.html, os, regex, collections, gzip
 
 from os.path import dirname, join, realpath
 import sys
-
-sys.path.insert(1, join(dirname(dirname(realpath(__file__))), 'python'))
-
 import glob, mysql.connector, os, regex, textwrap, time
 import config
 

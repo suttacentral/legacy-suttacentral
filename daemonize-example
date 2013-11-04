@@ -13,5 +13,5 @@ cd "$SC_ROOT"
 if [ ! -f "$NEW_RELIC_CONFIG_FILE" ]; then
    make create-newrelic-ini
 fi
-cd python
+cd src
 exec newrelic-admin run-program cherryd -i server

@@ -1,7 +1,7 @@
 all: server
 
 server:
-	cd python && ./server.py
+	cd src && ./server.py
 
 deploy-staging:
 	ssh sc-staging@vps.suttacentral.net \
@@ -80,7 +80,7 @@ deploy-texts-production:
 clean:
 	rm -rf \
 		__pycache__ \
-		python/__pycache__ \
+		src/__pycache__ \
 		log/*.log \
 		tmp/*
 
@@ -99,13 +99,13 @@ clean-old-exports:
 clean-all: clean clean-assets clean-db clean-exports
 
 build-assets:
-	cd python && python -c 'import assets;assets.build()'
+	cd src && python -c 'import assets;assets.build()'
 
 build-dict:
-	cd python && python build_dict_db.py
+	cd src && python build_dict_db.py
 
 build-search-indexes:
-	cd python && python -c 'import textsearch; textsearch.build()'
+	cd src && python -c 'import textsearch; textsearch.build()'
 
 create-dev-offline-export:
 	utility/export/offline.py --force localhost:8800

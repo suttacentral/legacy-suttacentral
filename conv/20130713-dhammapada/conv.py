@@ -3,7 +3,7 @@
 from os.path import dirname, join, realpath
 import sys
 
-sys.path.insert(1, join(dirname(dirname(dirname(realpath(__file__)))), 'python'))
+sys.path.insert(1, join(dirname(dirname(dirname(realpath(__file__)))), 'src'))
 
 import glob, jinja2, mysql.connector, os, regex, textwrap, time
 import config

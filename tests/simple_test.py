@@ -1,4 +1,4 @@
-from environment import SCTestCase
+from test_env import SCTestCase
 
 class SimpleTestCase(SCTestCase):
 
