@@ -16,3 +16,6 @@ class SimpleTestCase(SCTestCase):
                           self.css('caption').text)
         self.assertEqual('en | vn | en | en | fr | de',
                           self.css('.origin td:last-child').text)
+
+    def test_always_fail(self):
+        self.assertEqual(1, 2)
