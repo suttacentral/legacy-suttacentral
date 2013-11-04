@@ -2,8 +2,8 @@ import plumbum
 import config
 
 def git(*args):
-    plumbum.local.cwd.chdir(config.base_dir)
-    return plumbum.local['git'](*args).strip()
+    with plumbum.local.cwd(config.base_dir):
+        return plumbum.local['git'](*args).strip()
 
 def get_revision():
     return git('log', '-1', '--format=%H')
