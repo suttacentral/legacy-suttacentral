@@ -1,3 +1,9 @@
+notifications:
+  email:
+    recipients:
+      - suttacentral-dev@googlegroups.com
+    on_success: change
+    on_failure: always
 language: python
 python:
   - '3.3'
