@@ -36,7 +36,6 @@ js_core = webassets.Bundle(
     'js/sc_functions.js',
     'js/sc_init.js',
     'js/sc_formatter.js',
-    'js/userecho.js',
     filters='rjsmin',
     output='js/compiled/core-%(version)s.js'
 )
