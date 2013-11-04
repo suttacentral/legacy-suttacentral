@@ -12,7 +12,7 @@ def get_timestamp():
     return int(git('log', '-1', '--format=%at'))
 
 def get_branch():
-    return git('symbolic-ref', '--short', 'HEAD')
+    return git('rev-parse', '--abbrev-ref', 'HEAD')
 
 def get_tag():
     try:
