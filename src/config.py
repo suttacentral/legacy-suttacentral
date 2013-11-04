@@ -70,7 +70,7 @@ class Config(dict):
     ]
 
     base_dir         = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    source_dir       = os.path.join(base_dir, 'python')
+    source_dir       = os.path.join(base_dir, 'src')
     global_conf_path = os.path.join(base_dir, 'global.conf')
     local_conf_path  = os.path.join(base_dir, 'local.conf')
 
@@ -137,6 +137,9 @@ cherrypy.engine.autoreload.files.add(__config.local_conf_path)
 # We manually add this file because cherrypy autoreloader doesn't recognize
 # it, probably because of the module munging.
 cherrypy.engine.autoreload.files.add(os.path.realpath(__file__))
+
+# Do not use autoreloader against plumbum
+cherrypy.engine.autoreload.match = r'^(?!plumbum).+'
 
 # See http://mail.python.org/pipermail/python-ideas/2012-May/014969.html
 sys.modules[__name__] = __config

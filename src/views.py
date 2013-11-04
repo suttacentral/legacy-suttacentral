@@ -3,7 +3,7 @@ import regex, socket, time, urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
 from bs4 import BeautifulSoup
 
-import assets, config, scdb
+import assets, config, scdb, scm
 from menu import menu_data
 from classes import Parallel, Sutta
 
@@ -137,6 +137,7 @@ class ViewBase:
             'nonfree_fonts': config.nonfree_fonts and not cherrypy.request.offline,
             'offline': cherrypy.request.offline,
             'page_lang': 'en',
+            'scm': scm,
             'search_query': '',
         })
 

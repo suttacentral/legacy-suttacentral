@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import os, sys
 import cherrypy
 import config, logger, root
 
