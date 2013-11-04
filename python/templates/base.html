@@ -13,7 +13,7 @@
 <meta name="description" content="Correspondence tables, references, text, and translations for early Buddhist discourses in all schools of Buddhism">
 <meta name="viewport" content="width=device-width">
 {{ newrelic_browser_timing.header }}
-<!--[if lt IE 10]><script src="/js/vendor/modernizr-2.6.2.min.js"></script><![endif]-->
+<!--[if lt IE 10]><script src="/js/vendor/modernizr-2.6.3.min.js"></script><![endif]-->
 {% if nonfree_fonts -%}
   {%- assets 'css_nonfree' -%}
     <link rel="stylesheet" href="{{ ASSET_URL }}">
@@ -96,10 +96,10 @@
 </footer>
 
 {% if offline -%}
-<script src="/js/vendor/jquery-1.9.1.min.js"></script>
+<script src="/js/vendor/jquery-1.10.2.min.js"></script>
 {% else -%}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 {% endif %}
 
 {% assets 'js_core' %}
