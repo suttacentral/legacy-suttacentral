@@ -72,7 +72,8 @@ clean:
 clean-assets:
 	rm -rf \
 		static/css/compiled/*.css \
-		static/js/compiled/*.js
+		static/js/compiled/*.js \
+		tmp/webassets*
 
 clean-db:
 	rm -f db/*.sqlite db/*.sqlite.tmp*

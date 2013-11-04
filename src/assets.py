@@ -15,17 +15,23 @@ env.auto_build = not config.compile_assets
 env.cache = cache_dir
 env.debug = not config.compile_assets
 env.manifest = 'json:%s' % manifest_path
+
+css_files = [
+    'css/sc.css',
+    'css/development_bar.scss',
+]
+
 css_basic = webassets.Bundle(
     'css/sc.css',
-    filters='cssutils',
+    'css/development_bar.scss',
+    filters=('pyscss', 'cssutils'),
     output='css/compiled/basic-%(version)s.css'
 )
 env.register('css_basic', css_basic)
 
 css_nonfree = webassets.Bundle(
-    'css/nonfree.css',
-    'css/sc.css',
-    filters='cssutils',
+    *(['css/nonfree.css'] + css_files),
+    filters=('pyscss', 'cssutils'),
     output='css/compiled/nonfree-%(version)s.css'
 )
 env.register('css_nonfree', css_nonfree)

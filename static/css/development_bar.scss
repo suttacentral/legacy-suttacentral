@@ -1,0 +1,56 @@
+$development-bar-color: white;
+$development-bar-background-color: rgb(67,39,105);
+$development-bar-height: 32px;
+$development-bar-font-size: 18px;
+$development-bar-mobile-height: 20px;
+$development-bar-mobile-font-size: 12px;
+$development-bar-travis-icon-width: 77px;
+$development-bar-travis-icon-height: 19px;
+
+.development-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: 100%;
+    height: $development-bar-height;
+    background-color: $development-bar-background-color;
+    line-height: $development-bar-height;
+    font-size: $development-bar-font-size;
+    text-align: center;
+    color: $development-bar-color;
+    overflow: hidden;
+
+    a, a:visited {
+        color: $development-bar-color;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+
+    img {
+        vertical-align: middle;
+        width: $development-bar-travis-icon-width;
+        height: $development-bar-travis-icon-height;
+    }
+}
+
+.development-bar-push {
+    width: 100%;
+    height: $development-bar-height;
+}
+
+@media only screen and (max-width: 25em) {
+    .development-bar {
+        height: $development-bar-mobile-height;
+        line-height: $development-bar-mobile-height;
+        font-size: $development-bar-mobile-font-size;
+        img {
+            width: $development-bar-travis-icon-width/2;
+            height: $development-bar-travis-icon-height/2;
+        }
+    }
+    .development-bar-push {
+        height: $development-bar-mobile-height;
+    }
+}
