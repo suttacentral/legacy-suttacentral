@@ -133,6 +133,7 @@ class ViewBase:
         """Return a dictionary of variables accessible by all templates."""
         return ViewContext({
             'collections': menu_data,
+            'development_bar': config.development_bar,
             'newrelic_browser_timing': NewRelicBrowserTimingProxy(),
             'nonfree_fonts': config.nonfree_fonts and not cherrypy.request.offline,
             'offline': cherrypy.request.offline,
