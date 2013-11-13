@@ -507,10 +507,10 @@ section:lang(zh) q {
 
 /*NEW CLASSES ADDED FOR VERSION 3.0 (PYTHON). THESE ARE MAINLY FOR SANSKRIT TEXTS. I PLACE THEM HERE FOR NOW, BUT ULTIMATELY THEY SHOUL BE INTEGRATED PROPERLY. UNDER THE DESCRIPTION IS THE TITLE ATTRIBUTE.*/
 
-.ref
+//.ref
 /*references external, eg to other books. Used in IBH.*/
 
-.cr
+//.cr
 /*cross-reference, i.e. internal references. Used in IBH.*/
 .surplus	{display:none;}
 .surplus.infomode	{display:inline;color:#4805A2}
