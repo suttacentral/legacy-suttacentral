@@ -1,0 +1,9 @@
+.sutta {
+    max-width: 40em;
+    margin: 0 auto;
+    padding: 0 5% !important;
+
+    @media #{$mobile} {
+        padding: 0 !important;
+    }
+}

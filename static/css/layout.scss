@@ -1,0 +1,112 @@
+$page-min-width: 320px;
+$page-max-width: 1100px;
+$footer-height: 115px;
+$main-top-margin: 6em;
+
+$tablet-main-top-margin: 3em;
+
+$mobile-footer-height: 75px;
+$mobile-main-top-margin: 2em;
+$mobile-main-side-margin: 1em;
+
+html, body {
+    height: 100%;
+}
+
+body {
+    min-width: $page-min-width;
+}
+
+#page-wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -$footer-height;
+
+    @media #{$mobile} {
+        margin-bottom: -$mobile-footer-height;
+    }
+}
+
+#page-footer-push {
+    width: 100%;
+    height: $footer-height;
+
+    @media #{$mobile} {
+        height: $mobile-footer-height;
+    }
+}
+
+#onecol, #twocol, #main_content, #text {
+    margin: 0 auto;
+    max-width: $page-max-width;
+    overflow: auto;
+
+    @media #{$mobile-and-tablet} {
+        max-width: inherit;
+    }
+}
+
+#onecol article,
+#text article,
+#home-start,
+#home-read,
+#home-methodology {
+    margin: $main-top-margin auto;
+    max-width: 640px;
+
+    @media #{$tablet} {
+        margin: $tablet-main-top-margin 10%;
+        max-width: inherit;
+    }
+
+    @media #{$mobile} {
+        margin: $mobile-main-top-margin $mobile-main-side-margin;
+    }
+}
+
+#onecol > table, #main_search_results {
+    margin: 5em auto;
+}
+
+#twocol {
+    article {
+        float: right;
+        max-width: 60%;
+        margin: $main-top-margin 2em;
+        margin-left: 0;
+
+        @media #{$tablet} {
+            margin: $tablet-main-top-margin 1em;
+            margin-left: 0;
+        }
+
+        @media #{$mobile} {
+            float: inherit;
+            max-width: inherit;
+            margin: $mobile-main-top-margin $mobile-main-side-margin;
+        }
+    }
+
+    aside {
+        float: left;
+        max-width: 25%;
+        margin: $main-top-margin 2em;
+
+        @media #{$tablet} {
+            margin: $tablet-main-top-margin 1em;
+        }
+
+        @media #{$mobile} {
+            float: inherit;
+            max-width: inherit;
+            margin: $mobile-main-top-margin $mobile-main-side-margin;
+        }
+    }
+}
+
+#text {
+    @media #{$mobile} {
+        margin-bottom: 2em;
+    }
+}

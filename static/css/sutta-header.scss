@@ -1,0 +1,66 @@
+$sutta-h1-color: #a1a1a1;
+$sutta-h2-color: #b2b2b2;
+
+.sutta {
+    h1, h2, h3, h4, h5, h6 {
+        font-family: $small-caps-font;
+        text-align: center;
+        font-weight: normal;
+        letter-spacing: 0.02em;
+    }
+
+    h1, h1 > a {
+        color: $sutta-h1-color;
+    }
+
+    h2, h2 > a, h3, h3 > a, h4, h4 > a, h5, h5 > a, h6, h6 > a {
+        color: $sutta-h2-color;
+    }
+
+    h1 {
+        margin-bottom: 1.3em;
+        padding-top: 0em;
+        font-size: 2em;
+        line-height: 1em;
+    }
+
+    h2 {
+        margin: 0 0 0.85em 0;
+        font-size:1.5em;
+        line-height: 1.5em;
+    }
+
+    h3 {
+        margin: -0.26em 0 1.26em 0;
+        font-size: 1.2em;
+        line-height: 1.5em;
+    }
+
+    h4, h5, h6 {
+        margin: 1.29em 0 1.25em 0;
+        font-size: 1em;
+        line-height: 1.5em;
+    }
+
+
+    hgroup {
+        margin-top: 6em;
+
+        @media #{$mobile} {
+            margin-top: 0;
+        }
+
+        & > h2, & > h3 {
+            margin: 0;
+            font-family: $source-sans-pro-font;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        & > h4 {
+            margin: -2em 0 0;
+            font-style: italic;            
+        }
+    }
+}

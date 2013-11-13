@@ -16,24 +16,39 @@ env.cache = cache_dir
 env.debug = not config.compile_assets
 env.manifest = 'json:%s' % manifest_path
 
-css_files = [
-    'css/sc.css',
-    'css/development_bar.scss',
-]
-
-css_basic = webassets.Bundle(
-    'css/sc.css',
-    'css/development_bar.scss',
-    filters=('pyscss', 'cssutils'),
-    output='css/compiled/basic-%(version)s.css'
+css_normalize = webassets.Bundle(
+    'css/vendor/normalize-2.1.3.css'
 )
-env.register('css_basic', css_basic)
+
+css_main_free = webassets.Bundle(
+    'css/main-free.scss',
+    depends='css/*.scss',
+    filters='pyscss',
+    output='css/compiled/main-free-%(version)s.css'
+)
+
+css_main_nonfree = webassets.Bundle(
+    'css/main-nonfree.scss',
+    depends='css/*.scss',
+    filters='pyscss',
+    output='css/compiled/main-nonfree-%(version)s.css'
+)
+
+css_free = webassets.Bundle(
+    css_normalize,
+    css_main_free,
+    filters='cssmin',
+    output='css/compiled/free-%(version)s.css'
+)
 
 css_nonfree = webassets.Bundle(
-    *(['css/nonfree.css'] + css_files),
-    filters=('pyscss', 'cssutils'),
+    css_normalize,
+    css_main_nonfree,
+    filters='cssmin',
     output='css/compiled/nonfree-%(version)s.css'
 )
+
+env.register('css_free', css_free)
 env.register('css_nonfree', css_nonfree)
 
 js_core = webassets.Bundle(

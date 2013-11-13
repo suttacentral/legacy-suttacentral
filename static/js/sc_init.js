@@ -322,4 +322,4 @@ function ohInternetExplorerLetMeCountTheWaysILoveYou(){
 
 ohInternetExplorerLetMeCountTheWaysILoveYou();
 
-$('#search_box_input').select().focus();
+$('#page-header-search > input[type=text]').select().focus();

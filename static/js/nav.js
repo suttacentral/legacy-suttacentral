@@ -1,42 +1,47 @@
 // AJAX search results.
 var sc_nav = {
-     search_element: $('#search_box input'),
-     lastXHR: null,
-     init: function(){
-        sc_nav.search_element.keyup(sc_nav.handleSearch)
-                             .mouseover(sc_nav.handleSearch);
-     },
-     handleSearch: function(e) {
+    search_element: $('#page-header-search > input'),
+    search_results: $('#page-header-search-results'),
+    lastXHR: null,
+    init: function() {
+        sc_nav.search_element.keyup(sc_nav.handleSearch);
+        $('body').mousedown(sc_nav.hideResultsIfNotSearch);
+    },
+    handleSearch: function(e) {
         var input = e.target.value;
-        if (sc_nav.lastXHR)
+        if (sc_nav.lastXHR) {
             sc_nav.lastXHR.abort();
-        if (input.length < 2) {
-            $("#search_results").hide().html("");
+        }
+        if (input.length < 3) {
+            sc_nav.hideResults();
             return;
         }
-        url = "/search?query=" +input+"&ajax=1";
-        console.log(url)
-        ajax = jQuery.ajax(url,{"cache":"true"});
+        url = "/search?query=" + encodeURIComponent(input) + "&ajax=1";
+        ajax = jQuery.ajax(url, { "cache": "true" });
         ajax.done(sc_nav.done);
         sc_nav.lastXHR = ajax;
     },
-    done: function(data, code, jqXHR)
-    {
-        sc_nav.showResults(data)
-    },
-    showResults: function(data)
-    {
-        if (!document.getElementById("search_results")){
-            $('<div id="search_results"></div>').appendTo("header").hide();
-            $("header").mouseleave(function(){$("#search_results").slideUp()});
-        }
+    done: function(data, code, jqXHR) {
         results = $("<div>" + data + "</div>");
-        tds = results.find("td:nth-of-type(4)")
-        $("#search_results").html(results).slideDown();
-        sc_truncate.apply($("#search_results"), 125)
-        $("#search_results tr").filter(":even").addClass("even");
-        $("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'})
+        sc_nav.search_results.html(results);
+        sc_truncate.apply(sc_nav.search_results, 125);
+        sc_nav.search_results.find("tr").filter(":even").addClass("even");
+        $("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'});
+        sc_nav.showResults();
     },
+    hideResultsIfNotSearch: function(e) {
+        var target = $(e.target);
+        if (!target.closest('#page-header-search')[0] &&
+            !target.closest('#page-header-search-results')[0]) {
+            sc_nav.hideResults();
+        }
+    },
+    hideResults: function() {
+        sc_nav.search_results.stop(true, true).slideUp();
+    },
+    showResults: function() {
+        sc_nav.search_results.stop(true, true).slideDown();
+    }
 };
 
 sc_nav.init();

@@ -1,0 +1,27 @@
+.text_results .details {
+    float: none;
+}
+
+.terms, .text_results {
+    list-style: none;
+}
+
+.terms a.ref, .terms span.precision {
+    color: gray;
+    font-style: italic;
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+    top: -0.5em;
+}
+
+.terms span.precision{ color: gray}
+/*.terms span.precision:before{ content: ' (~'}
+.terms span.precision:after{ content: ') '}*/
+.terms .type {visibility: hidden}
+
+.text_results	{margin-bottom:-1em}
+    
+
+.text_results table {margin-top:1em}

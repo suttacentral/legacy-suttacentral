@@ -1,0 +1,53 @@
+$text-nav-font-color: #007afe;
+
+#text {
+
+    & > .previous,
+    & > .top,
+    & > .next {
+        display: block;
+        padding: 1em 3em;
+        border-radius: 0.5em;
+        margin-bottom: 6em;
+        font-family: $source-sans-pro-font;
+        color: $text-nav-font-color;
+        font-size: 0.7em;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: .2em;
+    }
+
+    & > .previous {
+        float: left;
+    }
+
+    & > .top {
+        position: absolute;
+        text-align: center;
+        left: 45%;
+    }
+
+    & > .next {
+        float: right;
+        text-align: right;
+    }
+
+    & > .previous:hover,
+    & > .top:hover,
+    & > .next:hover {
+        background: #efefef;
+    }
+
+    @media #{$mobile} {
+        & > .previous,
+        & > .top,
+        & > .next {
+            position: static;
+            float: inherit;
+            width: 80%;
+            padding: 0;
+            margin: 0 auto;
+            text-align: center;
+        }
+    }
+}

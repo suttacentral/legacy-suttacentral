@@ -1,0 +1,824 @@
+.bibliography {text-indent: -1em;}
+
+.abbreviations table {margin: 0 0 1.3em 0}
+.abbreviations caption {margin:1em 0 1em 0;}
+
+.school {
+    border:1px solid #ccc;
+    margin:0em -0.25em 1.3em -0.25em;
+    padding:0.25em 0.25em 0 0.25em;
+}
+
+.abhidhamma {
+    width: 60% !important;
+    margin: 0 auto;
+
+    @media #{$mobile} {
+        width: 100% !important;
+    }
+
+    ul {
+        width: 29% !important;
+
+        @media #{$mobile} {
+            width: 100% !important;
+        }
+    }
+}
+
+.origin {background:#ececec;}
+
+.vagga {
+    color:#aaa;
+    text-transform:uppercase;
+    font-size:0.8em;
+    letter-spacing:0.1em;
+    padding:1.1em 1.2em;
+}
+
+.subdivision {
+    color:#aaa;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    padding-top:1em;
+    font-weight:bold;
+}
+
+td.vagga {border:none;}
+
+.details {
+    font-family: $source-sans-pro-font;
+    float:right;
+    color:#75A38F;
+    margin:0.3em 1.5em 0 0;
+    padding:0.1em 0.3em 0.1em 0.3em;
+}
+
+a.details {text-decoration:none;}
+a.details:link {color:#75A38F;}
+a.details:visited {color:#607A6F;}
+a.details:hover {color:#DF00FF;}
+a.details:active {color:purple;}
+
+td .altVolPage:before {content:"<";}
+td .altVolPage:after {content:">";}
+td .altAcronym:before {content:"[";}
+td .altAcronym:after {content:"]";}
+td .altVolPage, td .altAcronym {font-size: 80%; color: #555}
+
+table.divtable td:nth-of-type(1) > a {white-space:nowrap;}
+
+/* NOTES, TEXT DATA & BIBLIOGRAPHY */
+
+a.note {
+    position:relative;
+    color:#EE1700;
+}
+
+a.bib {
+    position:relative;
+    color:#EED900;
+}
+
+span.var, span.cross, span.end {position:relative;}
+
+span.var:hover, span.cross:hover, span.end:hover {color:#2b2b2b;}
+
+span.var.infomode, span.var.infomode:hover {color:#7A39D0;}
+
+span.cross.infomode, span.cross.infomode:hover {color:#F74F3E;}
+
+span.end.infomode, span.end.infomode:hover {color:blue;}
+
+a.note .deets, a.note:hover .deets
+    {background-color:#F7DBD0;}
+
+a.bib .deets, a.bib:hover .deets
+    {background-color:#F7F2C2;}
+
+span.var .deets, span.var:hover .deets
+    {background-color:#E5E0EC;}
+
+span.cross .deets, span.cross:hover .deets
+    {background-color:#F7D1C2;}
+
+span.end .deets, span.end:hover .deets
+    {background-color:blue;}
+
+a.note .deets,a.note:hover .deets, a.bib .deets, a.bib:hover .deets, span.var .deets, span.var.infomode:hover .deets,span.cross .deets, span.cross.infomode:hover .deets, span.end .deets, span.end.infomode:hover .deets
+    {
+    position:absolute;
+    z-index:2;
+    top:1.5em;
+    left:-22em;
+    width:20em;
+    color:#2b2b2b;
+    padding:0.5em;
+    font-size:0.8em;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border:1px solid #ccc;
+    box-shadow:6px 4px 10px rgba(136, 136, 136, 0.3);
+    font-family: $source-sans-pro-font;
+    line-height:1.2;
+}
+
+a.note .deets, a.bib .deets, span.var .deets, span.cross .deets, span.end .deets{
+    -webkit-transition:opacity 0.5s ease;
+    -moz-transition:opacity 0.5s ease;
+    -o-transition:opacity 0.5s ease;
+    transition:opacity 0.5s ease;
+    visibility:hidden;
+    opacity:0;
+    -webkit-transition:visibility 0s ease 0.5s,opacity 0.5s ease;
+    -moz-transition:visibility 0s ease 0.5s,opacity 0.5s ease;
+    -o-transition:visibility 0s ease 0.5s,opacity 0.5s ease;
+    transition:visibility 0s ease 0.5s,opacity 0.5s ease;
+}
+
+/*a.note:hover .deets, a.bib:hover .deets, span.varcolor:hover .deets, span.crosscolor:hover .deets, span.endcolor:hover .deets*/
+span.infomode:hover, span.infomode:hover span, a.bib:hover span.deets, a.note:hover span.deets {
+    visibility:visible;
+    opacity:1;
+    -webkit-transition-delay:0s;
+    -moz-transition-delay:0s;
+    -o-transition-delay:0s;
+    transition-delay:0s;
+}
+
+.insertion.infomode:before {
+    content:'[';
+}
+.insertion.infomode:after {
+    content:']';
+}
+
+#metaarea {display:none; visibility:hidden;}
+#metaarea.infomode {display:inline-block; visibility:visible;}
+/* MARGIN 'NOTES' */
+
+a.msdiv {display:none;}
+
+
+a.da {
+    display: none;
+}
+
+a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.pts, a.pts_pn, a.san87, a.san89, a.sc, a.sen82, a.sht, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus, a.tlinehead, a.ud-sutta, a.ud-vagga-sutta, a.tri62, a.tri95, a.tu, a.uv, a.vai58, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.wal48, a.wal50, a.wal52, a.wal55b, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72
+    {
+    visibility:hidden;
+    position:absolute;
+    text-align:left;
+    width:4em;
+    font-family: $source-sans-pro-font;
+    font-size:0.6em;
+    display:table;
+    font-style:normal;
+    font-weight:normal;
+    margin: 1.8em 0 0 -8em;
+    white-space:nowrap;
+    color: #2DB3A7;
+}
+
+a.ms {margin:0.7em 0 0 -14.5em; color:#00B428;}
+a.sc {margin:0.7em 0 0 -5.3em; color:#B3A72D;}
+a.t {margin:0.7em 0 0 -5.3em; color:#00B428;}
+a.wp {margin:0.7em 0 0 -5.3em; color:red;}
+a.pts {margin:-0.2em 0 0 -12.1em; color:#B2AF8C;}
+a.vn {margin:0.7em 0 0 -6em; color:#9B0F00;}
+a.sht {margin:0.8em 0 0 -6em; color:#9B000F;}
+a.wal52 {margin: 0.8em 0 0 -7em; color: #B3A72D;}
+/*a.titus {margin: -0.1em 0 0 -4em; color: #00B428;}*/
+a.titus {display:none}
+
+/* TODO systematically do for all of them (alphabetical order)
+a.bl
+a.bps
+a.eno89
+a.fuk03
+a.fol
+a.gbm
+a.gno78
+a.har04
+a.hoe16
+a.hos89a, a.hos89b, a.hos91
+a.hs
+a.kel
+a.mat85, a.mat88
+a.mit57
+a.ms
+a.pts
+a.san87,, a.san89
+a.sc
+a.sen82
+a.sht
+a.snp-vagga-section-verse
+a.snp-vagga-verse
+a.t,  a.tlinehead
+a.tri62,, a.tri95
+a.ud-sutta
+a.ud-vagga-sutta
+a.uv
+a.vai58, a.vai59, a.vai61
+a.verse-num-pts
+a.vn
+a.wal48, a.wal50, a.wal52, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c
+a.wp
+a.yam72
+a.snp-vagga-verse
+a.snp-vagga-section-verse
+
+*/
+
+a.vimula {color:blue;}
+
+a.pub {
+    color:#6d6d6d;
+    position:relative;
+}
+
+a.bl {display:none;}
+
+/*a.bl:before {content:"bl "}*/
+a.bps:before {content:"BPS "}
+a.eno89:before {content:"Eno "}
+a.fuk03:before {content:"Fuk "}
+a.fol:before {content:"Fol "}
+/*a.gatha-number:before {content:" "}*/
+/*a.gatn:before {content:" "}*/
+a.gbm:before {content:"GBM "}
+a.gno78:before {content:"Gno "}
+a.har04:before {content:"Har "}
+a.hoe16:before {content:"Hoe "}
+a.hos89a:before, a.hos89b:before, a.hos91:before {content:"Hos "}
+a.hs:before {content:"hs "}
+a.kel:before {content:"Kel "}
+a.mat85:before, a.mat88:before {content:"Mat "}
+a.mit57:before {content:"Mit "}
+a.ms:before {content:"MS "}
+a.pts:before {content:"PTS "}
+a.pts_pn:before {content:"PTS "}
+a.san87:before,, a.san89:before {content:"San "}
+a.sc:before {content:"SC "}
+a.sen82:before {content:"Sen "}
+a.sht:before {content:"SHT "}
+a.snp-vagga-section-verse:before, a.snp-vagga-verse:before {content:"SNP "}
+a.t:before,  a.tlinehead:before {content:"T "}
+a.tri62:before, a.tri95:before {content:"Tri "}
+a.ud-sutta:before,, a.ud-vagga-sutta:before {content:"Ud "}
+/*a.tu:before {content:" "}*/
+a.uv:before {content:"Uv "}
+a.vai58:before, a.vai59:before, a.vai61:before {content:"Vai "}
+a.verse-num-pts:before {content:"PTS "}
+a.vn:before {content:"Vn "}
+a.wal48:before, a.wal50:before, a.wal52:before, a.wal57c:before, a.wal58:before, a.wal59a:before, a.wal60:before, a.wal61:before, a.wal68a:before, a.wal70a:before, a.wal70b:before, a.wal76:before, a.wal78:before, a.wal80c:before {content:"Wal "}
+a.wp:before {content:"WP "}
+a.yam72:before {content:"Yam "}
+
+
+
+#metaarea .author, #metaarea .smallcaps, #metaarea .roman_numerals {
+    font-family: $hetu-schetu-sc-font;
+    font-style:normal;
+    letter-spacing:0.02em;
+}
+
+.author {
+    font-family: $small-caps-font;
+    font-style:normal;
+    letter-spacing:0.02em;
+}
+
+.smallcaps {
+    font-family: $small-caps-font;
+    text-transform:lowercase;
+    letter-spacing:0.02em;
+}
+
+.roman_numerals {
+  text-transform:lowercase;
+    font-family: $small-caps-font;
+    font-style:normal;
+    letter-spacing:0.02em;
+}
+
+a.infomode {visibility:visible;}
+
+
+
+/* BOOKMARKED SECTION HIGHLIGHTING */
+.embeddedparallel.bookmarkeded {
+    padding: 0.5em 0.1em 0.5em 0.5em;
+    border-radius: 1em;
+    background-color: #feeae7;
+    margin-bottom: 1.5em;
+}
+/* The bottom margin is transfered to the highlighting element */
+.embeddedparallel.bookmarkeded p:last-child {
+    margin-bottom: 0em;
+}
+
+/* POPUP DICTIONARY LOOKUP */
+
+#message_box{
+    position:fixed;
+    font-family: $source-sans-pro-font;
+    font-size:80%;
+    box-shadow:3px 2px 10px rgba(136, 136, 136, 0.3);
+    background:#B0D1C3;
+    border:1px solid #75A38F;
+    border-radius:3px;
+    position:fixed;
+    top:10em;
+    left:5%;
+    padding:0.5em;
+}
+
+span.lookup {position:relative;}
+[lang=zh] span.lookup {display:inline-block;}
+span.lookup > q {position:relative;}/* display:block;float:left}*/
+span.lookup:before {content: none;}
+
+span.lookup > span.meaning {
+    position:absolute;
+    display:block;
+    font-size: 11pt;
+    z-index:2;
+    bottom:0.6em;
+    margin-bottom:1.2em;
+    padding-bottom:0em;
+    right: -50%;
+    left: -50%;
+    min-width: 10em;
+    max-width: 20em;
+    color:#1d1d1d;
+    padding:0em 1em 0em 1em;
+    font-size:normal;
+    font-family: $source-sans-pro-font;
+    box-shadow:3px 2px 5px rgba(136, 136, 136, 0.3);
+    background-color:#F7D1C2;
+    border-radius: 3px 3px 3px 3px;
+    border:1px solid #f74f3e;
+    visibility:hidden;
+    opacity:0;
+    letter-spacing:0;
+    word-spacing:0;
+    text-transform: none;
+}
+
+span.lookup > span.meaning > a {
+    font-size:105%;
+    color:black;
+    font-weight: bold;
+}
+[lang=zh] span.lookup > span.meaning > a {
+    font-weight: normal;
+    font-size: 110%;
+}
+
+span.lookup > span.meaning > a:hover {
+    color:#DF00FF;
+}
+
+span.lookup:hover {
+    color:red;
+}
+span.lookup > span.meaning:hover {
+    color:black;
+}
+
+span.lookup:hover > span.meaning {
+    visibility:visible;
+    opacity:1;
+}
+
+.syllables {
+        word-spacing: 1em;
+}
+.syllables  u {
+        text-decoration:none;
+        border-bottom:3px solid #999;
+}
+
+/*#text_info_button, #pali_lookup_button, #zh2en*/
+
+/* TEXT */
+
+
+.evam {
+    font-family: $small-caps-font;
+    letter-spacing:0.02em;
+}
+
+.sutta ul {
+    list-style-type: none;
+}
+
+.sutta ol   {
+     padding:0 0 1.5em 0;
+     margin:0 0 0 -1em;
+}
+
+.sutta ol ol  {
+     padding:0 0 0 1em;
+     margin:0 0 0 0;
+}
+
+
+.gatha {
+    font-size: inherit;
+    display: table;
+    width: auto;
+    margin: 0 auto;
+}
+
+.indent {
+  padding-left:1.5em;
+}
+
+.uddanagatha {
+    font-size: 0.8em;
+    display: table;
+    width: auto;
+    margin: 0 auto;
+    font-style:italic !important;color:#b2b2b2;
+}
+
+.endh2, .endh3, .endh4, .endh5, .endh6, .endsutta, .endvagga, .endsubdivision, .endsection, .enddivision, .bhanavara, .enduddesa
+    {
+    text-align:center;
+    font-family: $standard-font !important;
+    font-style:italic !important;color:#b2b2b2;
+}
+
+.uddana {
+    text-align:center !important;
+    font-size:0.8em !important;
+    margin-bottom:2em;
+    font-family: $standard-font !important;
+    font-style:italic !important;color:#b2b2b2;
+}
+
+.endbook {
+    text-align:center;
+    font-family: $standard-font !important;
+    font-weight:bold;color:#b2b2b2;
+}
+
+.dquo {margin-left: -1ex;position:absolute;}
+.squo {margin-left: -0.6ex;position:absolute;}
+.dsquo {margin-left: -1.6ex;position:absolute;}
+
+
+
+
+.tri {display:inline;}
+
+/* KOREAN */
+
+/* VIETNAMESE */
+
+
+
+/*CHINESE*/
+
+a.tlinehead:before {content:"CBETA "}
+
+section:lang(zh) {
+    letter-spacing:0.2em;
+}
+section:lang(zh) q {
+    letter-spacing: normal;
+}
+
+.tlinehead {
+    font-family: $source-sans-pro-font !important;
+    color:#0099cc;
+    margin: 1em 0 0 -16em;
+    font-size:0.5em !important;
+    letter-spacing:0 !important;
+    visibility:hidden;
+    position:absolute;
+}
+
+.tlineheadnote {color:red;}
+
+
+/*NEW CLASSES ADDED FOR VERSION 3.0 (PYTHON). THESE ARE MAINLY FOR SANSKRIT TEXTS. I PLACE THEM HERE FOR NOW, BUT ULTIMATELY THEY SHOUL BE INTEGRATED PROPERLY. UNDER THE DESCRIPTION IS THE TITLE ATTRIBUTE.*/
+
+.ref
+/*references external, eg to other books. Used in IBH.*/
+
+.cr
+/*cross-reference, i.e. internal references. Used in IBH.*/
+.surplus	{display:none;}
+.surplus.infomode	{display:inline;color:#4805A2}
+/*For Mahaparinirvana text, marks apparently random phrases that are marked in bold in GRETIL. 
+
+Surplus text.
+*/
+
+.supplied {}	
+.supplied.infomode	{color:#B3A72D}
+/*In almost all Sanskrit texts, there is reconstruction by the editor. These are marked <span class="supplied"></span>. In CSS this should by default display normally, and optionally, use 
+
+
+Text hypothetically reconstructed by the editor or translator.
+*/
+
+.supplied2 {}
+.supplied2.infomode	{color:#9B8D00}
+/*In some cases there are two forms of supplied text, usually differentiated in the original by () and []. This difference is retained by using supplied2 for the []. Actually these should be marked more clearly to differentiate them, but this will differ according to the various publications, which I don't have. So for now let them behave as for .supplied, except use 
+
+Text hypothetically reconstructed by the editor or translator.
+*/
+
+p .add {display: none; }
+.add.show {display: inline;}
+
+
+p .add.infomode  {
+    display:inline;
+    padding: 0 0.5em;
+    font-family: $source-sans-pro-font;
+    color:#b2b2b2;
+    font-size: 80%;
+}
+
+.add.infomode {background:#fefefe; box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);}
+
+.add.infomode .author {
+    font-family: $hetu-schetu-sc-font;
+}
+/*There are some editorial additions marked <span class="add"></span>. These should be hidden by default.
+
+Text added by the editor or translator for clarification.
+*/
+
+.suppliedmetre {
+    color: #b2b2b2;
+    font-family: $hetu-schetu-sc-font;
+}
+/*This is for cases where the editor has "filled in the blanks" (hence "supplied") with metrical notation (hence "metre"). 
+
+Metre reconstructed by the editor.
+*/
+
+.gap	{color:#B2AF8C}
+/*For marking gaps in the text, which are filled in with + or the like.  In IB Horner's translation, deliberate gaps were marked by the translator with an *. Accidental omissions are marked with +.
+
+Gap in the manuscript.
+*/
+
+.corr {}
+corr.infomode	{color:#00751A} 
+/*A corrected reading that has been adopted in the text (usually by the latest editor mentioned in the meta). By default display normally.
+
+
+Reading corrected by the editor.
+*/
+
+.sic	{display:none}
+.sic.infomode	{display:inline; color:#9B0F00;}
+/*
+Apparently incorrect reading determined by the editor.
+*/
+
+.lem {}
+.lem.infomode	{color:#432769}
+/*The adopted main reading in a text. Display normally.
+
+
+
+Accepted reading in this text.
+*/
+
+.rdg {}
+/*A variant reading. Use the same color as for "var" above. In fact, these var should be merged under rdg (which is the TEI terminology.)
+
+Variant reading.
+*/
+
+cite.book	{font-style:italic;}
+/*A book title.*/
+
+cite.article	{font-style:normal}
+/*An article title.*/
+
+.gatha-number {}
+/*As it says. Style as for other refs.*/
+
+.del	{display:none;}
+.del.infomode	{color:#EE1700;}
+/*(deletion) contains a letter, word, or passage deleted, marked as deleted, or otherwise indicated as superfluous or spurious in the copy text by an author, scribe, annotator, or corrector.
+
+Text deleted by the editor as superfluous.
+*/
+
+.unclear	{color:#b2b2b2}
+/*Text marked as uncertain, usually with a "?", in the transcribed text.
+
+Unclear reading.
+*/
+.namo		{font-style:italic;text-align:center;}
+/*dedication at the start of texts*/
+
+.scribe		{font-style:italic}
+/*note in the text recording who copied the text*/
+hr		{width:33%;color:#b2b2b2;margin:0 auto 2em}
+.rule	{font-weight:bold}
+/*text in vibhanga, etc., of the rule itself.*/
+
+
+#vinita {}
+/*Discussion of various cases in Vinaya vibhangas.*/
+
+#restatement {}
+/*Restatement of the rule in some Vinaya vibhangas.*/
+
+#pannatti-prelim {}
+/*Preliminary laying down of the rule in Vinaya vibhangas*/
+
+#pannatti {}
+/*Final laying down of the rule in Vinaya vibhangas.*/
+
+#cakka {}
+/*Permutations of rule application.*/
+
+#pada {}
+/*Definitions of terms.*/
+
+.term {}
+/*term to be defined.*/
+
+.gloss {}
+/*Definition of a term. The relevant gloss and term should be linked with id.*/
+
+.kamma {}
+/*Words spoken during a formal act of the Sangha.*/
+
+.counter {}
+/*Token, number, or syllable used in some texts as a counter. Use only for counters found in text, not added.*/
+
+.rule {}
+/*Vinaya rule or precept.*/
+
+#nidana {}
+/*Origin story.*/
+
+#nidana-sub {}
+/*Subsidiary origin story*/
+
+/*CBETA tags
+
+Generally, eliminate inline styles, and retain semantic markup. Transform all classes inherited from CBETA by prefixing with t-. This is to avoid clashing with SC classes, and also to clarify the source of the markup.. NEED TO CHANGE PREVIOUS HANDLING OF CBETA TAGS*/
+
+.t-note	{}
+/*= .note in CBETA text. Changed to avoid confusion with SC's .note. Indicates usually bracketed note or comment in the text. No need to indicate.*/
+
+.t-gaiji	{color:darkcyan}
+/*Rare character indicated in Chinese text of CBETA. These are coded thus:
+<span class="t-gaiji">勅<!--gaiji,敕,1[束*力],2&#x52C5;,3--></span>
+
+Rare character.
+*/
+
+.t-juannum {}
+/*Sutra number, possibly other numbers.*/
+
+.t-juanname {}
+/*Title of sutra, end of sutra.*/
+
+.t-byline {}
+/*attribution in CBETA.*/
+
+.titus {display:none}
+/*reference numbers that appear in some titus editions, eg. sf217. I don't know what these refer to. set display:none.*/
+
+
+.titus-random {display:none}
+/*inexplicable numbers that appear to serve the purpose of clunking up the text in Titus editions. display:none.
+
+I cannot find any explanation for either of the above two ref systems, and they are kept solely for legacy purposes.*/
+
+/*	Various ref classes. In some cases the text uses different ref numbering in different parts, where they are sourced from various manuscripts or additions. In such cases I have already marked up the numbers appropriately. 
+
+The classes are usually named according to the surname and year of publication. Here they are followed by the title, which is to be inserted with javascript.
+
+CSS Class	HTML Title
+
+.ud-vagga-sutta	"Chapter/sutta number."
+
+.ud-sutta			"Sutta number."
+
+.snp-vagga-verse	"Chapter, and verse number within the chapter."
+
+.snp-vagga-section-verse	"Chapter, section, and verse number within the section."
+
+.verse-num-pts		"Verse number in the Pali Text Society edition."
+
+.eno89		"Paragraph numbers in Enomoto, 1989."
+.uv			"Chapter and verse numbers for the Udānavarga."
+
+.dp			"Verse numbers for Dhammapada."
+
+.hoe16		"Verse numbers in Hoernle, 1916."
+
+.mat85		"Paragraph numbers in Matsumura, 1985."
+
+.mat88		"Paragraph numbers in Matsumura, 1988."
+
+.mit57		"Paragraph numbers in Mittal, 1957."
+
+.san89		"Paragraph numbers in Sander, 1987."
+
+.tri62		"Sūtra and paragraph number in Tripāṭhī, 1962."
+
+.tri95		"Section and paragraph number in Tripāṭhī, 1995."
+
+.har04		"Paragraph number in Hartmann, 2004."
+
+.fuk03		"Page numbers in Fukita, 2003"
+
+.wal50		"Paragraph numbers in Waldschmidt, 1950 (etc.)."
+
+.wal48		"Paragraph numbers for sondertext in Waldschmidt, 1948 (ST.ii)."
+
+.wal61		"Paragraph numbers for sondertext in Waldschmidt, 1961 (ST.i)."
+
+.wal55b		"Paragraph numbers in Waldschmidt, 1955b, “Die Einleitung des Saṅgītisūtra.”"
+
+.wal57c		"Paragraph numbers in Waldschmidt, 1957c, “Das Upasenasūtra.”"
+
+.wal52		"Paragraph numbers in Waldschmidt, 1952, 1956, 1960."
+
+.wal58		"Paragraph numbers in Waldschmidt, 1958."
+
+.wal59a		"Paragraph numbers in Waldschmidt, 1959a, “Kleine Brahmi-Schriftrolle.”"
+
+.wal68a		"Paragraph numbers in Waldschmidt, 1958a, “Drei Fragmente buddhistischer Sūtras aus den Turfanhandschriften.”"
+
+.wal70a		"Paragraph numbers in Waldschmidt, 1970a, Buddha frees the disc of the moon."
+
+.wal70b		"Paragraph numbers in Waldschmidt, 1970b, “Fragment of a Buddhist Sanskrit text on cosmogony.”"
+
+.wal76		"Paragraph numbers in Waldschmidt, 1976."
+
+.wal78		"Paragraph numbers in Waldschmidt, 1978."
+
+.wal80c		"Paragraph numbers in Waldschmidt, 1980c, “On a Sanskrit version of the Verahaccāni Sutta.”"
+
+.mat88		"Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988."
+
+.san87		"Paragraph numbers in Sander, 1987."
+
+.gno78		"Paragraph numbers in Gnoli, 1978."
+
+.yam72		"Paragraph numbers in Yamada, 1972."
+
+.wal60		"Paragraph numbers in Waldschmidt, 1960/1."
+
+.hos89a		"Paragraph numbers in Hosoda, 1989, “Sanskrit Fragments from the Parivrājakasaṃyukta of the Saṃyuktāgama I.”"
+
+.hos89b	"Paragraph numbers in Hosoda, 1989, “Sanskrit Fragments from the Parivrājakasaṃyukta of the Saṃyuktāgama II.”"
+
+.hos91		"Paragraph numbers in Hosoda, 1991."
+
+.vai59		"Page and line numbers in Vaidya, 1959."
+
+.vai58		"Page numbers in Vaidya, 1958."
+
+.sen82		"Section and paragraph numbers in Senart, 1882."
+.roth		"Paragraph numbers in Roth, 1970."
+
+The following references are secondary. They appear in the same files as some of the ones above, and should be styled as more distant from the text.
+
+.hs			(Not defined in GRETIL source.)
+
+.bl			(Not defined in GRETIL source.)
+
+.as			"Page numbers in Yamada, 1972."
+
+.sht			"References for SHT fragments."
+
+.gbm		"Section numbers in Gilgit Buddhist Manscripts."
+
+.fol			"Folio number in the manuscript."
+.kel		"Paragraph numbers in Kelly, Sawyer, and Yareham."
+
+.skt-mg-bu-pm	"Rule numbers in the Sanskrit Mahāsaṅghika Bhikhhu Pātimokkha."
+In a few cases there are no paragraph numbers, these should be added as "SC" numbers. These texts are:
+
+Mahavadana
+Śroṇa 1
+Śroṇa 2
+Dahra
+Sakrapasna
+Āryānityatāsūtra
+Avadanasataka
+Lalitavistara
+Sanghabhedavastu
+
+*/
+

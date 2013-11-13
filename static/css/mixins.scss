@@ -1,0 +1,63 @@
+@mixin clearfix {
+    *zoom: 1;
+
+    &:before, &:after {
+        display: table;
+        content: "";
+        line-height: 0;
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+@mixin grid-container {
+    @include box-sizing(border-box);
+    @include clearfix;
+}
+
+@mixin grid-unit($width, $side-padding: 0px, $top-padding: 0px) {
+    @include box-sizing(border-box);
+    float: left;
+    width: $width;
+
+    @if $side-padding != 0px {
+        padding: $top-padding ($side-padding / 2);
+
+        &:first-child {
+            padding-left: $side-padding;
+        }
+
+        &:last-child {
+            padding-right: $side-padding;
+        }
+    }
+}
+
+@mixin box-sizing($args...) {
+    -webkit-box-sizing: $args;
+    -o-box-sizing: $args;
+    -khtml-box-sizing: $args;
+    -ms-box-sizing: $args;
+    -moz-box-sizing: $args;
+    box-sizing: $args;
+}
+
+@mixin transition($defs...) {
+    -webkit-transition: $defs;
+    -moz-transition: $defs;
+    -o-transition: $defs;
+    transition: $defs;
+}
+
+@mixin vertical-linear-gradient($top, $bottom) {
+    background: $top;
+    background: -moz-linear-gradient(top, $top 0%, $bottom 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $top), color-stop(100%, $bottom));
+    background: -webkit-linear-gradient(top, $top 0%, $bottom 100%);
+    background: -o-linear-gradient(top, $top 0%, $bottom 100%);
+    background: -ms-linear-gradient(top, $top 0%, $bottom 100%);
+    background: linear-gradient(to bottom, $top 0%, $bottom 100%);
+    filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#{ie-hex-str($top)}', endColorstr='#{ie-hex-str($bottom)}', GradientType=0 )";
+}

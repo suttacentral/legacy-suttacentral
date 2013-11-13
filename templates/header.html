@@ -1,0 +1,41 @@
+<div id="page-header">
+<header>
+
+<div id="page-header-wheel">
+    <a href="/">☸</a>
+</div>
+<h1 id="page-header-title">
+    <a href="/">SuttaCentral
+        {%- if offline -%}<em>Offline</em>{%- endif -%}
+    </a>
+</h1>
+<h2 id="page-header-caption">
+    <a href="/">Early Buddhist texts, translations, and parallels</a>
+</h2>
+
+<div id="page-header-menu">
+{% for collection in collections | reverse -%}
+<nav>
+    <h3>{{collection.name}}</h3>
+    <ul>
+    {% for division in collection.divisions %}
+        <li><a href="{{division.link}}">{{division.name}}</a></li>
+    {% endfor %}
+    </ul>
+</nav>
+{%- endfor %}
+</div><!-- page-header-menu -->
+
+{% if not offline %}
+<form id="page-header-search" action="/search">
+    <input type="text" name="query" size="25" placeholder="Search" autocomplete="off" value="{{ search_query }}">
+    <button title="Search">
+        <img src="/img/search-icon-16.png">
+    </button>
+</form><!-- page-header-search -->
+{% endif %}
+
+<div id="page-header-search-results" style="display: none;"></div>
+
+</header>
+</div><!-- page-header -->

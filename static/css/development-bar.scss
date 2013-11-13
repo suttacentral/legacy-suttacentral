@@ -1,0 +1,44 @@
+$development-bar-color: white;
+$development-bar-background-color: rgb(67,39,105);
+$development-bar-height: 2em;
+
+.development-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: 100%;
+    height: $development-bar-height;
+    background-color: $development-bar-background-color;
+    line-height: $development-bar-height;
+    text-align: center;
+    color: $development-bar-color;
+    overflow: hidden;
+
+    @media print {
+        display: none;
+    }
+
+    a, a:visited {
+        color: $development-bar-color;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    img {
+        vertical-align: middle;
+        width: 4em;
+        height: 1em;
+    }
+}
+
+.development-bar-push {
+    width: 100%;
+    height: $development-bar-height;
+
+    @media print {
+        display: none;
+    }
+}

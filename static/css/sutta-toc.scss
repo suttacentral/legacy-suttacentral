@@ -1,0 +1,162 @@
+$sutta-toc-text-color: #6f6f6f;
+$sutta-toc-background-color: #f6f6f6;
+$sutta-toc-shadow-color: rgb(136, 136, 136);
+$sutta-toc-text-shadow-color: #fefefe;
+$sutta-toc-text-border-color: #ccc;
+$sutta-toc-button-border-color: #aaa;
+$sutta-toc-menu-hover-color: #e6e6e6;
+
+$sutta-toc-border-radius: 3px;
+$sutta-toc-button-height: 26px;
+$sutta-toc-font-size: 13px;
+$sutta-toc-menu-font-size: 11px;
+
+#toc {
+    display: table;
+    position: relative;
+    float: right;
+    margin: 7em 0.5em 0 1em;
+    width: 12em;
+
+    @media #{$mobile} {
+        display: static;
+        float: inherit;
+        margin: 2em 0em;
+        padding: 0;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    button {
+        @include box-sizing(border-box);
+        display: block;
+        width: 100%;
+        height: $sutta-toc-button-height;
+        margin: 0;
+        padding: 0;
+        border: 1px solid $sutta-toc-button-border-color;
+        border-radius: $sutta-toc-border-radius;
+        box-shadow: 0 0 3px rgba($sutta-toc-shadow-color, 0.3);
+        font-family: $source-sans-pro-font;
+        font-size: $sutta-toc-font-size;
+        color: $sutta-toc-text-color;
+        text-shadow: 1px 1px 1px $sutta-toc-text-shadow-color;
+        line-height: $sutta-toc-button-height - 2px;
+        letter-spacing: 0;
+        word-spacing: 0;
+    }
+}
+
+#menu {
+    margin: 0 0 1em 0;
+    padding: 0.5em 1em;
+    border: 1px solid $sutta-toc-text-border-color;
+    border-radius: $sutta-toc-border-radius;
+    background-color: $sutta-toc-background-color;
+
+    @media #{$mobile} {
+        margin-left: $mobile-main-side-margin;
+        margin-right: $mobile-main-side-margin;
+    }
+
+    ul, li {
+        margin: 0;
+        padding: 0;
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    li {
+        font-family: $source-sans-pro-font;
+        font-size: $sutta-toc-menu-font-size;
+        line-height: 1.5em;
+        font-weight: bold;
+
+        & > a {
+            display: block;
+            width: 100%;
+            padding: 0.2em 0.1em;
+            color: $sutta-toc-text-color;
+            
+            &:hover {
+                background-color: $sutta-toc-menu-hover-color;
+            }
+        }
+
+        li {
+            font-weight: normal;
+        }
+    }
+}
+
+#textual_controls {
+    @media #{$mobile} {
+        margin-left: $mobile-main-side-margin;
+        margin-right: $mobile-main-side-margin;
+    }
+}
+
+#translitButtons {
+    width: 100%;
+
+    @media #{$mobile} {
+        margin-left: $mobile-main-side-margin;
+        margin-right: $mobile-main-side-margin;
+    }
+
+    & > button {
+        display: inline-block;
+        float: left;
+        width: 16.6667%;
+        border-left: 0;
+        border-radius: 0;
+
+        &:first-child {
+            border-radius: $sutta-toc-border-radius 0 0 $sutta-toc-border-radius;
+            border-left: 1px solid $sutta-toc-button-border-color;
+        }
+
+        &:last-child {
+            border-radius: 0 $sutta-toc-border-radius $sutta-toc-border-radius 0;
+        }
+    }
+}
+
+button#text_info_button,
+button#pali_lookup_button,
+#translitButtons {
+    margin: 0.5em 0 1em 0;
+}
+
+#metaarea {
+    margin: 1em 0;
+    padding: 0.5em 1em;
+    border: 1px solid $sutta-toc-text-border-color;
+    border-radius: $sutta-toc-border-radius;
+    color: $sutta-toc-text-color;
+    background-color: $sutta-toc-background-color;
+    font-family: $source-sans-pro-font;
+    font-size: $sutta-toc-font-size;
+    letter-spacing: 0;
+
+    @media #{$mobile} {
+        margin-left: $mobile-main-side-margin;
+        margin-right: $mobile-main-side-margin;
+    }
+
+    p {
+        margin: 0.5em 0;
+    }
+}
+
+#pali_lookup_log {
+    position: fixed;
+    right: 1em;
+    top: 1em;
+    margin: 0;
+    margin-top: -1em;
+    padding: 0;
+    color: #ddd;
+}

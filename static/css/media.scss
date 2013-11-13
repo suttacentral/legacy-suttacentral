@@ -1,0 +1,11 @@
+$mobile-max-width: 480px;
+$tablet-max-width: 908px;
+
+$mobile: "only screen and (max-width: #{$mobile-max-width})";
+$tablet: "only screen and (min-width: #{$mobile-max-width + 1px}) and (max-width: #{$tablet-max-width})";
+$desktop: "only screen and (min-width: #{$tablet-max-width + 1px})";
+
+$mobile-and-tablet: "only screen and (max-width: #{$tablet-max-width})";
+$tablet-and-mobile: $mobile-and-tablet;
+$tablet-and-desktop: "only screen and (min-width: #{$mobile-max-width + 1px})";
+$desktop-and-tablet: $tablet-and-desktop;
