@@ -20,6 +20,10 @@ css_normalize = webassets.Bundle(
     'css/vendor/normalize-2.1.3.css'
 )
 
+css_utf8 = webassets.Bundle(
+    'css/utf8.css'
+)
+
 css_main_free = webassets.Bundle(
     'css/main-free.scss',
     depends='css/*.scss',
@@ -37,6 +41,7 @@ css_main_nonfree = webassets.Bundle(
 css_free = webassets.Bundle(
     css_normalize,
     css_main_free,
+    css_utf8,
     filters='cssmin',
     output='css/compiled/free-%(version)s.css'
 )
@@ -44,6 +49,7 @@ css_free = webassets.Bundle(
 css_nonfree = webassets.Bundle(
     css_normalize,
     css_main_nonfree,
+    css_utf8,
     filters='cssmin',
     output='css/compiled/nonfree-%(version)s.css'
 )
