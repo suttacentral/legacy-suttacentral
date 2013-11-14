@@ -278,6 +278,7 @@ var scState = {
     _target: (function(){
         if ($("#text").length) return $("#text")[0];
         if ($("#onecol").length) return $("#onecol")[0];
+        if ($("#home").length) return $("#home")[0];
         if ($("body section").length) return $("body section")[0];
         throw "Error!";
     }) (),
