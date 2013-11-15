@@ -58,6 +58,7 @@ env.register('css_free', css_free)
 env.register('css_nonfree', css_nonfree)
 
 js_core = webassets.Bundle(
+    'js/vendor/ZeroClipboard-1.2.3.js',
     'js/easytabs.js',
     'js/nav.js',
     'js/sc_functions.js',
