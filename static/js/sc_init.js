@@ -110,14 +110,15 @@ $(document).ready(function() {
             moviePath: "/js/vendor/ZeroClipboard-1.2.3.swf"
         });
         clip.on('load', function(client) {
-            console.log('ZeroClipboard loaded');
+            parallelCitationButton.show();
+            // console.log('ZeroClipboard loaded');
             client.on('complete', function(client, args) {
-                console.log('Copied text: ' + text);
+                // console.log('Copied text: ' + text);
             });
         });
         clip.on('dataRequested', function(client, args) {
             var text = parallelCitationTextField.val();
-            console.log('Text set to: ' + text);
+            // console.log('Text set to: ' + text);
             client.setText(text);
         });
     }
