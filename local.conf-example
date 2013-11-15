@@ -13,11 +13,13 @@
 [app]
     # app_log_file: 'log/app.log'
     # app_log_level: 'DEBUG'
+    # base_url: 'http://localhost:8800'
     # compile_assets: False
     # console_log_level: 'DEBUG'
     # db_refresh_interval: 90
     # dbr_cache_file: 'tmp/dbr.cache'
     # debug: True
+    # default_locale: 'en_AU'
     # development_bar: 'Local Development'
     # exports_root: 'static/exports'
     # newrelic_license_key: '...'

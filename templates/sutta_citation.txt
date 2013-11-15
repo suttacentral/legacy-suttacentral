@@ -16,3 +16,4 @@ Parallels for {{ sutta.acronym }} {{ sutta.name }} ({{ sutta.volpage_info }}):
         {{ ';' }}
     {%- endif -%}
 {%- endfor -%}
+. Retrieved from {{ config.base_url }}/{{ sutta.uid }} on {{ current_datetime | date('medium') }}.

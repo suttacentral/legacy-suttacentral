@@ -1,0 +1,15 @@
+#parallel-citation {
+    float: right;
+
+    & > button {
+        border: 1px solid $medium-gray;
+        border-radius: 0.25em;
+        background: $light-gray;
+        color: $dark-gray;
+        font-family: $source-sans-pro-font;
+
+        &:hover {
+            background: darken($light-gray, 5%);
+        }
+    }
+}

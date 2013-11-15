@@ -100,7 +100,19 @@ $(document).ready(function() {
     if ($('.sutta').length > 0){
         textualControls.init();
     }
-
+    var parallelCitationButton = $('#parallel-citation > button');
+    if (parallelCitationButton.length) {
+        // console.log("citation clip");
+        var clip = new ZeroClipboard(parallelCitationButton, {
+            moviePath: "/js/vendor/ZeroClipboard-1.2.3.swf"
+        });
+        clip.on('load', function(client) {
+            // console.log('ZeroClipboard loaded');
+            client.on('complete', function(client, args) {
+                // console.log(args.text);
+            });
+        });
+    }
 });
 
 // Offline bodge

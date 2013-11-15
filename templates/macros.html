@@ -52,15 +52,20 @@
 {# This macro should be called with the context.
    If either or both flags are set in the context
    then the extra footer info is included in the page #}
-{% macro table_footer() -%}
-{% if has_alt_acronym or has_alt_volpage -%} 
-<tfoot>
-{% if has_alt_acronym -%}
-<tr><td colspan="5">[...] indicates alternative PTS or Taishō numbering.</td></tr>
-{%- endif -%}
+{% macro table_footer() %}
+{% if citation or has_alt_acronym or has_alt_volpage %}
+<tfoot><tr><td colspan="5">
+{% if citation %}
+    <div id="parallel-citation">
+        <button data-clipboard-text="{{ citation | e }}" title="Click to copy table data to clipboard">Cite</button>
+    </div>
+{% endif %}
+{% if has_alt_acronym %}
+    <p>[...] indicates alternative PTS or Taishō numbering.</p>
+{% endif %}
 {% if has_alt_volpage %}
-<tr><td colspan="5">&lt;...> refers to PTS 1998 (Somaratne) edition of SN Vol I.</td></tr>
-{% endif -%}
-</tfoot>
-{% endif -%}
+    <p>&lt;...&gt; refers to PTS 1998 (Somaratne) edition of SN Vol I.</p>
+{% endif %}
+</td></tr></tfoot>
+{% endif %}
 {% endmacro %}
