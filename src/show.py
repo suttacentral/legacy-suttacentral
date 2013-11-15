@@ -64,6 +64,14 @@ def default(*args, **kwargs):
         if sutta:
             return ParallelView(sutta).render()
     elif len(args) == 2:
+        if args[1] == 'citation.txt':
+            # Citation
+            cherrypy.response.headers['Content-Type'] = "text/plain"
+            sutta = dbr.suttas.get(args[0])
+            if sutta:
+                return SuttaCitationView(sutta).render()
+            else:
+                raise cherrypy.NotFound()
         # Sutta or Translation Texts
         lang_code = args[1]
         path = '%s/%s' % (uid, lang_code)

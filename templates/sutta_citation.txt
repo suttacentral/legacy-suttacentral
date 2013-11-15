@@ -1,0 +1,18 @@
+Parallels for {{ sutta.acronym }} {{ sutta.name }} ({{ sutta.volpage_info }}):
+{%- for parallel in sutta.parallels -%}
+    {%- set psutta = parallel.sutta -%}
+    {%- set sht_test = psutta.acronym[0:3] | upper -%}
+    {%- if sht_test == 'SHT' -%}
+        {{ ' ' + psutta.volpage_info }}
+    {%- else -%}
+        {{ ' ' + psutta.acronym + ' ' }}
+        {%- if psutta.biblio_entry -%}
+            ({{ psutta.biblio_entry.text }})
+        {%- else -%}
+            ({{ psutta.volpage_info }})
+        {%- endif -%}
+    {%- endif -%}
+    {%- if not loop.last -%}
+        {{ ';' }}
+    {%- endif -%}
+{%- endfor -%}

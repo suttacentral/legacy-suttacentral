@@ -487,3 +487,13 @@ class ShtLookupView(ViewBase):
         if self.redir_url:
             raise cherrypy.HTTPRedirect(self.redir_url, 302)
 
+class SuttaCitationView(ViewBase):
+
+    def __init__(self, sutta):
+        self.sutta = sutta
+
+    def get_template(self):
+        return self.env.get_template('sutta_citation.txt')
+
+    def setup_context(self, context):
+        context.sutta = self.sutta
