@@ -57,7 +57,9 @@
 <tfoot><tr><td colspan="5">
 {% if citation %}
     <div id="parallel-citation">
-        <button data-clipboard-text="{{ citation | e }}" title="Click to copy table data to clipboard">Cite</button>
+        <span class="citation">Citation:</span>
+        <input type="text" readonly value="{{ citation | e }}"><!--
+        --><button title="Click to copy table data to clipboard">Copy</button>
     </div>
 {% endif %}
 {% if has_alt_acronym %}

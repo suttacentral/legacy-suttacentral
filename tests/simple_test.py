@@ -39,8 +39,8 @@ class SimpleTestCase(SCTestCase):
 
     def test_parallel_citation(self):
         self.goto('/dn4')
-        button = self.css('#parallel-citation > button')
-        full_citation = button.get_attribute('data-clipboard-text')
+        text_input = self.css('#parallel-citation > input')
+        full_citation = text_input.get_attribute('value')
         regex = r'^(.+)\. Retrieved from (.+) on (.+)\.$'
         self.assertRegex(full_citation, regex)
         matches = re.search(regex, full_citation)

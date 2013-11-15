@@ -40,7 +40,7 @@ body {
 #onecol, #twocol, #main_content, #text {
     margin: 0 auto;
     max-width: $page-max-width;
-    overflow: auto;
+    clear: both;
 
     @media #{$mobile-and-tablet} {
         max-width: inherit;

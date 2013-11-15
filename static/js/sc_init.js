@@ -100,17 +100,25 @@ $(document).ready(function() {
     if ($('.sutta').length > 0){
         textualControls.init();
     }
+    var parallelCitationTextField = $('#parallel-citation > input');
     var parallelCitationButton = $('#parallel-citation > button');
     if (parallelCitationButton.length) {
-        // console.log("citation clip");
+        parallelCitationTextField.on('click', function() {
+            parallelCitationTextField.select();
+        });
         var clip = new ZeroClipboard(parallelCitationButton, {
             moviePath: "/js/vendor/ZeroClipboard-1.2.3.swf"
         });
         clip.on('load', function(client) {
-            // console.log('ZeroClipboard loaded');
+            console.log('ZeroClipboard loaded');
             client.on('complete', function(client, args) {
-                // console.log(args.text);
+                console.log('Copied text: ' + text);
             });
+        });
+        clip.on('dataRequested', function(client, args) {
+            var text = parallelCitationTextField.val();
+            console.log('Text set to: ' + text);
+            client.setText(text);
         });
     }
 });

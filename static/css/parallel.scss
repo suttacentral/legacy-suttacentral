@@ -1,12 +1,31 @@
 #parallel-citation {
     float: right;
 
-    & > button {
+    & > input, & > button {
+        @include box-sizing(border-box);
+        display: inline-block;
+        position: relative;
+        margin: 0;
+        padding: 0 0.5em;
+        height: 24px;
         border: 1px solid $medium-gray;
         border-radius: 0.25em;
+        vertical-align: middle;
+    }
+
+    & > input {
+        width: 14em;
+        font-family: monospace;
+        font-size: 0.75em;
+        border-right: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    & > button {
         background: $light-gray;
-        color: $dark-gray;
-        font-family: $source-sans-pro-font;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
 
         &:hover {
             background: darken($light-gray, 5%);
