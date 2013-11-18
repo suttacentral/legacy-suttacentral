@@ -253,13 +253,9 @@ class TextView(ViewBase):
         context.text = self.content_html(doc.body)
 
     @property
-    def filename(self):
-        return os.path.join(self.lang_code, self.uid) + '.html'
-
-    @property
     def path(self):
-        return os.path.join(config.text_root, self.filename)
-
+        return scdb.getDBR().text_paths[self.lang_code].get(self.uid)
+    
     def get_document(self):
         """Return the BeautifulSoup document object of the text or raise
         a cherrypy.NotFound exception"""

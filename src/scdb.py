@@ -89,7 +89,7 @@ class _DBR:
         self.sort_translations()
         self.build_parallels()
         self.build_search_data()
-        self.build_file_data()
+        self.build_text_paths()        
     
     def __call__(self, uid):
         if uid in self.collections:
@@ -136,6 +136,10 @@ class _DBR:
 
         Some things, such as parallels, are not indexed at all, and are
         only accessable as attributes of the relevant suttas.
+        
+        The dbr also examines the file system. The fully qualified path to a 
+        text can be acquired using:
+        dbr.text_paths[lang][uid]
 
         """
 
@@ -496,10 +500,25 @@ class _DBR:
             for sutta in self.suttas.values()])
 
         self.searchstrings = list(zip(self.suttas.values(), suttastrings, suttastringsU, suttanamesimplified))
+       
+    def build_text_paths(self):
+        """ Provides fully qualified paths for all texts.
         
-    def build_file_data(self):
-        self.static_pages = ()
-        #([a[:-5] for a in os.listdir(config.static_root) if a.endswith('.html')])
+        Texts are keyed [lang][uid]
+        Note that subfolders within a langroot are ignored. For example a file:
+        text_root/pi/sn/56/sn56.11.html would be found by the key ('pi', 'sn56.11'),
+        thus subfolders exist solely for ease of file organization.
+        """
+        import glob
+        self.text_paths = collections.defaultdict(dict)
+        
+        for langroot in glob.glob(config.text_root + '/*'):
+            lang = os.path.basename(langroot)
+            for basedir, subdirs, filenames in os.walk(langroot):
+                for filename in filenames:
+                    uid = filename.replace('.html', '')
+                    assert uid not in self.text_paths[lang]
+                    self.text_paths[lang][uid] = os.path.join(basedir, filename)      
 
     def deep_md5(self, ids=False):
         """ Calculate a md5 for the data. Takes ~0.5s on a fast cpu.
