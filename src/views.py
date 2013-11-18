@@ -1,5 +1,5 @@
 import babel.dates, cherrypy, http.client, jinja2, newrelic.agent, os.path
-import regex, socket, time, urllib.parse
+import datetime, regex, socket, time, urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
 from bs4 import BeautifulSoup
 
@@ -30,9 +30,16 @@ def jinja2_environment():
     )
     env.assets_environment = assets.env
 
-    def datetime_filter(value, format='short', locale='en_AU'):
-        return babel.dates.format_datetime(value,
-            format=format, locale=locale)
+    def date_filter(value, format='short', locale=config.default_locale):
+        return babel.dates.format_date(value, format=format, locale=locale)
+    env.filters['date'] = date_filter
+
+    def time_filter(value, format='short', locale=config.default_locale):
+        return babel.dates.format_time(value, format=format, locale=locale)
+    env.filters['time'] = time_filter
+
+    def datetime_filter(value, format='short', locale=config.default_locale):
+        return babel.dates.format_datetime(value, format=format, locale=locale)
     env.filters['datetime'] = datetime_filter
 
     def sub_filter(string, pattern, repl):
@@ -133,6 +140,8 @@ class ViewBase:
         """Return a dictionary of variables accessible by all templates."""
         return ViewContext({
             'collections': menu_data,
+            'config': config,
+            'current_datetime': datetime.datetime.now(),
             'development_bar': config.development_bar,
             'newrelic_browser_timing': NewRelicBrowserTimingProxy(),
             'nonfree_fonts': config.nonfree_fonts and not cherrypy.request.offline,
@@ -236,6 +245,7 @@ class ParallelView(ViewBase):
         context.parallels = parallels
         context.has_alt_volpage = has_alt_volpage
         context.has_alt_acronym = has_alt_acronym
+        context.citation = SuttaCitationView(self.sutta).render()
 
 class TextView(ViewBase):
     """The view for showing the text of a sutta or tranlsation."""

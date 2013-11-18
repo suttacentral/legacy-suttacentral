@@ -1,0 +1,100 @@
+// Color palette for use with SuttaCentral
+
+// Main Palette URL: http://colorschemedesigner.com/#1E42P99tSw0w0
+
+$yellow-color:        #EEE8AA;
+$faded-yellow-color:  #B3AF8C;
+$dark-yellow-color:   #9B9237;
+$light-yellow-color:  #F7F2C2;
+$bright-yellow-color: #F7F3D0;
+
+$green-color:         #75A38F;
+$faded-green-color:   #607A6F;
+$dark-green-color:    #266A4D;
+$light-green-color:   #A4D1BE;
+$bright-green-color:  #B0D1C3;
+
+$red-color:           #EEBDAA;
+$faded-red-color:     #B3978C;
+$dark-red-color:      #9B5437;
+$light-red-color:     #F7D1C2;
+$bright-red-color:    #F7DBD0;
+
+$purple-color:        #8977A1;
+$faded-purple-color:  #6C6179;
+$dark-purple-color:   #432769;
+$light-purple-color:  #B9A7D0;
+$bright-purple-color: #BFB2D0;
+
+// Saturated Palette URL: http://colorschemedesigner.com/#1E42EP6tVw0w0
+
+$saturated-yellow-color:        #EED900;
+$saturated-faded-yellow-color:  #B3A72D;
+$saturated-dark-yellow-color:   #9B8D00;
+$saturated-light-yellow-color:  #F7E63E;
+$saturated-bright-yellow-color: #F7EA6F;
+
+$saturated-green-color:         #00B428;
+$saturated-faded-green-color:   #228738;
+$saturated-dark-green-color:    #00751A;
+$saturated-light-green-color:   #36DA5A;
+$saturated-bright-green-color:  #62DA7C;
+
+$saturated-red-color:           #EE1700;
+$saturated-faded-red-color:     #B3392D;
+$saturated-dark-red-color:      #9B0F00;
+$saturated-light-red-color:     #F74F3E;
+$saturated-bright-red-color:    #F77C6F;
+
+$saturated-purple-color:        #4805A2;
+$saturated-faded-purple-color:  #472179;
+$saturated-dark-purple-color:   #2E0269;
+$saturated-light-purple-color:  #7A39D0;
+$saturated-bright-purple-color: #9161D0;
+
+// Other colors (e.g., grays)
+
+$light-gray: rgb(246, 246, 246);
+$medium-gray: rgb(161, 161, 161);
+$dark-gray: rgb(43, 43, 43);
+
+// Styles for the color sample page
+
+#colors-page {
+
+    & > .container {
+        @include grid-container;
+        & > .unit {
+            @include grid-unit(25%, 0.5em, 0.25em);
+        }
+    }
+
+    h2 {
+        margin-top: 1em;
+    }
+
+    $types: "" "saturated-";
+    $styles: "" "faded-" "dark-" "light-" "bright-";
+    $colors: "yellow" "green" "red" "purple";
+
+    @each $type in $types {
+        @each $style in $styles {
+            @each $color in $colors {
+                $name: #{$type}#{$style}#{$color};
+                .b-#{$name} {
+                    min-height: 3em;
+                    padding: 0.25em 0.5em;
+                    font-family: fixed;
+                    font-size: 0.8em;
+                    line-height: 1.3em;
+                    background-color: $#{$name}-color;
+                    @if lightness($#{$name}-color) > 60% {
+                        color: black;
+                    } @else {
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}

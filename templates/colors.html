@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="onecol">
+<article>
+
+{% set types = ["", "saturated-"] %}
+{% set styles = ["", "faded-", "dark-", "light-", "bright-"] %}
+{% set colors = ["yellow", "green", "red", "purple"] %}
+
+<div id="colors-page">
+
+    <h1>SuttaCentral Colors</h1>
+
+    {% for type in types %}
+        <h2>
+            {% if type == "" %}
+                Main Colors
+            {% else %}
+                Saturated Colors
+            {% endif %}
+        </h2>
+        {% for style in styles %}
+            <div class="container">
+                {% for color in colors %}
+                    <div class="unit">
+                        <div class="b-{{ type }}{{ style }}{{ color }}">
+                            ${{ type }}{{ style }}{{ color }}-color
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+</article>
+</div>
+{% endblock %}
