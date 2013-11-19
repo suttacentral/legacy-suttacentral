@@ -53,13 +53,14 @@ def fileiter(path, ext=None, rex=None):
     if rex is not None and type(rex) is str:
         rex = regex.compile(rex)
     extmatch = regex.compile(r'.*\.(.*)').match
-    for f in os.listdir(path):
-        if ext:
-            m = extmatch(f)
-            if not m or m[1] not in ext:
-                continue
-        if not rex or rex.search(f):
-            yield os.path.join(path, f)
+    for basedir, dirs, filenames in os.walk(path):
+        for filename in filenames:
+            if ext:
+                m = extmatch(filename)
+                if not m or m[1] not in ext:
+                    continue
+            if not rex or rex.search(filename):
+                yield os.path.join(basedir, filename)
         
 def find_best_id(tag):
     while True:
