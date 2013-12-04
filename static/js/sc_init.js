@@ -100,6 +100,7 @@ $(document).ready(function() {
     if ($('.sutta').length > 0){
         textualControls.init();
     }
+    var parallelCitationLabel = $('#parallel-citation .label');
     var parallelCitationTextField = $('#parallel-citation > input');
     var parallelCitationButton = $('#parallel-citation > button');
     if (parallelCitationButton.length) {
@@ -107,9 +108,12 @@ $(document).ready(function() {
             parallelCitationTextField.select();
         });
         var clip = new ZeroClipboard(parallelCitationButton, {
-            moviePath: "/js/vendor/ZeroClipboard-1.2.3.swf"
+            moviePath: "/js/vendor/ZeroClipboard-1.2.3.swf",
+            hoverClass: "hover",
+            activeClass: "active"
         });
         clip.on('load', function(client) {
+            parallelCitationLabel.hide();
             parallelCitationButton.show();
             // console.log('ZeroClipboard loaded');
             client.on('complete', function(client, args) {
