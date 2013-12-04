@@ -1,0 +1,36 @@
+// Styles for the fonts sample page
+
+#fonts-page {
+
+    p {
+        font-size: 32px;
+        line-height: 1.1em;
+        margin: 0 0 0 1em;
+        padding: 0;
+    }
+    
+    h2 {
+        margin: 1em 0;
+    }
+
+    .serif-ligatures-off {
+        font-family: serif;
+        @include font-feature-settings("kern" 0, "liga" 0, "dlig" 0);
+    }
+
+    .skolar-sutta-web-ligatures-off {
+        font-family: $standard-font;
+        @include font-feature-settings("kern" 0, "liga" 0, "dlig" 0);
+    }
+
+    .skolar-sutta-web-ligatures-on {
+        font-family: $standard-font;
+        @include font-feature-settings("kern" 1, "liga" 1, "dlig" 1);
+    }
+
+    .skolar-sutta-web-sc-ligatures-on {
+        font-family: $small-caps-font;
+        @include font-feature-settings("kern" 1, "liga" 1, "dlig" 1);
+    }
+
+}

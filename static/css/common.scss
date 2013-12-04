@@ -25,9 +25,7 @@ body {
 
     // Use kerning and ligatures if possible...
     // See http://blog.fontdeck.com/post/15777165734/opentype-1
-    -moz-font-feature-settings: "kern", "liga";
-    -webkit-font-feature-settings: "kern", "liga";
-    font-feature-settings: "kern", "liga";
+    @include font-feature-settings("kern" 1, "liga" 1, "dlig" 1);
 
     @media #{$mobile} {
         font-size: $mobile-body-font-size;

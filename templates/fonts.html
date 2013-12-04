@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="onecol">
+<article>
+
+{% set test_ligature_text = ' '.join([ 'fi', 'fj', 'fl', 'ff', 'ffi', 'ffl', 'ft', 'fb', 'fh', 'Fi', 'Th' ]) %}
+
+{%- macro test_ligatures() -%}
+    <p>{{ test_ligature_text }}</p>
+    <p><strong>{{ test_ligature_text }}</strong></p>
+    <p><em>{{ test_ligature_text }}</em></p>
+    <p><strong><em>{{ test_ligature_text }}</em></strong></p>
+{%- endmacro -%}
+    
+<div id="fonts-page">
+
+    <h1>SuttaCentral Fonts</h1>
+
+    <h2>Serif Ligatures Off</h2>
+    <div class="serif-ligatures-off">
+        {{ test_ligatures() }}
+    </div>
+
+    <h2>Skolar Sutta Web Ligatures Off</h2>
+    <div class="skolar-sutta-web-ligatures-off">
+        {{ test_ligatures() }}
+    </div>
+
+    <h2>Skolar Sutta Web Ligatures On</h2>
+    <div class="skolar-sutta-web-ligatures-on">
+        {{ test_ligatures() }}
+    </div>
+
+    <h2>Skolar Sutta Web Small Caps Ligatures On</h2>
+    <div class="skolar-sutta-web-sc-ligatures-on">
+        {{ test_ligatures() }}
+    </div>
+
+</div>
+
+</article>
+</div>
+{% endblock %}
