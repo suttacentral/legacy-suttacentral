@@ -10,8 +10,11 @@ import config
 
 """Asset (CSS, JavaScript) compilation."""
 
-cache_dir = os.path.join(config.base_dir, 'tmp', 'webassets-cache')
-manifest_path = os.path.join(config.base_dir, 'tmp', 'webassets-manifest')
+manifest_path = os.path.join(config.base_dir, 'db', 'webassets', 'manifest')
+cache_dir = os.path.join(config.base_dir, 'db', 'webassets', 'cache')
+compiled_css_dir = os.path.join(config.static_root, 'css', 'compiled')
+compiled_js_dir = os.path.join(config.static_root, 'js', 'compiled')
+
 # For some reason, webassets does not create these directories if
 # they do not exist...
 if not os.path.exists(cache_dir):
@@ -76,29 +79,32 @@ js_core = webassets.Bundle(
 )
 env.register('js_core', js_core)
 
-def build():
+def compile():
+    """Compile assets."""
     log = logging.getLogger(__name__)
     cmd = CommandLineEnvironment(env, log)
     cmd.build()
 
-def clean_outdated():
+def clean(all=False):
     """Remove outdated compiled assets."""
-    print('Removing outdated compiled assets...')
+
+    maximum_ctime = None
     try:
-        manifest_ctime = os.path.getctime(manifest_path)
+        maximum_ctime = os.path.getmtime(manifest_path)
+        maximum_ctime -= 60 # seconds
     except OSError:
-        print('  Manifest {} does not exist, aborting')
-    maximum_ctime = manifest_ctime - (1 * 24 * 60 * 60) # 1 day
+        all = true
+
     cache_glob = os.path.join(cache_dir, '*')
-    css_glob = os.path.join(config.static_root, 'css', 'compiled', '*.css')
-    js_glob = os.path.join(config.static_root, 'js', 'compiled', '*.js')
+    css_glob = os.path.join(compiled_css_dir, '*.css')
+    js_glob = os.path.join(compiled_js_dir, '*.js')
     paths = glob.glob(cache_glob) + glob.glob(css_glob) + glob.glob(js_glob)
+    if all:
+        paths += [ manifest_path ]
 
     for path in paths:
         try:
-            ctime = os.path.getctime(path)
-            if ctime < maximum_ctime:
-                print('  Removing {}'.format(path))
+            if all or os.path.getctime(path) < maximum_ctime:
                 os.unlink(path)
         except OSError:
             pass

@@ -1,7 +1,7 @@
 all: server
 
 server:
-	cd src && ./server.py
+	invoke server
 
 deploy-staging:
 	ssh sc-staging@vps.suttacentral.net \
@@ -63,18 +63,11 @@ deploy-texts-production:
 		make build-search-indexes'
 		
 clean:
-	rm -rf \
-		__pycache__ \
-		src/__pycache__ \
-		log/*.log \
-		tmp/*
+	invoke clean
 clean-assets:
-	rm -rf \
-		static/css/compiled/*.css \
-		static/js/compiled/*.js \
-		tmp/webassets*
-clean-outdated-assets:
-	cd src && python -c 'import assets; assets.clean_outdated()'
+	invoke assets.clean
+clean-all-assets:
+	invoke assets.clean --aggressive
 clean-db:
 	rm -f db/*.sqlite db/*.sqlite.tmp*
 clean-exports:
@@ -84,8 +77,10 @@ clean-old-exports:
 
 clean-all: clean clean-assets clean-db clean-exports
 
-build-assets:
-	cd src && python -c 'import assets;assets.build()'
+build-assets: compile-assets
+
+compile-assets:
+	invoke assets.compile
 
 build-dict:
 	cd src && python build_dict_db.py
@@ -127,8 +122,8 @@ create-newrelic-ini:
 test: test-local
 
 test-local:
-	python -m unittest discover -s tests -p '*_test.py'
+	invoke test
 test-staging:
-	URL='http://staging.suttacentral.net/' python -m unittest discover -s tests -p '*_test.py'
+	invoke test --url='http://staging.suttacentral.net/'
 test-production:
-	URL='http://suttacentral.net/' python -m unittest discover -s tests -p '*_test.py'
+	invoke test --url='http://suttacentral.net/'
