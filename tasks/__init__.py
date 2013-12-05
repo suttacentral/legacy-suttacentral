@@ -13,8 +13,6 @@ for name, obj in inspect.getmembers(tasks.root):
     if isinstance(obj, Task):
         ns.add_task(obj)
 
-import tasks.assets
-ns.add_collection(tasks.assets)
-
-import tasks.travis
-ns.add_collection(tasks.travis)
+for name in ['assets', 'db', 'travis']:
+    __import__('tasks.' + name)
+    ns.add_collection(eval('tasks.' + name))

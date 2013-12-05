@@ -102,19 +102,19 @@ create-production-db-export:
 	utility/export/db.py --quiet
 
 create-db-user:
-	utility/dbutil.py create-db-user
+	invoke db.setup
 setup-db-auth:
-	utility/dbutil.py setup-db-auth
+	invoke db.setup
 fetch-db-export:
-	utility/dbutil.py fetch-db-export
+	invoke db.dump.download
 create-db:
-	utility/dbutil.py create-db
+	invoke db.create
 load-db:
-	utility/dbutil.py load-db
+	invoke db.dump.import
 drop-db:
-	utility/dbutil.py drop-db
+	invoke db.drop
 reset-db:
-	utility/dbutil.py reset-db
+	invoke db.reset
 
 create-newrelic-ini:
 	utility/create_newrelic_ini.py
