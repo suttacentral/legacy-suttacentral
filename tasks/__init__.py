@@ -15,3 +15,6 @@ for name, obj in inspect.getmembers(tasks.root):
 
 import tasks.assets
 ns.add_collection(tasks.assets)
+
+import tasks.travis
+ns.add_collection(tasks.travis)
