@@ -6,20 +6,16 @@ Source code to [suttacentral.net](http://suttacentral.net/): early Buddhist text
 
 ## Setup
 
-See the [wiki page](https://github.com/suttacentral/suttacentral/wiki/SuttaCentral-Dev-Setup).
+See the [setup page on the
+Wiki](https://github.com/suttacentral/suttacentral/wiki/SuttaCentral-Dev-Setup).
 
-## Running the Server
+## Running
 
     make server
 
 Then visit <http://localhost:8800/>.
 
-## Deployment
+## Additional Help
 
-To deploy changes to [staging](http://staging.suttacentral.net/):
-
-    make deploy-staging
-
-To deploy changes to [production](http://suttacentral.net/):
-
-    make deploy-production
+See the [commands page on the
+Wiki](https://github.com/suttacentral/suttacentral/wiki/Commands).
