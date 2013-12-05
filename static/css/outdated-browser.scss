@@ -1,0 +1,12 @@
+#outdated-browser {
+    height: 56px;
+    background-color: $saturated-red-color;
+    font-size: 18px;
+    line-height: 56px;
+    text-align: center;
+
+    & > a {
+        color: white;
+        font-weight: bold;
+    }
+}

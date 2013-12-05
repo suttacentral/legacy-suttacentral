@@ -23,7 +23,6 @@
     <link rel="stylesheet" href="{{ ASSET_URL }}">
   {% endassets -%}
 {%- endif -%}
-<!--[if lt IE 9]><style>header {display:inline-block; width:90%;}</style><![endif]-->
 </head>
 
 <body>
@@ -33,6 +32,8 @@
 {% include 'development_bar.html' %}
 
 {% include 'header.html' %}
+
+{% include 'outdated_browser.html' %}
 
 <div id="page-main">
 {% block content %}{% endblock %}
