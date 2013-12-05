@@ -1,5 +1,12 @@
-import config, logging, os, webassets
+import glob
+import json
+import logging
+import os
+import os.path
+import webassets
 from webassets.script import CommandLineEnvironment
+
+import config
 
 """Asset (CSS, JavaScript) compilation."""
 
@@ -73,3 +80,25 @@ def build():
     log = logging.getLogger(__name__)
     cmd = CommandLineEnvironment(env, log)
     cmd.build()
+
+def clean_outdated():
+    """Remove outdated compiled assets."""
+    print('Removing outdated compiled assets...')
+    try:
+        manifest_ctime = os.path.getctime(manifest_path)
+    except OSError:
+        print('  Manifest {} does not exist, aborting')
+    maximum_ctime = manifest_ctime - (1 * 24 * 60 * 60) # 1 day
+    cache_glob = os.path.join(cache_dir, '*')
+    css_glob = os.path.join(config.static_root, 'css', 'compiled', '*.css')
+    js_glob = os.path.join(config.static_root, 'js', 'compiled', '*.js')
+    paths = glob.glob(cache_glob) + glob.glob(css_glob) + glob.glob(js_glob)
+
+    for path in paths:
+        try:
+            ctime = os.path.getctime(path)
+            if ctime < maximum_ctime:
+                print('  Removing {}'.format(path))
+                os.unlink(path)
+        except OSError:
+            pass
