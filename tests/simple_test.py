@@ -10,7 +10,7 @@ class SimpleTestCase(SCTestCase):
 
     def test_unknown_page(self):
         self.goto('/blargh')
-        self.assertIn('Not Found', self.title)
+        self.assertPageIs404()
 
     def test_translation_order(self):
         self.goto('/dn2')

@@ -46,3 +46,6 @@ class SCTestCase(unittest.TestCase):
             # See https://code.google.com/p/selenium/issues/detail?id=5701
             raise NoSuchElementException(
                 'Could not find by css selector {}'.format(selector))
+
+    def assertPageIs404(self):
+        self.assertIn('Not Found', self.title)

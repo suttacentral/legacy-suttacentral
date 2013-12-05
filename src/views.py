@@ -264,7 +264,7 @@ class TextView(ViewBase):
 
     @property
     def path(self):
-        return scdb.getDBR().text_paths[self.lang_code].get(self.uid)
+        return scdb.getDBR().text_paths[self.lang_code].get(self.uid) or ''
     
     def get_document(self):
         """Return the BeautifulSoup document object of the text or raise

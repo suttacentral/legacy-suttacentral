@@ -53,6 +53,12 @@ class UrlTestCase(SCTestCase):
         self.goto('/sbv')
         self.assertTableHasRows()
 
+    def test_bug_56_regression(self):
+        self.goto('/wp/wp-admin/')
+        self.assertPageIs404()
+        self.goto('/sf270/None')
+        self.assertPageIs404()
+
     def table_heading_text(self):
         return self.css('caption').text
 
