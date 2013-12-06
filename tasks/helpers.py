@@ -3,6 +3,7 @@
 import colorama
 import os
 import os.path
+import sys
 from invoke import task
 
 root_path = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(
@@ -27,4 +28,10 @@ def run(command):
     print(colorama.Fore.BLUE, end='')
     print(command, end='')
     print(colorama.Fore.RESET)
+    sys.stdout.flush()
     os.system(command)
+
+def remote_run(login, commands):
+    remote_command = ' && '.join(commands)
+    command = "ssh {} '{}'".format(login, remote_command)
+    run(command)

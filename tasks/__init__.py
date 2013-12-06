@@ -6,6 +6,7 @@ from .root import *
 
 from . import assets
 from . import db
+from . import deploy
 from . import dictionary
 from . import exports
 from . import fonts
@@ -18,6 +19,7 @@ from . import travis
 ns = Collection.from_module(sys.modules[__name__])
 ns.add_collection(assets)
 ns.add_collection(db)
+ns.add_collection(deploy)
 ns.add_collection(dictionary)
 ns.add_collection(exports)
 ns.add_collection(fonts)
