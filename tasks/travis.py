@@ -3,8 +3,8 @@
 import os
 import time
 
+import tasks.db
 from .helpers import *
-from . import db
 
 TRAVIS_LOCAL_CONF = """\
 [mysql]
@@ -19,7 +19,7 @@ def prepare():
     with open('local.conf', 'w', encoding='utf-8') as f:
         f.write(TRAVIS_LOCAL_CONF)
     run('mysql -e "CREATE DATABASE suttacentral;"')
-    db.reset()
+    tasks.db.reset()
 
 @task
 def start_server():

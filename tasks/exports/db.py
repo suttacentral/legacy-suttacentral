@@ -3,13 +3,13 @@
 from ..helpers import *
 
 @task
-def clean(aggressive=False):
+def clean(older=False):
     """Delete SuttaCentral database export files."""
-    if aggressive:
-        rm_rf('static/exports/sc-db-*')
-    else:
+    if older:
         run('find static/exports -type f -mtime +2 -name "sc-db-*" ' +
             '-exec rm {} \;')
+    else:
+        rm_rf('static/exports/sc-db-*')
 
 @task
 def create(force=False, quiet=False):

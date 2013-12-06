@@ -65,21 +65,22 @@ deploy-texts-production:
 clean:
 	invoke clean
 clean-assets:
-	invoke assets.clean
+	invoke assets.clean --older
 clean-all-assets:
-	invoke assets.clean --aggressive
+	invoke assets.clean
 clean-db:
 	invoke db.clean
 	invoke dictionary.clean
 	invoke search.clean
 clean-exports:
-	invoke exports.db.clean --aggressive
-	invoke exports.offline.clean --aggressive
-clean-old-exports:
 	invoke exports.db.clean
 	invoke exports.offline.clean
+clean-old-exports:
+	invoke exports.db.clean --older
+	invoke exports.offline.clean --older
 
-clean-all: clean clean-assets clean-db clean-exports
+clean-all:
+	invoke clean --aggressive
 
 build-assets: compile-assets
 

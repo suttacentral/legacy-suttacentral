@@ -3,10 +3,10 @@
 from .helpers import *
 
 @task
-def clean(aggressive=False):
+def clean(older=False):
     """Remove compiled and temporary assets."""
-    if aggressive:
-        run_sc('assets.clean(all=True)')
+    if older:
+        run_sc('assets.clean(older=True)')
     else:
         run_sc('assets.clean()')
 

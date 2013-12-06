@@ -3,13 +3,13 @@
 from ..helpers import *
 
 @task
-def clean(aggressive=False):
+def clean(older=False):
     """Delete offline SuttaCentral export files."""
-    if aggressive:
-        rm_rf('static/exports/sc-offline-*')
-    else:
+    if older:
         run('find static/exports -type f -mtime +2 -name "sc-offline-*" ' +
             '-exec rm {} \;')
+    else:
+        rm_rf('static/exports/sc-offline-*')
 
 @task
 def create(host='localhost:8800', force=False, quiet=False, wait=None):

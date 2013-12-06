@@ -2,17 +2,26 @@
 
 import os
 
+import tasks
 from .helpers import *
 
 @task
-def clean():
+def clean(aggressive=False):
     """Remove unnecessary files."""
-    rm_rf(
-        '__pycache__',
-        '**/__pycache__',
-        'log/*.log',
-        'tmp/*'
-    )
+    tasks.db.dump.clean()
+    tasks.log.clean()
+    tasks.tmp.clean()
+    if aggressive:
+        tasks.assets.clean(older=False)
+        tasks.db.clean()
+        tasks.dictionary.clean()
+        tasks.exports.db.clean(older=False)
+        tasks.exports.offline.clean(older=False)
+        tasks.search.clean()
+    else:
+        tasks.assets.clean(older=True)
+        tasks.exports.db.clean(older=True)
+        tasks.exports.offline.clean(older=True)
 
 @task('newrelic.update_ini')
 def daemonize():

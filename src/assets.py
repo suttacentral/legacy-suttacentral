@@ -85,7 +85,7 @@ def compile():
     cmd = CommandLineEnvironment(env, log)
     cmd.build()
 
-def clean(all=False):
+def clean(older=False):
     """Remove outdated compiled assets."""
 
     maximum_ctime = None
@@ -93,18 +93,18 @@ def clean(all=False):
         maximum_ctime = os.path.getmtime(manifest_path)
         maximum_ctime -= 60 # seconds
     except OSError:
-        all = True
+        older = True
 
     cache_glob = os.path.join(cache_dir, '*')
     css_glob = os.path.join(compiled_css_dir, '*.css')
     js_glob = os.path.join(compiled_js_dir, '*.js')
     paths = glob.glob(cache_glob) + glob.glob(css_glob) + glob.glob(js_glob)
-    if all:
+    if not older:
         paths += [ manifest_path ]
 
     for path in paths:
         try:
-            if all or os.path.getctime(path) < maximum_ctime:
+            if not older or os.path.getctime(path) < maximum_ctime:
                 os.unlink(path)
         except OSError:
             pass
