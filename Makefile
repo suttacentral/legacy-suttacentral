@@ -70,6 +70,8 @@ clean-all-assets:
 	invoke assets.clean --aggressive
 clean-db:
 	invoke db.clean
+	invoke dictionary.clean
+	invoke search.clean
 clean-exports:
 	rm -f static/exports/*
 clean-old-exports:
@@ -83,10 +85,10 @@ compile-assets:
 	invoke assets.compile
 
 build-dict:
-	cd src && python build_dict_db.py
+	invoke dictionary.build
 
 build-search-indexes:
-	cd src && python -c 'import textsearch; textsearch.build()'
+	invoke search.index
 
 sync-production-fonts:
 	invoke fonts.download_nonfree

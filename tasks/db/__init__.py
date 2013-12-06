@@ -6,17 +6,17 @@ from . import dump
 
 @task
 def clean():
-    """Cleanup SQLite database files."""
-    rm_rf('db/*.sqlite', 'db/*.sqlite.tmp*')
+    """Delete the main SQLite database & temporary database files."""
+    rm_rf('db/sc.sqlite', 'db/*.sqlite.tmp*')
 
 @task
 def create():
     """Create the MySQL database."""
     run('utility/dbutil.py create-db', pty=True)
 
-@task
+@task(aliases=('destroy',))
 def drop():
-    """Drop the MySQL database."""
+    """Drop (destroy) the MySQL database."""
     run('utility/dbutil.py drop-db', pty=True)
 
 @task
