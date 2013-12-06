@@ -93,7 +93,7 @@ def clean(all=False):
         maximum_ctime = os.path.getmtime(manifest_path)
         maximum_ctime -= 60 # seconds
     except OSError:
-        all = true
+        all = True
 
     cache_glob = os.path.join(cache_dir, '*')
     css_glob = os.path.join(compiled_css_dir, '*.css')
