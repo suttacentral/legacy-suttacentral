@@ -1,7 +1,5 @@
 """Common tasks."""
 
-import os
-
 from .helpers import *
 
 @task
@@ -19,13 +17,12 @@ def daemonize():
     """Run the server for use as a daemon."""
     command = ('cd src && NEW_RELIC_CONFIG_FILE="{}/newrelic.ini" ' + \
         'newrelic-admin run-program cherryd -i server').format(root_path)
-    print(command)
-    os.system(command)
+    run(command)
 
 @task
 def server():
     """Run the local development server."""
-    run('cd src && python server.py', pty=True)
+    run('cd src && python server.py')
 
 @task
 def test(url=None, phantomjs=False):
@@ -35,4 +32,4 @@ def test(url=None, phantomjs=False):
         command = "URL='{}' {}".format(url, command)
     if phantomjs:
         command = "PHANTOMJS=1 {}".format(command)
-    run(command, pty=True)
+    run(command)

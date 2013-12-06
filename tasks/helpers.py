@@ -1,6 +1,7 @@
 """Task helpers."""
 
-import invoke
+import colorama
+import os
 import os.path
 from invoke import task
 
@@ -22,7 +23,8 @@ def run_sc(statement):
     code = 'import {}; {}'.format(module, statement)
     run('cd src && python -c \'{}\''.format(code))
 
-def run(*args, **kwargs):
-    """Invoke's run() with echo."""
-    kwargs.setdefault('echo', True)
-    invoke.run(*args, **kwargs)
+def run(command):
+    print(colorama.Fore.BLUE, end='')
+    print(command, end='')
+    print(colorama.Fore.RESET)
+    os.system(command)

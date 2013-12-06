@@ -24,10 +24,7 @@ def prepare():
 @task
 def start_server():
     """Start a daemonized server for the travis environment."""
-    # run() seems to have problems with background processes.
-    command = 'cd src && python server.py &'
-    print(command)
-    os.system(command)
+    run('cd src && python server.py &')
     # Give time to server to warm up.
     time.sleep(10)
 

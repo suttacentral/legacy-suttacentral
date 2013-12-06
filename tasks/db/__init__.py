@@ -12,20 +12,20 @@ def clean():
 @task
 def create():
     """Create the MySQL database."""
-    run('utility/dbutil.py create-db', pty=True)
+    run('utility/dbutil.py create-db')
 
 @task(aliases=('destroy',))
 def drop():
     """Drop (destroy) the MySQL database."""
-    run('utility/dbutil.py drop-db', pty=True)
+    run('utility/dbutil.py drop-db')
 
 @task
 def reset():
     """Reset the MYSQL database."""
-    run('utility/dbutil.py reset-db', pty=True)
+    run('utility/dbutil.py reset-db')
 
 @task
 def setup():
     """Setup the MySQL database user and authentication."""
-    run('utility/dbutil.py create-db-user', pty=True)
-    run('utility/dbutil.py setup-db-auth', pty=True)
+    run('utility/dbutil.py create-db-user')
+    run('utility/dbutil.py setup-db-auth')
