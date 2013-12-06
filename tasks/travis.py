@@ -1,7 +1,7 @@
 import os
 import time
 
-from tasks.helpers import *
+from .helpers import *
 
 TRAVIS_LOCAL_CONF = """\
 [mysql]

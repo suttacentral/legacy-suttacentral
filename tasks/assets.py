@@ -1,4 +1,6 @@
-from tasks.helpers import *
+"""(Compiled CSS/JS) asset tasks."""
+
+from .helpers import *
 
 @task
 def clean(aggressive=False):
@@ -10,5 +12,5 @@ def clean(aggressive=False):
 
 @task(aliases=('build',))
 def compile():
-    """Compile the assets"""
+    """Compile the assets."""
     run_sc('assets.compile()')

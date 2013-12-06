@@ -1,3 +1,5 @@
+"""Task helpers."""
+
 import invoke
 import os.path
 from invoke import task
@@ -22,5 +24,5 @@ def run_sc(statement):
 
 def run(*args, **kwargs):
     """Invoke's run() with echo."""
-    kwargs['echo'] = True
+    kwargs.setdefault('echo', True)
     invoke.run(*args, **kwargs)

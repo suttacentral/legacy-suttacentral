@@ -1,18 +1,12 @@
-import inspect
-import os
 from invoke import Collection
-from invoke.tasks import Task
 
-from tasks.helpers import *
+from . import root
+from . import assets
+from . import db
+from . import travis
 
-ns = Collection()
-os.chdir(root_path)
-
-import tasks.root
-for name, obj in inspect.getmembers(tasks.root):
-    if isinstance(obj, Task):
-        ns.add_task(obj)
-
-for name in ['assets', 'db', 'travis']:
-    __import__('tasks.' + name)
-    ns.add_collection(eval('tasks.' + name))
+ns = Collection.from_module(root)
+ns.add_collection(assets)
+ns.add_collection(db)
+ns.collections['db'].add_collection(db.dump)
+ns.add_collection(travis)

@@ -69,7 +69,7 @@ clean-assets:
 clean-all-assets:
 	invoke assets.clean --aggressive
 clean-db:
-	rm -f db/*.sqlite db/*.sqlite.tmp*
+	invoke db.clean
 clean-exports:
 	rm -f static/exports/*
 clean-old-exports:

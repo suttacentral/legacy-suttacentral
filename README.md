@@ -11,7 +11,7 @@ Wiki](https://github.com/suttacentral/suttacentral/wiki/SuttaCentral-Dev-Setup).
 
 ## Running
 
-    make server
+    invoke server
 
 Then visit <http://localhost:8800/>.
 

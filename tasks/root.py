@@ -1,4 +1,6 @@
-from tasks.helpers import *
+"""Common tasks."""
+
+from .helpers import *
 
 @task
 def clean():
