@@ -25,6 +25,21 @@ def full():
     ])
 
 @task
+def nonfree_fonts(force=False):
+    """Copy local nonfree fonts to the production server."""
+    command = 'rsync -avz ' + \
+        'static/fonts/nonfree/ ' + \
+        'sc-production@vps.suttacentral.net:' + \
+        '/home/sc-production/suttacentral/static/fonts/nonfree/'
+
+    if force:
+        run(command)
+    else:
+        warning('*** Dry run ***')
+        notice('Use the --force flag to make changes.')
+        run(command.replace('rsync', 'rsync -n'))
+
+@task
 def quick():
     """Quick deploy to the production server."""
     remote_run('sc-production@vps.suttacentral.net', [

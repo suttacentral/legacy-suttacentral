@@ -24,3 +24,11 @@ def full():
         'invoke dictionary.build',
         'invoke search.index',
     ])
+
+@task
+def nonfree_fonts():
+    """Copy local nonfree fonts to the staging server."""
+    run('rsync -avz ' + \
+        'static/fonts/nonfree/ ' + \
+        'sc-staging@vps.suttacentral.net:' + \
+        '/home/sc-staging/suttacentral/static/fonts/nonfree/')

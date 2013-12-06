@@ -1,45 +1,77 @@
-/* Proprietary fonts that are not allowed for free distribution */
+/*
+    Proprietary serif fonts that are not allowed for free distribution.
+
+    Contact: David Březina <brezina@davi.cz>
+
+    If you make *any* changes to fonts files, make sure to increment the
+    version to avoid browser caching problems.
+
+    ## Process
+
+    1. Get the original TTF fonts, e.g., from SkolarSuttaWeb_v2final.zip.
+    2. Change filenames of TTFs to 'skolar-sutta-web-<format>-<version>.<type>'.
+    3. Convert TTFs to other formats using http://www.font-face-generator.com/.
+    4. Unzip and rename resulting files to filenames like in step 2.
+    5. Edit SVG files, adding an id="skolar-sutta-web-<format>" to the <font>
+       tag. It should be close to the beginning of the file.
+
+    ## Caveats and Hints
+
+    - Many font-face generators seem to strip out ligature or kerning data
+      from some of the fonts (e.g., fontsquirrel.com).
+    - Make sure to cross-check against different browsers on different
+      operating systems. It's surpising how there will be slight rendering
+      problems on different browsers/OSs.
+    - Use http://localhost:8800/fonts as a general testing page.
+
+    ## Deployment
+
+    You can deploy the fonts to staging and production using the
+    `invoke deploy.staging.nonfree_fonts` and
+    `invoke deploy.production.nonfree_fonts` tasks respectively. Make sure to
+    do this *before* you run the normal deployment task.
+*/
 
 @font-face {
     font-family: 'Skolar Sutta Web';
-    src: url('/fonts/nonfree/skolar-sutta-web-bold-2.eot');
-    src: url('/fonts/nonfree/skolar-sutta-web-bold-2.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/nonfree/skolar-sutta-web-bold-2.woff') format('woff'),
-         url('/fonts/nonfree/skolar-sutta-web-bold-2.ttf') format('truetype'),
-         url('/fonts/nonfree/skolar-sutta-web-bold-2.svg#ted_to_alter_the_fon') format('svg');
+    src: url('/fonts/nonfree/skolar-sutta-web-bold-3.eot');
+    src: url('/fonts/nonfree/skolar-sutta-web-bold-3.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/nonfree/skolar-sutta-web-bold-3.woff') format('woff'),
+         url('/fonts/nonfree/skolar-sutta-web-bold-3.ttf') format('truetype'),
+         url('/fonts/nonfree/skolar-sutta-web-bold-3.svg#skolar-sutta-web-bold') format('svg');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Skolar Sutta Web';
-    src: url('/fonts/nonfree/skolar-sutta-web-italic-2.eot');
-    src: url('/fonts/nonfree/skolar-sutta-web-italic-2.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/nonfree/skolar-sutta-web-italic-2.woff') format('woff'),
-         url('/fonts/nonfree/skolar-sutta-web-italic-2.ttf') format('truetype'),
-         url('/fonts/nonfree/skolar-sutta-web-italic-2.svg#er_the_font_soft') format('svg');
+    src: url('/fonts/nonfree/skolar-sutta-web-italic-3.eot');
+    src: url('/fonts/nonfree/skolar-sutta-web-italic-3.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/nonfree/skolar-sutta-web-italic-3.woff') format('woff'),
+         url('/fonts/nonfree/skolar-sutta-web-italic-3.ttf') format('truetype'),
+         url('/fonts/nonfree/skolar-sutta-web-italic-3.svg#skolar-sutta-web-italic') format('svg');
     font-weight: normal;
     font-style: italic;
 }
 
 @font-face {
     font-family: 'Skolar Sutta Web';
-    src: url('/fonts/nonfree/skolar-sutta-web-regular-2.eot');
-    src: url('/fonts/nonfree/skolar-sutta-web-regular-2.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/nonfree/skolar-sutta-web-regular-2.woff') format('woff'),
-         url('/fonts/nonfree/skolar-sutta-web-regular-2.ttf') format('truetype'),
-         url('/fonts/nonfree/skolar-sutta-web-regular-2.svg#alter_the_font_software') format('svg');
+    src: url('/fonts/nonfree/skolar-sutta-web-regular-3.eot');
+    src: url('/fonts/nonfree/skolar-sutta-web-regular-3.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/nonfree/skolar-sutta-web-regular-3.woff') format('woff'),
+         url('/fonts/nonfree/skolar-sutta-web-regular-3.ttf') format('truetype'),
+         url('/fonts/nonfree/skolar-sutta-web-regular-3.svg#skolar-sutta-web-regular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Skolar Sutta Web SC';
-    src: url('/fonts/nonfree/skolar-sutta-web-sc-regular-1.eot');
-    src: url('/fonts/nonfree/skolar-sutta-web-sc-regular-1.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/nonfree/skolar-sutta-web-sc-regular-1.woff') format('woff'),
-         url('/fonts/nonfree/skolar-sutta-web-sc-regular-1.ttf') format('truetype'),
-         url('/fonts/nonfree/skolar-sutta-web-sc-regular-1.svg#skolar-sutta-web-sc-regular') format('svg');
+    src: url('/fonts/nonfree/skolar-sutta-web-sc-regular-3.eot');
+    src: url('/fonts/nonfree/skolar-sutta-web-sc-regular-3.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/nonfree/skolar-sutta-web-sc-regular-3.woff') format('woff'),
+         url('/fonts/nonfree/skolar-sutta-web-sc-regular-3.ttf') format('truetype'),
+         url('/fonts/nonfree/skolar-sutta-web-sc-regular-3.svg#skolar-sutta-web-sc-regular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
