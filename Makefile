@@ -117,10 +117,10 @@ reset-db:
 	invoke db.reset
 
 create-newrelic-ini:
-	utility/create_newrelic_ini.py
+	invoke newrelic.update_ini
 
-test: test-local
-
+test:
+	invoke test
 test-local:
 	invoke test
 test-staging:

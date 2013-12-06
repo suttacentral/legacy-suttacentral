@@ -1,3 +1,5 @@
+"""Tasks to run in the Travis CI environment."""
+
 import os
 import time
 
