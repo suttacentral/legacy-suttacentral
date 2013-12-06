@@ -37,7 +37,7 @@ $sutta-toc-menu-font-size: 11px;
         border: 1px solid $sutta-toc-button-border-color;
         border-radius: $sutta-toc-border-radius;
         box-shadow: 0 0 3px rgba($sutta-toc-shadow-color, 0.3);
-        font-family: $source-sans-pro-font;
+        font-family: $sans-serif-font;
         font-size: $sutta-toc-font-size;
         color: $sutta-toc-text-color;
         text-shadow: 1px 1px 1px $sutta-toc-text-shadow-color;
@@ -69,7 +69,7 @@ $sutta-toc-menu-font-size: 11px;
     }
 
     li {
-        font-family: $source-sans-pro-font;
+        font-family: $sans-serif-font;
         font-size: $sutta-toc-menu-font-size;
         line-height: 1.5em;
         font-weight: bold;
@@ -137,7 +137,7 @@ button#pali_lookup_button,
     border-radius: $sutta-toc-border-radius;
     color: $sutta-toc-text-color;
     background-color: $sutta-toc-background-color;
-    font-family: $source-sans-pro-font;
+    font-family: $sans-serif-font;
     font-size: $sutta-toc-font-size;
     letter-spacing: 0;
 

@@ -3,9 +3,9 @@
 #fonts-page {
 
     p {
-        font-size: 32px;
-        line-height: 1.1em;
-        margin: 0 0 0 1em;
+        font-size: 24px;
+        line-height: 1.2em;
+        margin: 0.1em 0 0.5em 1em;
         padding: 0;
     }
     
@@ -13,24 +13,32 @@
         margin: 1em 0;
     }
 
-    .serif-ligatures-off {
+    .ligatures-on {
+        @include font-feature-settings("kern" 1, "liga" 1, "dlig" 1);
+    }
+
+    .ligatures-off {
+        @include font-feature-settings("kern" 0, "liga" 0, "dlig" 0);
+    }
+
+    .default {
         font-family: serif;
-        @include font-feature-settings("kern" 0, "liga" 0, "dlig" 0);
     }
 
-    .skolar-sutta-web-ligatures-off {
+    .serif {
         font-family: $standard-font;
-        @include font-feature-settings("kern" 0, "liga" 0, "dlig" 0);
     }
 
-    .skolar-sutta-web-ligatures-on {
-        font-family: $standard-font;
-        @include font-feature-settings("kern" 1, "liga" 1, "dlig" 1);
-    }
-
-    .skolar-sutta-web-sc-ligatures-on {
+    .serif-sc {
         font-family: $small-caps-font;
-        @include font-feature-settings("kern" 1, "liga" 1, "dlig" 1);
+    }
+
+    .sans-serif {
+        font-family: $sans-serif-font;
+    }
+
+    .sans-serif-sc {
+        font-family: $sans-serif-sc-font;
     }
 
 }

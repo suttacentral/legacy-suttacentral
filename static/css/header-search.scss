@@ -4,7 +4,7 @@
     right: 0;
     width: $header-search-width;
     height: $header-search-height;
-    font-family: $source-sans-pro-font;
+    font-family: $sans-serif-font;
     font-size: $header-search-font-size;
     z-index: 1;
 
@@ -110,7 +110,7 @@
     padding-top: $header-search-height + ($header-padding * 2);
     border: 1px solid $header-search-results-border-color;
     overflow: auto;
-    font-family: $source-sans-pro-font;
+    font-family: $sans-serif-font;
     font-size: $header-search-font-size;
     line-height: 2em;
     background-color: $header-search-results-background-color;

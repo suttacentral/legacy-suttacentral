@@ -9,31 +9,69 @@
     <p>{{ test_ligature_text }}</p>
     <p><strong>{{ test_ligature_text }}</strong></p>
     <p><em>{{ test_ligature_text }}</em></p>
-    <p><strong><em>{{ test_ligature_text }}</em></strong></p>
 {%- endmacro -%}
-    
+
+{%- macro test_vietnamese() -%}
+    <p>
+        Như vậy tôi nghe. Một thời Thế Tôn ở tại Rājagaha (Vương Xá) nơi
+        vườn xoài của Jìvaka (Kỳ-bà) Komārabhacca, cùng với đại chúng
+        Tỷ-kheo một nghìn hai trăm năm mươi vị.
+    </p>
+{%- endmacro -%}
+
+{%- macro test_chinese() -%}
+    <p>
+        一時，佛遊於俱留國，與大比丘眾千二百五十人俱。
+        爾時，異道人須卑及弟子梵達摩納，隨佛及比丘僧。
+        異道人須卑，謗佛無央數，及謗法、比丘僧；弟子梵達摩納，
+        嗟歎佛及法、比丘僧無央數。
+    </p>
+{%- endmacro -%}
+
 <div id="fonts-page">
 
     <h1>SuttaCentral Fonts</h1>
 
-    <h2>Serif Ligatures Off</h2>
-    <div class="serif-ligatures-off">
+    <h2>Default Serif (Kerning/Ligatures Off)</h2>
+    <div class="default ligatures-off">
         {{ test_ligatures() }}
+        {{ test_vietnamese()}}
+        {{ test_chinese()}}
     </div>
 
-    <h2>Skolar Sutta Web Ligatures Off</h2>
-    <div class="skolar-sutta-web-ligatures-off">
+    <h2>Skolar Sutta Web (Kerning/Ligatures Off)</h2>
+    <div class="serif ligatures-off">
         {{ test_ligatures() }}
+        {{ test_vietnamese()}}
+        {{ test_chinese()}}
     </div>
 
-    <h2>Skolar Sutta Web Ligatures On</h2>
-    <div class="skolar-sutta-web-ligatures-on">
+    <h2>Skolar Sutta Web (Kerning/Ligatures On)</h2>
+    <div class="serif ligatures-on">
         {{ test_ligatures() }}
+        {{ test_vietnamese()}}
+        {{ test_chinese()}}
     </div>
 
-    <h2>Skolar Sutta Web Small Caps Ligatures On</h2>
-    <div class="skolar-sutta-web-sc-ligatures-on">
-        {{ test_ligatures() }}
+    <h2>Skolar Sutta Web Small Caps (Kerning/Ligatures On)</h2>
+    <div class="serif-sc ligatures-on">
+        <p>Dīgha Nikāya 1</p>
+        <p>Brahmajālasutta</p>
+        <p>1. Paribbājakakathā</p>
+    </div>
+
+    <h2>Source Sans Pro (Kerning/Ligatures On)</h2>
+    <div class="sans-serif ligatures-on">
+        <p>Home | About | Help | Methodology</p>
+        <p>Abbreviations | Sutta Numbering | Bibliography</p>
+        <p>People | Copyright | Downloads | Feedback</p>
+    </div>
+
+    <h2>Hetu Schetu Small Caps (Kerning/Ligatures On)</h2>
+    <div class="sans-serif-sc ligatures-on">
+        <p>Bhikkhu Bodhi Bhikkhu Bodhi Bhikkhu Bodhi</p>
+        <p>Bhikkhu Bodhi Bhikkhu Bodhi Bhikkhu Bodhi</p>
+        <p>Bhikkhu Bodhi Bhikkhu Bodhi Bhikkhu Bodhi</p>
     </div>
 
 </div>
