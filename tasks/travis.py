@@ -4,6 +4,7 @@ import os
 import time
 
 from .helpers import *
+from . import db
 
 TRAVIS_LOCAL_CONF = """\
 [mysql]
@@ -18,7 +19,7 @@ def prepare():
     with open('local.conf', 'w', encoding='utf-8') as f:
         f.write(TRAVIS_LOCAL_CONF)
     run('mysql -e "CREATE DATABASE suttacentral;"')
-    run('utility/dbutil.py reset-db', pty=True)
+    db.reset()
 
 @task
 def start_server():
