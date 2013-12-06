@@ -1,5 +1,7 @@
 """Common tasks."""
 
+import os
+
 from .helpers import *
 
 @task
@@ -14,10 +16,10 @@ def clean():
 
 @task('newrelic.update_ini')
 def daemonize():
-    """Run the server for use as a daemon."""
-    command = ('cd src && NEW_RELIC_CONFIG_FILE="{}/newrelic.ini" ' + \
-        'newrelic-admin run-program cherryd -i server').format(root_path)
-    run(command)
+    """Replace the current process with the server for use as a daemon."""
+    os.chdir('src')
+    os.environ['NEW_RELIC_CONFIG_FILE'] = '{}/newrelic.ini'.format(root_path)
+    os.execlp('newrelic-admin', 'newrelic-admin', 'run-program', 'cherryd', '-i', 'server')
 
 @task
 def server():
