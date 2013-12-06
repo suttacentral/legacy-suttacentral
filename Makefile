@@ -73,9 +73,11 @@ clean-db:
 	invoke dictionary.clean
 	invoke search.clean
 clean-exports:
-	rm -f static/exports/*
+	invoke exports.db.clean --aggressive
+	invoke exports.offline.clean --aggressive
 clean-old-exports:
-	find static/exports -type f -mtime +7 -exec rm {} \;
+	invoke exports.db.clean
+	invoke exports.offline.clean
 
 clean-all: clean clean-assets clean-db clean-exports
 
@@ -94,14 +96,14 @@ sync-production-fonts:
 	invoke fonts.download_nonfree
 
 create-dev-offline-export:
-	utility/export/offline.py --force localhost:8800
+	invoke exports.offline.create_dev
 create-dev-db-export:
-	utility/export/db.py --force
+	invoke exports.db.create_dev
 
 create-production-offline-export:
-	utility/export/offline.py --quiet --wait 0.05 suttacentral.net
+	invoke exports.offline.create_production
 create-production-db-export:
-	utility/export/db.py --quiet
+	invoke exports.db.create_production
 
 create-db-user:
 	invoke db.setup
