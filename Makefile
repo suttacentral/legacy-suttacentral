@@ -89,7 +89,7 @@ build-search-indexes:
 	cd src && python -c 'import textsearch; textsearch.build()'
 
 sync-production-fonts:
-	rsync -avz sc-production@vps.suttacentral.net:/home/sc-production/suttacentral/static/fonts/nonfree/ static/fonts/nonfree/
+	invoke fonts.download_nonfree
 
 create-dev-offline-export:
 	utility/export/offline.py --force localhost:8800
