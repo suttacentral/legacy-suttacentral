@@ -34,17 +34,14 @@
 {% else %}
 <p><em>No offline versions available.</em></p>
 {% endif %}
-</ul>
 
 <h2>SuttaCentral Database</h2>
 <p>This is a MySQL database dump of SuttaCentral's database.</p>
-<ul>
 {% if db_data %}
 {{ file_items(db_data) }}
 {% else %}
 <p><em>No databases available.</em></p>
 {% endif %}
-</ul>
 
 {% endif %}
 
