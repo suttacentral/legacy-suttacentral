@@ -7,6 +7,8 @@ import tasks.db
 from .helpers import *
 
 TRAVIS_LOCAL_CONF = """\
+[global]
+    engine.autoreload.on: False
 [mysql]
     user: 'travis'
     password: ''
