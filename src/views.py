@@ -1,9 +1,21 @@
-import babel.dates, cherrypy, http.client, jinja2, newrelic.agent, os.path
-import datetime, regex, socket, time, urllib.parse
+import cherrypy
+import datetime
+import http.client
+import jinja2
+import newrelic.agent
+import os.path
+import regex
+import socket
+import time
+import urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
 from bs4 import BeautifulSoup
 
-import assets, config, scdb, scm
+import assets
+import config
+import scdb
+import scm
+import util
 from menu import menu_data
 from classes import Parallel, Sutta
 
@@ -30,17 +42,9 @@ def jinja2_environment():
     )
     env.assets_environment = assets.env
 
-    def date_filter(value, format='short', locale=config.default_locale):
-        return babel.dates.format_date(value, format=format, locale=locale)
-    env.filters['date'] = date_filter
-
-    def time_filter(value, format='short', locale=config.default_locale):
-        return babel.dates.format_time(value, format=format, locale=locale)
-    env.filters['time'] = time_filter
-
-    def datetime_filter(value, format='short', locale=config.default_locale):
-        return babel.dates.format_datetime(value, format=format, locale=locale)
-    env.filters['datetime'] = datetime_filter
+    env.filters['date'] = util.format_date
+    env.filters['time'] = util.format_time
+    env.filters['datetime'] = util.format_datetime
 
     def sub_filter(string, pattern, repl):
         return regex.sub(pattern, repl, string)

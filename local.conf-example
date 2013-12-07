@@ -30,6 +30,7 @@
     # static_root: 'static'
     # templates_root: 'templates'
     # text_root: 'text'
+    # timezone: 'UTC'
 [mysql]
     # host: 'localhost'
     # port: 3306

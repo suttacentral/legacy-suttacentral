@@ -71,3 +71,11 @@
 </td></tr></tfoot>
 {% endif %}
 {% endmacro %}
+
+
+{# A conventional way of showing date/times on the site. #}
+{% macro time_tag(t) %}
+    <time datetime="{{ t | datetime('rfc3339')}}">
+        {{ t | datetime }} {{ config.timezone }}
+    </time>
+{% endmacro %}

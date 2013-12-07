@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 
 import cherrypy
-import config, logger, root
+
+import config
+import logger
+import root
+import util
 
 logger.setup()
+util.set_timezone()
 
 if __name__ == '__main__':
     cherrypy.quickstart(root.Root(), config=config)

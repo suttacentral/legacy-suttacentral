@@ -1,3 +1,5 @@
+{% from 'macros.html' import time_tag with context %}
+
 {% extends "base.html" -%}
 {% block content %}
 
@@ -10,7 +12,7 @@
 <td><a href="{{ file.url }}"><code>{{ file.filename }}</code></a></td>
 <td>{{ file.size | filesizeformat }}</td>
 <td>{{ file.format | capitalize }}</td>
-<td>{{ file.time | datetime }}</td>
+<td>{{ time_tag(file.time) }}</td>
 </tr>
 {% endfor %}
 </tbody>
@@ -44,6 +46,8 @@
 {% endif %}
 
 {% endif %}
+
+<p><em>It is currently {{ time_tag(current_datetime) }}.</em></p>
 
 </article>
 </section>
