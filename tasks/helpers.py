@@ -33,7 +33,9 @@ def rm_rf(*files):
 def run(command):
     """Runs command in a subprocess."""
     notice(command)
-    os.system(command)
+    result = os.system(command)
+    if result != 0:
+        raise RuntimeError('Command exited with error {}'.format(result))
 
 def run_sc(statement):
     """Run a core SuttaCentral method in src.
