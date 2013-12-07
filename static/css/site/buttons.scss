@@ -1,11 +1,11 @@
-$button-gradiant-top-color:           white;
-$button-gradiant-bottom-color:        $light-gray;
-$button-hover-gradiant-top-color:     white;
-$button-hover-gradiant-bottom-color:  $light-light-gray;
-$button-active-gradiant-top-color:    $light-light-gray;
+$button-gradiant-top-color: white;
+$button-gradiant-bottom-color: $light-gray;
+$button-hover-gradiant-top-color: white;
+$button-hover-gradiant-bottom-color: $light-light-gray;
+$button-active-gradiant-top-color: $light-light-gray;
 $button-active-gradiant-bottom-color: white;
-$button-disabled-background-color:    $light-gray;
-$button-box-shadow-color:             rgba($medium-gray, 0.3);
+$button-disabled-background-color: $light-gray;
+$button-box-shadow-color: rgba($medium-gray, 0.3);
 
 @mixin button-background {
     @include vertical-linear-gradient($button-gradiant-top-color,

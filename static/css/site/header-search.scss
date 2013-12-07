@@ -1,10 +1,31 @@
-$header-search-border-color:                       $header-menu-border-color;
-$header-search-results-background-color:           darken($body-background-color, 2%);
-$header-search-results-border-color:               $light-medium-gray;
-$header-search-results-alt-background-color:       darken($header-search-results-background-color, 2%);
-$header-search-results-hover-background-color:     darken($header-search-results-background-color, 5%);
+$header-search-border-color: $header-menu-border-color;
+$header-search-results-background-color: $off-white;
+$header-search-results-border-color: $light-medium-gray;
+$header-search-results-alt-background-color: $light-light-gray;
+$header-search-results-hover-background-color: $light-medium-gray;
 $header-search-results-highlight-background-color: $light-pastel-yellow;
-$header-search-box-shadow-color:                   rgba($medium-gray, 0.8);
+$header-search-box-shadow-color: rgba($medium-gray, 0.8);
+
+$header-search-height: $header-menu-height;
+$header-search-font-size: $header-menu-font-size;
+$header-search-input-width: 200px;
+$header-search-button-width: 32px;
+$header-search-width: $header-search-input-width + $header-search-button-width;
+$header-search-button-img-size: 14px;
+
+$tablet-header-search-height: $tablet-header-menu-height;
+$tablet-header-search-font-size: $tablet-header-menu-font-size;
+$tablet-header-search-input-width: 160px;
+$tablet-header-search-button-width: 26px;
+$tablet-header-search-width: $tablet-header-search-input-width + $tablet-header-search-button-width;
+$tablet-header-search-button-img-size: 12px;
+
+$mobile-header-search-height: $mobile-header-menu-height;
+$mobile-header-search-font-size: $mobile-header-menu-font-size;
+$mobile-header-search-input-width: 230px;
+$mobile-header-search-button-width: 26px;
+$mobile-header-search-width: $mobile-header-search-input-width + $mobile-header-search-button-width;
+$mobile-header-search-button-img-size: 12px;
 
 #page-header-search {
     position: absolute;

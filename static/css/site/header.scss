@@ -1,73 +1,23 @@
 $header-background-color: $pastel-yellow;
-$header-line-color: $dark-saturated-red;
-$header-wheel-color: white;
-$header-title-color: $cool-blue;
-$header-caption-color: $dark-saturated-yellow;
+$header-border-color: $dark-saturated-red;
 
 $header-height: 54px;
 $header-padding: 6px;
 $header-border-width: 4px;
-$header-wheel-top: 1px;
-$header-wheel-font-size: 72px;
-$header-wheel-width-multiplier: 3/4;
-$header-wheel-height-multiplier: 4/5;
-$header-wheel-width: $header-wheel-font-size * $header-wheel-width-multiplier;
-$header-wheel-height: $header-wheel-font-size * $header-wheel-height-multiplier;
-$header-title-top: 4px;
-$header-title-font-size: 32px;
-$header-caption-font-size: 14px;
-$header-menu-position: 39%;
-$header-menu-height: 26px;
-$header-menu-font-size: 16px;
-$header-search-height: $header-menu-height;
-$header-search-font-size: $header-menu-font-size;
-$header-search-input-width: 200px;
-$header-search-button-width: 32px;
-$header-search-width: $header-search-input-width + $header-search-button-width;
-$header-search-button-img-size: 14px;
 
 $tablet-header-height: 54px;
 $tablet-header-padding: 6px;
 $tablet-header-border-width: 4px;
-$tablet-header-wheel-top: 1px;
-$tablet-header-wheel-font-size: 72px;
-$tablet-header-wheel-width: $tablet-header-wheel-font-size * $header-wheel-width-multiplier;
-$tablet-header-wheel-height: $tablet-header-wheel-font-size * $header-wheel-height-multiplier;
-$tablet-header-title-top: 4px;
-$tablet-header-title-font-size: 32px;
-$tablet-header-caption-font-size: 14px;
-$tablet-header-menu-height: 22px;
-$tablet-header-menu-font-size: 14px;
-$tablet-header-search-height: $tablet-header-menu-height;
-$tablet-header-search-font-size: $tablet-header-menu-font-size;
-$tablet-header-search-input-width: 160px;
-$tablet-header-search-button-width: 26px;
-$tablet-header-search-width: $tablet-header-search-input-width + $tablet-header-search-button-width;
-$tablet-header-search-button-img-size: 12px;
 
 $mobile-header-height: 68px;
 $mobile-header-padding: 3px;
 $mobile-header-border-width: 2px;
-$mobile-header-wheel-top: 0px;
-$mobile-header-wheel-font-size: 28px;
-$mobile-header-wheel-width: $mobile-header-wheel-font-size * $header-wheel-width-multiplier;
-$mobile-header-wheel-height: $mobile-header-wheel-font-size * $header-wheel-height-multiplier;
-$mobile-header-title-top: 1px;
-$mobile-header-title-font-size: 20px;
-$mobile-header-menu-height: 22px;
-$mobile-header-menu-font-size: 14px;
-$mobile-header-search-height: $mobile-header-menu-height;
-$mobile-header-search-font-size: $mobile-header-menu-font-size;
-$mobile-header-search-input-width: 230px;
-$mobile-header-search-button-width: 26px;
-$mobile-header-search-width: $mobile-header-search-input-width + $mobile-header-search-button-width;
-$mobile-header-search-button-img-size: 12px;
 
 #page-header {
     position: relative;
     height: $header-height;
     padding: $header-padding;
-    border-bottom: $header-border-width solid $header-line-color;
+    border-bottom: $header-border-width solid $header-border-color;
     background-color: $header-background-color;
     z-index: 100;
 
@@ -93,108 +43,5 @@ $mobile-header-search-button-img-size: 12px;
         margin: 0 auto;
         max-width: $page-max-width - ($header-padding * 2);
         height: 100%;
-    }
-}
-
-#page-header-wheel {
-    position: absolute;
-    top: $header-wheel-top;
-    left: 0px;
-    width: $header-wheel-width;
-    height: $header-wheel-height;
-    line-height: $header-wheel-height;
-    font-size: $header-wheel-font-size;
-    text-align: center;
-
-    @media #{$tablet} {
-        top: $tablet-header-wheel-top;
-        width: $tablet-header-wheel-width;
-        height: $tablet-header-wheel-height;
-        line-height: $tablet-header-wheel-height;
-        font-size: $tablet-header-wheel-font-size;
-    }
-
-    @media #{$mobile} {
-        top: $mobile-header-wheel-top;
-        width: $mobile-header-wheel-width;
-        height: $mobile-header-wheel-height;
-        line-height: $mobile-header-wheel-height;
-        font-size: $mobile-header-wheel-font-size;
-    }
-
-    & > a {
-        display: block;
-        color: $header-wheel-color;
-    }
-}
-
-#page-header-title {
-    position: absolute;
-    top: $header-title-top;
-    left: $header-wheel-width;
-    height: $header-title-font-size;
-    margin: 0;
-    padding: 0;
-    line-height: $header-title-font-size;
-    font-size: $header-title-font-size;
-    font-family: $small-caps-font;
-    font-weight: normal;
-    letter-spacing: 0.02em;
-
-    @media #{$tablet} {
-        top: $tablet-header-title-top;
-        left: $tablet-header-wheel-width;
-        height: $tablet-header-title-font-size;
-        line-height: $tablet-header-title-font-size;
-        font-size: $tablet-header-title-font-size;
-    }
-
-    @media #{$mobile} {
-        top: $mobile-header-title-top;
-        left: $mobile-header-wheel-width;
-        height: $mobile-header-title-font-size;
-        line-height: $mobile-header-title-font-size;
-        font-size: $mobile-header-title-font-size;
-    }
-
-    & > a {
-        display: block;
-        color: $header-title-color;
-    }
-}
-
-#page-header-caption {
-    position: absolute;
-    top: $header-title-top + $header-title-font-size;
-    left: $header-wheel-width;
-    height: $header-caption-font-size;
-    margin: 0;
-    padding: 0;
-    line-height: $header-caption-font-size;
-    font-size: $header-caption-font-size;
-    font-weight: normal;
-    font-style: italic;
-
-    @media #{$tablet} {
-        top: $tablet-header-title-top + $tablet-header-title-font-size;
-        left: $tablet-header-wheel-width;
-        height: $tablet-header-caption-font-size;
-        line-height: $tablet-header-caption-font-size;
-        font-size: $tablet-header-caption-font-size;
-    }
-
-    // Fudge...
-    @media only screen and (min-width: #{$mobile-max-width + 1px}) and (max-width: 600px) {
-        display: none;
-    }
-
-    @media #{$mobile} {
-        display: none;
-    }
-
-    & > a {
-        display: block;
-        color: $header-caption-color;
-        white-space: nowrap;
     }
 }

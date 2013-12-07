@@ -1,11 +1,21 @@
-$header-menu-background-color:      $light-off-white;
-$header-menu-border-color:          $medium-gray;
-$header-menu-shadow-color:          $button-box-shadow-color;
-$header-menu-item-color:            $off-white;
-$header-menu-item-hover-color:      $light-light-gray;
-$header-menu-separation-color:      $light-gray;
-$header-menu-nav-text-color:        lighten($body-text-color, 20%);
-$header-menu-nav-hover-text-color:  $body-text-color;
+$header-menu-background-color: $light-off-white;
+$header-menu-border-color: $medium-gray;
+$header-menu-shadow-color: $button-box-shadow-color;
+$header-menu-item-color: $off-white;
+$header-menu-item-hover-color: $light-light-gray;
+$header-menu-separation-color: $light-gray;
+$header-menu-nav-text-color: $dark-medium-gray;
+$header-menu-nav-hover-text-color: $body-text-color;
+
+$header-menu-position: 39%;
+$header-menu-height: 26px;
+$header-menu-font-size: 16px;
+
+$tablet-header-menu-height: 22px;
+$tablet-header-menu-font-size: 14px;
+
+$mobile-header-menu-height: 22px;
+$mobile-header-menu-font-size: 14px;
 
 #page-header-menu {
     position: absolute;
