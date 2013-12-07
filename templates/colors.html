@@ -3,8 +3,8 @@
 <div id="onecol">
 <article>
 
-{% set types = ["", "saturated-"] %}
-{% set styles = ["", "faded-", "dark-", "light-", "bright-"] %}
+{% set types = ["pastel-", "saturated-"] %}
+{% set styles = ["", "dirty-", "dark-", "bright-", "light-"] %}
 {% set colors = ["yellow", "green", "red", "purple"] %}
 
 <div id="colors-page">
@@ -13,8 +13,8 @@
 
     {% for type in types %}
         <h2>
-            {% if type == "" %}
-                Main Colors
+            {% if type == "pastel-" %}
+                Pastel Colors
             {% else %}
                 Saturated Colors
             {% endif %}
@@ -23,8 +23,8 @@
             <div class="container">
                 {% for color in colors %}
                     <div class="unit">
-                        <div class="b-{{ type }}{{ style }}{{ color }}">
-                            ${{ type }}{{ style }}{{ color }}-color
+                        <div class="b-{{ style }}{{ type }}{{ color }}">
+                            ${{ style }}{{ type }}{{ color }}
                         </div>
                     </div>
                 {% endfor %}

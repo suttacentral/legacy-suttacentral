@@ -13,22 +13,22 @@
         margin-top: 1em;
     }
 
-    $types: "" "saturated-";
-    $styles: "" "faded-" "dark-" "light-" "bright-";
+    $types: "pastel-" "saturated-";
+    $styles: "" "dirty-" "dark-" "bright-" "light-";
     $colors: "yellow" "green" "red" "purple";
 
     @each $type in $types {
         @each $style in $styles {
             @each $color in $colors {
-                $name: #{$type}#{$style}#{$color};
+                $name: #{$style}#{$type}#{$color};
                 .b-#{$name} {
                     min-height: 3em;
                     padding: 0.25em 0.5em;
                     font-family: fixed;
                     font-size: 0.8em;
                     line-height: 1.3em;
-                    background-color: $#{$name}-color;
-                    @if lightness($#{$name}-color) > 60% {
+                    background-color: $#{$name};
+                    @if lightness($#{$name}) > 60% {
                         color: black;
                     } @else {
                         color: white;
