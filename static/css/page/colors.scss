@@ -1,5 +1,23 @@
 // Styles for the color sample page
 
+@mixin color-page-block($name) {
+    .b-#{$name} {
+        min-height: 3em;
+        border: 1px solid black;
+        padding: 0.25em 0.5em;
+        font-family: fixed;
+        font-size: 0.8em;
+        line-height: 1.3em;
+        text-align: center;
+        background-color: $#{$name};
+        @if lightness($#{$name}) > 60% {
+            color: black;
+        } @else {
+            color: white;
+        }
+    }
+}
+
 #colors-page {
 
     & > .container {
@@ -20,21 +38,17 @@
     @each $type in $types {
         @each $style in $styles {
             @each $color in $colors {
-                $name: #{$style}#{$type}#{$color};
-                .b-#{$name} {
-                    min-height: 3em;
-                    padding: 0.25em 0.5em;
-                    font-family: fixed;
-                    font-size: 0.8em;
-                    line-height: 1.3em;
-                    background-color: $#{$name};
-                    @if lightness($#{$name}) > 60% {
-                        color: black;
-                    } @else {
-                        color: white;
-                    }
-                }
+                @include color-page-block(#{$style}#{$type}#{$color});
             }
         }
+    }
+
+    $others: "cool-blue", "bright-cool-blue",
+             "light-off-white", "off-white",
+             "light-light-gray", "light-gray",
+             "light-gray", "light-medium-gray",
+             "medium-gray", "dark-gray";
+    @each $name in $others {
+        @include color-page-block($name);
     }
 }

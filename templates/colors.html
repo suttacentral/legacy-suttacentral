@@ -3,6 +3,10 @@
 <div id="onecol">
 <article>
 
+{% macro color_unit(name) %}
+<div class="unit"><div class="b-{{ name }}">${{ name }}</div></div>
+{% endmacro %}
+
 {% set types = ["pastel-", "saturated-"] %}
 {% set styles = ["", "dirty-", "dark-", "bright-", "light-"] %}
 {% set colors = ["yellow", "green", "red", "purple"] %}
@@ -22,15 +26,45 @@
         {% for style in styles %}
             <div class="container">
                 {% for color in colors %}
-                    <div class="unit">
-                        <div class="b-{{ style }}{{ type }}{{ color }}">
-                            ${{ style }}{{ type }}{{ color }}
-                        </div>
-                    </div>
+                    {{ color_unit(style + type + color) }}
                 {% endfor %}
             </div>
         {% endfor %}
     {% endfor %}
+
+    <h2>Other Colors</h2>
+
+    <div class="container">
+        {{ color_unit('light-light-gray') }}
+        {{ color_unit('light-off-white') }}
+        {{ color_unit('bright-cool-blue') }}
+        <div class="unit"></div>
+    </div>
+    <div class="container">
+        {{ color_unit('light-gray') }}
+        {{ color_unit('off-white') }}
+        {{ color_unit('cool-blue') }}
+        <div class="unit"></div>
+    </div>
+    <div class="container">
+        {{ color_unit('light-medium-gray') }}
+        <div class="unit"></div>
+        <div class="unit"></div>
+        <div class="unit"></div>
+    </div>
+    <div class="container">
+        {{ color_unit('medium-gray') }}
+        <div class="unit"></div>
+        <div class="unit"></div>
+        <div class="unit"></div>
+    </div>
+    <div class="container">
+        {{ color_unit('dark-gray') }}
+        <div class="unit"></div>
+        <div class="unit"></div>
+        <div class="unit"></div>
+    </div>
+
 </div>
 
 </article>
