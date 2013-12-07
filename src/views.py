@@ -138,6 +138,8 @@ class ViewBase:
 
     def get_global_context(self):
         """Return a dictionary of variables accessible by all templates."""
+        if config['global']['engine.autoreload.on']:
+            scm.refresh()
         return ViewContext({
             'collections': menu_data,
             'config': config,

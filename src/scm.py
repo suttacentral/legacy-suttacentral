@@ -20,7 +20,11 @@ def get_tag():
     except plumbum.commands.processes.ProcessExecutionError as e:
         return None
 
-revision = get_revision()
-timestamp = get_timestamp()
-branch = get_branch()
-tag = get_tag()
+def refresh():
+    global revision, timestamp, branch, tag
+    revision = get_revision()
+    timestamp = get_timestamp()
+    branch = get_branch()
+    tag = get_tag()
+
+refresh()

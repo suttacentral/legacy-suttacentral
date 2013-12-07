@@ -2,7 +2,7 @@ $development-bar-text-color: $off-white;
 $development-bar-background-color: $pastel-purple;
 $development-bar-height: 2em;
 
-.development-bar {
+#development-bar {
     position: fixed;
     top: 0;
     left: 0;
@@ -34,7 +34,7 @@ $development-bar-height: 2em;
     }
 }
 
-.development-bar-push {
+#development-bar-push {
     width: 100%;
     height: $development-bar-height;
 

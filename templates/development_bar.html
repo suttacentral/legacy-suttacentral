@@ -1,5 +1,5 @@
 {%- if development_bar -%}
-<div class="development-bar">
+<div id="development-bar">
 {{ development_bar }} -
 <a href="https://github.com/suttacentral/suttacentral/tree/{{ scm.branch }}">{{ scm.branch }}</a> -
 <a href="https://github.com/suttacentral/suttacentral/commit/{{ scm.revision }}">{{ scm.revision[:8] }}</a>
@@ -7,5 +7,5 @@
 <a href="https://travis-ci.org/suttacentral/suttacentral"><img src="https://travis-ci.org/suttacentral/suttacentral.png?branch={{ scm.branch }}"></a>
 {%- endif -%}
 </div>
-<div class="development-bar-push"></div>
+<div id="development-bar-push"></div>
 {%- endif -%}
