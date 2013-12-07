@@ -22,7 +22,7 @@ $mobile-header-menu-font-size: 14px;
     bottom: 0;
     left: $header-menu-position;
     height: $header-menu-height;
-    font-family: $sans-serif-font;
+    @include sans-serif;
     font-size: $header-menu-font-size;
     line-height: $header-menu-height;
 

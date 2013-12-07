@@ -76,5 +76,13 @@
     font-style: normal;
 }
 
-$standard-font: 'Skolar Sutta Web', serif;
-$small-caps-font: 'Skolar Sutta Web SC', 'Skolar Sutta Web', serif;
+$skolar-sutta-web: 'Skolar Sutta Web', serif;
+$skolar-sutta-web-sc: 'Skolar Sutta Web SC', 'Skolar Sutta Web', serif;
+
+@mixin serif($extra:'') {
+    font-family: $skolar-sutta-web unquote($extra);
+}
+
+@mixin serif-small-caps($extra:'') {
+    font-family: $skolar-sutta-web-sc unquote($extra);
+}

@@ -33,7 +33,7 @@ $mobile-header-search-button-img-size: 12px;
     right: 0;
     width: $header-search-width;
     height: $header-search-height;
-    font-family: $sans-serif-font;
+    @include sans-serif;
     font-size: $header-search-font-size;
     z-index: 1;
 
@@ -138,7 +138,7 @@ $mobile-header-search-button-img-size: 12px;
     padding-top: $header-search-height + ($header-padding * 2);
     border: 1px solid $header-search-results-border-color;
     overflow: auto;
-    font-family: $sans-serif-font;
+    @include sans-serif;
     font-size: $header-search-font-size;
     line-height: 2em;
     background-color: $header-search-results-background-color;

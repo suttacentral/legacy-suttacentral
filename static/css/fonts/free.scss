@@ -37,5 +37,13 @@
     font-style: normal;
 }
 
-$standard-font: 'Gentium Basic', serif;
-$small-caps-font: 'Gentium Basic', serif;
+$gentium-basic: 'Gentium Basic', serif;
+
+@mixin serif($extra:'') {
+    font-family: $gentium-basic unquote($extra);
+}
+
+@mixin serif-small-caps($extra:'') {
+    font-family: $gentium-basic unquote($extra);
+    font-variant: small-caps;
+}

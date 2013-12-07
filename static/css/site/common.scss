@@ -6,7 +6,7 @@ $body-font-size: 16px;
 $mobile-body-font-size: 14px;
 
 body {
-    font-family: $standard-font;
+    @include serif;
     font-size: $body-font-size;
     line-height: 1.5em;
     color: $body-text-color;

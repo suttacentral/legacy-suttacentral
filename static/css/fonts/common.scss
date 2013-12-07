@@ -48,5 +48,17 @@
     font-style: normal;
 }
 
-$sans-serif-font: 'source_sans_pro', sans-serif;
-$sans-serif-sc-font: 'hetu_schetu_sc', sans-serif;
+$source-sans-pro: 'source_sans_pro', sans-serif;
+$hetu-schetu-sc: 'hetu_schetu_sc', sans-serif;
+
+@mixin sans-serif($extra:'') {
+    font-family: $source-sans-pro unquote($extra);
+}
+
+@mixin sans-serif-small-caps($extra:'') {
+    font-family: $hetu-schetu-sc unquote($extra);
+}
+
+@mixin monospace($extra:'') {
+    font-family: monospace unquote($extra);
+}

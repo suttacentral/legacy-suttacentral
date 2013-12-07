@@ -5,6 +5,14 @@
 
 {% set test_ligature_text = ' '.join([ 'fi', 'fj', 'fl', 'ff', 'ffi', 'ffl', 'ft', 'fb', 'fh', 'Fi', 'Th' ]) %}
 
+{% if offline %}
+    {% set serif_name = 'Gentium Basic' %}
+    {% set serif_small_caps_name = 'Gentium Basic (font-variant: small-caps)' %}
+{% else %}
+    {% set serif_name = 'Skolar Sutta Web' %}
+    {% set serif_small_caps_name = 'Skolar Sutta Web SC' %}
+{% endif %}
+
 {%- macro test_ligatures() -%}
     <p>{{ test_ligature_text }}</p>
     <p><strong>{{ test_ligature_text }}</strong></p>
@@ -39,21 +47,21 @@
         {{ test_chinese()}}
     </div>
 
-    <h2>Skolar Sutta Web (Kerning/Ligatures Off)</h2>
+    <h2>{{ serif_name }} (Kerning/Ligatures Off)</h2>
     <div class="serif ligatures-off">
         {{ test_ligatures() }}
         {{ test_vietnamese()}}
         {{ test_chinese()}}
     </div>
 
-    <h2>Skolar Sutta Web (Kerning/Ligatures On)</h2>
+    <h2>{{ serif_name }} (Kerning/Ligatures On)</h2>
     <div class="serif ligatures-on">
         {{ test_ligatures() }}
         {{ test_vietnamese()}}
         {{ test_chinese()}}
     </div>
 
-    <h2>Skolar Sutta Web Small Caps (Kerning/Ligatures On)</h2>
+    <h2>{{ serif_small_caps_name }} (Kerning/Ligatures On)</h2>
     <div class="serif-sc ligatures-on">
         <p>Dīgha Nikāya 1</p>
         <p>Brahmajālasutta</p>

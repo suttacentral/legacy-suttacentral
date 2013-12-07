@@ -22,7 +22,7 @@ $mobile-footer-font-size: 12px;
         display: block;
         width: 100%;
         padding: 1.5em 0 0 0;
-        font-family: $sans-serif-font;
+        @include sans-serif;
         font-size: $footer-font-size;
         line-height: 2em;
         text-transform: uppercase;

@@ -17,7 +17,7 @@ $citation-border-color: $medium-gray;
 
     & > input {
         width: 14em;
-        font-family: monospace;
+        @include monospace;
         font-size: 0.75em;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
@@ -27,7 +27,7 @@ $citation-border-color: $medium-gray;
         border-left: 0;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
-        font-family: $sans-serif-font;
+        @include sans-serif;
 
         &.hover {
             @include button-hover-background;

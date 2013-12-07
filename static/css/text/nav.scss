@@ -10,7 +10,7 @@ $text-nav-hover-color: $light-light-gray;
         padding: 1em 3em;
         border-radius: 0.5em;
         margin-bottom: 6em;
-        font-family: $sans-serif-font;
+        @include sans-serif;
         color: $text-nav-text-color;
         font-size: 0.7em;
         font-weight: bold;

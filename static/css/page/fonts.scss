@@ -26,19 +26,19 @@
     }
 
     .serif {
-        font-family: $standard-font;
+        @include serif;
     }
 
     .serif-sc {
-        font-family: $small-caps-font;
+        @include serif-small-caps;
     }
 
     .sans-serif {
-        font-family: $sans-serif-font;
+        @include sans-serif;
     }
 
     .sans-serif-sc {
-        font-family: $sans-serif-sc-font;
+        @include sans-serif-small-caps;
     }
 
 }

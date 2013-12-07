@@ -6,7 +6,7 @@
         min-height: 3em;
         border: 1px solid black;
         padding: 0.5em;
-        font-family: fixed;
+        @include monospace;
         font-size: 0.8em;
         line-height: 1.3em;
         text-align: center;

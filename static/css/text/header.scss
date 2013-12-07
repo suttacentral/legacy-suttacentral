@@ -3,7 +3,7 @@ $sutta-h2-color: $light-medium-gray;
 
 .sutta {
     h1, h2, h3, h4, h5, h6 {
-        font-family: $small-caps-font;
+        @include serif-small-caps;
         text-align: center;
         font-weight: normal;
         letter-spacing: 0.02em;
@@ -52,7 +52,7 @@ $sutta-h2-color: $light-medium-gray;
 
         & > h2, & > h3 {
             margin: 0;
-            font-family: $sans-serif-font;
+            @include sans-serif;
             font-size: 0.8em;
             text-transform: uppercase;
             letter-spacing: 0.2em;

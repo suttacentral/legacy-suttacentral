@@ -68,7 +68,7 @@ $mobile-header-title-font-size: 20px;
     padding: 0;
     line-height: $header-title-font-size;
     font-size: $header-title-font-size;
-    font-family: $small-caps-font;
+    @include serif-small-caps;
     font-weight: normal;
     letter-spacing: 0.02em;
 
