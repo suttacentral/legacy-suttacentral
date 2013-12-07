@@ -1,19 +1,8 @@
-$header-background-color: #EEE8AA;
-$header-line-color: #9B0F00;
-$header-shadow-color: rgb(136, 136, 136);
+$header-background-color: $pastel-yellow;
+$header-line-color: $dark-saturated-red;
 $header-wheel-color: white;
-$header-title-color: #00527A;
-$header-caption-color: #6f6f6f;
-$header-menu-border-color: #a1a1a1;
-$header-menu-background-color: #fafafa;
-$header-menu-separation-color: #ccc;
-$header-menu-item-hover-color: #f2f2f2;
-$header-search-border-color: $header-menu-border-color;
-$header-search-results-background-color: #f6f6f6;
-$header-search-results-border-color: #ccc;
-$header-search-results-alt-background-color: #f0f0f0;
-$header-search-results-hover-background-color: #e5e5e5;
-$header-search-results-highlight-background-color: #ffffcc;
+$header-title-color: $cool-blue;
+$header-caption-color: $dark-saturated-yellow;
 
 $header-height: 54px;
 $header-padding: 6px;
@@ -115,11 +104,7 @@ $mobile-header-search-button-img-size: 12px;
     height: $header-wheel-height;
     line-height: $header-wheel-height;
     font-size: $header-wheel-font-size;
-    overflow: hidden;
     text-align: center;
-
-    // jingoro - this seems to make the wheel more blurry so I'm disabling it
-    // text-shadow: 0 0 5px rgba(255,255,255,0.5);
 
     @media #{$tablet} {
         top: $tablet-header-wheel-top;
@@ -139,7 +124,7 @@ $mobile-header-search-button-img-size: 12px;
 
     & > a {
         display: block;
-        color: white;
+        color: $header-wheel-color;
     }
 }
 

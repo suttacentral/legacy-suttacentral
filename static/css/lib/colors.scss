@@ -52,10 +52,15 @@ $dark-saturated-purple:   #2E0269;
 $bright-saturated-purple: #7A39D0;
 $light-saturated-purple:  #9161D0;
 
-// Other colors (e.g., grays)
+// Other colors (e.g., blues, grays, etc.)
 
-$light-light-gray: rgb(235, 235, 235);
-$light-gray: rgb(220, 220, 220);
+$cool-blue:         #005179;
+$bright-cool-blue:  #007AFE;
+
+$light-off-white:   darken(white, 1%);
+$off-white:         darken(white, 3%);
+$light-light-gray:  rgb(235, 235, 235);
+$light-gray:        rgb(220, 220, 220);
 $light-medium-gray: rgb(200, 200, 200);
-$medium-gray: rgb(161, 161, 161);
-$dark-gray: rgb(43, 43, 43);
+$medium-gray:       rgb(161, 161, 161);
+$dark-gray:         rgb( 43,  43,  43);

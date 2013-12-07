@@ -1,6 +1,5 @@
-$footer-background-color: #B0D1C3;
-$footer-font-color: #b2b2b2;
-$footer-separator-color: rgb(178, 178, 178);
+$footer-background-color: $light-pastel-green;
+$footer-separator-color: $medium-gray;
 
 $footer-font-size: 13px;
 $mobile-footer-font-size: 12px;
@@ -23,7 +22,6 @@ $mobile-footer-font-size: 12px;
         display: block;
         width: 100%;
         padding: 1.5em 0 0 0;
-        color: $footer-font-color;
         font-family: $sans-serif-font;
         font-size: $footer-font-size;
         line-height: 2em;
@@ -49,10 +47,22 @@ $mobile-footer-font-size: 12px;
                 margin: 0;
                 padding: 0 0.2em 0 0.5em;
                 border-left: 1px solid $footer-separator-color;
-                
+
                 &:first-child {
                     padding-left: 0;
                     border-left: none;
+                }
+
+                & > a:visited {
+                    color: $link-color;
+                }
+
+                & > a:hover {
+                    color: $link-hover-color;
+                }
+
+                & > a:active {
+                    color: $link-active-color;
                 }
             }
         }

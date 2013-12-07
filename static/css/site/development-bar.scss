@@ -1,5 +1,5 @@
-$development-bar-color: white;
-$development-bar-background-color: rgb(67,39,105);
+$development-bar-text-color: $off-white;
+$development-bar-background-color: $pastel-purple;
 $development-bar-height: 2em;
 
 .development-bar {
@@ -12,7 +12,7 @@ $development-bar-height: 2em;
     background-color: $development-bar-background-color;
     line-height: $development-bar-height;
     text-align: center;
-    color: $development-bar-color;
+    color: $development-bar-text-color;
     overflow: hidden;
 
     @media print {
@@ -20,7 +20,7 @@ $development-bar-height: 2em;
     }
 
     a, a:visited {
-        color: $development-bar-color;
+        color: $development-bar-text-color;
     }
 
     a:hover {

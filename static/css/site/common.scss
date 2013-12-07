@@ -1,13 +1,8 @@
-$body-background-color: #fcfcfc;
-$body-text-color: #2b2b2b;
-$link-color: #007afe;
-$visited-link-color: #006699;
-$hover-link-color: #DF00FF;
-$active-link-color: purple;
-$offsite-translation-link-color: #99aabb;
-$subheading-color: #a1a1a1;
+$body-background-color: $light-off-white;
+$body-text-color:       $dark-gray;
+$body-subheading-color: $medium-gray;
 
-$body-font-size: 16px;
+$body-font-size:        16px;
 $mobile-body-font-size: 14px;
 
 body {
@@ -30,23 +25,6 @@ body {
     @media #{$mobile} {
         font-size: $mobile-body-font-size;
     }
-}
-
-//
-// Links
-//
-
-a         { text-decoration: none; }
-a:link    { color: $link-color; }
-a:visited { color: $visited-link-color; }
-a:hover   { color: $hover-link-color; }
-a:active  { color: $active-link-color; }
-
-// De-emphasize offsite translations
-a.tran[href^="http"] {
-    font-size: 90%;
-    color: $offsite-translation-link-color;
-    font-style: italic;
 }
 
 //
@@ -75,18 +53,24 @@ h1 {
     color: $body-text-color;
 }
 
+h2, h3, h4, h5, h6 {
+    color: $body-subheading-color;
+}
+
 h2 {
     margin: 0.3em 0 0.8em;
     font-size: 1.3em;
     font-weight: normal;
-    color: $subheading-color;
 }
 
 h3 {
     margin-bottom: -0.2em 0 1.3em;
     font-size: 1em;
     font-weight: bold;
-    color: $subheading-color;
+}
+
+blockquote {
+    margin: 1.3em 1em 1.3em 1em;
 }
 
 time {
@@ -94,75 +78,6 @@ time {
     font-weight: bold;
 }
 
-//
-// Tables
-//
-
-table {
-    border-collapse: collapse;
-    margin: 0 auto 1.5em auto;
-}
-
-caption {
-    margin: 0 0 1em 0;
-    white-space: nowrap;
-
-    @media #{$mobile} {
-        text-align:left;
-        margin-left: 1em;
-    }
-}
-
-blockquote {
-    margin: 1.3em 1em 1.3em 1em;
-}
-
-td, th {
-    padding: 0.75em 1em;
-    border: 1px solid #d9d9d9;
-    border-left: none;
-    border-right: none;
-    vertical-align: top;
-    text-align: left;
-}
-
-tfoot > tr > td {
-    padding: 0.5em 0.5em 0em 0.5em;
-    border: none;
-    font-size: 0.8em;
-}
-
-tr.even {
-    background-color: #fff;
-}
-
-td a:hover:not(.bib):not(.note) {
-    background-color: #f4f4f4;
-}
-
-.tdindent {
-    padding-left: 3em;
-}
-
-//
-// Buttons
-//
-
-button {
-    @include vertical-linear-gradient(white, $light-gray);
-}
-
-button:hover {
-    @include vertical-linear-gradient(white, $light-light-gray);
-}
-
-button:active {
-    @include vertical-linear-gradient($light-light-gray, white);
-}
-
-button[disabled=disabled] {
-    background: $light-light-gray;
-}
 
 //
 // Manual Overrides

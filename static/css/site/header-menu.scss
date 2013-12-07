@@ -1,3 +1,17 @@
+$header-menu-background-color:      $light-off-white;
+$header-menu-border-color:          $medium-gray;
+$header-menu-shadow-color:          $button-box-shadow-color;
+$header-menu-item-color:            $off-white;
+$header-menu-item-hover-color:      $light-light-gray;
+$header-menu-separation-color:      $light-gray;
+$header-menu-nav-text-color:        lighten($body-text-color, 20%);
+$header-menu-nav-hover-text-color:  $body-text-color;
+
+$header-menu-nav-gradiant-top-color:          $button-hover-gradiant-top-color;
+$header-menu-nav-gradiant-bottom-color:       $button-hover-gradiant-bottom-color;
+$header-menu-nav-hover-gradiant-top-color:    $button-active-gradiant-top-color;
+$header-menu-nav-hover-gradiant-bottom-color: $button-active-gradiant-bottom-color;
+
 #page-header-menu {
     position: absolute;
     bottom: 0;
@@ -38,10 +52,11 @@
             padding: 0 0.4em;
             border: 1px solid $header-menu-border-color;
             border-right: 0;
-            @include vertical-linear-gradient(rgba(255,255,255,1), rgba(237,237,237,1));
+            @include vertical-linear-gradient($header-menu-nav-gradiant-top-color,
+                                              $header-menu-nav-gradiant-bottom-color);
             font-weight: normal;
-            color: $body-text-color;
-            cursor: pointer;
+            color: $header-menu-nav-text-color;
+            cursor: default;
 
             @media #{$tablet} {
                 height: $tablet-header-menu-height;
@@ -64,11 +79,13 @@
         };
         
         &:hover > h3, & > h3:hover {
-            background: #fafafa !important;
-            box-shadow: 0.25em 0.25em 0.5em rgba($header-shadow-color, 0.3);
+            @include vertical-linear-gradient($header-menu-nav-hover-gradiant-top-color,
+                                              $header-menu-nav-hover-gradiant-bottom-color);
+            box-shadow: 0.25em 0.25em 0.5em $header-menu-shadow-color;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
             z-index: 30;
+            color: $header-menu-nav-hover-text-color;
         }
 
         & > ul {
@@ -80,7 +97,7 @@
             border: 1px solid $header-menu-border-color;
             list-style-type: none;
             white-space: nowrap;
-            box-shadow: 0.25em 0.25em 0.5em rgba($header-shadow-color, 0.3);
+            box-shadow: 0.25em 0.25em 0.5em $header-menu-shadow-color;
             background-color: $header-menu-background-color;
             visibility: hidden;
             opacity: 0;

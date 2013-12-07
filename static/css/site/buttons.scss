@@ -1,0 +1,28 @@
+$button-gradiant-top-color:           white;
+$button-gradiant-bottom-color:        $light-gray;
+$button-hover-gradiant-top-color:     white;
+$button-hover-gradiant-bottom-color:  $light-light-gray;
+$button-active-gradiant-top-color:    $button-hover-gradiant-bottom-color;
+$button-active-gradiant-bottom-color: $button-hover-gradiant-top-color;
+$button-disabled-background-color:    $button-gradiant-bottom-color;
+$button-box-shadow-color:             rgba($medium-gray, 0.3);
+
+button {
+    @include vertical-linear-gradient($button-gradiant-top-color,
+                                      $button-gradiant-bottom-color);
+    box-shadow: 0 0 0.25em $button-box-shadow-color;
+}
+
+button:hover {
+    @include vertical-linear-gradient($button-hover-gradiant-top-color,
+                                      $button-hover-gradiant-bottom-color);
+}
+
+button:active {
+    @include vertical-linear-gradient($button-active-gradiant-top-color,
+                                      $button-active-gradiant-bottom-color);
+}
+
+button[disabled=disabled] {
+    background: $button-disabled-background-color;
+}
