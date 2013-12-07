@@ -51,10 +51,18 @@ h1 {
     line-height: 1em;
     font-weight: normal;
     color: $body-text-color;
+
+    & > a, & > a:link, & > a:visited, & > a:hover, & > a:active {
+        color: $body-text-color;
+    }
 }
 
 h2, h3, h4, h5, h6 {
     color: $body-subheading-color;
+
+    & > a, & > a:link, & > a:visited, & > a:hover, & > a:active {
+        color: $body-subheading-color;
+    }
 }
 
 h2 {
