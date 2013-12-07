@@ -1,30 +1,33 @@
-// Dependencies
-@import 'mixins';
-@import 'media';
-@import 'fonts-common';
-@import 'colors';
+// Other fonts are specified in main-*.scss
+@import 'fonts/common';
+
+// Variables and mixins
+@import 'lib/colors';
+@import 'lib/media';
+@import 'lib/mixins';
 
 // Site-wide styles
-@import 'common';
-@import 'layout';
-@import 'development-bar';
-@import 'header';
-@import 'header-menu';
-@import 'header-search';
-@import 'outdated-browser';
-@import 'footer';
+@import 'site/common';
+@import 'site/layout';
+@import 'site/development-bar';
+@import 'site/header';
+@import 'site/header-menu';
+@import 'site/header-search';
+@import 'site/outdated-browser';
+@import 'site/footer';
 
 // Page-specific styles
-@import 'home';
-@import 'search';
-@import 'parallel';
-@import 'fonts-page';
+@import 'page/colors';
+@import 'page/fonts';
+@import 'page/home';
+@import 'page/parallel';
+@import 'page/search';
 
 // Sutta styles
-@import 'sutta';
-@import 'sutta-header';
-@import 'sutta-nav';
-@import 'sutta-toc';
+@import 'text/common';
+@import 'text/header';
+@import 'text/nav';
+@import 'text/toc';
 
 // Unconverted styles
 @import 'sc';
