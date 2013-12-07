@@ -36,14 +36,14 @@ css_utf8 = webassets.Bundle(
 
 css_main_free = webassets.Bundle(
     'css/main-free.scss',
-    depends='css/*.scss',
+    depends=('css/*.scss', 'css/*/*.scss'),
     filters='pyscss',
     output='css/compiled/main-free-%(version)s.css'
 )
 
 css_main_nonfree = webassets.Bundle(
     'css/main-nonfree.scss',
-    depends='css/*.scss',
+    depends=('css/*.scss', 'css/*/*.scss'),
     filters='pyscss',
     output='css/compiled/main-nonfree-%(version)s.css'
 )
