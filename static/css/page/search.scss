@@ -1,3 +1,5 @@
+$search-terms-ref-color: $medium-gray;
+
 .text_results .details {
     float: none;
 }
@@ -7,7 +9,7 @@
 }
 
 .terms a.ref, .terms span.precision {
-    color: gray;
+    color: $search-terms-ref-color;
     font-style: italic;
     font-size: 75%;
     line-height: 0;

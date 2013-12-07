@@ -11,6 +11,10 @@ $mobile-main-side-margin: 1em;
 
 html, body {
     height: 100%;
+
+    @media print {
+        height: inherit;
+    }
 }
 
 body {
@@ -26,6 +30,11 @@ body {
     @media #{$mobile} {
         margin-bottom: -$mobile-footer-height;
     }
+
+    @media print {
+        min-height: inherit;
+        height: inherit !important;
+    }
 }
 
 #page-footer-push {
@@ -34,6 +43,10 @@ body {
 
     @media #{$mobile} {
         height: $mobile-footer-height;
+    }
+
+    @media print {
+        display: none;
     }
 }
 

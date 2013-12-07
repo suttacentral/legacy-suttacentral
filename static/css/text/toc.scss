@@ -1,10 +1,10 @@
-$sutta-toc-text-color: #6f6f6f;
-$sutta-toc-background-color: #f6f6f6;
-$sutta-toc-shadow-color: rgb(136, 136, 136);
-$sutta-toc-text-shadow-color: #fefefe;
-$sutta-toc-text-border-color: #ccc;
-$sutta-toc-button-border-color: #aaa;
-$sutta-toc-menu-hover-color: #e6e6e6;
+$sutta-toc-text-color: lighten($dark-gray, 25%);
+$sutta-toc-background-color: $off-white;
+$sutta-toc-shadow-color: $medium-gray;
+$sutta-toc-text-shadow-color: white;
+$sutta-toc-text-border-color: $light-gray;
+$sutta-toc-button-border-color: $medium-gray;
+$sutta-toc-menu-hover-color: $light-light-gray;
 
 $sutta-toc-border-radius: 3px;
 $sutta-toc-button-height: 26px;
@@ -25,6 +25,10 @@ $sutta-toc-menu-font-size: 11px;
         padding: 0;
         width: 100%;
         overflow: hidden;
+    }
+
+    @media print {
+        display: none;
     }
 
     button {

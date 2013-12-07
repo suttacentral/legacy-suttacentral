@@ -7,11 +7,6 @@ $header-menu-separation-color:      $light-gray;
 $header-menu-nav-text-color:        lighten($body-text-color, 20%);
 $header-menu-nav-hover-text-color:  $body-text-color;
 
-$header-menu-nav-gradiant-top-color:          $button-hover-gradiant-top-color;
-$header-menu-nav-gradiant-bottom-color:       $button-hover-gradiant-bottom-color;
-$header-menu-nav-hover-gradiant-top-color:    $button-active-gradiant-top-color;
-$header-menu-nav-hover-gradiant-bottom-color: $button-active-gradiant-bottom-color;
-
 #page-header-menu {
     position: absolute;
     bottom: 0;
@@ -45,6 +40,7 @@ $header-menu-nav-hover-gradiant-bottom-color: $button-active-gradiant-bottom-col
 
         & > h3 {
             @include box-sizing(border-box);
+            @include button-hover-background;
             position: relative;
             height: $header-menu-height;
             line-height: $header-menu-height - 2px;
@@ -52,8 +48,6 @@ $header-menu-nav-hover-gradiant-bottom-color: $button-active-gradiant-bottom-col
             padding: 0 0.4em;
             border: 1px solid $header-menu-border-color;
             border-right: 0;
-            @include vertical-linear-gradient($header-menu-nav-gradiant-top-color,
-                                              $header-menu-nav-gradiant-bottom-color);
             font-weight: normal;
             color: $header-menu-nav-text-color;
             cursor: default;
@@ -79,8 +73,7 @@ $header-menu-nav-hover-gradiant-bottom-color: $button-active-gradiant-bottom-col
         };
         
         &:hover > h3, & > h3:hover {
-            @include vertical-linear-gradient($header-menu-nav-hover-gradiant-top-color,
-                                              $header-menu-nav-hover-gradiant-bottom-color);
+            @include button-active-background;
             box-shadow: 0.25em 0.25em 0.5em $header-menu-shadow-color;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;

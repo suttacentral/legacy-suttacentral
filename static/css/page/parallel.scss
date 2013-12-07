@@ -1,3 +1,5 @@
+$citation-border-color: $medium-gray;
+
 #parallel-citation {
     float: right;
 
@@ -8,7 +10,7 @@
         margin: 0;
         padding: 0 0.5em;
         height: 24px;
-        border: 1px solid $medium-gray;
+        border: 1px solid $citation-border-color;
         border-radius: 0.25em;
         vertical-align: middle;
     }
@@ -28,11 +30,15 @@
         font-family: $sans-serif-font;
 
         &.hover {
-            @include vertical-linear-gradient(white, $light-light-gray);
+            @include button-hover-background;
         }
 
         &.active {
-            @include vertical-linear-gradient($light-light-gray, white);
+            @include button-active-background;
         }
+    }
+
+    @media print {
+        display: none;
     }
 }
