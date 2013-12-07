@@ -32,3 +32,19 @@ def nonfree_fonts():
         'static/fonts/nonfree/ ' + \
         'sc-staging@vps.suttacentral.net:' + \
         '/home/sc-staging/suttacentral/static/fonts/nonfree/')
+
+@task
+def quick():
+    """Quick deploy to the staging server."""
+    remote_run('sc-staging@vps.suttacentral.net', [
+        'source $HOME/.virtualenvs/suttacentral/bin/activate',
+        'cd $HOME/suttacentral',
+        'git pull',
+        'cd text',
+        'git pull',
+        'cd ..',
+        'pip install -q -r requirements.txt',
+        'invoke assets.compile',
+        'sudo supervisorctl restart sc-staging',
+        'invoke assets.clean --older',
+    ])
