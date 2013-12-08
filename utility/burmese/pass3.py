@@ -3,6 +3,7 @@
 """Finalize output.
 
 - Normalize Unicode issues.
+- Fix encoding issues identified by Nay.
 - Add font-face.
 
 See http://stackoverflow.com/questions/5465170/text-run-is-not-in-unicode-normalization-form-c
@@ -28,6 +29,7 @@ body {
 
 def convert(text):
     text = unicodedata.normalize('NFC', text)
+    text = text.replace('စွွဲ၍', 'စွဲ၍')
     text = text.replace('</head>', '{}</head>'.format(FONTS_HTML))
     return text
 
