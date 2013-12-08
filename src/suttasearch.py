@@ -68,7 +68,6 @@ class Ranker:
 # the same results will be requested again, with only the offset changed.
 # Results are not large, so there's little harm in caching a lot of them.
 
-@functools.lru_cache(500)
 def get_and_rank_results(query, lang=None):
     results = search_dbr(query, lang)
     if len(results) == 0:
