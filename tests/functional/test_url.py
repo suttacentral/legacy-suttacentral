@@ -1,5 +1,6 @@
 from selenium.common.exceptions import NoSuchElementException
-from test_env import SCTestCase
+
+from ..helper import SCTestCase
 
 class UrlTestCase(SCTestCase):
 

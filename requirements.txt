@@ -14,6 +14,7 @@ mysql-connector-python==1.0.12
 newrelic==2.6.0.5
 plumbum==1.4.0
 pyScss==1.2.0.post3
+pytest==2.4.2
 regex==0.1.20130125
 selenium==2.37.2
 webassets==0.9

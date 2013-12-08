@@ -2,7 +2,8 @@ import datetime
 import pytz
 import unittest
 
-import test_env
+from ..helper import SCTestCase
+
 import util
 
 class UnitsTest(unittest.TestCase):

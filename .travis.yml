@@ -16,5 +16,5 @@ install:
 before_script:
   - invoke travis.prepare
   - invoke travis.start_server
-script: invoke test --phantomjs
+script: invoke test.all --phantomjs
 after_script: invoke travis.stop_server

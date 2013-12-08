@@ -13,6 +13,7 @@ from . import fonts
 from . import log
 from . import newrelic
 from . import search
+from . import test
 from . import tmp
 from . import travis
 
@@ -26,5 +27,6 @@ ns.add_collection(fonts)
 ns.add_collection(log)
 ns.add_collection(newrelic)
 ns.add_collection(search)
+ns.add_collection(test)
 ns.add_collection(tmp)
 ns.add_collection(travis)

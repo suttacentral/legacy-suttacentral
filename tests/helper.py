@@ -1,8 +1,18 @@
-import env
-import atexit, os, time, unittest
-from urllib.parse import urljoin
+import atexit
+import os
+import os.path
+import sys
+import time
+import unittest
+
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from urllib.parse import urljoin
+
+# Setup sys.path to import modules from the project directory.
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(
+    os.path.realpath(__file__))), 'src'))
+
 import config
 
 base_url = None

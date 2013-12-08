@@ -1,6 +1,6 @@
 import re
 
-from test_env import SCTestCase
+from ..helper import SCTestCase
 
 class SimpleTestCase(SCTestCase):
 
