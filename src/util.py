@@ -47,7 +47,7 @@ def mysql(sql, host=None, port=None, user=None, password=None, db=None,
     """
     args = []
     try:
-        if password:
+        if password is not None:
             tf = tempfile.NamedTemporaryFile(delete = False)
             my_cnf = '[client]\npassword="{}"\n'.format(password)
             tf.write(bytes(my_cnf, 'UTF-8'))
@@ -73,7 +73,7 @@ def mysql(sql, host=None, port=None, user=None, password=None, db=None,
         else:
             return command.run(retcode=None)
     finally:
-        if password:
+        if password is not None:
             os.unlink(tf.name)
 
 def set_timezone(tz=None):
