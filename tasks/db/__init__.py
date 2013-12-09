@@ -8,38 +8,38 @@ from . import dump
 from ..helpers import *
 
 @task
-@blurb
 def clean():
     """Delete the main SQLite database & temporary database files."""
+    blurb(clean)
     rm_rf('db/sc.sqlite', 'db/*.sqlite.tmp*')
 
 @task
-@blurb
 def create():
     """Create the MySQL database."""
+    blurb(create)
     sql = 'CREATE DATABASE {db} CHARACTER SET utf8;'.format(**config.mysql)
     mysql(sql, db=False)
 
 @task(aliases=('destroy',))
-@blurb
 def drop():
     """Drop the MySQL database."""
+    blurb(drop)
     sql = 'DROP DATABASE IF EXISTS {db};'.format(**config.mysql)
     mysql(sql, db=False)
 
 @task
-@blurb
 def reset():
     """Reset the MySQL database."""
+    blurb(reset)
     dump.download()
     drop()
     create()
     dump.import_()
 
 @task
-@blurb
 def setup():
     """Setup MySQL database authentication."""
+    blurb(setup)
     notice('When prompted, enter the MySQL root password.')
     sql = """
         GRANT ALL PRIVILEGES ON {db}.* TO {user}@{host}

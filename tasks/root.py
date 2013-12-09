@@ -26,16 +26,16 @@ def clean(aggressive=False):
         tasks.exports.offline.clean(older=True)
 
 @task('newrelic.update_ini')
-@blurb
 def daemonize():
     """Run the *HARDCORE* server."""
+    blurb(daemonize)
     os.chdir(config.source_dir)
     os.environ['NEW_RELIC_CONFIG_FILE'] = '{}/newrelic.ini'.format(config.base_dir)
     os.execlp('newrelic-admin', 'newrelic-admin', 'run-program', 'cherryd', '-i', 'server')
 
 @task
-@blurb
 def server():
     """Run the local development server."""
+    blurb(server)
     os.chdir(config.source_dir)
     os.execlp('python', 'python', 'server.py')

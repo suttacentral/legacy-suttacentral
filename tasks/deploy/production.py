@@ -3,9 +3,9 @@
 from ..helpers import *
 
 @task
-@blurb
 def full():
     """Deploy to the production server."""
+    blurb(full)
     remote_run('sc-production@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
@@ -26,9 +26,9 @@ def full():
     ])
 
 @task
-@blurb
 def nonfree_fonts(force=False):
     """Copy local nonfree fonts to the production server."""
+    blurb(nonfree_fonts)
     command = 'rsync -avz ' + \
         'static/fonts/nonfree/ ' + \
         'sc-production@vps.suttacentral.net:' + \
@@ -39,9 +39,9 @@ def nonfree_fonts(force=False):
     run(command, fg=True)
 
 @task
-@blurb
 def quick():
     """Deploy simple changes to the production server."""
+    blurb(quick)
     remote_run('sc-production@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
@@ -56,9 +56,9 @@ def quick():
     ])
 
 @task
-@blurb
 def text():
     """Deploy text changes to the production server."""
+    blurb(text)
     remote_run('sc-production@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',

@@ -19,6 +19,7 @@ _PP_HINTS = {
     'Delete': 'Deleting',
     'Drop': 'Dropping',
     'Prepare': 'Preparing',
+    'Reset': 'Resetting',
     'Run': 'Running',
     'Setup': 'Setting up',
     'Stop': 'Stopping',
@@ -33,18 +34,7 @@ def _color_print(string, color):
     sys.stdout.flush()
 
 def blurb(function):
-    """A decorator for blurb_notice."""
-    text = function.__doc__
-    def wrap(*args, **kwargs):
-        blurb_notice(function)
-        function(*args, **kwargs)
-    # We need this so invoke @task decorator functions correctly.
-    wrap.__doc__ = function.__doc__
-    wrap.__name__ = function.__name__
-    return wrap
-
-def blurb_notice(function):
-    """Display notice for function in present participle tense."""
+    """Print the function's docstring in present participle tense."""
     text = function.__doc__
     first, rest = text.split(' ', 1)
     first = _PP_HINTS.get(first, first + 'ing')

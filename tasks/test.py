@@ -12,19 +12,19 @@ def _run_tests(tests, url=None, phantomjs=False):
         run('py.test {}'.format(tests), fg=True)
 
 @task
-@blurb
 def all(url=None, phantomjs=False):
     """Run all tests in the test suite."""
+    blurb(all)
     _run_tests('tests', url=url, phantomjs=phantomjs)
 
 @task
-@blurb
 def functional(url=None, phantomjs=False):
     """Run the functional test suite."""
+    blurb(functional)
     _run_tests('tests/functional', url=url, phantomjs=phantomjs)
 
 @task
-@blurb
 def unit():
     """Run the unit test suite."""
+    blurb(unit)
     _run_tests('tests/unit')

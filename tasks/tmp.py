@@ -3,9 +3,9 @@
 from .helpers import *
 
 @task
-@blurb
 def clean():
     """Delete Python cache and temporary files."""
+    blurb(clean)
     rm_rf(
         '__pycache__',
         '*/__pycache__',

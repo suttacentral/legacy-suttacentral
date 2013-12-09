@@ -3,9 +3,9 @@
 from ..helpers import *
 
 @task
-@blurb
 def clean(older=False):
     """Delete offline SuttaCentral export files."""
+    blurb(clean)
     if older:
         run('find static/exports -type f -mtime +2 -name "sc-offline-*" ' +
             '-exec rm {} \;')
@@ -13,9 +13,9 @@ def clean(older=False):
         rm_rf('static/exports/sc-offline-*')
 
 @task
-@blurb
 def create(host='localhost:8800', force=False, quiet=False, wait=None):
     """Create an offline SuttaCentral export."""
+    blurb(create)
     command = 'utility/export/offline.py'
     if force:
         command += ' --force'

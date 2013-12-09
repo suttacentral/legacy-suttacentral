@@ -3,7 +3,7 @@
 from tasks.helpers import *
 
 @task
-@blurb
 def clean():
     """Delete log files."""
+    blurb(clean)
     rm_rf('log/*.log')

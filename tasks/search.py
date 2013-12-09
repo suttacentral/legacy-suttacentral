@@ -5,13 +5,13 @@ import textsearch
 from .helpers import *
 
 @task
-@blurb
 def clean():
     """Delete the search index SQLite databases."""
+    blurb(clean)
     rm_rf('db/search_*.sqlite')
 
 @task
-@blurb
 def index():
     """Create the search index SQLite databases."""
+    blurb(index)
     textsearch.build()
