@@ -82,7 +82,6 @@ class _DBR:
         self.build_references(db)
         self.build_parallels_data(db)
         self.timestamp = timestamp
-        pickle.dump(self, open(config.dbr_cache_file, 'wb'))
         self.build_stage2()
         
     def build_stage2(self):

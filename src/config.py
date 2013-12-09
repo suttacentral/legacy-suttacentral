@@ -63,6 +63,7 @@ class Config(dict):
         ['app', 'static_root'],
         ['app', 'templates_root'],
         ['app', 'text_root'],
+        ['app', 'data'],
         ['sqlite', 'db'],
         ['dict', 'db'],
         ['dict', 'sources'],

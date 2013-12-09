@@ -1,0 +1,197 @@
+uid,name,vagga_ind
+dn-nosub,,False
+mn-nosub,,False
+sn1,Devatā Saṃyutta,False
+sn2,Devaputta Saṃyutta,False
+sn3,Kosala Saṃyutta,False
+sn4,Māra Saṃyutta,False
+sn5,Bhikkhuṇī Saṃyutta,False
+sn6,Brahmā Saṃyutta,False
+sn7,Brāhmaṇa Saṃyutta,False
+sn8,Vangīsa Thera Saṃyutta,False
+sn9,Vana Saṃyutta,False
+sn10,Yakkha Saṃyutta,False
+sn11,Sakka Saṃyutta,False
+sn12,Nidāna Saṃyutta,False
+sn13,Abhisamaya Saṃyutta,False
+sn14,Dhātu Saṃyutta,False
+sn15,Anamatagga Saṃyutta,False
+sn16,Kassapa Saṃyutta,False
+sn17,Lābhasakkāra Saṃyutta,False
+sn18,Rāhula Saṃyutta,False
+sn19,Lakkhaṇa Saṃyutta,False
+sn20,Opamma Saṃyutta,False
+sn21,Bhikkhu Saṃyutta,False
+sn22,Khandha Saṃyutta,False
+sn23,Rādha Saṃyutta,False
+sn24,Diṭṭhi Saṃyutta,False
+sn25,Okkantika Saṃyutta,False
+sn26,Uppāda Saṃyutta,False
+sn27,Kilesa Saṃyutta,False
+sn28,Sāriputta Saṃyutta,False
+sn29,Nāga Saṃyutta,False
+sn30,Supaṇṇa Saṃyutta,False
+sn31,Gandhabbakāya Saṃyutta,False
+sn32,Valāhaka Saṃyutta,False
+sn33,Vacchagotta Saṃyutta,False
+sn34,Samādhi Saṃyutta,False
+sn35,Saḷāyatana Saṃyutta,False
+sn36,Vedanā Saṃyutta,False
+sn37,Mātugāma Saṃyutta,False
+sn38,Jambukhādaka Saṃyutta,False
+sn39,Sāmaṇḍaka Saṃyutta,False
+sn40,Moggallāna Saṃyutta,False
+sn41,Citta Saṃyutta,False
+sn42,Gāmani Saṃyutta,False
+sn43,Asaṅkhata Saṃyutta,False
+sn44,Avyākata Saṃyutta,False
+sn45,Magga Saṃyutta,False
+sn46,Bojjhaṅga Saṃyutta,False
+sn47,Satipaṭṭhāna Saṃyutta,False
+sn48,Indriya Saṃyutta,False
+sn49,Sammappadhāna Saṃyutta,False
+sn50,Bala Saṃyutta,False
+sn51,Iddhipāda Saṃyutta,False
+sn52,Anuruddha Saṃyutta,False
+sn53,Jhāna Saṃyutta,False
+sn54,Ānāpāna Saṃyutta,False
+sn55,Sotāpatti Saṃyutta,False
+sn56,Sacca Saṃyutta,False
+an1,Ekaka Nipāta,True
+an2,Duka Nipāta,True
+an3,Tika Nipāta,False
+an4,Catukka Nipāta,False
+an5,Pañcaka Nipāta,False
+an6,Chakka Nipāta,False
+an7,Sattaka Nipāta,False
+an8,Aṭṭhaka Nipāta,False
+an9,Navaka Nipāta,False
+an10,Dasaka Nipāta,False
+an11,Ekādasaka Nipāta,False
+kp,Khuddakapāṭha,False
+dp,Dhammapada,False
+ud,Udāna,False
+it,Itivuttaka,False
+sp,Sutta Nipāta,False
+vv,Vimānavatthu (no data online),False
+pv,Petavatthu (no data online),False
+thag,Theragāthā (no data online),False
+thig,Therīgāthā (no data online),False
+jat,Jātaka (no data online),False
+nm,Niddesa (no data online),False
+ps,Paṭisambhidāmagga,False
+ap,Apadāna (no data online),False
+bv,Buddhavaṃsa (no data online),False
+cp,Cariyāpiṭaka (no data online),False
+mv-nosub,,False
+cv-nosub,,False
+prv-nosub,,False
+svbh-nosub,,False
+dhs-nosub,,False
+vbh-nosub,,False
+dhatuk-nosub,,False
+pp-nosub,,False
+kv-nosub,,False
+yam-nosub,,False
+patth-nosub,,False
+da-nosub,,False
+t2-25,Other Dīrgha Sūtras,False
+ma-nosub,,False
+t27-98,Other Madhyama Sūtras,False
+sa1-100,Saṃyuktāgama 1−100,False
+sa101-200,Saṃyuktāgama 101−200,False
+sa201-300,Saṃyuktāgama 201−300,False
+sa301-400,Saṃyuktāgama 301−400,False
+sa401-500,Saṃyuktāgama 401−500,False
+sa501-600,Saṃyuktāgama 501−600,False
+sa601-700,Saṃyuktāgama 601−700,False
+sa701-800,Saṃyuktāgama 701−800,False
+sa801-900,Saṃyuktāgama 801−900,False
+sa901-1000,Saṃyuktāgama 901−1000,False
+sa1001-1100,Saṃyuktāgama 1001−1100,False
+sa1101-1200,Saṃyuktāgama 1101−1200,False
+sa1201-1300,Saṃyuktāgama 1201−1300,False
+sa1301-1362,Saṃyuktāgama 1301−1362,False
+sa2-nosub,,False
+sa3-nosub,,False
+t102-124,Other Saṃyukta Sūtras,False
+ea1,Ekottarikāgama 1,False
+ea2,Ekottarikāgama 2,False
+ea3,Ekottarikāgama 3,False
+ea4,Ekottarikāgama 4,False
+ea5,Ekottarikāgama 5,False
+ea6,Ekottarikāgama 6,False
+ea7,Ekottarikāgama 7,False
+ea8,Ekottarikāgama 8,False
+ea9,Ekottarikāgama 9,False
+ea10,Ekottarikāgama 10,False
+ea11,Ekottarikāgama 11,False
+ea12,Ekottarikāgama 12,False
+ea13,Ekottarikāgama 13,False
+ea14,Ekottarikāgama 14,False
+ea15,Ekottarikāgama 15,False
+ea16,Ekottarikāgama 16,False
+ea17,Ekottarikāgama 17,False
+ea18,Ekottarikāgama 18,False
+ea19,Ekottarikāgama 19,False
+ea20,Ekottarikāgama 20,False
+ea21,Ekottarikāgama 21,False
+ea22,Ekottarikāgama 22,False
+ea23,Ekottarikāgama 23,False
+ea24,Ekottarikāgama 24,False
+ea25,Ekottarikāgama 25,False
+ea26,Ekottarikāgama 26,False
+ea27,Ekottarikāgama 27,False
+ea28,Ekottarikāgama 28,False
+ea29,Ekottarikāgama 29,False
+ea30,Ekottarikāgama 30,False
+ea31,Ekottarikāgama 31,False
+ea32,Ekottarikāgama 32,False
+ea33,Ekottarikāgama 33,False
+ea34,Ekottarikāgama 34,False
+ea35,Ekottarikāgama 35,False
+ea36,Ekottarikāgama 36,False
+ea37,Ekottarikāgama 37,False
+ea38,Ekottarikāgama 38,False
+ea39,Ekottarikāgama 39,False
+ea40,Ekottarikāgama 40,False
+ea41,Ekottarikāgama 41,False
+ea42,Ekottarikāgama 42,False
+ea43,Ekottarikāgama 43,False
+ea44,Ekottarikāgama 44,False
+ea45,Ekottarikāgama 45,False
+ea46,Ekottarikāgama 46,False
+ea47,Ekottarikāgama 47,False
+ea48,Ekottarikāgama 48,False
+ea49,Ekottarikāgama 49,False
+ea50,Ekottarikāgama 50,False
+ea51,Ekottarikāgama 51,False
+ea52,Ekottarikāgama 52,False
+t126-149,Other Ekottarika Sūtras,False
+t150A,,False
+t150B,,False
+dq-nosub,,False
+up-nosub,,False
+tib-nosub,,False
+arv-nosub,,False
+avs-nosub,,False
+divy-nosub,,False
+lal-nosub,,False
+mvu-nosub,,False
+sbv-nosub,,False
+sht1,"SHT i – ed. W. Clawiter, L. Holzmann, E. Waldschmidt 1965",False
+sht2,"SHT ii – ed. W. Clawiter, L. Holzmann, E. Waldschmidt 1968",False
+sht3,"SHT iii – ed. W. Clawiter, L. Holzmann, E. Waldschmidt 1971",False
+sht4,"SHT iv – ed. L. Sander, E. Waldschmidt 1980",False
+sht5,"SHT v – ed. L. Sander, E. Waldschmidt 1985",False
+sht6,"SHT vi – ed. H. Bechert, K. Wille 1989",False
+sht7,"SHT vii – ed. H. Bechert, K. Wille 1995",False
+sht8,"SHT viii – ed. H. Bechert, K. Wille 2000",False
+sht9,"SHT ix – ed. H. Bechert, K. Wille 2004",False
+sht10,SHT x – ed. K. Wille 2008,False
+sfg-nosub,,False
+pfg-nosub,,False
+gfg-nosub,,False
+kfg-nosub,,False
+ufg-nosub,,False
+uv-nosub,,False

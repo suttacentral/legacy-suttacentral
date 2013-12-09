@@ -1,0 +1,13 @@
+uid,name,abbrev_name,language
+pi.su,Pāli Suttas,P S,pi
+pi.vi,Pāli Vinaya,P V,pi
+pi.ab,Pāli Abhidhamma,P A,pi
+zh.su,Chinese Sūtras,C S,zh
+zh.vi,Chinese Vinaya,C V,zh
+zh.ab,Chinese Abhidharma,C A,zh
+bo.su,Tibetan Texts,Tib,bo
+skt.su,Sanskrit Texts,Skt,skt
+prk,Prakrit Texts,Prk,ot
+gandh,Gāndhārī Texts,Gandh,ot
+khot,Khotanese Texts,Khot,ot
+uigh,Uighur Texts,Uigh,ot
