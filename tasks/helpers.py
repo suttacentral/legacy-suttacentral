@@ -15,6 +15,7 @@ import config
 import util
 
 _PP_HINTS = {
+    'Compile': 'Compiling',
     'Create': 'Creating',
     'Delete': 'Deleting',
     'Drop': 'Dropping',
