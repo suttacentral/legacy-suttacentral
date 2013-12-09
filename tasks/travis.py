@@ -3,6 +3,7 @@
 import os
 import time
 
+import config
 import tasks.db
 from .helpers import *
 
@@ -21,6 +22,8 @@ def prepare():
     """Prepare the travis environment."""
     with open('local.conf', 'w', encoding='utf-8') as f:
         f.write(TRAVIS_LOCAL_CONF)
+    # Make sure we reload config after config gets updated...
+    config.reload()
     run('mysql -e "CREATE DATABASE suttacentral;"')
     tasks.db.reset()
 

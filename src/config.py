@@ -74,8 +74,17 @@ class Config(dict):
     global_conf_path = os.path.join(base_dir, 'global.conf')
     local_conf_path  = os.path.join(base_dir, 'local.conf')
 
+    def reload(self):
+        """Reload the configuration."""
+        self.clear()
+        self.__setup()
+
     def __init__(self):
         dict.__init__(self)
+        # Manually copy these two function references because they seem to
+        # disappear after the module is loaded...!
+        self.__as_dict = cherrypy.lib.reprconf.as_dict
+        self.__join = os.path.join
         self.__setup()
 
     def __getattr__(self, name):
@@ -87,9 +96,9 @@ class Config(dict):
             raise AttributeError("Config has no attribute '%s'" % name)
 
     def __setup(self):
-        config = cherrypy.lib.reprconf.as_dict(self.global_conf_path)
+        config = self.__as_dict(self.global_conf_path)
         try:
-            local_config = cherrypy.lib.reprconf.as_dict(self.local_conf_path)
+            local_config = self.__as_dict(self.local_conf_path)
             self.__deep_update(config, local_config)
         except IOError:
             pass
@@ -126,7 +135,7 @@ class Config(dict):
                 if path[0] != '/':
                     if base is None:
                         base = self.base_dir
-                    self[key][subkey] = os.path.join(base, path)
+                    self[key][subkey] = self.__join(base, path)
 
 __config = Config()
 
