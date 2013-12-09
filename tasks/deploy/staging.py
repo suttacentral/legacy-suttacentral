@@ -2,15 +2,21 @@
 
 from ..helpers import *
 
+def _branch_or_pull(branch):
+    if branch:
+        return 'git fetch && git checkout -t origin/{}'.format(branch)
+    else:
+        return 'git pull'
+
 @task
-def full():
+def full(branch=None):
     """Full deploy to the staging server."""
     remote_run('sc-staging@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
         'touch tmp/maintenance',
         'sudo supervisorctl stop sc-staging',
-        'git pull',
+        _branch_or_pull(branch),
         'cd text',
         'git pull',
         'cd ..',
@@ -34,12 +40,12 @@ def nonfree_fonts():
         '/home/sc-staging/suttacentral/static/fonts/nonfree/')
 
 @task
-def quick():
+def quick(branch=None):
     """Quick deploy to the staging server."""
     remote_run('sc-staging@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
-        'git pull',
+        _branch_or_pull(branch),
         'cd text',
         'git pull',
         'cd ..',
