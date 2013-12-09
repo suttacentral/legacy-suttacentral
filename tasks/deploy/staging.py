@@ -4,7 +4,9 @@ from ..helpers import *
 
 def _branch_or_pull(branch):
     if branch:
-        return 'git fetch && git checkout -t origin/{}'.format(branch)
+        return ('git fetch && ' + \
+                'git checkout {0} || git checkout -t origin/{0} && ' + \
+                'git pull').format(branch)
     else:
         return 'git pull'
 
