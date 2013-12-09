@@ -13,7 +13,7 @@ def _branch_or_pull(branch):
 @task
 @blurb
 def full(branch=None):
-    """Deploy to the production server."""
+    """Deploy to the staging server."""
     remote_run('sc-staging@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
