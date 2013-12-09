@@ -3,6 +3,7 @@
 from ..helpers import *
 
 @task
+@blurb
 def clean(older=False):
     """Delete SuttaCentral database export files."""
     if older:
@@ -12,6 +13,7 @@ def clean(older=False):
         rm_rf('static/exports/sc-db-*')
 
 @task
+@blurb
 def create(force=False, quiet=False):
     """Create a SuttaCentral database export."""
     command = 'utility/export/db.py'

@@ -3,11 +3,13 @@
 from .helpers import *
 
 @task
+@blurb
 def build():
-    """Create/update the dictionary SQLite database."""
+    """Create the dictionary SQLite database."""
     run('cd src && python build_dict_db.py')
 
 @task
+@blurb
 def clean():
-    """Delete the search SQLite databases."""
+    """Delete the dictionary SQLite databases."""
     rm_rf('db/dictionaries.sqlite')

@@ -3,6 +3,7 @@
 from .helpers import *
 
 @task
+@blurb
 def update_ini():
-    """Create/update the newrelic.ini file."""
+    """Update the newrelic.ini file."""
     run('utility/create_newrelic_ini.py')

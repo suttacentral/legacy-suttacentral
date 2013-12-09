@@ -11,8 +11,9 @@ def _branch_or_pull(branch):
         return 'git pull'
 
 @task
+@blurb
 def full(branch=None):
-    """Full deploy to the staging server."""
+    """Deploy to the production server."""
     remote_run('sc-staging@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
@@ -34,16 +35,18 @@ def full(branch=None):
     ])
 
 @task
+@blurb
 def nonfree_fonts():
     """Copy local nonfree fonts to the staging server."""
     run('rsync -avz ' + \
         'static/fonts/nonfree/ ' + \
         'sc-staging@vps.suttacentral.net:' + \
-        '/home/sc-staging/suttacentral/static/fonts/nonfree/')
+        '/home/sc-staging/suttacentral/static/fonts/nonfree/', fg=True)
 
 @task
+@blurb
 def quick(branch=None):
-    """Quick deploy to the staging server."""
+    """Deploy simple changes to the staging server."""
     remote_run('sc-staging@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',

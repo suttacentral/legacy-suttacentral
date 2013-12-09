@@ -3,52 +3,137 @@
 import colorama
 import os
 import os.path
+import plumbum
+import plumbum.commands
+import regex
 import sys
+
+from plumbum import local
 from invoke import task
 
-root_path = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(
-    __file__))))
+import config
+import util
 
-def notice(string):
-    """Print string in blue."""
-    color_print(string, colorama.Fore.BLUE)
+_PP_HINTS = {
+    'Create': 'Creating',
+    'Delete': 'Deleting',
+    'Drop': 'Dropping',
+    'Prepare': 'Preparing',
+    'Run': 'Running',
+    'Setup': 'Setting up',
+    'Stop': 'Stopping',
+    'Update': 'Updating',
+}
 
-def color_print(string, color):
+def _color_print(string, color):
     """Print string in color."""
     print(color, end='')
     print(string, end='')
     print(colorama.Fore.RESET)
     sys.stdout.flush()
 
+def blurb(function):
+    """A decorator for blurb_notice."""
+    text = function.__doc__
+    def wrap(*args, **kwargs):
+        blurb_notice(function)
+        function(*args, **kwargs)
+    # We need this so invoke @task decorator functions correctly.
+    wrap.__doc__ = function.__doc__
+    wrap.__name__ = function.__name__
+    return wrap
+
+def blurb_notice(function):
+    """Display notice for function in present participle tense."""
+    text = function.__doc__
+    first, rest = text.split(' ', 1)
+    first = _PP_HINTS.get(first, first + 'ing')
+    notice('{} {}..'.format(first, rest))
+
+def mysql(sql, root=False, db=False):
+    """A wrapper around the MySQL command line utility using the configuration
+    provided by config.mysql.
+
+    If root, this sets user to root.
+
+    If db, this sets the database to config.mysql['db'].
+
+    See util.mysql().
+    """
+    host = config.mysql.get('host')
+    port = config.mysql.get('port')
+    if root:
+        user = 'root'
+        password = None
+    else:
+        user = config.mysql.get('user')
+        password = config.mysql.get('password')
+    if db:
+        db = config.mysql.get('db')
+    else:
+        db = None
+    def runner(command):
+        return run(command)
+    return util.mysql(sql, host=host, port=port, user=user, password=password,
+        db=db, runner=runner)
+
+def notice(string):
+    """Print string in blue."""
+    _color_print(string, colorama.Fore.BLUE)
+
 def remote_run(login, commands):
     """Print string in blue."""
     remote_command = ' && '.join(commands)
     command = "ssh {} '{}'".format(login, remote_command)
-    run(command)
+    run(command, echo=True, fg=True)
 
 def rm_rf(*files):
     """Recursively remove files."""
     run('rm -rf {}'.format(' '.join(files)))
 
-def run(command):
-    """Runs command in a subprocess."""
-    notice(command)
-    status = os.system(command)
-    if status != 0:
-        warning('Last command exited with status {}, exiting...\n'.format(status))
-        sys.exit(status)
+def run(command, echo=False, fg=False):
+    """Runs command in a subprocess.
 
-def run_sc(statement):
-    """Run a core SuttaCentral method in src.
-
-    Example:
-        run_sc('assets.compile()')
-
+    If echo is True, then the command is echoed to screen.
+    If fg is True, then command is run in the foreground.
     """
-    module = statement.split('.')[0]
-    code = 'import {}; {}'.format(module, statement)
-    run('cd src && python -c \'{}\''.format(code))
+    if not isinstance(command, plumbum.commands.BaseCommand):
+        command = local['bash']['-c', str(command)]
+
+    # Code to deal with a bug in plumbum's str(command)...
+    def flatten_list(lst):
+        result = []
+        for el in lst:
+            if isinstance(el, (list, tuple)):
+                result += flatten_list(el)
+            else:
+                result.append(el)
+        return result
+    command_string = ' '.join(flatten_list(command.formulate()))
+    if echo:
+        notice('Command:')
+        notice(util.wrap(command_string, indent=4))
+    kwargs = {'retcode': None}
+    if fg:
+        kwargs.update(stdin=None, stdout=None, stderr=None)
+    retcode, stdout, stderr = command.run(**kwargs)
+    if not echo and (stderr or retcode != 0):
+        warning('Command:')
+        warning(util.wrap(command_string, indent=4))
+    if stderr:
+        warning('Stderr:')
+        warning(util.wrap(stderr, indent=4))
+    if retcode != 0:
+        warning('Command exited with return code {}'.format(retcode))
+        warning('Exiting...')
+        sys.exit(retcode)
+
+def run_src(statement, **kwargs):
+    """Runs Python statement in the src directory."""
+    command = local['python']['-c', statement]
+    with local.cwd(local.cwd / 'src'):
+        run(command, **kwargs)
 
 def warning(string):
     """Print string in red."""
-    color_print(string, colorama.Fore.RED)
+    _color_print(string, colorama.Fore.RED)

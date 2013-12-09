@@ -3,6 +3,7 @@
 from ..helpers import *
 
 @task
+@blurb
 def clean(older=False):
     """Delete offline SuttaCentral export files."""
     if older:
@@ -12,6 +13,7 @@ def clean(older=False):
         rm_rf('static/exports/sc-offline-*')
 
 @task
+@blurb
 def create(host='localhost:8800', force=False, quiet=False, wait=None):
     """Create an offline SuttaCentral export."""
     command = 'utility/export/offline.py'

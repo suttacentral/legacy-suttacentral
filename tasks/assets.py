@@ -1,16 +1,20 @@
 """(Compiled CSS/JS) asset tasks."""
 
+import assets
+
 from .helpers import *
 
 @task
+@blurb
 def clean(older=False):
-    """Remove compiled and temporary assets."""
+    """Delete compiled (CSS/JS) assets and cache files."""
     if older:
-        run_sc('assets.clean(older=True)')
+        assets.clean(older=True)
     else:
-        run_sc('assets.clean()')
+        assets.clean
 
 @task(aliases=('build',))
+@blurb
 def compile():
-    """Compile the assets."""
-    run_sc('assets.compile()')
+    """Compile the (CSS/JS) assets."""
+    assets.compile()
