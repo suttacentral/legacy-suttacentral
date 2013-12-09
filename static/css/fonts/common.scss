@@ -35,6 +35,15 @@
 
 $base_font_url: '/fonts';
 
+// Source: https://www.google.com/fonts/specimen/Source+Sans+Pro
+$source-sans-pro: 'Source Sans Pro';
+
+// Source: ?
+$hetu-schetu-sc: 'hetu_schetu_sc';
+
+// Source: https://code.google.com/p/tharlon-font/
+$tharlon: 'TharLon';
+
 @mixin font-face-src($font-path, $svg-id) {
     $url = '#{$base_font_url}/#{$font-path}';
     src: url('#{$url}.eot');
@@ -43,12 +52,6 @@ $base_font_url: '/fonts';
          url('#{$url}.ttf') format('truetype'),
          url('#{$url}.svg##{$svg-id}') format('svg');
 }
-
-// Source: https://www.google.com/fonts/specimen/Source+Sans+Pro
-$source-sans-pro: 'Source Sans Pro';
-
-// Source: ?
-$hetu-schetu-sc: 'hetu_schetu_sc';
 
 @font-face {
     font-family: $source-sans-pro;
@@ -74,6 +77,13 @@ $hetu-schetu-sc: 'hetu_schetu_sc';
 @font-face {
     font-family: $hetu-schetu-sc;
     @include font-face-src('hetu-schetu-sc-2', 'hetu-schetu-sc');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: $tharlon;
+    @include font-face-src('tharlon-regular-1', 'tharlon-regular');
     font-weight: normal;
     font-style: normal;
 }
