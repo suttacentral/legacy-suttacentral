@@ -10,7 +10,7 @@ BiblioEntry = namedtuple('BiblioEntry', 'name, text')
 
 DivisionBase = namedtuple('DivisionBase', '''
     uid, collection, name, acronym,
-    subdiv_ind, subdivisions''')
+    subdiv_ind, text_ref, subdivisions''')
     
 SubdivisionBase = namedtuple('SubdivisionBase',
     'uid, division, name, acronym, vagga_numbering_ind, vaggas, suttas, order')
@@ -103,6 +103,9 @@ class Parallel(ParallelBase):
 
 class TextRef(TextRefBase):
     __slots__ = ()
+    
+    def __repr__(self):
+        return '<TextRef: lang=<{self.lang.uid}>, url="{self.url}">'.format(self=self)
 
     @staticmethod
     def sort_key(t):
@@ -135,6 +138,7 @@ class Division(DivisionBase):
     name={self.name},
     acronym={self.acronym},
     subdiv_ind={self.subdiv_ind},
+    text_ref={self.text_ref},
     subdivisions={subdivisions}\n""".format(self=self,
         collection="<Collection>",
         subdivisions="[{}]".format(
@@ -206,52 +210,3 @@ class HTMLRow:
     """
     def __init__(self, html):
         self.html=html
-
-class InvalidTextCollectionPathException(Exception):
-    pass
-
-class TextCollection(dict):
-    """A dictionary of lists of internally hosted suttas or translations
-       keyed by their internally hosted path."""
-
-    def add(self, obj):
-        """Adds a Sutta or Translation if possible."""
-        url = obj.url
-        if url and url.startswith('/'):
-            path = self._normalize_path(url)
-            if self._valid_path(path):
-                self.setdefault(path, []).append(obj)
-            else:
-                raise InvalidTextCollectionPathException(
-                    'Unexpected path {}'.format(path))
-
-    def sort_lists(self):
-        """Sorts each list of suttas or translations."""
-        for lst in self.values():
-            lst.sort(key=self.list_sort_key)
-
-    def _normalize_path(self, path):
-        """Strip the leading / and any trailing / or fragment"""
-        return regex.sub(r'/?(#.+)?$', '', path[1:])
-
-    def _valid_path(self, path):
-        return regex.match(r'^[-.a-z0-9]+/[a-z]+$', path)
-
-class SuttaTextCollection(TextCollection):
-
-    @staticmethod
-    def list_sort_key(sutta):
-        return sutta.number
-
-class TranslationTextCollection(TextCollection):
-
-    @staticmethod
-    def list_sort_key(translation):
-        # The only reasonable differentiator seems to be the url
-        # fragment, which will (hopefully) be of the form <number> or
-        # <number>-<number>, so we use that for now..."""
-        matches = regex.match(r'^.+#([0-9]+)(?:-([0-9]+))?$', translation.url)
-        if matches:
-            return (int(matches[1]), int(matches[2] or 0))
-        else:
-            return (0, 0)

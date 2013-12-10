@@ -3,8 +3,8 @@
 {# Linkafy acronym if possible and replace spaces with non-breakers.
    Optionally show the alt_sutta_acronym #}
 {% macro sutta_acronym(sutta, show_alt) %}
-{%- if sutta.url -%}{# TODO: Insert nbsp where needed #}
-<a href='{{sutta.url}}' title='Go to original text for {{sutta.acronym}}'>
+{%- if sutta.text_ref -%}{# TODO: Insert nbsp where needed #}
+<a href='{{sutta.text_ref.url}}' title='{{sutta.text_ref.abstract}}'>
 {{sutta.acronym|sub("(?<![,;]) ", "&nbsp;")}}</a>
 {%- else -%}
 {{sutta.acronym|sub("(?<![,;]) ", "&nbsp;")}}
@@ -43,7 +43,7 @@
 </td>
 <td>
 {% for translation in sutta.translations -%}
-<a href='{{translation.url}}' class='tran' title='{{translation.abstract}}'>{{translation.lang.code}}</a>{% if not loop.last %} | {% endif %} 
+<a href='{{translation.url}}' class='tran' title='{{translation.abstract}}'>{{translation.lang.iso_code}}</a>{% if not loop.last %} | {% endif %} 
 {% endfor -%}
 </td>
 </tr>

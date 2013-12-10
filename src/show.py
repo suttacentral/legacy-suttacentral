@@ -1,5 +1,5 @@
 import cherrypy, os, regex
-import classes, scdb, suttasearch
+import classes, scimm, suttasearch
 from views import *
 import classes, suttasearch, dictsearch, textsearch
 
@@ -38,12 +38,12 @@ def default(*args, **kwargs):
     if uid in STATIC_PAGES:
         return InfoView(uid).render()
 
-    dbr = scdb.getDBR()
+    imm = scimm.imm()
 
     # Divisions
     full = len(args) == 2 and args[1] == 'full'
     if len(args) == 1 or full:
-        division = dbr.divisions.get(uid)
+        division = imm.divisions.get(uid)
         if division:
             if division.has_subdivisions():
                 if full:
@@ -55,35 +55,35 @@ def default(*args, **kwargs):
 
     # Subdivisions
     if len(args) == 1:
-        subdivision = dbr.subdivisions.get(uid)
+        subdivision = imm.subdivisions.get(uid)
         if subdivision:
             return SubdivisionView(subdivision).render()
 
     if len(args) == 1:
         # Sutta Parallels
-        sutta = dbr.suttas.get(uid)
+        sutta = imm.suttas.get(uid)
         if sutta:
             return ParallelView(sutta).render()
     elif len(args) == 2:
         if args[1] == 'citation.txt':
             # Citation
             cherrypy.response.headers['Content-Type'] = "text/plain"
-            sutta = dbr.suttas.get(args[0])
+            sutta = imm.suttas.get(args[0])
             if sutta:
                 return SuttaCitationView(sutta).render()
             else:
                 raise cherrypy.NotFound()
         # Sutta or Translation Texts
         lang_code = args[1]
-        path = '%s/%s' % (uid, lang_code)
-        suttas = dbr.sutta_texts.get(path)
-        if suttas and suttas[0]:
-            sutta = suttas[0]
-            return SuttaView(sutta, sutta.lang, uid, lang_code).render()
-        translations = dbr.translation_texts.get(path)
-        if translations and translations[0]:
-            translation = translations[0]
-            return SuttaView(translation.sutta, translation.lang, uid, lang_code).render()
+        try:
+            imm.text_paths[lang_code][uid]
+        except KeyError:
+            raise cherrypy.NotFound()
+        
+        sutta = imm.suttas.get(uid)
+        lang = imm.languages[lang_code]
+        if sutta:
+            return SuttaView(sutta, lang).render()
         else:
             return TextView(uid, lang_code).render()
 
@@ -140,7 +140,7 @@ def fallback_disp_handler(id, collection):
     except (TypeError, ValueError) as e:
         id = None
     if id:
-        objects = getattr(scdb.getDBR(), collection).values()
+        objects = getattr(scimm.imm(), collection).values()
         # Looping is awful but it's all we have for now...
         for object in objects:
             if object.id == id:

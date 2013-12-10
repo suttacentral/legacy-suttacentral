@@ -20,7 +20,7 @@ biblio_fields = ('sutta_uid', 'name', 'text')
 
 collection_uids = {1: 'pi.su', 2: 'pi.vi', 3: 'pi.ab', 4: 'zh.su', 5: 'zh.vi', 6: 'zh.ab', 7: 'bo.su', 8: 'skt.su', 9: 'prk', 10: 'gandh', 11: 'khot', 12: 'uigh'}
 
-language_fields = ('uid', 'iso_code', 'name', 'root')
+language_fields = ('uid', 'iso_code', 'name', 'isroot')
 
 class ScDialect(csv.Dialect):
     """ Make it explicit. This happens to be exactly what LibreOffice calc
@@ -41,7 +41,7 @@ def scwriter(fp, fields):
     return writer
 
 dbr = scdb.getDBR()
-db = scdb.db_grab(scdb.sqlite3.connect(config.sqlite['db']))
+db = scdb.db_grab(scdb.mysql.connect(**config.mysql))
 
 outdir = config.app['data']
 

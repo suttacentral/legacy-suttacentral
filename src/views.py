@@ -9,11 +9,11 @@ import socket
 import time
 import urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
-from bs4 import BeautifulSoup
+import lxml.html
 
 import assets
 import config
-import scdb
+import scimm
 import scm
 import util
 from menu import menu_data
@@ -258,72 +258,84 @@ class TextView(ViewBase):
 
     template_name = 'text'
 
+    # Extract the (non-nestable) hgroup element using regex, DOTALL
+    # and non-greedy matching makes this straightforward.
+    content_regex = regex.compile(r'''
+        <body[^>]*>
+            (?:
+                (?<preamble>.*?)
+                (?<hgroup><hgroup.*?</hgroup>)
+                (?<content>.*)
+            |   # If there is no hgroup the above fails
+                # fall through to grabbing everything as content
+                (?<content>.*)
+            )
+        </body>
+        ''', flags=regex.DOTALL | regex.VERBOSE)
+    
     def __init__(self, uid, lang_code):
         self.uid = uid
         self.lang_code = lang_code
 
     def setup_context(self, context):
-        doc = self.get_document()
-        context.title = self.get_title(doc) or '?'
-        self.annotate_heading(doc)
-        context.text = self.content_html(doc.body)
-
+        m = self.content_regex.search(self.get_html())
+        context.title = '?'
+        if m['hgroup'] is not None:
+            hgroup_dom = lxml.html.fragment_fromstring((m['hgroup']))
+            h1 = hgroup_dom.cssselect('h1')
+            if h1:
+                context.title = h1[0].text
+            self.annotate_heading(hgroup_dom)
+            hgroup_html = lxml.html.tostring(hgroup_dom, encoding='utf8').decode()
+            context.text = ''.join([m['preamble'], hgroup_html, m['content']])
+        else:
+            context.text = m['content']
+    
     @property
     def path(self):
-        return scdb.getDBR().text_paths[self.lang_code].get(self.uid) or ''
-    
-    def get_document(self):
-        """Return the BeautifulSoup document object of the text or raise
-        a cherrypy.NotFound exception"""
         try:
+            return scimm.imm().text_paths[self.lang_code][self.uid]
+        except KeyError:
+            return None
+    
+    def get_html(self):
+        """Return the text HTML or raise a cherrypy.NotFound exception"""
+        if self.path:
             with open(self.path, 'r', encoding='utf-8') as f:
-                return BeautifulSoup(f)
-        except OSError:
+                return f.read()
+        else:
             raise cherrypy.NotFound()
 
-    def get_title(self, doc):
-        hgroup = doc.hgroup
-        if hgroup:
-            h1 = hgroup.h1
-            if h1:
-                return h1.text
-
-    def annotate_heading(self, doc):
+    def annotate_heading(self, hgroup_dom):
         """Add navigation links to the header h1 and h2"""
-        hgroup = doc.hgroup
-        if not hgroup:
-            return
-        h1 = hgroup.h1
-        if h1:
-            href = '/{}'.format(self.uid)
-            a = doc.new_tag('a', href=href,
-                title='Click for details of parallels and translations.')
-            h1.wrap(a)
-            h1.unwrap()
-            a.wrap(h1)
-        if hasattr(self, 'subdivision'):
-            h2 = hgroup.h2
-            if h2:
-                href = '/{}'.format(self.subdivision.uid)
-                a = doc.new_tag('a', href=href,
-                    title='Click to go to the division or subdivision page.')
-                h2.wrap(a)
-                h2.unwrap()
-                a.wrap(h2)
 
-    def content_html(self, el):
-        """Return the HTML of the contents of el."""
-        output = []
-        for c in el.contents:
-            output.append(str(c))
-        output.append('\n')
-        return '\n'.join(output)
+        h1 = hgroup_dom.cssselect('h1')
+        
+        # The below should continue to work when new 'hgroup' markup comes in.
+        if h1:
+            h1 = h1[0]
+            href = '/{}'.format(self.uid)
+            a = hgroup_dom.makeelement('a', href=href,
+                title='Click for details of parallels and translations.')
+            a.text = h1.text; h1.text = None
+            a.extend(h1)
+            h1.append(a)
+            
+        if hasattr(self, 'subdivision'):
+            if len(hgroup_dom) > 1:
+                subhead = hgroup_dom[0]
+                href = '/{}'.format(self.subdivision.uid)
+                a = hgroup_dom.makeelement('a', href=href,
+                    title='Click to go to the division or subdivision page.')
+                a.text = subhead.text; subhead.text = None
+                a.extend(subhead)
+                subhead.append(a)
 
 class SuttaView(TextView):
     """The view for showing the sutta text in original sutta langauge."""
 
-    def __init__(self, sutta, lang, uid, lang_code):
-        super().__init__(uid, lang_code)
+    def __init__(self, sutta, lang):
+        super().__init__(sutta.uid, lang.uid)
         self.sutta = sutta
         self.lang = lang
 
@@ -332,7 +344,7 @@ class SuttaView(TextView):
         context.title = '{}: {} ({}) - {}'.format(
             self.sutta.acronym, context.title, self.lang.name,
             self.subdivision.name)
-        context.sutta_lang_code = self.lang_code
+        context.sutta_lang_code = self.sutta.lang.iso_code
 
     @property
     def subdivision(self):
@@ -350,36 +362,13 @@ class DivisionView(ViewBase):
     def __init__(self, division):
         self.division = division
 
-    @property
-    def division_lang_code(self):
-        """Ugly hack to handle sk/skt discrepancy..."""
-        code = self.division.collection.lang.code
-        if code == 'sk':
-            return 'skt'
-        else:
-            return code
-
-    @property
-    def division_text_url(self):
-        """Division-level text URL (if it exists)"""
-        if os.path.exists(self.division_text_path):
-            return '/{}/{}'.format(self.division.uid,
-                self.division_lang_code)
-        else:
-            return None
-
-    @property
-    def division_text_path(self):
-        """Division-level text path"""
-        return os.path.join(config.text_root,
-            self.division_lang_code,
-            self.division.uid) + '.html'
-
     def setup_context(self, context):
         context.title = "{}: {}".format(self.division.acronym,
             self.division.name)
         context.division = self.division
-        context.division_text_url = self.division_text_url
+        context.division_text_url = None
+        if self.division.text_ref:
+            context.division_text_url = self.division.text_ref.url
         context.has_alt_volpage = False
         context.has_alt_acronym = False
 
@@ -440,7 +429,7 @@ class SearchResultView(ViewBase):
         context.title = 'Search: "{}"'.format(
             self.search_query)
         context.result = self.search_result
-        context.dbr = scdb.getDBR()
+        context.imm = scimm.imm()
 
 class AjaxSearchResultView(SearchResultView):
     """The view for /search?ajax=1."""

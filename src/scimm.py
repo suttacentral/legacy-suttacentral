@@ -74,7 +74,7 @@ class _Imm:
         return (self._uid_to_acro_map.get(m[0]) or m[0].upper()) + m[1]
     
     def build(self):
-        """ Build the sutta central database representation
+        """ Build the sutta central In Memory Model
 
         This starts from the highest level (i.e. collection) and works to
         the lowest level (i.e. parallels - the relationship between suttas)
@@ -82,15 +82,9 @@ class _Imm:
         elements can't be populated initially. This means that suttas
         insert themselves into the subdivision where they belong.
 
-        Some attribute names undergo transformation (DRY). For example:
-        sutta.sutta_uid -> sutta.uid
-
-        Some attributes are transformed from a name into an object
-        correspondence.sutta_uid -> parallel.sutta.uid
-        
-        Some tables are indexed as dicts, with the key being id or uid.
+        Some tables are indexed as dicts, with the key being the uid.
         These include:
-        collection, division, subdivision, vagga, sutta
+        collection, division, subdivision, sutta, language
         
         When classes are contained within a class, for example, suttas in
         a subdivision, this is always represented by a list. That list will
@@ -99,19 +93,14 @@ class _Imm:
 
         When an attribute is a list or dict, the name always end in an 's'
         for example:
-        dbr.suttas['sn1.1'].subdivision.division.subdivisions[0].suttas[0]
-
-        lists always use zero-based indexing, while dicts are generally
-        based on the table data, generally starting at 1. This inconsitency
-        is not a problem since for lists only the ordering is meaningful,
-        they are intended to be printed out as a whole unit using "for in"
+        imm.suttas['sn1.1'].subdivision.division.subdivisions[0].suttas[0]
 
         Some things, such as parallels, are not indexed at all, and are
         only accessable as attributes of the relevant suttas.
         
-        The dbr also examines the file system. The fully qualified path to a 
+        The imm also examines the file system. The fully qualified path to a 
         text can be acquired using:
-        dbr.text_paths[lang][uid]
+        imm.text_paths[lang][uid]
 
         """
         
@@ -132,6 +121,14 @@ class _Imm:
                 collections=[],
                 )
         
+        # Gather up text refs:
+        # From filesystem (This also returns important text_paths variable)
+        self.text_paths, text_refs = self.scan_text_root()
+        
+        # From external_text table
+        for row in table_reader('external_text'):
+            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url) )
+        
         self.collections = OrderedDict()
         for row in table_reader('collection'):
             collection = Collection(
@@ -147,18 +144,23 @@ class _Imm:
         # Build divisions (indexed by uid)
         self.divisions = OrderedDict()
         for row in table_reader('division'):
+            collection = self.collections[row.collection_uid]
+            try:
+                text_ref = text_refs[row.uid][0]
+            except (KeyError, IndexError):
+                text_ref = None
             division = Division(
                 uid=row.uid,
                 name=row.name,
                 acronym=row.acronym,
                 subdiv_ind=row.subdiv_ind,
-                collection=self.collections[row.collection_uid],
+                text_ref=text_ref,
+                collection=collection,
                 subdivisions=[], # Populate later
-                
             )
             self.divisions[row.uid] = division
             # Populate collections
-            self.collections[row.collection_uid].divisions.append(division)
+            collection.divisions.append(division)
 
         # Build subdivisions (indexed by uid)
         self.subdivisions = OrderedDict()
@@ -178,7 +180,6 @@ class _Imm:
             if row.uid.endswith('-nosub'):
                 self.nosubs.add(row.uid[:-6])
             # populate divisions.subdivisions
-            
             self.divisions[row.division_uid].subdivisions.append(subdivision)
         
         # Build vaggas
@@ -202,14 +203,7 @@ class _Imm:
                 name=row.name,
                 text=row.text)
         
-        # Gather up text refs
-        # From filesystem (This also returns important text_paths variable)
-        self.text_paths, text_refs = self.scan_text_root()
-        
-        # From external
-        for row in table_reader('external_text'):
-            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url) )
-        
+
         # Build suttas (indexed by uid)
         suttas = []
         for row in table_reader('sutta'):
@@ -266,6 +260,25 @@ class _Imm:
         # Populate subdivisions.suttas
         for sutta in self.suttas.values():
             sutta.subdivision.suttas.append(sutta)
+            if sutta.vagga:
+                sutta.vagga.suttas.append(sutta)
+        
+        # Put every sutta into a vagga, making a None Vagga
+        # if needed.
+        for sutta in self.suttas.values():
+            if sutta.vagga is None:
+                try:
+                    vagga = sutta.subdivision.vaggas[0]
+                except IndexError:
+                    vagga = Vagga(
+                        uid=None,
+                        subdivision=sutta.subdivision,
+                        name=None,
+                        suttas=[],
+                        )
+                    sutta.subdivision.vaggas.append(vagga)
+                vagga.suttas.append(sutta)
+
         
     def build_parallels_data(self):
         
@@ -414,7 +427,7 @@ class _Imm:
                     return m[1]
         return None
 
-    def deep_md5(self, ids=False):
+    def _deep_md5(self, ids=False):
         """ Calculate a md5 for the data. Takes ~0.5s on a fast cpu.
 
         This will detect most inconsistencies in the contents of strings,
@@ -445,13 +458,13 @@ class _Imm:
             return (md5.hexdigest(), md5ids.hexdigest())
         return md5.hexdigest()
 
-    def check_md5(self, exception=None):
-        new_md5 = self.deep_md5(ids=True)
-        if not hasattr(self, 'dbr_md5'):
-            self.dbr_md5 = new_md5
+    def _check_md5(self, exception=None):
+        new_md5 = self._deep_md5(ids=True)
+        if not hasattr(self, 'imm_md5'):
+            self.imm_md5 = new_md5
             logger.info('Generating md5 {}.'.format(new_md5))
         else:
-            if self.dbr_md5 == new_md5:
+            if self.imm_md5 == new_md5:
                 logger.debug('md5s match')
             else:
                 logger.error('md5 mismatch')
@@ -538,6 +551,7 @@ def atomicfy(start, stack=None):
         # Yield the type. Useful for user classes.
         yield b't' + str(type(obj)).encode()
 
+_imm = None
 def imm():
     """ Get an instance of the DBR.
 
@@ -547,8 +561,8 @@ def imm():
     served, hence multiple versions can exist for a short time. (The stale
     copies will be garbage collected when they fall out of scope)
     
-    If the dbr is being generated, this function will block until it is
-    ready. If the dbr has already been generated, it is virtually free to
+    If the imm is being generated, this function will block until it is
+    ready. If the imm has already been generated, it is virtually free to
     call.
 
     """
@@ -559,12 +573,23 @@ def imm():
         updater.ready.wait()
         return _imm
 
+def _mtime_recurse(path, timestamp=0):
+    "Fast function for finding the latest mtime in a folder structure"
+
+    timestamp = max(timestamp, os.stat(path).st_mtime_ns)
+    for path1 in os.listdir(path):
+        if '.' in path1:
+            continue
+        path1 = os.path.join(path, path1)
+        timestamp = max(timestamp, _mtime_recurse(path1, timestamp))
+    return timestamp
+    
 class Updater(threading.Thread):
-    """ Ensures the dbr is available and up to date.
+    """ Ensures the imm is available and up to date.
 
     The Updater is responsible for detecting changes in the mysql database
     when changes are detected, it rebuilds the sqlite database. The sqlite
-    database is then used as the basis for building the dbr. It will also
+    database is then used as the basis for building the imm. It will also
     notice if the sqlite database has been replaced with a new one with a
     new timestamp but otherwise does not expect the sqlite database to
     change.
@@ -581,64 +606,47 @@ class Updater(threading.Thread):
 
     """
     
-    ready = threading.Event() # Signal that the dbr is ready.
     
-    def set_sqlite_timestamp(self, timestamp):
-        with sqlite3.connect(config.sqlite['db']) as con:
-            con.execute('CREATE TABLE dbr_info (label UNIQUE, value)')
-            con.execute('INSERT INTO dbr_info VALUES (?, ?)', ('mysql_timestamp', timestamp) )
+    ready = threading.Event() # Signal that the imm is ready.
     
-    def convertdb(self, mysql_timestamp):
-        from mysql2sqlite3 import convert
-        convert(config.mysql, lite_db=config.sqlite['db'], cull_list=('timestamp', 'login'), no_index=True)
-        self.set_sqlite_timestamp(mysql_timestamp)
-
+    def get_change_timestamp(self):
+        timestamp = str(os.stat(config.data).st_mtime_ns)
+        
+        if config.app['runtime_tests']:
+            timestamp += str(_mtime_recurse(config.text_root))
+        else:
+            # Detecting changes to git repository should be enough
+            # for server environment.
+            timestamp += str(os.stat(os.path.join(config.text_root, '.git')).st_mtime_ns)
+            
+    
+    
     def run(self):
-        global _dbr
+        global _imm
         while True:
             # Check if sqlite db is up to date
-            start=time.time()
-            sqlite_timestamp = self.get_sqlite_timestamp()
-            try:
-                mysql_timestamp = self.get_mysql_timestamp()
-                if mysql_timestamp != sqlite_timestamp:
-                    logger.info(('SQLite database (t=%s) out of sync with' +
-                                ' MySQL database (t=%s); converting...') %
-                                (sqlite_timestamp, mysql_timestamp))
-                    start_build=time.time()
-                    self.convertdb(mysql_timestamp)
-                    sqlite_timestamp = mysql_timestamp
-                    logger.info('Conversion took {} seconds'.format(time.time()-start_build))
-            except:
-                # We can continue if mysql is not available, but sqlite
-                # is. But for the moment, we will raise here.
-                if config.debug:
-                    raise
-            # Check if dbr is up to date
-            try:
-                if _dbr.timestamp != sqlite_timestamp:
-                    raise ValueError
-            except (NameError, ValueError) as e:
-                # _dbr doesn't exist, or is out of date.
-                logger.info('dbr requires rebuilding because {}'.format(e))
-                start=time.time()
+            timestamp = self.get_change_timestamp()
+            
+            # Check if imm is up to date
+            
+            if not _imm or _imm.timestamp != timestamp:
+                logger.info('building imm')
+                start=time.time();
                 try:
-                    new_dbr = _DBR(sqlite_timestamp)
+                    _imm = _Imm(timestamp)
+                    self.ready.set()
                 except Exception as e:
                     logger.error("Critical Error: DBR buid failed.")
                     raise e
 
-                # Make the fresh copy available
-                _dbr = new_dbr
-                self.build_completed.set()
+                logger.info('imm build took {} seconds'.format(time.time()-start))
 
-                logger.info('dbr build took {} seconds'.format(time.time()-start))
-
-            # Do consistency checking.
-            _dbr.check_md5()
+                if config.app['runtime_tests']:
+                    # Do consistency checking.
+                    _imm._check_md5()
             time.sleep(config.db_refresh_interval)
 
-updater = Updater(name='dbr_updater', daemon=True)
+updater = Updater(name='imm_updater', daemon=True)
 
 if __name__ == '__main__':
     start=time.time()

@@ -1,5 +1,5 @@
 import bisect, math, functools
-import scdb, classes, textfunctions
+import scimm, classes, textfunctions
 from html import escape
 
 class Ranker:
@@ -69,7 +69,7 @@ class Ranker:
 # Results are not large, so there's little harm in caching a lot of them.
 
 def get_and_rank_results(query, lang=None):
-    results = search_dbr(query, lang)
+    results = search_imm(query, lang)
     if len(results) == 0:
         return ((),())
     ranker = Ranker(query, lang)
@@ -82,8 +82,8 @@ def search(query=None, limit=25, offset=0):
     quoted = '"' in query
     query = query.replace('"', '')
     if len(query) <= 3:
-        dbr = scdb.getDBR()
-        if query in dbr.lang_codes:
+        imm = scimm.imm()
+        if query in imm.lang_codes:
             searchlang = query
         if not searchlang and len(query) <= 2:
             out.total = 0
@@ -124,9 +124,9 @@ def search(query=None, limit=25, offset=0):
         out.add("Similiar results", s_results)
     return out
         
-def search_dbr(query, lang):
-    dbr = scdb.getDBR()
-    # The structure of dbr.searchstrings is :
+def search_imm(query, lang):
+    imm = scimm.imm()
+    # The structure of imm.searchstrings is :
     # ( sutta, searchstring, searchstring_cased, suttaname simplified)
 
     # First try matching query as a whole
@@ -136,17 +136,17 @@ def search_dbr(query, lang):
     else:
         cf_query = query.casefold()
         sm_query = textfunctions.simplify_pali(query)
-    results = set(s for s in dbr.searchstrings if cf_query in s[1])
+    results = set(s for s in imm.searchstrings if cf_query in s[1])
     if sm_query and cf_query != sm_query:
-        results_s = set(s for s in dbr.searchstrings if sm_query in s[3])
+        results_s = set(s for s in imm.searchstrings if sm_query in s[3])
         results.update(results_s)
 
     return results
 
 def stress(count=1000):
     import time, concurrent.futures, random
-    dbr = scdb.getDBR()
-    terms = [s.name[:4] for s in dbr.suttas.values()]
+    imm = scimm.imm()
+    terms = [s.name[:4] for s in imm.suttas.values()]
     random.shuffle(terms)
     terms = terms[:1000] * int(1 + count / 1000)
     queries = random.sample(terms, count)
