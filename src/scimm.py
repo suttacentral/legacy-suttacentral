@@ -227,11 +227,31 @@ class _Imm:
             
             text_ref = None;
             translations = []
-            for ref in text_refs[uid]:
-                if ref.lang == lang:
-                    text_ref = ref
-                else:
-                    translations.append(ref)
+            if uid in text_refs:
+                for ref in text_refs[uid]:
+                    if ref.lang == lang:
+                        text_ref = ref
+                    else:
+                        translations.append(ref)
+            else:
+                variants = []
+                m = regex.match(r'(.*?)\.?(\d+[a-z]?)$', uid)
+                if m:
+                    variants.append((m[1], m[2]))
+                for sub_uid, bookmark in variants:
+                    if sub_uid in text_refs:
+                        for ref in text_refs[sub_uid]:
+                            ref = TextRef(lang=ref.lang,
+                                        abstract=ref.abstract,
+                                        url=Sutta.canon_url(lang_code=ref.lang.uid,
+                                            uid=sub_uid) + '#' + bookmark
+                                        )
+                            if ref.lang == lang:
+                                text_ref = ref
+                            else:
+                                translations.append(ref)
+                        break
+                
             translations.sort(key=TextRef.sort_key)
             
             sutta = Sutta(
@@ -391,7 +411,21 @@ class _Imm:
                     text_paths[lang][uid] = filepath
                     
                     author = self.get_text_author(filepath)
-                    text_refs[uid].append( TextRef(self.languages[lang], author, Sutta.canon_url(lang_code=lang, uid=uid)) )                    
+                    url = Sutta.canon_url(lang_code=lang, uid=uid)
+                    text_refs[uid].append( TextRef(self.languages[lang], author, url) )
+                    
+                    # In the case of a sutta range, we create new entries
+                    # for the entire range. Unneeded entries will be gc'd
+                    m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
+                    if m:
+                        range_start, range_end = int(m[2]), int(m[3])
+                        
+                        for i in range(range_start, range_end + 1):
+                            try:
+                                text_refs[m[1]+str(i)].append( TextRef(self.languages[lang], author, url + '#' + str(i)))                            
+                            except KeyError:
+                                globals().update(locals())
+                                raise
         
         return (text_paths, text_refs)
     
@@ -587,22 +621,8 @@ def _mtime_recurse(path, timestamp=0):
 class Updater(threading.Thread):
     """ Ensures the imm is available and up to date.
 
-    The Updater is responsible for detecting changes in the mysql database
-    when changes are detected, it rebuilds the sqlite database. The sqlite
-    database is then used as the basis for building the imm. It will also
-    notice if the sqlite database has been replaced with a new one with a
-    new timestamp but otherwise does not expect the sqlite database to
-    change.
-
-    While this may seem like a slightly convoluted approach, it does have
-    benefits:
-    1) sqlite3 is built into the python standard library, which makes
-       possible a lightweight distribution which doesn't require mysql.
-    2) In general, sqlite3 is faster than mysql, this is particulary so
-       for python3 which is backwards in it's mysql support.
-    3) Other subsystems (such as search and text analysis) rely heavily
-       on sqlite3, so rather than introducing a new dependency, it is
-       reducing an external one.
+    Checks the filesystem for changes which should be reflected
+    in the imm.
 
     """
     
@@ -619,19 +639,15 @@ class Updater(threading.Thread):
             # for server environment.
             timestamp += str(os.stat(os.path.join(config.text_root, '.git')).st_mtime_ns)
             
-    
-    
     def run(self):
         global _imm
         while True:
-            # Check if sqlite db is up to date
             timestamp = self.get_change_timestamp()
             
             # Check if imm is up to date
-            
             if not _imm or _imm.timestamp != timestamp:
                 logger.info('building imm')
-                start=time.time();
+                start = time.time();
                 try:
                     _imm = _Imm(timestamp)
                     self.ready.set()
@@ -639,7 +655,7 @@ class Updater(threading.Thread):
                     logger.error("Critical Error: DBR buid failed.")
                     raise e
 
-                logger.info('imm build took {} seconds'.format(time.time()-start))
+                logger.info('imm build took {} seconds'.format(time.time() - start))
 
                 if config.app['runtime_tests']:
                     # Do consistency checking.
