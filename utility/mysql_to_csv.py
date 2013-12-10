@@ -165,12 +165,16 @@ def fix_lang_uid(uid):
     return uid
 languages = []
 seen = set()
-for lang in dbr.collection_languages.values():
+for key, lang in dbr.collection_languages.items():
+    if isinstance(key, int):
+        continue
     uid = fix_lang_uid(lang.code)
     seen.add(uid)
     languages.append([uid, lang.code, lang.name, 1])
 
-for lang in dbr.reference_languages.values():
+for key, lang in dbr.reference_languages.items():
+    if isinstance(key, int):
+        continue
     if lang.code not in used_lang:
         continue
     uid = fix_lang_uid(lang.code)
