@@ -23,17 +23,22 @@ collection_uids = {1: 'pi.su', 2: 'pi.vi', 3: 'pi.ab', 4: 'zh.su', 5: 'zh.vi', 6
 language_fields = ('uid', 'iso_code', 'name', 'root')
 
 class ScDialect(csv.Dialect):
+    """ Make it explicit. This happens to be exactly what LibreOffice calc
+    outputs on my Ubuntu machine. """
     quoting = csv.QUOTE_MINIMAL
     delimiter = ','
     quotechar = '"'
     doublequote = True
     lineterminator = '\n'
+    strict=True
 
 def openforwriter(filename):
     return open(os.path.join(outdir, filename), 'w', newline='')
 
-def scwriter(fp):
-    return csv.writer(fp, dialect=ScDialect)
+def scwriter(fp, fields):
+    writer = csv.writer(fp, dialect=ScDialect)
+    writer.writerow(fields)
+    return writer
 
 dbr = scdb.getDBR()
 db = scdb.db_grab(scdb.sqlite3.connect(config.sqlite['db']))
@@ -70,9 +75,7 @@ def add_biblio_entry(sutta):
         biblio_entries.append((sutta.uid, sutta.biblio_entry.name, sutta.biblio_entry.text))
 
 with openforwriter('sutta.csv') as sutfile:
-    sut_writer = scwriter(sutfile)
-    sut_writer.writerow(sutta_fields)
-
+    sut_writer = scwriter(sutfile, sutta_fields)
 
     for sutta in dbr.suttas.values():
         try:
@@ -106,13 +109,11 @@ with openforwriter('sutta.csv') as sutfile:
             volpage])
 
 with openforwriter('external_text.csv') as etfile:
-    et_writer = scwriter(etfile)
-    et_writer.writerow(external_text_fields)
+    et_writer = scwriter(etfile, external_text_fields)
     et_writer.writerows(references)
 
 with openforwriter('correspondence.csv') as corrfile:
-    writer = scwriter(corrfile)
-    writer.writerow(correspondence_fields)
+    writer = scwriter(corrfile, correspondence_fields)
     for corr in db.correspondence.values():
         writer.writerow([
             db.sutta[corr.entry_id].sutta_uid,
@@ -121,13 +122,11 @@ with openforwriter('correspondence.csv') as corrfile:
             corr.footnote_text])
 
 with openforwriter('biblio.csv') as bibfile:
-    writer = scwriter(bibfile)
-    writer.writerow(biblio_fields)
+    writer = scwriter(bibfile, biblio_fields)
     writer.writerows(biblio_entries)
 
 with openforwriter('collection.csv') as colfile:
-    writer = scwriter(colfile)
-    writer.writerow(collection_fields)
+    writer = scwriter(colfile, collection_fields)
     for coll in dbr.collections.values():
         writer.writerow([
             collection_uids[coll.id],
@@ -136,8 +135,7 @@ with openforwriter('collection.csv') as colfile:
             coll.lang.code])
 
 with openforwriter('division.csv') as divfile:
-    writer = scwriter(divfile)
-    writer.writerow(division_fields)
+    writer = scwriter(divfile, division_fields)
     for div in dbr.divisions.values():
         writer.writerow([
             div.uid,
@@ -147,8 +145,7 @@ with openforwriter('division.csv') as divfile:
             1 if div.subdiv_ind == 'Y' else None])
         
 with openforwriter('subdivision.csv') as sdfile:
-    writer = scwriter(sdfile)
-    writer.writerow(subdivision_fields)
+    writer = scwriter(sdfile, subdivision_fields)
     for sd in dbr.subdivisions.values():
         writer.writerow([
             sd.uid,
@@ -156,8 +153,7 @@ with openforwriter('subdivision.csv') as sdfile:
             sd.vagga_numbering_ind])
 
 with openforwriter('vagga.csv') as vagfile:
-    writer = scwriter(vagfile)
-    writer.writerow(vagga_fields)
+    writer = scwriter(vagfile, vagga_fields)
     writer.writerows(vaggas.items())
 
 def fix_lang_uid(uid):
@@ -167,26 +163,25 @@ def fix_lang_uid(uid):
         return 'oth'
     
     return uid
+languages = []
+seen = set()
+for lang in dbr.collection_languages.values():
+    uid = fix_lang_uid(lang.code)
+    seen.add(uid)
+    languages.append([uid, lang.code, lang.name, 1])
+
+for lang in dbr.reference_languages.values():
+    if lang.code not in used_lang:
+        continue
+    uid = fix_lang_uid(lang.code)
+    if uid in seen:
+        uid = 'm' + uid
+    languages.append([uid, lang.code, lang.name, None])
+
+languages.sort(key=lambda t: (t[1], not t[3]))
+
 
 with openforwriter('language.csv') as langfile:
-    writer = scwriter(langfile)
-    writer.writerow(language_fields)
-    languages = []
-    seen = set()
-    for lang in dbr.collection_languages.values():
-        uid = fix_lang_uid(lang.code)
-        seen.add(uid)
-        languages.append([uid, lang.code, lang.name, 1])
-    
-    for lang in dbr.reference_languages.values():
-        if lang.code not in used_lang:
-            continue
-        uid = fix_lang_uid(lang.code)
-        if uid in seen:
-            uid = 'm' + uid
-        languages.append([uid, lang.code, lang.name, None])
-    
-    languages.sort(key=lambda t: (t[1], not t[3]))
+    writer = scwriter(langfile, language_fields)
     writer.writerows(languages)
     
-language_fields = ('uid', 'iso_code', 'name')
