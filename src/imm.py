@@ -8,7 +8,6 @@ import collections, functools, itertools, time, regex, hashlib, os, threading, m
 from collections import OrderedDict, defaultdict, namedtuple
 
 import csv
-import uid
 
 import logging
 logger = logging.getLogger(__name__)
@@ -52,19 +51,13 @@ def table_reader(tablename):
         for row in reader:
             yield NT._make(row)
 
-class _IMM:
+class _Imm:
     def __init__(self, timestamp):
-        self.build_suttas(db)
-        self.build_references(db)
-        self.build_parallels_data(db)
-        self.timestamp = timestamp
-        self.build_stage2()
-        
-    def build_stage2(self):
-        self.sort_translations()
+        self.build()
+        self.build_parallels_data()
         self.build_parallels()
         self.build_search_data()
-        self.build_text_paths()        
+        self.timestamp = timestamp
     
     def __call__(self, uid):
         if uid in self.collections:
@@ -76,7 +69,11 @@ class _IMM:
         elif uid in self.suttas:
             return self.suttas[uid]
     
-    def build_suttas(self, db):
+    def uid_to_acro(self, uid):
+        m = regex.match(r'(\p{alpha}+(?:-\d+)?)(.*)', uid)
+        return (self._uid_to_acro_map.get(m[0]) or m[0].upper()) + m[1]
+    
+    def build(self):
         """ Build the sutta central database representation
 
         This starts from the highest level (i.e. collection) and works to
@@ -117,218 +114,174 @@ class _IMM:
         dbr.text_paths[lang][uid]
 
         """
-
-        # Build Languages (indexed by id)
         
+        # Load uid to acro map
+        self._uid_to_acro_map = {}
+        for row in table_reader('uid_to_acro'):
+            self._uid_to_acro_map[row.uid] = row.acro
+        
+        # Build Languages (indexed by id)
         self.languages = OrderedDict()
         for row in table_reader('language'):
             self.languages[row.uid] = Language(
                 uid=row.uid,
                 name=row.name,
                 iso_code=row.iso_code,
-                is_root=row.is_root)
-                
+                isroot=row.isroot,
+                priority=row.priority,
+                collections=[],
+                )
+        
         self.collections = OrderedDict()
         for row in table_reader('collection'):
-            self.collections[row.uid] = Collection(
+            collection = Collection(
                 uid=row.uid,
                 name=row.name,
                 abbrev_name=row.abbrev_name,
-                language=self.languages[row.language],
+                lang=self.languages[row.language],
                 divisions=[] # Populate later
                 )
+            self.collections[row.uid] = collection
+            self.languages[row.language].collections.append(collection)
         
         # Build divisions (indexed by uid)
         self.divisions = OrderedDict()
         for row in table_reader('division'):
-            self.divisions[row.uid] = Division(
+            division = Division(
                 uid=row.uid,
                 name=row.name,
                 acronym=row.acronym,
                 subdiv_ind=row.subdiv_ind,
                 collection=self.collections[row.collection_uid],
                 subdivisions=[], # Populate later
+                
             )
-            self.collections[row.uid].divisions.append(self.divisions[-1])
+            self.divisions[row.uid] = division
+            # Populate collections
+            self.collections[row.collection_uid].divisions.append(division)
 
         # Build subdivisions (indexed by uid)
         self.subdivisions = OrderedDict()
-        for row in table_reader('subdivision'):
-            self.subdivisions[row.uid] = Subdivision(
+        self.nosubs = set()
+        for i, row in enumerate(table_reader('subdivision')):
+            subdivision = Subdivision(
                 uid=row.uid,
+                acronym=row.acronym,
+                division=self.divisions[row.division_uid],
                 name=row.name,
-                vagga_ind=row.vagga_ind,
+                vagga_numbering_ind=row.vagga_ind,
+                order=i,
                 vaggas=[], # Populate later
                 suttas=[] # Populate later
             )
+            self.subdivisions[row.uid] = subdivision
+            if row.uid.endswith('-nosub'):
+                self.nosubs.add(row.uid[:-6])
             # populate divisions.subdivisions
-            div_uid = uid.subdiv_to_div(row.uid)
-            self.divisions[div_uid].subdivisions.append(self.subdivisions[-1])
-
-        # Build vaggas (indexed by id)
+            
+            self.divisions[row.division_uid].subdivisions.append(subdivision)
+        
+        # Build vaggas
         self.vaggas = OrderedDict()
         for row in table_reader('vagga'):
-            self.vaggas[row.vagga_id] = Vagga(
+            subdiv_uid = row.uid.split('/')[0]
+            vagga = Vagga(
                 uid=row.uid,
-                subdivision=self.subdivisions[uids.vagga_to_subdiv(row.uid)],
+                subdivision=self.subdivisions[subdiv_uid],
                 name=row.name,
                 suttas=[], # Populate later
             )
+            self.vaggas[row.uid] = vagga
+            # Populate subdivision.vaggas
+            self.subdivisions[subdiv_uid].vaggas.append(vagga)
+        
+        # Load biblio entries (Not into an instance variable)
+        biblios = {}
+        for row in table_reader('biblio'):
+            biblios[row.sutta_uid] = BiblioEntry(
+                name=row.name,
+                text=row.text)
+        
+        # Gather up text refs
+        # From filesystem (This also returns important text_paths variable)
+        self.text_paths, text_refs = self.scan_text_root()
+        
+        # From external
+        for row in table_reader('external_text'):
+            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url) )
         
         # Build suttas (indexed by uid)
-
         suttas = []
-        for sutta in db.sutta.values():
-            sutta_uid = sutta.sutta_uid
-            subdivision = db.subdivision[sutta.subdivision_id]
-            division_id = db.division[subdivision.division_id].division_id
-            subdivision_uid = subdivision.subdivision_uid
-            try:
-                biblio_entry = BiblioEntry(
-                    name=db.biblio_entry[sutta.biblio_entry_id].biblio_entry_name,
-                    text=db.biblio_entry[sutta.biblio_entry_id].biblio_entry_text,)
-            except KeyError:
-                if sutta.biblio_entry_id:
-                    logger.error('Database: Invalid biblio id {} for sutta {}'.format(sutta.biblio_entry_id, sutta_uid))
-                biblio_entry = None
-            try:
-                vagga = self.vaggas[sutta.vagga_id]
-            except KeyError:
-                if sutta.vagga_id:
-                    logger.error('Invalid vagga id {} for sutta {}'.format(sutta.vagga_id, sutta_uid))
-                vagga = None
-            try:
-                lang = self.collection_languages[sutta.collection_language_id]
-            except KeyError:
-                logger.error('Invalid language id {} for sutta {}'.format(sutta.collection_language_id, sutta_uid))
-                lang = None #Hack
-            try:
-                new_sutta = Sutta(
-                    id=sutta.sutta_id,
-                    uid=sutta_uid,
-                    acronym=sutta.sutta_acronym,
-                    alt_acronym=sutta.alt_sutta_acronym,
-                    name=sutta.sutta_name,
-                    coded_name=sutta.sutta_coded_name,
-                    plain_name=sutta.sutta_plain_name,
-                    number=sutta.sutta_number,
-                    lang=lang,
-                    subdivision=self.subdivisions[subdivision_uid],
-                    vagga=vagga,
-                    number_in_vagga=sutta.sutta_in_vagga_number,
-                    volpage_info=sutta.volpage_info,
-                    alt_volpage_info=sutta.alt_volpage_info,
-                    biblio_entry=biblio_entry,
-                    url=sutta.sutta_text_url_link,
-                    url_info=sutta.url_extra_info_text,
-                    translations=[],
-                    parallels=[],
-                )
-                suttas.append( (sutta_uid, new_sutta) )
-            except:
-                print("Sutta: " + str(sutta))
-                raise
-
+        for row in table_reader('sutta'):
+            uid = row.uid
+            if row.vagga:
+                m = regex.match(r'(.*?/.*?)/(.*)', row.vagga)
+                vag_uid, numinvag = m[1], m[2]
+            else:
+                vag_uid, numinvag = None, None
+            volpage = row.volpage.split('//')
+            acro = row.acronym.split('//')
+            if not acro[0]:
+                acro[0] = self.uid_to_acro(uid)
+            m = regex.match(r'\d$', uid)
+            if m:
+                number = int(m[0])
+            else:
+                number = 842
+            
+            lang = self.languages[row.language]
+            
+            text_ref = None;
+            translations = []
+            for ref in text_refs[uid]:
+                if ref.lang == lang:
+                    text_ref = ref
+                else:
+                    translations.append(ref)
+            translations.sort(key=TextRef.sort_key)
+            
+            sutta = Sutta(
+                uid=row.uid,
+                acronym=acro[0],
+                alt_acronym=acro[1] if len(acro) > 1 else None,
+                name=row.name,
+                number=number,
+                lang=lang,
+                subdivision=self.subdivisions[row.subdivision_uid],
+                vagga=self.vaggas.get(vag_uid, None),
+                number_in_vagga=numinvag,
+                volpage_info=volpage[0],
+                alt_volpage_info=volpage[1] if len(volpage) > 1 else None,
+                biblio_entry=biblios.get(uid, None),
+                text_ref=text_ref,
+                translations=translations,
+                parallels=[],
+            )
+            suttas.append( (uid, sutta) )
+        
         suttas = sorted(suttas, key=numsortkey)
-        suttas = sorted(suttas, key=lambda t: t[1].subdivision.division.id)
         
         self.suttas = OrderedDict(suttas)
+        
         # Populate subdivisions.suttas
         for sutta in self.suttas.values():
             sutta.subdivision.suttas.append(sutta)
         
-        # Populate sutta_texts
-        self.sutta_texts = SuttaTextCollection()
-        for sutta in self.suttas.values():
-            try:
-                self.sutta_texts.add(sutta)
-            except InvalidTextCollectionPathException:
-                logger.warning('Could not add sutta {} to texts with url {}'.format(sutta.uid, sutta.url))
-        self.sutta_texts.sort_lists()
-
-        # Build tree from bottom up:
-
-        for sutta in self.suttas.values():
-            if sutta.vagga is None:
-                try:
-                    vagga = sutta.subdivision.vaggas[0]
-                except IndexError:
-                    null_vagga = Vagga(
-                        id=0,
-                        subdivision=sutta.subdivision,
-                        name=None,
-                        coded_name=None,
-                        plain_name=None,
-                        suttas=[],
-                        )
-                    sutta.subdivision.vaggas.append(null_vagga)
-                    vagga = null_vagga
-            else:
-                vagga = sutta.vagga
-            vagga.suttas.append(sutta)
-
-        # Attach vaggas to subdivisions.
-        for vagga in self.vaggas.values():
-            # This is more reliable
-            try:
-                subdivision = vagga.suttas[0].subdivision
-            except IndexError:
-                logger.warning("Vagga id={} has no suttas.".format(vagga.id))
-                subdivision = vagga.subdivision
-            try:
-                assert subdivision is vagga.subdivision
-            except AssertionError:
-                logger.warning("{} thinks it is in {}, but the vagga thinks it is in {}".format(vagga.suttas[0].uid, vagga.suttas[0].subdivision.uid, vagga.subdivision.uid))
-                
-            subdivision.vaggas.append(vagga)
+    def build_parallels_data(self):
         
-        # Attach collections to collection_languages
-        for collection in self.collections.values():
-            collection.lang.collections.append(collection)
-
-    def build_references(self, db):
-
-        self.translation_texts = TranslationTextCollection()
-
-        for key, row in db.reference.items():
-            try:
-                uid = db.sutta[row.sutta_id].sutta_uid
-            except KeyError:
-                self.errors.append('{} missing in sutta ({})'.format(
-                    row.sutta_id, key))
-            lang = (self.reference_languages[                                    row.reference_language_id])
-            seq_nbr = row.reference_seq_nbr
-            url = row.reference_url_link
-            abstract = row.abstract_text
-            sutta = self.suttas[uid]
-            translation = Translation(seq_nbr, lang, url, abstract, sutta)
-            sutta.translations.append(translation)
-
-            # Populate translation_texts
-            try:
-                self.translation_texts.add(translation)
-            except InvalidTextCollectionPathException:
-                logger.warning(('Could not add translation {} {} to ' +
-                    'translation texts with url {}').format(
-                    translation.seq_nbr, translation.lang, url))
-
-        self.translation_texts.sort_lists()
-
-    def build_parallels_data(self, db):
-        db = db
         fulls = defaultdict(set)
         partials = defaultdict(set)
         indirects = defaultdict(set)
         # initially we operate purely on ids using id, footnote tuples
 
         #Populate partial and full parallels
-        for row in db.correspondence.values():
-            if row.partial_corresp_ind == 'Y':
-                partials[row.entry_id].add( (row.corresp_entry_id, row.footnote_text) )
-                partials[row.corresp_entry_id].add( (row.entry_id, row.footnote_text) )
+        for row in table_reader('correspondence'):
+            if row.partial:
+                partials[row.sutta_uid].add( (row.other_uid, row.footnote) )
+                partials[row.other_uid].add( (row.sutta_uid, row.footnote) )
             else:
-                fulls[row.entry_id].add( (row.corresp_entry_id, row.footnote_text) )
-                fulls[row.corresp_entry_id].add( (row.entry_id, row.footnote_text) )
+                fulls[row.sutta_uid].add( (row.other_uid, row.footnote) )
+                fulls[row.other_uid].add( (row.sutta_uid, row.footnote) )
 
         # Populate indirect full parallels
         for id, parallels in fulls.items():
@@ -337,66 +290,20 @@ class _IMM:
                     indirects[id].update(fulls[pid])
 
         for id, parallels in indirects.items():
-            
             # Remove self and fulls
             indirects[id] -= set(a for a in indirects[id] if a[0] == id)
-            #indirects[id] -= fulls[id]
 
-        def test():
-            class CaseSutta:
-                def __init__(self, id, fulls, partials):
-                    self.id = id
-                    self.fulls = fulls
-                    self.partials = partials
-
-            case_suttas = (
-                CaseSutta(id=16,
-                        fulls={4155, 4187, 4188, 4189, 6036, 6099, 6100, 6105,
-                            6106, 6156, 6205, 6283, 6289, 6291, 6297, 6301, 6312},
-                        partials={2770, 3327, 3432, 4051, 6381, 6382,
-                                6385, 6386, 6387, 8553, 8577, 8578, 2325}),
-                CaseSutta(id=4218,
-                        fulls={36, 3940, 4436, 5932, 6071},
-                        partials=set()),
-                )
-            for case_sutta in case_suttas:
-                id = case_sutta.id
-                full_ids = set(a[0] for a in fulls[id].union(indirects[id]))
-                part_ids = set(a[0] for a in partials[id])
-            
-                if full_ids == case_sutta.fulls and part_ids == case_sutta.partials:
-                    logger.info("Parallels generation for id = {} passes test.".format(case_sutta.id))
-                else:
-                    logger.warning("Parallel generation anonomly id = {}:\n    missing: {}\n    extras: {}".format(
-                        case_sutta.id,
-                        (case_sutta.fulls - full_ids,
-                         case_sutta.partials - part_ids),
-                        (full_ids - case_sutta.fulls,
-                         part_ids - case_sutta.partials)))
-        test()
-
-        # Nested list comprehensions for the sheer joy of it.
-        self.parallels_data = {
-            'fulls': [(db.sutta[s_id].sutta_uid,
-                        [(db.sutta[p_id].sutta_uid, note) for p_id, note in parallels])
-                        for (s_id, parallels) in fulls.items()],
-            'indirects': [(db.sutta[s_id].sutta_uid,
-                        [(db.sutta[p_id].sutta_uid, note) for p_id, note in parallels])
-                        for (s_id, parallels) in indirects.items()],
-            'partials': [(db.sutta[s_id].sutta_uid,
-                        [(db.sutta[p_id].sutta_uid, note) for p_id, note in parallels])
-                        for (s_id, parallels) in partials.items()],
+        return {
+            'fulls': fulls.items(),
+            'indirects': indirects.items(),
+            'partials': partials.items(),
             }
-
-    def sort_translations(self):
-        for sutta in self.suttas.values():
-            sutta.translations.sort(key=Translation.sort_key)
-
+    
     def build_parallels(self):
-        fulls = self.parallels_data['fulls']
-        indirects = self.parallels_data['indirects']
-        partials = self.parallels_data['partials']
-        del self.parallels_data
+        parallels_data = self.build_parallels_data()
+        fulls = parallels_data['fulls']
+        indirects = parallels_data['indirects']
+        partials = parallels_data['partials']
         
         for sutta_uid, parallels in fulls:
             sutta = self.suttas[sutta_uid]
@@ -423,29 +330,32 @@ class _IMM:
         """ Build useful search data.
 
         Note that the size of the data is somewhat less than 2mb """
-
-        suttastringsU = (["  {}  ".format("  ".join(
+        
+        suttastringsU = []
+        for sutta in self.suttas.values():
+            name = sutta.name.lower()
+            suttastringsU.append("  {}  ".format("  ".join(
                                 [sutta.uid,
-                                sutta.lang.code,
+                                sutta.lang.iso_code,
                                 sutta.acronym,
                                 sutta.alt_acronym or '',
-                                sutta.name,
-                                sutta.coded_name,
-                                sutta.plain_name,
+                                name,
+                                textfunctions.codely(name),
+                                textfunctions.plainly(name),
                                 sutta.volpage_info,
                                 sutta.alt_volpage_info or '',
-                                "  ".join( t.lang.code
+                                "  ".join( t.lang.iso_code
                                     for t in sutta.translations,) or '',]))
-                            for sutta in self.suttas.values()])
+                                )
         suttastrings = [s.lower() for s in suttastringsU]
         # Only simplify the name.
         suttanamesimplified = (["  {}  ".format(
-            textfunctions.simplify(sutta.name, sutta.lang.code))
+            textfunctions.simplify(sutta.name, sutta.lang.iso_code))
             for sutta in self.suttas.values()])
 
         self.searchstrings = list(zip(self.suttas.values(), suttastrings, suttastringsU, suttanamesimplified))
        
-    def build_text_paths(self):
+    def scan_text_root(self):
         """ Provides fully qualified paths for all texts.
         
         Texts are keyed [lang][uid]
@@ -454,15 +364,55 @@ class _IMM:
         thus subfolders exist solely for ease of file organization.
         """
         import glob
-        self.text_paths = collections.defaultdict(dict)
+        text_paths = {}
+        text_refs = collections.defaultdict(list)
         
         for langroot in glob.glob(config.text_root + '/*'):
             lang = os.path.basename(langroot)
+            text_paths[lang] = {}
             for basedir, subdirs, filenames in os.walk(langroot):
                 for filename in filenames:
                     uid = filename.replace('.html', '')
-                    assert uid not in self.text_paths[lang]
-                    self.text_paths[lang][uid] = os.path.join(basedir, filename)      
+                    assert uid not in text_paths[lang]
+                    filepath = os.path.join(basedir, filename)
+                    text_paths[lang][uid] = filepath
+                    
+                    author = self.get_text_author(filepath)
+                    text_refs[uid].append( TextRef(self.languages[lang], author, Sutta.canon_url(lang_code=lang, uid=uid)) )                    
+        
+        return (text_paths, text_refs)
+    
+    def get_text_path(self, lang, uid):
+        try:
+            return self.text_paths[lang][uid]
+        except KeyError:
+            return None
+    
+    _author_search = regex.compile(r'''(?s)<meta[^>]+author=(?|"(.*?)"|'(.*?)')''').search
+    
+    @staticmethod
+    def get_text_author(filepath):
+        """ Examines the file to discover the author
+        
+        This requires that a tag appears
+        <meta author="Translated by Bhikkhu Bodhi">
+        
+        This must be in head and occur in the first 5 lines.
+        The attribute must be quoted and should be fully qualified.
+        <meta author='Edited by Bhante Sujato'>
+        
+        <meta author="Pali text from the Mahāsaṅgīti Tipiṭaka">
+        
+        """
+        
+        with open(filepath) as f:
+            for i, line in enumerate(f):
+                if i > 6:
+                    break
+                m = _Imm._author_search(line)
+                if m:
+                    return m[1]
+        return None
 
     def deep_md5(self, ids=False):
         """ Calculate a md5 for the data. Takes ~0.5s on a fast cpu.
@@ -588,7 +538,7 @@ def atomicfy(start, stack=None):
         # Yield the type. Useful for user classes.
         yield b't' + str(type(obj)).encode()
 
-def getDBR():
+def imm():
     """ Get an instance of the DBR.
 
     Use only this function to get an instance of the DBR. For most intents
@@ -603,12 +553,11 @@ def getDBR():
 
     """
 
-    try:
-        assert _dbr, _dbr.timestamp
-        return _dbr
-    except NameError:
-        updater.build_completed.wait()
-        return _dbr
+    if _imm:
+        return _imm
+    else:
+        updater.ready.wait()
+        return _imm
 
 class Updater(threading.Thread):
     """ Ensures the dbr is available and up to date.
@@ -632,30 +581,8 @@ class Updater(threading.Thread):
 
     """
     
-    build_completed = threading.Event() # Signal that the dbr is ready.
+    ready = threading.Event() # Signal that the dbr is ready.
     
-    def get_sqlite_timestamp(self):
-        with sqlite3.connect(config.sqlite['db']) as con:
-            try:
-                return con.execute('SELECT value FROM dbr_info WHERE label=?', ('mysql_timestamp', )).fetchone()[0]
-            except (TypeError, sqlite3.OperationalError):
-                return 'NOTFOUND'
-
-    def get_mysql_timestamp(self):
-        """ Return the timestamp of the last modification.
-
-        This is a fast function, it only takes a few milliseconds"""
-        con = mysql.connect(**config.mysql)
-        cur = con.cursor(raw=True)
-        cur.execute("""
-            SELECT MAX(Update_time)
-            FROM information_schema.tables
-            WHERE table_schema = '%s';
-        """ % config.mysql['db'])
-        timestamp = cur.fetchone()[0].decode()
-        con.close()
-        return timestamp
-
     def set_sqlite_timestamp(self, timestamp):
         with sqlite3.connect(config.sqlite['db']) as con:
             con.execute('CREATE TABLE dbr_info (label UNIQUE, value)')
@@ -712,18 +639,11 @@ class Updater(threading.Thread):
             time.sleep(config.db_refresh_interval)
 
 updater = Updater(name='dbr_updater', daemon=True)
-updater.start()
 
-def stress_test(count=10):
-    import random
-    def get_a():
-        time.sleep(random.random()/10)
-        print("Getting a DBR")
-        dbr = getDBR()
-        print("Got a DBR")
-        time.sleep(random.random() * 10)
-
-    threads = [threading.Thread(target=get_a) for i in range(1, count)]
-    for t in threads:
-        print("Starting thread")
-        t.start()
+if __name__ == '__main__':
+    start=time.time()
+    imm = _Imm(42)
+    print('Imm build took {}s'.format(time.time()-start))
+else:
+    updater.start()
+    

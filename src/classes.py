@@ -1,8 +1,7 @@
 import regex
 from collections import namedtuple
 
-TranslationBase = namedtuple('Translation',
-                                     'seq_nbr, lang, url, abstract, sutta')
+TextRefBase = namedtuple('TextRef', 'lang, abstract, url')
 
 ParallelBase = namedtuple('ParallelBase',
                                   'sutta, partial, indirect, footnote')
@@ -10,23 +9,22 @@ ParallelBase = namedtuple('ParallelBase',
 BiblioEntry = namedtuple('BiblioEntry', 'name, text')
 
 DivisionBase = namedtuple('DivisionBase', '''
-    id, uid, collection, name, coded_name, plain_name, acronym,
-    subdiv_ind, note_text, subdivisions''')
+    uid, collection, name, acronym,
+    subdiv_ind, subdivisions''')
     
 SubdivisionBase = namedtuple('SubdivisionBase',
-    'id, uid, division, name, coded_name, plain_name, acronym, vagga_numbering_ind, vaggas, suttas')
+    'uid, division, name, acronym, vagga_numbering_ind, vaggas, suttas, order')
 
-VaggaBase = namedtuple('VaggaBase', ('id', 'subdivision', 'name', 'coded_name', 'plain_name', 'suttas') )
+VaggaBase = namedtuple('VaggaBase', ('uid', 'subdivision', 'name', 'suttas') )
 
-CollectionBase = namedtuple('CollectionBase', ('id', 'name', 'abbrev_name', 'lang', 'note_text', 'divisions') )
+CollectionBase = namedtuple('CollectionBase', ('uid', 'name', 'abbrev_name', 'lang', 'divisions') )
 
 SuttaBase = namedtuple('SuttaBase', (
-        'id', 'uid', 'acronym', 'alt_acronym', 'name',
-        'coded_name', 'plain_name', 'number', 'lang', 'subdivision',
-        'vagga', 'number_in_vagga', 'volpage_info', 'alt_volpage_info',
-        'biblio_entry', 'url', 'url_info', 'translations', 'parallels',) )
-CollectionLanguage = namedtuple('CollectionLanguage', 'id, name, abbrev, code, collections')
-ReferenceLanguage = namedtuple('ReferenceLanguage', 'id, name, abbrev, code')
+        'uid', 'acronym', 'alt_acronym', 'name', 'number',
+        'lang', 'subdivision', 'vagga', 'number_in_vagga', 'volpage_info', 'alt_volpage_info',
+        'biblio_entry', 'text_ref', 'translations', 'parallels',) )
+
+Language = namedtuple('Language', 'uid, name, isroot, iso_code, priority, collections')
 
 class SearchString(str):
     __slots__ = ('target')
@@ -42,28 +40,24 @@ class Sutta(SuttaBase):
     __slots__ = ()
     def __repr__(self):
         return """< Sutta: "{self.name}"
-    id={self.id},
     uid={self.uid},
     subdivision=<{self.subdivision.uid}>,
     number={self.number},
-    lang=<{self.lang.code}>,
+    lang=<{self.lang.uid}>,
     acronym={self.acronym},
     alt_acronym={self.alt_acronym},
     name={self.name},
-    coded_name={self.coded_name},
-    plain_name={self.plain_name},
     vagga=vagga,
     number_in_vagga={self.number_in_vagga},
     volpage_info={self.volpage_info}, alt_volpage_info={self.alt_volpage_info},
     biblio_entry={self.biblio_entry},
-    url={self.url},
-    url_info={self.url_info},
+    text_ref={self.text_ref},
     translations={translations},
     parallels={parallels} >\n""".format(
         self=self,
         vagga="<{}>".format(self.vagga.name) if self.vagga else '',
         translations="[{}]".format(", ".join(
-        "<{}>".format(a.lang.code) for a in self.translations)),
+        "<{}>".format(a.lang.uid) for a in self.translations)),
         parallels="[{}]".format(", ".join(
             "<{}{}>".format(a.sutta.uid, '*' if a.partial else '')
                 for a in self.parallels)),
@@ -79,11 +73,9 @@ class Vagga(VaggaBase):
     __slots__ = ()
     def __repr__(self):
         return """<Vagga: "{self.name}"
-    id={self.id},
+    uid={self.uid},
     subdivision=<{self.subdivision.uid}>,
     name={self.name},
-    coded_name={self.coded_name},
-    plain_name={self.plain_name},
     suttas=[{suttas}]\n""".format(self=self,
         suttas=", ".join("<{}>".format(sutta.uid) for sutta in self.suttas))
     
@@ -103,19 +95,13 @@ class Parallel(ParallelBase):
             3) sutta subdivision id,
             4) sutta number.
         To be used with sort() or sorted()."""
-        def langhack(lang_id):
-            if lang_id == 2:
-                return 1
-            if lang_id == 1:
-                return 2
-            return lang_id
         s = p.sutta
-        return (langhack(s.lang.id),
+        return (s.lang.priority,
                 p.partial,
-                s.subdivision.id,
-                s.number)
+                s.subdivision.order,
+                s.number_in_vagga)
 
-class Translation(TranslationBase):
+class TextRef(TextRefBase):
     __slots__ = ()
 
     @staticmethod
@@ -124,17 +110,15 @@ class Translation(TranslationBase):
             1) language id
             2) sequence number
         To be used with sort() or sorted()."""
-        return (not t.url.startswith('/'), t.lang.id, t.seq_nbr)
+        return (not t.url.startswith('/'), t.lang.iso_code)
 
 class Collection(CollectionBase):
     __slots__ = ()
     def __repr__(self):
         return """<Collection: "{self.name}",
-    id={self.id},
+    uid={self.uid},
     name={self.name},
-    abbrev_name={self.abbrev_name},
-    lang=<{self.lang.code}>,
-    note_text={self.note_text},
+    lang=<{self.lang.uid}>,
     divisions={divisions}\n""".format(
         self=self,
         divisions="[{}]".format(", ".join(
@@ -146,15 +130,11 @@ class Division(DivisionBase):
     __slots__ = ()
     def __repr__(self):
         return """<Division: "{self.name}"
-    id={self.id},
     uid={self.uid},
     collection={collection},
     name={self.name},
-    coded_name={self.coded_name},
-    plain_name={self.plain_name},
     acronym={self.acronym},
     subdiv_ind={self.subdiv_ind},
-    note_text={self.note_text},
     subdivisions={subdivisions}\n""".format(self=self,
         collection="<Collection>",
         subdivisions="[{}]".format(
@@ -168,12 +148,9 @@ class Subdivision(SubdivisionBase):
     __slots__ = ()
     def __repr__(self):
         return """<Subdivision: "{self.name}"
-    id={self.id}
     uid={self.uid}
     division=<{self.division.uid}>
     name={self.name}
-    coded_name={self.coded_name}
-    plain_name={self.plain_name}
     acronym={self.acronym}
     vagga_numbering_ind={self.vagga_numbering_ind},
     vaggas=[{vaggas}],
