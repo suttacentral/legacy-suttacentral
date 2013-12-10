@@ -78,6 +78,7 @@ class _DBR:
         #con = mysql.connect(**config.mysql)
         con = sqlite3.connect(config.sqlite['db'])
         db = db_grab(con)
+        self.build_text_paths()
         self.build_suttas(db)
         self.build_references(db)
         self.build_parallels_data(db)
@@ -88,7 +89,6 @@ class _DBR:
         self.sort_translations()
         self.build_parallels()
         self.build_search_data()
-        self.build_text_paths()        
     
     def __call__(self, uid):
         if uid in self.collections:
@@ -145,17 +145,17 @@ class _DBR:
         # Build Languages (indexed by id)
         self.collection_languages = OrderedDict()
         for row in db.collection_language.values():
-            self.collection_languages[row.collection_language_id] = CollectionLanguage(
+            self.collection_languages[row.language_code] =            self.collection_languages[row.collection_language_id] = CollectionLanguage(
                 id=row.collection_language_id,
                 name=row.collection_language_name,
                 abbrev=row.collection_language_abbrev_name,
                 code=row.language_code,
                 collections=[], # Populate later
                 )
-
+        
         self.reference_languages = OrderedDict()
         for row in db.reference_language.values():
-            self.reference_languages[row.reference_language_id] = ReferenceLanguage(
+            self.reference_languages[row.iso_code_2] =            self.reference_languages[row.reference_language_id] = ReferenceLanguage(
                 id=row.reference_language_id,
                 name=row.reference_language_name,
                 abbrev=None,
@@ -239,6 +239,44 @@ class _DBR:
             division_id = db.division[subdivision.division_id].division_id
             subdivision_uid = subdivision.subdivision_uid
             try:
+                root_lang = self.collection_languages[sutta.collection_language_id]
+            except KeyError:
+                logger.error('Invalid language id {} for sutta {}'.format(sutta.collection_language_id, sutta_uid))
+                root_lang = None #Hack
+            
+            
+            url = None
+            url_info = None
+            trans_url_infos=[]
+            
+            for ipass in range(0, 2):
+                if ipass == 0:
+                    # Play it straight.
+                    uid = sutta_uid
+                elif ipass == 1:
+                    # There are a few cases where the text of a 'sutta' is not
+                    # found in it's own file, but is a subset of a larger file.
+                    # So we'll try splitting at the last dot
+                    # and also try splitting into alpha/numeric
+                    m = regex.match(r'(?|(.+?)\.(.+)|([a-z]+)(.+))', sutta_uid)
+                    if m:
+                        uid = m[1]
+                        bookmark = m[2]
+                    else:
+                        break
+                
+                langs_authors = self.get_text_langs_author(uid)
+                for lang_code, author in langs_authors:
+                    text_url = Sutta.canon_url(uid=uid, lang_code=lang_code)
+                    if ipass == 1:
+                        text_url += '#' + bookmark
+                    if lang_code == root_lang.code:
+                        url = text_url
+                        url_info = author
+                    else:
+                        trans_url_infos.append((lang_code, text_url, author))
+            
+            try:
                 biblio_entry = BiblioEntry(
                     name=db.biblio_entry[sutta.biblio_entry_id].biblio_entry_name,
                     text=db.biblio_entry[sutta.biblio_entry_id].biblio_entry_text,)
@@ -252,11 +290,7 @@ class _DBR:
                 if sutta.vagga_id:
                     logger.error('Invalid vagga id {} for sutta {}'.format(sutta.vagga_id, sutta_uid))
                 vagga = None
-            try:
-                lang = self.collection_languages[sutta.collection_language_id]
-            except KeyError:
-                logger.error('Invalid language id {} for sutta {}'.format(sutta.collection_language_id, sutta_uid))
-                lang = None #Hack
+
             try:
                 new_sutta = Sutta(
                     id=sutta.sutta_id,
@@ -267,21 +301,27 @@ class _DBR:
                     coded_name=sutta.sutta_coded_name,
                     plain_name=sutta.sutta_plain_name,
                     number=sutta.sutta_number,
-                    lang=lang,
+                    lang=root_lang,
                     subdivision=self.subdivisions[subdivision_uid],
                     vagga=vagga,
                     number_in_vagga=sutta.sutta_in_vagga_number,
                     volpage_info=sutta.volpage_info,
                     alt_volpage_info=sutta.alt_volpage_info,
                     biblio_entry=biblio_entry,
-                    url=sutta.sutta_text_url_link,
-                    url_info=sutta.url_extra_info_text,
+                    url=url,# or sutta.sutta_text_url_link,
+                    url_info=url_info,# or sutta.url_extra_info_text,
                     translations=[],
                     parallels=[],
                 )
                 suttas.append( (sutta_uid, new_sutta) )
+                for lang_code, url, info in trans_url_infos:
+                    lang = self.reference_languages[lang_code]
+                    new_sutta.translations.append(
+                        Translation(0, lang, url, info, new_sutta))
+                    
             except:
                 print("Sutta: " + str(sutta))
+                globals().update(locals())
                 raise
 
         suttas = sorted(suttas, key=numsortkey)
@@ -292,15 +332,6 @@ class _DBR:
         for sutta in self.suttas.values():
             sutta.subdivision.suttas.append(sutta)
         
-        # Populate sutta_texts
-        self.sutta_texts = SuttaTextCollection()
-        for sutta in self.suttas.values():
-            try:
-                self.sutta_texts.add(sutta)
-            except InvalidTextCollectionPathException:
-                logger.warning('Could not add sutta {} to texts with url {}'.format(sutta.uid, sutta.url))
-        self.sutta_texts.sort_lists()
-
         # Build tree from bottom up:
 
         for sutta in self.suttas.values():
@@ -330,10 +361,6 @@ class _DBR:
             except IndexError:
                 logger.warning("Vagga id={} has no suttas.".format(vagga.id))
                 subdivision = vagga.subdivision
-            try:
-                assert subdivision is vagga.subdivision
-            except AssertionError:
-                logger.warning("{} thinks it is in {}, but the vagga thinks it is in {}".format(vagga.suttas[0].uid, vagga.suttas[0].subdivision.uid, vagga.subdivision.uid))
                 
             subdivision.vaggas.append(vagga)
         
@@ -509,16 +536,70 @@ class _DBR:
         thus subfolders exist solely for ease of file organization.
         """
         import glob
-        self.text_paths = collections.defaultdict(dict)
+        self.text_paths = {}
+        self.text_langs = {}
         
         for langroot in glob.glob(config.text_root + '/*'):
             lang = os.path.basename(langroot)
+            self.text_paths[lang] = {}
             for basedir, subdirs, filenames in os.walk(langroot):
                 for filename in filenames:
                     uid = filename.replace('.html', '')
                     assert uid not in self.text_paths[lang]
-                    self.text_paths[lang][uid] = os.path.join(basedir, filename)      
-
+                    self.text_paths[lang][uid] = os.path.join(basedir, filename)
+                    try:
+                        self.text_langs[uid].append(lang)
+                    except KeyError:
+                        self.text_langs[uid] = [lang]
+    
+    def get_text_path(self, lang, uid):
+        try:
+            return self.text_paths[lang][uid]
+        except KeyError:
+            return None
+    
+    def get_text_langs(self, uid):
+        "Returns language versions of text ``uid`` existing in textroot"
+        
+        return self.text_langs.get(uid, None)
+    
+    def get_text_langs_author(self, uid):
+        """ Examines the file to discover the author
+        
+        This requires that a tag appears
+        <meta author="Translated by Bhikkhu Bodhi">
+        
+        This must be in head and occur in the first 5 lines.
+        The attribute must be quoted and should be fully qualified.
+        <meta author='Edited by Bhante Sujato'>
+        
+        <meta author="Pali text from the Mahāsaṅgīti Tipiṭaka">
+        
+        """
+        
+        if uid not in self.text_langs:
+            return []
+            
+        out = []
+        for lang in self.text_langs[uid]:
+            author_search = regex.compile(r'''(?s)<meta[^>]+author=(?|"(.*?)"|'(.*?)')''').search
+            
+            author = ''
+            with open(self.get_text_path(lang, uid)) as f:
+                for i, line in enumerate(f):
+                    if i > 6:
+                        print(lang, uid)
+                        globals().update(locals())
+                        raise ValueError
+                        break
+                    m = author_search(line)
+                    if m:
+                        author = m[1]
+                        break
+                        
+            out.append((lang, author))
+        return out
+    
     def deep_md5(self, ids=False):
         """ Calculate a md5 for the data. Takes ~0.5s on a fast cpu.
 

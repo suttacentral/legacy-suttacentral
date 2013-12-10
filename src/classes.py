@@ -70,12 +70,10 @@ class Sutta(SuttaBase):
         )
     def __hash__(self):
         return self.id
-
-    def canon_filename(self):
-        return '/{lang}/{uid}.html'.format(lang=self.lang.code, uid=self.uid)
     
-    def canon_url(self):
-        return '/{uid}/{lang}/'.format(uid=self.uid, lang=self.lang.code)
+    @staticmethod
+    def canon_url(uid, lang_code):
+        return '/{uid}/{lang}/'.format(uid=uid, lang=lang_code)
 
 class Vagga(VaggaBase):
     __slots__ = ()
