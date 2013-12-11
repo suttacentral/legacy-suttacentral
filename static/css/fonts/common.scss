@@ -1,62 +1,99 @@
 /*
-    Sans serif fonts for free distribution.
+    Common fonts and mixins.
 
-    See fonts-nonfree.scss for information on updating and versioning.
+    If you make *any* changes to fonts files, make sure to increment the
+    version to avoid browser caching problems.
+
+    ## Process
+
+    1. Get the original TTF font.
+    2. Change the TTF to the '<name>-<style>-<version>.<type>', e.g.,
+       'skolar-sutta-web-regular-3.ttf'.
+    3. Convert TTF to other formats (EOT, WOFF, etc.) using
+       http://www.font-face-generator.com/.
+    4. Rename any converted fonts to filenames like in step 2.
+    5. Edit SVG files, adding an id="<name>-<style>" to the <font> tag. This
+       tag should be close to the beginning of the file.
+
+    ## Caveats and Hints
+
+    - Many font-face generators seem to strip out ligature or kerning data
+      from some of the fonts (e.g., fontsquirrel.com).
+    - Make sure to cross-check against different browsers on different
+      operating systems. It's surpising how there will be slight rendering
+      problems on different browsers/OSs.
+    - Use the fonts page (e.g., http://localhost:8800/fonts) to test.
+
+    ## Deployment
+
+    You can deploy the fonts to staging and production using the
+    `invoke deploy.staging.nonfree_fonts` and
+    `invoke deploy.production.nonfree_fonts` tasks respectively. Make sure to
+    do this *before* you run the normal deploy task.
+
 */
 
+$base_font_url: '/fonts';
+
+// Source: https://www.google.com/fonts/specimen/Source+Sans+Pro
+$source-sans-pro: 'Source Sans Pro';
+
+// Source: ?
+$hetu-schetu-sc: 'hetu_schetu_sc';
+
+// Source: https://code.google.com/p/tharlon-font/
+$tharlon: 'TharLon';
+
+@mixin font-face-src($font-path, $svg-id) {
+    $url = '#{$base_font_url}/#{$font-path}';
+    src: url('#{$url}.eot');
+    src: url('#{$url}.eot?#iefix') format('embedded-opentype'),
+         url('#{$url}.woff') format('woff'),
+         url('#{$url}.ttf') format('truetype'),
+         url('#{$url}.svg##{$svg-id}') format('svg');
+}
+
 @font-face {
-    font-family: 'source_sans_pro';
-    src: url('/fonts/source-sans-pro-bold-1.eot');
-    src: url('/fonts/source-sans-pro-bold-1.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/source-sans-pro-bold-1.woff') format('woff'),
-         url('/fonts/source-sans-pro-bold-1.ttf') format('truetype'),
-         url('/fonts/source-sans-pro-bold-1.svg#source-sans-pro-bold') format('svg');
+    font-family: $source-sans-pro;
+    @include font-face-src('source-sans-pro-bold-1', 'source-sans-pro-bold');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'source_sans_pro';
-    src: url('/fonts/source-sans-pro-italic-1.eot');
-    src: url('/fonts/source-sans-pro-italic-1.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/source-sans-pro-italic-1.woff') format('woff'),
-         url('/fonts/source-sans-pro-italic-1.ttf') format('truetype'),
-         url('/fonts/source-sans-pro-italic-1.svg#source-sans-pro-italic') format('svg');
+    font-family: $source-sans-pro;
+    @include font-face-src('source-sans-pro-italic-1', 'source-sans-pro-italic');
     font-weight: normal;
     font-style: italic;
 }
 
 @font-face {
-    font-family: 'source_sans_pro';
-    src: url('/fonts/source-sans-pro-regular-1.eot');
-    src: url('/fonts/source-sans-pro-regular-1.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/source-sans-pro-regular-1.woff') format('woff'),
-         url('/fonts/source-sans-pro-regular-1.ttf') format('truetype'),
-         url('/fonts/source-sans-pro-regular-1.svg#source-sans-pro-regular') format('svg');
+    font-family: $source-sans-pro;
+    @include font-face-src('source-sans-pro-regular-1', 'source-sans-pro-regular');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'hetu_schetu_sc';
-    src: url('/fonts/hetu-schetu-sc-2.eot');
-    src: url('/fonts/hetu-schetu-sc-2.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/hetu-schetu-sc-2.woff') format('woff'),
-         url('/fonts/hetu-schetu-sc-2.ttf') format('truetype'),
-         url('/fonts/hetu-schetu-sc-2.svg#hetu-schetu-sc') format('svg');
+    font-family: $hetu-schetu-sc;
+    @include font-face-src('hetu-schetu-sc-2', 'hetu-schetu-sc');
     font-weight: normal;
     font-style: normal;
 }
 
-$source-sans-pro: 'source_sans_pro', sans-serif;
-$hetu-schetu-sc: 'hetu_schetu_sc', sans-serif;
+@font-face {
+    font-family: $tharlon;
+    @include font-face-src('tharlon-regular-1', 'tharlon-regular');
+    font-weight: normal;
+    font-style: normal;
+}
 
 @mixin sans-serif($extra:'') {
-    font-family: $source-sans-pro unquote($extra);
+    font-family: $source-sans-pro, sans-serif unquote($extra);
 }
 
 @mixin sans-serif-small-caps($extra:'') {
-    font-family: $hetu-schetu-sc unquote($extra);
+    font-family: $hetu-schetu-sc, sans-serif unquote($extra);
 }
 
 @mixin monospace($extra:'') {

@@ -4,7 +4,8 @@ from ..helpers import *
 
 @task
 def full():
-    """Full deploy to the production server."""
+    """Deploy to the production server."""
+    blurb(full)
     remote_run('sc-production@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
@@ -27,21 +28,20 @@ def full():
 @task
 def nonfree_fonts(force=False):
     """Copy local nonfree fonts to the production server."""
+    blurb(nonfree_fonts)
     command = 'rsync -avz ' + \
         'static/fonts/nonfree/ ' + \
         'sc-production@vps.suttacentral.net:' + \
         '/home/sc-production/suttacentral/static/fonts/nonfree/'
-
-    if force:
-        run(command)
-    else:
-        warning('*** Dry run ***')
-        notice('Use the --force flag to make changes.')
-        run(command.replace('rsync', 'rsync -n'))
+    if not force:
+        warning('*** Dry run...use the --force flag to make changes ***')
+        command = command.replace('rsync', 'rsync -n')
+    run(command, fg=True)
 
 @task
 def quick():
-    """Quick deploy to the production server."""
+    """Deploy simple changes to the production server."""
+    blurb(quick)
     remote_run('sc-production@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
@@ -57,7 +57,8 @@ def quick():
 
 @task
 def text():
-    """Text-only deploy to the production server."""
+    """Deploy text changes to the production server."""
+    blurb(text)
     remote_run('sc-production@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',

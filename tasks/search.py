@@ -1,13 +1,17 @@
 """Search tasks."""
 
+import textsearch
+
 from .helpers import *
 
 @task
 def clean():
     """Delete the search index SQLite databases."""
+    blurb(clean)
     rm_rf('db/search_*.sqlite')
 
 @task
 def index():
-    """Create/update the search index SQLite databases."""
-    run_sc('textsearch.build()')
+    """Create the search index SQLite databases."""
+    blurb(index)
+    textsearch.build()

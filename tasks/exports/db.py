@@ -5,6 +5,7 @@ from ..helpers import *
 @task
 def clean(older=False):
     """Delete SuttaCentral database export files."""
+    blurb(clean)
     if older:
         run('find static/exports -type f -mtime +2 -name "sc-db-*" ' +
             '-exec rm {} \;')
@@ -14,6 +15,7 @@ def clean(older=False):
 @task
 def create(force=False, quiet=False):
     """Create a SuttaCentral database export."""
+    blurb(create)
     command = 'utility/export/db.py'
     if force:
         command += ' --force'
