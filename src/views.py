@@ -281,7 +281,11 @@ class TextView(ViewBase):
         m = self.content_regex.search(self.get_html())
         context.title = '?'
         if m['hgroup'] is not None:
-            hgroup_dom = lxml.html.fragment_fromstring((m['hgroup']))
+            # lxml still has a number of issues handling utf8. We need to
+            # explicitly define a parser. See:
+            # http://stackoverflow.com/questions/15302125/html-encoding-and-lxml-parsing
+            parser = lxml.html.HTMLParser(encoding='utf8')
+            hgroup_dom = lxml.html.fragment_fromstring(m['hgroup'], parser=parser)
             h1 = hgroup_dom.cssselect('h1')
             if h1:
                 context.title = h1[0].text

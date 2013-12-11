@@ -37,3 +37,13 @@ class UnitsTest(unittest.TestCase):
     def test_format_time_default(self):
         self.assertEqual('4:32 AM',
                          util.format_time(self.test_datetime))
+
+    def test_wrap(self):
+        input = 'Neither mother, father, nor any other relative can do\n' + \
+                'one greater good than one\'s own well-directed mind.'
+        output = '   Neither mother, father, nor any other\n' + \
+                 '   relative can do\n' + \
+                 '   one greater good than one\'s own\n' + \
+                 '   well-directed mind.'
+        result = util.wrap(input, width=40, indent=3)
+        self.assertEqual(output, result)

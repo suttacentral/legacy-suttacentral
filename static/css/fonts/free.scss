@@ -1,49 +1,38 @@
 /*
     Serif fonts for free distribution.
 
-    See fonts-nonfree.scss for information on updating and versioning.
+    See fonts-common.scss for information on updating and versioning.
 */
+
+// Source: http://www.fontsquirrel.com/fonts/Gentium-Basic
+$gentium-basic: 'Gentium Basic';
 
 @font-face {
     font-family: 'Gentium Basic';
-    src: url('/fonts/gentium-basic-bold-1.1.eot');
-    src: url('/fonts/gentium-basic-bold-1.1.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/gentium-basic-bold-1.1.woff') format('woff'),
-         url('/fonts/gentium-basic-bold-1.1.ttf') format('truetype'),
-         url('/fonts/gentium-basic-bold-1.1.svg#gentium_basicbold') format('svg');
+    @include font-face-src('gentium-basic-bold-1.1', 'gentium_basicbold');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Gentium Basic';
-    src: url('/fonts/gentium-basic-italic-1.1.eot');
-    src: url('/fonts/gentium-basic-italic-1.1.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/gentium-basic-italic-1.1.woff') format('woff'),
-         url('/fonts/gentium-basic-italic-1.1.ttf') format('truetype'),
-         url('/fonts/gentium-basic-italic-1.1.svg#gentium_basicitalic') format('svg');
+    @include font-face-src('gentium-basic-italic-1.1', 'gentium_basicitalic');
     font-weight: normal;
     font-style: italic;
 }
 
 @font-face {
     font-family: 'Gentium Basic';
-    src: url('/fonts/gentium-basic-regular-1.1.eot');
-    src: url('/fonts/gentium-basic-regular-1.1.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/gentium-basic-regular-1.1.woff') format('woff'),
-         url('/fonts/gentium-basic-regular-1.1.ttf') format('truetype'),
-         url('/fonts/gentium-basic-regular-1.1.svg#gentium_basicregular') format('svg');
+    @include font-face-src('gentium-basic-regular-1.1', 'gentium_basicregular');
     font-weight: normal;
     font-style: normal;
 }
 
-$gentium-basic: 'Gentium Basic', serif;
-
 @mixin serif($extra:'') {
-    font-family: $gentium-basic unquote($extra);
+    font-family: $gentium-basic, serif unquote($extra);
 }
 
 @mixin serif-small-caps($extra:'') {
-    font-family: $gentium-basic unquote($extra);
+    font-family: $gentium-basic, serif unquote($extra);
     font-variant: small-caps;
 }
