@@ -42,7 +42,8 @@ def numsortkey(input, index=0):
 
 def table_reader(tablename):
     """ Like csv.DictReader but returns named tuples (2x faster also) """
-    with open(os.path.join(config.data, tablename + '.csv'), 'r', newline='') as f:
+    with open(os.path.join(config.data, tablename + '.csv'), 'r',
+              encoding='utf-8', newline='') as f:
         reader = csv.reader(f, dialect=ScCsvDialect)
         field_names = next(reader)
         NtName = '_' + tablename.title()
@@ -452,7 +453,7 @@ class _Imm:
         
         """
         
-        with open(filepath) as f:
+        with open(filepath, 'r', encoding='utf-8') as f:
             for i, line in enumerate(f):
                 if i > 6:
                     break
