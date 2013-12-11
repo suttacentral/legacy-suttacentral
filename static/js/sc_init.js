@@ -346,5 +346,3 @@ function ohInternetExplorerLetMeCountTheWaysILoveYou(){
 };
 
 ohInternetExplorerLetMeCountTheWaysILoveYou();
-
-$('#page-header-search > input[type=text]').select().focus();
