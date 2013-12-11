@@ -642,8 +642,11 @@ class Updater(threading.Thread):
             
     def run(self):
         global _imm
+        # Give a few moments for the main thread to get started.
+        time.sleep(1)
         while True:
             timestamp = self.get_change_timestamp()
+            refresh_interval = config.db_refresh_interval
             
             # Check if imm is up to date
             if not _imm or _imm.timestamp != timestamp:
@@ -652,16 +655,16 @@ class Updater(threading.Thread):
                 try:
                     _imm = _Imm(timestamp)
                     self.ready.set()
+                    logger.info('imm build took {} seconds'.format(time.time() - start))
+                    if config.app['runtime_tests']:
+                        # Do consistency checking.
+                        _imm._check_md5()
                 except Exception as e:
-                    logger.error("Critical Error: DBR buid failed.")
-                    raise e
+                    logger.error("Critical Error: DBR buid failed.", e)
+                    # retry in case problem is fixed.
+                    refresh_interval = min(20, refresh_interval)
 
-                logger.info('imm build took {} seconds'.format(time.time() - start))
-
-                if config.app['runtime_tests']:
-                    # Do consistency checking.
-                    _imm._check_md5()
-            time.sleep(config.db_refresh_interval)
+            time.sleep(refresh_interval)
 
 updater = Updater(name='imm_updater', daemon=True)
 
