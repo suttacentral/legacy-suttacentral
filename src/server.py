@@ -4,10 +4,13 @@ import cherrypy
 
 import config
 import logger
+# Make sure to do this before importing root because it cascades into importing
+# scimm which autostarts the imm updater thread.
+logger.setup()
+
 import root
 import util
 
-logger.setup()
 util.set_timezone()
 
 if __name__ == '__main__':
