@@ -63,7 +63,7 @@ class Sutta(SuttaBase):
                 for a in self.parallels)),
         )
     def __hash__(self):
-        return self.id
+        return hash(self.uid)
     
     @staticmethod
     def canon_url(uid, lang_code):

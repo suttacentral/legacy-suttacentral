@@ -60,7 +60,8 @@ class Ranker:
 
         rank += bonus
 
-        rank += sutta.subdivision.division.id
+        # It would be nice to have another rank breaker...
+        #rank += sutta.subdivision.division.id
 
         return 10 * int(rank / 10) 
 
@@ -83,7 +84,7 @@ def search(query=None, limit=25, offset=0):
     query = query.replace('"', '')
     if len(query) <= 3:
         imm = scimm.imm()
-        if query in imm.lang_codes:
+        if query in imm.languages:
             searchlang = query
         if not searchlang and len(query) <= 2:
             out.total = 0
