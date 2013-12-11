@@ -1,4 +1,5 @@
 import re
+import pytest
 
 from ..helper import SCTestCase
 
@@ -12,6 +13,8 @@ class SimpleTestCase(SCTestCase):
         self.goto('/blargh')
         self.assertPageIs404()
 
+    @pytest.mark.xfail(reason='2013-12-10 There is discussion around ' + \
+        'preserving sequence information for external translations.')
     def test_translation_order(self):
         self.goto('/dn2')
         self.assertEqual('Details for DN 2 Sāmaññaphala',
