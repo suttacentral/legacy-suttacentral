@@ -81,8 +81,7 @@ def codely(string):
         
         return _rexnotascii.sub(subfn, string).strip()
     except KeyError:
-        print(string)
-        raise
+        return ''
 
 def plainly(string):
     def subfn(m, plain_map=_plain_map):
