@@ -7,6 +7,7 @@ import unittest
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
 from urllib.parse import urljoin
 
 # Setup sys.path to import modules from the project directory.
@@ -35,6 +36,10 @@ class SCTestCase(unittest.TestCase):
 
     @property
     def browser(self):
+        """Return a suitable webdriver object.
+
+        See https://selenium.googlecode.com/svn/trunk/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html
+        """
         global browser
         if not browser:
             if os.getenv('PHANTOMJS'):
@@ -43,6 +48,11 @@ class SCTestCase(unittest.TestCase):
                 browser = webdriver.Firefox()
             atexit.register(browser.close)
         return browser
+
+    @property
+    def active_element(self):
+        """Return the active DOM element (or body if non selected)."""
+        return self.browser.switch_to_active_element()
 
     def goto(self, path):
         self.get(urljoin(self.base_url, path))
