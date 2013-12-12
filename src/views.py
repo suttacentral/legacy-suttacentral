@@ -9,7 +9,7 @@ import socket
 import time
 import urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
-import lxml.html
+import lhtmlx
 
 import assets
 import config
@@ -281,16 +281,12 @@ class TextView(ViewBase):
         m = self.content_regex.search(self.get_html())
         context.title = '?'
         if m['hgroup'] is not None:
-            # lxml still has a number of issues handling utf8. We need to
-            # explicitly define a parser. See:
-            # http://stackoverflow.com/questions/15302125/html-encoding-and-lxml-parsing
-            parser = lxml.html.HTMLParser(encoding='utf8')
-            hgroup_dom = lxml.html.fragment_fromstring(m['hgroup'], parser=parser)
-            h1 = hgroup_dom.cssselect('h1')
+            hgroup_dom = lhtmlx.fragment_fromstring(m['hgroup'])
+            h1 = hgroup_dom.select('h1')
             if h1:
                 context.title = h1[0].text
             self.annotate_heading(hgroup_dom)
-            hgroup_html = lxml.html.tostring(hgroup_dom, encoding='utf8').decode()
+            hgroup_html = str(hgroup_dom)
             context.text = ''.join([m['preamble'], hgroup_html, m['content']])
         else:
             context.text = m['content']
@@ -313,7 +309,7 @@ class TextView(ViewBase):
     def annotate_heading(self, hgroup_dom):
         """Add navigation links to the header h1 and h2"""
 
-        h1 = hgroup_dom.cssselect('h1')
+        h1 = hgroup_dom.select('h1')
         
         # The below should continue to work when new 'hgroup' markup comes in.
         if h1:
@@ -321,9 +317,7 @@ class TextView(ViewBase):
             href = '/{}'.format(self.uid)
             a = hgroup_dom.makeelement('a', href=href,
                 title='Click for details of parallels and translations.')
-            a.text = h1.text; h1.text = None
-            a.extend(h1)
-            h1.append(a)
+            h1.wrap_inner(a)
             
         if hasattr(self, 'subdivision'):
             if len(hgroup_dom) > 1:
@@ -331,9 +325,7 @@ class TextView(ViewBase):
                 href = '/{}'.format(self.subdivision.uid)
                 a = hgroup_dom.makeelement('a', href=href,
                     title='Click to go to the division or subdivision page.')
-                a.text = subhead.text; subhead.text = None
-                a.extend(subhead)
-                subhead.append(a)
+                subhead.wrap_inner(a)
 
 class SuttaView(TextView):
     """The view for showing the sutta text in original sutta langauge."""
