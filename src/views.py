@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 import assets
 import config
 import scdb
-import scm
+from scm import scm
 import util
 from menu import menu_data
 from classes import Parallel, Sutta
@@ -142,8 +142,6 @@ class ViewBase:
 
     def get_global_context(self):
         """Return a dictionary of variables accessible by all templates."""
-        if config['global']['engine.autoreload.on']:
-            scm.refresh()
         return ViewContext({
             'collections': menu_data,
             'config': config,
