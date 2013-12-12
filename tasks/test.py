@@ -5,7 +5,7 @@ from .helpers import *
 def _run_tests(tests, url=None, phantomjs=False):
     environ = {}
     if url:
-        environ['URL'] = self.url
+        environ['URL'] = url
     if phantomjs:
         environ['PHANTOMJS'] = '1'
     with local.env(**environ):

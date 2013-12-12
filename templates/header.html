@@ -28,7 +28,8 @@
 
 {% if not offline %}
 <form id="page-header-search" action="/search">
-    <input type="text" name="query" size="25" placeholder="Search" autocomplete="off" value="{{ search_query }}">
+    <input type="text" name="query" tabindex="1" size="25"
+        placeholder="Search" autocomplete="off" value="{{ search_query }}">
     <button title="Search">
         <img src="/img/search-icon-16.png">
     </button>

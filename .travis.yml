@@ -16,5 +16,9 @@ install:
 before_script:
   - invoke travis.prepare
   - invoke travis.start_server
-script: invoke test.all --phantomjs
-after_script: invoke travis.stop_server
+script:
+  - invoke dictionary.build
+  - invoke search.index
+  - invoke test.all --phantomjs
+after_script:
+  - invoke travis.stop_server
