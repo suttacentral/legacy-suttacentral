@@ -126,6 +126,9 @@ class _Imm:
         # From filesystem (This also returns important text_paths variable)
         self.text_paths, text_refs = self.scan_text_root()
         
+        # Make a copy, note: we want copy of lists, not refs to them!
+        local_text_refs = {key: value[:] for key, value in text_refs.items()}
+        
         # From external_text table
         for row in table_reader('external_text'):
             text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url, priority=row.priority) )
@@ -245,30 +248,28 @@ class _Imm:
                         text_ref = ref
                     else:
                         translations.append(ref)
-            else:
-                variants = []
-                m = regex.match(r'(.*?)\.?(\d+[a-z]?)$', uid)
-                if m:
-                    variants.append((m[1], m[2]))
-                m = regex.match(r'(.*?)((\d+)-\d+$)', uid)
-                if m:
-                    variants.append((m[1] + m[3], m[2]))
-                for sub_uid, bookmark in variants:
-                    if sub_uid in text_refs:
-                        for ref in text_refs[sub_uid]:
-                            ref = TextRef(lang=ref.lang,
-                                        abstract=ref.abstract,
-                                        url=Sutta.canon_url(lang_code=ref.lang.uid,
-                                            uid=sub_uid) + '#' + bookmark,
-                                        priority=0,
-                                        )
-                            if ref.lang == lang:
+            variants = []
+            m = regex.match(r'(.*?)\.?(\d+[a-z]?)$', uid)
+            if m:
+                variants.append((m[1], m[2]))
+            m = regex.match(r'(.*?)((\d+)-\d+$)', uid)
+            if m:
+                variants.append((m[1] + m[3], m[2]))
+            for sub_uid, bookmark in variants:
+                if sub_uid in local_text_refs:
+                    for ref in local_text_refs[sub_uid]:
+                        ref = TextRef(lang=ref.lang,
+                                    abstract=ref.abstract,
+                                    url=ref.url.split('#')[0] + '#' + bookmark,
+                                    priority=0,
+                                    )
+                        if ref.lang == lang:
+                            if not text_ref:
                                 text_ref = ref
-                            else:
-                                translations.append(ref)
-                        break
+                        else:
+                            translations.append(ref)
                 
-            translations.sort(key=TextRef.sort_key)
+            #translations.sort(key=TextRef.sort_key)
             
             subdivision = self.subdivisions[row.subdivision_uid]
             
