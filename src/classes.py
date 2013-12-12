@@ -20,7 +20,7 @@ VaggaBase = namedtuple('VaggaBase', ('subdivision', 'number', 'name', 'suttas') 
 CollectionBase = namedtuple('CollectionBase', ('uid', 'name', 'abbrev_name', 'lang', 'divisions') )
 
 SuttaBase = namedtuple('SuttaBase', (
-        'uid', 'acronym', 'alt_acronym', 'name', 'vagga_number', 'number_in_vagga',
+        'uid', 'acronym', 'alt_acronym', 'name', 'vagga_number', 'number_in_vagga', 'number',
         'lang', 'subdivision', 'vagga', 'volpage_info', 'alt_volpage_info',
         'biblio_entry', 'text_ref', 'translations', 'parallels',) )
 

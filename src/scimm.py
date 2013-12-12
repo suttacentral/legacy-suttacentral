@@ -280,6 +280,12 @@ class _Imm:
                 vagga_number = 0
                 vagga = subdivision.vaggas[0]
             
+            m = regex.search(r'(?r)\d+', row.uid)
+            if m:
+                number = int(m[0])
+            else:
+                number = 9999
+            
             sutta = Sutta(
                 uid=row.uid,
                 acronym=acro[0],
@@ -289,6 +295,7 @@ class _Imm:
                 lang=lang,
                 subdivision=subdivision,
                 vagga=vagga,
+                number=number,
                 number_in_vagga=row.number_in_vagga,
                 volpage_info=volpage[0],
                 alt_volpage_info=volpage[1] if len(volpage) > 1 else None,
