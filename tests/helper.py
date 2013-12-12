@@ -14,6 +14,10 @@ from urllib.parse import urljoin
 sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(
     os.path.realpath(__file__))), 'src'))
 
+# Set UTC!
+os.environ['TZ'] = 'UTC'
+time.tzset()
+
 import config
 
 base_url = None
