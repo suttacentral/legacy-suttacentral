@@ -269,7 +269,7 @@ class _Imm:
                         else:
                             translations.append(ref)
                 
-            #translations.sort(key=TextRef.sort_key)
+            translations.sort(key=TextRef.sort_key)
             
             subdivision = self.subdivisions[row.subdivision_uid]
             

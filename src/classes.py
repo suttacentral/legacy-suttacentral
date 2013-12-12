@@ -113,7 +113,7 @@ class TextRef(TextRefBase):
             1) language id
             2) sequence number
         To be used with sort() or sorted()."""
-        return (not t.url.startswith('/'), t.lang.iso_code)
+        return (not t.url.startswith('/'), t.lang.priority, t.lang.iso_code, t.priority)
 
 class Collection(CollectionBase):
     __slots__ = ()
