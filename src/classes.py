@@ -1,12 +1,12 @@
 import regex
 from collections import namedtuple
 
-TextRefBase = namedtuple('TextRef', 'lang, abstract, url')
+TextRefBase = namedtuple('TextRef', 'lang, abstract, url, priority')
 
 ParallelBase = namedtuple('ParallelBase',
                                   'sutta, partial, indirect, footnote')
 
-BiblioEntry = namedtuple('BiblioEntry', 'name, text')
+BiblioEntry = namedtuple('BiblioEntry', 'uid, name, text')
 
 DivisionBase = namedtuple('DivisionBase', '''
     uid, collection, name, acronym,
@@ -15,13 +15,13 @@ DivisionBase = namedtuple('DivisionBase', '''
 SubdivisionBase = namedtuple('SubdivisionBase',
     'uid, division, name, acronym, vagga_numbering_ind, vaggas, suttas, order')
 
-VaggaBase = namedtuple('VaggaBase', ('uid', 'subdivision', 'name', 'suttas') )
+VaggaBase = namedtuple('VaggaBase', ('subdivision', 'number', 'name', 'suttas') )
 
 CollectionBase = namedtuple('CollectionBase', ('uid', 'name', 'abbrev_name', 'lang', 'divisions') )
 
 SuttaBase = namedtuple('SuttaBase', (
-        'uid', 'acronym', 'alt_acronym', 'name', 'number',
-        'lang', 'subdivision', 'vagga', 'number_in_vagga', 'volpage_info', 'alt_volpage_info',
+        'uid', 'acronym', 'alt_acronym', 'name', 'vagga_number', 'number_in_vagga',
+        'lang', 'subdivision', 'vagga', 'volpage_info', 'alt_volpage_info',
         'biblio_entry', 'text_ref', 'translations', 'parallels',) )
 
 Language = namedtuple('Language', 'uid, name, isroot, iso_code, priority, collections')

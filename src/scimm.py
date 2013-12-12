@@ -128,7 +128,7 @@ class _Imm:
         
         # From external_text table
         for row in table_reader('external_text'):
-            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url) )
+            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url, priority=row.priority) )
         
         self.collections = OrderedDict()
         for row in table_reader('collection'):
@@ -172,7 +172,7 @@ class _Imm:
                 acronym=row.acronym,
                 division=self.divisions[row.division_uid],
                 name=row.name,
-                vagga_numbering_ind=row.vagga_ind,
+                vagga_numbering_ind=row.vagga_numbering_ind,
                 order=i,
                 vaggas=[], # Populate later
                 suttas=[] # Populate later
@@ -183,46 +183,57 @@ class _Imm:
             # populate divisions.subdivisions
             self.divisions[row.division_uid].subdivisions.append(subdivision)
         
+        for division in self.divisions.values():
+            if not division.subdivisions:
+                subdivision = Subdivision(
+                                uid=None,
+                                acronym=None,
+                                division=division,
+                                name=None,
+                                vagga_numbering_ind=False,
+                                order=9000,
+                                vaggas=[],
+                                suttas=[])
+                division.subdivisions.append(subdivision)
+            self.subdivisions[division.uid] = subdivision
+        
         # Build vaggas
         self.vaggas = OrderedDict()
         for row in table_reader('vagga'):
-            subdiv_uid = row.uid.split('/')[0]
             vagga = Vagga(
-                uid=row.uid,
-                subdivision=self.subdivisions[subdiv_uid],
+                subdivision=self.subdivisions[row.subdivision_uid],
+                number=row.number,
                 name=row.name,
                 suttas=[], # Populate later
             )
-            self.vaggas[row.uid] = vagga
+            self.vaggas[(row.subdivision_uid, row.number)] = vagga
             # Populate subdivision.vaggas
-            self.subdivisions[subdiv_uid].vaggas.append(vagga)
+            vagga.subdivision.vaggas.append(vagga)
+        
+        for subdivision in self.subdivisions.values():
+            if not subdivision.vaggas:
+                subdivision.vaggas.append(Vagga(
+                    subdivision=subdivision,
+                    number=0,
+                    name=None,
+                    suttas=[]))
         
         # Load biblio entries (Not into an instance variable)
         biblios = {}
         for row in table_reader('biblio'):
-            biblios[row.sutta_uid] = BiblioEntry(
+            biblios[row.uid] = BiblioEntry(
+                uid=row.uid,
                 name=row.name,
                 text=row.text)
         
-
         # Build suttas (indexed by uid)
         suttas = []
         for row in table_reader('sutta'):
             uid = row.uid
-            if row.vagga:
-                m = regex.match(r'(.*?/.*?)/(.*)', row.vagga)
-                vag_uid, numinvag = m[1], m[2]
-            else:
-                vag_uid, numinvag = None, None
             volpage = row.volpage.split('//')
             acro = row.acronym.split('//')
             if not acro[0]:
                 acro[0] = self.uid_to_acro(uid)
-            m = regex.match(r'\d$', uid)
-            if m:
-                number = int(m[0])
-            else:
-                number = 842
             
             lang = self.languages[row.language]
             
@@ -239,13 +250,17 @@ class _Imm:
                 m = regex.match(r'(.*?)\.?(\d+[a-z]?)$', uid)
                 if m:
                     variants.append((m[1], m[2]))
+                m = regex.match(r'(.*?)((\d+)-\d+$)', uid)
+                if m:
+                    variants.append((m[1] + m[3], m[2]))
                 for sub_uid, bookmark in variants:
                     if sub_uid in text_refs:
                         for ref in text_refs[sub_uid]:
                             ref = TextRef(lang=ref.lang,
                                         abstract=ref.abstract,
                                         url=Sutta.canon_url(lang_code=ref.lang.uid,
-                                            uid=sub_uid) + '#' + bookmark
+                                            uid=sub_uid) + '#' + bookmark,
+                                        priority=0,
                                         )
                             if ref.lang == lang:
                                 text_ref = ref
@@ -255,16 +270,25 @@ class _Imm:
                 
             translations.sort(key=TextRef.sort_key)
             
+            subdivision = self.subdivisions[row.subdivision_uid]
+            
+            if row.vagga_number:
+                vagga_number = int(row.vagga_number)
+                vagga = subdivision.vaggas[vagga_number - 1]
+            else:
+                vagga_number = 0
+                vagga = subdivision.vaggas[0]
+            
             sutta = Sutta(
                 uid=row.uid,
                 acronym=acro[0],
                 alt_acronym=acro[1] if len(acro) > 1 else None,
                 name=row.name,
-                number=number,
+                vagga_number=vagga_number,
                 lang=lang,
-                subdivision=self.subdivisions[row.subdivision_uid],
-                vagga=self.vaggas.get(vag_uid, None),
-                number_in_vagga=numinvag,
+                subdivision=subdivision,
+                vagga=vagga,
+                number_in_vagga=row.number_in_vagga,
                 volpage_info=volpage[0],
                 alt_volpage_info=volpage[1] if len(volpage) > 1 else None,
                 biblio_entry=biblios.get(uid, None),
@@ -281,25 +305,8 @@ class _Imm:
         # Populate subdivisions.suttas
         for sutta in self.suttas.values():
             sutta.subdivision.suttas.append(sutta)
-            if sutta.vagga:
-                sutta.vagga.suttas.append(sutta)
+            sutta.vagga.suttas.append(sutta)
         
-        # Put every sutta into a vagga, making a None Vagga
-        # if needed.
-        for sutta in self.suttas.values():
-            if sutta.vagga is None:
-                try:
-                    vagga = sutta.subdivision.vaggas[0]
-                except IndexError:
-                    vagga = Vagga(
-                        uid=None,
-                        subdivision=sutta.subdivision,
-                        name=None,
-                        suttas=[],
-                        )
-                    sutta.subdivision.vaggas.append(vagga)
-                vagga.suttas.append(sutta)
-
         
     def build_parallels_data(self):
         
@@ -311,11 +318,11 @@ class _Imm:
         #Populate partial and full parallels
         for row in table_reader('correspondence'):
             if row.partial:
-                partials[row.sutta_uid].add( (row.other_uid, row.footnote) )
-                partials[row.other_uid].add( (row.sutta_uid, row.footnote) )
+                partials[row.sutta_uid].add( (row.other_sutta_uid, row.footnote) )
+                partials[row.other_sutta_uid].add( (row.sutta_uid, row.footnote) )
             else:
-                fulls[row.sutta_uid].add( (row.other_uid, row.footnote) )
-                fulls[row.other_uid].add( (row.sutta_uid, row.footnote) )
+                fulls[row.sutta_uid].add( (row.other_sutta_uid, row.footnote) )
+                fulls[row.other_sutta_uid].add( (row.sutta_uid, row.footnote) )
 
         # Populate indirect full parallels
         for id, parallels in fulls.items():
@@ -413,7 +420,7 @@ class _Imm:
                     
                     author = self.get_text_author(filepath)
                     url = Sutta.canon_url(lang_code=lang, uid=uid)
-                    text_refs[uid].append( TextRef(self.languages[lang], author, url) )
+                    text_refs[uid].append( TextRef(self.languages[lang], author, url, 0) )
                     
                     # In the case of a sutta range, we create new entries
                     # for the entire range. Unneeded entries will be gc'd
@@ -423,7 +430,7 @@ class _Imm:
                         
                         for i in range(range_start, range_end + 1):
                             try:
-                                text_refs[m[1]+str(i)].append( TextRef(self.languages[lang], author, url + '#' + str(i)))                            
+                                text_refs[m[1]+str(i)].append( TextRef(self.languages[lang], author, url + '#' + str(i), 0))                            
                             except KeyError:
                                 globals().update(locals())
                                 raise

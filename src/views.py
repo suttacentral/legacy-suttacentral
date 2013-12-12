@@ -345,7 +345,7 @@ class SuttaView(TextView):
     @property
     def subdivision(self):
         subdivision = self.sutta.subdivision
-        if subdivision.uid.endswith('-nosub'):
+        if subdivision.name is None:
             return subdivision.division
         else:
             return subdivision
