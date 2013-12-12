@@ -12,10 +12,10 @@ Example:
     >>>
 """
 
-import datetime
 import pathlib
 import plumbum
 import time
+from datetime import datetime as _datetime
 from plumbum.commands.processes import ProcessExecutionError
 
 import config
@@ -53,7 +53,7 @@ class Scm(object):
     def datetime(self):
         """Return the datetime of last commit."""
         time = int(self._git('log', '-1', '--format=%at'))
-        return datetime.datetime.fromtimestamp(time)
+        return _datetime.fromtimestamp(time)
 
     @property
     @_cached
