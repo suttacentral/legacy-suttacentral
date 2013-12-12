@@ -1,45 +1,21 @@
 #!/usr/bin/env python
 
-"""Convert pass3/mn*.html to output/mn*.html."""
+"""Process Burmese Majjhima Nikāya."""
 
-import bs4
-import os
-import pathlib
-import regex
-import textwrap
-import unicodedata
+from lib import *
 
 division = 'မဇ္ဈိမနိကာယ်'
-base_dir = pathlib.Path('.')
-input_dir = base_dir.join('pass3')
-output_dir = base_dir.join('output', 'mn')
 
-template = """\
-<!DOCTYPE html>
-<html lang="my"><head><meta charset="UTF-8"><title>{title}</title></head><body>
-<div id="text" lang="my"><div id="toc"></div><section class="sutta"><article>
-<hgroup><h2>{division}</h2><h1>{title}</h1></hgroup>
-{content}
-</article></section></div></body></html>
-"""
-
-def clean(text):
-    return regex.sub(r'\s+', ' ', text.strip())
-
-def tagit(tag, text):
-    text = clean(text)
-    text = textwrap.fill(text, width=78)
-    if '\n' in text:
-        text = '\n' + textwrap.indent(text, '  ') + '\n'
-    return '<{0}>{1}</{0}>\n'.format(tag, text)
-
-def to_sections(path):
-    doc = bs4.BeautifulSoup(path.open('r', encoding='utf-8'))
+def mn_sections(html):
+    doc = soup(html)
     sections = []
     section = None
     for el in doc.body:
         if el.name == 'h4':
-            if '-' in el.text:
+            text = clean(el.text)
+            if text[0] == '-':
+                text = text[1:]
+            if numbers_re.match(text[0]):
                 if section:
                     sections.append(section)
                 section = {
@@ -54,21 +30,20 @@ def to_sections(path):
         sections.append(section)
     return sections
 
-if not output_dir.exists():
-    os.makedirs(str(output_dir))
+if __name__ == '__main__':
+    makedirs()
+    for input_path in pass3_dir.glob('mn*.html'):
+        with input_path.open('r', encoding='utf-8') as input:
+            sections = mn_sections(input.read())
+        nums = input_path.name.replace('mn', '').replace('.html', '')
+        first, last = map(int, nums.split('-'))
+        assert len(sections) == last + 1 - first
 
-for input_path in input_dir.glob('mn*.html'):
-    sections = to_sections(input_path)
-    nums = input_path.name.replace('mn', '').replace('.html', '')
-    first, last = map(int, nums.split('-'))
-    if len(sections) != last + 1 - first:
-        print('ERROR: Section length does not match filename: {}'.format(
-            str([input_path, len(sections), last + 1 - first])))
-    else:
         for i in range(first, last + 1):
-            output_path = output_dir.join('mn{}.html'.format(i))
-            print('Converting {} to {}'.format(input_path, output_path))
             section = sections[i - first]
-            output = template.format(division=division,
-                title=section['title'], content=section['content'])
-            output_path.open('w', encoding='utf-8').write(output)
+            output_path = output_mn_dir / 'mn{}.html'.format(i)
+            print('Process: {} to {}'.format(input_path, output_path))
+            with output_path.open('w', encoding='utf-8') as output:
+                html = output_template.format(division=division,
+                    title=section['title'], content=section['content'])
+                output.write(html)
