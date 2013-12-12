@@ -15,7 +15,7 @@ def test_revision():
 def test_datetime():
     scm = Scm('/foo')
     scm._git = MagicMock(return_value='1386816309')
-    assert scm.datetime == datetime.datetime(2013, 12, 11, 18, 45, 9)
+    assert scm.datetime == datetime.datetime(2013, 12, 12, 2, 45, 9)
 
 def test_branch():
     scm = Scm('/foo')
