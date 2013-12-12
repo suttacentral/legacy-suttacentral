@@ -1,11 +1,17 @@
 #!/usr/bin/env python
 
-import env
 import cherrypy
-import config, logger, regex, root, scdb, show
+import regex
+
+import env
+import config
+import logger
+import root
+import scimm
+import show
 
 def paths():
-    dbr = scdb.getDBR()
+    dbr = scimm.imm()
     for page in show.STATIC_PAGES:
         yield ('/' + page, 'STATIC')
     for division in dbr.divisions.values():
@@ -18,8 +24,10 @@ def paths():
                     yield ('/' + subdivision.uid, subdivision)
     for sutta in dbr.suttas.values():
         yield ('/' + sutta.uid, sutta)
-        if sutta.url and sutta.url.startswith('/'):
-            yield (sutta.url, sutta)
+        if sutta.text_ref:
+            url = sutta.text_ref.url
+            if url and url.startswith('/'):
+                yield (url, sutta)
         for translation in sutta.translations:
             if translation.url and translation.url.startswith('/'):
                 yield (translation.url, translation)
