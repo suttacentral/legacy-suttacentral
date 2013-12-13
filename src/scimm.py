@@ -286,6 +286,10 @@ class _Imm:
             else:
                 number = 9999
             
+            biblio_entry = None
+            if row.biblio_uid:
+                biblio_entry = biblios.get(row.biblio_uid)
+            
             sutta = Sutta(
                 uid=row.uid,
                 acronym=acro[0],
@@ -299,7 +303,7 @@ class _Imm:
                 number_in_vagga=row.number_in_vagga,
                 volpage_info=volpage[0],
                 alt_volpage_info=volpage[1] if len(volpage) > 1 else None,
-                biblio_entry=biblios.get(uid, None),
+                biblio_entry=biblio_entry,
                 text_ref=text_ref,
                 translations=translations,
                 parallels=[],
