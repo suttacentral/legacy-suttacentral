@@ -16,12 +16,10 @@ def paths():
         yield ('/' + page, 'STATIC')
     for division in dbr.divisions.values():
         yield ('/' + division.uid, division)
-        if (len(division.subdivisions) > 0 and
-                not (division.subdivisions[0].uid or '').endswith('nosub')):
+        if division.has_subdivisions():
             yield ('/' + division.uid + '/full', division)
             for subdivision in division.subdivisions:
-                if subdivision.uid:
-                    yield ('/' + subdivision.uid, subdivision)
+                yield ('/' + subdivision.uid, subdivision)
     for sutta in dbr.suttas.values():
         yield ('/' + sutta.uid, sutta)
         if sutta.text_ref:
