@@ -45,3 +45,12 @@ $mobile-header-border-width: 2px;
         height: 100%;
     }
 }
+
+#loading {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: $dark-pastel-red;
+    color: white;
+    z-index: 20000;
+}

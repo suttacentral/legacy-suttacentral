@@ -95,7 +95,7 @@ scMode = {
     }
 }
 
-$(document).ready(function() {
+function documentReady() {
     $('#home').easyTabs({defaultContent:1});
     if ($('.sutta').length > 0){
         textualControls.init();
@@ -126,7 +126,7 @@ $(document).ready(function() {
             client.setText(text);
         });
     }
-});
+}
 
 // Offline bodge
 if (window.location.href.search('file:') == 0) {
@@ -346,3 +346,14 @@ function ohInternetExplorerLetMeCountTheWaysILoveYou(){
 };
 
 ohInternetExplorerLetMeCountTheWaysILoveYou();
+
+$(document).pjax('a', '#page-main', {
+    timeout: 10000
+});
+$(document).on('pjax:start', function() {
+    $('#loading').show();
+});
+$(document).on('ready pjax:end', function() {
+    documentReady();
+    $('#loading').hide();
+});

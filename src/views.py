@@ -151,6 +151,7 @@ class ViewBase:
             'nonfree_fonts': config.nonfree_fonts and not cherrypy.request.offline,
             'offline': cherrypy.request.offline,
             'page_lang': 'en',
+            'pjax': 'X-PJAX' in cherrypy.request.headers,
             'scm': scm,
             'search_query': '',
         })

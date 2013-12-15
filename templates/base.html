@@ -1,8 +1,10 @@
+{% if not pjax %}
 <!DOCTYPE html>
 <html lang="{{page_lang}}">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+{% endif %}
 <title>
   {%- if title -%}
     {{ title }} - SuttaCentral
@@ -10,6 +12,7 @@
     SuttaCentral, Correspondence of early Buddhist discourses
   {%- endif -%}
 </title>
+{% if not pjax %}
 <meta name="description" content="Correspondence tables, references, text, and translations for early Buddhist discourses in all schools of Buddhism">
 <meta name="viewport" content="width=device-width">
 {{ newrelic_browser_timing.header }}
@@ -26,7 +29,7 @@
 </head>
 
 <body>
-
+<div id="loading" style="display: none;">Loading...</div>
 <div id="page-wrap">
 
 {% include 'development_bar.html' %}
@@ -36,7 +39,9 @@
 {% include 'outdated_browser.html' %}
 
 <div id="page-main">
+{% endif %}
 {% block content %}{% endblock %}
+{% if not pjax %}
 </div><!-- page-main -->
 
 <div id="page-footer-push"></div>
@@ -64,3 +69,4 @@
      Date:     {{ scm.datetime | datetime('long') }}
      Branch:   {{ scm.branch }}
      Tag:      {{ scm.tag }} -->
+{% endif %}
