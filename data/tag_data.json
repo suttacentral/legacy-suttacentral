@@ -1,0 +1,727 @@
+{
+    "by_class": {
+        "P4": {
+            "p": 1
+        }, 
+        "add": {
+            "h2": 141, 
+            "p": 1, 
+            "span": 1851
+        }, 
+        "article": {
+            "cite": 2396
+        }, 
+        "as": {
+            "a": 5
+        }, 
+        "author": {
+            "span": 1744
+        }, 
+        "bl": {
+            "a": 7
+        }, 
+        "book": {
+            "cite": 88
+        }, 
+        "bps": {
+            "a": 257
+        }, 
+        "bracket": {
+            "p": 68
+        }, 
+        "brnum": {
+            "a": 1252, 
+            "span": 2544
+        }, 
+        "byline": {
+            "span": 1
+        }, 
+        "choice": {
+            "span": 119
+        }, 
+        "corr": {
+            "span": 52
+        }, 
+        "cross": {
+            "span": 129
+        }, 
+        "del": {
+            "span": 8
+        }, 
+        "dp": {
+            "a": 73
+        }, 
+        "dquo": {
+            "span": 62
+        }, 
+        "editinginfo": {
+            "p": 34
+        }, 
+        "embeddedparallel": {
+            "div": 36
+        }, 
+        "end": {
+            "span": 16
+        }, 
+        "endbook": {
+            "p": 35
+        }, 
+        "endsection": {
+            "p": 3995
+        }, 
+        "endsutta": {
+            "p": 178
+        }, 
+        "eno89": {
+            "a": 20
+        }, 
+        "evam": {
+            "span": 841
+        }, 
+        "fakechapter": {
+            "h4": 7
+        }, 
+        "fol": {
+            "a": 150
+        }, 
+        "fuk03": {
+            "a": 70
+        }, 
+        "gaiji": {
+            "span": 42
+        }, 
+        "gap": {
+            "span": 770
+        }, 
+        "gatha": {
+            "blockquote": 3992
+        }, 
+        "gatha-number": {
+            "a": 1999, 
+            "span": 1079
+        }, 
+        "gatn": {
+            "a": 17
+        }, 
+        "gbm": {
+            "a": 171
+        }, 
+        "gno78": {
+            "a": 312
+        }, 
+        "har04": {
+            "a": 24
+        }, 
+        "hidden": {
+            "div": 10947
+        }, 
+        "hoe16": {
+            "a": 7
+        }, 
+        "hos89a": {
+            "a": 25
+        }, 
+        "hos89b": {
+            "a": 19
+        }, 
+        "hos91": {
+            "a": 29
+        }, 
+        "hs": {
+            "a": 19
+        }, 
+        "indent": {
+            "span": 630
+        }, 
+        "italic": {
+            "span": 88
+        }, 
+        "juanname": {
+            "span": 2
+        }, 
+        "kel": {
+            "a": 35
+        }, 
+        "lem": {
+            "span": 219
+        }, 
+        "mat85": {
+            "a": 62
+        }, 
+        "mat88": {
+            "a": 196
+        }, 
+        "mit57": {
+            "a": 335
+        }, 
+        "ms": {
+            "a": 25381
+        }, 
+        "msdiv": {
+            "a": 7064
+        }, 
+        "namo": {
+            "p": 11
+        }, 
+        "next": {
+            "a": 7367
+        }, 
+        "note": {
+            "span": 1
+        }, 
+        "p2": {
+            "p": 1
+        }, 
+        "pagerefs": {
+            "span": 11
+        }, 
+        "previous": {
+            "a": 7382
+        }, 
+        "pts": {
+            "a": 1672
+        }, 
+        "pts_pn": {
+            "a": 1753
+        }, 
+        "pub": {
+            "a": 216
+        }, 
+        "rdg": {
+            "span": 223
+        }, 
+        "roman": {
+            "span": 109
+        }, 
+        "roman_numeral": {
+            "span": 28
+        }, 
+        "roman_numerals": {
+            "span": 34
+        }, 
+        "romannumeral": {
+            "span": 4
+        }, 
+        "san87": {
+            "a": 53
+        }, 
+        "sc": {
+            "a": 50511
+        }, 
+        "sen82": {
+            "a": 427
+        }, 
+        "show": {
+            "span": 1494
+        }, 
+        "sht": {
+            "a": 4
+        }, 
+        "sic": {
+            "span": 14
+        }, 
+        "small-caps": {
+            "a": 33, 
+            "span": 1
+        }, 
+        "smallcaps": {
+            "span": 75
+        }, 
+        "snp-vagga-section-verse": {
+            "a": 174
+        }, 
+        "snp-vagga-verse": {
+            "a": 174
+        }, 
+        "spe06": {
+            "a": 5
+        }, 
+        "speaker": {
+            "span": 303
+        }, 
+        "squo": {
+            "span": 57
+        }, 
+        "summary": {
+            "p": 1
+        }, 
+        "supplied": {
+            "h1": 1, 
+            "h2": 6, 
+            "h3": 44, 
+            "span": 15840
+        }, 
+        "supplied2": {
+            "span": 743
+        }, 
+        "suppliedmetre": {
+            "span": 268
+        }, 
+        "surplus": {
+            "span": 4
+        }, 
+        "sutta": {
+            "section": 8165
+        }, 
+        "t": {
+            "a": 46
+        }, 
+        "titlerefs": {
+            "div": 39
+        }, 
+        "titus": {
+            "a": 84
+        }, 
+        "titus-random": {
+            "a": 1049
+        }, 
+        "tlinehead": {
+            "a": 650
+        }, 
+        "top": {
+            "a": 7408
+        }, 
+        "translatedby": {
+            "p": 186
+        }, 
+        "tri62": {
+            "a": 446
+        }, 
+        "tri95": {
+            "a": 359
+        }, 
+        "tu": {
+            "a": 3
+        }, 
+        "uddana": {
+            "p": 61
+        }, 
+        "uddanagatha": {
+            "blockquote": 395
+        }, 
+        "unclear": {
+            "span": 26
+        }, 
+        "uv": {
+            "a": 1044
+        }, 
+        "vagguddanagatha": {
+            "blockquote": 13
+        }, 
+        "vai58": {
+            "a": 583
+        }, 
+        "vai59": {
+            "a": 12359
+        }, 
+        "vai61": {
+            "a": 18
+        }, 
+        "var": {
+            "span": 1115
+        }, 
+        "verse-num-pts": {
+            "a": 174
+        }, 
+        "vn": {
+            "a": 10453
+        }, 
+        "vnO": {
+            "a": 320
+        }, 
+        "voidchapter": {
+            "h2": 29
+        }, 
+        "wal48": {
+            "a": 82
+        }, 
+        "wal50": {
+            "a": 919
+        }, 
+        "wal52": {
+            "a": 604
+        }, 
+        "wal55b": {
+            "a": 280, 
+            "span": 42
+        }, 
+        "wal57c": {
+            "a": 35
+        }, 
+        "wal58": {
+            "a": 19
+        }, 
+        "wal59a": {
+            "a": 9
+        }, 
+        "wal60": {
+            "a": 25
+        }, 
+        "wal61": {
+            "a": 23
+        }, 
+        "wal68a": {
+            "a": 20
+        }, 
+        "wal70a": {
+            "a": 12
+        }, 
+        "wal70b": {
+            "a": 7
+        }, 
+        "wal76": {
+            "a": 20
+        }, 
+        "wal78": {
+            "a": 6
+        }, 
+        "wal80c": {
+            "a": 21
+        }, 
+        "wp": {
+            "a": 2241
+        }, 
+        "yam72": {
+            "a": 15
+        }
+    }, 
+    "by_tag": {
+        "a": {
+            "as": 5, 
+            "bl": 7, 
+            "bps": 257, 
+            "brnum": 1252, 
+            "dp": 73, 
+            "eno89": 20, 
+            "fol": 150, 
+            "fuk03": 70, 
+            "gatha-number": 1999, 
+            "gatn": 17, 
+            "gbm": 171, 
+            "gno78": 312, 
+            "har04": 24, 
+            "hoe16": 7, 
+            "hos89a": 25, 
+            "hos89b": 19, 
+            "hos91": 29, 
+            "hs": 19, 
+            "kel": 35, 
+            "mat85": 62, 
+            "mat88": 196, 
+            "mit57": 335, 
+            "ms": 25381, 
+            "msdiv": 7064, 
+            "next": 7367, 
+            "previous": 7382, 
+            "pts": 1672, 
+            "pts_pn": 1753, 
+            "pub": 216, 
+            "san87": 53, 
+            "sc": 50511, 
+            "sen82": 427, 
+            "sht": 4, 
+            "small-caps": 33, 
+            "snp-vagga-section-verse": 174, 
+            "snp-vagga-verse": 174, 
+            "spe06": 5, 
+            "t": 46, 
+            "titus": 84, 
+            "titus-random": 1049, 
+            "tlinehead": 650, 
+            "top": 7408, 
+            "tri62": 446, 
+            "tri95": 359, 
+            "tu": 3, 
+            "uv": 1044, 
+            "vai58": 583, 
+            "vai59": 12359, 
+            "vai61": 18, 
+            "verse-num-pts": 174, 
+            "vn": 10453, 
+            "vnO": 320, 
+            "wal48": 82, 
+            "wal50": 919, 
+            "wal52": 604, 
+            "wal55b": 280, 
+            "wal57c": 35, 
+            "wal58": 19, 
+            "wal59a": 9, 
+            "wal60": 25, 
+            "wal61": 23, 
+            "wal68a": 20, 
+            "wal70a": 12, 
+            "wal70b": 7, 
+            "wal76": 20, 
+            "wal78": 6, 
+            "wal80c": 21, 
+            "wp": 2241, 
+            "yam72": 15
+        }, 
+        "blockquote": {
+            "gatha": 3992, 
+            "uddanagatha": 395, 
+            "vagguddanagatha": 13
+        }, 
+        "cite": {
+            "article": 2396, 
+            "book": 88
+        }, 
+        "div": {
+            "embeddedparallel": 36, 
+            "hidden": 10947, 
+            "titlerefs": 39
+        }, 
+        "h1": {
+            "supplied": 1
+        }, 
+        "h2": {
+            "add": 141, 
+            "supplied": 6, 
+            "voidchapter": 29
+        }, 
+        "h3": {
+            "supplied": 44
+        }, 
+        "h4": {
+            "fakechapter": 7
+        }, 
+        "p": {
+            "P4": 1, 
+            "add": 1, 
+            "bracket": 68, 
+            "editinginfo": 34, 
+            "endbook": 35, 
+            "endsection": 3995, 
+            "endsutta": 178, 
+            "namo": 11, 
+            "p2": 1, 
+            "summary": 1, 
+            "translatedby": 186, 
+            "uddana": 61
+        }, 
+        "section": {
+            "sutta": 8165
+        }, 
+        "span": {
+            "add": 1851, 
+            "author": 1744, 
+            "brnum": 2544, 
+            "byline": 1, 
+            "choice": 119, 
+            "corr": 52, 
+            "cross": 129, 
+            "del": 8, 
+            "dquo": 62, 
+            "end": 16, 
+            "evam": 841, 
+            "gaiji": 42, 
+            "gap": 770, 
+            "gatha-number": 1079, 
+            "indent": 630, 
+            "italic": 88, 
+            "juanname": 2, 
+            "lem": 219, 
+            "note": 1, 
+            "pagerefs": 11, 
+            "rdg": 223, 
+            "roman": 109, 
+            "roman_numeral": 28, 
+            "roman_numerals": 34, 
+            "romannumeral": 4, 
+            "show": 1494, 
+            "sic": 14, 
+            "small-caps": 1, 
+            "smallcaps": 75, 
+            "speaker": 303, 
+            "squo": 57, 
+            "supplied": 15840, 
+            "supplied2": 743, 
+            "suppliedmetre": 268, 
+            "surplus": 4, 
+            "unclear": 26, 
+            "var": 1115, 
+            "wal55b": 42
+        }
+    }, 
+    "defaults": {
+        "P4": "p", 
+        "add": "span", 
+        "article": "cite", 
+        "as": "a", 
+        "author": "span", 
+        "bl": "a", 
+        "book": "cite", 
+        "bps": "a", 
+        "bracket": "p", 
+        "brnum": "span", 
+        "byline": "span", 
+        "choice": "span", 
+        "corr": "span", 
+        "cross": "span", 
+        "del": "span", 
+        "dp": "a", 
+        "dquo": "span", 
+        "editinginfo": "p", 
+        "embeddedparallel": "div", 
+        "end": "span", 
+        "endbook": "p", 
+        "endsection": "p", 
+        "endsutta": "p", 
+        "eno89": "a", 
+        "evam": "span", 
+        "fakechapter": "h4", 
+        "fol": "a", 
+        "fuk03": "a", 
+        "gaiji": "span", 
+        "gap": "span", 
+        "gatha": "blockquote", 
+        "gatha-number": "a", 
+        "gatn": "a", 
+        "gbm": "a", 
+        "gno78": "a", 
+        "har04": "a", 
+        "hidden": "div", 
+        "hoe16": "a", 
+        "hos89a": "a", 
+        "hos89b": "a", 
+        "hos91": "a", 
+        "hs": "a", 
+        "indent": "span", 
+        "italic": "span", 
+        "juanname": "span", 
+        "kel": "a", 
+        "lem": "span", 
+        "mat85": "a", 
+        "mat88": "a", 
+        "mit57": "a", 
+        "ms": "a", 
+        "msdiv": "a", 
+        "namo": "p", 
+        "next": "a", 
+        "note": "span", 
+        "p2": "p", 
+        "pagerefs": "span", 
+        "previous": "a", 
+        "pts": "a", 
+        "pts_pn": "a", 
+        "pub": "a", 
+        "rdg": "span", 
+        "roman": "span", 
+        "roman_numeral": "span", 
+        "roman_numerals": "span", 
+        "romannumeral": "span", 
+        "san87": "a", 
+        "sc": "a", 
+        "sen82": "a", 
+        "show": "span", 
+        "sht": "a", 
+        "sic": "span", 
+        "small-caps": "a", 
+        "smallcaps": "span", 
+        "snp-vagga-section-verse": "a", 
+        "snp-vagga-verse": "a", 
+        "spe06": "a", 
+        "speaker": "span", 
+        "squo": "span", 
+        "summary": "p", 
+        "supplied": "span", 
+        "supplied2": "span", 
+        "suppliedmetre": "span", 
+        "surplus": "span", 
+        "sutta": "section", 
+        "t": "a", 
+        "titlerefs": "div", 
+        "titus": "a", 
+        "titus-random": "a", 
+        "tlinehead": "a", 
+        "top": "a", 
+        "translatedby": "p", 
+        "tri62": "a", 
+        "tri95": "a", 
+        "tu": "a", 
+        "uddana": "p", 
+        "uddanagatha": "blockquote", 
+        "unclear": "span", 
+        "uv": "a", 
+        "vagguddanagatha": "blockquote", 
+        "vai58": "a", 
+        "vai59": "a", 
+        "vai61": "a", 
+        "var": "span", 
+        "verse-num-pts": "a", 
+        "vn": "a", 
+        "vnO": "a", 
+        "voidchapter": "h2", 
+        "wal48": "a", 
+        "wal50": "a", 
+        "wal52": "a", 
+        "wal55b": "a", 
+        "wal57c": "a", 
+        "wal58": "a", 
+        "wal59a": "a", 
+        "wal60": "a", 
+        "wal61": "a", 
+        "wal68a": "a", 
+        "wal70a": "a", 
+        "wal70b": "a", 
+        "wal76": "a", 
+        "wal78": "a", 
+        "wal80c": "a", 
+        "wp": "a", 
+        "yam72": "a"
+    }, 
+    "pnum_classes": {
+        "bl": 7, 
+        "eno89": 20, 
+        "fol": 150, 
+        "fuk03": 70, 
+        "gatha-number": 1825, 
+        "gatn": 17, 
+        "gbm": 171, 
+        "gno78": 312, 
+        "har04": 24, 
+        "hoe16": 7, 
+        "hos89a": 25, 
+        "hos89b": 19, 
+        "hos91": 29, 
+        "hs": 19, 
+        "mat85": 62, 
+        "mat88": 196, 
+        "mit57": 335, 
+        "ms": 25381, 
+        "msdiv": 7064, 
+        "pts_pn": 1753, 
+        "san87": 52, 
+        "sc": 50502, 
+        "sen82": 427, 
+        "sht": 4, 
+        "t": 46, 
+        "titus-random": 1049, 
+        "tlinehead": 650, 
+        "tri62": 446, 
+        "tri95": 359, 
+        "uv": 1044, 
+        "vai58": 583, 
+        "vai59": 12359, 
+        "vai61": 18, 
+        "vn": 10453, 
+        "vnO": 316, 
+        "wal48": 82, 
+        "wal50": 919, 
+        "wal52": 604, 
+        "wal55b": 253, 
+        "wal57c": 35, 
+        "wal58": 19, 
+        "wal59a": 9, 
+        "wal60": 25, 
+        "wal61": 23, 
+        "wal68a": 20, 
+        "wal70a": 12, 
+        "wal70b": 7, 
+        "wal76": 20, 
+        "wal78": 6, 
+        "wal80c": 21, 
+        "wp": 2207, 
+        "yam72": 15
+    }
+}

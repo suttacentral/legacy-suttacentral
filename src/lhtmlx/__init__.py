@@ -16,6 +16,14 @@ import functools as _functools
 from html import escape # lxml.html doesn't define it's own escape
 import regex as _regex
 
+
+class CssSelectorFailed(Exception):
+    " The exception returned by select_or_fail "
+    def __init__(self, selector):
+        self.selector = selector
+    def __str__(self):
+        return 'No matches for "{}"'.format(self.selector)
+
 class HtHtmlElementMixin:
     """ Adds methods primarly to aid with proper handling of text/tail.
     
@@ -110,6 +118,16 @@ class HtHtmlElementMixin:
             return list(self.iter(*parts))
         return self.cssselect(selector)
     
+    def select_or_fail(self, selector):
+        """ Raises ``CssSelectorFailed`` instead of returning an empty list
+        
+        """
+        
+        result = self.select(selector)
+        if not result:
+            raise CssSelectorFailed(selector)
+        return result
+    
     def convert_bad_tags(self):
         """ Convert invalid html tags into div/span class="tag"
         
@@ -176,9 +194,12 @@ class CustomLookup(_html.HtmlElementClassLookup):
 # lxml still has a number of issues handling utf8. We need to
 # explicitly define that our parser is using utf-8 for some systems.
 # http://stackoverflow.com/questions/15302125/html-encoding-and-lxml-parsing        
+def get_parser(encoding='utf-8'):    
+    parser = _html.HTMLParser(encoding=encoding)
+    parser.set_element_class_lookup(CustomLookup(mixins=[('*', HtHtmlElementMixin)]))
+    return parser
 
-utf8parser = _html.HTMLParser(encoding='utf-8')
-utf8parser.set_element_class_lookup(CustomLookup(mixins=[('*', HtHtmlElementMixin)]))
+utf8parser = get_parser('utf-8')
 
 def fromstring(string):
     return _html.fromstring(string, parser=utf8parser)
@@ -192,20 +213,42 @@ def fragments_fromstring(string):
 def document_fromstring(string):
     return _html.document_fromstring(string, parser=utf8parser)
 
-def parse(filename):
-    return _html.parse(filename, parser=utf8parser)
+def parse(filename, encoding='utf8'):
+    # It seems that lxml.html always guesses the charset regardless
+    # of charset declarations. On Linux, if a charset is not specified
+    # it will correctly recognize utf8 and utf16. But on some systems
+    # it wont recognize utf8?
+    
+    encoding = encoding.upper()
+    if encoding in ('UTF8', 'UTF-8'):
+        parser = utf8parser
+    elif encoding in ('UTF16', 'UTF-16'):
+        parser = get_parser('UTF-16')
+    elif encoding == "DECLARED":
+        if not hasattr(filename, 'read'):
+            filename = open(filename, 'rb')
+        start = filename.read(250)
+        filename.seek(-250)
+        if b'<\x00' in start:
+               parser = get_parser("UTF-16LE")
+        elif b'\x00<' in start:
+            parser = get_parser("UTF-16BE")
+        else:
+            m = regex.search(r'charset=(["\']?)([\w-]+)\1', start)
+            parser = get_parser(m[2])
+    else:
+        parser = get_parser(None)
+        
+    return _html.parse(filename, parser=parser)
 
-def htmlfiles(path):
-    """Iterates over all html files in ``path``
-    """
-    import os
-    for dirpath, dirnames, filenames in os.walk(path):
-        filenames.sort(key=lambda s: [int(i) for i in _regex.findall('\d+', s)])
-        filenames.sort(key=lambda s: _regex.match('(\p{alpha}*)', s)[0])
-        for filename in filenames:
-            infile = os.path.join(dirpath, filename)
-            if filename.endswith('.html') or filename.endswith('.htm'):
-                yield infile
+def write_utf8_html5(doc, filename):
+    for e in doc.getroot().cssselect('meta[charset], meta[content*=charset]'):
+        e.drop_tree()
+    doc.find('//head').insert(0, doc.parser.makeelement('meta', charset="UTF-8"))
+    _html.xhtml_to_html(doc)
+    with open(filename, 'wb', universal_newlines=False) as f:
+        f.write(b'<!DOCTYPE html>\r\n', method="html")
+        doc.write(f, method="html")
 
 if __name__ == "__main__":
     import doctest
