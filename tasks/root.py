@@ -34,6 +34,22 @@ def daemonize():
     os.execlp('newrelic-admin', 'newrelic-admin', 'run-program', 'cherryd', '-i', 'server')
 
 @task
+def reset():
+    """Reset the environment."""
+    blurb(reset)
+    clean(aggressive=True)
+    update_text()
+    tasks.dictionary.build()
+    tasks.search.index()
+
+@task
+def update_text():
+    """Update the text repository."""
+    blurb(update_text)
+    with local.cwd(local.cwd / 'text'):
+        run('git pull')
+
+@task
 def server():
     """Run the local development server."""
     blurb(server)
