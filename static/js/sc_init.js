@@ -97,7 +97,7 @@ scMode = {
 
 $(document).ready(function() {
     $('#home').easytabs({
-        animationSpeed: 100,
+        animate: false,
         tabs: '.tabs > li',
         updateHash: false
     });

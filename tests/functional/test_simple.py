@@ -13,7 +13,6 @@ class SimpleTestCase(SCTestCase):
         self.goto('/')
         self.assertNotIn('What is SuttaCentral?', self.css('body').text)
         self.css('#home-tabs li:nth-child(2) a').click()
-        self.implicitly_wait(0.5)
         self.assertIn('What is SuttaCentral?', self.css('body').text)
 
     def test_unknown_page(self):
