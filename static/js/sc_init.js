@@ -96,7 +96,11 @@ scMode = {
 }
 
 $(document).ready(function() {
-    $('#home').easyTabs({defaultContent:1});
+    $('#home').easytabs({
+        animationSpeed: 100,
+        tabs: '.tabs > li',
+        updateHash: false
+    });
     if ($('.sutta').length > 0){
         textualControls.init();
     }
