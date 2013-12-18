@@ -648,14 +648,15 @@ class Updater(threading.Thread):
     
     def get_change_timestamp(self):
         timestamp = str(config.table_dir.stat().st_mtime_ns)
-        
+
         if config.app['runtime_tests']:
             timestamp += str(_mtime_recurse(config.text_dir))
         else:
             # Detecting changes to git repository should be enough
             # for server environment.
-            timestamp += str((config.table_dir / '.git').stat().st_mtime_ns)
-            
+            timestamp += str((config.text_dir / '.git').stat().st_mtime_ns)
+        return timestamp
+
     def run(self):
         global _imm
         # Give a few moments for the main thread to get started.
