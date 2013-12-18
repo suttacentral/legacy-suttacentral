@@ -65,7 +65,6 @@ class Config(dict):
         ['app', 'templates_root'],
         ['app', 'table_dir'],
         ['app', 'text_dir'],
-        ['sqlite', 'db'],
         ['dict', 'db'],
         ['dict', 'sources'],
         ['textsearch', 'dbpath'],

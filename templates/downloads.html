@@ -37,15 +37,14 @@
 <p><em>No offline versions available.</em></p>
 {% endif %}
 
-<h2>SuttaCentral Database</h2>
-<p>This is a MySQL database dump of SuttaCentral's database.</p>
-{% if db_data %}
-{{ file_items(db_data) }}
-{% else %}
-<p><em>No databases available.</em></p>
 {% endif %}
 
-{% endif %}
+<h2>Raw Database and Texts</h2>
+<p>All the raw SuttaCentral data (<code>CSV</code>, <code>html</code>, etc.) is
+    <a href="https://github.com/suttacentral/suttacentral-data">available on
+    our GitHub repository</a>. You can
+    <a href="https://github.com/suttacentral/suttacentral-data/archive/master.zip">download
+    a Zip copy here</a>.</p>
 
 <p><em>It is currently {{ time_tag(current_datetime) }}.</em></p>
 

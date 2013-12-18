@@ -191,7 +191,6 @@ class DownloadsView(InfoView):
     def setup_context(self, context):
         super().setup_context(context)
         context.offline_data = self.__offline_data()
-        context.db_data = self.__db_data()
 
     def __file_data(self, basename, exports_path):
         data = []
@@ -212,9 +211,6 @@ class DownloadsView(InfoView):
 
     def __offline_data(self):
         return self.__file_data('sc-offline', config.exports_root)
-
-    def __db_data(self):
-        return self.__file_data('sc-db', config.exports_root)
 
 class ParallelView(ViewBase):
     """The view for the sutta parallels page."""
