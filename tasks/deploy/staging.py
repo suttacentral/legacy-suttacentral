@@ -58,3 +58,16 @@ def quick(branch=None):
         'sudo supervisorctl restart sc-staging',
         'invoke assets.clean --older',
     ])
+
+@task
+def data():
+    """Deploy data changes to the staging server."""
+    blurb(data)
+    remote_run('sc-staging@vps.suttacentral.net', [
+        'source $HOME/.virtualenvs/suttacentral/bin/activate',
+        'cd $HOME/suttacentral',
+        'cd data',
+        'git pull',
+        'cd ..',
+        'invoke search.index',
+    ])
