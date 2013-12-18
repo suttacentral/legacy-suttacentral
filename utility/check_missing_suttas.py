@@ -33,7 +33,7 @@ def get_sutta_id_from_uid(sutta_uid):
     return (cursor.fetchone() or [None])[0]
 
 def each_pali_sutta_file():
-    for f in glob.glob(join(config.text_root, 'pi', '*.html')):
+    for f in glob.glob(join(config.text_dir, 'pi', '*.html')):
         yield f
 
 def make_update_sql(sutta_id, path):

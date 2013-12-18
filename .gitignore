@@ -3,7 +3,7 @@ __pycache__
 local.conf
 daemonize
 newrelic.ini
-text
+data
 *.log
 *~
 utility/out/

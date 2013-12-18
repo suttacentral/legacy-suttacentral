@@ -19,7 +19,7 @@ class PrettyRow(sqlite3.Row):
 tlocals = threading.local()
 tlocals.con = {}
 
-textroot = config.app['text_root']
+textroot = config.text_dir
 searchroot = config.textsearch['dbpath']
 
 def rank(data):

@@ -42,7 +42,7 @@ def numsortkey(input, index=0):
 
 def table_reader(tablename):
     """ Like csv.DictReader but returns named tuples (2x faster also) """
-    with open(os.path.join(config.data, tablename + '.csv'), 'r',
+    with open(os.path.join(config.table_dir, tablename + '.csv'), 'r',
               encoding='utf-8', newline='') as f:
         reader = csv.reader(f, dialect=ScCsvDialect)
         field_names = next(reader)
@@ -124,7 +124,7 @@ class _Imm:
         
         # Gather up text refs:
         # From filesystem (This also returns important text_paths variable)
-        self.text_paths, text_refs = self.scan_text_root()
+        self.text_paths, text_refs = self.scan_text_dir()
         
         # Make a copy, note: we want copy of lists, not refs to them!
         local_text_refs = {key: value[:] for key, value in text_refs.items()}
@@ -408,19 +408,19 @@ class _Imm:
 
         self.searchstrings = list(zip(self.suttas.values(), suttastrings, suttastringsU, suttanamesimplified))
        
-    def scan_text_root(self):
+    def scan_text_dir(self):
         """ Provides fully qualified paths for all texts.
         
         Texts are keyed [lang][uid]
         Note that subfolders within a langroot are ignored. For example a file:
-        text_root/pi/sn/56/sn56.11.html would be found by the key ('pi', 'sn56.11'),
+        text_dir/pi/sn/56/sn56.11.html would be found by the key ('pi', 'sn56.11'),
         thus subfolders exist solely for ease of file organization.
         """
         import glob
         text_paths = {}
         text_refs = collections.defaultdict(list)
         
-        for langroot in glob.glob(config.text_root + '/*'):
+        for langroot in glob.glob(config.text_dir + '/*'):
             lang = os.path.basename(langroot)
             text_paths[lang] = {}
             for basedir, subdirs, filenames in os.walk(langroot):
@@ -650,14 +650,14 @@ class Updater(threading.Thread):
     ready = threading.Event() # Signal that the imm is ready.
     
     def get_change_timestamp(self):
-        timestamp = str(os.stat(config.data).st_mtime_ns)
+        timestamp = str(os.stat(config.table_dir).st_mtime_ns)
         
         if config.app['runtime_tests']:
-            timestamp += str(_mtime_recurse(config.text_root))
+            timestamp += str(_mtime_recurse(config.text_dir))
         else:
             # Detecting changes to git repository should be enough
             # for server environment.
-            timestamp += str(os.stat(os.path.join(config.text_root, '.git')).st_mtime_ns)
+            timestamp += str(os.stat(os.path.join(config.text_dir, '.git')).st_mtime_ns)
             
     def run(self):
         global _imm

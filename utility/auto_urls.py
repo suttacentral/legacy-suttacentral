@@ -45,7 +45,7 @@ entries = []
 mapping = {}
 transby = {}
 
-textroot = config['app']['text_root']
+textroot = config.text_dir
 
 def dedup(item):
     out = []

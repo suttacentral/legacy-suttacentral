@@ -16,6 +16,7 @@
     # base_url: 'http://localhost:8800'
     # compile_assets: False
     # console_log_level: 'DEBUG'
+    # data_dir: 'data'
     # db_refresh_interval: 90
     # dbr_cache_file: 'tmp/dbr.cache'
     # debug: True
@@ -28,8 +29,9 @@
     # nonfree_fonts: False
     # runtime_tests: True
     # static_root: 'static'
+    # table_dir: 'data/table'
     # templates_root: 'templates'
-    # text_root: 'text'
+    # text_dir: 'data/text'
     # timezone: 'UTC'
 [mysql]
     # host: 'localhost'

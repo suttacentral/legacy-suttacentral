@@ -41,10 +41,10 @@ def analyze_path(path):
             'by_class': {class_: dict(val) for class_, val in by_class.items()},
             'pnum_classes': pnum_classes}
 
-data_file_json = pathlib.Path(config.data).joinpath('tag_data.json')
+data_file_json = pathlib.Path(config.base_dir) / 'utility' / 'tag_data.json'
 
 def save_sc_class_data():
-    tag_class_data = analyze_path(pathlib.Path(config.text_root))
+    tag_class_data = analyze_path(pathlib.Path(config.text_dir))
     json.dump(tag_class_data, data_file_json.open('w'), indent=4, sort_keys=1)
 
 def load_sc_class_data():
@@ -58,5 +58,5 @@ import htmlproc.analysis
 htmlproc.analysis.save_sc_class_data()
 htmlproc.analysis.load_sc_class_data()
 
-by_class = htmlproc.analysis.analyze_path(pathlib.Path(config.text_root))
+by_class = htmlproc.analysis.analyze_path(pathlib.Path(config.text_dir))
     """
