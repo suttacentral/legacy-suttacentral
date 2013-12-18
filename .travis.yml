@@ -11,7 +11,7 @@ cache:
   directories:
     - $HOME/.pip-cache/
 install:
-  - git clone https://github.com/suttacentral/suttacentral-text.git text
+  - git clone https://github.com/suttacentral/suttacentral-data.git data
   - pip install --use-mirrors --download-cache $HOME/.pip-cache -r requirements.txt
 before_script:
   - invoke travis.prepare

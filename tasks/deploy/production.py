@@ -12,7 +12,7 @@ def full():
         'touch tmp/maintenance',
         'sudo supervisorctl stop sc-production',
         'git pull',
-        'cd text',
+        'cd data',
         'git pull',
         'cd ..',
         'pip install -q -r requirements.txt',
@@ -46,7 +46,7 @@ def quick():
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
         'git pull',
-        'cd text',
+        'cd data',
         'git pull',
         'cd ..',
         'pip install -q -r requirements.txt',
@@ -56,13 +56,13 @@ def quick():
     ])
 
 @task
-def text():
-    """Deploy text changes to the production server."""
-    blurb(text)
+def data():
+    """Deploy data changes to the production server."""
+    blurb(data)
     remote_run('sc-production@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
-        'cd text',
+        'cd data',
         'git pull',
         'cd ..',
         'invoke search.index',

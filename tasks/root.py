@@ -38,15 +38,15 @@ def reset():
     """Reset the environment."""
     blurb(reset)
     clean(aggressive=True)
-    update_text()
+    update_data()
     tasks.dictionary.build()
     tasks.search.index()
 
 @task
-def update_text():
-    """Update the text repository."""
-    blurb(update_text)
-    with local.cwd(local.cwd / 'text'):
+def update_data():
+    """Update the data repository."""
+    blurb(update_data)
+    with local.cwd(config.data_dir):
         run('git pull')
 
 @task
