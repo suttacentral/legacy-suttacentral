@@ -15,6 +15,7 @@ install:
   - pip install --use-mirrors --download-cache $HOME/.pip-cache -r requirements.txt
 before_script:
   - invoke travis.prepare
+  - invoke assets.compile
   - invoke travis.start_server
 script:
   - invoke dictionary.build

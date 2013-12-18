@@ -9,6 +9,8 @@ from .helpers import *
 TRAVIS_LOCAL_CONF = """\
 [global]
     engine.autoreload.on: False
+[app]
+    compile_assets: True
 """
 
 @task

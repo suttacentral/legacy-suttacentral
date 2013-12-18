@@ -9,6 +9,12 @@ class SimpleTestCase(SCTestCase):
         self.goto('/')
         self.assertIn('Correspondence of early Buddhist discourses', self.title)
 
+    def test_homepage_tabs(self):
+        self.goto('/')
+        self.assertNotIn('What is SuttaCentral?', self.css('body').text)
+        self.css('#home-tabs li:nth-child(2) a').click()
+        self.assertIn('What is SuttaCentral?', self.css('body').text)
+
     def test_unknown_page(self):
         self.goto('/blargh')
         self.assertPageIs404()
