@@ -10,7 +10,6 @@ invoke==0.6.1
 Jinja2==2.7.1
 jsmin==2.0.8
 lxml==3.2.4
-mysql-connector-python==1.0.12
 newrelic==2.6.0.5
 pathlib==0.97
 plumbum==1.4.0

@@ -4,16 +4,11 @@ import os
 import time
 
 import config
-import tasks.db
 from .helpers import *
 
 TRAVIS_LOCAL_CONF = """\
 [global]
     engine.autoreload.on: False
-[mysql]
-    user: 'travis'
-    password: ''
-    db: 'suttacentral'
 """
 
 @task
@@ -24,8 +19,6 @@ def prepare():
         f.write(TRAVIS_LOCAL_CONF)
     # Make sure we reload config after config gets updated...
     config.reload()
-    run('mysql -e "CREATE DATABASE suttacentral;"')
-    tasks.db.reset()
 
 @task
 def start_server():

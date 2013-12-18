@@ -41,33 +41,6 @@ def blurb(function):
     first = _PP_HINTS.get(first, first + 'ing')
     notice('{} {}..'.format(first, rest))
 
-def mysql(sql, root=False, db=False):
-    """A wrapper around the MySQL command line utility using the configuration
-    provided by config.mysql.
-
-    If root, this sets user to root.
-
-    If db, this sets the database to config.mysql['db'].
-
-    See util.mysql().
-    """
-    host = config.mysql.get('host')
-    port = config.mysql.get('port')
-    if root:
-        user = 'root'
-        password = None
-    else:
-        user = config.mysql.get('user')
-        password = config.mysql.get('password')
-    if db:
-        db = config.mysql.get('db')
-    else:
-        db = None
-    def runner(command):
-        return run(command)
-    return util.mysql(sql, host=host, port=port, user=user, password=password,
-        db=db, runner=runner)
-
 def notice(string):
     """Print string in blue."""
     _color_print(string, colorama.Fore.BLUE)

@@ -33,14 +33,6 @@
     # templates_root: 'templates'
     # text_dir: 'data/text'
     # timezone: 'UTC'
-[mysql]
-    # host: 'localhost'
-    # port: 3306
-    # user: 'sc'
-    # password: 'sc'
-    # db: 'sc'
-[sqlite]
-    # db: 'db/sc.sqlite'
 [dict]
     # db: 'db/dictionaries.sqlite'
     # sources: 'dicts'

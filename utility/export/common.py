@@ -1,4 +1,4 @@
-# Common code for db.py and offline.py
+# Common code for offline.py
 
 import env
 import os, os.path, plumbum, regex, shutil, sys, time
