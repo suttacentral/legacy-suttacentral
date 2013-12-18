@@ -133,29 +133,3 @@ def downloads():
 
 def sht_lookup(query):
     return ShtLookupView(query).render()
-
-def fallback_disp_handler(id, collection):
-    try:
-        id = int(id)
-    except (TypeError, ValueError) as e:
-        id = None
-    if id:
-        objects = getattr(scimm.imm(), collection).values()
-        # Looping is awful but it's all we have for now...
-        for object in objects:
-            if object.id == id:
-                path = '/{}'.format(object.uid)
-                raise cherrypy.HTTPRedirect(path, 301)
-    raise cherrypy.NotFound()
-
-def fallback_disp_correspondence(sutta_id=None, **kwargs):
-    fallback_disp_handler(sutta_id, 'suttas')
-
-def fallback_disp_subdivision(division_id=None, **kwargs):
-    fallback_disp_handler(division_id, 'divisions')
-
-def fallback_disp_sutta(division_id=None, subdivision_id=None, **kwargs):
-    if subdivision_id:
-        fallback_disp_handler(subdivision_id, 'subdivisions')
-    else:
-        fallback_disp_handler(division_id, 'divisions')
