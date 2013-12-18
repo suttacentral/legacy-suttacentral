@@ -1,5 +1,7 @@
-import cherrypy, os
-import config, show
+import cherrypy
+
+import config
+import show
 
 # We expose everything we need to here.
 
@@ -14,6 +16,11 @@ def get_cookie_or_param(name):
     else:
         return None
 
+def remove_trailing_slash():
+    path = cherrypy.request.path_info
+    if path != '/' and path.endswith('/'):
+        raise cherrypy.HTTPRedirect(path[:-1], 301)
+
 def set_offline():
     if get_cookie_or_param('offline'):
         offline = True
@@ -21,12 +28,15 @@ def set_offline():
         offline = False
     cherrypy.request.offline = offline
 
+cherrypy.tools.remove_trailing_slash = cherrypy.Tool('before_handler',
+    remove_trailing_slash)
 cherrypy.tools.set_offline = cherrypy.Tool('before_handler', set_offline)
 
 class Root(object):
 
     _cp_config = {
         'error_page.404': error_page_404,
+        'tools.remove_trailing_slash.on': True,
         'tools.set_offline.on': True,
     }
 

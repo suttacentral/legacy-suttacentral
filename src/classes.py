@@ -67,7 +67,7 @@ class Sutta(SuttaBase):
     
     @staticmethod
     def canon_url(uid, lang_code):
-        return '/{uid}/{lang}/'.format(uid=uid, lang=lang_code)
+        return '/{uid}/{lang}'.format(uid=uid, lang=lang_code)
 
 class Vagga(VaggaBase):
     __slots__ = ()

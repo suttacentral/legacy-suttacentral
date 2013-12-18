@@ -1,40 +1,40 @@
 # Return the context of collections and divisions for menu display
 
-other_divisions = [{"name": "Prākrit", "link": "/pf/"},
-			       {"name": "Gāndhārī", "link": "/gf/"},
-			       {"name": "Khotanese", "link": "/kf/"},
-			       {"name": "Uighur", "link": "/uf/"}]
+other_divisions = [{"name": "Prākrit", "link": "/pf"},
+			       {"name": "Gāndhārī", "link": "/gf"},
+			       {"name": "Khotanese", "link": "/kf"},
+			       {"name": "Uighur", "link": "/uf"}]
 
 sanskrit_divisions = [
-							{"name": "Arthaviniścayasūtra", "link": "/arv/"},
-							{"name": "Avadānaśataka", "link": "/avs/"},
-				      {"name": "Divyāvadāna", "link": "/divy/"},
-				      {"name": "Lalitavistara", "link": "/lal/"},
-				      {"name": "Mahāvastu", "link": "/mvu/"},
-				      {"name": "Saṅghabhedavastu", "link": "/sbv/"},
-				      {"name": "Udānavarga", "link": "/uv/"},
-				      {"name": "SHT fragments", "link": "/sht/"},
-				      {"name": "Other fragments", "link": "/sf/"}]
+							{"name": "Arthaviniścayasūtra", "link": "/arv"},
+							{"name": "Avadānaśataka", "link": "/avs"},
+				      {"name": "Divyāvadāna", "link": "/divy"},
+				      {"name": "Lalitavistara", "link": "/lal"},
+				      {"name": "Mahāvastu", "link": "/mvu"},
+				      {"name": "Saṅghabhedavastu", "link": "/sbv"},
+				      {"name": "Udānavarga", "link": "/uv"},
+				      {"name": "SHT fragments", "link": "/sht"},
+				      {"name": "Other fragments", "link": "/sf"}]
 
-tibetan_divisions = [{"name": "Derge / Peking editions", "link": "/dq/"},
-				     {"name": "Upāyikā", "link": "/up/"},
-				     {"name": "Critical editions", "link": "/tc/"}]
+tibetan_divisions = [{"name": "Derge / Peking editions", "link": "/dq"},
+				     {"name": "Upāyikā", "link": "/up"},
+				     {"name": "Critical editions", "link": "/tc"}]
 
-chinese_divisions = [{"name": "Dīrghāgama", "link": "/da/"},
-				     {"name": "Madhyamāgama", "link": "/ma/"},
-				     {"name": "Saṃyuktāgama", "link": "/sa/"},
-				     {"name": "Saṃyuktāgama (2nd)", "link": "/sa-2/"},
-				     {"name": "Saṃyuktāgama (3rd)", "link": "/sa-3/"},
-				     {"name": "Ekottarikāgama", "link": "/ea/"},
-				     {"name": "Ekottarikāgama (2nd)", "link": "/ea-2/"},
-				     {"name": "Other Āgama sūtras", "link": "/oa/"},
-				     {"name": "Other Taishō texts", "link": "/ot/"}]
+chinese_divisions = [{"name": "Dīrghāgama", "link": "/da"},
+				     {"name": "Madhyamāgama", "link": "/ma"},
+				     {"name": "Saṃyuktāgama", "link": "/sa"},
+				     {"name": "Saṃyuktāgama (2nd)", "link": "/sa-2"},
+				     {"name": "Saṃyuktāgama (3rd)", "link": "/sa-3"},
+				     {"name": "Ekottarikāgama", "link": "/ea"},
+				     {"name": "Ekottarikāgama (2nd)", "link": "/ea-2"},
+				     {"name": "Other Āgama sūtras", "link": "/oa"},
+				     {"name": "Other Taishō texts", "link": "/ot"}]
 
-pali_divisions = [{"name": "Dīgha Nikāya", "link": "/dn/"},
-			      {"name": "Majjhima Nikāya", "link": "/mn/"},
-			      {"name": "Saṃyutta Nikāya", "link": "/sn/"},
-			      {"name": "Aṅguttara Nikāya", "link": "/an/"},
-			      {"name": "Khuddaka Nikāya", "link": "/kn/"}]
+pali_divisions = [{"name": "Dīgha Nikāya", "link": "/dn"},
+			      {"name": "Majjhima Nikāya", "link": "/mn"},
+			      {"name": "Saṃyutta Nikāya", "link": "/sn"},
+			      {"name": "Aṅguttara Nikāya", "link": "/an"},
+			      {"name": "Khuddaka Nikāya", "link": "/kn"}]
 
 collections = []
 

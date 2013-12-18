@@ -1,4 +1,5 @@
 from selenium.common.exceptions import NoSuchElementException
+from urllib.parse import urljoin
 
 from ..helper import SCTestCase
 
@@ -59,6 +60,10 @@ class UrlTestCase(SCTestCase):
         self.assertPageIs404()
         self.goto('/sf270/None')
         self.assertPageIs404()
+
+    def test_trailing_slash_redirect(self):
+        self.goto('/dn1/')
+        assert self.current_url == urljoin(self.base_url, 'dn1')
 
     def table_heading_text(self):
         return self.css('caption').text
