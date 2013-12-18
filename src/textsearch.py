@@ -19,9 +19,6 @@ class PrettyRow(sqlite3.Row):
 tlocals = threading.local()
 tlocals.con = {}
 
-textroot = config.text_dir
-searchroot = config.textsearch['dbpath']
-
 def rank(data):
     "Taken from SQLite3 fts3/4 documentation c -> python"
     aMatchInfo = array('i', data)
@@ -53,7 +50,7 @@ def fileiter(path, ext=None, rex=None):
     if rex is not None and type(rex) is str:
         rex = regex.compile(rex)
     extmatch = regex.compile(r'.*\.(.*)').match
-    for basedir, dirs, filenames in os.walk(path):
+    for basedir, dirs, filenames in os.walk(str(path)):
         for filename in filenames:
             if ext:
                 m = extmatch(filename)
@@ -122,11 +119,10 @@ class SectionSearch:
         self.lang_code = lang_code
         self.extensions = extensions
         self.tags = tags
-        self.path = os.path.join(textroot, lang_code)
-        if not os.path.exists(self.path):
+        self.path = config.text_dir / lang_code
+        if not self.path.exists():
             raise Exception("Path {} does not exist".format(self.path))
-        self.dbname = os.path.join(searchroot,
-            'search_{}.sqlite'.format(lang_code))
+        self.db_path = config.db_dir / 'search_{}.sqlite'.format(lang_code)
         self.alias_map = {}
         for group in self.aliases:
             stemmed = [self.stemmer(t) for t in group]
@@ -148,17 +144,17 @@ class SectionSearch:
         except AttributeError:
             tlocals.con = {}
         try:
-            con = tlocals.con[self.dbname]
+            con = tlocals.con[self.db_path]
         except KeyError:
-            con = sqlite3.connect(self.dbname)
+            con = sqlite3.connect(str(self.db_path))
             con.row_factory=PrettyRow
             con.create_function('rank', 1, rank)
             con.create_function('demangle', 1, demangle)
-            tlocals.con[self.dbname] = con
+            tlocals.con[self.db_path] = con
         try:
             yield con
         except:
-            del tlocals.con[self.dbname]
+            del tlocals.con[self.db_path]
             raise
         finally:
             pass
@@ -269,12 +265,12 @@ class SectionSearch:
         return (entries, original_entries, stemmed_entries)
     
     def generate_search_db(self):
-        tmpfile = self.dbname + '.tmp'
+        tmp_db_path = self.db_path.with_suffix('.sqlite.tmp')
         try:
-            os.remove(tmpfile)
+            tmp_db_path.unlink()
         except OSError:
             pass
-        con = sqlite3.connect(tmpfile)
+        con = sqlite3.connect(str(tmp_db_path))
         con.execute('PRAGMA foreign_keys = ON')
         con.execute('PRAGMA synchronous = 0')
         con.execute('''CREATE TABLE entries (
@@ -326,7 +322,7 @@ class SectionSearch:
         con.execute('CREATE UNIQUE INDEX terms_orig_x ON terms(original)')
         
         con.commit()
-        os.replace(tmpfile, self.dbname)
+        tmp_db_path.replace(self.db_path)
 
     def stemmer(self, string, query=False):
         """stemmer should pre-stem text before passing it to fts4

@@ -9,6 +9,7 @@ import logger
 import root
 import scimm
 import show
+import util
 
 def paths():
     dbr = scimm.imm()
@@ -67,9 +68,10 @@ def setup():
         'console_log_level': 'CRITICAL',
     })
     logger.setup()
+    util.set_timezone()
     cherrypy.config.update(config['global'])
     cherrypy.server.unsubscribe()
-    cherrypy.tree.mount(root.Root(), config=config)
+    cherrypy.tree.mount(root.Root(), config=config.for_cherrypy())
     cherrypy.engine.start()
 
 if __name__ == '__main__':

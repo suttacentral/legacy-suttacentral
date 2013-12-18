@@ -42,7 +42,7 @@ def numsortkey(input, index=0):
 
 def table_reader(tablename):
     """ Like csv.DictReader but returns named tuples (2x faster also) """
-    with open(os.path.join(config.table_dir, tablename + '.csv'), 'r',
+    with (config.table_dir / (tablename + '.csv')).open('r',
               encoding='utf-8', newline='') as f:
         reader = csv.reader(f, dialect=ScCsvDialect)
         field_names = next(reader)
@@ -420,33 +420,31 @@ class _Imm:
         text_paths = {}
         text_refs = collections.defaultdict(list)
         
-        for langroot in glob.glob(config.text_dir + '/*'):
-            lang = os.path.basename(langroot)
-            text_paths[lang] = {}
-            for basedir, subdirs, filenames in os.walk(langroot):
-                for filename in filenames:
-                    uid = filename.replace('.html', '')
-                    assert uid not in text_paths[lang]
-                    filepath = os.path.join(basedir, filename)
-                    text_paths[lang][uid] = filepath
-                    
-                    author = self.get_text_author(filepath)
-                    url = Sutta.canon_url(lang_code=lang, uid=uid)
-                    text_refs[uid].append( TextRef(self.languages[lang], author, url, 0) )
-                    
-                    # In the case of a sutta range, we create new entries
-                    # for the entire range. Unneeded entries will be gc'd
-                    m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
-                    if m:
-                        range_start, range_end = int(m[2]), int(m[3])
-                        
-                        for i in range(range_start, range_end + 1):
-                            try:
-                                text_refs[m[1]+str(i)].append( TextRef(self.languages[lang], author, url + '#' + str(i), 0))                            
-                            except KeyError:
-                                globals().update(locals())
-                                raise
-        
+        for filepath in config.text_dir.glob('**/*.html'):
+            lang = filepath.relative_to(config.text_dir).parts[0]
+            if lang not in text_paths:
+                text_paths[lang] = {}
+            uid = filepath.name.replace('.html', '')
+            assert uid not in text_paths[lang]
+            text_paths[lang][uid] = filepath
+
+            author = self.get_text_author(filepath)
+            url = Sutta.canon_url(lang_code=lang, uid=uid)
+            text_refs[uid].append( TextRef(self.languages[lang], author, url, 0) )
+
+            # In the case of a sutta range, we create new entries
+            # for the entire range. Unneeded entries will be gc'd
+            m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
+            if m:
+                range_start, range_end = int(m[2]), int(m[3])
+
+                for i in range(range_start, range_end + 1):
+                    try:
+                        text_refs[m[1]+str(i)].append( TextRef(self.languages[lang], author, url + '#' + str(i), 0))                            
+                    except KeyError:
+                        globals().update(locals())
+                        raise
+
         return (text_paths, text_refs)
     
     def get_text_path(self, lang, uid):
@@ -472,7 +470,7 @@ class _Imm:
         
         """
         
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with filepath.open('r', encoding='utf-8') as f:
             for i, line in enumerate(f):
                 if i > 6:
                     break
@@ -630,11 +628,10 @@ def imm():
 def _mtime_recurse(path, timestamp=0):
     "Fast function for finding the latest mtime in a folder structure"
 
-    timestamp = max(timestamp, os.stat(path).st_mtime_ns)
-    for path1 in os.listdir(path):
-        if '.' in path1:
+    timestamp = max(timestamp, path.stat().st_mtime_ns)
+    for path1 in path.iterdir():
+        if not path1.is_dir():
             continue
-        path1 = os.path.join(path, path1)
         timestamp = max(timestamp, _mtime_recurse(path1, timestamp))
     return timestamp
     
@@ -650,14 +647,14 @@ class Updater(threading.Thread):
     ready = threading.Event() # Signal that the imm is ready.
     
     def get_change_timestamp(self):
-        timestamp = str(os.stat(config.table_dir).st_mtime_ns)
+        timestamp = str(config.table_dir.stat().st_mtime_ns)
         
         if config.app['runtime_tests']:
             timestamp += str(_mtime_recurse(config.text_dir))
         else:
             # Detecting changes to git repository should be enough
             # for server environment.
-            timestamp += str(os.stat(os.path.join(config.text_dir, '.git')).st_mtime_ns)
+            timestamp += str((config.table_dir / '.git').stat().st_mtime_ns)
             
     def run(self):
         global _imm

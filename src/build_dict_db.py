@@ -1,9 +1,9 @@
-import lxml.html, collections, sqlite3, os, itertools, regex, math
+import lxml.html, collections, sqlite3, itertools, regex, math
 
 import textfunctions, config
 
 import sys
-sys.path.append(config['dict']['sources'])
+sys.path.append(str(config.dict_sources_dir))
 import cped_data
 
 class PrettyRow(sqlite3.Row):
@@ -33,13 +33,13 @@ def create_brief(string, max_length=150):
         return regex.sub(r'\S+$', '', string)
 
 # Create the database.
-dbname = config['dict']['db']
-tmpdb = dbname + '.tmp'
+db_path = config.dict_db_path
+tmp_db_path = db_path.with_suffix('.sqlite.tmp')
 try:
-    os.remove(tmpdb)
+    tmp_db_path.unlink()
 except OSError:
     pass
-con = sqlite3.connect(tmpdb)
+con = sqlite3.connect(str(tmp_db_path))
 #con.execute('PRAGMA foreign_keys = ON')
 con.execute('PRAGMA synchronous = 0') # Much faster and we don't want a partial database.
 con.row_factory = PrettyRow
@@ -132,8 +132,8 @@ term_id = 0
 def build_dppn():
     global dict_id, entry_id, term_id, con
 
-    dict_path = os.path.join(config['dict']['sources'], 'sc_dppn.html')
-    with open(dict_path, 'r', encoding='utf-8') as f:
+    dict_path = config.dict_sources_dir / 'sc_dppn.html'
+    with dict_path.open('r', encoding='utf-8') as f:
         dom = lxml.html.fromstring(f.read())
 
     # Perform sanity-correction
@@ -340,5 +340,4 @@ con.execute('CREATE INDEX ref_entry_id_x ON refs(entry_id)')
 con.execute('ANALYZE')
 
 con.commit()
-os.replace(tmpdb, dbname)
-
+tmp_db_path.replace(db_path)

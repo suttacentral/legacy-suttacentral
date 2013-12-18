@@ -12,11 +12,13 @@ import root
 import util
 
 util.set_timezone()
+cherrypy_controller = root.Root()
+cherrypy_config = config.for_cherrypy()
 
 if __name__ == '__main__':
-    cherrypy.quickstart(root.Root(), config=config)
+    cherrypy.quickstart(cherrypy_controller, config=cherrypy_config)
 else:
     # For some reason, this mode requires global settings to be explicitly
     # injected.
-    cherrypy.config.update(config['global'])
-    cherrypy.tree.mount(root.Root(), config=config)
+    cherrypy.config.update(cherrypy_config['global'])
+    cherrypy.tree.mount(cherrypy_controller, config=cherrypy_config)

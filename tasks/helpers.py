@@ -1,9 +1,6 @@
 """Task helpers."""
 
 import colorama
-import os
-import os.path
-import plumbum
 import plumbum.commands
 import regex
 import sys
@@ -53,7 +50,7 @@ def remote_run(login, commands):
 
 def rm_rf(*files):
     """Recursively remove files."""
-    run('rm -rf {}'.format(' '.join(files)))
+    run('rm -rf {}'.format(' '.join(map(str, files))))
 
 def run(command, echo=False, fg=False):
     """Runs command in a subprocess.

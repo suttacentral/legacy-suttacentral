@@ -149,7 +149,7 @@ class TermSortKey:
             score -= 0.05
         return score
         
-omni = OmniDictSearcher(dbname=config['dict']['db'])
+omni = OmniDictSearcher(dbname=str(config.dict_db_path))
 
 def search(query, target='dict', limit=10, offset=0, ajax=0):
     dictResults = classes.DictionaryResultsCategory()

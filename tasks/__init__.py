@@ -1,12 +1,11 @@
-import os.path
+import pathlib
 import sys
 
 # Setup sys.path to import modules from the project directory.
-base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-src_path = os.path.join(base_path, 'src')
+src_path = str(pathlib.Path(__file__).resolve().parents[1] / 'src')
 if src_path not in sys.path:
     sys.path.insert(1, src_path)
-del base_path, src_path
+del src_path
 
 from invoke import Collection
 

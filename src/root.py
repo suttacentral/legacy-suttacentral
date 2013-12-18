@@ -4,7 +4,7 @@ import config, show
 # We expose everything we need to here.
 
 def error_page_404(status, message, traceback, version):
-    return open(os.path.join(config.static_root, '404.html'), 'r').read()
+    return (config.static_dir / '404.html').open('r', encoding='utf-8').read()
 
 def get_cookie_or_param(name):
     if name in cherrypy.request.cookie:

@@ -1,5 +1,9 @@
-import os, sys
 import cherrypy
+import copy
+import pathlib
+import sys
+
+_file_path = pathlib.Path(__file__).resolve()
 
 class Config(dict):
     """A flexible and convenient configuration class for SuttaCentral.
@@ -59,33 +63,63 @@ class Config(dict):
         ['global', 'log.error_file'],
         ['app', 'app_log_file'],
         ['app', 'data_dir'],
-        ['app', 'dbr_cache_file'],
-        ['app', 'exports_root'],
-        ['app', 'static_root'],
-        ['app', 'templates_root'],
-        ['app', 'table_dir'],
-        ['app', 'text_dir'],
-        ['dict', 'db'],
-        ['dict', 'sources'],
-        ['textsearch', 'dbpath'],
     ]
 
-    base_dir         = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    source_dir       = os.path.join(base_dir, 'src')
-    global_conf_path = os.path.join(base_dir, 'global.conf')
-    local_conf_path  = os.path.join(base_dir, 'local.conf')
+    base_dir          = _file_path.parents[1]
+    source_dir        = base_dir / 'src'
+    global_conf_path  = base_dir / 'global.conf'
+    local_conf_path   = base_dir / 'local.conf'
+
+    static_dir        = base_dir / 'static'
+    templates_dir     = base_dir / 'templates'
+    exports_dir       = static_dir / 'exports'
+
+    db_dir            = base_dir / 'db'
+    dict_db_path      = db_dir / 'dictionaries.sqlite'
+    dict_sources_dir  = base_dir / 'dicts'
+
+    webassets_manifest_path = db_dir / 'webassets' / 'manifest'
+    webassets_cache_dir = db_dir / 'webassets' / 'cache'
+    compiled_css_dir  = static_dir / 'css' / 'compiled'
+    compiled_js_dir   = static_dir / 'js' / 'compiled'
+
+    @property
+    def table_dir(self):
+        return self.data_dir / 'table'
+
+    @property
+    def text_dir(self):
+        return self.data_dir / 'text'
 
     def reload(self):
         """Reload the configuration."""
         self.clear()
         self.__setup()
 
+    def for_cherrypy(self):
+        """Return a copy of this dictionary suitable for cherrypy.
+
+        This will stringify any pathlib.Paths as cherrypy does not play
+        nicely with such objects.
+        """
+        result = self.__deepcopy(self)
+        def stringify(dct):
+            for key, value in dct.items():
+                if isinstance(value, self.__Path):
+                    dct[key] = str(value)
+                elif isinstance(value, dict):
+                    stringify(value)
+        stringify(result)
+        return result
+
     def __init__(self):
         dict.__init__(self)
-        # Manually copy these two function references because they seem to
-        # disappear after the module is loaded...!
+        # Manually copy these references to this object because they disappear
+        # from global scope when we do the module replacement trick. See the
+        # last line of this file.
         self.__as_dict = cherrypy.lib.reprconf.as_dict
-        self.__join = os.path.join
+        self.__deepcopy = copy.deepcopy
+        self.__Path = pathlib.Path
         self.__setup()
 
     def __getattr__(self, name):
@@ -97,28 +131,28 @@ class Config(dict):
             raise AttributeError("Config has no attribute '%s'" % name)
 
     def __setup(self):
-        config = self.__as_dict(self.global_conf_path)
+        config = self.__as_dict(str(self.global_conf_path))
         try:
-            local_config = self.__as_dict(self.local_conf_path)
+            local_config = self.__as_dict(str(self.local_conf_path))
             self.__deep_update(config, local_config)
         except IOError:
             pass
         self.update(config)
 
         for key, subkey in self.ABSOLUTE_PATHS:
-            self.__absolutize(key, subkey)
+            self.__absolutize(key, subkey, self.base_dir)
 
-        # Manually set tools.staticdir.root from static_root
+        # Manually set tools.staticdir.root from static_dir
         if '/' not in self:
             self['/'] = {}
-        self['/']['tools.staticdir.root'] = self.static_root
+        self['/']['tools.staticdir.root'] = self.static_dir
 
         # Absolutize any relative filename paths for cherrypy.
         for key, subdict in self.items():
             if key[0] == '/':
                 subkey = 'tools.staticfile.filename'
                 if subkey in subdict:
-                    self.__absolutize(key, subkey, self.static_root)
+                    self.__absolutize(key, subkey, self.static_dir)
         return config
 
     def __deep_update(self, a, b):
@@ -134,19 +168,17 @@ class Config(dict):
             if subkey in self[key]:
                 path = self[key][subkey]
                 if path[0] != '/':
-                    if base is None:
-                        base = self.base_dir
-                    self[key][subkey] = self.__join(base, path)
+                    self[key][subkey] = base / path
 
 __config = Config()
 
 # Add the configuration files to trigger autoreload.
-cherrypy.engine.autoreload.files.add(__config.global_conf_path)
-cherrypy.engine.autoreload.files.add(__config.local_conf_path)
+cherrypy.engine.autoreload.files.add(str(__config.global_conf_path))
+cherrypy.engine.autoreload.files.add(str(__config.local_conf_path))
 
 # We manually add this file because cherrypy autoreloader doesn't recognize
 # it, probably because of the module munging.
-cherrypy.engine.autoreload.files.add(os.path.realpath(__file__))
+cherrypy.engine.autoreload.files.add(str(_file_path))
 
 # Do not use autoreloader against plumbum
 cherrypy.engine.autoreload.match = r'^(?!plumbum).+'

@@ -3,7 +3,6 @@ import datetime
 import http.client
 import jinja2
 import newrelic.agent
-import os.path
 import regex
 import socket
 import time
@@ -35,7 +34,7 @@ def jinja2_environment():
         return __jinja2_environment
 
     env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(config.templates_root),
+        loader=jinja2.FileSystemLoader(str(config.templates_dir)),
         extensions=[AssetsExtension],
         trim_blocks=True,
         lstrip_blocks=True,
@@ -97,7 +96,7 @@ class NewRelicBrowserTimingProxy:
 
 class ViewContext(dict):
     """A dictionary with easy object-style setters/getters.
-    
+
     >>> context = ViewContext()
     >>> context['a'] = 1
     >>> context.b = 2
@@ -196,21 +195,21 @@ class DownloadsView(InfoView):
         data = []
         for format in self.formats:
             latest_filename = '{}-latest.{}'.format(basename, format)
-            latest_path = os.path.join(exports_path, latest_filename)
-            local_path = os.path.realpath(latest_path)
-            logger.debug(latest_path)
-            if os.path.exists(local_path):
+            latest_path = exports_path / latest_filename
+            if latest_path.exists():
+                local_path = latest_path.resolve()
+                relative_url = local_path.relative_to(config.static_dir)
                 data.append({
-                    'filename': os.path.basename(local_path),
-                    'url': local_path[len(config.static_root):],
-                    'time': os.path.getctime(local_path),
-                    'size': os.path.getsize(local_path),
+                    'filename': local_path.name,
+                    'url': '/{}'.format(relative_url),
+                    'time': local_path.stat().st_ctime,
+                    'size': local_path.stat().st_size,
                     'format': format,
                 })
         return data
 
     def __offline_data(self):
-        return self.__file_data('sc-offline', config.exports_root)
+        return self.__file_data('sc-offline', config.exports_dir)
 
 class ParallelView(ViewBase):
     """The view for the sutta parallels page."""
@@ -295,7 +294,7 @@ class TextView(ViewBase):
     def get_html(self):
         """Return the text HTML or raise a cherrypy.NotFound exception"""
         if self.path:
-            with open(self.path, 'r', encoding='utf-8') as f:
+            with self.path.open('r', encoding='utf-8') as f:
                 return f.read()
         else:
             raise cherrypy.NotFound()

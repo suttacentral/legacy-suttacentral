@@ -1,8 +1,5 @@
-import glob
 import json
 import logging
-import os
-import os.path
 import webassets
 from webassets.script import CommandLineEnvironment
 
@@ -10,21 +7,16 @@ import config
 
 """Asset (CSS, JavaScript) compilation."""
 
-manifest_path = os.path.join(config.base_dir, 'db', 'webassets', 'manifest')
-cache_dir = os.path.join(config.base_dir, 'db', 'webassets', 'cache')
-compiled_css_dir = os.path.join(config.static_root, 'css', 'compiled')
-compiled_js_dir = os.path.join(config.static_root, 'js', 'compiled')
-
 # For some reason, webassets does not create these directories if
 # they do not exist...
-if not os.path.exists(cache_dir):
-    os.makedirs(cache_dir)
+if not config.webassets_cache_dir.exists():
+    config.webassets_cache_dir.mkdir(parents=True)
 
-env = webassets.Environment(config.static_root, '/')
+env = webassets.Environment(str(config.static_dir), '/')
 env.auto_build = not config.compile_assets
-env.cache = cache_dir
+env.cache = str(config.webassets_cache_dir)
 env.debug = not config.compile_assets
-env.manifest = 'json:%s' % manifest_path
+env.manifest = 'json:{}'.format(config.webassets_manifest_path)
 
 css_normalize = webassets.Bundle(
     'css/vendor/normalize-2.1.3.css'
@@ -90,21 +82,22 @@ def clean(older=False):
 
     maximum_ctime = None
     try:
-        maximum_ctime = os.path.getmtime(manifest_path)
+        maximum_ctime = config.webassets_manifest_path.stat().st_mtime
         maximum_ctime -= 60 # seconds
     except OSError:
         older = True
 
-    cache_glob = os.path.join(cache_dir, '*')
-    css_glob = os.path.join(compiled_css_dir, '*.css')
-    js_glob = os.path.join(compiled_js_dir, '*.js')
-    paths = glob.glob(cache_glob) + glob.glob(css_glob) + glob.glob(js_glob)
+    cache_glob = config.webassets_cache_dir.glob('*')
+    css_glob = config.compiled_css_dir.glob('*.css')
+    js_glob = config.compiled_js_dir.glob('*.js')
+    paths = list(cache_glob) + list(css_glob) + list(js_glob)
+
     if not older:
-        paths += [ manifest_path ]
+        paths.append(config.webassets_manifest_path)
 
     for path in paths:
         try:
-            if not older or os.path.getctime(path) < maximum_ctime:
-                os.unlink(path)
+            if not older or path.stat().st_ctime < maximum_ctime:
+                path.unlink()
         except OSError:
             pass

@@ -18,23 +18,12 @@
     # console_log_level: 'DEBUG'
     # data_dir: 'data'
     # db_refresh_interval: 90
-    # dbr_cache_file: 'tmp/dbr.cache'
     # debug: True
     # default_locale: 'en_AU'
     # development_bar: 'Local Development'
-    # exports_root: 'static/exports'
     # internet_connectivity: True
     # newrelic_license_key: '...'
     # newrelic_real_user_monitoring: False
     # nonfree_fonts: False
     # runtime_tests: True
-    # static_root: 'static'
-    # table_dir: 'data/table'
-    # templates_root: 'templates'
-    # text_dir: 'data/text'
     # timezone: 'UTC'
-[dict]
-    # db: 'db/dictionaries.sqlite'
-    # sources: 'dicts'
-[textsearch]
-    # dbpath: 'db'

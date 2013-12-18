@@ -25,7 +25,7 @@ formatter = logging.Formatter(
     style='{'
 )
 
-app_log = logging.FileHandler(config.app_log_file)
+app_log = logging.FileHandler(str(config.app_log_file))
 app_log.addFilter(cherrypy_filter)
 app_log.setFormatter(formatter)
 
