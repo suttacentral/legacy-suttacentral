@@ -19,13 +19,15 @@ def mn_sections(html):
                 if section:
                     sections.append(section)
                 section = {
-                    'title': clean(el.text),
+                    'title': dash_to_em(clean(el.text)),
                     'content': '',
                 }
             elif section:
-                section['content'] += tagit('h2', el.text)
+                text = dash_to_em(clean(el.text))
+                section['content'] += tagit('h2', text)
         elif section and el.name == 'p':
-            section['content'] += tagit('p', el.text)
+            text = dash_to_em(curly_quote(clean(el.text)))
+            section['content'] += tagit('p', text)
     if section:
         sections.append(section)
     return sections
@@ -44,6 +46,6 @@ if __name__ == '__main__':
             output_path = output_mn_dir / 'mn{}.html'.format(i)
             print('Process: {} to {}'.format(input_path, output_path))
             with output_path.open('w', encoding='utf-8') as output:
-                html = output_template.format(division=division,
+                html = output_html(division=division,
                     title=section['title'], content=section['content'])
                 output.write(html)

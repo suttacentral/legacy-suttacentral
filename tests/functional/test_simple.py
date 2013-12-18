@@ -17,7 +17,7 @@ class SimpleTestCase(SCTestCase):
         self.goto('/dn2')
         self.assertEqual('Details for DN 2 Sāmaññaphala',
                           self.css('caption').text)
-        self.assertEqual('en | vn | en | en | fr | de',
+        self.assertEqual('en | my | vn | en | en | fr | de',
                           self.css('.origin td:last-child').text)
 
     def test_scm_footer(self):

@@ -21,16 +21,17 @@ def process_dn(html):
                 # Start of vagga
                 vaggafile = True
             elif text and numbers_re.match(text[0]):
-                title = text
+                title = dash_to_em(text)
             continue
         if el.name == 'h4':
+            text = dash_to_em(text)
             content += tagit('h2', text)
         elif el.name == 'p':
+            text = dash_to_em(curly_quote(text))
             content += tagit('p', text)
     assert title, 'No title!'
     assert content, 'No content!'
-    html = output_template.format(division=division,
-        title=title, content=content)
+    html = output_html(division=division, title=title, content=content)
     return html
 
 if __name__ == '__main__':

@@ -7,3 +7,19 @@
         padding: 0 !important;
     }
 }
+
+// Burmese
+#text:lang(my) {
+
+    .sutta {
+        h1, h2, h3, h4, h5, h6, p,
+        hgroup > h2, hgroup > h3 {
+            font-family: $tharlon;
+            letter-spacing: 0;
+        }
+    }
+
+    #metaarea p {
+        font-family: $tharlon;
+    }
+}
