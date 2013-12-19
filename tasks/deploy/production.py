@@ -2,13 +2,17 @@
 
 from ..helpers import *
 
+def _production_run(*commands):
+    remote_run('sc-production@vps.suttacentral.net', [
+        'source $HOME/.virtualenvs/suttacentral/bin/activate',
+        'cd $HOME/suttacentral',
+    ] + list(commands))
+
 @task
 def full():
     """Deploy to the production server."""
     blurb(full)
-    remote_run('sc-production@vps.suttacentral.net', [
-        'source $HOME/.virtualenvs/suttacentral/bin/activate',
-        'cd $HOME/suttacentral',
+    _production_run(
         'touch tmp/maintenance',
         'sudo supervisorctl stop sc-production',
         'git pull',
@@ -22,8 +26,8 @@ def full():
         'rm -f tmp/maintenance',
         'invoke dictionary.build',
         'invoke search.index',
-        'invoke assets.clean --older',
-    ])
+        'invoke assets.clean --older'
+    )
 
 @task
 def nonfree_fonts(force=False):
@@ -42,28 +46,28 @@ def nonfree_fonts(force=False):
 def quick():
     """Deploy simple changes to the production server."""
     blurb(quick)
-    remote_run('sc-production@vps.suttacentral.net', [
-        'source $HOME/.virtualenvs/suttacentral/bin/activate',
-        'cd $HOME/suttacentral',
+    _production_run(
         'git pull',
-        'cd data',
-        'git pull',
-        'cd ..',
         'pip install -q -r requirements.txt',
         'invoke assets.compile',
         'sudo supervisorctl restart sc-production',
-        'invoke assets.clean --older',
-    ])
+        'invoke assets.clean --older'
+    )
 
 @task
-def data():
+def update_data():
     """Deploy data changes to the production server."""
-    blurb(data)
-    remote_run('sc-production@vps.suttacentral.net', [
-        'source $HOME/.virtualenvs/suttacentral/bin/activate',
-        'cd $HOME/suttacentral',
+    blurb(update_data)
+    _production_run(
         'cd data',
-        'git pull',
-        'cd ..',
-        'invoke search.index',
-    ])
+        'git pull'
+    )
+
+@task
+def update_search():
+    """Update dictionary and search index on the production server."""
+    blurb(update_search)
+    _production_run(
+        'invoke dictionary.build',
+        'invoke search.index'
+    )

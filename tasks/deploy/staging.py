@@ -10,13 +10,17 @@ def _branch_or_pull(branch):
     else:
         return 'git pull'
 
+def _staging_run(*commands):
+    remote_run('sc-staging@vps.suttacentral.net', [
+        'source $HOME/.virtualenvs/suttacentral/bin/activate',
+        'cd $HOME/suttacentral',
+    ] + list(commands))
+
 @task
 def full(branch=None):
     """Deploy to the staging server."""
     blurb(full)
-    remote_run('sc-staging@vps.suttacentral.net', [
-        'source $HOME/.virtualenvs/suttacentral/bin/activate',
-        'cd $HOME/suttacentral',
+    _staging_run(
         'touch tmp/maintenance',
         'sudo supervisorctl stop sc-staging',
         _branch_or_pull(branch),
@@ -30,8 +34,8 @@ def full(branch=None):
         'sudo service apache2 reload',
         'rm -f tmp/maintenance',
         'invoke dictionary.build',
-        'invoke search.index',
-    ])
+        'invoke search.index'
+    )
 
 @task
 def nonfree_fonts():
@@ -46,28 +50,28 @@ def nonfree_fonts():
 def quick(branch=None):
     """Deploy simple changes to the staging server."""
     blurb(quick)
-    remote_run('sc-staging@vps.suttacentral.net', [
-        'source $HOME/.virtualenvs/suttacentral/bin/activate',
-        'cd $HOME/suttacentral',
+    _staging_run(
         _branch_or_pull(branch),
-        'cd data',
-        'git pull',
-        'cd ..',
         'pip install -q -r requirements.txt',
         'invoke assets.compile',
         'sudo supervisorctl restart sc-staging',
-        'invoke assets.clean --older',
-    ])
+        'invoke assets.clean --older'
+    )
 
 @task
-def data():
+def update_data(branch=None):
     """Deploy data changes to the staging server."""
-    blurb(data)
-    remote_run('sc-staging@vps.suttacentral.net', [
-        'source $HOME/.virtualenvs/suttacentral/bin/activate',
-        'cd $HOME/suttacentral',
+    blurb(update_data)
+    _staging_run(
         'cd data',
-        'git pull',
-        'cd ..',
-        'invoke search.index',
-    ])
+        _branch_or_pull(branch)
+    )
+
+@task
+def update_search():
+    """Update dictionary and search index on the staging server."""
+    blurb(update_search)
+    _staging_run(
+        'invoke dictionary.build',
+        'invoke search.index'
+    )
