@@ -7,15 +7,27 @@ from ..helper import SCTestCase
 
 from scm import Scm
 
-def test_revision():
+def setup_last_commit_scm():
     scm = Scm('/foo')
-    scm._git = MagicMock(return_value='0101beef')
-    assert scm.revision == '0101beef'
+    git_result = '0101beef\n1386816309\nJohn Doe\nFix bugs'
+    scm._git = MagicMock(return_value=git_result)
+    return scm
 
-def test_datetime():
-    scm = Scm('/foo')
-    scm._git = MagicMock(return_value='1386816309')
-    assert scm.datetime == datetime.datetime(2013, 12, 12, 2, 45, 9)
+def test_last_commit_revision():
+    scm = setup_last_commit_scm()
+    assert scm.last_commit_revision == '0101beef'
+
+def test_last_commit_time():
+    scm = setup_last_commit_scm()
+    assert scm.last_commit_time == datetime.datetime(2013, 12, 12, 2, 45, 9)
+
+def test_last_commit_author():
+    scm = setup_last_commit_scm()
+    assert scm.last_commit_author == 'John Doe'
+
+def test_last_commit_subject():
+    scm = setup_last_commit_scm()
+    assert scm.last_commit_subject == 'Fix bugs'
 
 def test_branch():
     scm = Scm('/foo')

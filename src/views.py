@@ -12,8 +12,9 @@ import lhtmlx
 
 import assets
 import config
+import data_repo
 import scimm
-from scm import scm
+from scm import scm, data_scm
 import util
 from menu import menu_data
 from classes import Parallel, Sutta
@@ -44,6 +45,7 @@ def jinja2_environment():
     env.filters['date'] = util.format_date
     env.filters['time'] = util.format_time
     env.filters['datetime'] = util.format_datetime
+    env.filters['timedelta'] = util.format_timedelta
 
     def sub_filter(string, pattern, repl):
         return regex.sub(pattern, repl, string)
@@ -487,3 +489,15 @@ class SuttaCitationView(ViewBase):
 
     def setup_context(self, context):
         context.sutta = self.sutta
+
+class AdminIndexView(InfoView):
+    """The view for the admin index page."""
+
+    def __init__(self):
+        super().__init__('admin')
+
+    def setup_context(self, context):
+        super().setup_context(context)
+        context.data_last_update_request = data_repo.last_update()
+        context.data_scm = data_scm
+        context.imm_build_time = scimm.imm().build_time

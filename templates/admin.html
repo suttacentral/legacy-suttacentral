@@ -1,0 +1,31 @@
+{% extends "base.html" -%}
+{% block head %}
+<meta http-equiv="refresh" content="10">
+{% endblock %}
+{% block content %}
+<div id="onecol">
+<section>
+<article>
+
+<h1>SuttaCentral Admin</h1>
+
+<h2>Data Repository</h2>
+<p>
+    <form action="/admin/data_notify" method="POST" style="float: right">
+    <input type="submit" value="Manual Update">
+    </form>
+    Last Updated: {{ imm_build_time | timedelta }} ago<br>
+    {% if data_last_update_request %}
+        Last Update Request: {{ data_last_update_request | timedelta }} ago
+    {% endif %}<br>
+    Branch: {{ data_scm.branch }}<br>
+    Revision:
+    <a href="https://github.com/suttacentral/suttacentral-data/commit/{{ data_scm.last_commit_revision }}">{{ data_scm.last_commit_revision[:8] }}</a>
+    {{ data_scm.last_commit_time | timedelta }} ago<br>
+    Log Message: {{ data_scm.last_commit_subject | e }}
+</p>
+
+</article>
+</section>
+</div>
+{% endblock %}

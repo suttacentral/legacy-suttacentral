@@ -1,9 +1,19 @@
-import cherrypy, os, regex
-import classes, scimm, suttasearch
-from views import *
-import classes, suttasearch, dictsearch, textsearch
-
+import cherrypy
+import json
 import logging
+import os
+import regex
+
+import classes
+import data_repo
+import dictsearch
+import scimm
+import suttasearch
+import textsearch
+from scm import data_scm
+from util import filelock
+from views import *
+
 logger = logging.getLogger(__name__)
 
 STATIC_PAGES = ['about', 'abbreviations', 'bibliography', 'contacts', 'help',
@@ -133,3 +143,30 @@ def downloads():
 
 def sht_lookup(query):
     return ShtLookupView(query).render()
+
+def admin_index():
+    return AdminIndexView().render()
+
+def admin_data_notify(json_payload):
+    if json_payload:
+        logger.info('Data update request')
+        try:
+            payload = json.loads(json_payload)
+        except ValueError:
+            payload = None
+        if isinstance(payload, dict):
+            logger.info('Payload: {}'.format(repr(payload)))
+            payload_branch = str(payload.get('ref')).replace('refs/heads/', '')
+            update_data = data_scm.branch == payload_branch
+        else:
+            logger.warning('Invalid payload: {}'.format(repr(json_payload)))
+            update_data = False
+    else:
+        logger.info('Data update request (manually-triggered)')
+        update_data = True
+    if update_data:
+        logger.info('Data update started')
+        data_repo.update(bg=True)
+    else:
+        logger.info('Data update request ignored')
+    raise cherrypy.HTTPRedirect('/admin', 303)

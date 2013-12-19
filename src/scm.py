@@ -2,10 +2,14 @@
 
 Example:
     >>> from scm import scm
-    >>> scm.revision
+    >>> scm.last_revision
     '01798b77bdb2cb88e5996828662d1d8ebca0d9c2'
-    >>> scm.datetime
+    >>> scm.last_commit_time
     datetime.datetime(2013, 12, 11, 18, 45, 9)
+    >>> scm.last_commit_author
+    'John Doe'
+    >>> scm.last_commit_subject
+    'Fix bugs'
     >>> scm.branch
     'master'
     >>> scm.tag
@@ -15,7 +19,7 @@ Example:
 import pathlib
 import plumbum
 import time
-from datetime import datetime as _datetime
+from datetime import datetime
 from plumbum.commands.processes import ProcessExecutionError
 
 import config
@@ -43,17 +47,24 @@ class Scm(object):
         self.refresh()
 
     @property
-    @_cached
-    def revision(self):
+    def last_commit_revision(self):
         """Return the revision of last commit."""
-        return self._git('log', '-1', '--format=%H')
+        return self._last_commit_info['revision']
 
     @property
-    @_cached
-    def datetime(self):
-        """Return the datetime of last commit."""
-        time = int(self._git('log', '-1', '--format=%at'))
-        return _datetime.fromtimestamp(time)
+    def last_commit_time(self):
+        """Return the time of last commit."""
+        return self._last_commit_info['time']
+
+    @property
+    def last_commit_author(self):
+        """Return the author of last commit."""
+        return self._last_commit_info['author']
+
+    @property
+    def last_commit_subject(self):
+        """Return the subject (short message) of last commit."""
+        return self._last_commit_info['subject']
 
     @property
     @_cached
@@ -74,9 +85,22 @@ class Scm(object):
         """Clear the cache."""
         self._cache = {}
 
+    @property
+    @_cached
+    def _last_commit_info(self):
+        info = self._git('log', '-1', '--format=%H%n%at%n%an%n%s')
+        revision, time, author, subject = info.split('\n', 3)
+        return {
+            'revision': revision,
+            'time': datetime.fromtimestamp(int(time)),
+            'author': author,
+            'subject': subject,
+        }
+
     def _git(self, *args):
         with plumbum.local.cwd(self.dir):
             return plumbum.local['git'](*args).strip()
 
 _timeout = 10 if config['global']['engine.autoreload.on'] else None
 scm = Scm(config.base_dir, _timeout)
+data_scm = Scm(config.data_dir, 1)

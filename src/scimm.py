@@ -1,15 +1,25 @@
 #!/usr/bin/env python3.3
 
-# Import user modules.
-import config, textfunctions
-from classes import *
-
-import collections, functools, itertools, time, regex, hashlib, os, threading, math, datetime, pickle, cherrypy
+import cherrypy
+import collections
+import csv
+import functools
+import hashlib
+import itertools
+import logging
+import math
+import os
+import pickle
+import regex
+import threading
+import time
+from datetime import datetime
 from collections import OrderedDict, defaultdict, namedtuple
 
-import csv
+import config
+import textfunctions
+from classes import *
 
-import logging
 logger = logging.getLogger(__name__)
 
 class ScCsvDialect(csv.Dialect):
@@ -59,6 +69,7 @@ class _Imm:
         self.build_parallels()
         self.build_search_data()
         self.timestamp = timestamp
+        self.build_time = datetime.now()
     
     def __call__(self, uid):
         if uid in self.collections:
@@ -654,7 +665,7 @@ class Updater(threading.Thread):
         else:
             # Detecting changes to git repository should be enough
             # for server environment.
-            timestamp += str((config.text_dir / '.git').stat().st_mtime_ns)
+            timestamp += str((config.data_dir / '.git').stat().st_mtime_ns)
         return timestamp
 
     def run(self):

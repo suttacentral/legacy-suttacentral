@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ ASSET_URL }}">
   {% endassets -%}
 {%- endif -%}
+{% block head %}{% endblock %}
 </head>
 
 <body>
@@ -60,7 +61,7 @@
 
 </body>
 </html>
-<!-- Revision: {{ scm.revision }}
-     Date:     {{ scm.datetime | datetime('long') }}
+<!-- Revision: {{ scm.last_commit_revision }}
+     Date:     {{ scm.last_commit_time | datetime('long') }}
      Branch:   {{ scm.branch }}
      Tag:      {{ scm.tag }} -->

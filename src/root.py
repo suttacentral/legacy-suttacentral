@@ -33,12 +33,17 @@ cherrypy.tools.remove_trailing_slash = cherrypy.Tool('before_handler',
 cherrypy.tools.set_offline = cherrypy.Tool('before_handler', set_offline)
 
 class Root(object):
+    """Requests to /*"""
 
     _cp_config = {
         'error_page.404': error_page_404,
+        'tools.trailing_slash.on': False,
         'tools.remove_trailing_slash.on': True,
         'tools.set_offline.on': True,
     }
+
+    def __init__(self):
+        self.admin = Admin()
 
     @cherrypy.expose
     def default(self, *args, **kwargs):
@@ -59,3 +64,14 @@ class Root(object):
     @cherrypy.expose
     def sht_lookup(self, query, **kwargs):
         return show.sht_lookup(query)
+
+class Admin(object):
+    """Requests to /admin/*"""
+
+    @cherrypy.expose
+    def index(self, **kwargs):
+        return show.admin_index()
+
+    @cherrypy.expose
+    def data_notify(self, **kwargs):
+        return show.admin_data_notify(kwargs.get('payload'))

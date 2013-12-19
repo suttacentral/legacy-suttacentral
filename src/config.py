@@ -73,6 +73,7 @@ class Config(dict):
     static_dir        = base_dir / 'static'
     templates_dir     = base_dir / 'templates'
     exports_dir       = static_dir / 'exports'
+    tmp_dir           = base_dir / 'tmp'
 
     db_dir            = base_dir / 'db'
     dict_db_path      = db_dir / 'dictionaries.sqlite'
