@@ -43,6 +43,10 @@ import logging, regex, os, os.path, time, subprocess
 import lhtmlx, pathlib, collections, io
 from .colors import color_name
 
+
+BRTAG_SAFE = 1
+BRTAG_UNSAFE = 2
+
 def generate_descriptive_name(attr, value):
     if attr in {'color', 'background', 'background-color'}:
         if value.startswith('#'):
@@ -116,6 +120,60 @@ def crunch(root, name_mapping, xml_tags=False):
             else:
                 e.attrib['class'] = class_string
 
+brackets = {'(': ')', '[': ']'}
+bracket_class = {'(': 'RoBr', '[': 'SqBr'}
+def convert_brackets_dom(root):
+    """ Sometimes people like to be prats and generate constructions like:
+    <p>[<em>This is probably a title</em>]</p>
+    
+    The problem is these horrid constructions can appear in variants:
+    <p><em>[This is probably a title]</em></p>
+    
+    
+    The variations on the obscene things one can do with brackets is enough
+    to motivate one to turn them into nice crunchy tags.
+    
+    This function has trouble when the open and close tags are at different
+    depths.
+    <p><b><i>[This is probably a title</i>]</b></p>
+    
+    In this case the regex mode should be used.
+    
+    
+    """
+    
+    for e in root:
+        class_ = None
+        if not e.text:
+            continue
+        if e.text[0] in brackets:
+            if len(e) > 0:
+                if e[-1].tail[-1] == brackets[e.text[0]]:
+                    class_ = bracket_class[e.text]
+                    e.text = e.text[1:] or None
+                    e[-1].tail = e[-1].tail[:-1] or None
+        else if e.text[0] in brackets and e.text[-1] == brackets[e.text[0]]:
+            e.text = e.text[1:-1]
+            class_ = bracket_class[e.text[0]]
+        if class_:
+            e.wrap_inner(e.makelement('span', {'class':class_}))
+            
+def convert_brackets_regex(data, mode):
+    """ Regex mode doesn't give a damn about mismatched tag depth ;).
+    
+    """
+    
+    def repl(m):
+        class_ = bracket_class[m[0]].encode()
+        return b'<span class="' + class_  + b'">'+ m[1] + b'</span>'
+    if mode == BRTAG_UNSAFE:
+        # Round brackets
+        data = regex.sub(rb'(?>=\w>)\(([^)(]{1,300})\)(?=<\w)', repl, data)
+        # Square brackets.
+        data = regex.sub(rb'(?>=\w>)\[([^)(]{1,300})\](?=<\w)', repl, data)
+
+    return data
+
 def prune_most_common_face(root):
     # Eliminate spammy explicit font declarations.
     # Recognizing that fonts may contain information, we only
@@ -141,14 +199,13 @@ tidy_cmd = regex.split(r'\s+', """tidy -c -w 0 --doctype html5 --quote-nbsp no
     --drop-proprietary-attributes yes --tidy-mark no --sort-attributes alpha 
     --output-html yes --output-encoding utf8 --css-prefix TIDY""")
     
-def crunch_file(filepath, xml_tags=False):
+def crunch_file(filepath, xml_tags=False, brtags=BRTAG_SAFE):
     filename = str(filepath)
     doc = lhtmlx.parse(filename)
     root = doc.getroot()
     prune_most_common_face(root)
     data = lhtmlx._html.tostring(root, encoding='utf8')
  
-    
     pTidy = subprocess.Popen(tidy_cmd, stdin = subprocess.PIPE, stdout = subprocess.PIPE)
     data = pTidy.communicate(data)[0]
     try:
@@ -156,6 +213,9 @@ def crunch_file(filepath, xml_tags=False):
     except:
         pass
     del doc, root
+    
+    if brtag_mode == BRTAG_UNSAFE:
+        data = convert_brackets_regex(data)
     
     doc = lhtmlx.parse(io.BytesIO(data), encoding='utf8')
     

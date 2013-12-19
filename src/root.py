@@ -1,5 +1,5 @@
 import cherrypy, os
-import config, show
+import config, show, tools
 
 # We expose everything we need to here.
 
@@ -70,4 +70,6 @@ class Root(object):
     @cherrypy.expose
     def disp_sutta_php(self, **kwargs):
         return show.fallback_disp_sutta(**kwargs)
-
+    
+    # HTML sutta processing functions.
+    tools = tools.Tools()

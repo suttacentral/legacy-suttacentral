@@ -60,6 +60,7 @@ class Config(dict):
         ['app', 'app_log_file'],
         ['app', 'dbr_cache_file'],
         ['app', 'exports_root'],
+        ['app', 'processed_root'],
         ['app', 'static_root'],
         ['app', 'templates_root'],
         ['app', 'text_root'],
