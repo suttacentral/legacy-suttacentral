@@ -1,8 +1,8 @@
 """Search tasks."""
 
-import textsearch
+from sc import textsearch
 
-from .helpers import *
+from tasks.helpers import *
 
 @task
 def clean():

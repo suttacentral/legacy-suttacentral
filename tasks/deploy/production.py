@@ -1,6 +1,6 @@
 """Deploy to production server tasks."""
 
-from ..helpers import *
+from tasks.helpers import *
 
 def _production_run(*commands):
     remote_run('sc-production@vps.suttacentral.net', [

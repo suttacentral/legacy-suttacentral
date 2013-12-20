@@ -4,12 +4,10 @@ import colorama
 import plumbum.commands
 import regex
 import sys
-
-from plumbum import local
 from invoke import task
+from plumbum import local
 
-import config
-import util
+from sc import config, util
 
 _PP_HINTS = {
     'Compile': 'Compiling',

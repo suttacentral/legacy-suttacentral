@@ -1,6 +1,6 @@
 """New Relic tasks."""
 
-from .helpers import *
+from tasks.helpers import *
 
 @task
 def update_ini():

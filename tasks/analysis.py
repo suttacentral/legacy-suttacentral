@@ -8,10 +8,12 @@ The json output is designed to be diff-friendly.
 
 """
 
-from .helpers import *
-import collections, json
-import lhtmlx, config
+import collections
+import json
 
+from sc import config, lhtmlx
+
+from tasks.helpers import *
 
 def analyze_path(path):
     by_tag = collections.defaultdict(collections.Counter)

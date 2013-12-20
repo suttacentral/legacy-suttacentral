@@ -1,6 +1,6 @@
 """Test tasks."""
 
-from .helpers import *
+from tasks.helpers import *
 
 def _run_tests(tests, url=None, phantomjs=False):
     environ = {}

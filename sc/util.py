@@ -8,7 +8,7 @@ import time
 from contextlib import contextmanager
 from datetime import datetime
 
-import config
+from sc import config
 
 @contextmanager
 def filelock(path, block=True):

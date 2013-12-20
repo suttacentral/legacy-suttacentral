@@ -1,6 +1,6 @@
 """Font tasks."""
 
-from .helpers import *
+from tasks.helpers import *
 
 @task
 def download_nonfree():

@@ -3,8 +3,9 @@
 import os
 import time
 
-import config
-from .helpers import *
+from sc import config
+
+from tasks.helpers import *
 
 TRAVIS_LOCAL_CONF = """\
 [global]
@@ -27,7 +28,7 @@ def prepare():
 def start_server():
     """Start a background server for the travis environment."""
     blurb(start_server)
-    run('cd src && python server.py &', fg=True)
+    run('invoke server &', fg=True)
     # Give time to server to warm up.
     time.sleep(10)
     notice('Awoken after for 10 seconds...')
@@ -36,4 +37,4 @@ def start_server():
 def stop_server():
     """Stop the background server for the travis environment."""
     blurb(stop_server)
-    run('pkill -f server.py')
+    run('pkill -f cherryd')

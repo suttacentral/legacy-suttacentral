@@ -1,8 +1,10 @@
-import sqlite3, threading, time, collections, functools, concurrent.futures, unicodedata, time, regex, jinja2
+import functools
+import sqlite3
+import threading
 from contextlib import contextmanager
 from html import escape
 
-import textfunctions, config, classes
+from sc import config, classes, textfunctions
 
 class PrettyRow(sqlite3.Row):
     def __repr__(self):

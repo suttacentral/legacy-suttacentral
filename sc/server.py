@@ -2,14 +2,12 @@
 
 import cherrypy
 
-import config
-import logger
+from sc import config, logger
 # Make sure to do this before importing root because it cascades into importing
 # scimm which autostarts the imm updater thread.
 logger.setup()
 
-import root
-import util
+from sc import root, util
 
 util.set_timezone()
 cherrypy_controller = root.Root()

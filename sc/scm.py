@@ -22,7 +22,7 @@ import time
 from datetime import datetime
 from plumbum.commands.processes import ProcessExecutionError
 
-import config
+from sc import config
 
 def _cached(function):
     key = function.__name__

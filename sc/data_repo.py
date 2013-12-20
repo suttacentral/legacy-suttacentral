@@ -2,9 +2,9 @@ from datetime import datetime
 from threading import Thread
 from plumbum import local
 
-import config
-from scm import data_scm
-from util import filelock
+from sc import config
+from sc.scm import data_scm
+from sc.util import filelock
 
 lock_path = config.tmp_dir / 'update_data.lock'
 

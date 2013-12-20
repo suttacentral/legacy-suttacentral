@@ -1,7 +1,6 @@
 import cherrypy
 
-import config
-import show
+from sc import config, show
 
 # We expose everything we need to here.
 

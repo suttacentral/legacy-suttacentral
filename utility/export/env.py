@@ -1,6 +1,6 @@
 # Setup sys.path to import modules from the project directory.
 
-from os.path import dirname, join, realpath
+from pathlib import Path
 import sys
 
-sys.path.insert(1, join(dirname(dirname(dirname(realpath(__file__)))), 'src'))
+sys.path.insert(1, str(Path(__file__).resolve().parents[2]))

@@ -1,9 +1,14 @@
-import lxml.html, collections, sqlite3, itertools, regex, math
-
-import textfunctions, config
-
+import collections
+import lxml.html
+import regex
+import sqlite3
 import sys
-sys.path.append(str(config.dict_sources_dir))
+from pathlib import Path
+
+sys.path.insert(1, str(Path(__file__).resolve().parents[1]))
+from sc import config, textfunctions
+
+sys.path.insert(1, str(config.dict_sources_dir))
 import cped_data
 
 class PrettyRow(sqlite3.Row):

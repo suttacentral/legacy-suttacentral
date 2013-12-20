@@ -1,7 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
 from urllib.parse import urljoin
 
-from ..helper import SCTestCase
+from tests.helper import SCTestCase
 
 class UrlTestCase(SCTestCase):
 

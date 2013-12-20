@@ -3,7 +3,7 @@ import logging
 import webassets
 from webassets.script import CommandLineEnvironment
 
-import config
+from sc import config
 
 """Asset (CSS, JavaScript) compilation."""
 

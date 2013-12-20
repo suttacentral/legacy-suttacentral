@@ -1,8 +1,8 @@
 """(Compiled CSS/JS) asset tasks."""
 
-import assets
+from sc import assets
 
-from .helpers import *
+from tasks.helpers import *
 
 @task
 def clean(older=False):

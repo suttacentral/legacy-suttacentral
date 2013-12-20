@@ -2,9 +2,10 @@
 
 import os
 
-import config
+from sc import config
+
 import tasks
-from .helpers import *
+from tasks.helpers import *
 
 @task
 def clean(aggressive=False):
@@ -24,9 +25,8 @@ def clean(aggressive=False):
 def daemonize():
     """Run the *HARDCORE* server."""
     blurb(daemonize)
-    os.chdir(str(config.source_dir))
     os.environ['NEW_RELIC_CONFIG_FILE'] = str(config.base_dir / 'newrelic.ini')
-    os.execlp('newrelic-admin', 'newrelic-admin', 'run-program', 'cherryd', '-i', 'server')
+    os.execlp('newrelic-admin', 'newrelic-admin', 'run-program', 'cherryd', '-i', 'sc.server')
 
 @task
 def reset():
@@ -48,5 +48,4 @@ def update_data():
 def server():
     """Run the local development server."""
     blurb(server)
-    os.chdir(str(config.source_dir))
-    os.execlp('python', 'python', 'server.py')
+    os.execlp('cherryd', 'cherryd', '-i', 'sc.server')

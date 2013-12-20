@@ -10,7 +10,8 @@ Usage:
 """
 
 import logging
-import config
+
+from sc import config
 
 def getLogger(name=None):
     return logging.getLogger(name)

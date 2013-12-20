@@ -38,8 +38,8 @@ Usage::
  
 """ 
 
-__package__ = 'lhtmlx'
-import lhtmlx
+__package__ = 'sc.lhtmlx'
+from sc import lhtmlx
 from lxml.html.builder import ElementMaker
 E = ElementMaker(makeelement=lhtmlx.utf8parser.makeelement)
 del ElementMaker, lhtmlx

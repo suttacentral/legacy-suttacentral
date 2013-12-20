@@ -1,4 +1,4 @@
-from ..helper import SCTestCase
+from tests.helper import SCTestCase
 
 class AdminTestCase(SCTestCase):
 

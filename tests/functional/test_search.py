@@ -1,4 +1,6 @@
-from ..helper import SCTestCase, Keys
+from selenium.webdriver.common.keys import Keys
+
+from tests.helper import SCTestCase
 
 class SearchTestCase(SCTestCase):
 

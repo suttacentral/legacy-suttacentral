@@ -3,7 +3,7 @@
 """Create newrelic.ini from configuration"""
 
 import env
-import config
+from sc import config
 
 if __name__ == '__main__':
 

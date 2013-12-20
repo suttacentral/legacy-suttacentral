@@ -4,12 +4,8 @@ import cherrypy
 import regex
 
 import env
-import config
-import logger
-import root
-import scimm
-import show
-import util
+
+from sc import config, logger, root, scimm, show, util
 
 def paths():
     dbr = scimm.imm()

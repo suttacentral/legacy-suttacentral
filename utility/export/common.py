@@ -8,7 +8,8 @@ import sys
 import time
 
 import env
-import config
+
+from sc import config
 
 license_path = config.base_dir / 'LICENSE.txt'
 export_code_dir = pathlib.Path(__file__).parent

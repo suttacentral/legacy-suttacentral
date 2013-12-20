@@ -1,6 +1,6 @@
 """Deploy to staging server tasks."""
 
-from ..helpers import *
+from tasks.helpers import *
 
 def _branch_or_pull(branch):
     if branch:

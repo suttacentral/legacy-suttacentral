@@ -8,8 +8,10 @@ import plumbum
 import tempfile
 
 import env
+
+from sc import config
+
 from common import *
-import config
 
 index_html_path = export_code_dir / 'offline_index.html'
 readme_path = export_code_dir / 'offline_readme.txt'

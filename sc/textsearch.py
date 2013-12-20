@@ -1,11 +1,16 @@
-import os, threading, sqlite3, regex, lxml.html, shutil, functools, collections
+import os
+import threading
+import sqlite3
+import regex
+import lxml.html
+import functools
 from array import array
 from contextlib import contextmanager
-import declensions, config
-from classes import FulltextResultsCategory, HTMLRow
 from html import escape
 
-from textfunctions import *
+from sc import config, declensions
+from sc.classes import FulltextResultsCategory, HTMLRow
+from sc.textfunctions import *
 
 class PrettyRow(sqlite3.Row):
     def __repr__(self):

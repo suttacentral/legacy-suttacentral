@@ -8,16 +8,11 @@ import socket
 import time
 import urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
-import lhtmlx
 
-import assets
-import config
-import data_repo
-import scimm
-from scm import scm, data_scm
-import util
-from menu import menu_data
-from classes import Parallel, Sutta
+from sc import assets, config, data_repo, lhtmlx, scimm, util
+from sc.menu import menu_data
+from sc.scm import scm, data_scm
+from sc.classes import Parallel, Sutta
 
 import logging
 logger = logging.getLogger(__name__)

@@ -66,7 +66,6 @@ class Config(dict):
     ]
 
     base_dir          = _file_path.parents[1]
-    source_dir        = base_dir / 'src'
     global_conf_path  = base_dir / 'global.conf'
     local_conf_path   = base_dir / 'local.conf'
 

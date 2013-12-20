@@ -1,6 +1,8 @@
-import bisect, math, functools
-import scimm, classes, textfunctions
+import bisect
+import math
 from html import escape
+
+from sc import classes, scimm, textfunctions
 
 class Ranker:
     def __init__(self, query, lang):

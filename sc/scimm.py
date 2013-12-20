@@ -1,24 +1,17 @@
 #!/usr/bin/env python3.3
 
-import cherrypy
-import collections
 import csv
-import functools
 import hashlib
-import itertools
 import logging
 import math
-import os
-import pickle
 import regex
 import threading
 import time
-from datetime import datetime
 from collections import OrderedDict, defaultdict, namedtuple
+from datetime import datetime
 
-import config
-import textfunctions
-from classes import *
+from sc import config, textfunctions
+from sc.classes import *
 
 logger = logging.getLogger(__name__)
 
@@ -429,7 +422,7 @@ class _Imm:
         """
         import glob
         text_paths = {}
-        text_refs = collections.defaultdict(list)
+        text_refs = defaultdict(list)
         
         for filepath in config.text_dir.glob('**/*.html'):
             lang = filepath.relative_to(config.text_dir).parts[0]
