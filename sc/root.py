@@ -17,9 +17,11 @@ def get_cookie_or_param(name):
         return None
 
 def remove_trailing_slash():
-    path = cherrypy.request.path_info
+    request = cherrypy.serving.request
+    path = request.path_info
     if path != '/' and path.endswith('/'):
-        raise cherrypy.HTTPRedirect(path[:-1], 301)
+        url = cherrypy.url(path[:-1], request.query_string)
+        raise cherrypy.HTTPRedirect(url, 301)
 
 def set_offline():
     if get_cookie_or_param('offline'):

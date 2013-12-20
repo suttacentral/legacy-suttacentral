@@ -1,4 +1,5 @@
 import functools
+import regex
 import sqlite3
 import threading
 from contextlib import contextmanager

@@ -8,6 +8,10 @@ class SearchTestCase(SCTestCase):
         self.goto('/')
         assert 'body' == self.active_element.tag_name
 
+    def test_bug_69_regression(self):
+        self.goto('/search/?query=sutta')
+        self.assertIn('You searched: sutta', self.css('body').text)
+
     def test_tab_focuses_search_input(self):
         self.goto('/')
         self.active_element.send_keys(Keys.TAB)
