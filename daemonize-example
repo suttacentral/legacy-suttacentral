@@ -5,8 +5,7 @@
 HOME=/path/to/home
 SC_VIRTUALENV="$HOME/.virtualenvs/suttacentral"
 SC_ROOT="$HOME/suttacentral"
-export NEW_RELIC_ENVIRONMENT=production
 
 source "$SC_VIRTUALENV/bin/activate"
 cd "$SC_ROOT"
-exec invoke daemonize
+exec invoke server
