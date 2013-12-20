@@ -1,11 +1,12 @@
 import cherrypy
 
-from sc import config, show
+import sc
+from sc import show
 
 # We expose everything we need to here.
 
 def error_page_404(status, message, traceback, version):
-    return (config.static_dir / '404.html').open('r', encoding='utf-8').read()
+    return (sc.static_dir / '404.html').open('r', encoding='utf-8').read()
 
 def get_cookie_or_param(name):
     if name in cherrypy.request.cookie:

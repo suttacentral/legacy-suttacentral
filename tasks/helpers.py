@@ -7,7 +7,7 @@ import sys
 from invoke import task
 from plumbum import local
 
-from sc import config, util
+from sc import util
 
 _PP_HINTS = {
     'Compile': 'Compiling',

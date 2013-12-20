@@ -3,6 +3,7 @@
 import os
 import time
 
+import sc
 from sc import config
 
 from tasks.helpers import *
@@ -18,8 +19,8 @@ TRAVIS_LOCAL_CONF = """\
 def prepare():
     """Prepare the travis environment."""
     blurb(prepare)
-    assert not config.local_conf_path.exists()
-    with config.local_conf_path.open('w', encoding='utf-8') as f:
+    assert not sc.local_config_path.exists()
+    with sc.local_config_path.open('w', encoding='utf-8') as f:
         f.write(TRAVIS_LOCAL_CONF)
     # Make sure we reload config after config gets updated...
     config.reload()

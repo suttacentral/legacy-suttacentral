@@ -9,6 +9,7 @@ import time
 import urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
 
+import sc
 from sc import assets, config, data_repo, lhtmlx, scimm, util
 from sc.menu import menu_data
 from sc.scm import scm, data_scm
@@ -30,12 +31,12 @@ def jinja2_environment():
         return __jinja2_environment
 
     env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(str(config.templates_dir)),
+        loader=jinja2.FileSystemLoader(str(sc.templates_dir)),
         extensions=[AssetsExtension],
         trim_blocks=True,
         lstrip_blocks=True,
     )
-    env.assets_environment = assets.env
+    env.assets_environment = assets.get_env()
 
     env.filters['date'] = util.format_date
     env.filters['time'] = util.format_time
@@ -195,7 +196,7 @@ class DownloadsView(InfoView):
             latest_path = exports_path / latest_filename
             if latest_path.exists():
                 local_path = latest_path.resolve()
-                relative_url = local_path.relative_to(config.static_dir)
+                relative_url = local_path.relative_to(sc.static_dir)
                 data.append({
                     'filename': local_path.name,
                     'url': '/{}'.format(relative_url),
@@ -206,7 +207,7 @@ class DownloadsView(InfoView):
         return data
 
     def __offline_data(self):
-        return self.__file_data('sc-offline', config.exports_dir)
+        return self.__file_data('sc-offline', sc.exports_dir)
 
 class ParallelView(ViewBase):
     """The view for the sutta parallels page."""

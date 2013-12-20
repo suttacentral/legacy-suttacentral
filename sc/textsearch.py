@@ -8,7 +8,8 @@ from array import array
 from contextlib import contextmanager
 from html import escape
 
-from sc import config, declensions
+import sc
+from sc import declensions
 from sc.classes import FulltextResultsCategory, HTMLRow
 from sc.textfunctions import *
 
@@ -124,10 +125,10 @@ class SectionSearch:
         self.lang_code = lang_code
         self.extensions = extensions
         self.tags = tags
-        self.path = config.text_dir / lang_code
+        self.path = sc.text_dir / lang_code
         if not self.path.exists():
             raise Exception("Path {} does not exist".format(self.path))
-        self.db_path = config.db_dir / 'search_{}.sqlite'.format(lang_code)
+        self.db_path = sc.db_dir / 'search_{}.sqlite'.format(lang_code)
         self.alias_map = {}
         for group in self.aliases:
             stemmed = [self.stemmer(t) for t in group]

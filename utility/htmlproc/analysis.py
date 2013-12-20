@@ -9,8 +9,9 @@ The json output is designed to be diff-friendly.
 """
 
 import collections, json
-import lhtmlx
-import config
+
+import sc
+from sc import lhtmlx
 
 def analyze_path(path):
     by_tag = collections.defaultdict(collections.Counter)
@@ -41,10 +42,10 @@ def analyze_path(path):
             'by_class': {class_: dict(val) for class_, val in by_class.items()},
             'pnum_classes': pnum_classes}
 
-data_file_json = config.base_dir / 'utility' / 'tag_data.json'
+data_file_json = sc.base_dir / 'utility' / 'tag_data.json'
 
 def save_sc_class_data():
-    tag_class_data = analyze_path(config.text_dir)
+    tag_class_data = analyze_path(sc.text_dir)
     json.dump(tag_class_data, data_file_json.open('w'), indent=4, sort_keys=1)
 
 def load_sc_class_data():
@@ -53,10 +54,10 @@ def load_sc_class_data():
 def test():
     test = """
 import imp
-import env, config
+import env, sc
 import htmlproc.analysis
 htmlproc.analysis.save_sc_class_data()
 htmlproc.analysis.load_sc_class_data()
 
-by_class = htmlproc.analysis.analyze_path(config.text_dir)
+by_class = htmlproc.analysis.analyze_path(sc.text_dir)
     """

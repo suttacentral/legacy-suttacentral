@@ -66,9 +66,3 @@ def wrap(text, width=80, indent=0):
             break_on_hyphens=False) for line in text.splitlines()
     ])
     return textwrap.indent(text.strip(), ' ' * indent)
-
-def set_timezone(tz=None):
-    if not tz:
-        tz = config.timezone
-    os.environ['TZ'] = tz
-    time.tzset()

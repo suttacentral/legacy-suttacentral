@@ -5,7 +5,7 @@ import regex
 
 import env
 
-from sc import config, logger, root, scimm, show, util
+from sc import app, config, scimm, show
 
 def paths():
     dbr = scimm.imm()
@@ -41,6 +41,7 @@ def get_path(path):
 
 def check_paths():
     for path, obj in paths():
+        print(path)
         try:
             result = get_path(path)
             exception = None
@@ -63,11 +64,9 @@ def setup():
         'app_log_level': 'CRITICAL',
         'console_log_level': 'CRITICAL',
     })
-    logger.setup()
-    util.set_timezone()
-    cherrypy.config.update(config['global'])
+    app.setup()
+    app.mount()
     cherrypy.server.unsubscribe()
-    cherrypy.tree.mount(root.Root(), config=config.for_cherrypy())
     cherrypy.engine.start()
 
 if __name__ == '__main__':

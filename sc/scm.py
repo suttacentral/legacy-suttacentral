@@ -22,6 +22,7 @@ import time
 from datetime import datetime
 from plumbum.commands.processes import ProcessExecutionError
 
+import sc
 from sc import config
 
 def _cached(function):
@@ -102,5 +103,5 @@ class Scm(object):
             return plumbum.local['git'](*args).strip()
 
 _timeout = 10 if config['global']['engine.autoreload.on'] else None
-scm = Scm(config.base_dir, _timeout)
-data_scm = Scm(config.data_dir, 1)
+scm = Scm(sc.base_dir, _timeout)
+data_scm = Scm(sc.data_dir, 1)

@@ -1,4 +1,13 @@
-#!/usr/bin/env python3.3
+"""SuttaCentral In-Memory Module.
+
+Example:
+    >>> from sc import scimm
+    >>> imm = scimm.imm()
+    >>> imm.suttas.get('dn1')
+    < Sutta: "Brahmajāla"
+        uid=dn1,
+        ... >
+"""
 
 import csv
 import hashlib
@@ -10,6 +19,7 @@ import time
 from collections import OrderedDict, defaultdict, namedtuple
 from datetime import datetime
 
+import sc
 from sc import config, textfunctions
 from sc.classes import *
 
@@ -45,7 +55,7 @@ def numsortkey(input, index=0):
 
 def table_reader(tablename):
     """ Like csv.DictReader but returns named tuples (2x faster also) """
-    with (config.table_dir / (tablename + '.csv')).open('r',
+    with (sc.table_dir / (tablename + '.csv')).open('r',
               encoding='utf-8', newline='') as f:
         reader = csv.reader(f, dialect=ScCsvDialect)
         field_names = next(reader)
@@ -424,8 +434,8 @@ class _Imm:
         text_paths = {}
         text_refs = defaultdict(list)
         
-        for filepath in config.text_dir.glob('**/*.html'):
-            lang = filepath.relative_to(config.text_dir).parts[0]
+        for filepath in sc.text_dir.glob('**/*.html'):
+            lang = filepath.relative_to(sc.text_dir).parts[0]
             if lang not in text_paths:
                 text_paths[lang] = {}
             uid = filepath.name.replace('.html', '')
@@ -608,6 +618,8 @@ def atomicfy(start, stack=None):
         yield b't' + str(type(obj)).encode()
 
 _imm = None
+_updater = None
+
 def imm():
     """ Get an instance of the DBR.
 
@@ -623,11 +635,14 @@ def imm():
 
     """
 
-    if _imm:
-        return _imm
-    else:
-        updater.ready.wait()
-        return _imm
+    global _imm
+
+    if not _imm:
+        if _updater:
+            _updater.ready.wait()
+        else:
+            _imm = _Imm(42)
+    return _imm
 
 def _mtime_recurse(path, timestamp=0):
     "Fast function for finding the latest mtime in a folder structure"
@@ -651,14 +666,14 @@ class Updater(threading.Thread):
     ready = threading.Event() # Signal that the imm is ready.
     
     def get_change_timestamp(self):
-        timestamp = str(config.table_dir.stat().st_mtime_ns)
+        timestamp = str(sc.table_dir.stat().st_mtime_ns)
 
-        if config.app['runtime_tests']:
-            timestamp += str(_mtime_recurse(config.text_dir))
+        if config.runtime_tests:
+            timestamp += str(_mtime_recurse(sc.text_dir))
         else:
             # Detecting changes to git repository should be enough
             # for server environment.
-            timestamp += str((config.data_dir / '.git').stat().st_mtime_ns)
+            timestamp += str((sc.data_dir / '.git').stat().st_mtime_ns)
         return timestamp
 
     def run(self):
@@ -677,7 +692,7 @@ class Updater(threading.Thread):
                     _imm = _Imm(timestamp)
                     self.ready.set()
                     logger.info('imm build took {} seconds'.format(time.time() - start))
-                    if config.app['runtime_tests']:
+                    if config.runtime_tests:
                         # Do consistency checking.
                         _imm._check_md5()
                 except Exception as e:
@@ -687,12 +702,10 @@ class Updater(threading.Thread):
 
             time.sleep(refresh_interval)
 
-updater = Updater(name='imm_updater', daemon=True)
+def start_updater():
+    """Start the background updater."""
 
-if __name__ == '__main__':
-    start=time.time()
-    imm = _Imm(42)
-    print('Imm build took {}s'.format(time.time()-start))
-else:
-    updater.start()
-    
+    global _updater
+    if not _updater:
+        _updater = Updater(name='imm_updater', daemon=True)
+        _updater.start()

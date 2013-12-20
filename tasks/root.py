@@ -2,7 +2,7 @@
 
 import os
 
-from sc import config
+import sc
 
 import tasks
 from tasks.helpers import *
@@ -25,7 +25,7 @@ def clean(aggressive=False):
 def daemonize():
     """Run the *HARDCORE* server."""
     blurb(daemonize)
-    os.environ['NEW_RELIC_CONFIG_FILE'] = str(config.base_dir / 'newrelic.ini')
+    os.environ['NEW_RELIC_CONFIG_FILE'] = str(sc.base_dir / 'newrelic.ini')
     os.execlp('newrelic-admin', 'newrelic-admin', 'run-program', 'cherryd', '-i', 'sc.server')
 
 @task
@@ -41,7 +41,7 @@ def reset():
 def update_data():
     """Update the data repository."""
     blurb(update_data)
-    with local.cwd(config.data_dir):
+    with local.cwd(sc.data_dir):
         run('git pull')
 
 @task
