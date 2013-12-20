@@ -20,6 +20,7 @@ collections = [
     'tmp',
     'travis',
 ]
+
 for collection in collections:
     exec('from tasks import {} as module'.format(collection))
     ns.add_collection(module)

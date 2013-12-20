@@ -2,11 +2,13 @@
 
 from tasks.helpers import *
 
+
 def _production_run(*commands):
     remote_run('sc-production@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
     ] + list(commands))
+
 
 @task
 def full():
@@ -29,6 +31,7 @@ def full():
         'invoke assets.clean --older'
     )
 
+
 @task
 def nonfree_fonts(force=False):
     """Copy local nonfree fonts to the production server."""
@@ -42,6 +45,7 @@ def nonfree_fonts(force=False):
         command = command.replace('rsync', 'rsync -n')
     run(command, fg=True)
 
+
 @task
 def quick():
     """Deploy simple changes to the production server."""
@@ -54,6 +58,7 @@ def quick():
         'invoke assets.clean --older'
     )
 
+
 @task
 def update_data():
     """Deploy data changes to the production server."""
@@ -62,6 +67,7 @@ def update_data():
         'cd data',
         'git pull'
     )
+
 
 @task
 def update_search():

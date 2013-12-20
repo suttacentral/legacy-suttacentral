@@ -8,12 +8,14 @@ from sc import config
 
 from tasks.helpers import *
 
+
 TRAVIS_LOCAL_CONF = """\
 [global]
     engine.autoreload.on: False
 [app]
     compile_assets: True
 """
+
 
 @task
 def prepare():
@@ -25,6 +27,7 @@ def prepare():
     # Make sure we reload config after config gets updated...
     config.reload()
 
+
 @task
 def start_server():
     """Start a background server for the travis environment."""
@@ -33,6 +36,7 @@ def start_server():
     # Give time to server to warm up.
     time.sleep(10)
     notice('Awoken after for 10 seconds...')
+
 
 @task
 def stop_server():

@@ -10,7 +10,6 @@ from tasks.helpers import *
 def update_ini():
     """Update the newrelic.ini file."""
     blurb(update_ini)
-
     if not config.newrelic_license_key:
         raise Exception('newrelic_license_key must be defined')
     ini_path = sc.base_dir / 'newrelic.ini'

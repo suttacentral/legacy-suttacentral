@@ -4,6 +4,7 @@ from sc import assets
 
 from tasks.helpers import *
 
+
 @task
 def clean(older=False):
     """Delete compiled (CSS/JS) assets and cache files."""
@@ -12,6 +13,7 @@ def clean(older=False):
         assets.clean(older=True)
     else:
         assets.clean
+
 
 @task(aliases=('build',))
 def compile():

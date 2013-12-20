@@ -2,6 +2,7 @@
 
 from tasks.helpers import *
 
+
 @task
 def clean(older=False):
     """Delete offline SuttaCentral export files."""
@@ -11,6 +12,7 @@ def clean(older=False):
             '-exec rm {} \;')
     else:
         rm_rf('static/exports/sc-offline-*')
+
 
 @task
 def create(host='localhost:8800', force=False, quiet=False, wait=None):
@@ -26,10 +28,12 @@ def create(host='localhost:8800', force=False, quiet=False, wait=None):
     command += ' {}'.format(host)
     run(command)
 
+
 @task
 def create_dev():
     """Create an offline SuttaCentral export for a development environment."""
     create(force=True)
+
 
 @task
 def create_production():

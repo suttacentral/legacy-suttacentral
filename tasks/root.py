@@ -12,7 +12,6 @@ from tasks.helpers import *
 @task
 def clean(aggressive=False):
     """Remove unnecessary files."""
-
     tasks.log.clean()
     tasks.tmp.clean()
     if aggressive:
@@ -29,7 +28,6 @@ def clean(aggressive=False):
 def reset():
     """Reset the environment."""
     blurb(reset)
-
     clean(aggressive=True)
     update_data()
     tasks.dictionary.build()
@@ -40,7 +38,6 @@ def reset():
 def server():
     """Run the server."""
     blurb(server)
-
     if config.newrelic_license_key:
         tasks.newrelic.update_ini()
         os.environ['NEW_RELIC_ENVIRONMENT'] = config.newrelic_environment
@@ -54,7 +51,6 @@ def server():
 @task
 def update_data():
     """Update the data repository."""
-
     blurb(update_data)
     with local.cwd(sc.data_dir):
         run('git pull')
