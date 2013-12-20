@@ -1,9 +1,10 @@
 import cherrypy
 import copy
-import pathlib
 import sys
+from cherrypy.lib.reprconf import as_dict
+from pathlib import Path
 
-_file_path = pathlib.Path(__file__).resolve()
+_file_path = Path(__file__).resolve()
 
 class Config(dict):
     """A flexible and convenient configuration class for SuttaCentral.
@@ -102,10 +103,10 @@ class Config(dict):
         This will stringify any pathlib.Paths as cherrypy does not play
         nicely with such objects.
         """
-        result = self.__deepcopy(self)
+        result = copy.deepcopy(self)
         def stringify(dct):
             for key, value in dct.items():
-                if isinstance(value, self.__Path):
+                if isinstance(value, Path):
                     dct[key] = str(value)
                 elif isinstance(value, dict):
                     stringify(value)
@@ -114,12 +115,6 @@ class Config(dict):
 
     def __init__(self):
         dict.__init__(self)
-        # Manually copy these references to this object because they disappear
-        # from global scope when we do the module replacement trick. See the
-        # last line of this file.
-        self.__as_dict = cherrypy.lib.reprconf.as_dict
-        self.__deepcopy = copy.deepcopy
-        self.__Path = pathlib.Path
         self.__setup()
 
     def __getattr__(self, name):
@@ -131,9 +126,9 @@ class Config(dict):
             raise AttributeError("Config has no attribute '%s'" % name)
 
     def __setup(self):
-        config = self.__as_dict(str(self.global_conf_path))
+        config = as_dict(str(self.global_conf_path))
         try:
-            local_config = self.__as_dict(str(self.local_conf_path))
+            local_config = as_dict(str(self.local_conf_path))
             self.__deep_update(config, local_config)
         except IOError:
             pass
@@ -170,18 +165,9 @@ class Config(dict):
                 if path[0] != '/':
                     self[key][subkey] = base / path
 
-__config = Config()
-
 # Add the configuration files to trigger autoreload.
-cherrypy.engine.autoreload.files.add(str(__config.global_conf_path))
-cherrypy.engine.autoreload.files.add(str(__config.local_conf_path))
-
-# We manually add this file because cherrypy autoreloader doesn't recognize
-# it, probably because of the module munging.
-cherrypy.engine.autoreload.files.add(str(_file_path))
+cherrypy.engine.autoreload.files.add(str(Config.global_conf_path))
+cherrypy.engine.autoreload.files.add(str(Config.local_conf_path))
 
 # Do not use autoreloader against plumbum
 cherrypy.engine.autoreload.match = r'^(?!plumbum).+'
-
-# See http://mail.python.org/pipermail/python-ideas/2012-May/014969.html
-sys.modules[__name__] = __config
