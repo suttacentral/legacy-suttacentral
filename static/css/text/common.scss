@@ -16,10 +16,12 @@
         hgroup > h2, hgroup > h3 {
             font-family: $tharlon;
             letter-spacing: 0;
+            line-height: 2em;
         }
     }
 
     #metaarea p {
         font-family: $tharlon;
+        line-height: 2em;
     }
 }
