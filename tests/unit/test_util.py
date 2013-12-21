@@ -47,3 +47,21 @@ class UnitsTest(unittest.TestCase):
                  '   well-directed mind.'
         result = util.wrap(input, width=40, indent=3)
         self.assertEqual(output, result)
+    
+    sortdata1 = ['1x', '1.1x', '1.1.1x', '1.2.1x', '1.2.3x', '1.3x']
+    sortdata2 = ['x1', 'x1.1', 'x1.1.1', 'x1.2', 'x1.2.1', 'x1.2.1.1', 'x1.2.2']
+    def test_numericsortkey(self):
+        # numeric sort only gets one of these cases right.
+        data1 = self.sortdata1
+        self.assertNotEqual(data1, sorted(data1, key=util.numericsortkey))
+        
+        data2 = self.sortdata2
+        self.assertEqual(data2, sorted(data2, key=util.numericsortkey))
+    
+    def test_humansortkey(self):
+        # human sort gets both correct.
+        data1 = self.sortdata1
+        self.assertEqual(data1, sorted(data1, key=util.humansortkey))
+        
+        data2 = self.sortdata2
+        self.assertEqual(data2, sorted(data2, key=util.humansortkey))
