@@ -2,7 +2,12 @@ import bs4
 import os
 import pathlib
 import regex
+import sys
 import textwrap
+from bs4 import Tag
+from functools import reduce
+
+sys.path.insert(1, str(pathlib.Path('.').resolve().parents[1]))
 
 base_dir = pathlib.Path('.')
 originals_dir = base_dir / 'originals'
@@ -15,14 +20,6 @@ output_dn_dir = output_dir / 'dn'
 output_mn_dir = output_dir / 'mn'
 output_sn_dir = output_dir / 'sn'
 
-burmese_numbers = list('๐၁၂၃၄၅၆၇၈၉')
-numbers_re = regex.compile('|'.join(burmese_numbers))
-
-burmese_namo_tassa = 'နမော တဿ ဘဂဝတော'
-burmese_translation = 'မြန်မာပြန်'
-burmese_vagga = 'ဝဂ်'
-burmese_sutta = 'သုတ်'
-
 output_template = """\
 <!DOCTYPE html>
 <html>
@@ -30,7 +27,7 @@ output_template = """\
 <meta charset="UTF-8">
 <meta author="ပိဋကတ်တော် မြန်မာပြန်ဌာနမှ သုတ္တန် ပိဋကတ်တော်ကို ပါဠိဘာသာမှ ပြန်ဆိုသည်။">
 <title>{title}</title>
-</head>
+{css_html}</head>
 <body>
 <div id="text" lang="my">
 <div id="toc">
@@ -52,7 +49,7 @@ output_template = """\
 </html>
 """
 
-def output_html(title=None, division=None, content=None, vagga=None):
+def output_html(title=None, division=None, content=None, vagga=None, css=False):
     assert title
     assert division
     assert content
@@ -60,8 +57,12 @@ def output_html(title=None, division=None, content=None, vagga=None):
         vagga_html = '<h3>{}</h3>\n'.format(vagga)
     else:
         vagga_html = ''
+    if css:
+        css_html = '<link href="sc.css" rel="stylesheet" type="text/css">\n'
+    else:
+        css_html = ''
     return output_template.format(title=title, division=division,
-        content=content, vagga_html=vagga_html)
+        content=content, vagga_html=vagga_html, css_html=css_html)
 
 def clean(text):
     return regex.sub(r'\s+', ' ', text.strip())
@@ -74,6 +75,12 @@ def makedirs():
 
 def soup(text):
     return bs4.BeautifulSoup(text)
+
+def soup_body_lines(text):
+    def line_elements(el):
+        return type(el) is Tag and hasattr(el, 'text') and \
+               el.text.strip() != ''
+    return filter(line_elements, soup(text).body)
 
 def tagit(tag, text):
     return '<{0}>{1}</{0}>\n'.format(tag, text)
@@ -115,7 +122,45 @@ def curly_quote_word(word):
         word = word[0:i] + quote + word[i+length:]
     return word
 
-_burmese_number_dict = { str(i): c for i, c in enumerate(burmese_numbers) }
+_log_file = (tmp_dir / 'log.txt').open('w', encoding='utf-8')
+
+def log(msg):
+    _log_file.write(msg + '\n')
+
+def is_namo_tassa_line(text):
+    return text.startswith('နမော တဿ ဘဂဝတော အရဟတော')
+
+def is_translation_line(text):
+    return text == 'မြန်မာပြန်'
+
+def is_vagga_line(text):
+    return text.endswith('ဝဂ်')
+
+def is_sutta_line(text):
+    return text.endswith('သုတ်') and _digit_re.match(text[0])
+
+_numbers = list('ဝ၁၂၃၄၅၆၇၈၉')
+_number_dict = { str(i): c for i, c in enumerate(_numbers) }
+_digit_re = regex.compile('|'.join(_numbers))
+_number_re = regex.compile("""^
+                              ((?:{})+)       # the number
+                              (\s*(?:-|။)\s*) # a breaker
+                              (.*)            # everything else
+                              $""".format(_digit_re.pattern),
+                           regex.VERBOSE)
+
 def burmize_number(n):
-    return ''.join([_burmese_number_dict.get(c, '') for c in list(str(n))])
-    
+    return ''.join([_number_dict.get(c, '') for c in list(str(n))])
+
+def parse_numbers(text):
+    numbers = []
+    while True:
+        match = _number_re.match(text)
+        if match:
+            digits = [_numbers.index(c) for c in list(match[1])]
+            number = reduce(lambda t, n: (t * 10) + n, digits, 0)
+            numbers.append(number)
+            text = match[3]
+        else:
+            break
+    return numbers
