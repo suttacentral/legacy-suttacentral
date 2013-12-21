@@ -2,6 +2,7 @@ import cherrypy
 
 import config
 import show
+import tools
 
 # We expose everything we need to here.
 
@@ -44,6 +45,7 @@ class Root(object):
 
     def __init__(self):
         self.admin = Admin()
+        self.tools = tools.Tools()
 
     @cherrypy.expose
     def default(self, *args, **kwargs):
