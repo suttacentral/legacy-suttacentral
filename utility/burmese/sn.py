@@ -9,30 +9,10 @@ from lib import *
 
 from sc.scimm import numsortkey
 
-line_fixes = {
-    # SN4
-    '၊ ၁-တပေါကမ္မသုတ်': '၁-တပေါကမ္မသုတ်',
-    # SN15
-    '-၁-တိဏကဋ္ဌသုတ်': '၁-တိဏကဋ္ဌသုတ်',
-    # SN17
-    '၃-သုဝဏ္ဏနိက္ခသုတ်စသော (၈) သုတ်': '၃-၁ဝ-သုဝဏ္ဏနိက္ခသုတ်စသော (၈) သုတ်',
-    # SN23
-    '၁-မာရာဒိသုတ္တ ဧကာဒသကသုတ်': '၁-၁၁-မာရာဒိသုတ္တ ဧကာဒသကသုတ်',
-    # SN35
-    '၃-ပဌမ သမုဒ္ဒသုတ်': '၁-ပဌမ သမုဒ္ဒသုတ်',
-    # SN46
-    '၃၁၂-၃၂၃- ပုနဂင်္ဂ ါနဒီအာဒိသုတ်': '၁-၁၂-ပုနဂင်္ဂ ါနဒီအာဒိသုတ်', 
-    '၃၂၄-၃၃၃-တထာဂတာဒိသုတ်': '၁-၁ဝ-တထာဂတာဒိသုတ်',
-    '၃၃၄-၃၄၅-ပုနဗလာဒိသုတ်': '၁-၁၂-ပုနဗလာဒိသုတ်',
-    '၃၄၆-၃၅၆-ပုနဧသနာဒိသုတ်': '၁-၁ဝ-ပုနဧသနာဒိသုတ်',
-    '၃၅၇-၃၆၆-ပုနသြဃာဒိသုတ်': '၁-၁ဝ-ပုနသြဃာဒိသုတ်',
-    # SN54
-    '-၅-ဒုတိယ ဖလသုတ်': '၅-ဒုတိယ ဖလသုတ်',
-    '၄.ဒုတိယ အာနန္ဒသုတ်': '၄-ဒုတိယ အာနန္ဒသုတ်',
-    # SN55
-    '၁-ဒုတိယ အဘိသန္ဒသုတ်': '၂-ဒုတိယ အဘိသန္ဒသုတ်',
-    '၁-တတိယ အဘိသန္ဒသုတ်': '၃-တတိယ အဘိသန္ဒသုတ်',
-}
+extra_sutta_lines = [
+    '၂၁-၅ဝ-ဇလာဗုဇာဒိဒါနူပကာရသုတ် သုံးဆယ်',  # sn29
+    '၂၃-၁၁၂-သာရဂန္ဓာဒိဒါနူပကာရ သုတ်ကိုးဆယ်',  # sn31
+]
 
 division = 'သံယုတ္တနိကာယ်'
 burmese_samyutta = 'သံယုတ်'
@@ -64,7 +44,7 @@ def extract_suttas(path, subdivision_number, id_map):
         add_to_lst(next_path)
     return extract_suttas_from_list(lst, subdivision_number, id_map)
 
-def clean_elements(lst):
+def clean_elements(lst, subdivision_number):
     for el in lst:
         if type(el) is not Tag:
             continue
@@ -75,7 +55,6 @@ def clean_elements(lst):
         text = clean(el.text)
         if text == '' or regex.match(r'^-+$', text):
             continue
-        text = line_fixes.get(text, text)
         yield el, text
 
 def extract_suttas_from_list(lst, subdivision_number, id_map):
@@ -85,13 +64,13 @@ def extract_suttas_from_list(lst, subdivision_number, id_map):
     index = 0
     base_number = 0
     last_number = 0
-    for el, text in clean_elements(lst):
+    for el, text in clean_elements(lst, subdivision_number):
         if text == '' or is_namo_tassa_line(text) or \
                          is_translation_line(text) or \
                          text == division:
             #log('IGNORE: {}'.format(text))
             pass
-        elif is_sutta_line(text):
+        elif is_sutta_line(text) or text in extra_sutta_lines:
             numbers = parse_numbers(text)
             if len(numbers) == 0 or len(numbers) > 2:
                 raise(Exception(text))
@@ -108,12 +87,6 @@ def extract_suttas_from_list(lst, subdivision_number, id_map):
             except IndexError:
                 test_number = None
             if sutta_number != test_number:
-                # # Force in this edge case...
-                # if '-' not in sutta_number and '-' in test_number:
-                #     test_number_1, test_number_2 = test_number.split('-')
-                #     if sutta_number == test_number_1:
-                #         sutta_number = test_number
-                #         last_number = int(test_number_2) - base_number
                 if sutta_number != test_number:
                     log(text)
                     log('Unexpected: {} != {}'.format(sutta_number, test_number))
@@ -130,6 +103,7 @@ def extract_suttas_from_list(lst, subdivision_number, id_map):
                 'content': '',
                 'sutta_number': None,
             }
+            print(sutta_number + '..', end='')
             index += 1
         elif text.endswith(burmese_samyutta):
             #log('PASS samyutta: {}'.format(text))
@@ -140,6 +114,26 @@ def extract_suttas_from_list(lst, subdivision_number, id_map):
         elif is_vagga_line(text):
             #log('vagga: {}'.format(text))
             vagga = dash_to_em(text)
+            # hacks for subdivison 48
+            if subdivision_number == 48:
+                if text == '၁၂-သြဃဝဂ်' or text == '၁၇-သြဃဝဂ်':
+                    base_number += 32
+                    index += 3
+            elif subdivision_number == 50:
+                if text == '၅-သြဃဝဂ်':
+                    base_number += 32
+                    index += 3
+                elif text == text == '၉-ဧသနာဝဂ်':
+                    base_number += 22
+                    index += 2
+            elif subdivision_number == 51:
+                if text == 'ဂ - သြဃဝဂ်':
+                    base_number += 32
+                    index += 3
+            elif subdivision_number == 53:
+                if text == '၅ - သြဃဝဂ်':
+                    base_number += 32
+                    index += 3
         else:
             # log('content: {}'.format(text))
             text = dash_to_em(curly_quote(text))
@@ -149,42 +143,34 @@ def extract_suttas_from_list(lst, subdivision_number, id_map):
     print()
     return suttas
 
-ignore_subdivisions = [
-    12,  # mismatch
-    24,  # mismatch
-    29,  # mismatch
-    31,  # mismatch
-    45,  # mismatch
-    47,  # mismatch
-    48,  # mismatch
-    49,  # mismatch
-    50,  # mismatch
-    51,  # mismatch
-    53,  # mismatch
-    56,  # mismatch
-]
-
 if __name__ == '__main__':
     id_maps = make_id_maps()
     makedirs()
     for input_path in pass3_dir.glob('sn*.html'):
         if input_path.name.endswith('-1.html'):
             continue
-        print('Reading: {}...'.format(input_path), end='')
+        print('Processing: {}...'.format(input_path), end='')
         subdivision_number = parse_subdivision(input_path)
-        if subdivision_number in ignore_subdivisions:
-            print('IGNORING')
-            continue
         suttas = extract_suttas(input_path, subdivision_number,
                                 id_maps[subdivision_number])
-        assert len(suttas) == len(id_maps[subdivision_number])
+        if len(suttas) != len(id_maps[subdivision_number]):
+            log('sutta length != expected ({} != {})'.format(
+                len(suttas), len(id_maps[subdivision_number])))
+            if subdivision_number in [12, 45, 48, 50, 51, 53]:
+                # 12 don't know what to do...
+                # 45 combines Taṇhā/Tasinā on SC, but the text for Tasinā is 
+                #    not to be found.
+                # 48-53 has several suttas/combinations that don't map
+                pass
+            else:
+                raise 'uh oh'
         for sutta in suttas:
             output_filename = 'sn{}.{}.html'.format(subdivision_number,
                 sutta['number'])
             output_path = output_sn_dir / output_filename
-            print('Process: {} to {}'.format(input_path, output_path))
+            print('    {} to {}'.format(input_path.name, output_path.name))
             with output_path.open('w', encoding='utf-8') as output:
                 html = output_html(division=sutta['division'],
                     vagga=sutta['vagga'], title=sutta['title'],
                     content=sutta['content'], css=True)
-                # output.write(html)
+                output.write(html)

@@ -21,3 +21,6 @@ copy:
 	mkdir -p ../../data/text/my/pi/mn
 	cp output/dn/dn*.html ../../data/text/my/pi/dn
 	cp output/mn/mn*.html ../../data/text/my/pi/mn
+
+snpatch:
+	diff -ur tmp/bakpass3 tmp/pass3 > sn.patch
