@@ -285,9 +285,10 @@ class TextView(ViewBase):
     @property
     def path(self):
         try:
-            return scimm.imm().text_paths[self.lang_code][self.uid]
+            relative_path = scimm.imm().text_paths[self.lang_code][self.uid]
         except KeyError:
             return None
+        return sc.text_dir / relative_path
     
     def get_html(self):
         """Return the text HTML or raise a cherrypy.NotFound exception"""

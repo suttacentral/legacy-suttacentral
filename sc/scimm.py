@@ -434,15 +434,16 @@ class _Imm:
         text_paths = {}
         text_refs = defaultdict(list)
         
-        for filepath in sc.text_dir.glob('**/*.html'):
-            lang = filepath.relative_to(sc.text_dir).parts[0]
+        for full_path in sc.text_dir.glob('**/*.html'):
+            relative_path = full_path.relative_to(sc.text_dir)
+            lang = relative_path.parts[0]
             if lang not in text_paths:
                 text_paths[lang] = {}
-            uid = filepath.name.replace('.html', '')
+            uid = relative_path.name.replace('.html', '')
             assert uid not in text_paths[lang]
-            text_paths[lang][uid] = filepath
+            text_paths[lang][uid] = str(relative_path)
 
-            author = self.get_text_author(filepath)
+            author = self.get_text_author(full_path)
             url = Sutta.canon_url(lang_code=lang, uid=uid)
             text_refs[uid].append( TextRef(self.languages[lang], author, url, 0) )
 
