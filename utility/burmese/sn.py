@@ -156,10 +156,8 @@ if __name__ == '__main__':
         if len(suttas) != len(id_maps[subdivision_number]):
             log('sutta length != expected ({} != {})'.format(
                 len(suttas), len(id_maps[subdivision_number])))
-            if subdivision_number in [12, 45, 48, 50, 51, 53]:
+            if subdivision_number in [12, 48, 50, 51, 53]:
                 # 12 don't know what to do...
-                # 45 combines Taṇhā/Tasinā on SC, but the text for Tasinā is 
-                #    not to be found.
                 # 48-53 has several suttas/combinations that don't map
                 pass
             else:
@@ -172,5 +170,5 @@ if __name__ == '__main__':
             with output_path.open('w', encoding='utf-8') as output:
                 html = output_html(division=sutta['division'],
                     vagga=sutta['vagga'], title=sutta['title'],
-                    content=sutta['content'], css=True)
+                    content=sutta['content'])
                 output.write(html)
