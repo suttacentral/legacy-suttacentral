@@ -13,8 +13,9 @@
 
     .sutta {
         h1, h2, h3, h4, h5, h6, p,
-        hgroup > h2, hgroup > h3 {
-            font-family: $tharlon;
+        hgroup > h2, hgroup > h3,
+        .evam {
+            font-family: $tharlon !important;
             letter-spacing: 0;
             line-height: 2em;
         }
@@ -22,6 +23,7 @@
 
     #metaarea p {
         font-family: $tharlon;
+        letter-spacing: 0;
         line-height: 2em;
     }
 }
