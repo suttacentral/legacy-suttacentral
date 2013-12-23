@@ -17,13 +17,13 @@ sc_formatter = {
         });
         $(document).on('keydown', sc_formatter.deathToTheBeast);
         this.apply();
+        this.menuGenerator();
         this.operaFix();
         this.highlightBookmark();
+        this.toolsMagic();
     },
     apply: function(){
         $("tr").filter(":even").addClass("even"); //Add the .even class to every second tr element
-        //$(".altVolPage").attr("title", scMode[scMode.lang].strings["altVolPage"]);
-        //$(".altAcronym").attr("title", scMode[scMode.lang].strings["altAcronym"]);
         sc_formatter.quoteHanger();
         
     },
@@ -64,6 +64,7 @@ sc_formatter = {
             children = this.childNodes
             node = this.childNodes[0];
             //Find the start of the actual text.
+            if (!node) return;
             while (node.nodeType == 1) {
                 if (node.nodeName == 'A') {
                     node = node.nextSibling
@@ -149,6 +150,153 @@ sc_formatter = {
             }
             i++;
             if (i > 100) return;
+        }
+    },
+    toolsMagic: function(){
+        if ($('.tools').length == 0) {
+            return
+        }
+        tidy = {
+            tidy: $('[value=html5tidy]'),
+            level: $('[name=tidy-level]'),
+            extra: $('#tidy-extra input'),
+            flags: $('[name=tidy-flags]'),
+            updateFlags: function(e){
+                var self=tidy, 
+                    flags = [];
+                if (self.tidy[0].checked) {
+                    $('#tidy ul input, #tidy textarea').removeAttr('disabled');
+                } else {
+                    $('#tidy ul input, #tidy textarea').attr('disabled', 'disabled');
+                }
+                
+                flags.push(self.tidy.attr('data-flags'));
+                for (var i = 0; i < self.level.length; i++){
+                    flags.push($(self.level[i]).attr('data-flags'));
+                    if (self.level[i].checked)
+                        break;
+                }
+                for (var i = 0; i < self.extra.length; i++) {
+                    if (self.extra[i].checked)
+                        flags.push($(self.extra[i]).attr('data-flags'));
+                };
+                
+                self.flags.val(flags.join(' ').replace(/  +/g, ' ').trim())
+            },
+            init: function(){
+                var self=this;
+                $('#tidy input, [name=cleanup]').on('change', self.updateFlags);
+                self.updateFlags();
+            }
+        }
+
+        decruft = {
+            decruft: $('[name=decruft]'),
+            what: $('[name^=decruft-]'),
+            discard: $('[name=decruft-discard]'),
+            unwrap: $('[name=decruft-unwrap'),
+            update: function(e){
+                var self=decruft,
+                    selectors = [];
+                for (var i = 0; i < self.what.length; i++) {
+                    if (self.what[i].checked){
+                        selectors.push(self.what[i].value);
+                    }
+                }
+                self.discard.val(selectors.join(', '))
+            },
+            init: function(){
+                this.update();
+                this.what.on('change', this.update);
+            
+            }
+        }
+
+        $('[name=tidy-file]').on('change', function(e){
+            var self=e.target;
+            console.log(e.target.value);
+            if (e.target.value.search(/\.zip$/i) == -1){
+                self.value = null;
+                alert('Only zip files are acceptable.', 'Go away');
+                
+            }
+        });
+
+        function updateBoundStatus(target) {
+            var boundElements = $($(target).attr('data-bound'));
+            if (target.checked) {
+                boundElements.removeAttr('disabled')
+            }
+            else {
+                boundElements.attr('disabled', 'disabled')
+            }
+        }
+
+        $('[data-bound]').on('change', function(e){updateBoundStatus(this)});
+        $(document).on('ready', function(){
+            $('[data-bound]').each(function(){updateBoundStatus(this)});
+        });
+
+        tidy.init();
+        decruft.init();
+    },
+    menuGenerator: function(headings){
+        var self = this;
+        if (!headings) {
+            headings = $('h1,h2,h3,h4,h5,h6')
+                .filter('#text *')
+            
+            if (headings.filter('hgroup').length <= 1)
+                headings = headings.not('hgroup *')
+            else 
+                headings = headings.not('hgroup h2, hgroup h3')
+        }
+        
+        adjustment = 6
+        headings.each(function(){
+            adjustment = Math.min(this.tagName.replace('H', '') - 1, adjustment)
+        })
+        menu = ['<ul>']
+        currentDepth = 1
+        seen = {null:1}
+        headings.each(function(){
+            depth = this.tagName.replace('H', '') - adjustment;
+            while (depth > currentDepth) {
+                menu.push('<li><ul>');
+                currentDepth++;
+            }
+            while (depth < currentDepth) {
+                menu.push('</ul></li>')
+                currentDepth--;
+            }
+            headtext = $(this).text();
+            m = headtext.match(/[ivx0-9]{1,5}[.:] \(?([^(]+)/i)
+            if (m){
+                menutext = m[1].trim()
+            } else {
+                menutext = headtext
+            }
+            menutext = menutext.toTitleCase();
+            
+            var oref = ref = escape(sc.util.asciify(menutext.toLowerCase().replace(/ /g, '-')))
+            while (ref in seen) {
+                ref = oref + ++i;
+            }
+            
+            menu.push('<li><a href="#{}">{}</a></li>'.format(ref, menutext))
+            child = $(this).children()[0];
+            if (child && child.tagName == 'A')
+                $(child).attr({id: ref, href: "#menu"})
+            else
+                $(this).wrapInner('<a id="{}" href="#menu" />'.format(ref))
+
+        });
+        if (menu.length > 1) {
+            menu.push('</ul>')
+            tocMenu = $('#menu')
+            if (tocMenu.length == 0)
+                tocMenu = $('<div id="menu">').appendTo('#toc')
+            $('#menu').html(menu.join(''))
         }
     }
 }

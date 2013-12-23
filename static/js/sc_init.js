@@ -12,10 +12,9 @@ textualControls = {
     metaarea: "#metaarea"
 }
 
-var sc = {
-    'zh2en_dict_url' : '/js/zh2en_dict_0.04s.js',
-    'pi2en_dict_url' : '/js/pi2en_dict_0.03.js'
-}
+var sc = window.sc || {}
+sc.zh2en_dict_url = '/js/zh2en_dict_0.04s.js'
+sc.pi2en_dict_url = '/js/pi2en_dict_0.03.js'
 
 // Used for different 'modes', such as interface language (defaults to 'en')
 // Also partly to save on transfer and ease of updating titles.
