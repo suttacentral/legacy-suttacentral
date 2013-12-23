@@ -19,6 +19,7 @@ output_dir = base_dir / 'output'
 output_dn_dir = output_dir / 'dn'
 output_mn_dir = output_dir / 'mn'
 output_sn_dir = output_dir / 'sn'
+output_an_dir = output_dir / 'an'
 
 output_template = """\
 <!DOCTYPE html>
@@ -69,7 +70,7 @@ def clean(text):
 
 def makedirs():
     for dir in [pass1_dir, pass2_dir, pass3_dir, output_dn_dir,
-                output_mn_dir, output_sn_dir]:
+                output_mn_dir, output_sn_dir, output_an_dir]:
         if not dir.exists():
             dir.mkdir(parents=True)
 
@@ -139,27 +140,87 @@ def is_vagga_line(text):
 def is_sutta_line(text):
     return text.endswith('သုတ်') and _digit_re.match(text[0])
 
+def parse_vagga_sutta_line(text):
+    match = _vagga_sutta_re.match(text)
+    if match:
+        alt_vagga_number, vagga_number, vagga, sutta_number, sutta = match[1:6]
+        if not vagga and not sutta:
+            return None
+        if vagga:
+            if alt_vagga_number:
+                int_alt_vagga_number = parse_number(alt_vagga_number)
+            else:
+                int_alt_vagga_number = None
+            int_vagga_number = parse_number(vagga_number)
+            vagga_line = '{}-{}'.format(vagga_number, vagga)
+            if alt_vagga_number:
+                vagga_line = '({}) {}'.format(alt_vagga_number, vagga_line)
+        else:
+            int_alt_vagga_number = None
+            int_vagga_number = None
+            vagga_line = None
+        if sutta:
+            if not sutta_number:
+                print(text)
+                print(sutta)
+                print(sutta_number)
+            int_sutta_number = parse_number(sutta_number)
+            sutta_line = '{}-{}'.format(sutta_number, sutta)
+        else:
+            int_sutta_number = None
+            sutta_line = None
+        result = locals().copy()
+        del(result['match'])
+        return result
+    else:
+        return None
+
 _numbers = list('ဝ၁၂၃၄၅၆၇၈၉')
 _number_dict = { str(i): c for i, c in enumerate(_numbers) }
-_digit_re = regex.compile('|'.join(_numbers))
+_digit_re = regex.compile('[' + ''.join(_numbers) + ']')
 _number_re = regex.compile("""^
                               ((?:{})+)       # the number
-                              (\s*(?:-|။)\s*) # a breaker
+                              (\s*(?:-|–|၊|။)\s*) # a breaker
                               (.*)            # everything else
                               $""".format(_digit_re.pattern),
                            regex.VERBOSE)
+_vagga_sutta_re = regex.compile("""
+    ^                      # start of text
+    \s*                    # optional whitespace
+    (?:                    # opening optional vagga
+        (?:\(({0}+)\))?    # optional alternate vagga number in parenthesis
+        \s*                # optional whitespace
+        ({0}+)             # vagga number
+        \s*                # optional whitespace
+        (?:-|–|\s)         # dash or space
+        \s*                # optional whitespace
+        (.+(?:ဝဂ်|ယျာလ|သုတ်များ))  # text ending in vagga (or yalam)
+    )?                     # closing optional vagga
+    \s*                    # optional whitespace
+    (?:                    # opening optional sutta
+        ({0}+)             # sutta number
+        \s*                # optional whitespace
+        (?:-|–|\s)         # dash or space
+        \s*                # optional whitespace
+        (.+(?:သုတ်|စသည်))  # text ending in sutta (or suttadisattakam)
+    )?                     # closing optional sutta
+    \s*                    # optional whitespace
+    $                      # end of text
+""".format(_digit_re.pattern), regex.VERBOSE)
 
 def burmize_number(n):
     return ''.join([_number_dict.get(c, '') for c in list(str(n))])
+
+def parse_number(text):
+    digits = [_numbers.index(c) for c in list(text)]
+    return reduce(lambda t, n: (t * 10) + n, digits, 0)
 
 def parse_numbers(text):
     numbers = []
     while True:
         match = _number_re.match(text)
         if match:
-            digits = [_numbers.index(c) for c in list(match[1])]
-            number = reduce(lambda t, n: (t * 10) + n, digits, 0)
-            numbers.append(number)
+            numbers.append(parse_number(match[1]))
             text = match[3]
         else:
             break

@@ -48,7 +48,10 @@ def pass1(text):
 if __name__ == '__main__':
     makedirs()
     for input_path in originals_dir.glob('*.html'):
-        output_path = pass1_dir / input_path.name.lower().replace('sn-', 'sn')
+        filename = input_path.name.lower()
+        filename = filename.replace('sn-', 'sn')
+        filename = filename.replace('book-', 'an')
+        output_path = pass1_dir / filename
         print('Pass 1: {} -> {}'.format(input_path, output_path))
         with input_path.open('r', encoding='utf-8') as input:
             with output_path.open('w', encoding='utf-8') as output:
