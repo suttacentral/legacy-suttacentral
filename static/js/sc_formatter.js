@@ -236,9 +236,19 @@ sc_formatter = {
         $(document).on('ready', function(){
             $('[data-bound]').each(function(){updateBoundStatus(this)});
         });
-
-        tidy.init();
-        decruft.init();
+        
+        $('[name=hide]').on('change', function(e){
+            $('.entry').show();
+            if (e.target.value == 'okay') 
+                $('.entry').not('.warnings, .errors').hide()
+            else if (e.target.value == 'warnings') 
+                $('.entry').not('.errors').hide();
+        });
+        
+        if ($('#tidy').length)
+            tidy.init();
+        if ($('#decruft').length)
+            decruft.init();
     },
     menuGenerator: function(headings){
         var self = this;

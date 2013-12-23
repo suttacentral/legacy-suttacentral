@@ -63,6 +63,7 @@ js_core = webassets.Bundle(
     'js/vendor/ZeroClipboard-1.2.3.js',
     'js/vendor/jquery.hashchange-1.3.min.js',
     'js/vendor/jquery.easytabs-3.2.0.min.js',
+    'js/sc_utility.js',
     'js/nav.js',
     'js/sc_functions.js',
     'js/sc_init.js',

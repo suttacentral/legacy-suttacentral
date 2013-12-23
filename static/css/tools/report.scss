@@ -1,0 +1,27 @@
+.tools .report {
+    
+    ul {
+        list-style: none;
+    }
+    
+    & > ul > li {
+        padding: 0.2em 1em 0.2em 1em;
+        border-bottom: 1px solid $light-gray;
+        &:first-child {
+            border-top: 1px solid $light-gray;
+        }
+        span.summary {
+            font-weight: bold;
+        }
+        &.odd {
+            background:white;
+        }
+    }
+    
+    li.heading {
+        padding-top: 0.5em;
+        border-bottom: 1px solid $light-gray;
+        font-style: italic;
+    }
+    
+}

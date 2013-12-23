@@ -80,7 +80,7 @@ def numericsortkey(string, _rex=regex.compile(r'(\d+)')):
     Should work on absolutely any configuration of characters in a string
     this doesn't mean it'll always order sensibly, just that it wont throw
     any 'TypeError: unorderable types' exceptions.
-    Also works on all unicode decimal characters, not just ASCII 48-57.
+    Also works on all unicode decimal characters, not just ASCII 0-9.
     
     Does not handle dotted ranges unless the string ends with the range.
     >>> sorted(['1', '1.1', '1.1.1'], key=numericsortkey)
@@ -97,12 +97,13 @@ def numericsortkey(string, _rex=regex.compile(r'(\d+)')):
 def humansortkey(string, _rex=regex.compile(r'(\d+(?:[.-]\d+)*)')):
     """ Properly sorts more constructions than numericsort
     
-    Only slightly slower than numericsort, works on all strings.
+    Should generally be preferred to numericsort unless a simpler ordering
+    is required.
     
     >>> sorted(['1.txt', '1.1.txt', '1.1.1.txt'], key=humansortkey)
     ['1.txt', '1.1.txt', '1.1.1.txt']
     
     """
-    
+    # With split, every second element will be the one in the capturing group.
     return [numericsortkey(s) if i % 2 else s 
             for i, s in enumerate(_rex.split(string))]

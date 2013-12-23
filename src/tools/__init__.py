@@ -24,9 +24,6 @@ MAX_RETRIVE_AGE = 900   # time in seconds.
 # How long the users result zip will be kept alive for before being valid
 # targets for garbage collection. May live for longer.
 
-
-    
-
 import random, pathlib, datetime, logging, io, regex, os
 import config, lhtmlx
 from cherrypy import expose, HTTPError
@@ -40,6 +37,8 @@ from tempfile import TemporaryFile, NamedTemporaryFile
 from bs4 import UnicodeDammit
 from util import humansortkey
 from subprocess import Popen, PIPE, call
+
+import tools.crumple
 
 
 logger = logging.Logger(__name__)
@@ -168,6 +167,9 @@ class ToolsView(InfoView):
 class ProcessingError(Exception):
     pass
 
+class ProcessorError(Exception):
+    pass
+
 class ProcessorBase:
     """ The ProcessorBase attempts to implement all the zip and filehandling
     stuff so that derived classes only need to implement process_str,
@@ -231,8 +233,7 @@ class ProcessorBase:
         report = self.init_report()
         
         if not is_zipfile(inzipfile):
-            report.error = "{} is not a valid zip archive.".format(filename)
-            return report
+            raise InputError("{} is not a valid zip archive.".format(filename))
         
         resultfile = Tools.make_return_file(filename)
         outzipfile = resultfile.fileobj
@@ -247,8 +248,7 @@ class ProcessorBase:
                                                         humansize(total_size))
             
             if total_size > MAX_ARCHIVE_SIZE:
-                report.error = "Archive too large. Maximum uncompressed size is {}.".format(humansize(MAX_ARCHIVE_SIZE))
-                return report
+                raise ProcessorError("Archive too large. Maximum uncompressed size is {}.".format(humansize(MAX_ARCHIVE_SIZE)))
             
             for zinfo in inzip.filelist:
                 data = self.process_file(inzip.open(zinfo, 'r'), zinfo)
@@ -258,7 +258,6 @@ class ProcessorBase:
                 # Manually specify compress_type in case some loony uploads
                 # a -0 archive (archive compression is overridden by ZipInfo)
                 outzip.writestr(zinfo, data, compress_type=ZIP_DEFLATED)
-                self.report.processed_bytes += len(data)
         
         self.finalize_report(resultfile)
         return report
@@ -281,41 +280,44 @@ class ProcessorBase:
         self.suffix = suffix
         
         try:
-            fileobj = self.preprocess_file(fileobj)
+            fn = None
             
             if (self.allowed_types and suffix not in self.allowed_types 
                             and suffix[1:] not in self.allowed_types):
                 entry.info("No instructions for {}".format(suffix))
-                out = self.process_unknown(fileobj)
             elif suffix in {'.txt'}:
                 entry.info("Treating as text")
-                out = self.process_txt(fileobj)
+                fn = self.process_txt
             elif suffix in {'.html', '.htm'}:
                 entry.info("Treating as html")
-                out = self.process_html(fileobj)
+                fn = self.process_html
             elif suffix in {'.xml', '.xhtml'}:
                 entry.info("Treating as xml")
-                out = self.process_xml(fileobj)
+                fn = self.process_xml
             elif suffix in {'.odt', '.sxw'}:
                 entry.info("Treating as Open Document")
-                out = self.process_odt(fileobj)
+                fn = self.process_odt
             else:
                 entry.info("Unknown file, not processing")
-                out = self.process_unknown(fileobj)
+            
+            if fn == None:
+                outdata = fileobj.read()
+            else:
+                fileobj = self.preprocess_file(fileobj)
+                outdata = fn(fileobj)
+                self.report.processed_bytes += len(outdata)
+            
         except ProcessingError as e:
             entry.error(str(e))
             return None
         
         zinfo.filename = self.output_filename(zinfo.filename)
         # Out is bytes at the moment. Due to how ZipFile works the alternative
-        # would be to create a TemporaryFile and return that.
-        return out
+        # would be to create a TemporaryFile or use a pipe.
+        return outdata
     
     def preprocess_file(self, fileobj):
         return fileobj
-    
-    def process_unknown(self, fileobj):
-        return fileobj.read()
     
     def process_txt(self, fileobj):
         raise NotImplementedError
@@ -446,10 +448,7 @@ class DetwingleProcessor(ProcessorBase):
 class HTMLProcessor(ProcessorBase):
     "Inputs HTML/XHTML, outputs HTML5 with UTF-8 encoding"
     
-    def preprocess_file(self, fileobj):
-        if self.suffix not in {'.htm', '.html', '.xhtml'}:
-            raise ProcessingError('Not an HTML file')
-        return fileobj
+    allowed_types = {'.htm', '.html', '.xhtml'}
     
     def output_filename(self, filename):
         return str(pathlib.Path(filename).with_suffix('.html'))
@@ -461,7 +460,7 @@ class HTMLProcessor(ProcessorBase):
         doc = lhtmlx.parse(fileobj)
         root = doc.getroot()
         self.process_root(root)
-        lhtmlx.xhtml_to_html(doc)
+        lhtmlx.xhtml_to_html(doc) # This is very fast.
         root.head.insert(0, doc.parser.makeelement('meta', charset="UTF-8"))
         root.attrib.clear()
         return lhtmlx.tostring(doc.getroot(), doctype='<!DOCTYPE html>', 
@@ -474,23 +473,22 @@ class CleanupProcessor(HTMLProcessor):
     
     name = "Cleanup"
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.mode = self.options.get('cleanup')
+        
+    
     def preprocess_file(self, fileobj):
         """ Apply tidy as a preprocessor """
         
-        fileobj = super().preprocess_file(fileobj)
-        mode = self.options.get('cleanup')
         
-        if mode == 'descriptiveclasses':
+        if self.mode == 'descriptiveclasses':
             # Set special tidy flags.
-            self.options['tidy-flags'] = """tidy -c -w 0 --doctype html5
-            --quote-nbsp no --logical-emphasis yes --merge-emphasis yes
-            --force-output yes --quiet yes --drop-proprietary-attributes yes
-            --tidy-mark no --sort-attributes alpha --output-html yes
-            --output-encoding utf8 --css-prefix TIDY""".split()
+            self.options['tidy-flags'] = tools.crumple.tidy_flags
             
             return self.tidy(fileobj)
         
-        elif mode == 'html5tidy':
+        elif self.mode == 'html5tidy':
             return self.tidy(fileobj)
         
         return fileobj
@@ -498,10 +496,10 @@ class CleanupProcessor(HTMLProcessor):
     def tidy(self, fileobj):
         """ Call tidy on a fileobj, generates an Entry """
         
-        
         tidy_cmd = self.options.get('tidy-flags', '').split()
         if not tidy_cmd:
-            # TODO Build command string manually here.
+            # Build command string manually here. This might
+            # be needed if user has javascript disabled.
             target = self.options.get('tidy-level')
             if target is not None and target in tidy_level:
                 for level, flags in tidy_level.items():
@@ -521,23 +519,26 @@ class CleanupProcessor(HTMLProcessor):
         entry.heading("Running HTML5 Tidy")
         
         # tidy: 0 = no probs, 1 = warnings, 2 = errors, we don't care.
-        with Popen(tidy_cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE) as tidy:
-            out, errors = tidy.communicate(fileobj.read())
+        try:
+            with Popen(tidy_cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE) as tidy:
+                out, errors = tidy.communicate(fileobj.read())
+        except FileNotFoundError:
+            raise ProcessorError("Tidy program not found!")
         
-            for line in errors.decode(encoding='utf8').split('\n'):
-                if 'Warning:' in line:
-                    entry.warning(line.replace('Warning: ', ''))
-                elif 'Error:' in line:
-                    entry.error(line.replace('Error: ', ''))
-            if entry.errors:
-                entry.info('Fix errors and try again.')
-                raise ProcessingError
-            elif not entry.messages:
-                entry.info("Tidy reported no problems")
-            return io.BytesIO(out)
-    
+        for line in errors.decode(encoding='utf8').split('\n'):
+            if 'Warning:' in line:
+                entry.warning(line.replace('Warning: ', ''))
+            elif 'Error:' in line:
+                entry.error(line.replace('Error: ', ''))
+        if entry.errors:
+            entry.info('Fix errors and try again.')
+            raise ProcessingError
+        elif not entry.messages:
+            entry.info("Tidy reported no problems")
+        return io.BytesIO(out)
     
     def process_root(self, root):
+        self.entry.info('Processing root')
         if 'cherrypick' in self.options:
             selector = self.options.get('cherrypick-css', '')
             target = root.select(selector)
@@ -546,9 +547,12 @@ class CleanupProcessor(HTMLProcessor):
             root.body.clear()
             root.body.extend(target)
         
-        if 'descriptiveclasses' in options:
-            import lhtmlx.crunchtml
-            lhtml.crumple.crumple(
+        if self.mode == 'descriptiveclasses':
+            self.entry.heading('Generating Normalized Class Names')
+            try:
+                tools.crumple.crumple(root, self.options)
+            except Exception as e:
+                self.entry.error('{} ({})'.format(type(e), e))
         
         if 'strip-header' in self.options:
             selector = self.options.get("strip-header-css", '')

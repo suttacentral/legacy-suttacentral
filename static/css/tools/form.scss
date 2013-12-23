@@ -1,0 +1,80 @@
+.tools {
+    form {
+        margin: 2em 0 2em 0;
+        
+        h2, h3 {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        
+        p, ul {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        p + p {
+            margin-top: 0.5em;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        & > ul {
+            border: 2px solid black;
+            
+            & > li {
+                padding: 0.5em 0.5em 0.5em 1em;
+                border-top: 2px solid black;
+                
+                &:first-child {
+                    border-top: none;
+                    background: palegoldenrod;
+                }
+            }
+        }
+        
+        li {
+            padding: 0.1em 0.1em 0.1em 1em;
+        }
+        
+        [name=tidy-flags] {
+            width: 80%;
+            height: 6em;
+            font-family: monospace;
+            font-style: italic;
+            display: block;
+            margin: auto;
+        }
+        
+        #decruft {
+            textarea[name^=decruft-] {
+                width: 37em;
+                height: 3em;
+                font-family: monospace;
+            }
+            
+            input[type=text] {
+                width: 75%;
+            }
+        }
+        
+        code {
+            border: 1px solid #ddd;
+            background: #eee;
+            font-style: normal;
+            font-size: 85%;
+        }
+        
+        .css, input[name*="-css"] {
+            background: #fee;
+            &[disabled=disabled] {
+                background: #eadddd;
+            }
+        }
+    }
+}
+        
+        
+

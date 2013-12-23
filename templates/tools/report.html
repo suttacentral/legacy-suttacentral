@@ -1,0 +1,43 @@
+{% from 'macros.html' import time_tag with context %}
+
+{% extends "base.html" -%}
+{% block content %}
+
+<div id="onecol" class="tools">
+
+<div class="report">
+
+<h1>{{ report.title }}</h1>
+<p>{{report.header}}</p>
+
+<ul>
+{% for entry in report %}
+    <li class="{{'even' if loop.index % 2 == 0 else 'odd'}}"> <span class="summary">{{entry.summary}}</span>
+    {% if entry.messages %}
+        <ul>
+            {% for cls, msg in entry.messages %}
+            {% if cls == 'heading' %}
+            <li class="{{cls}} {{'even' if loop.index % 2 == 0 else 'odd'}}">{{msg|e}}</li>
+            {% else %}
+            <li class="{{cls}} {{'even' if loop.index % 2 == 0 else 'odd'}}">{{cls|title}}: {{msg|e}}</li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endfor %}
+</ul>
+
+{% if report.processed_bytes == 0 %}
+<p>Processing failed.</p>
+{% else %}
+<p>Download your file <a href="{{report.result.url}}">{{report.result.filename}} ({{report.result.size}})</a></p>
+{% endif %}
+<p>{{report.footer}}</p>
+
+
+
+</div>
+
+</div>
+
+{%- endblock %}

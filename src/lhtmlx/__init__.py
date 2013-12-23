@@ -11,6 +11,7 @@ which now returns the html code of the element.
 """
 
 import lxml.html as _html
+from lxml.html import tostring, xhtml_to_html
 import lxml.etree as _etree
 import functools as _functools
 from html import escape # lxml.html doesn't define it's own escape
@@ -240,15 +241,6 @@ def parse(filename, encoding='utf8'):
         parser = get_parser(None)
         
     return _html.parse(filename, parser=parser)
-
-def write_utf8_html5(doc, filename):
-    for e in doc.getroot().cssselect('meta[charset], meta[content*=charset]'):
-        e.drop_tree()
-    doc.find('//head').insert(0, doc.parser.makeelement('meta', charset="UTF-8"))
-    _html.xhtml_to_html(doc)
-    with open(filename, 'wb', universal_newlines=False) as f:
-        f.write(b'<!DOCTYPE html>\r\n', method="html")
-        doc.write(f, method="html")
 
 if __name__ == "__main__":
     import doctest
