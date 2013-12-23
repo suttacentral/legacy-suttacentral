@@ -1,7 +1,7 @@
 import sys, unittest
 sys.path.append('..')
 from htmlproc import *
-from lhtmlx import *
+from tools.html import *
 
 
 

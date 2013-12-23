@@ -2,8 +2,8 @@ import sys
 sys.path.append('..')
 import env
 
-import lhtmlx
-from lhtmlx.builder import *
+import tools.html
+from tools.html.builder import *
 
 import regex, itertools, logging
 
@@ -46,7 +46,7 @@ def filterdescendents(elements):
 
 
 def xhtml_to_html(dom):
-    return lhtmlx._html.xhtml_to_html(dom)
+    return tools.html._html.xhtml_to_html(dom)
 
 if __name__ == '__main__':
     import doctest

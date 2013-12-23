@@ -24,4 +24,19 @@
         font-style: italic;
     }
     
+    .error {
+        color:white;
+        background:red; /* Illegal color, on purpose :) */
+    }
+    
+    a.result {
+        background: $light-pastel-yellow;
+        border: 2px solid $light-pastel-yellow;
+        border-radius: 0.5em;
+        padding: 0.2em 0.4em 0.2em 0.4em;
+    }
+    a.result:hover {
+        border: 2px solid $pastel-yellow;        
+    }
+    
 }

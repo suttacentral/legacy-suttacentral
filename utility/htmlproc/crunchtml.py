@@ -40,7 +40,7 @@ By default 20% error is permitted.
 
 import env
 import logging, regex, os, os.path, time, subprocess
-import lhtmlx, pathlib, collections, io
+import tools.html, pathlib, collections, io
 from .colors import color_name
 
 
@@ -194,17 +194,17 @@ def prune_most_common_face(root):
                     del e.attrib['font']
         
     
-tidy_cmd = regex.split(r'\s+', """tidy -c -w 0 --doctype html5 --quote-nbsp no
+tidy_cmd = """tidy -c -w 0 --doctype html5 --quote-nbsp no
     --logical-emphasis yes --merge-emphasis yes --force-output yes --quiet yes
     --drop-proprietary-attributes yes --tidy-mark no --sort-attributes alpha 
-    --output-html yes --output-encoding utf8 --css-prefix TIDY""")
+    --output-html yes --output-encoding utf8 --css-prefix TIDY""".split()
     
 def crunch_file(filepath, xml_tags=False, brtags=BRTAG_SAFE):
     filename = str(filepath)
-    doc = lhtmlx.parse(filename)
+    doc = tools.html.parse(filename)
     root = doc.getroot()
     prune_most_common_face(root)
-    data = lhtmlx._html.tostring(root, encoding='utf8')
+    data = tools.html._html.tostring(root, encoding='utf8')
  
     pTidy = subprocess.Popen(tidy_cmd, stdin = subprocess.PIPE, stdout = subprocess.PIPE)
     data = pTidy.communicate(data)[0]
@@ -217,7 +217,7 @@ def crunch_file(filepath, xml_tags=False, brtags=BRTAG_SAFE):
     if brtag_mode == BRTAG_UNSAFE:
         data = convert_brackets_regex(data)
     
-    doc = lhtmlx.parse(io.BytesIO(data), encoding='utf8')
+    doc = tools.html.parse(io.BytesIO(data), encoding='utf8')
     
     css = doc.find('//style').text
     print(css)

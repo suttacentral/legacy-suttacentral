@@ -40,7 +40,7 @@ error permitted, meaning that #000080 and #00007f will both be called "navy".
 """
 
 import logging, regex, os, os.path
-import lhtmlx, pathlib, collections, io
+import pathlib, collections, io
 from .colors import color_name
 
 
@@ -122,6 +122,7 @@ def crunch(root, name_mapping, xml_tags=False):
 
 brackets = {'(': ')', '[': ']'}
 bracket_class = {'(': 'RoBr', '[': 'SqBr'}
+
 def convert_brackets_dom(root):
     """ Sometimes people like to be prats and generate constructions like:
     <p>[<em>This is probably a title</em>]</p>

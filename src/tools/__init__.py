@@ -25,7 +25,8 @@ MAX_RETRIVE_AGE = 900   # time in seconds.
 # targets for garbage collection. May live for longer.
 
 import random, pathlib, datetime, logging, io, regex, os
-import config, lhtmlx
+import config
+from tools import html
 from cherrypy import expose, HTTPError
 from cherrypy.lib.static import serve_file
 from views import InfoView
@@ -38,7 +39,7 @@ from bs4 import UnicodeDammit
 from util import humansortkey
 from subprocess import Popen, PIPE, call
 
-import tools.crumple
+from tools import crumple, finalizer
 
 
 logger = logging.Logger(__name__)
@@ -101,6 +102,7 @@ class Report(list):
             self.summary = ''
             self.messages = []
             self.errors = False
+            self.warnings = False
             self.modified = False
 
         def __repr__(self):
@@ -116,6 +118,7 @@ class Report(list):
             self.messages.append(('error', msg))
         
         def warning(self, msg):
+            self.warnings = True
             self.messages.append(('warning', msg))
         
         def info(self, msg):
@@ -128,6 +131,7 @@ class Report(list):
     title = ''
     header = ''
     footer = ''
+    filename = ''
     result = None # Should be a simple filename
     processed_bytes = 0
 
@@ -374,7 +378,7 @@ class TextProcessor(ProcessorBase):
         return self.process_bytes(fileobj.read())
     
     def process_html(self, fileobj):
-        doc = lhtmlx.parse(fileobj)
+        doc = html.parse(fileobj)
         for e in doc.iter():
             if e.text:
                 e.text = self.process_str(e.text)
@@ -457,13 +461,13 @@ class HTMLProcessor(ProcessorBase):
         return self.process_html(fileobj)
     
     def process_html(self, fileobj):
-        doc = lhtmlx.parse(fileobj)
+        doc = html.parse(fileobj)
         root = doc.getroot()
         self.process_root(root)
-        lhtmlx.xhtml_to_html(doc) # This is very fast.
+        html.xhtml_to_html(doc) # This is very fast.
         root.head.insert(0, doc.parser.makeelement('meta', charset="UTF-8"))
         root.attrib.clear()
-        return lhtmlx.tostring(doc.getroot(), doctype='<!DOCTYPE html>', 
+        return html.tostring(doc.getroot(), doctype='<!DOCTYPE html>', 
                 encoding='UTF-8', include_meta_content_type=False)
                 
     def process_root(self, root):
@@ -476,7 +480,6 @@ class CleanupProcessor(HTMLProcessor):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.mode = self.options.get('cleanup')
-        
     
     def preprocess_file(self, fileobj):
         """ Apply tidy as a preprocessor """
@@ -484,7 +487,7 @@ class CleanupProcessor(HTMLProcessor):
         
         if self.mode == 'descriptiveclasses':
             # Set special tidy flags.
-            self.options['tidy-flags'] = tools.crumple.tidy_flags
+            self.options['tidy-flags'] = crumple.tidy_flags
             
             return self.tidy(fileobj)
         
@@ -550,7 +553,7 @@ class CleanupProcessor(HTMLProcessor):
         if self.mode == 'descriptiveclasses':
             self.entry.heading('Generating Normalized Class Names')
             try:
-                tools.crumple.crumple(root, self.options)
+                crumple.crumple(root, self.options)
             except Exception as e:
                 self.entry.error('{} ({})'.format(type(e), e))
         
@@ -561,7 +564,15 @@ class CleanupProcessor(HTMLProcessor):
             root.head.clear()
             root.head.extend(keep)
         
-        
+class FinalizeProcessor(HTMLProcessor):
+    name = "Finalize"
+    
+    def process_root(self, root):
+        finalizer.finalize(root, entry=self.entry, options=self.options)
+    
+    
+    
+
 
 class Tools:
     """ Provide HTML/XML processing web services.
@@ -602,7 +613,11 @@ class Tools:
         report = processor.process_zip(userfile.file, userfile.filename)
         return ReportView(report).render()
     
-    stored_files = {}
+    @expose()
+    def finalize(self, userfile, **kwargs):
+        processor = FinalizeProcessor(**kwargs)
+        report = processor.process_zip(userfile.file, userfile.filename)
+        return ReportView(report).render()
     
     @expose()
     def clean(self, userfile, **kwargs):
@@ -623,6 +638,8 @@ class Tools:
     @classmethod
     def result_url(cls, filename):
         return '/tools/result/' + filename
+    
+    stored_files = {}
     
     @classmethod
     def make_return_file(cls, infilename):

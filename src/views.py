@@ -8,7 +8,6 @@ import socket
 import time
 import urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
-import lhtmlx
 
 import assets
 import config
@@ -273,10 +272,11 @@ class TextView(ViewBase):
         self.lang_code = lang_code
 
     def setup_context(self, context):
+        from tools import html
         m = self.content_regex.search(self.get_html())
         context.title = '?'
         if m['hgroup'] is not None:
-            hgroup_dom = lhtmlx.fragment_fromstring(m['hgroup'])
+            hgroup_dom = html.fragment_fromstring(m['hgroup'])
             h1 = hgroup_dom.select('h1')
             if h1:
                 context.title = h1[0].text

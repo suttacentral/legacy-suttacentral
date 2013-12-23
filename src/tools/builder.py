@@ -38,11 +38,11 @@ Usage::
  
 """ 
 
-__package__ = 'lhtmlx'
-import lhtmlx
+__package__ = 'tools.html'
+import tools.html
 from lxml.html.builder import ElementMaker
-E = ElementMaker(makeelement=lhtmlx.utf8parser.makeelement)
-del ElementMaker, lhtmlx
+E = ElementMaker(makeelement=tools.html.utf8parser.makeelement)
+del ElementMaker, tools.html
 
 # elements
 A = E.a # anchor

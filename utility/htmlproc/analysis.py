@@ -9,7 +9,7 @@ The json output is designed to be diff-friendly.
 """
 
 import collections, json
-import lhtmlx
+import tools.html
 import config
 
 def analyze_path(path):
@@ -17,7 +17,7 @@ def analyze_path(path):
     by_class = collections.defaultdict(collections.Counter)
     pnum_classes = {}
     for infile in path.glob('**/*.html'):
-        doc = lhtmlx.parse(str(infile), encoding='utf8')
+        doc = tools.html.parse(str(infile), encoding='utf8')
         for e in doc.getroot().cssselect('[class]'):
             for class_ in e.attrib['class'].split():
                 by_tag[e.tag][class_] += 1

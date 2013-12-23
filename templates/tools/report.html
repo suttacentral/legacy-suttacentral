@@ -9,10 +9,15 @@
 
 <h1>{{ report.title }}</h1>
 <p>{{report.header}}</p>
+Show:
+<input type="radio" name="hide" value="nothing" checked> All
+<input type="radio" name="hide" value="okay"> Problems
+<input type="radio" name="hide" value="warnings"> Errors
 
 <ul>
 {% for entry in report %}
-    <li class="{{'even' if loop.index % 2 == 0 else 'odd'}}"> <span class="summary">{{entry.summary}}</span>
+    <li class="entry {{'even' if loop.index % 2 == 0 else 'odd'}}
+    {{- ' warnings' if entry.warnings else '' }}{{ ' errors' if entry.errors else ''}}"> <span class="summary">{{entry.summary}}</span>
     {% if entry.messages %}
         <ul>
             {% for cls, msg in entry.messages %}
@@ -30,7 +35,7 @@
 {% if report.processed_bytes == 0 %}
 <p>Processing failed.</p>
 {% else %}
-<p>Download your file <a href="{{report.result.url}}">{{report.result.filename}} ({{report.result.size}})</a></p>
+<p>Download your file <a class="result" href="{{report.result.url}}">{{report.result.filename}} ({{report.result.size}})</a></p>
 {% endif %}
 <p>{{report.footer}}</p>
 

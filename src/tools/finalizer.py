@@ -11,18 +11,39 @@ red means human intervention is required.
 
 """
 
-import sys, regex, lxml.html, os, shutil, collections, itertools, imm
+import sys, regex, os, shutil, collections, itertools
+import pathlib
 from copy import copy
 
+def get_existing_uids(_cache=[]):
+    try:
+        return _cache[0]
+    except IndexError:
+        pass
+    import scimm
+    existing_uids = set(scimm.imm().suttas.keys())
+    for value in scimm.imm().text_paths.values():
+        existing_uids.update(value.keys())
+    _cache.append(existing_uids)
+    return existing_uids
 
-existing_uids = set(scimm.imm().suttas.keys())
-for value in scimm.imm().text_paths.values():
-    existing_uids.update(value.keys())
+def get_tag_data(_cache=[]):
+    try:
+        return _cache[0]
+    except IndexError:
+        pass
+    import config, json
+    jsonfile = config.base_dir / 'utility' / 'tag_data.json'
+    with jsonfile.open('r') as f:
+        tag_data = json.load(f)
+    _cache.append(tag_data)
+    return tag_data
 
-pnums = set()
-
-def analyze(root, entry, lang=None, metadata=None, options={}):
-    imm = imm.getImm()
+def finalize(root, entry, lang=None, metadata=None, options={}):
+    pnums = set()
+    filename = entry.filename
+    existing_uids = get_existing_uids()
+    tag_data = get_tag_data()
     # Analytics.
     print("Analyzing {}:".format(filename))
     # Does this file have a menu?
