@@ -252,6 +252,8 @@ sc_formatter = {
     },
     menuGenerator: function(headings){
         var self = this;
+        if ($('#menu').length) return; //Keep existing menu.
+        
         if (!headings) {
             headings = $('h1,h2,h3,h4,h5,h6')
                 .filter('#text *')
