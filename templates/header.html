@@ -14,13 +14,35 @@
 </h2>
 
 <div id="page-header-menu">
-{% for collection in collections | reverse -%}
+{% for pitaka_menu in menu -%}
 <nav>
-    <h3>{{collection.name}}</h3>
+    <h3>{{ pitaka_menu.pitaka.name }}</h3>
     <ul>
-    {% for division in collection.divisions %}
-        <li><a href="{{division.link}}">{{division.name}}</a></li>
-    {% endfor %}
+        {% for lang_menu in pitaka_menu %}
+        <li>
+            <div class="triangle">▶</div>
+            <a href="#" class="sublink">{{ lang_menu.lang.name }}</a>
+            <ul>
+                {% if lang_menu|length < 2 %}
+                {% for division in lang_menu[0] %}
+                <li><a href="/{{ division.uid }}">{{ division.name }}</a></li>
+                {% endfor %}
+                {% else %}
+                {% for sect_menu in lang_menu %}
+                <li>
+                    <div class="triangle">▶</div>
+                    <a href="#" class="sublink">{{ sect_menu.sect.name }}</a>
+                    <ul>
+                        {% for division in sect_menu %}
+                        <li><a href="/{{ division.uid }}">{{ division.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+        </li>
+        {% endfor %}
     </ul>
 </nav>
 {%- endfor %}

@@ -11,7 +11,7 @@ from webassets.ext.jinja2 import AssetsExtension
 
 import sc
 from sc import assets, config, data_repo, scimm, util
-from sc.menu import menu_data
+from sc.menu import get_menu
 from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
 
@@ -140,7 +140,7 @@ class ViewBase:
     def get_global_context(self):
         """Return a dictionary of variables accessible by all templates."""
         return ViewContext({
-            'collections': menu_data,
+            'menu': get_menu(),
             'config': config,
             'current_datetime': datetime.datetime.now(),
             'development_bar': config.development_bar,

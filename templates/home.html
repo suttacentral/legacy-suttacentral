@@ -15,20 +15,36 @@
 <div id="home-content">
 
 <div id="home-main" style="display: block;">
-<!-- Collections/Divisions go here -->
-{# HACK: We use reverse to collections because its defined in reverse in
-   menu.py. When menu.py gets updated to use the database, this should
-   reflect the proper ordering. #}
-{% for collection in collections|reverse -%}
-<div class="column">
-    <ul>
-        <li><h2>{{collection.name}}</h2></li>
-        {% for division in collection.divisions %}
-            <li><a href="{{division.link}}">{{division.name}}</a></li>
-        {% endfor %}
-    </ul>
-</div>
+
+{% for pitaka_menu in menu %}
+<section class="pitaka columns-{{ pitaka_menu|length }}">
+    <h1>{{ pitaka_menu.pitaka.name }}</h1>
+    {% for lang_menu in pitaka_menu %}
+    <div class="column">
+        <div class="language">
+            <h2>{{ lang_menu.lang.name }}</h2>
+            {% for sect_menu in lang_menu %}
+            <ul class="sect">
+                {% if sect_menu.sect %}
+                <li><h3>{{ sect_menu.sect.name }}</h3></li>
+                {% endif %}
+                {% for division in sect_menu %}
+                {% if division.menu_gwn_ind %}
+                <li class="group-with-next">
+                {% else %}
+                <li>
+                {% endif %}
+                    <a href="/{{ division.uid }}">{{ division.name }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</section>
 {% endfor %}
+
 </div><!-- home-main -->
 
 <div id="home-start" style="display: none;">

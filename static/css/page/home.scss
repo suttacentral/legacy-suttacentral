@@ -85,53 +85,99 @@ $home-tabs-height: 2em;
 }
 
 #home-main {
-    @include grid-container;
 
-    @media #{$mobile-and-tablet} {
-        font-size: 14px;
-    }
+    .pitaka {
 
-    & > .column {
-        @include grid-unit(20%, 0.5em, 0.5em);
+        @include grid-container;
+        margin-bottom: 3em;
 
-        @media #{$mobile} {
-            float: inherit;
-            width: 100%;
-            padding: 0.5em;
+        &.columns-3 {
+            width: 70%;
+            margin: 0 auto;
         }
 
-        & > ul {
-            display: block;
-            margin: 0;
-            padding: 0;
-            border: 1px solid rgba($home-line-color, 0.3);
-            border-radius: 0.3em;
-            box-shadow: 0 0 0.3em $home-shadow-color;
-            list-style: none;
+        & > h1 {
+            @include serif-small-caps;
+            margin: 0 0 0.5em;
+            font-size: 2em;
+            text-align: center;
+            color: $home-heading-color;
+        }
 
-            & > li {
-                border-bottom: 1px solid $home-line-color;
-                word-wrap: break-word;
+        &.columns-5 .column {
+            @include grid-unit(20%, 0.5em, 0.5em);
+        }
 
-                &:last-child {
-                    border-bottom: none;
-                }
+        &.columns-4 .column {
+            @include grid-unit(25%, 0.5em, 0.5em);
+        }
 
-                & > h2 {
-                    color: $home-heading-color;
-                    margin: 0;
-                    padding: 1em 0.5em 0.75em;
-                    font-weight: bold;
-                }
+        &.columns-3 .column {
+            @include grid-unit(33.3%, 0.5em, 0.5em);
+        }
 
-                & > a {
-                    display: block;
-                    padding: 0.4em 0.5em;
-                    line-height: 1.75em;
+    }
 
-                    &:hover {
-                        background-color: $home-link-hover-color;
-                    }
+    .language {
+        padding: 0.5em;
+        border: 1px solid rgba($home-line-color, 0.3);
+        border-radius: 0.3em;
+        box-shadow: 0 0 0.3em $home-shadow-color;
+        background-color: $off-white;
+
+        & > h2 {
+            margin: 0.5em 0 0.5em 0.35em;
+            font-size: 1.5em;
+            font-weight: normal;
+            color: $home-heading-color;
+        }
+    }
+
+    .sect {
+
+        margin: 0 0 0.5em;
+        padding: 0;
+        border: 1px solid $home-line-color;
+        border-radius: 0.25em;
+        list-style: none;
+        background-color: white;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        & > li {
+
+            border-bottom: 1px solid $home-line-color;
+            word-wrap: break-word;
+
+            &.group-with-next {
+                border-bottom: 1px solid white;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            & > h3 {
+                margin: 0;
+                padding: 0.75em 0.5em 0.5em;
+                border-radius: 0.25em;
+                font-size: 1.1em;
+                font-weight: normal;
+                color: $home-heading-color;
+                background-color: $light-off-white;
+                cursor: default;
+            }
+
+            & > a {
+
+                display: block;
+                padding: 0.4em 0.5em;
+                line-height: 1.75em;
+
+                &:hover {
+                    background-color: $home-link-hover-color;
                 }
             }
         }

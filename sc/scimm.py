@@ -124,6 +124,16 @@ class _Imm:
         for row in table_reader('uid_to_acro'):
             self._uid_to_acro_map[row.uid] = row.acro
         
+        # Build Pitakas
+        self.pitakas = OrderedDict()
+        for row in table_reader('pitaka'):
+            self.pitakas[row.uid] = Pitaka(uid=row.uid, name=row.name)
+
+        # Build Sects
+        self.sects = OrderedDict()
+        for row in table_reader('sect'):
+            self.sects[row.uid] = Pitaka(uid=row.uid, name=row.name)
+
         # Build Languages (indexed by id)
         self.languages = OrderedDict()
         for row in table_reader('language'):
@@ -147,18 +157,32 @@ class _Imm:
         for row in table_reader('external_text'):
             text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url, priority=row.priority) )
         
-        self.collections = OrderedDict()
+        collections = []
         for row in table_reader('collection'):
+            if row.sect_uid:
+                sect = self.sects[row.sect_uid]
+            else:
+                sect = None
             collection = Collection(
                 uid=row.uid,
                 name=row.name,
                 abbrev_name=row.abbrev_name,
                 lang=self.languages[row.language],
+                sect=sect,
+                pitaka=self.pitakas[row.pitaka_uid],
+                menu_seq=int(row.menu_seq),
                 divisions=[] # Populate later
                 )
-            self.collections[row.uid] = collection
-            self.languages[row.language].collections.append(collection)
-        
+            collections.append(collection)
+
+        # Sort collections by menu_seq
+        collections.sort(key=Collection.sort_key)
+
+        self.collections = OrderedDict()
+        for collection in collections:
+            self.collections[collection.uid] = collection
+            self.languages[collection.lang.uid].collections.append(collection)
+
         # Build divisions (indexed by uid)
         self.divisions = OrderedDict()
         for row in table_reader('division'):
@@ -170,8 +194,11 @@ class _Imm:
             division = Division(
                 uid=row.uid,
                 name=row.name,
+                alt_name=row.alt_name,
                 acronym=row.acronym,
                 subdiv_ind=row.subdiv_ind,
+                menu_seq=int(row.menu_seq),
+                menu_gwn_ind=bool(row.menu_gwn_ind),
                 text_ref=text_ref,
                 collection=collection,
                 subdivisions=[], # Populate later
@@ -179,6 +206,10 @@ class _Imm:
             self.divisions[row.uid] = division
             # Populate collections
             collection.divisions.append(division)
+
+        # Sort divisions within collections by menu_seq
+        for collection in self.collections.values():
+            collection.divisions.sort(key=Division.sort_key)
 
         # Build subdivisions (indexed by uid)
         self.subdivisions = OrderedDict()

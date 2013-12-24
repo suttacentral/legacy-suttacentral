@@ -9,15 +9,17 @@ ParallelBase = namedtuple('ParallelBase',
 BiblioEntry = namedtuple('BiblioEntry', 'uid, name, text')
 
 DivisionBase = namedtuple('DivisionBase', '''
-    uid, collection, name, acronym,
-    subdiv_ind, text_ref, subdivisions''')
-    
+    uid, collection, name, alt_name, acronym,
+    subdiv_ind, menu_seq, menu_gwn_ind, text_ref, subdivisions''')
+
 SubdivisionBase = namedtuple('SubdivisionBase',
     'uid, division, name, acronym, vagga_numbering_ind, vaggas, suttas, order')
 
 VaggaBase = namedtuple('VaggaBase', ('subdivision', 'number', 'name', 'suttas') )
 
-CollectionBase = namedtuple('CollectionBase', ('uid', 'name', 'abbrev_name', 'lang', 'divisions') )
+CollectionBase = namedtuple('CollectionBase',
+    ('uid', 'name', 'abbrev_name', 'lang', 'sect', 'pitaka', 'menu_seq',
+     'divisions'))
 
 SuttaBase = namedtuple('SuttaBase', (
         'uid', 'acronym', 'alt_acronym', 'name', 'vagga_number', 'number_in_vagga', 'number',
@@ -25,6 +27,10 @@ SuttaBase = namedtuple('SuttaBase', (
         'biblio_entry', 'text_ref', 'translations', 'parallels',) )
 
 Language = namedtuple('Language', 'uid, name, isroot, iso_code, priority, collections')
+
+Sect = namedtuple('Sect', ('uid', 'name'))
+
+Pitaka = namedtuple('Pitaka', ('uid', 'name'))
 
 class SearchString(str):
     __slots__ = ('target')
@@ -122,12 +128,19 @@ class Collection(CollectionBase):
     uid={self.uid},
     name={self.name},
     lang=<{self.lang.uid}>,
+    sect=<{sect}>,
+    pitaka=<{self.pitaka.uid}>,
+    menu_seq=<{self.menu_seq}>,
     divisions={divisions}\n""".format(
         self=self,
+        sect=getattr(self.sect, 'uid', None),
         divisions="[{}]".format(", ".join(
             "<{}>".format(a.name) for a in self.divisions)))
-        
-    
+
+    @staticmethod
+    def sort_key(collection):
+        """Return the canonical sort key."""
+        return collection.menu_seq
 
 class Division(DivisionBase):
     __slots__ = ()
@@ -136,15 +149,24 @@ class Division(DivisionBase):
     uid={self.uid},
     collection={collection},
     name={self.name},
+    alt_name={self.alt_name},
     acronym={self.acronym},
     subdiv_ind={self.subdiv_ind},
     text_ref={self.text_ref},
+    menu_seq={self.menu_seq},
+    menu_gwt_ind={self.menu_gwt_ind},
     subdivisions={subdivisions}\n""".format(self=self,
         collection="<Collection>",
         subdivisions="[{}]".format(
             ", ".join("<{}>".format(a.uid)
                 for a in self.subdivisions)),
         )
+
+    @staticmethod
+    def sort_key(division):
+        """Return the canonical sort key."""
+        return division.menu_seq
+
     def has_subdivisions(self):
         return len(self.subdivisions) > 1
 
