@@ -5,11 +5,11 @@ import os
 import pathlib
 import textwrap
 import time
+import regex
 from contextlib import contextmanager
 from datetime import datetime
-import regex
 
-import config
+from sc import config
 
 @contextmanager
 def filelock(path, block=True):
@@ -67,12 +67,6 @@ def wrap(text, width=80, indent=0):
             break_on_hyphens=False) for line in text.splitlines()
     ])
     return textwrap.indent(text.strip(), ' ' * indent)
-
-def set_timezone(tz=None):
-    if not tz:
-        tz = config.timezone
-    os.environ['TZ'] = tz
-    time.tzset()
 
 def numericsortkey(string, _rex=regex.compile(r'(\d+)')):
     """ Intelligently sorts most kinds of data.

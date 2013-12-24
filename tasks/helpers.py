@@ -4,12 +4,11 @@ import colorama
 import plumbum.commands
 import regex
 import sys
-
-from plumbum import local
 from invoke import task
+from plumbum import local
 
-import config
-import util
+from sc import util
+
 
 _PP_HINTS = {
     'Compile': 'Compiling',
@@ -24,12 +23,14 @@ _PP_HINTS = {
     'Update': 'Updating',
 }
 
+
 def _color_print(string, color):
     """Print string in color."""
     print(color, end='')
     print(string, end='')
     print(colorama.Fore.RESET)
     sys.stdout.flush()
+
 
 def blurb(function):
     """Print the function's docstring in present participle tense."""
@@ -38,9 +39,11 @@ def blurb(function):
     first = _PP_HINTS.get(first, first + 'ing')
     notice('{} {}..'.format(first, rest))
 
+
 def notice(string):
     """Print string in blue."""
     _color_print(string, colorama.Fore.BLUE)
+
 
 def remote_run(login, commands):
     """Print string in blue."""
@@ -48,9 +51,11 @@ def remote_run(login, commands):
     command = "ssh {} '{}'".format(login, remote_command)
     run(command, echo=True, fg=True)
 
+
 def rm_rf(*files):
     """Recursively remove files."""
     run('rm -rf {}'.format(' '.join(map(str, files))))
+
 
 def run(command, echo=False, fg=False):
     """Runs command in a subprocess.
@@ -89,11 +94,13 @@ def run(command, echo=False, fg=False):
         warning('Exiting...')
         sys.exit(retcode)
 
+
 def run_src(statement, **kwargs):
     """Runs Python statement in the src directory."""
     command = local['python']['-c', statement]
     with local.cwd(local.cwd / 'src'):
         run(command, **kwargs)
+
 
 def warning(string):
     """Print string in red."""

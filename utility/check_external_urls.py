@@ -9,7 +9,8 @@ import threading
 from urllib.parse import urlparse
 
 import env
-import scimm
+
+from sc import scimm
 
 MAX_THREADS = 40
 MAX_URL_CHECKS = 5

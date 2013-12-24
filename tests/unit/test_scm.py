@@ -3,9 +3,9 @@ import pathlib
 from plumbum.commands.processes import ProcessExecutionError
 from unittest.mock import MagicMock
 
-from ..helper import SCTestCase
+from sc.scm import Scm
 
-from scm import Scm
+from tests.helper import SCTestCase
 
 def setup_last_commit_scm():
     scm = Scm('/foo')

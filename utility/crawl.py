@@ -158,6 +158,8 @@ if __name__ == '__main__':
             sys.stderr.write("{}: {}\n".format(path, str(e)))
         if wait > 0:
             time.sleep(wait)
+        # XXX DEBUG REMOVE
+        break
 
     total = time.time() - start
     if not quiet:

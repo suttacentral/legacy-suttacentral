@@ -1,6 +1,7 @@
-import regex as _regex, unicodedata as _unicodedata, math as  _math
 import itertools as _itertools
-import json as _json
+import math as  _math
+import regex as _regex
+import unicodedata as _unicodedata
 
 def numsortkey(input, index=0):
     """ Numerical sort. Handles identifiers well.

@@ -9,14 +9,11 @@ import time
 import urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
 
-import assets
-import config
-import data_repo
-import scimm
-from scm import scm, data_scm
-import util
-from menu import menu_data
-from classes import Parallel, Sutta
+import sc
+from sc import assets, config, data_repo, scimm, util
+from sc.menu import menu_data
+from sc.scm import scm, data_scm
+from sc.classes import Parallel, Sutta
 
 import logging
 logger = logging.getLogger(__name__)
@@ -34,12 +31,12 @@ def jinja2_environment():
         return __jinja2_environment
 
     env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(str(config.templates_dir)),
+        loader=jinja2.FileSystemLoader(str(sc.templates_dir)),
         extensions=[AssetsExtension],
         trim_blocks=True,
         lstrip_blocks=True,
     )
-    env.assets_environment = assets.env
+    env.assets_environment = assets.get_env()
 
     env.filters['date'] = util.format_date
     env.filters['time'] = util.format_time
@@ -199,7 +196,7 @@ class DownloadsView(InfoView):
             latest_path = exports_path / latest_filename
             if latest_path.exists():
                 local_path = latest_path.resolve()
-                relative_url = local_path.relative_to(config.static_dir)
+                relative_url = local_path.relative_to(sc.static_dir)
                 data.append({
                     'filename': local_path.name,
                     'url': '/{}'.format(relative_url),
@@ -210,7 +207,7 @@ class DownloadsView(InfoView):
         return data
 
     def __offline_data(self):
-        return self.__file_data('sc-offline', config.exports_dir)
+        return self.__file_data('sc-offline', sc.exports_dir)
 
 class ParallelView(ViewBase):
     """The view for the sutta parallels page."""
@@ -272,7 +269,7 @@ class TextView(ViewBase):
         self.lang_code = lang_code
 
     def setup_context(self, context):
-        from tools import html
+        from sc.tools import html
         m = self.content_regex.search(self.get_html())
         context.title = '?'
         if m['hgroup'] is not None:
@@ -289,9 +286,10 @@ class TextView(ViewBase):
     @property
     def path(self):
         try:
-            return scimm.imm().text_paths[self.lang_code][self.uid]
+            relative_path = scimm.imm().text_paths[self.lang_code][self.uid]
         except KeyError:
             return None
+        return sc.text_dir / relative_path
     
     def get_html(self):
         """Return the text HTML or raise a cherrypy.NotFound exception"""

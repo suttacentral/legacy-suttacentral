@@ -1,24 +1,13 @@
 import atexit
 import os
-import os.path
 import sys
-import time
 import unittest
-
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from urllib.parse import urljoin
 
-# Setup sys.path to import modules from the project directory.
-sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(
-    os.path.realpath(__file__))), 'src'))
-
-# Set UTC!
-os.environ['TZ'] = 'UTC'
-time.tzset()
-
-import config
+from sc import config
 
 base_url = None
 browser = None

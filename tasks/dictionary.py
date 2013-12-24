@@ -1,12 +1,14 @@
 """Dictionary tasks."""
 
-from .helpers import *
+from tasks.helpers import *
+
 
 @task
 def build():
     """Create the dictionary SQLite database."""
     blurb(build)
-    run('cd src && python build_dict_db.py')
+    run('python sc/build_dict_db.py')
+
 
 @task
 def clean():

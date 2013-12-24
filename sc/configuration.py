@@ -1,9 +1,9 @@
 import cherrypy
 import copy
-import pathlib
 import sys
+from cherrypy.lib.reprconf import as_dict
+from pathlib import Path
 
-_file_path = pathlib.Path(__file__).resolve()
 
 class Config(dict):
     """A flexible and convenient configuration class for SuttaCentral.
@@ -65,32 +65,10 @@ class Config(dict):
         ['app', 'data_dir'],
     ]
 
-    base_dir          = _file_path.parents[1]
-    source_dir        = base_dir / 'src'
-    global_conf_path  = base_dir / 'global.conf'
-    local_conf_path   = base_dir / 'local.conf'
-
-    static_dir        = base_dir / 'static'
-    templates_dir     = base_dir / 'templates'
-    exports_dir       = static_dir / 'exports'
-    tmp_dir           = base_dir / 'tmp'
-
-    db_dir            = base_dir / 'db'
-    dict_db_path      = db_dir / 'dictionaries.sqlite'
-    dict_sources_dir  = base_dir / 'dicts'
-
-    webassets_manifest_path = db_dir / 'webassets' / 'manifest'
-    webassets_cache_dir = db_dir / 'webassets' / 'cache'
-    compiled_css_dir  = static_dir / 'css' / 'compiled'
-    compiled_js_dir   = static_dir / 'js' / 'compiled'
-
-    @property
-    def table_dir(self):
-        return self.data_dir / 'table'
-
-    @property
-    def text_dir(self):
-        return self.data_dir / 'text'
+    _base_dir = Path(__file__).resolve().parents[1]
+    _static_dir = _base_dir / 'static'
+    global_config_path = _base_dir / 'global.conf'
+    local_config_path = _base_dir / 'local.conf'
 
     def reload(self):
         """Reload the configuration."""
@@ -103,10 +81,10 @@ class Config(dict):
         This will stringify any pathlib.Paths as cherrypy does not play
         nicely with such objects.
         """
-        result = self.__deepcopy(self)
+        result = copy.deepcopy(self)
         def stringify(dct):
             for key, value in dct.items():
-                if isinstance(value, self.__Path):
+                if isinstance(value, Path):
                     dct[key] = str(value)
                 elif isinstance(value, dict):
                     stringify(value)
@@ -115,12 +93,6 @@ class Config(dict):
 
     def __init__(self):
         dict.__init__(self)
-        # Manually copy these references to this object because they disappear
-        # from global scope when we do the module replacement trick. See the
-        # last line of this file.
-        self.__as_dict = cherrypy.lib.reprconf.as_dict
-        self.__deepcopy = copy.deepcopy
-        self.__Path = pathlib.Path
         self.__setup()
 
     def __getattr__(self, name):
@@ -132,28 +104,28 @@ class Config(dict):
             raise AttributeError("Config has no attribute '%s'" % name)
 
     def __setup(self):
-        config = self.__as_dict(str(self.global_conf_path))
+        config = as_dict(str(self.global_config_path))
         try:
-            local_config = self.__as_dict(str(self.local_conf_path))
+            local_config = as_dict(str(self.local_config_path))
             self.__deep_update(config, local_config)
         except IOError:
             pass
         self.update(config)
 
         for key, subkey in self.ABSOLUTE_PATHS:
-            self.__absolutize(key, subkey, self.base_dir)
+            self.__absolutize(key, subkey, self._base_dir)
 
         # Manually set tools.staticdir.root from static_dir
         if '/' not in self:
             self['/'] = {}
-        self['/']['tools.staticdir.root'] = self.static_dir
+        self['/']['tools.staticdir.root'] = self._static_dir
 
         # Absolutize any relative filename paths for cherrypy.
         for key, subdict in self.items():
             if key[0] == '/':
                 subkey = 'tools.staticfile.filename'
                 if subkey in subdict:
-                    self.__absolutize(key, subkey, self.static_dir)
+                    self.__absolutize(key, subkey, self._static_dir)
         return config
 
     def __deep_update(self, a, b):
@@ -170,19 +142,3 @@ class Config(dict):
                 path = self[key][subkey]
                 if path[0] != '/':
                     self[key][subkey] = base / path
-
-__config = Config()
-
-# Add the configuration files to trigger autoreload.
-cherrypy.engine.autoreload.files.add(str(__config.global_conf_path))
-cherrypy.engine.autoreload.files.add(str(__config.local_conf_path))
-
-# We manually add this file because cherrypy autoreloader doesn't recognize
-# it, probably because of the module munging.
-cherrypy.engine.autoreload.files.add(str(_file_path))
-
-# Do not use autoreloader against plumbum
-cherrypy.engine.autoreload.match = r'^(?!plumbum).+'
-
-# See http://mail.python.org/pipermail/python-ideas/2012-May/014969.html
-sys.modules[__name__] = __config

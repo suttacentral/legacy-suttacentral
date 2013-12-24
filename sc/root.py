@@ -1,13 +1,13 @@
 import cherrypy
 
-import config
-import show
-import tools
+import sc
+from sc import show
+from sc.tools import webtools
 
 # We expose everything we need to here.
 
 def error_page_404(status, message, traceback, version):
-    return (config.static_dir / '404.html').open('r', encoding='utf-8').read()
+    return (sc.static_dir / '404.html').open('r', encoding='utf-8').read()
 
 def get_cookie_or_param(name):
     if name in cherrypy.request.cookie:
@@ -18,9 +18,11 @@ def get_cookie_or_param(name):
         return None
 
 def remove_trailing_slash():
-    path = cherrypy.request.path_info
+    request = cherrypy.serving.request
+    path = request.path_info
     if path != '/' and path.endswith('/'):
-        raise cherrypy.HTTPRedirect(path[:-1], 301)
+        url = cherrypy.url(path[:-1], request.query_string)
+        raise cherrypy.HTTPRedirect(url, 301)
 
 def set_offline():
     if get_cookie_or_param('offline'):
@@ -45,7 +47,7 @@ class Root(object):
 
     def __init__(self):
         self.admin = Admin()
-        self.tools = tools.Tools()
+        self.tools = webtools.Tools()
 
     @cherrypy.expose
     def default(self, *args, **kwargs):

@@ -1,9 +1,15 @@
-import lxml.html, collections, sqlite3, itertools, regex, math
-
-import textfunctions, config
-
+import collections
+import lxml.html
+import regex
+import sqlite3
 import sys
-sys.path.append(str(config.dict_sources_dir))
+from pathlib import Path
+
+sys.path.insert(1, str(Path(__file__).resolve().parents[1]))
+import sc
+from sc import textfunctions
+
+sys.path.insert(1, str(sc.dict_sources_dir))
 import cped_data
 
 class PrettyRow(sqlite3.Row):
@@ -33,7 +39,7 @@ def create_brief(string, max_length=150):
         return regex.sub(r'\S+$', '', string)
 
 # Create the database.
-db_path = config.dict_db_path
+db_path = sc.dict_db_path
 tmp_db_path = db_path.with_suffix('.sqlite.tmp')
 try:
     tmp_db_path.unlink()
@@ -132,7 +138,7 @@ term_id = 0
 def build_dppn():
     global dict_id, entry_id, term_id, con
 
-    dict_path = config.dict_sources_dir / 'sc_dppn.html'
+    dict_path = sc.dict_sources_dir / 'sc_dppn.html'
     with dict_path.open('r', encoding='utf-8') as f:
         dom = lxml.html.fromstring(f.read())
 

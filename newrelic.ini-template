@@ -52,7 +52,9 @@ monitor_mode = true
 # write out a log file, it is also possible to say "stderr" and
 # output to standard error output. This would normally result in
 # output appearing in your web server log.
-log_file = {base_dir}/log/newrelic.log
+
+# Send logs to /dev/null otherwise log_level is not respected
+log_file = /dev/null
 
 # Sets the level of detail of messages sent to the log file, if
 # a log file location has been provided. Possible values, in

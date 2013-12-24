@@ -1,10 +1,16 @@
-from ..helper import SCTestCase, Keys
+from selenium.webdriver.common.keys import Keys
+
+from tests.helper import SCTestCase
 
 class SearchTestCase(SCTestCase):
 
     def test_bug_65_regression(self):
         self.goto('/')
         assert 'body' == self.active_element.tag_name
+
+    def test_bug_69_regression(self):
+        self.goto('/search/?query=sutta')
+        self.assertIn('You searched: sutta', self.css('body').text)
 
     def test_tab_focuses_search_input(self):
         self.goto('/')

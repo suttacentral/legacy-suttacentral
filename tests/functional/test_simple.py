@@ -1,7 +1,6 @@
-import re
-import pytest
+import regex
 
-from ..helper import SCTestCase
+from tests.helper import SCTestCase
 
 class SimpleTestCase(SCTestCase):
 
@@ -34,7 +33,7 @@ class SimpleTestCase(SCTestCase):
         self.assertRegex(source, r'Revision: +[0-9a-f]+\n')
         self.assertRegex(source, r'Date: +.+\n')
 
-    DN4_CITATION = re.sub(r'\s{2,}', ' ', """
+    DN4_CITATION = regex.sub(r'\s{2,}', ' ', """
         Parallels for DN 4 Soṇadaṇḍa (DN i 111): DA 22 (T i 094a18); SHT 1251,
         1352c; SF 42 (HARTMANN, Jens-Uwe 1989. Fragmente aus dem Dīrghāgama der
         Sarvāstivādins. In ENOMOTO Fumio, HARTMANN, Jens-Uwe, and MATSUMURA
@@ -48,7 +47,7 @@ class SimpleTestCase(SCTestCase):
         self.goto('/dn4')
         text_input = self.css('#parallel-citation > input')
         full_citation = text_input.get_attribute('value')
-        regex = r'^(.+)\. Retrieved from (.+) on (.+)\.$'
-        self.assertRegex(full_citation, regex)
-        matches = re.search(regex, full_citation)
+        re = r'^(.+)\. Retrieved from (.+) on (.+)\.$'
+        self.assertRegex(full_citation, re)
+        matches = regex.search(re, full_citation)
         self.assertEqual(self.DN4_CITATION, matches.group(1))

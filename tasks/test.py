@@ -1,6 +1,7 @@
 """Test tasks."""
 
-from .helpers import *
+from tasks.helpers import *
+
 
 def _run_tests(tests, url=None, phantomjs=False):
     environ = {}
@@ -11,17 +12,20 @@ def _run_tests(tests, url=None, phantomjs=False):
     with local.env(**environ):
         run('py.test {}'.format(tests), fg=True)
 
+
 @task
 def all(url=None, phantomjs=False):
     """Run all tests in the test suite."""
     blurb(all)
     _run_tests('tests', url=url, phantomjs=phantomjs)
 
+
 @task
 def functional(url=None, phantomjs=False):
     """Run the functional test suite."""
     blurb(functional)
     _run_tests('tests/functional', url=url, phantomjs=phantomjs)
+
 
 @task
 def unit():

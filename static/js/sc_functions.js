@@ -505,6 +505,12 @@ function toSyllablesInit(){
         
 
 function transliterate(func){
+    if (func == toMyanmar) {
+        $('#text').attr('lang', 'my');
+    } else {
+        // TODO other languages
+        $('#text').attr('lang', 'pi');
+    }
     if (func == toSyllables) {
         toSyllablesInit();
         $('.syllables').each(function(){
@@ -515,6 +521,18 @@ function transliterate(func){
     var classes = $(".sutta P, .sutta H1, .sutta H2, .sutta H3")
     for (var i = 0; i < classes.length; i++) {
         convertIteratively(classes[i], func);
+    }
+    if (func == toMyanmar) {
+        // This is to handle a strange artifact in Chrome.
+        var evam = $('#text .evam')[0];
+        if (evam) {
+            var textNode = evam.nextSibling;
+            if (textNode) {
+                var text = textNode.textContent;
+                text = text.replace(/^\s+/, '');
+                textNode.textContent = text;
+            }
+        }
     }
 }
 

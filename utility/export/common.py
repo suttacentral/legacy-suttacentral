@@ -8,9 +8,10 @@ import sys
 import time
 
 import env
-import config
 
-license_path = config.base_dir / 'LICENSE.txt'
+import sc
+
+license_path = sc.base_dir / 'LICENSE.txt'
 export_code_dir = pathlib.Path(__file__).parent
 
 def export_file_date():

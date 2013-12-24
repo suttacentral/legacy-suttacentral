@@ -2,9 +2,12 @@
 
 import os
 
-import config
+import sc
+from sc import config
+
 import tasks
-from .helpers import *
+from tasks.helpers import *
+
 
 @task
 def clean(aggressive=False):
@@ -20,13 +23,6 @@ def clean(aggressive=False):
         tasks.assets.clean(older=True)
         tasks.exports.offline.clean(older=True)
 
-@task('newrelic.update_ini')
-def daemonize():
-    """Run the *HARDCORE* server."""
-    blurb(daemonize)
-    os.chdir(str(config.source_dir))
-    os.environ['NEW_RELIC_CONFIG_FILE'] = str(config.base_dir / 'newrelic.ini')
-    os.execlp('newrelic-admin', 'newrelic-admin', 'run-program', 'cherryd', '-i', 'server')
 
 @task
 def reset():
@@ -37,16 +33,24 @@ def reset():
     tasks.dictionary.build()
     tasks.search.index()
 
+
+@task
+def server():
+    """Run the server."""
+    blurb(server)
+    if config.newrelic_license_key:
+        tasks.newrelic.update_ini()
+        os.environ['NEW_RELIC_ENVIRONMENT'] = config.newrelic_environment
+        os.environ['NEW_RELIC_CONFIG_FILE'] = str(sc.base_dir / 'newrelic.ini')
+        os.execlp('newrelic-admin', 'newrelic-admin', 'run-program', 'cherryd',
+                  '-i', 'sc.server')
+    else:
+        os.execlp('cherryd', 'cherryd', '-i', 'sc.server')
+
+
 @task
 def update_data():
     """Update the data repository."""
     blurb(update_data)
-    with local.cwd(config.data_dir):
+    with local.cwd(sc.data_dir):
         run('git pull')
-
-@task
-def server():
-    """Run the local development server."""
-    blurb(server)
-    os.chdir(str(config.source_dir))
-    os.execlp('python', 'python', 'server.py')

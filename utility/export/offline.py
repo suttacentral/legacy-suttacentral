@@ -8,14 +8,16 @@ import plumbum
 import tempfile
 
 import env
+
+import sc
+
 from common import *
-import config
 
 index_html_path = export_code_dir / 'offline_index.html'
 readme_path = export_code_dir / 'offline_readme.txt'
 
 def crawl(host, out_dir, wait=0.0, quiet=False):
-    cmd_path = config.base_dir / 'utility' / 'crawl.py'
+    cmd_path = sc.base_dir / 'utility' / 'crawl.py'
     args = ['--wait', str(wait)]
     if quiet:
         args.append('--quiet')
@@ -24,8 +26,8 @@ def crawl(host, out_dir, wait=0.0, quiet=False):
 
 def generate(host, wait=0.0, force=False, quiet=False):
     basename = 'sc-offline-{}'.format(export_file_date())
-    output_zip = config.exports_dir / (basename + '.zip')
-    output_7z = config.exports_dir / (basename + '.7z')
+    output_zip = sc.exports_dir / (basename + '.zip')
+    output_7z = sc.exports_dir / (basename + '.7z')
 
     # Check the targets to make sure they don't exist, unless we're force mode
     ensure_not_exists(output_zip, force=force, quiet=quiet)

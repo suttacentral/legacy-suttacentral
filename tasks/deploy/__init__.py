@@ -1,7 +1,6 @@
 from invoke import Collection
 
-from . import production
-from . import staging
+from tasks.deploy import production, staging
 
 ns = Collection()
 ns.add_collection(production)

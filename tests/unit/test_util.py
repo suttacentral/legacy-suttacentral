@@ -2,9 +2,9 @@ import datetime
 import pytz
 import unittest
 
-from ..helper import SCTestCase
+from sc import util
 
-import util
+from tests.helper import SCTestCase
 
 class UnitsTest(unittest.TestCase):
 

@@ -1,18 +1,11 @@
 import cherrypy
 import json
 import logging
-import os
-import regex
 
-import classes
-import data_repo
-import dictsearch
-import scimm
-import suttasearch
-import textsearch
-from scm import data_scm
-from util import filelock
-from views import *
+from sc import classes, data_repo, dictsearch, scimm, suttasearch, textsearch
+from sc.scm import data_scm
+from sc.util import filelock
+from sc.views import *
 
 logger = logging.getLogger(__name__)
 

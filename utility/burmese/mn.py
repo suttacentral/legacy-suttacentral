@@ -11,7 +11,7 @@ def mn_sections(html):
     sections = []
     section = None
     for el in doc.body:
-        if el.name == 'h4':
+        if el.name == 'h2':
             text = clean(el.text)
             if text[0] == '-':
                 text = text[1:]
@@ -27,6 +27,8 @@ def mn_sections(html):
                 section['content'] += tagit('h2', text)
         elif section and el.name == 'p':
             text = dash_to_em(curly_quote(clean(el.text)))
+            if text == '၁':  # ignore artifact
+                continue
             section['content'] += tagit('p', text)
     if section:
         sections.append(section)

@@ -1,20 +1,23 @@
 """Deploy to staging server tasks."""
 
-from ..helpers import *
+from tasks.helpers import *
+
 
 def _branch_or_pull(branch):
     if branch:
-        return ('git fetch && ' + \
-                'git checkout {0} || git checkout -t origin/{0} && ' + \
+        return ('git fetch && ' +
+                'git checkout {0} || git checkout -t origin/{0} && ' +
                 'git pull').format(branch)
     else:
         return 'git pull'
+
 
 def _staging_run(*commands):
     remote_run('sc-staging@vps.suttacentral.net', [
         'source $HOME/.virtualenvs/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
     ] + list(commands))
+
 
 @task
 def full(branch=None):
@@ -37,14 +40,16 @@ def full(branch=None):
         'invoke search.index'
     )
 
+
 @task
 def nonfree_fonts():
     """Copy local nonfree fonts to the staging server."""
     blurb(nonfree_fonts)
-    run('rsync -avz ' + \
-        'static/fonts/nonfree/ ' + \
-        'sc-staging@vps.suttacentral.net:' + \
+    run('rsync -avz ' +
+        'static/fonts/nonfree/ ' +
+        'sc-staging@vps.suttacentral.net:' +
         '/home/sc-staging/suttacentral/static/fonts/nonfree/', fg=True)
+
 
 @task
 def quick(branch=None):
@@ -58,6 +63,7 @@ def quick(branch=None):
         'invoke assets.clean --older'
     )
 
+
 @task
 def update_data(branch=None):
     """Deploy data changes to the staging server."""
@@ -66,6 +72,7 @@ def update_data(branch=None):
         'cd data',
         _branch_or_pull(branch)
     )
+
 
 @task
 def update_search():

@@ -25,22 +25,20 @@ MAX_RETRIVE_AGE = 900   # time in seconds.
 # targets for garbage collection. May live for longer.
 
 import random, pathlib, datetime, logging, io, regex, os
-import config
-from tools import html
+
 from cherrypy import expose, HTTPError
 from cherrypy.lib.static import serve_file
-from views import InfoView
 from collections import OrderedDict
 from zipfile import ZipFile, ZIP_DEFLATED, is_zipfile, ZipInfo
 from time import time as current_time
-from html import escape
 from tempfile import TemporaryFile, NamedTemporaryFile
 from bs4 import UnicodeDammit
-from util import humansortkey
 from subprocess import Popen, PIPE, call
 
-from tools import crumple, finalizer
-
+import sc
+from sc.views import InfoView
+from sc.util import humansortkey
+from . import html, crumple, finalizer
 
 logger = logging.Logger(__name__)
 

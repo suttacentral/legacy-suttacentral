@@ -126,6 +126,10 @@ $sutta-toc-menu-font-size: 11px;
             border-radius: 0 $sutta-toc-border-radius $sutta-toc-border-radius 0;
         }
     }
+
+    & > button:nth-child(4) {
+        font-family: $tharlon;
+    };
 }
 
 button#text_info_button,

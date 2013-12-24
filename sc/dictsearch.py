@@ -1,8 +1,12 @@
-import sqlite3, threading, time, collections, functools, concurrent.futures, unicodedata, time, regex, jinja2
+import functools
+import regex
+import sqlite3
+import threading
 from contextlib import contextmanager
 from html import escape
 
-import textfunctions, config, classes
+import sc
+from sc import classes, textfunctions
 
 class PrettyRow(sqlite3.Row):
     def __repr__(self):
@@ -149,7 +153,7 @@ class TermSortKey:
             score -= 0.05
         return score
         
-omni = OmniDictSearcher(dbname=str(config.dict_db_path))
+omni = OmniDictSearcher(dbname=str(sc.dict_db_path))
 
 def search(query, target='dict', limit=10, offset=0, ajax=0):
     dictResults = classes.DictionaryResultsCategory()
