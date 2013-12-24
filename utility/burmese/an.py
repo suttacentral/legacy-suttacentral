@@ -234,5 +234,5 @@ if __name__ == '__main__':
             with output_path.open('w', encoding='utf-8') as output:
                 html = output_html(division=division,
                     vagga=sutta['vagga_title'], title=sutta['title'],
-                    content=sutta['content'], css=True)
+                    content=sutta['content'])
                 output.write(html)
