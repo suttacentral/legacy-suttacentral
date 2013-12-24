@@ -16,9 +16,7 @@ from sc.tools import html
 
 from tasks.helpers import *
 
-
 data_file_json = sc.base_dir / 'utility' / 'tag_data.json'
-
 
 def analyze_path(path):
     by_tag = collections.defaultdict(collections.Counter)

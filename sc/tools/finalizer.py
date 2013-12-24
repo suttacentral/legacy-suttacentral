@@ -15,14 +15,16 @@ import sys, regex, os, shutil, collections, itertools
 import pathlib
 from copy import copy
 
+import sc
+
 def get_existing_uids(_cache=[]):
     try:
         return _cache[0]
     except IndexError:
         pass
-    import scimm
-    existing_uids = set(scimm.imm().suttas.keys())
-    for value in scimm.imm().text_paths.values():
+    imm = sc.scimm.imm()
+    existing_uids = set(imm.suttas.keys())
+    for value in imm.text_paths.values():
         existing_uids.update(value.keys())
     _cache.append(existing_uids)
     return existing_uids
@@ -32,12 +34,21 @@ def get_tag_data(_cache=[]):
         return _cache[0]
     except IndexError:
         pass
-    import config, json
-    jsonfile = config.base_dir / 'utility' / 'tag_data.json'
+    import json
+    jsonfile = sc.base_dir / 'utility' / 'tag_data.json'
     with jsonfile.open('r') as f:
         tag_data = json.load(f)
     _cache.append(tag_data)
     return tag_data
+
+
+def has_ascii_punct(root):
+    badpuncts = ('"', '--', "'s")
+    for e in root.iter():
+        for punct in badpuncts:
+            if (e.text and punct in e.text) or (e.tail and punct in e.tail):
+                return True
+            return False
 
 def finalize(root, entry, lang=None, metadata=None, options={}):
     pnums = set()
@@ -51,7 +62,9 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
     needsarticle = len(root.select('article')) == 0
     try:
         metadata = root.select_or_throw('#metaarea')[0]
+        hasmeta = True
     except:
+        hasmeta = False
         if not metadata:
             entry.error('No metadata found. Metadata should either be in a \
             <div id="metaarea"> tag, or a seperate file "meta.html".')
@@ -131,7 +144,8 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
     for h in root.select('h1,h2,h3,h4,h5,h6,h7'):
         if 'class' in h.attrib and 'supplied' in h.attrib['class']:
             supplied_misused = True
-
+    
+    all_ids = ','.join(tag_data['pnum_classes'].keys())
     for e in root.select(all_ids):
         if 'id' not in e.attrib:
             pnumbers_need_id = True
@@ -139,13 +153,8 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
     items = []
 
     # Does this file need emdashing?
-
-    badpuncts = ('"', '--', "'s")
-    for e in root.iter():
-        for punct in badpuncts:
-            if punct in e.text or punct in e.tail:
-                entry.warning("Contains ascii puncuation, consider applying emdashar or manually fix")
-                break
+    if has_ascii_punct(root):
+        entry.warning("Contains ascii puncuation, consider applying emdashar or manually fix")
     
     try:
         divtext = root.get_element_by_id('text')
@@ -161,7 +170,7 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
     # Now do stuff.
     if needsarticle:
         if multisutta:
-            raise NotImplementedError
+            raise sc.tools.webtools.ProcessingError("Multiple Suttas per file not implemented yet, sorry.")
         else:
             try:
                 section = root.select('section')[0]
@@ -208,7 +217,7 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
 
     used_ids = set()
     
-    if scnumbers_insane or not pnumbers or force_sc_nums:
+    if scnumbers_insane or not pnumbers or options.get('force_sc_nums'):
         for a in root.select('a.sc'):
             a.drop_tree()
         for section in root.select('section.sutta'):
@@ -239,58 +248,59 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
                 e.attrib['id'] = pid
     
     if needsmenu and not hasmenu:
-        # We should consider doing menu generation in JavaScript
-        try:
-            menu_list = []
-            if not multisutta:
-                headings = root.select('h2, h3, h4, h5, h6')
-                hcount = itertools.count(1)
-                for h in headings:
+        # We have JavaScript menu generation.
+        pass
+        #try:
+            #menu_list = []
+            #if not multisutta:
+                #headings = root.select('h2, h3, h4, h5, h6')
+                #hcount = itertools.count(1)
+                #for h in headings:
 
-                    if list(h.iterancestors('hgroup')):
-                        continue # skip initial heading.
-                    #try:
-                        #if h.getnext().tag in 'h2, h3, h4, h5, h6':
-                            #continue # Skip all but last heading in group
-                    #except AttributeError:
-                        #continue
-                    id = 'm{}'.format(next(hcount))
-                    # Wrangle the heading.
-                    a = copy(h)
-                    a.tag = 'a'
-                    a.attrib.update({'href':'#toc', 'id':id})
-                    h.clear()
-                    h.append(a)
+                    #if list(h.iterancestors('hgroup')):
+                        #continue # skip initial heading.
+                    ##try:
+                        ##if h.getnext().tag in 'h2, h3, h4, h5, h6':
+                            ##continue # Skip all but last heading in group
+                    ##except AttributeError:
+                        ##continue
+                    #id = 'm{}'.format(next(hcount))
+                    ## Wrangle the heading.
+                    #a = copy(h)
+                    #a.tag = 'a'
+                    #a.attrib.update({'href':'#toc', 'id':id})
+                    #h.clear()
+                    #h.append(a)
 
-                    # Create the menu item
-                    li = '<li><a href="#{}">{}</a></li>'.format(id, h.text_content())
-                    depth = int(h.tag[1])
-                    menu_list.append( (depth, li) )
-                max_d = max(t[0] for t in menu_list)
-                min_d = min(t[0] for t in menu_list)
-                menu_list = [ (1 + t[0] - min_d, t[1]) for t in menu_list]
+                    ## Create the menu item
+                    #li = '<li><a href="#{}">{}</a></li>'.format(id, h.text_content())
+                    #depth = int(h.tag[1])
+                    #menu_list.append( (depth, li) )
+                #max_d = max(t[0] for t in menu_list)
+                #min_d = min(t[0] for t in menu_list)
+                #menu_list = [ (1 + t[0] - min_d, t[1]) for t in menu_list]
 
-                # Build the menu
-                menu = root.makeelement('div', {'id':'menu'})
-                ul = root.makeelement('ul')
-                menu.append(ul)
-                last_d = 1
-                last_e = ul
-                for depth, li in menu_list:
-                    # Create a new ul if the menu is getting deeper.
-                    while depth > last_d:
-                        ul = root.makeelement('ul')
-                        last_e[-1].append(ul)
-                        last_e = ul
-                        last_d += 1
-                    while depth < last_d:
-                        last_e = last_e.getparent().getparent()
-                        last_d -= 1
-                    last_e.append(lxml.html.fromstring(li))
-                toc.insert(0, menu)
-        except (AttributeError, IndexError):
-            menu = '<ul>{}</ul>'.format("\n".join(t[1] for t in menu_list))
-            toc.insert(0, lxml.html.fragment_fromstring(menu))
+                ## Build the menu
+                #menu = root.makeelement('div', {'id':'menu'})
+                #ul = root.makeelement('ul')
+                #menu.append(ul)
+                #last_d = 1
+                #last_e = ul
+                #for depth, li in menu_list:
+                    ## Create a new ul if the menu is getting deeper.
+                    #while depth > last_d:
+                        #ul = root.makeelement('ul')
+                        #last_e[-1].append(ul)
+                        #last_e = ul
+                        #last_d += 1
+                    #while depth < last_d:
+                        #last_e = last_e.getparent().getparent()
+                        #last_d -= 1
+                    #last_e.append(lxml.html.fromstring(li))
+                #toc.insert(0, menu)
+        #except (AttributeError, IndexError):
+            #menu = '<ul>{}</ul>'.format("\n".join(t[1] for t in menu_list))
+            #toc.insert(0, lxml.html.fragment_fromstring(menu))
             
     if not hasmeta:
         if metadata is not None:

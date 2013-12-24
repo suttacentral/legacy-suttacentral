@@ -514,7 +514,7 @@ class CleanupProcessor(HTMLProcessor):
             else:
                 raise ProcessingError('No Tidy level or unknown Tidy level')
         
-        tidy_cmd = [config.tidyprogram] + tidy_cmd
+        tidy_cmd = [sc.config.tidyprogram] + tidy_cmd
         
         entry = self.entry
         entry.heading("Running HTML5 Tidy")
