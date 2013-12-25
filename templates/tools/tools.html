@@ -69,7 +69,7 @@ Tidy document and normalize class names.
 <li><input name="brackets" type="checkbox" checked> Convert brackets to classes in tag clusters. <p> Sometimes you get bracketed headings, sometimes you get <code>&lt;b&gt;[heading]&lt;/b&gt;</code> and <code>[&lt;b&gt;heading&lt;/b&gt;]</code>, this replaces brackets with a class, <code>RoBr</code> or <code>SqBr</code>.
 </ul>
 <li id="decruft">
-<h2> Remove cruft </h2>
+<h2> Remove rubbish </h2>
 <p>Often html documents will have huge quantities of 'boiler-plate' code or even just pointless rubbish. These options can help to effortlessly clear away vast swathes of such cruft.
 <ul>
 <li>
@@ -81,7 +81,7 @@ Replace the contents of body, with only elements that match the following css se
 <hr>
 <li>
 <input name="strip-header" type="checkbox" data-bound="[name=strip-header-css]" checked>Eliminate contents of the header unless they match:
-<input name="strip-header-css" type="text" value="style"><br>
+<input name="strip-header-css" type="text" value="title, style"><br>
 <p><em> Often there is no useful information in the header. If there is useful meta tags, for example <code>&lt;meta name="keywords" content="..."&gt;</code> and <code>&lt;meta name="translator" content="..."&gt;</code> then you could specify <code class="css">meta[name="keywords"], meta[name="translator"]</code> to save those elements from the cull.</em></p>
 </ul>
 <li>
@@ -101,7 +101,7 @@ Replace the contents of body, with only elements that match the following css se
 <li><input name="action" type="radio" value="detwingle" required>Attempt to fix corrupted characters which result from mixing Windows encoding with Unicode encoding.
 </li>
 <li> Please upload a zip archive containing the file or files to attempt to repair.<p>
-<input type="file" name="userfile" required>
+<input type="file" accept="zip" name="userfile" required>
 <button>Submit</button>
 </ul>
 
@@ -119,23 +119,6 @@ Replace the contents of body, with only elements that match the following css se
 <p>If a file lacks required elements then an error report will be generated explaining what needs to be fixed. Sometimes the utility will guess, in which case a warning or notice will be generated.
 <p>As a shorthand, where on suttacentral, a tag appears as: <code>&lt;span class="corr"&gt;gacchāmi&lt;/span&gt;</code> or <code>&lt;a class="wp" id="14"&gt;&lt;/a&gt;</code> you may instead use <code>&lt;corr&gt;gacchāmi&lt;/corr&gt;</code> or <code>&lt;wp&gt;14&lt;/wp&gt;</code>, the utility will automatically convert such tags into the proper HTML based on analysis of existing sutta central texts. If it is unable to make sense of a tag it will produce an error. Also if a class is used which is unknown to Sutta Central, a warning will be generated.
 <p>HTML code should be valid HTML5, this means that attributes don't have to be quoted, you can omit many end tags, ids can be numeric and so on.
-<li>
-<input name="finalize-commit" type="checkbox">Commit texts to the text repository.
-<p>If this option is selected then the files will be added to the repository and become visible on the website. This <em>requires</em> that no errors are generated. Furthermore within the zip file, files must either:<ul>
-<li>1) have a properly defined 'lang' attribute
-<code>&lt;div lang="en"&gt;</code>, or
-<li>2) be arranged into folders named the language code:
-
-<code><br>/fr/dn1.html<br>
-/fr/dn2.html<br>
-/de/dn1.html<br>
-/de/dn2.html<br>
-</code>
-Subfolders are acceptable and encouraged:<br>
-<code>/en/bhikkhu-bodhi/dn1.html</code>
-</ul>
-</p>
-<p> For obvious reasons this is not available to the public. If you would like to submit texts, please contact a Sutta Central team member
 <li>
 <input name="userfile" type="file" required>
 <button>Submit</button>

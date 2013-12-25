@@ -17,43 +17,123 @@ from copy import copy
 
 import sc
 
-def get_existing_uids(_cache=[]):
+def get_existing_file_uids(_cache=sc.util.TimedCache(lifetime=15 * 60)):
     try:
         return _cache[0]
-    except IndexError:
+    except KeyError:
         pass
+    
     imm = sc.scimm.imm()
-    existing_uids = set(imm.suttas.keys())
+    existing_file_uids = set()
     for value in imm.text_paths.values():
-        existing_uids.update(value.keys())
-    _cache.append(existing_uids)
-    return existing_uids
+        existing_file_uids.update(value.keys())
+    
+    _cache[0] = existing_file_uids
+    return existing_file_uids
 
-def get_tag_data(_cache=[]):
+def get_tag_data(_cache=sc.util.TimedCache(lifetime=15 * 60)):
     try:
         return _cache[0]
-    except IndexError:
+    except KeyError:
         pass
     import json
     jsonfile = sc.base_dir / 'utility' / 'tag_data.json'
     with jsonfile.open('r') as f:
         tag_data = json.load(f)
-    _cache.append(tag_data)
+    _cache[0] = tag_data
     return tag_data
 
+def process_metadata(root):
+    metaarea = root.select('div#metaarea')
+    if metaarea:
+        return metaarea[0]
+    pes = root.select('p')
+    if pes:
+        parent = pes[0].getparent()
+        if parent.tag == 'blockquote':
+            parent = parent.getparent()
+        parent.tag = 'div'
+        parent.attrib['id'] = 'metaarea'
+        return parent
+    if root.text and root.tag == 'div':
+        root.attrib['id'] = 'metaarea'
+        root.wrap_inner(root.makeelement('p'))
+        return root
+    raise tools.webtools.ProcessingError("Couldn't make sense of metadata")
 
+def normalize_id(string):
+    # Remove spaces between alpha char and digit
+    string = regex.sub(r'(?<=\p{alpha})\s+(?=\d)', '', string)
+    # Replace space between alpha with hyphen
+    string = regex.sub(r'(?<=\p{alpha})\s+(?=\p{alpha})', '-', string)
+    # Replace space between digits with period
+    string = regex.sub(r'(?<=\d)\s+(?=\d)', '.', string)
+    
+    # WARNING this can still return invalid ids, need to check
+    # the HTML5 standard. This is an area where not being restricted
+    # to the HTML4 standard would be very ideall. From memory
+    # in HTML5 is might be defined as a list of forbidden characters,
+    # with unicode characters in general being okay.
+    
+    return string
+
+def normalize_tags(root, entry):
+    tag_data = get_tag_data()
+    validtags = sc.tools.html.defs.tags
+    warned = set()
+    for e in root.iter():
+        if not isinstance(e.tag, str):
+            continue
+        if e.tag not in validtags:
+            if tag_data['pnum_classes'].get(e.tag):
+                # Certainly a paragraph number
+                
+                e.attrib['class'] = e.tag
+                e.tag = 'a'
+                id = e.attrib.get('id')
+                text = e.text
+                
+                if id and text:
+                    if id == text:
+                        e.text = None
+                
+                elif text:
+                    e.attrib['id'] = normalize_id(text)
+                    e.text = None
+            else:
+                tags = tag_data['by_class'].get(e.tag)
+                if tags:
+                    tags = sorted(tags.items(), key=lambda t: t[1], reverse=True)
+                    e.attrib['class'] = e.tag
+                    e.tag = tags[0][0]
+                else:
+                    if e.tag not in warned:
+                        entry.warning("Don't know what to do with tag: {}".format(e.tag), lineno=e.sourceline)
+                        warned.add(e.tag)
+
+def inspect_classes(root, entry):
+    tag_data = get_tag_data()
+    warned = set()
+    for e in self.iter():
+        if 'class' in e.attrib:
+            for class_ in e.attrib['class'].split():
+                if class_ not in tag_data['by_class']:
+                    if class_ not in warned:
+                        entry.warning("CSS class {} not recognized, this may be an error.".format(_class), lineno=e.sourceline)
+                        warned.add(class_)
+
+    
 def has_ascii_punct(root):
     badpuncts = ('"', '--', "'s")
     for e in root.iter():
         for punct in badpuncts:
             if (e.text and punct in e.text) or (e.tail and punct in e.tail):
-                return True
+                return (punct, e.sourceline)
             return False
 
-def finalize(root, entry, lang=None, metadata=None, options={}):
+def finalize(root, entry, languid=None, metadata=None, options={}):
     pnums = set()
     filename = entry.filename
-    existing_uids = get_existing_uids()
     tag_data = get_tag_data()
     # Analytics.
     print("Analyzing {}:".format(filename))
@@ -70,24 +150,89 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
             <div id="metaarea"> tag, or a seperate file "meta.html".')
             # No metadata is an error (i.e. absolutely invalidates text)
             # But we will continue to find more errors.
-        
+    
+    
     hasmenu = len(root.select('#menu')) > 0
     needsmenu = not hasmenu and len(root.select('h1, h2, h3')) > 3 or len(root.select('h1')) > 2
 
     try:
-        lang = root.select('div[lang], html[lang], section[lang], article[lang]')[0].attrib['lang']
+        doclang = root.select('div[lang], section[lang], article[lang]')[0].attrib['lang']
+        if not lang:
+            lang = doclang
+        else:
+            if lang != doclang:
+                entry.warning("Document language '{0}' does not match path language '{1}', defaulting to '{1}'".format(doclang, lang))
     except (IndexError, KeyError):
         if not lang:
-            entry.error('No language code found. Either use <div id="en">, or include \
-            in a subfolder en/filename.html')
+            entry.error('No language code found. Either use <div lang="en">, or include in a subfolder en/filename.html')
             # No language is an error, but we will forge ahead!
     
     uid = pathlib.Path(entry.filename).stem
-    if uid not in existing_uids:
-        entry.warning("The filename does not match the uid or filename of an \
-        existing text, this is okay if you are adding something completely \
-        new but is more likely an error.")
         
+    imm = sc.scimm.imm()
+    
+    if lang in imm.languages:
+        language_name = imm.languages[lang].name
+    else:
+        language_name = "Unknown Language"
+    
+    for ipass in range(0, 2):
+        if ipass == 0:
+            uid_ = uid
+        else:
+            # Try pruning the end of the uid.
+            m = regex.match(r'(.*?).?\d+-\d+$', uid)
+            if m:
+                uid_ = m[1]
+        if uid_ in imm.suttas:
+            entry.info("Looks like sutta text {0.acronym}: {0.name} ({1})".format(imm.suttas[uid_], language_name))
+            break
+        
+        elif uid_ in imm.divisions:
+            entry.info("Looks like division text {0.uid}: {0.name} ({1})".format(imm.divisions[uid_], language_name))
+            break
+            
+        elif uid_ in imm.subdivisions:
+            entry.info("Looks like subdivision text {0.uid}: {0.name} ({1})".format(imm.subdivisions[uid_], language_name))
+            break
+    else:
+        entry.warning("Don't know what {} is ({})".format(uid, 
+            language_name))
+        if uid not in get_existing_file_uids():
+            entry.warning("It also doesn't match any existing file.")
+    
+    # Examine for over-nesting
+    pes = []
+    for p in root.select('p'):
+        if p.getparent() == metadata:
+            continue
+        pes.append(p)
+    if not pes:
+        entry.warning("Document contains no paragraphs. This is okay only under exceptional circumstances. <div> tags containing text should be changed to <p>")
+    else:
+        midp = pes[int(len(pes)/2)]
+        ancestors = [e.tag for e in midp.iterancestors()]
+        anccount = len(ancestors) - 2 # html and body
+        if 'article' in ancestors:
+            anccount -= 1
+        if 'section' in ancestors:
+            anccount -= 1
+        if 'div' in ancestors:
+            anccount -= 1
+        if 'blockquote' in ancestors:
+            anccount -= 1
+        if anccount > 0:
+            entry.warning("Document content appears to be excessively nested, by {} levels.".format(anccount))
+    
+    rubbish = root.cssselect('body script, body link, body style')
+    if rubbish:
+        entry.warning("Document contains rubbish such as script or style tags. Has this document been cleaned up?")
+    for e in rubbish:
+        e.drop_tree()
+    
+    #Convert non-HTML tags to classes
+    normalize_tags(root, entry)
+    
     # Does this this file have numbering?
     pnumbers = False
     pnumbers_need_id = False
@@ -165,8 +310,13 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
 
     for e in root.select('#metaarea'):
         divtext.append(e)
-
-    divtext.attrib['lang'] = lang or base_lang
+    
+    for e in root.select('div, article, section'):
+        if 'lang' in e.attrib:
+            del e.attrib['lang']
+    if lang:
+        divtext.attrib['lang'] = lang
+        
     # Now do stuff.
     if needsarticle:
         if multisutta:
@@ -249,58 +399,9 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
     
     if needsmenu and not hasmenu:
         # We have JavaScript menu generation.
+        # Old code deleted because it was crappy. If we want
+        # static menus, convert code from sc_formatter.js
         pass
-        #try:
-            #menu_list = []
-            #if not multisutta:
-                #headings = root.select('h2, h3, h4, h5, h6')
-                #hcount = itertools.count(1)
-                #for h in headings:
-
-                    #if list(h.iterancestors('hgroup')):
-                        #continue # skip initial heading.
-                    ##try:
-                        ##if h.getnext().tag in 'h2, h3, h4, h5, h6':
-                            ##continue # Skip all but last heading in group
-                    ##except AttributeError:
-                        ##continue
-                    #id = 'm{}'.format(next(hcount))
-                    ## Wrangle the heading.
-                    #a = copy(h)
-                    #a.tag = 'a'
-                    #a.attrib.update({'href':'#toc', 'id':id})
-                    #h.clear()
-                    #h.append(a)
-
-                    ## Create the menu item
-                    #li = '<li><a href="#{}">{}</a></li>'.format(id, h.text_content())
-                    #depth = int(h.tag[1])
-                    #menu_list.append( (depth, li) )
-                #max_d = max(t[0] for t in menu_list)
-                #min_d = min(t[0] for t in menu_list)
-                #menu_list = [ (1 + t[0] - min_d, t[1]) for t in menu_list]
-
-                ## Build the menu
-                #menu = root.makeelement('div', {'id':'menu'})
-                #ul = root.makeelement('ul')
-                #menu.append(ul)
-                #last_d = 1
-                #last_e = ul
-                #for depth, li in menu_list:
-                    ## Create a new ul if the menu is getting deeper.
-                    #while depth > last_d:
-                        #ul = root.makeelement('ul')
-                        #last_e[-1].append(ul)
-                        #last_e = ul
-                        #last_d += 1
-                    #while depth < last_d:
-                        #last_e = last_e.getparent().getparent()
-                        #last_d -= 1
-                    #last_e.append(lxml.html.fromstring(li))
-                #toc.insert(0, menu)
-        #except (AttributeError, IndexError):
-            #menu = '<ul>{}</ul>'.format("\n".join(t[1] for t in menu_list))
-            #toc.insert(0, lxml.html.fragment_fromstring(menu))
             
     if not hasmeta:
         if metadata is not None:

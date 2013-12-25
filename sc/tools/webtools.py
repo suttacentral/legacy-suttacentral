@@ -95,13 +95,15 @@ class Report(list):
         may generate it's own entry.
         
         """
+        summary = ''
+        filename = ''
+        messages = []
+        errors = False
+        warnings = False
+        modified = False
         
         def __init__(self):
-            self.summary = ''
             self.messages = []
-            self.errors = False
-            self.warnings = False
-            self.modified = False
 
         def __repr__(self):
             out = '<Report.Entry ' + self.summary + ' : '
@@ -111,19 +113,19 @@ class Report(list):
             out += '>'
             return out
         
-        def error(self, msg):
+        def error(self, msg, lineno=None):
             self.errors = True
-            self.messages.append(('error', msg))
+            self.messages.append(('error', msg, lineno))
         
-        def warning(self, msg):
+        def warning(self, msg, lineno=None):
             self.warnings = True
-            self.messages.append(('warning', msg))
+            self.messages.append(('warning', msg, lineno))
         
-        def info(self, msg):
-            self.messages.append(('info', msg))
+        def info(self, msg, lineno=None):
+            self.messages.append(('info', msg, lineno))
             
-        def heading(self, msg):
-            self.messages.append(('heading', msg))
+        def heading(self, msg, lineno=None):
+            self.messages.append(('heading', msg, lineno))
     
     error = None # If error is set, something went badly wrong.
     title = ''
@@ -252,6 +254,8 @@ class ProcessorBase:
             if total_size > MAX_ARCHIVE_SIZE:
                 raise ProcessorError("Archive too large. Maximum uncompressed size is {}.".format(humansize(MAX_ARCHIVE_SIZE)))
             
+            preprocess_zip(inzip)
+            
             for zinfo in inzip.filelist:
                 data = self.process_file(inzip.open(zinfo, 'r'), zinfo)
                 if data is None:
@@ -271,7 +275,7 @@ class ProcessorBase:
         self.entry = entry
         self.report.append(entry)
         
-        entry.filename = zinfo.filename
+        entry.filename = pathlib.Path(zinfo.filename)
         entry.summary = "{}: {}".format(zinfo.filename, humansize(zinfo.file_size))
         if zinfo.file_size > MAX_FILE_SIZE:
             # This is probably malicious so we wont bend over backwards.
@@ -317,6 +321,10 @@ class ProcessorBase:
         # Out is bytes at the moment. Due to how ZipFile works the alternative
         # would be to create a TemporaryFile or use a pipe.
         return outdata
+    
+    def preprocess_zip(self, zipfile):
+        "May examine the zip and alter zipfile.listlist"
+        pass
     
     def preprocess_file(self, fileobj):
         return fileobj
@@ -464,6 +472,8 @@ class HTMLProcessor(ProcessorBase):
         self.process_root(root)
         html.xhtml_to_html(doc) # This is very fast.
         root.head.insert(0, doc.parser.makeelement('meta', charset="UTF-8"))
+        if not root.head.select('title'):
+            root.head.append(doc.parser.makeelement('title', charset="UTF-8"))
         root.attrib.clear()
         return html.tostring(doc.getroot(), doctype='<!DOCTYPE html>', 
                 encoding='UTF-8', include_meta_content_type=False)
@@ -564,9 +574,37 @@ class CleanupProcessor(HTMLProcessor):
         
 class FinalizeProcessor(HTMLProcessor):
     name = "Finalize"
+    metadata = {}
+    
+    def preprocess_zip(self, zipfile):
+        "Discover metadata and store in instance variable metadata"
+        
+        # We process any files named '*-meta.*', filtering them out.
+        newlist = []
+        for zi in zipfile.filelist:
+            filepath = pathlib.Path(zi.filename)
+            stem = filepath.stem.lower()
+            dirpath = filepath.parent
+            if stem.endswith('meta'):
+                string = zipfile.open(zi).read().decode(encoding='UTF-8')
+                root = html.fromstring(string)
+                self.metadata[dirpath] = finalizer.process_metadata(root)                
+            else:
+                newlist.append(zi)
+        
+        zipfile.filelist = newlist
     
     def process_root(self, root):
-        finalizer.finalize(root, entry=self.entry, options=self.options)
+        dirpath = self.entry.filename.parent
+        try:
+            lang = dirpath.parts[0].lower()
+            if len(lang) > 3:
+                languid = None
+        except IndexError:
+            languid = None
+        finalizer.finalize(root, entry=self.entry, options=self.options, 
+            metadata=self.metadata.get(dirpath),
+            languid=languid)
     
     
     
@@ -664,7 +702,7 @@ class Tools:
         # control and might need to revert to an earlier version of their work
         # TODO this should be the users time. Check how to do this on-line.
         
-        m = regex.match(r'(.*)_\d{2}-\d{2}-\d{2}_\d{2}:\d{2}:\d{2}', stem, regex.I)
+        m = regex.match(r'(.*?)(?:_\d{2}-\d{2}-\d{2})+(?:_\d{2}:\d{2}:\d{2})+$', stem, regex.I)
         if m:
             stem = m[1]
         

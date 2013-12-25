@@ -11,7 +11,7 @@ which now returns the html code of the element.
 """
 
 import lxml.html as _html
-from lxml.html import tostring, xhtml_to_html
+from lxml.html import tostring, xhtml_to_html, defs
 import lxml.etree as _etree
 import functools as _functools
 from html import escape # lxml.html doesn't define it's own escape

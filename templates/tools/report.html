@@ -16,15 +16,17 @@ Show:
 
 <ul>
 {% for entry in report %}
-    <li class="entry {{'even' if loop.index % 2 == 0 else 'odd'}}
+    <li class="entry{{' even' if loop.index % 2 == 0 else ''}}
     {{- ' warnings' if entry.warnings else '' }}{{ ' errors' if entry.errors else ''}}"> <span class="summary">{{entry.summary}}</span>
     {% if entry.messages %}
         <ul>
-            {% for cls, msg in entry.messages %}
+            {% for cls, msg, lineno in entry.messages %}
             {% if cls == 'heading' %}
-            <li class="{{cls}} {{'even' if loop.index % 2 == 0 else 'odd'}}">{{msg|e}}</li>
+            <li class="{{cls}}{{' even' if loop.index % 2 == 0 else ''}}">{{msg|e}}</li>
             {% else %}
-            <li class="{{cls}} {{'even' if loop.index % 2 == 0 else 'odd'}}">{{cls|title}}: {{msg|e}}</li>
+            <li class="{{cls}}{{' even' if loop.index % 2 == 0 else ''}}">
+                {{cls|title}}: {% if lineno %}Line {{lineno }}: {% endif -%}
+                    {{msg|e}}</li>
             {% endif %}
             {% endfor %}
         </ul>
