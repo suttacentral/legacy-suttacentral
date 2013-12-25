@@ -156,23 +156,24 @@ def finalize(root, entry, languid=None, metadata=None, options={}):
     needsmenu = not hasmenu and len(root.select('h1, h2, h3')) > 3 or len(root.select('h1')) > 2
 
     try:
-        doclang = root.select('div[lang], section[lang], article[lang]')[0].attrib['lang']
-        if not lang:
-            lang = doclang
-        else:
-            if lang != doclang:
-                entry.warning("Document language '{0}' does not match path language '{1}', defaulting to '{1}'".format(doclang, lang))
+        lang_iso_code = root.select('div[lang], section[lang], article[lang]')[0].attrib['lang']
+        #if not languid:
+            #languid = doclang
+        #else:
+            #if languid != doclang:
+                #entry.warning("Document language '{0}' does not match path language '{1}', defaulting to '{1}'".format(doclang, lang))
     except (IndexError, KeyError):
-        if not lang:
-            entry.error('No language code found. Either use <div lang="en">, or include in a subfolder en/filename.html')
-            # No language is an error, but we will forge ahead!
+        lang_iso_code = None
+        #if not lang:
+            #entry.error('No language code found. Either use <div lang="en">, or include in a subfolder en/filename.html')
+            ## No language is an error, but we will forge ahead!
     
     uid = pathlib.Path(entry.filename).stem
         
     imm = sc.scimm.imm()
     
-    if lang in imm.languages:
-        language_name = imm.languages[lang].name
+    if languid in imm.languages:
+        language_name = imm.languages[languid].name
     else:
         language_name = "Unknown Language"
     
@@ -314,8 +315,8 @@ def finalize(root, entry, languid=None, metadata=None, options={}):
     for e in root.select('div, article, section'):
         if 'lang' in e.attrib:
             del e.attrib['lang']
-    if lang:
-        divtext.attrib['lang'] = lang
+    if lang_iso_code:
+        divtext.attrib['lang'] = lang_iso_code
         
     # Now do stuff.
     if needsarticle:

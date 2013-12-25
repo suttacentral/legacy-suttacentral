@@ -140,9 +140,9 @@ class _Imm:
         # for example zh modern/ancient
         self.isocode_to_language = {}
         for language in self.languages.values():
-            if language.isocode not in self.isocode_to_language:
-                self.isocode_to_language[language.isocode] = []
-            self.isocode_to_language[language.isocode].append(language)
+            if language.iso_code not in self.isocode_to_language:
+                self.isocode_to_language[language.iso_code] = []
+            self.isocode_to_language[language.iso_code].append(language)
         
         # Gather up text refs:
         # From filesystem (This also returns important text_paths variable)

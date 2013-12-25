@@ -254,7 +254,7 @@ class ProcessorBase:
             if total_size > MAX_ARCHIVE_SIZE:
                 raise ProcessorError("Archive too large. Maximum uncompressed size is {}.".format(humansize(MAX_ARCHIVE_SIZE)))
             
-            preprocess_zip(inzip)
+            self.preprocess_zip(inzip)
             
             for zinfo in inzip.filelist:
                 data = self.process_file(inzip.open(zinfo, 'r'), zinfo)
