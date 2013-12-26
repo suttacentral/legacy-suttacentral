@@ -160,14 +160,15 @@ class HtHtmlElementMixin:
                         break
             
     
-    def pretty(self):
+    def pretty(self, **kwargs):
         """ Return a string with prettified whitespace """
-        string = _html.tostring(self, encoding='utf8', pretty_print=True).decode()
+        string = _html.tostring(self, pretty_print=True, **kwargs).decode()
         extra_tags = ('article', 'section', 'hgroup')
         string = _regex.sub(r'(<(?:{})[^>]*>)'.format('|'.join(extra_tags)), r'\n\1\n', string)
-        string = _regex.sub(r'(</(?:{})>)'.format('|'.join(extra_tags)), r'\1\n', string)
+        string = _regex.sub(r'(</(?:{})>)'.format('|'.join(extra_tags)), r'\n\1\n', string)
         string = string.replace('<br>', '<br>\n')
         string = string.replace('\n\n', '\n')
+        string = _regex.sub(r'\n +', '\n', string)
         return string
     
 # We need to jump through some hoops to ensure the mixins are included

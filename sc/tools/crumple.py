@@ -61,6 +61,10 @@ def generate_descriptive_name(attr, value):
             value = "bg " + value
     elif attr in {'text-align'}:
         name = 'text ' + value
+    elif value in {'italic', 'oblique'}:
+        name = "Italic"
+    elif value in {'bold', 'bolder'}:
+        name = "Bold"
     else:
         name = attr + ' ' + value
     
@@ -201,7 +205,7 @@ tidy_flags = """-c -w 0 --doctype html5 --quote-nbsp no
 def crumple(root, options={}):
     css = root.select_or_fail('style')[0].text
     new_css = ['/* Unmodified rules */']
-    new_css_rules = set()
+    new_css_rules = dict()
     
     xml_tags = options.get('xml-tags')
     
@@ -216,10 +220,15 @@ def crumple(root, options={}):
             
             classes = []
             
-            for pair in pairs:
-                name = generate_descriptive_name(*pair)
+            for attr, value in pairs:
+                if value.startswith('#'):
+                    colname = color_name(value)
+                    if colname:
+                        value = colname[0]
+                name = generate_descriptive_name(attr, value)
+                
                 classes.append(name)
-                new_css_rules.add((name, pair))
+                new_css_rules[name] = (attr, value)
             
             classes.sort()
             tidyclass_to_newclass[css_class] = " ".join(classes)
@@ -229,10 +238,9 @@ def crumple(root, options={}):
     new_css.append("/* Automatically Generated Classes */")
     new_css_rules.update(tag_classes.items())
     
-    new_css.extend("%s {%s: %s}" % (name, prop, val) 
-                    for name, (prop, val) in new_css_rules)
+    new_css.extend(".%s {%s: %s}" % (name, prop, val) 
+                    for name, (prop, val) in sorted(new_css_rules.items()))
     
-    new_css_text = "\n".join(new_css) + '\n'
-    root.select_or_fail('style')[0].text = new_css_text
+    root.select_or_fail('style')[0].text = "\n".join(new_css) + '\n'
     print(tidyclass_to_newclass)
     crunch(root.body, tidyclass_to_newclass, xml_tags=xml_tags)

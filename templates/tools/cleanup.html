@@ -1,31 +1,7 @@
-{% extends "base.html" -%}
-{% block content %}
+{% extends "tools/tools-base.html" -%}
+{% block tool %}
 
-
-
-<div id="onecol" class="tools">
-<section>
-<article>
-
-<div id="home">
-<div id="home-tabs">
-    <ul class="tabs">
-        <li class="active"><a href="#tools-about">About</a></li>
-        <li><a href="#tools-cleanup">Clean up bad HTML</a></li>
-        <li><a href="#tools-reencode">Fix encoding</a></li>
-        <li><a href="#tools-submit">Submit Texts</a></li>
-    </ul>
-</div>
-
-<div id="tools-about" style="display: block;">
-
-<h1>HTML Processing Services</h1>
-<p>You can use these online tools to clean up HTML produced by such tools as Microsoft Word, Libre Office, Calibre and various Content Management Systems. This page is optimized for producing HTML for Sutta Central. This utility can be used by anyone for any purpose, but if you want more options, consider [HTML tidy website] or downloading a copy of tidy. If you are a developer check [github] where the python scripts which are used under the hood are available.
-
-</div>
-
-<div id="tools-cleanup" style="display: block;">
-<form action="/tools/clean" method="post" enctype="multipart/form-data">
+<form id="tools-cleanup" action="/tools/clean" method="post" enctype="multipart/form-data">
 
 <ul>
 <li><h2>Clean up bad HTML</h2>
@@ -90,47 +66,5 @@ Replace the contents of body, with only elements that match the following css se
 <button>Submit</button></p>
 </ul>
 </form>
-</div>
-
-<div class="tools" id="tools-reencode" style="display: none;">
-<form action="/tools/reencode" method="post" enctype="multipart/form-data">
-<ul><li><h2> Re-encode</h2>
-<li><p>These functions only work on the following formats: txt, html, odt and xml.
-<li>
-<input name="action" type="radio" value="csxplus" required>Convert CSX+ to UTF-8. Only use if you know the document contains CSX+, works for both properly encoded CSX+ and CSX+ which has been mistakenly converted to UTF-8, in other words, it fixes the most common cases. If you need to fix a doc file, convert it to odt first.
-<li><input name="action" type="radio" value="detwingle" required>Attempt to fix corrupted characters which result from mixing Windows encoding with Unicode encoding.
-</li>
-<li> Please upload a zip archive containing the file or files to attempt to repair.<p>
-<input type="file" accept="zip" name="userfile" required>
-<button>Submit</button>
-</ul>
-
-</form>
-</div>
-
-
-<div id="tools-submit" style="display: none;">
-<form action="/tools/finalize" method="post" enctype="multipart/form-data">
-<ul>
-<li>
-<h2>Finalize HTML files for Sutta Central</h2>
-<li>
-<p>Within certain constraints, appropriately marked up HTML code will have the finishing touches put on them. This includes the proper use of section and article, paragraph numbers, menu generation and other details.
-<p>If a file lacks required elements then an error report will be generated explaining what needs to be fixed. Sometimes the utility will guess, in which case a warning or notice will be generated.
-<p>As a shorthand, where on suttacentral, a tag appears as: <code>&lt;span class="corr"&gt;gacchāmi&lt;/span&gt;</code> or <code>&lt;a class="wp" id="14"&gt;&lt;/a&gt;</code> you may instead use <code>&lt;corr&gt;gacchāmi&lt;/corr&gt;</code> or <code>&lt;wp&gt;14&lt;/wp&gt;</code>, the utility will automatically convert such tags into the proper HTML based on analysis of existing sutta central texts. If it is unable to make sense of a tag it will produce an error. Also if a class is used which is unknown to Sutta Central, a warning will be generated.
-<p>HTML code should be valid HTML5, this means that attributes don't have to be quoted, you can omit many end tags, ids can be numeric and so on.
-<li>
-<input name="userfile" type="file" required>
-<button>Submit</button>
-
-
-</form>
-</div>
-
-
-</article>
-</section>
-</div>
-</div>
 
 {%- endblock %}

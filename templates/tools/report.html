@@ -1,9 +1,5 @@
-{% from 'macros.html' import time_tag with context %}
-
-{% extends "base.html" -%}
-{% block content %}
-
-<div id="onecol" class="tools">
+{% extends "tools/tools-base.html" -%}
+{% block tool %}
 
 <div class="report">
 
@@ -40,10 +36,6 @@ Show:
 <p>Download your file <a class="result" href="{{report.result.url}}">{{report.result.filename}} ({{report.result.size}})</a></p>
 {% endif %}
 <p>{{report.footer}}</p>
-
-
-
-</div>
 
 </div>
 

@@ -194,7 +194,7 @@ sc_formatter = {
             decruft: $('[name=decruft]'),
             what: $('[name^=decruft-]'),
             discard: $('[name=decruft-discard]'),
-            unwrap: $('[name=decruft-unwrap'),
+            unwrap: $('[name=decruft-unwrap]'),
             update: function(e){
                 var self=decruft,
                     selectors = [];

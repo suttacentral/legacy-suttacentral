@@ -101,6 +101,7 @@ class Report(list):
         errors = False
         warnings = False
         modified = False
+        language = None
         
         def __init__(self):
             self.messages = []
@@ -161,12 +162,22 @@ class ReportView(InfoView):
 
 class ToolsView(InfoView):
     
-    def __init__(self):
-        super().__init__('tools/tools')
+    def __init__(self, template):
+        super().__init__(template)
         
     def setup_context(self, context):
         context.tidy_level = tidy_level
         context.tidy_options = tidy_options
+
+class SafeZipReader:
+    "File Like Object which provides secure read method for dodgy source zips"
+    # There is a bug in zipfile whereby trying to read a file
+    # with lovingly corrupted size information results in a 100% CPU hang.
+    # Only ZipExtFile.read is affected, ZipExtFile.read1 works fine.
+    def __init__(self, fo):
+        self.fo = fo
+    def read(self, n=-1):
+        return self.fo.read1(MAX_FILE_SIZE if n in (-1, None) else min(MAX_FILE_SIZE, n))
 
 class ProcessingError(Exception):
     pass
@@ -180,7 +191,7 @@ class ProcessorBase:
     and perhaps process_bytes.
     
     As a rule the data is passed around, while the flow control for report 
-    information is far less well defined.
+    information and other little bits of information is far less well defined.
     
     """
     
@@ -257,13 +268,19 @@ class ProcessorBase:
             self.preprocess_zip(inzip)
             
             for zinfo in inzip.filelist:
-                data = self.process_file(inzip.open(zinfo, 'r'), zinfo)
+                data = self.process_file(SafeZipReader(inzip.open(zinfo, 'r')), zinfo)
                 if data is None:
                     # This happens when an error occured.
                     continue
-                # Manually specify compress_type in case some loony uploads
-                # a -0 archive (archive compression is overridden by ZipInfo)
-                outzip.writestr(zinfo, data, compress_type=ZIP_DEFLATED)
+                if not hasattr(data, 'decode'):
+                    # Under exceptional cirumstances, an iterable of new
+                    # filedata is returned. This requires special handling.
+                    for filename, filedata in data:
+                        self.report.processed_bytes += len(filedata)
+                        outzip.writestr(str(filename), filedata)
+                else:
+                    self.report.processed_bytes += len(data)
+                    outzip.writestr(zinfo, data, compress_type=ZIP_DEFLATED)
         
         self.finalize_report(resultfile)
         return report
@@ -292,16 +309,12 @@ class ProcessorBase:
                             and suffix[1:] not in self.allowed_types):
                 entry.info("No instructions for {}".format(suffix))
             elif suffix in {'.txt'}:
-                entry.info("Treating as text")
                 fn = self.process_txt
             elif suffix in {'.html', '.htm'}:
-                entry.info("Treating as html")
                 fn = self.process_html
             elif suffix in {'.xml', '.xhtml'}:
-                entry.info("Treating as xml")
                 fn = self.process_xml
             elif suffix in {'.odt', '.sxw'}:
-                entry.info("Treating as Open Document")
                 fn = self.process_odt
             else:
                 entry.info("Unknown file, not processing")
@@ -311,7 +324,6 @@ class ProcessorBase:
             else:
                 fileobj = self.preprocess_file(fileobj)
                 outdata = fn(fileobj)
-                self.report.processed_bytes += len(outdata)
             
         except ProcessingError as e:
             entry.error(str(e))
@@ -355,7 +367,7 @@ class ProcessorBase:
                     self.entry.error("File too large. File must be no larger than {}.".format(humansize(MAX_FILE_SIZE)))
                     # probably malicious so an Error
                     raise ProcessingError
-                zi_in_obj = inodtzip.open(zinfo, 'r')
+                zi_in_obj = SafeZipReader(inodtzip.open(zinfo, 'r'))
                 if zinfo.filename == 'content.xml':
                     # Process content.xml
                     zdata = self.process_xml(zi_in_obj)
@@ -469,15 +481,23 @@ class HTMLProcessor(ProcessorBase):
     def process_html(self, fileobj):
         doc = html.parse(fileobj)
         root = doc.getroot()
-        self.process_root(root)
+        if not root.select('head'):
+            root.insert(0, root.makeelement('head'))
+            
         html.xhtml_to_html(doc) # This is very fast.
-        root.head.insert(0, doc.parser.makeelement('meta', charset="UTF-8"))
+        self.process_root(root)
+        
+        return self.root_to_bytes(root)
+    
+    def root_to_bytes(self, root):
+        root.head.insert(0, root.makeelement('meta', charset="UTF-8"))
         if not root.head.select('title'):
-            root.head.append(doc.parser.makeelement('title', charset="UTF-8"))
+            root.head.append(root.makeelement('title'))
         root.attrib.clear()
-        return html.tostring(doc.getroot(), doctype='<!DOCTYPE html>', 
-                encoding='UTF-8', include_meta_content_type=False)
-                
+        return root.pretty(doctype='<!DOCTYPE html>', 
+                encoding='UTF-8', 
+                include_meta_content_type=False).encode()
+        
     def process_root(self, root):
         raise NotImplementedError
     
@@ -492,7 +512,6 @@ class CleanupProcessor(HTMLProcessor):
     def preprocess_file(self, fileobj):
         """ Apply tidy as a preprocessor """
         
-        
         if self.mode == 'descriptiveclasses':
             # Set special tidy flags.
             self.options['tidy-flags'] = crumple.tidy_flags
@@ -505,7 +524,7 @@ class CleanupProcessor(HTMLProcessor):
         return fileobj
     
     def tidy(self, fileobj):
-        """ Call tidy on a fileobj, generates an Entry """
+        """ Call tidy on a fileobj """
         
         tidy_cmd = self.options.get('tidy-flags', '').split()
         if not tidy_cmd:
@@ -576,6 +595,15 @@ class FinalizeProcessor(HTMLProcessor):
     name = "Finalize"
     metadata = {}
     
+    def output_filename(self, filename):
+        filename = pathlib.Path(filename)
+        if self.options.get('canonical-paths') and self.entry.language:
+            p = finalizer.generate_canonical_path(self.entry.filename.stem, self.entry.language)
+            if p:
+                filename = p / filename.name
+        
+        return super().output_filename(filename)
+    
     def preprocess_zip(self, zipfile):
         "Discover metadata and store in instance variable metadata"
         
@@ -594,20 +622,61 @@ class FinalizeProcessor(HTMLProcessor):
         
         zipfile.filelist = newlist
     
+    def process_html(self, fileobj):
+        doc = html.parse(fileobj)
+        html.xhtml_to_html(doc) # This is very fast.
+        
+        root = doc.getroot()
+        
+        sections = root.select('section')
+        if len(sections) > 1:
+            self.entry.info("Looks like file contains {} suttas".format(
+                                                            len(sections)))
+            # Multiple sutta mode.
+            return self.process_many(root)
+        
+        # Single sutta mode.
+        self.process_root(root)
+        return self.root_to_bytes(root)
+    
     def process_root(self, root):
+        language = finalizer.discover_language(root, self.entry)
+        self.entry.language = language
         dirpath = self.entry.filename.parent
-        try:
-            lang = dirpath.parts[0].lower()
-            if len(lang) > 3:
-                languid = None
-        except IndexError:
-            languid = None
         finalizer.finalize(root, entry=self.entry, options=self.options, 
             metadata=self.metadata.get(dirpath),
-            languid=languid)
+            language=language)
     
-    
-    
+    def process_many(self, root):
+        orgentry = self.entry
+        orgroot = root
+        dirpath = self.entry.filename.parent
+        language = finalizer.discover_language(root, self.entry)
+        metadata = self.metadata.get(dirpath)
+        es = root.select('section section')
+        if es:
+            entry.error("File contains nested sections. Sections must not be nested.", lineno=es[0].sourceline)
+            raise ProcessingError("Unable to proceed due to nested sections")
+        for section in root.select('section'):
+            root = html.document_fromstring('<html><head><body>')
+            root.body.append(section)
+            entry = Report.Entry()
+            try:
+                entry.filename = pathlib.Path(section.attrib['id'])
+            except KeyError:
+                entry.error("Section has no 'id' attribute", lineno=section.sourceline)
+                raise ProcessingError("With multiple suttas in one file, <section id=\"uid\"> notation must be used")
+            self.report.append(entry)
+            self.entry = entry
+            self.entry.language = language
+            
+            finalizer.finalize(root, entry=entry, options=self.options, 
+                language=language, metadata=metadata)
+            entry.filename = pathlib.Path(root.select('section')[0].attrib['id']+ '.html') 
+            
+            filename = self.output_filename(orgentry.filename.parent / entry.filename)
+            
+            yield (filename, self.root_to_bytes(root))
 
 
 class Tools:
@@ -616,6 +685,8 @@ class Tools:
     Note that potential for denial of service is very high, since
     this module can do things like dynamically create files and consume
     gobs of cpu. The main consideration has been limiting memory use.
+    
+    Several countermeasures against zip bombs have been employed.
     
     """
     
@@ -635,7 +706,19 @@ class Tools:
         
     @expose()
     def index(self, **kwargs):
-        return ToolsView().render()
+        return ToolsView('tools/about').render()
+    
+    @expose()
+    def csx_reencode(self, **kwargs):
+        return ToolsView('tools/reencode').render()
+    
+    @expose()
+    def cleanup_bad_html(self, **kwargs):
+        return ToolsView('tools/cleanup').render()
+    
+    @expose()
+    def finalize_for_submission(self, **kwargs):
+        return ToolsView('tools/finalize').render()
     
     @expose()
     def reencode(self, userfile, action=None, **kwargs):
