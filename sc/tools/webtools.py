@@ -169,15 +169,30 @@ class ToolsView(InfoView):
         context.tidy_level = tidy_level
         context.tidy_options = tidy_options
 
-class SafeZipReader:
-    "File Like Object which provides secure read method for dodgy source zips"
-    # There is a bug in zipfile whereby trying to read a file
-    # with lovingly corrupted size information results in a 100% CPU hang.
-    # Only ZipExtFile.read is affected, ZipExtFile.read1 works fine.
-    def __init__(self, fo):
-        self.fo = fo
-    def read(self, n=-1):
-        return self.fo.read1(MAX_FILE_SIZE if n in (-1, None) else min(MAX_FILE_SIZE, n))
+def monkeypatch_ZipExtFile():
+    """ Fix 100% CPU infinite loop bug in zipfile.ZipExtFile.read
+    
+    A monkey patch seemed the best solution since as well as fixing
+    the hang, it also raises an exception on corrupt input (read1 doesn't
+    hang but silently returns corrupt binary data). The stdlib test_zipfile.py
+    passes just the same with this patch applied.
+    
+    This is required to harden the server against zip bombs.
+    
+    """
+    
+    from zipfile import ZipExtFile, BadZipFile
+    
+    _read1_org = ZipExtFile._read1
+    def _read1(self, n):
+        data = _read1_org(self, n)
+        if not data:
+            self._eof = True
+            self._update_crc(data)
+        return data
+    ZipExtFile._read1 = _read1
+
+monkeypatch_ZipExtFile()
 
 class ProcessingError(Exception):
     pass
@@ -268,7 +283,7 @@ class ProcessorBase:
             self.preprocess_zip(inzip)
             
             for zinfo in inzip.filelist:
-                data = self.process_file(SafeZipReader(inzip.open(zinfo, 'r')), zinfo)
+                data = self.process_file(inzip.open(zinfo, 'r'), zinfo)
                 if data is None:
                     # This happens when an error occured.
                     continue
@@ -367,7 +382,7 @@ class ProcessorBase:
                     self.entry.error("File too large. File must be no larger than {}.".format(humansize(MAX_FILE_SIZE)))
                     # probably malicious so an Error
                     raise ProcessingError
-                zi_in_obj = SafeZipReader(inodtzip.open(zinfo, 'r'))
+                zi_in_obj = inodtzip.open(zinfo, 'r')
                 if zinfo.filename == 'content.xml':
                     # Process content.xml
                     zdata = self.process_xml(zi_in_obj)
