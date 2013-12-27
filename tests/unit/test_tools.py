@@ -1,9 +1,21 @@
 import unittest
 import io
 
+import sc
 from sc.tools import *
 
+
 from tests.helper import SCTestCase
+
+def tidy_available():
+    from subprocess import Popen, PIPE, DEVNULL
+    try:
+        cmd = [sc.config.app['tidyprogram'], '-v']
+        with Popen(cmd, stdin=None, stdout=PIPE, stderr=DEVNULL) as tidy:
+            return b'HTML5' in tidy.communicate()[0]
+    except FileNotFoundError:
+        pass
+    return False
 
 class UnitsTest(unittest.TestCase):
     def test1plus1(self):
@@ -104,22 +116,24 @@ class UnitsTest(unittest.TestCase):
         result = cp.process_html(self.badhtml)
         self.assertEqual(result.decode(), self.libxml2html)
     
-    # Tests disabled temporarily until we get tidy for travis
+    @unittest.skipUnless(tidy_available(), 
+        "Tidy not available, or not HTML5 version")
+    def test_tidy(self):
+        options = {'cleanup': 'html5tidy', 'tidy-level':'moderate'}
+        cp = webtools.CleanupProcessor(**options)
+        cp.entry = webtools.Report.Entry()
+        result = cp.process_html(self.badhtml)
+        self.assertEqual(result.decode(), self.tidyhtml)
     
-    #def test_tidy(self):
-        #options = {'cleanup': 'html5tidy', 'tidy-level':'moderate'}
-        #cp = webtools.CleanupProcessor(**options)
-        #cp.entry = webtools.Report.Entry()
-        #result = cp.process_html(self.badhtml)
-        #self.assertEqual(result.decode(), self.tidyhtml)
+    @unittest.skipUnless(tidy_available(), 
+        "Tidy not available, or not HTML5 version")
+    def test_crumple(self):
+        options = {'cleanup':'descriptiveclasses'}
+        cp = webtools.CleanupProcessor(**options)
+        cp.entry = webtools.Report.Entry()
         
-    #def test_crumple(self):
-        #options = {'cleanup':'descriptiveclasses'}
-        #cp = webtools.CleanupProcessor(**options)
-        #cp.entry = webtools.Report.Entry()
-        
-        #result = cp.process_html(cp.preprocess_file(self.badhtml))
-        #self.assertEqual(result.decode(), self.crumpledhtml)
+        result = cp.process_html(cp.preprocess_file(self.badhtml))
+        self.assertEqual(result.decode(), self.crumpledhtml)
         
     def test_finalize(self):
         pass
