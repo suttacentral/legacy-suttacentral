@@ -373,23 +373,29 @@ class ProcessorBase:
         (much) the document will come out just fine.
         
         """
-        
         outodtdata = io.BytesIO()
+        try:
+            odt.seek(0)
+        except io.UnsupportedOperation:
+            # ZipFile requires a seekable stream so we'll load
+            # the odt into an io.BytesIO
+            odt = io.BytesIO(odt.read())
+            odt.seek(0)
         with ZipFile(odt, 'r') as inodt,\
-                ZipFile(io.BytesIO(outodtdata), 'w', ZIP_DEFLATED) as outodt:
-            for zinfo in inodtzip.filelist:
+                ZipFile(outodtdata, 'w', ZIP_DEFLATED) as outodt:
+            for zinfo in inodt.filelist:
                 if zinfo.file_size > MAX_FILE_SIZE:
                     self.entry.error("File too large. File must be no larger than {}.".format(humansize(MAX_FILE_SIZE)))
                     # probably malicious so an Error
                     raise ProcessingError
-                zi_in_obj = inodtzip.open(zinfo, 'r')
+                zi_in_obj = inodt.open(zinfo, 'r')
                 if zinfo.filename == 'content.xml':
                     # Process content.xml
                     zdata = self.process_xml(zi_in_obj)
                 else:
                     # Everything else, just copy straight through.
                     zdata = zi_in_obj.read()
-                outodtzip.writestr(zinfo, zdata)
+                outodt.writestr(zinfo, zdata)
         
         return outodtdata.getvalue()
     
