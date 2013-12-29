@@ -1,5 +1,6 @@
 import unittest
 import io
+from zipfile import ZipFile
 
 import sc
 from sc.tools import *
@@ -137,3 +138,36 @@ class UnitsTest(unittest.TestCase):
         
     def test_finalize(self):
         pass
+    
+    def test_csxconvert(self):
+        # This zip contains an entry on frogs in txt (latin1)
+        # html (utf-8) and odt (utf-8)
+        
+        ff = (sc.config.test_samples_dir / 'ff.zip').open('rb')
+        csxp = webtools.CSXProcessor()
+        result = csxp.process_zip(ff, ff.name)
+        
+        # Affirm result is a valid ZipFile
+        z = ZipFile(result.result.fileobj)
+        
+        # Affirm content is now utf8
+        text = z.read('ff-latin1.txt').decode(encoding='UTF-8')
+        
+        # 'Maṇḍūka', 'Nīlamaṇḍūka', 'Uddhumāyikā'
+        
+        # And it has been properly transcoded.
+        self.assertIn('Maṇḍūka', text)
+        
+        html = z.read('ff-utf8.html').decode(encoding='UTF-8')
+        self.assertIn('Nīlamaṇḍūka', text)
+        
+        # This doesn't completely test odt but confirms that
+        # it basically worked.
+        odt = z.open('ff.odt')
+        odt = io.BytesIO(odt.read()) # Needs to be seekable
+        
+        odtz = ZipFile(odt)
+        content = odtz.read('content.xml').decode(encoding='UTF-8')
+        self.assertIn('Uddhumāyikā', content)
+        
+

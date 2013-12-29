@@ -69,6 +69,7 @@ class Config(dict):
     _static_dir = _base_dir / 'static'
     global_config_path = _base_dir / 'global.conf'
     local_config_path = _base_dir / 'local.conf'
+    test_samples_dir = _base_dir / 'tests' / 'samples'
 
     def reload(self):
         """Reload the configuration."""
