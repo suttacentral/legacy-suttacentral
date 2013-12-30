@@ -200,8 +200,8 @@ class ProcessingError(Exception):
 class ProcessorError(Exception):
     pass
 
-class ProcessorBase:
-    """ The ProcessorBase attempts to implement all the zip and filehandling
+class BaseProcessor:
+    """ The BaseProcessor attempts to implement all the zip and filehandling
     stuff so that derived classes only need to implement process_str,
     and perhaps process_bytes.
     
@@ -365,6 +365,57 @@ class ProcessorBase:
     def process_xml(self, fileobj):
         raise NotImplementedError
     
+    def process_zipfmt(self, inzipfile, fn_map=None):
+        """ Processes a format which is actually just a zip file
+        
+        This includes formats such as odt, epub, docx and many more,
+        however fn_map must declare what contents are to be converted.
+        
+        fn_map should be a dict or dict-like-object, for each
+        file in inzip, process_zipfmt will first try fn_map.get(filename)
+        then fn_map.get(suffix), if get(filename) returns a non-None falsey
+        value (i.e. False) then the file is explicitly skipped even if the
+        suffix check would have permitted it to be processed.
+        
+        Fancier criteria such as regex match or Path match can be implemented
+        by passing in a custom class which defines 'get' and returns either a
+        function or None.
+        
+        """
+        
+        if not fn_map:
+            raise ValueError("Function map must be defined")
+        
+        outzipfile = io.BytesIO()
+        try:
+            inzipfile.seek(0)
+        except io.UnsupportedOperation:
+            # ZipFile requires a seekable stream so we'll load
+            # the file into an io.BytesIO
+            inzipfile = io.BytesIO(inzipfile.read())
+            inzipfile.seek(0)
+        with ZipFile(inzipfile, 'r') as inzip,\
+                ZipFile(outzipfile, 'w', ZIP_DEFLATED) as outzip:
+            for zinfo in inzip.filelist:
+                if zinfo.file_size > MAX_FILE_SIZE:
+                    self.entry.error("File too large. File must be no larger than {}.".format(humansize(MAX_FILE_SIZE)))
+                    # probably malicious so an Error
+                    raise ProcessingError
+                zi_in_obj = inzip.open(zinfo, 'r')
+                filename = zinfo.filename
+                
+                fn = fn_map.get(filename)
+                if fn is None:
+                    fn = fn_map.get(pathlib.Path(filename).suffix.lower())
+                if fn:
+                    zdata = fn(zi_in_obj)
+                else:
+                    # Everything else, just copy straight through.
+                    zdata = zi_in_obj.read()
+                outzip.writestr(zinfo, zdata)
+        
+        return outzipfile.getvalue()
+    
     def process_odt(self, odt):
         """ Calls process_xml on content.xml inside the odt 
         
@@ -373,31 +424,21 @@ class ProcessorBase:
         (much) the document will come out just fine.
         
         """
-        outodtdata = io.BytesIO()
-        try:
-            odt.seek(0)
-        except io.UnsupportedOperation:
-            # ZipFile requires a seekable stream so we'll load
-            # the odt into an io.BytesIO
-            odt = io.BytesIO(odt.read())
-            odt.seek(0)
-        with ZipFile(odt, 'r') as inodt,\
-                ZipFile(outodtdata, 'w', ZIP_DEFLATED) as outodt:
-            for zinfo in inodt.filelist:
-                if zinfo.file_size > MAX_FILE_SIZE:
-                    self.entry.error("File too large. File must be no larger than {}.".format(humansize(MAX_FILE_SIZE)))
-                    # probably malicious so an Error
-                    raise ProcessingError
-                zi_in_obj = inodt.open(zinfo, 'r')
-                if zinfo.filename == 'content.xml':
-                    # Process content.xml
-                    zdata = self.process_xml(zi_in_obj)
-                else:
-                    # Everything else, just copy straight through.
-                    zdata = zi_in_obj.read()
-                outodt.writestr(zinfo, zdata)
         
-        return outodtdata.getvalue()
+        return self.process_zipfmt(odt, {'content.xml': self.process_xml})
+    
+    def process_epub(self, epub):
+        """ Convert epub 
+        
+        I don't have the epub specification on hand but it seems that
+        the content will be either html or xhtml files. However regardless
+        of whether it calls them .html or .xhtml, they seem either way
+        to be approximately polygot or xhtml markup.
+        
+        """
+        
+        return self.process_zipfmt(epub, {'.html': self.process_xml, 
+                                   '.xhtml': self.process_xml})
     
     def process_bytes(self, data):
         # Default encoding is utf8. If another encoding is needed, 
@@ -408,7 +449,7 @@ class ProcessorBase:
     def process_str(self, string):
         raise NotImplementedError
 
-class TextProcessor(ProcessorBase):
+class TextProcessor(BaseProcessor):
     """ Only process the text contents of the file, leaving markup alone 
     
     The derived class should implement process_str.
@@ -468,7 +509,7 @@ class CSXProcessor(TextProcessor):
                     'àâãäåæ\x83\x88\x8c\x93\x96çèéêëìíîïð¤¥ñòóôõö÷øùú§üýþÿ',
                     'āĀīĪūŪâêîôûṛṚṝṜḷḶḹḸṅṄñÑṭṬḍḌṇṆśŚṣṢṁṃṂḥḤ')
 
-class DetwingleProcessor(ProcessorBase):
+class DetwingleProcessor(BaseProcessor):
     """ Calls bs4.UnicodeDammit.detwingle
     
     Shouldn't cause any harm if the document is already UTF-8.
@@ -488,7 +529,7 @@ class DetwingleProcessor(ProcessorBase):
     # which creates XML would already have re-encoded and detwingle
     # only works on "mixed encoded bytes".
 
-class HTMLProcessor(ProcessorBase):
+class HTMLProcessor(BaseProcessor):
     "Inputs HTML/XHTML, outputs HTML5 with UTF-8 encoding"
     
     allowed_types = {'.htm', '.html', '.xhtml'}
