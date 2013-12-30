@@ -1,1 +1,1 @@
-__all__ = ('webtools', 'finalizer', 'html', 'crumple')
+__all__ = ('webtools', 'finalizer', 'html', 'crumple', 'emdashar')

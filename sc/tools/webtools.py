@@ -39,6 +39,7 @@ import sc
 from sc.views import InfoView
 from sc.util import humansortkey
 from . import html, crumple, finalizer
+from .emdashar import Emdashar, SortedLogger
 
 logger = logging.Logger(__name__)
 
@@ -85,6 +86,16 @@ def humantime(seconds):
     else:
         out = '{:.3g}s'.format(seconds)
     return out
+
+
+def TempFile(infile=None):
+    "Create a suitable temporary file"
+    outfile = TemporaryFile()
+    if infile and hasattr(infile, 'read'):
+        outfile.writelines(infile)
+        outfile.seek(0)
+    return outfile
+        
 
 class Report(list):
     """ A report is generated per upload """
@@ -252,6 +263,15 @@ class BaseProcessor:
         self.finalize_report(resultfile)
         return report        
     
+    type_map = {'.txt': 'process_txt',
+                '.xml': 'process_xml',
+                '.xhtml': 'process_html',
+                '.html': 'process_html',
+                '.htm': 'process_html',
+                '.epub': 'process_epub',
+                '.odt': 'process_odt',
+                '.sxw': 'process_odt'}
+    
     def process_zip(self, inzipfile, filename):
         """ Process every file in a zip archive
         
@@ -323,14 +343,9 @@ class BaseProcessor:
             if (self.allowed_types and suffix not in self.allowed_types 
                             and suffix[1:] not in self.allowed_types):
                 entry.info("No instructions for {}".format(suffix))
-            elif suffix in {'.txt'}:
-                fn = self.process_txt
-            elif suffix in {'.html', '.htm'}:
-                fn = self.process_html
-            elif suffix in {'.xml', '.xhtml'}:
-                fn = self.process_xml
-            elif suffix in {'.odt', '.sxw'}:
-                fn = self.process_odt
+            elif suffix in self.type_map:
+                # Raises attribute error. Programmer should see.
+                fn = getattr(self, self.type_map[suffix])
             else:
                 entry.info("Unknown file, not processing")
             
@@ -346,7 +361,10 @@ class BaseProcessor:
         
         zinfo.filename = self.output_filename(zinfo.filename)
         # Out is bytes at the moment. Due to how ZipFile works the alternative
-        # would be to create a TemporaryFile or use a pipe.
+        # would be to create a TemporaryFile, this is because ZipFile's write
+        # method needs to know information like the data length, it thus 
+        # requires the complete data, either as bytes, or a file.
+        # Keeping it zipping around in memory seems expedient.
         return outdata
     
     def preprocess_zip(self, zipfile):
@@ -368,8 +386,9 @@ class BaseProcessor:
     def process_zipfmt(self, inzipfile, fn_map=None):
         """ Processes a format which is actually just a zip file
         
-        This includes formats such as odt, epub, docx and many more,
-        however fn_map must declare what contents are to be converted.
+        This includes formats such as odt, epub, docx and many more, however
+        fn_map must declare what contents are actually to be processed, since
+        all these formats will have numerous non-content files in the archive.
         
         fn_map should be a dict or dict-like-object, for each
         file in inzip, process_zipfmt will first try fn_map.get(filename)
@@ -386,16 +405,18 @@ class BaseProcessor:
         if not fn_map:
             raise ValueError("Function map must be defined")
         
-        outzipfile = io.BytesIO()
+        entry = self.entry
+        
+        outzipfile = TempFile()
         try:
             inzipfile.seek(0)
         except io.UnsupportedOperation:
-            # ZipFile requires a seekable stream so we'll load
-            # the file into an io.BytesIO
-            inzipfile = io.BytesIO(inzipfile.read())
-            inzipfile.seek(0)
+            # ZipFile requires a seekable stream
+            inzipfile = TempFile(inzipfile)
         with ZipFile(inzipfile, 'r') as inzip,\
                 ZipFile(outzipfile, 'w', ZIP_DEFLATED) as outzip:
+            total_size = sum(zinfo.file_size for zinfo in inzip.filelist)
+            entry.summary = '{}: {}'.format(entry.filename, humansize(total_size))
             for zinfo in inzip.filelist:
                 if zinfo.file_size > MAX_FILE_SIZE:
                     self.entry.error("File too large. File must be no larger than {}.".format(humansize(MAX_FILE_SIZE)))
@@ -414,7 +435,8 @@ class BaseProcessor:
                     zdata = zi_in_obj.read()
                 outzip.writestr(zinfo, zdata)
         
-        return outzipfile.getvalue()
+        outzipfile.seek(0)
+        return outzipfile.read()
     
     def process_odt(self, odt):
         """ Calls process_xml on content.xml inside the odt 
@@ -437,8 +459,8 @@ class BaseProcessor:
         
         """
         
-        return self.process_zipfmt(epub, {'.html': self.process_xml, 
-                                   '.xhtml': self.process_xml})
+        return self.process_zipfmt(epub, {'.html': self.process_html, 
+                                   '.xhtml': self.process_html})
     
     def process_bytes(self, data):
         # Default encoding is utf8. If another encoding is needed, 
@@ -740,6 +762,52 @@ class FinalizeProcessor(HTMLProcessor):
             
             yield (filename, self.root_to_bytes(root))
 
+class EmdasharProcessor(BaseProcessor):
+    name = "Fix Puncutation"
+    allowed_types = None
+    def process_txt(self, fileobj):
+        text = fileobj.read().decode()
+        text = text.replace('\n\n', '<p>').replace('\n', '<br>')
+        root = html.fromstring(text)
+        self.process_root(root)
+        text = str(html).replace('<p>', '\n\n').replace('<br>', '\n')
+        return text.encode()
+    
+    def process_html(self, fileobj):
+        doc = html.parse(fileobj)
+        self.process_root(doc.getroot())
+        return html.tostring(doc, doctype=doc.docinfo.doctype, 
+                        encoding=self.output_encoding or doc.docinfo.encoding)
+    
+    def process_xml(self, fileobj):
+        doc = html.parseXML(fileobj)
+        self.process_root(doc.getroot())
+        return html._etree.tostring(doc, xml_declaration=True, 
+                        doctype=doc.docinfo.doctype or '<!DOCTYPE html>',
+                        encoding=self.output_encoding or doc.docinfo.encoding)
+    
+    def process_root(self, root):
+        self.entry.info('Applying Emdashar')
+        
+        if self.options.get('details'):
+            logger = SortedLogger()
+            logger.file = TemporaryFile('w+')
+        else:
+            logger = None
+        dashar = Emdashar(logger=logger)
+        print(len(list(root.iter('p'))))
+        for p in root.iter('p'):
+            print('Dashing')
+            if p.text:
+                p.text = p.text.lstrip()
+            dashar.emdash(p)
+            
+        if self.options.get('details'):
+            logger.flush()
+            logger.file.seek(0)
+            self.entry.info('Details of {} changes:'.format(logger.count))
+            for line in logger.file:
+                self.entry.info(line)
 
 class Tools:
     """ Provide HTML/XML processing web services.
@@ -779,9 +847,13 @@ class Tools:
         return ToolsView('tools/cleanup').render()
     
     @expose()
+    def fix_punctuation(self, **kwargs):
+        return ToolsView('tools/emdashar').render()
+        
+    @expose()
     def finalize_for_submission(self, **kwargs):
         return ToolsView('tools/finalize').render()
-    
+
     @expose()
     def reencode(self, userfile, action=None, **kwargs):
         if action == 'csxplus':
@@ -803,6 +875,12 @@ class Tools:
     @expose()
     def clean(self, userfile, **kwargs):
         processor = CleanupProcessor(**kwargs)
+        report = processor.process_zip(userfile.file, userfile.filename)
+        return ReportView(report).render()
+    
+    @expose()
+    def emdashar(self, userfile, **kwargs):
+        processor = EmdasharProcessor(**kwargs)
         report = processor.process_zip(userfile.file, userfile.filename)
         return ReportView(report).render()
     

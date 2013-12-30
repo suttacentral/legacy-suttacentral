@@ -17,6 +17,7 @@ import functools as _functools
 from html import escape # lxml.html doesn't define it's own escape
 import regex as _regex
 
+defs.html5_tags = frozenset({'section', 'article', 'hgroup'})
 
 class CssSelectorFailed(Exception):
     " The exception returned by select_or_fail "
@@ -242,6 +243,15 @@ def parse(filename, encoding='utf8'):
         parser = get_parser(None)
         
     return _html.parse(filename, parser=parser)
+
+def parseXML(filename):
+    """ Parse an XML document, thus also suitable for XHTML """
+    # XML doesn't require jumping through the same hoops as HTML since there
+    # are no existing custom element classes.
+    parser_lookup = _etree.ElementDefaultClassLookup(element=HtHtmlElement)
+    parser = _etree.XMLParser()
+    parser.set_element_class_lookup(parser_lookup)
+    return _etree.parse(filename, parser=parser)
 
 if __name__ == "__main__":
     import doctest

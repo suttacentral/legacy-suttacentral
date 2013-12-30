@@ -170,4 +170,53 @@ class UnitsTest(unittest.TestCase):
         content = odtz.read('content.xml').decode(encoding='UTF-8')
         self.assertIn('Uddhumāyikā', content)
         
-
+class EmdasharTest(unittest.TestCase):
+    def setUp(self):
+        self.logger = emdashar.SortedLogger()
+        self.logger.file = io.StringIO()
+        self.emdash = emdashar.Emdashar(logger=self.logger).emdash
+    
+    def test_quotes(self):
+        samples =  [('<p>This is "misuse" of quotes</p>',
+                  '<p>This is “misuse” of quotes</p>'),
+                  
+                  ('<p>"Another paragraph."</p>',
+                  '<p>“Another paragraph.”</p>'),
+                  
+                  ('<b>"mismatched quotes”</b>',
+                  '<b>“mismatched quotes”</b>')]
+                  
+        for wrong, right in samples:
+            root = html.fromstring(wrong)
+            self.emdash(root)
+            self.assertEqual(str(root), right)
+    
+    def test_dashes(self):
+        samples = [('<p>See 1-10</p>', '<p>See 1–10</p>'),
+                    ('<p>Foo--bar</p>', '<p>Foo—bar</p>'),
+                    ('<p>See 11—13</p>', '<p>See 11–13</p>'),
+                    ]
+        
+        for wrong, right in samples:
+            root = html.fromstring(wrong)
+            self.emdash(root)
+            self.assertEqual(str(root), right)
+    
+    def test_longer(self):
+        source = """<body><p> "I see . . .' said the vampire thoughtfully,
+and slowly he walked across the room towards the window. For a long time he
+stood there against the dim light from Divisadero Street and the passing beams
+of traffic. The boy could see the furnishings of the room more clearly now,
+the round oak table, the chairs. A wash basin hung on one wall with a mirror.
+He set his brief case on the table and waited. </p><p> "But how much tape do
+you have with you?" asked the vampire, turning now so the boy could see his
+profile. "Enough for the story of a life?" </p>"""
+        root = html.fromstring(source)
+        self.emdash(root)
+        self.logger.flush()
+        self.logger.file.seek(0)
+        text = root.text_content()
+        self.assertEqual(text[0], '“')
+        self.assertIn('”', text[-2:])
+        self.assertIn('…', text)
+        self.assertEqual(len(self.logger.file.readlines()), 6)
