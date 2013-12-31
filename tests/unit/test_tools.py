@@ -170,4 +170,66 @@ class UnitsTest(unittest.TestCase):
         content = odtz.read('content.xml').decode(encoding='UTF-8')
         self.assertIn('Uddhumāyikā', content)
         
-
+class EmdasharTest(unittest.TestCase):
+    def setUp(self):
+        self.logger = emdashar.SortedLogger()
+        self.logger.file = io.StringIO()
+        self.emdash = emdashar.Emdashar(logger=self.logger).emdash
+    
+    def test_quotes(self):
+        samples =  [('<p>This is "misuse" of quotes</p>',
+                  '<p>This is “misuse” of quotes</p>'),
+                  
+                  ('<p>"Another paragraph."</p>',
+                  '<p>“Another paragraph.”</p>'),
+                  
+                  ('<b>"mismatched quotes”</b>',
+                  '<b>“mismatched quotes”</b>'),
+                  
+                  ('<i>“This is a quote“.</i>',
+                  '<i>“This is a quote”.</i>'),
+                  ]
+                  
+        for wrong, right in samples:
+            root = html.fromstring(wrong)
+            self.emdash(root)
+            self.assertEqual(str(root), right)
+    
+    def test_dashes(self):
+        samples = [('<p>See 1-10</p>', '<p>See 1–10</p>'),
+                    ('<p>Foo--bar</p>', '<p>Foo—bar</p>'),
+                    ('<p>See 11—13</p>', '<p>See 11–13</p>'),
+                    ]
+        
+        for wrong, right in samples:
+            root = html.fromstring(wrong)
+            self.emdash(root)
+            self.assertEqual(str(root), right)
+    
+    def test_longer(self):
+        source = ('<p>"I admit," said he - when I mentioned to him this objection'
+            '- "I admit the truth of your critic\'s facts, but I deny his '
+            'conclusions. It is true that we have really in Flatland a Third '
+            'unrecognized Dimension called `height,\' just as it is also true '
+            'that you have really in Spaceland a Fourth unrecognized Dimension'
+            ', called by no name at present, but which I will call '
+            '`extra-height\'. But we can no more take cognizance of our '
+            '`height\' then you can of your `extra-height\'. '
+            'Even I - who have been in Spaceland, and have had the privilege '
+            'of understanding for twenty-four hours the meaning of `height\' '
+            '- even I cannot now comprehend it, nor realize it by the sense '
+            'of sight or by any process of reason; I can but apprehend it by '
+            'faith."</p>')
+        root = html.fromstring(source)
+        self.emdash(root)
+        self.logger.flush()
+        self.logger.file.seek(0)
+        text = root.text_content()
+        # We wont check the entire result, but will cherrypick some cases.
+        self.assertEqual(text[0], '“')
+        self.assertIn('”', text[-2:])
+        self.assertIn('‘height,’', text)
+        self.assertIn('‘extra-height’.', text)
+        self.assertIn('critic’s', text)
+        self.assertIn('Even I—who', text)
+        self.assertGreater(len(self.logger.file.readlines()), 8)
