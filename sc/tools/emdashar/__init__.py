@@ -83,8 +83,6 @@ rules = [
     R(35, r"(?<=^|\n\W*)'(?!\W*\n)", r"‘"),
     R(36, r"(?<!\n\w*)'(?=\W*\n)", r"’"),
     
-    
-    
     #Straight double quotes >> open quote
     R(37, r"""(?x)
             (?<=\s|[:—]\s+)  # Preceeded by nearby space or emdash/colon
@@ -124,17 +122,19 @@ rules = [
     #Ambigious straight quote decided as 'open' by proceeding close quote (complexity is mainly filtering out isn't types)
     R(49, r"'(?=[^‘']+’(?=.(?<!\w’\w)))", "‘"),
     R(50, r"(?<=\w)`(?=[^‘']+’(?=.(?<!\w’\w)))", " ‘"),
-
+    
+    R(51, r'“ ‘', '“‘'),
 
     # A colon possibly followed by by space/hyphens and a quote => emdash
     # newlines are preserved, hyphens and spaces eliminated.
-    R(60, r'(”.\s+)\p{dash}+(\s*“)', r'\1\2'),
+    R(60, r'(”.\s+)\p{dash}+(\s*“)', r'\1—\2'),
+    R(60.1, r'(?<=[”’]) -[- ]*(?=[“‘\p{alpha}])', r'—'),
     R(61, r': ?(\n*)[ -]*(?<!:\n+)(?=[“‘])', r': \1'),
     R(62, r'(?<=[\w\.]) -[- ]*(?=[”’])', r':'),
     R(63, r'(?<=[\w\.])- [- ]*(?=[”’])', r':'),
 
     #Dash -> Colon
-    R(64, r'\p{dash}(?:\s(?<=\n)(?=\s))?(?=\W*[“‘])', r':'),
+    R(64, r'(?<!”\s*)\p{dash}(?:\s(?<=\n)(?=\s))?(?=\W*[“‘])', r':'),
     
     # Catchall colon+hyphen with no quote.
     R(65, r'(?<=\p{alpha}):\s?-[-\s]*', r'—'),
@@ -171,11 +171,11 @@ rules = [
         """, r"” —"),
 
     #Unspaced Open Puncuation
-    R(80, r"(?<![\s‘/(/[]|^)“", r" “"),
-    R(81, r"(?<![\s“/(/[]|^)‘", r" ‘"),
+    R(80, r"(?<![\s‘—/(/[]|^)“", r" “"),
+    R(81, r"(?<![\s“—/(/[]|^)‘", r" ‘"),
     
     #Unspaced Close Puncuation
-    R(82, r"”(?!$|\p{Term}|\s|’|ti)", r"” "),
+    R(82, r"”(?!$|\p{Term}|\s|’|—|ti)", r"” "),
     #There's not much we can do with the single quote
 
     #Pre-spaced comma/period

@@ -1,6 +1,7 @@
-import unittest
 import io
-from zipfile import ZipFile
+import unittest
+from zipfile import ZipFile, ZIP_DEFLATED
+from tempfile import NamedTemporaryFile
 
 import sc
 from sc.tools import *
@@ -17,6 +18,32 @@ def tidy_available():
     except FileNotFoundError:
         pass
     return False
+
+def create_zipfile(*files):
+    """Create a zip from arguments. Each can either be a fileobject, or
+    a filename, data tuple.
+    
+    The underlying temporary file will be collected automatically.
+    
+    """
+    # BytesIO would also be reasonable, however, on the server, we have
+    # an actual temporaryfile underlying the zip.
+    outfile = NamedTemporaryFile(suffix='.zip')
+    # ZIP_STORED isn't representive of normal content, so use ZIP_DEFLATED
+    outzip = ZipFile(outfile, 'w', compression=ZIP_DEFLATED)
+    num = 0
+    for file in files:
+        if hasattr(file, 'name'):
+            outzip.write(file.name)
+        elif len(file) == 2:
+            name, data = file
+            outzip.writestr(name, data)
+        else:
+            raise ValueError("Invalid input to create_zip, {}".format(file))
+    outzip.close()
+    outfile.seek(0)
+    
+    return outfile
 
 class UnitsTest(unittest.TestCase):
     def test1plus1(self):
@@ -137,7 +164,18 @@ class UnitsTest(unittest.TestCase):
         self.assertEqual(result.decode(), self.crumpledhtml)
         
     def test_finalize(self):
-        pass
+        options = {'canonical-paths':'on'}
+        inzip = create_zipfile(
+            ['/en/dn2.html', '<h1>The Fruits</h1><p>Thus<p>Rejoiced'],
+            ['/en/meta.html', 'Translated by foo'],
+            ['dn1.html', '<h1>The Net</h1><p>Thus<p>Rejoiced'])
+            
+        
+        cp = webtools.FinalizeProcessor(**options)
+        result = cp.process_zip(inzip)
+        print(result)
+        
+        
     
     def test_csxconvert(self):
         # This zip contains an entry on frogs in txt (latin1)
@@ -199,6 +237,8 @@ class EmdasharTest(unittest.TestCase):
         samples = [('<p>See 1-10</p>', '<p>See 1–10</p>'),
                     ('<p>Foo--bar</p>', '<p>Foo—bar</p>'),
                     ('<p>See 11—13</p>', '<p>See 11–13</p>'),
+                    ('<p>"spam." - "baz."</p>', '<p>“spam.”—“baz.”</p>'),
+                    ('<p>“spam.” - “baz.”</p>', '<p>“spam.”—“baz.”</p>'),
                     ]
         
         for wrong, right in samples:
@@ -232,4 +272,7 @@ class EmdasharTest(unittest.TestCase):
         self.assertIn('‘extra-height’.', text)
         self.assertIn('critic’s', text)
         self.assertIn('Even I—who', text)
+        self.assertIn('‘height’—even I', text)
+        # Don't worry about the particulars, but check that something
+        # is being logged.
         self.assertGreater(len(self.logger.file.readlines()), 8)

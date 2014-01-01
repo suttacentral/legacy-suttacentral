@@ -1,16 +1,3 @@
-#!/usr/bin/env python
-
-""" ANALYTICS:
-
-Displays information about each sutta.
-The colors mean as follow:
-white/blue is purely informative.
-green means there is probably no problem, and the basis for that assumption is printed.
-yellow means there is a problem but the program knows how to and has the information available to fix it.
-red means human intervention is required.
-
-"""
-
 import sys, regex, os, shutil, collections, itertools
 import pathlib
 from copy import copy
@@ -61,6 +48,37 @@ def process_metadata(root):
         return root
     raise tools.webtools.ProcessingError("Couldn't make sense of metadata")
 
+def discover_author(root, entry):
+    author = root.select('meta[author]')
+    if not author:
+        author = root.select('meta[data-author]')
+        if author:
+            author[0].attrib['author'] = author.attrib['data-author']
+            del author[0].attrib['data-author']
+    if author:
+        return author[0]
+    
+    metaarea = root.select('div#metaarea')
+    if metaarea:
+        metaarea = metaarea[0].text_content()
+        transby = None
+        m = regex.search('Transl(?:ated|ion) (?:by|from) ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+(?: and ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+)))', metaarea)
+        if m:
+            transby = m[0]
+        else:
+            # Match two words at front if possible commas are allowed, after that
+            # match everything up to the first sentence ender, but permit periods
+            # as abbreviation indicators.
+            m = regex.match(r'(?:\p{alpha}+,? \p{alpha}+,?\s)?(?:(?<!\p{alpha})(?:\bed|\b\p{alpha})\.\s*|[^.:,])+', metaarea)
+            if m:
+                transby = m[0]
+            if transby:
+                entry.info('No explicit author/origin blurb provided, using "{}", if this is wrong, please add an element \'<meta author="Translated by So-and-so">\' to the metadata'.format(transby))
+                return root.makeelement('meta', author=transby)
+    
+    entry.error('Could not determine author(translator/editor) blurb, please add an element \'<meta author="Translated by So-and-so">\' to the metadata')
+    return None
+    
 def normalize_id(string):
     # Remove spaces between alpha char and digit
     string = regex.sub(r'(?<=\p{alpha})\s+(?=\d)', '', string)
@@ -244,13 +262,12 @@ def finalize(root, entry, language=None, metadata=None, firstpass=True, options=
         hasmeta = True
     except IndexError:
         hasmeta = False
-        if not metadata:
-            if firstpass:
-                entry.error('No metadata found. Metadata should either be in a \
-            <div id="metaarea"> tag, or a seperate file "meta.html".')
-            metadata = None
-            # No metadata is an error (i.e. absolutely invalidates text)
-            # But we will continue to find more errors.
+        if firstpass:
+            entry.error('No metadata found. Metadata should either be in a \
+        <div id="metaarea"> tag, or a seperate file "meta.html".')
+        metadata = None
+        # No metadata is an error (i.e. absolutely invalidates text)
+        # But we will continue to find more errors.
     
     try:
         uid1 = root.select('section[id]')[0].attrib['id']
@@ -463,4 +480,8 @@ def finalize(root, entry, language=None, metadata=None, firstpass=True, options=
     if not hasmeta:
         if metadata is not None:
             divtext.append(copy(metadata))
+    
+    transby = discover_author(root, entry)
+    if transby:
+        root.head.append(transby)
     
