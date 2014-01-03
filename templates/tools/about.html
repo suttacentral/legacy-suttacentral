@@ -1,3 +1,4 @@
+{% set current = 0 %}
 {% extends "tools/tools-base.html" -%}
 {% block tool %}
 <h2> About This Service</h2>
@@ -45,7 +46,8 @@
 <li> The above will generally suffice to create a well-presented text. There are many, many details of possible markup. Please inspect similar existing texts for classes which can be used. You can get clean copies of the texts from <a href="http://suttacentral.net/downloads">suttacentral.net/downloads</a>, or examine the texts on the site itself, using your browsers right click menu 'inspect element' tool.
 </ul>
 <li> <h3> Submitting texts to Sutta Central</h3>
-<p>Once the texts have been edited (or even before) you can try uploading them to the Finalize tool. This will report any errors (serious problems which cannot be resolved automatically), and also give information on how it interepts information, for example it will say what sutta and what language it thinks each file refers to. The Finalize tool will take care of many finnicky details of markup and is quite tolerant of 
+<p>Once the texts have been edited (or even before) you can try uploading them to the Finalize tool. This will report any errors (serious problems which cannot be resolved automatically), and also give information on how it interepts information, for example it will say what sutta and what language it thinks each file refers to. The Finalize tool will take care of many finnicky details of markup and is quite tolerant of the input not being exactly right.
+Presently, you need to e-mail the zip to a Sutta Central team member, unless you have direct access to the github data repository.
 
 </section>
 {%- endblock %}

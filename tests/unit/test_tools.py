@@ -2,6 +2,7 @@ import io
 import unittest
 from zipfile import ZipFile, ZIP_DEFLATED
 from tempfile import NamedTemporaryFile
+from collections import Counter
 
 import sc
 from sc.tools import *
@@ -166,16 +167,20 @@ class UnitsTest(unittest.TestCase):
     def test_finalize(self):
         options = {'canonical-paths':'on'}
         inzip = create_zipfile(
-            ['/en/dn2.html', '<h1>The Fruits</h1><p>Thus<p>Rejoiced'],
-            ['/en/meta.html', 'Translated by foo'],
+            ['en/dn2.html', '<h1>The Fruits</h1><p>Thus<p>Rejoiced'],
+            ['en/meta.html', 'Translated by Bhikkhu Foo'],
             ['dn1.html', '<h1>The Net</h1><p>Thus<p>Rejoiced'])
             
         
         cp = webtools.FinalizeProcessor(**options)
-        result = cp.process_zip(inzip)
-        print(result)
+        result = cp.process_zip(inzip, inzip.name)
         
-        
+        meta_msg = Counter(e[0] for e in result[0].messages)
+        self.assertEqual(meta_msg['info'], 1)
+        dn1_msg = Counter(e[0] for e in result[1].messages)
+        self.assertEqual(dn1_msg['error'], 3)
+        dn2_msg = Counter(e[0] for e in result[2].messages)
+        self.assertEqual(dn2_msg['warning'], 1)        
     
     def test_csxconvert(self):
         # This zip contains an entry on frogs in txt (latin1)

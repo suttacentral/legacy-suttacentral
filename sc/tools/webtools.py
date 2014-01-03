@@ -565,16 +565,13 @@ class HTMLProcessor(BaseProcessor):
     def process_html(self, fileobj):
         doc = html.parse(fileobj)
         root = doc.getroot()
-        if not root.select('head'):
-            root.insert(0, root.makeelement('head'))
-            
         html.xhtml_to_html(doc) # This is very fast.
         self.process_root(root)
         
         return self.root_to_bytes(root)
     
     def root_to_bytes(self, root):
-        root.head.insert(0, root.makeelement('meta', charset="UTF-8"))
+        root.headsure.insert(0, root.makeelement('meta', charset="UTF-8"))
         if not root.head.select('title'):
             root.head.append(root.makeelement('title'))
         root.attrib.clear()
@@ -700,7 +697,12 @@ class FinalizeProcessor(HTMLProcessor):
             if stem.endswith('meta'):
                 string = zipfile.open(zi).read().decode(encoding='UTF-8')
                 root = html.fromstring(string)
-                self.metadata[dirpath] = finalizer.process_metadata(root)                
+                
+                self.metadata[dirpath] = finalizer.process_metadata(root)
+                entry = Report.Entry()
+                self.report.append(entry)
+                entry.summary = 'Metadata file: {}'.format(humansize(zi.file_size))
+                entry.info('Will be applied to all files in {} folder'.format(str(dirpath)))
             else:
                 newlist.append(zi)
         
@@ -724,19 +726,13 @@ class FinalizeProcessor(HTMLProcessor):
         return self.root_to_bytes(root)
     
     def process_root(self, root):
-        language = finalizer.discover_language(root, self.entry)
-        self.entry.language = language
-        dirpath = self.entry.filename.parent
         finalizer.finalize(root, entry=self.entry, options=self.options, 
-            metadata=self.metadata.get(dirpath),
-            language=language)
+            metadata=self.metadata.get(self.entry.filename.parent))
     
     def process_many(self, root):
         orgentry = self.entry
         orgroot = root
-        dirpath = self.entry.filename.parent
-        language = finalizer.discover_language(root, self.entry)
-        metadata = self.metadata.get(dirpath)
+        metadata = self.metadata.get(self.entry.filename.parent)
         es = root.select('section section')
         if es:
             entry.error("File contains nested sections. Sections must not be nested.", lineno=es[0].sourceline)
@@ -755,7 +751,7 @@ class FinalizeProcessor(HTMLProcessor):
             self.entry.language = language
             
             finalizer.finalize(root, entry=entry, options=self.options, 
-                language=language, metadata=metadata)
+                metadata=metadata)
             entry.filename = pathlib.Path(root.select('section')[0].attrib['id']+ '.html') 
             
             filename = self.output_filename(orgentry.filename.parent / entry.filename)
@@ -795,9 +791,8 @@ class EmdasharProcessor(BaseProcessor):
         else:
             logger = None
         dashar = Emdashar(logger=logger)
-        print(len(list(root.iter('p'))))
+        
         for p in root.iter('p'):
-            print('Dashing')
             if p.text:
                 p.text = p.text.lstrip()
             dashar.emdash(p)

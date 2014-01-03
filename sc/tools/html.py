@@ -172,6 +172,18 @@ class HtHtmlElementMixin:
         string = _regex.sub(r'\n +', '\n', string)
         return string
     
+    @property
+    def headsure(self):
+        """ Returns head, creating it if it doesn't exist """
+        try:
+            return self.head
+        except IndexError:
+            head = self.makeelement('head')
+            root = self.getroottree().getroot()
+            assert root.tag == 'html', "Incomplete HTML tree"
+            root.insert(0, head)
+            return head
+    
 # We need to jump through some hoops to ensure the mixins are included
 # in all Element class for every tag type. (in lxml.html, some, like input
 # and select, have a custom element type, these require the mixins parameter

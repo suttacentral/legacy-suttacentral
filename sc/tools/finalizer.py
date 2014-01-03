@@ -73,7 +73,7 @@ def discover_author(root, entry):
             if m:
                 transby = m[0]
             if transby:
-                entry.info('No explicit author/origin blurb provided, using "{}", if this is wrong, please add an element \'<meta author="Translated by So-and-so">\' to the metadata'.format(transby))
+                entry.warning('No explicit author/origin blurb provided, using "{}", if this is not sensible, please add an element \'<meta author="Translated by So-and-so">\' to the metadata'.format(transby))
                 return root.makeelement('meta', author=transby)
     
     entry.error('Could not determine author(translator/editor) blurb, please add an element \'<meta author="Translated by So-and-so">\' to the metadata')
@@ -195,18 +195,25 @@ def discover_language(root, entry):
             language = langs[0]
         elif len(langs) > 1 and not language:
             possibilities = ", ".join("{}/{}".format(l.uid, l.name) for l in langs)
-            entry.error("Ambigious language, could be ({}), please implicitly specify language".format(possibilities))
+            entry.error("Ambigious language, could be ({}), please implicitly specify language uid by enclosing in a sub folder i.e. zh/filename.html".format(possibilities))
+            return
         elif language and language.iso_code != lang_iso_code:
             entry.error("Language mismatch, according to path structure language is {}, but according to lang tag language is {}".format(language.iso_code, lang_iso_code))
+            return
     except (IndexError, KeyError):
         # Language does not exist.
         if language:
             lang_iso_code = language.iso_code
         else:
-            entry.error('No language code found. Either use <div lang="en">, or enclose in a subfolder en/filename.html (in rare cases, both must be done)')
+            entry.error('No language uid found. Please enclose file(s) in a subfolder en/filename.html')
+            return
     
     if not language:
-        entry.error("Language could not be determined. If '{}' is a new language, it will need to be added to the database.".format(entry.filename.parts[0]))
+        possible_code = entry.filename.parts[0]
+        if 2 <= len(possible_code) <= 3:
+            entry.error("Language could not be determined. If '{}' is a new language, it will need to be added to the database.".format(possible_code))
+        else:
+            entry.error("Language could not be determined.")
     
     return language
 
@@ -243,7 +250,7 @@ def generate_canonical_path(uid, language):
     
     return path
 
-def finalize(root, entry, language=None, metadata=None, firstpass=True, options={}):
+def finalize(root, entry, metadata=None, firstpass=True, options={}):
     if root.tag != 'html':
         raise ValueError('Root element should be <html> not <{}>'.format(root.tag))
     pnums = set()
@@ -252,22 +259,20 @@ def finalize(root, entry, language=None, metadata=None, firstpass=True, options=
     
     imm = sc.scimm.imm()
     
-    if not language:
-        language = discover_language(root, entry)
+    language = discover_language(root, entry)
     
     multisutta = len(root.select('article, h1')) > 2
-    
+    hasmeta = metadata is not None
     try:
         metadata = root.select('#metaarea')[0]
         hasmeta = True
     except IndexError:
-        hasmeta = False
-        if firstpass:
+        if metadata is None and firstpass:
             entry.error('No metadata found. Metadata should either be in a \
         <div id="metaarea"> tag, or a seperate file "meta.html".')
-        metadata = None
-        # No metadata is an error (i.e. absolutely invalidates text)
-        # But we will continue to find more errors.
+    
+    if hasmeta:
+        root.body.append(metadata)
     
     try:
         uid1 = root.select('section[id]')[0].attrib['id']
@@ -482,6 +487,6 @@ def finalize(root, entry, language=None, metadata=None, firstpass=True, options=
             divtext.append(copy(metadata))
     
     transby = discover_author(root, entry)
-    if transby:
-        root.head.append(transby)
+    if transby is not None:
+        root.headsure.append(transby)
     
