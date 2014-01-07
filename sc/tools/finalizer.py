@@ -250,7 +250,7 @@ def generate_canonical_path(uid, language):
     
     return path
 
-def finalize(root, entry, metadata=None, firstpass=True, options={}):
+def finalize(root, entry, language=None, metadata=None, author_blurb=None, firstpass=True, options={}):
     if root.tag != 'html':
         raise ValueError('Root element should be <html> not <{}>'.format(root.tag))
     pnums = set()
@@ -259,7 +259,8 @@ def finalize(root, entry, metadata=None, firstpass=True, options={}):
     
     imm = sc.scimm.imm()
     
-    language = discover_language(root, entry)
+    if not language:
+        language = discover_language(root, entry)
     
     multisutta = len(root.select('article, h1')) > 2
     hasmeta = metadata is not None
@@ -300,9 +301,9 @@ def finalize(root, entry, metadata=None, firstpass=True, options={}):
     
     for ipass in range(0, 4):
         if ipass in {0, 2}:
-            uid = uid2
-        else:
             uid = uid1
+        else:
+            uid = uid2
         
         if ipass >= 2:
             # Try pruning the end of the uid.
@@ -408,7 +409,12 @@ def finalize(root, entry, metadata=None, firstpass=True, options={}):
     article = root.makeelement('article')
     section = root.makeelement('section', 
                                 {'class':'sutta', 'id': uid})
-    divtext = root.makeelement('div', id="text") 
+    divtext = root.makeelement('div', id="text")
+    
+    for e in root.select('hgroup'):
+        if 'id' in e.attrib:
+            del e.attrib['id']
+    
     if language:
         divtext.attrib['lang'] = language.iso_code
     
@@ -486,7 +492,9 @@ def finalize(root, entry, metadata=None, firstpass=True, options={}):
         if metadata is not None:
             divtext.append(copy(metadata))
     
-    transby = discover_author(root, entry)
-    if transby is not None:
-        root.headsure.append(transby)
+    if author_blurb is None:
+        author_blurb = discover_author(root, entry)
+    
+    if author_blurb is not None:
+        root.headsure.append(author_blurb)
     

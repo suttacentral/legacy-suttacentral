@@ -732,8 +732,13 @@ class FinalizeProcessor(HTMLProcessor):
     def process_many(self, root):
         orgentry = self.entry
         orgroot = root
-        metadata = self.metadata.get(self.entry.filename.parent)
+        try:
+            metadata = root.select('div#metaarea')[0]
+        except IndexError:
+            metadata = self.metadata.get(self.entry.filename.parent)
+        author_blurb = finalizer.discover_author(root, self.entry)
         es = root.select('section section')
+        language = finalizer.discover_language(root, self.entry)
         if es:
             entry.error("File contains nested sections. Sections must not be nested.", lineno=es[0].sourceline)
             raise ProcessingError("Unable to proceed due to nested sections")
@@ -748,10 +753,10 @@ class FinalizeProcessor(HTMLProcessor):
                 raise ProcessingError("With multiple suttas in one file, <section id=\"uid\"> notation must be used")
             self.report.append(entry)
             self.entry = entry
-            self.entry.language = language
+            entry.language = language
             
             finalizer.finalize(root, entry=entry, options=self.options, 
-                metadata=metadata)
+                metadata=metadata, language=language, author_blurb=author_blurb)
             entry.filename = pathlib.Path(root.select('section')[0].attrib['id']+ '.html') 
             
             filename = self.output_filename(orgentry.filename.parent / entry.filename)
