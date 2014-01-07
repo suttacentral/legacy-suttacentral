@@ -156,6 +156,28 @@ sc_formatter = {
         if ($('.tools').length == 0) {
             return
         }
+        
+        $('[data-allowed]').on('change', function(e){
+            var filename = this.value,
+                types = $(this).attr('data-allowed').split(' ,'),
+                m = filename.match('.+[.](.+)');
+            
+            if (m && types.indexOf(m[1].toLowerCase()) != -1) {
+                return
+            }
+            
+            this.value = null;
+            
+            if (!m) {
+                alert('Unknown filetype, only {} allowed'.format(
+                    types.join(', ')));
+            }
+            else {
+                alert('Filename extension .{} not allowed, only .{} allowed'.format(
+                    m[1].toLowerCase(), types.join(', .')));
+            }
+        });
+        
         tidy = {
             tidy: $('[value=html5tidy]'),
             level: $('[name=tidy-level]'),
