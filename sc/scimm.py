@@ -10,14 +10,15 @@ Example:
 """
 
 import csv
-import hashlib
-import logging
+import time
 import math
 import regex
+import hashlib
+import logging
 import threading
-import time
-from collections import OrderedDict, defaultdict, namedtuple
+from bisect import bisect
 from datetime import datetime
+from collections import OrderedDict, defaultdict, namedtuple
 
 import sc
 from sc import config, textfunctions
@@ -66,6 +67,7 @@ def table_reader(tablename):
             yield NT._make(row)
 
 class _Imm:
+    _uidlangcache = {}
     def __init__(self, timestamp):
         self.build()
         self.build_parallels_data()
@@ -86,7 +88,7 @@ class _Imm:
     
     def uid_to_acro(self, uid):
         m = regex.match(r'(\p{alpha}+(?:-\d+)?)(.*)', uid)
-        return (self._uid_to_acro_map.get(m[0]) or m[0].upper()) + m[1]
+        return (self._uid_to_acro_map.get(m[1]) or m[1].upper()) + m[2]
     
     def build(self):
         """ Build the sutta central In Memory Model
@@ -477,6 +479,43 @@ class _Imm:
             return None
     
     _author_search = regex.compile(r'''(?s)<meta[^>]+author=(?|"(.*?)"|'(.*?)')''').search
+    
+    def get_text_nextprev(self, uid, language_code):
+        try:
+            uids = self._uidlangcache[language_code]
+        except KeyError:
+            uids = sorted(self.text_paths[language_code],
+                key=sc.util.humansortkey)
+            self._uidlangcache[language_code] = uids
+            # The cache is eliminated upon imm regeneration.
+        
+        # This is a horrible way to find an index but can still run 
+        # 4000 times a second on the largest collections :).
+        try:
+            i = uids.index(uid)
+        except ValueError:
+            return (None, None)
+        
+        prev_uid = uids[i - 1] if i > 0 else None
+        next_uid = uids[i + 1] if i < len(uids) else None
+            
+        if not self.uids_are_related(uid, prev_uid):
+            prev_uid = None
+        if not self.uids_are_related(uid, next_uid):
+            next_uid = None
+        return (prev_uid, next_uid)
+        
+    def uids_are_related(self, uid1, uid2):
+        # We will perform a simple uid comparison
+        # We could be more sophisticated! For example we could
+        # inspect whether they belong to the same division
+        if uid1 is None or uid2 is None:
+            return False
+        
+        m1 = regex.match(r'\p{alpha}*(?:-\d+)?', uid1)[0]
+        m2 = regex.match(r'\p{alpha}*(?:-\d+)?', uid2)[0]
+        if m1 and m2 and m1 == m2:
+            return True
     
     @staticmethod
     def get_text_author(filepath):
