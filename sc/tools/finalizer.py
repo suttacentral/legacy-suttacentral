@@ -31,9 +31,9 @@ def get_tag_data(_cache=sc.util.TimedCache(lifetime=15 * 60)):
     return tag_data
 
 def process_metadata(root):
-    metaarea = root.select('div#metaarea')
+    metaarea = root.select_one('div#metaarea')
     if metaarea:
-        return metaarea[0]
+        return metaarea
     pes = root.select('p')
     if pes:
         parent = pes[0].getparent()
@@ -49,27 +49,27 @@ def process_metadata(root):
     raise tools.webtools.ProcessingError("Couldn't make sense of metadata")
 
 def discover_author(root, entry):
-    author = root.select('meta[author]')
+    author = root.select_one('meta[author]')
     if not author:
-        author = root.select('meta[data-author]')
+        author = root.select_one('meta[data-author]')
         if author:
-            author[0].attrib['author'] = author.attrib['data-author']
-            del author[0].attrib['data-author']
+            author.attrib['author'] = author.attrib['data-author']
+            del author.attrib['data-author']
     if author:
-        return author[0]
+        return author
     
-    metaarea = root.select('div#metaarea')
+    metaarea = root.select_one('div#metaarea')
     if metaarea:
-        metaarea = metaarea[0].text_content()
+        metatext = metaarea.text_content()
         transby = None
-        m = regex.search('Transl(?:ated|ion) (?:by|from) ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+(?: and ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+)))', metaarea)
+        m = regex.search('Transl(?:ated|ion) (?:by|from) ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+(?: and ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+)))', metatext)
         if m:
             transby = m[0]
         else:
             # Match two words at front if possible commas are allowed, after that
             # match everything up to the first sentence ender, but permit periods
             # as abbreviation indicators.
-            m = regex.match(r'(?:\p{alpha}+,? \p{alpha}+,?\s)?(?:(?<!\p{alpha})(?:\bed|\b\p{alpha})\.\s*|[^.:,])+', metaarea)
+            m = regex.match(r'(?:\p{alpha}+,? \p{alpha}+,?\s)?(?:(?<!\p{alpha})(?:\bed|\b\p{alpha})\.\s*|[^.:,])+', metatext)
             if m:
                 transby = m[0]
             if transby:
@@ -181,15 +181,16 @@ def inspect_for_rubbish(root, entry):
 
 def discover_language(root, entry):
     imm = sc.scimm.imm()
-    for part in entry.filename.parts:
-        language = imm.languages.get(part)
-        if language:
-            break
-    else:
-        language = None
+    language = None
+    if entry.filename:
+        for part in entry.filename.parts:
+            language = imm.languages.get(part)
+            if language:
+                break
     
-    try:
-        lang_iso_code = root.select('div[lang], section[lang], article[lang]')[0].attrib['lang']
+    element = root.select_one('div[lang], section[lang], article[lang]')
+    if element:
+        lang_iso_code = element.attrib['lang']
         langs = imm.isocode_to_language.get(lang_iso_code, [])
         if len(langs) == 1 and not language:
             language = langs[0]
@@ -200,7 +201,7 @@ def discover_language(root, entry):
         elif language and language.iso_code != lang_iso_code:
             entry.error("Language mismatch, according to path structure language is {}, but according to lang tag language is {}".format(language.iso_code, lang_iso_code))
             return
-    except (IndexError, KeyError):
+    else:
         # Language does not exist.
         if language:
             lang_iso_code = language.iso_code
@@ -209,11 +210,12 @@ def discover_language(root, entry):
             return
     
     if not language:
-        possible_code = entry.filename.parts[0]
-        if 2 <= len(possible_code) <= 3:
-            entry.error("Language could not be determined. If '{}' is a new language, it will need to be added to the database.".format(possible_code))
-        else:
-            entry.error("Language could not be determined.")
+        if entry.filename:
+            possible_code = entry.filename.parts[0]
+            if 2 <= len(possible_code) <= 3:
+                entry.error("Language could not be determined. If '{}' is a new language, it will need to be added to the database.".format(possible_code))
+                return
+        entry.error("Language could not be determined.")
     
     return language
 
@@ -250,7 +252,21 @@ def generate_canonical_path(uid, language):
     
     return path
 
-def finalize(root, entry, language=None, metadata=None, author_blurb=None, firstpass=True, options={}):
+def discover_uid(root):
+    section = root.select_one('section[id], hgroup[id]')
+    if section:
+        uid = section.attrib['id']
+        if not regex.fullmatch(r'\P{alpha}+', uid):
+            return uid
+    hgroup = root.select_one('hgroup[id]')
+    if hgroup:
+        uid = hgroup.attrib['id']
+        if not regex.fullmatch(r'\P{alpha}+', uid):
+            return uid
+    return None
+
+def finalize(root, entry, language=None, metadata=None, 
+             author_blurb=None, num_in_file=-1, options={}):
     if root.tag != 'html':
         raise ValueError('Root element should be <html> not <{}>'.format(root.tag))
     pnums = set()
@@ -260,39 +276,30 @@ def finalize(root, entry, language=None, metadata=None, author_blurb=None, first
     imm = sc.scimm.imm()
     
     if not language:
-        language = discover_language(root, entry)
+        language = discover_language(root, entry if num_in_file == -1 else 
+            sc.tools.webtools.Report.Entry())
     
     multisutta = len(root.select('article, h1')) > 2
-    hasmeta = metadata is not None
-    try:
-        metadata = root.select('#metaarea')[0]
-        hasmeta = True
-    except IndexError:
-        if metadata is None and firstpass:
+    
+    if metadata:
+        # Allow specific metadata.
+        metadata = root.select_one('#metaarea') or metadata
+    else:
+        metadata = root.select_one('#metaarea')
+        if not metadata and num_in_file <= 0:
             entry.error('No metadata found. Metadata should either be in a \
         <div id="metaarea"> tag, or a seperate file "meta.html".')
     
-    if hasmeta:
+    if metadata:
         root.body.append(metadata)
     
-    try:
-        uid1 = root.select('section[id]')[0].attrib['id']
-        if regex.fullmatch(r'\P{alpha}+', uid1):
-            raise ValueError
-    except (IndexError, ValueError):
-        try:
-            uid1 = root.select('hgroup[id]')[0].attrib['id']
-            if regex.fullmatch(r'\P{alpha}+', uid1):
-                raise ValueError
-        except (IndexError, ValueError):
-            uid1 = None
-        
+    uid1 = discover_uid(root)
     uid2 = pathlib.Path(entry.filename).stem
     
     inspect_for_rubbish(root, entry)
     
     if len(root.select('section')) > 1:
-        entry.info("Multiple sections detected, looks like a multiple sutta file")
+        raise ValueError('Should not be called with multiple sections')
     
     if language:
         language_name = language.name
@@ -488,13 +495,13 @@ def finalize(root, entry, language=None, metadata=None, author_blurb=None, first
                     pid = 'p' + str(i)
                 e.attrib['id'] = pid
             
-    if not hasmeta:
-        if metadata is not None:
-            divtext.append(copy(metadata))
     
-    if author_blurb is None:
+    if metadata:
+        divtext.append(copy(metadata))
+    
+    if not author_blurb:
         author_blurb = discover_author(root, entry)
     
-    if author_blurb is not None:
+    if author_blurb:
         root.headsure.append(author_blurb)
     

@@ -161,6 +161,10 @@ class Report(list):
             out += ' contents: \n' + '\n'.join(repr(e) for e in self)
         out += '>\n'
         return out
+    
+    def __bool__(self):
+        # A Report is always truthy even if it contains not entries.
+        return True
 
 class ReportView(InfoView):
     def __init__(self, report):
@@ -739,10 +743,11 @@ class FinalizeProcessor(HTMLProcessor):
         author_blurb = finalizer.discover_author(root, self.entry)
         es = root.select('section section')
         language = finalizer.discover_language(root, self.entry)
+        
         if es:
             entry.error("File contains nested sections. Sections must not be nested.", lineno=es[0].sourceline)
             raise ProcessingError("Unable to proceed due to nested sections")
-        for section in root.select('section'):
+        for num, section in enumerate(root.select('section')):
             root = html.document_fromstring('<html><head><body>')
             root.body.append(section)
             entry = Report.Entry()
@@ -756,7 +761,8 @@ class FinalizeProcessor(HTMLProcessor):
             entry.language = language
             
             finalizer.finalize(root, entry=entry, options=self.options, 
-                metadata=metadata, language=language, author_blurb=author_blurb)
+                metadata=metadata, language=language, author_blurb=author_blurb,
+                num_in_file=num)
             entry.filename = pathlib.Path(root.select('section')[0].attrib['id']+ '.html') 
             
             filename = self.output_filename(orgentry.filename.parent / entry.filename)

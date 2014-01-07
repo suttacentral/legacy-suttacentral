@@ -259,12 +259,10 @@ sc_formatter = {
             $('[data-bound]').each(function(){updateBoundStatus(this)});
         });
         
-        $('[name=hide]').on('change', function(e){
+        $('[name=show]').on('change', function(e){
             $('.entry').show();
-            if (e.target.value == 'okay') 
-                $('.entry').not('.warnings, .errors').hide()
-            else if (e.target.value == 'warnings') 
-                $('.entry').not('.errors').hide();
+            if (e.target.value != 'all')
+                $('.entry').not(e.target.value).hide();
         });
         
         if ($('#tidy').length)

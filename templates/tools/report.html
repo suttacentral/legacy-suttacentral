@@ -6,9 +6,9 @@
 <h1>{{ report.title }}</h1>
 <p>{{report.header}}</p>
 Show:
-<input type="radio" name="hide" value="nothing" checked> All
-<input type="radio" name="hide" value="okay"> Problems
-<input type="radio" name="hide" value="warnings"> Errors
+<input type="radio" name="show" value="all" checked> All
+<input type="radio" name="show" value=".errors,.warnings"> Warnings
+<input type="radio" name="show" value=".errors"> Errors
 
 <ul>
 {% for entry in report %}
