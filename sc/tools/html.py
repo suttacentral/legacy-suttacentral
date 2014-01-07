@@ -120,6 +120,14 @@ class HtHtmlElementMixin:
             return list(self.iter(*parts))
         return self.cssselect(selector)
     
+    def select_one(self, selector):
+        """ Returns the first matching element, or None """
+        
+        result = self.select(selector)
+        if result:
+            return result[0]
+        return None
+    
     def select_or_fail(self, selector):
         """ Raises ``CssSelectorFailed`` instead of returning an empty list
         
@@ -184,6 +192,13 @@ class HtHtmlElementMixin:
             root.insert(0, head)
             return head
     
+    def __bool__(self):
+        """ Objects are always truthy, as in future lxml 
+        
+        Use 'len' to discover if contains children.
+        """
+        return True
+    
 # We need to jump through some hoops to ensure the mixins are included
 # in all Element class for every tag type. (in lxml.html, some, like input
 # and select, have a custom element type, these require the mixins parameter
@@ -191,7 +206,7 @@ class HtHtmlElementMixin:
 # non-customized tag, so we also need to manually mix them into a new
 # HtmlElement and create a CustomLookup class which returns our new
 # HtmlElement class as the default)
-class HtHtmlElement(_html.HtmlElement, HtHtmlElementMixin):
+class HtHtmlElement(HtHtmlElementMixin, _html.HtmlElement):
     pass
 
 class CustomLookup(_html.HtmlElementClassLookup):
