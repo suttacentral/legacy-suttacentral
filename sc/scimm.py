@@ -266,12 +266,14 @@ class _Imm:
             
             text_ref = None;
             translations = []
+            translangs = set()
             if uid in text_refs:
                 for ref in text_refs[uid]:
                     if ref.lang == lang:
                         text_ref = ref
                     else:
                         translations.append(ref)
+                        translangs.add(ref.lang.uid)
             variants = []
             m = regex.match(r'(.*?)\.?(\d+[a-z]?)$', uid)
             if m:
@@ -290,7 +292,7 @@ class _Imm:
                         if ref.lang == lang:
                             if not text_ref:
                                 text_ref = ref
-                        else:
+                        elif ref.lang.uid not in translangs:
                             translations.append(ref)
                 
             translations.sort(key=TextRef.sort_key)
