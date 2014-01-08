@@ -12,8 +12,9 @@
 <p>If a file lacks required elements then an error report will be generated explaining what needs to be fixed. Sometimes the utility will guess, in which case a warning or notice will be generated.
 <p>As a shorthand, where on suttacentral, a tag appears as: <code>&lt;span class="corr"&gt;gacchāmi&lt;/span&gt;</code> or <code>&lt;a class="wp" id="14"&gt;&lt;/a&gt;</code> you may instead use <code>&lt;corr&gt;gacchāmi&lt;/corr&gt;</code> or <code>&lt;wp&gt;14&lt;/wp&gt;</code>, the utility will automatically convert such tags into the proper HTML based on analysis of existing sutta central texts. If it is unable to make sense of a tag it will produce an error. Also if a class is used which is unknown to Sutta Central, a warning will be generated.
 <p>HTML code should be valid HTML5, this means that attributes don't have to be quoted, you can omit many end tags, ids can be numeric and so on.
-<li><input name="canonical-paths" type="checkbox" checked>Generate canonical paths. <em> Places files in folders according to canonical Sutta Central scheme.
+<li><input name="canonical-paths" type="checkbox" checked>Generate canonical paths. <em> Places files in folders according to canonical Sutta Central scheme.</em>
 <li>
+<p>Please put all the files you want processed in a zip archive and upload the zip file. Only zip archives are supported. You will receive a zip archive in return.</p>
 <input name="userfile" type="file"  data-allowed="zip" accept="application/x-zip" required>
 <button>Submit</button>
 
