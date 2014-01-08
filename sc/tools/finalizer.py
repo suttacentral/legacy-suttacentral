@@ -221,23 +221,33 @@ def discover_language(root, entry):
 
 def generate_canonical_path(uid, language):
     imm = sc.scimm.imm()
-    sutta = imm.suttas.get(uid)
+    
     if isinstance(language, str):
         language = imm.languages[language]
-    if sutta:
-        subdivision = sutta.subdivision
-    else:
-        uid = regex.sub(r'(.*?)\d+-\d+$', r'\1', uid)
-        subdivision = imm.subdivisions.get(uid)
+    
+    path = pathlib.Path(language.uid)
+    
+    subdivision = imm.subdivisions.get(uid)
+    if not subdivision:
+        sutta = imm.suttas.get(uid)
+        if sutta:
+            subdivision = sutta.subdivision
+    
+    if not subdivision:
+        m = regex.match(r'(.*?)\.?\d+(?:-\d+)?$', uid)
+        if m:
+            subdivision = imm.subdivisions.get(m[1])
+    
     if subdivision:
         division = subdivision.division
     else:
         division = imm.divisions.get(uid)
+    
     if division:
         collection = division.collection
     else:
-        return None
-    path = pathlib.Path(language.uid)
+        return path
+    
     if language != collection.lang:
         path /= pathlib.Path(collection.lang.uid)
     m = regex.match(r'.*\.(.*)', collection.uid)
@@ -252,16 +262,18 @@ def generate_canonical_path(uid, language):
     
     return path
 
-def discover_uid(root):
-    section = root.select_one('section[id], hgroup[id]')
+def discover_uid(root, entry):
+    section = root.select_one('section[id]')
     if section:
         uid = section.attrib['id']
         if not regex.fullmatch(r'\P{alpha}+', uid):
+            entry._lineno = section.sourceline
             return uid
     hgroup = root.select_one('hgroup[id]')
     if hgroup:
         uid = hgroup.attrib['id']
         if not regex.fullmatch(r'\P{alpha}+', uid):
+            entry._lineno = hgroup.sourceline
             return uid
     return None
 
@@ -293,7 +305,7 @@ def finalize(root, entry, language=None, metadata=None,
     if metadata:
         root.body.append(metadata)
     
-    uid1 = discover_uid(root)
+    uid1 = discover_uid(root, entry)
     uid2 = pathlib.Path(entry.filename).stem
     
     inspect_for_rubbish(root, entry)
@@ -306,36 +318,47 @@ def finalize(root, entry, language=None, metadata=None,
     else:
         language_name = 'Unknown'
     
-    for ipass in range(0, 4):
-        if ipass in {0, 2}:
+    def uid_makes_sense(uid):
+        if not uid:
+            return False
+        for ipass in range(0, 2):
+            if ipass == 1:
+                # Try pruning the end of the uid.
+                m = regex.match(r'(.*?)\.?\d+(?:-\d+)?$', uid)
+                if m:
+                    uid = m[1]
+            
+            if uid in imm.suttas:
+                return "Looks like sutta text {0.acronym}: {0.name} ({1})".format(imm.suttas[uid], language_name)
+                
+            
+            elif uid in imm.divisions:
+                return "Looks like belongs to division {0.uid}: {0.name} ({1})".format(imm.divisions[uid], language_name)
+                
+                
+            elif uid in imm.subdivisions:
+                return "Looks like belongs to subdivision {0.uid}: {0.name} ({1})".format(imm.subdivisions[uid], language_name)
+            
+        return False
+    
+    uid1_sense = uid_makes_sense(uid1)
+    uid2_sense = uid_makes_sense(uid2)
+    if uid1_sense and (not uid2_sense or uid1.startswith(uid2)):
+        entry.info(uid1_sense)
+        uid = uid1
+    elif uid2_sense and not uid1_sense:
+        entry.info(uid2_sense)
+        uid = uid2
+    elif uid1_sense and uid2_sense:
+        entry.warning(uid1_sense)
+        entry.warning('(also) ' + uid2_sense)
+        if len(uid1) > len(uid2):
             uid = uid1
         else:
             uid = uid2
-        
-        if ipass >= 2:
-            # Try pruning the end of the uid.
-            m = regex.match(r'(.*?)\.?\d+(?:-\d+)?$', uid)
-            if m:
-                uid = m[1]
-        if uid in imm.suttas:
-            entry.info("Looks like sutta text {0.acronym}: {0.name} ({1})".format(imm.suttas[uid], language_name))
-            break
-        
-        elif uid in imm.divisions:
-            entry.info("Looks like division text {0.uid}: {0.name} ({1})".format(imm.divisions[uid], language_name))
-            break
-            
-        elif uid in imm.subdivisions:
-            entry.info("Looks like subdivision text {0.uid}: {0.name} ({1})".format(imm.subdivisions[uid], language_name))
-            break
-
-    else:
-        entry.warning("Don't know what {} is ({})".format(uid, 
-            language_name))
-        if uid not in get_existing_file_uids():
-            entry.warning("It also doesn't match any existing file.")
-        entry.error("If you are adding an entirely new text it will need to be added to the database. It is more likely a mistake, the file's name should be equal to it's url. I.e: /sn56.11/ = sn56.11.html, you may also use <section id=\"sn56.11\"> and have multiple suttas in the file, each in their own section.")
-        uid = "unknown"
+        entry.warning('Using {}'.format(uid))
+    
+    entry.info('uid looks like {} ({}/{})'.format(uid, uid1, uid2))
     
     #Convert non-HTML tags to classes
     normalize_tags(root, entry)
@@ -496,8 +519,11 @@ def finalize(root, entry, language=None, metadata=None,
                 e.attrib['id'] = pid
             
     
+    for e in root.select('#metaarea'):
+        e.drop_tree()
+    
     if metadata:
-        divtext.append(copy(metadata))
+        section.append(metadata)
     
     if not author_blurb:
         author_blurb = discover_author(root, entry)

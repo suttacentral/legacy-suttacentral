@@ -314,7 +314,13 @@ class BaseProcessor:
                 if not hasattr(data, 'decode'):
                     # Under exceptional cirumstances, an iterable of new
                     # filedata is returned. This requires special handling.
+                    seen = set()
                     for filename, filedata in data:
+                        if filename in seen:
+                            # WARNING THIS SHOULD NOT HAPPEN!
+                            # TODO FIXIT!
+                            continue
+                        seen.add(filename)
                         self.report.processed_bytes += len(filedata)
                         outzip.writestr(str(filename), filedata)
                 else:
@@ -724,10 +730,10 @@ class FinalizeProcessor(HTMLProcessor):
                                                             len(sections)))
             # Multiple sutta mode.
             return self.process_many(root)
-        
-        # Single sutta mode.
-        self.process_root(root)
-        return self.root_to_bytes(root)
+        else:
+            # Single sutta mode.
+            self.process_root(root)
+            return self.root_to_bytes(root)
     
     def process_root(self, root):
         finalizer.finalize(root, entry=self.entry, options=self.options, 
@@ -741,18 +747,21 @@ class FinalizeProcessor(HTMLProcessor):
         except IndexError:
             metadata = self.metadata.get(self.entry.filename.parent)
         author_blurb = finalizer.discover_author(root, self.entry)
-        es = root.select('section section')
         language = finalizer.discover_language(root, self.entry)
         
+        es = root.select('section section')
         if es:
             entry.error("File contains nested sections. Sections must not be nested.", lineno=es[0].sourceline)
             raise ProcessingError("Unable to proceed due to nested sections")
-        for num, section in enumerate(root.select('section')):
-            root = html.document_fromstring('<html><head><body>')
+        seen = set()
+        for num, section in enumerate(root.iter('section')):
+            assert section not in seen
+            seen.add(section)
+            root = html.document_fromstring('<html><head></head><body>')
             root.body.append(section)
             entry = Report.Entry()
             try:
-                entry.filename = pathlib.Path(section.attrib['id'])
+                entry.filename = finalizer.discover_uid(section, entry)
             except KeyError:
                 entry.error("Section has no 'id' attribute", lineno=section.sourceline)
                 raise ProcessingError("With multiple suttas in one file, <section id=\"uid\"> notation must be used")
