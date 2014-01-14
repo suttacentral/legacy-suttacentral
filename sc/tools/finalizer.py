@@ -363,6 +363,10 @@ def finalize(root, entry, language=None, metadata=None,
     #Convert non-HTML tags to classes
     normalize_tags(root, entry)
     
+    if metadata:
+        for e in metadata.select('a.sc'):
+            e.drop_tag()
+    
     # Does this this file have numbering?
     pnumbers = False
     pnumbers_need_id = False
@@ -465,6 +469,7 @@ def finalize(root, entry, language=None, metadata=None,
             hgroup = root.makeelement('hgroup')
             h1.addnext(hgroup)
             hgroup.append(h1)
+    
     if supplied_misused:
         for h in root.select('h1,h2,h3,h4,h5,h6,h7'):
             if 'class' in h.attrib and 'supplied' in h.attrib['class']:
@@ -483,10 +488,14 @@ def finalize(root, entry, language=None, metadata=None,
             p = a.getparent()
             a.tail = p.text
             p.text = None
-        for a in root.select('#metaarea p a.sc'):
-            a.drop_tree()
 
     used_ids = set()
+    
+    for e in root.select('#metaarea'):
+        e.drop_tree()
+    
+    if metadata:
+        section.append(metadata)
     
     if scnumbers_insane or not pnumbers or options.get('force-sc-nums'):
         for a in root.select('a.sc'):
@@ -495,7 +504,7 @@ def finalize(root, entry, language=None, metadata=None,
             pcount = itertools.count(1)
             uid = section.attrib['id']
             assert uid[0].isalpha()
-            for p in section.select('p'):
+            for p in section.select('article p'):
                 if len(p.text_content()) > 50:
                     id = str(next(pcount))
                     used_ids.add(id)
@@ -517,13 +526,6 @@ def finalize(root, entry, language=None, metadata=None,
                 else:
                     pid = 'p' + str(i)
                 e.attrib['id'] = pid
-            
-    
-    for e in root.select('#metaarea'):
-        e.drop_tree()
-    
-    if metadata:
-        section.append(metadata)
     
     if not author_blurb:
         author_blurb = discover_author(root, entry)
