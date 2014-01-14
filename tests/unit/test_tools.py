@@ -281,3 +281,21 @@ class EmdasharTest(unittest.TestCase):
         # Don't worry about the particulars, but check that something
         # is being logged.
         self.assertGreater(len(self.logger.file.readlines()), 8)
+    
+    def test_broken_paragraphs(self):
+        source = ('<p>A normal paragraph.</p>\n<p>Another paragraph, this </p>'
+                  '\n<p>one broken incorrectly into two paragraphs.</p>'
+                  '\n<p>And another well-formed paragraph.</p>')
+        correct = ('<p>A normal paragraph.</p>\n<p>Another paragraph, this '
+                  ' one broken incorrectly into two paragraphs.</p>'
+                  '\n<p>And another well-formed paragraph.</p>')
+        result = emdashar.fix_broken_paragraphs(source.encode()).decode()
+        self.assertEqual(correct, result)
+    maxDiff = None
+    def test_broken_paragraphs2(self):
+        source = ('repeatedly</blockquote><blockquote class="calibre8">calling \n'
+                  'off his attention</blockquote>')
+        correct = 'repeatedly calling \noff his attention</blockquote>'
+        
+        result = emdashar.fix_broken_paragraphs(source.encode()).decode()
+        self.assertEqual(correct, result)

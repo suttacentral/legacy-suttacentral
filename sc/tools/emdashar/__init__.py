@@ -271,7 +271,33 @@ class Emdashar:
             mss.sub(rule.pattern, rule.repl)
         
         return mss
+
+def fix_broken_paragraphs(in_bytes):   
+    out = in_bytes
+    out = regex.sub(rb'''(?<=\p{lower}\s*)</(blockquote|p|div)>
+                        \s*
+                        <\1[^>]*>\s*(?=\p{lower})''', 
+                        b' ',
+                        out, flags=regex.VERBOSE|regex.I)
     
+    out = regex.sub(rb'''(?<=\p{lower}\s*)
+                        <p[^>]*>(?=\s*\p{lower})''', 
+                        b' ',
+                        out, flags=regex.VERBOSE|regex.I)
+    
+    # Deal with a wrong paragraph break on a hyphenated word
+    # (v.ugly)
+    out = regex.sub(rb'''(?<=\p{lower})-</(blockquote|p|div)>
+                        \s*
+                        <\1[^>]*>\s*(?=\p{lower})''', 
+                        b'',
+                        out, flags=regex.VERBOSE|regex.I)
+    
+    out = regex.sub(rb'(?<=\p{lower})-<p[^>]*>(?=\s*\p{lower})', 
+                        b'',
+                        out, regex.I)
+    return out
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

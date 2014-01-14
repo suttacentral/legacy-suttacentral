@@ -39,7 +39,7 @@ import sc
 from sc.views import InfoView
 from sc.util import humansortkey
 from . import html, crumple, finalizer
-from .emdashar import Emdashar, SortedLogger
+from .emdashar import Emdashar, SortedLogger, fix_broken_paragraphs
 
 logger = logging.Logger(__name__)
 
@@ -792,8 +792,9 @@ class EmdasharProcessor(BaseProcessor):
     def process_html(self, fileobj):
         doc = html.parse(fileobj)
         self.process_root(doc.getroot())
-        return html.tostring(doc, doctype=doc.docinfo.doctype, 
+        out_bytes = html.tostring(doc, doctype=doc.docinfo.doctype, 
                         encoding=self.output_encoding or doc.docinfo.encoding)
+        return fix_broken_paragraphs(out_bytes)
     
     def process_xml(self, fileobj):
         doc = html.parseXML(fileobj)
