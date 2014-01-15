@@ -498,8 +498,9 @@ class _Imm:
         except ValueError:
             return (None, None)
         
+        
         prev_uid = uids[i - 1] if i > 0 else None
-        next_uid = uids[i + 1] if i < len(uids) else None
+        next_uid = uids[i + 1] if i < len(uids) - 1 else None
             
         if not self.uids_are_related(uid, prev_uid):
             prev_uid = None
