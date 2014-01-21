@@ -673,7 +673,8 @@ class CleanupProcessor(HTMLProcessor):
             try:
                 crumple.crumple(root, self.options)
             except Exception as e:
-                self.entry.error('{} ({})'.format(type(e), e))
+                from traceback import format_tb
+                self.entry.error('{} ({}) {}'.format(type(e), e, format_tb(e.__traceback__)))
         
         if 'strip-header' in self.options:
             selector = self.options.get("strip-header-css", '')

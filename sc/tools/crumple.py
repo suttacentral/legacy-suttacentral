@@ -42,7 +42,7 @@ error permitted, meaning that #000080 and #00007f will both be called "navy".
 import logging, regex, os, os.path
 import pathlib, collections, io
 from .colors import color_name
-
+from collections import Counter
 
 BRTAG_SAFE = 1
 BRTAG_UNSAFE = 2
@@ -69,9 +69,11 @@ def generate_descriptive_name(attr, value):
         name = attr + ' ' + value
     
     name = name.replace('-', ' ')
+    name = regex.sub(r'[^\w%]', ' ', name)
     name = name.title()
     name = name.replace('%', 'pc')
     name = name.replace(' ', '')
+    
     
     return name
 
@@ -90,7 +92,8 @@ def crunch(root, name_mapping, xml_tags=False):
         classes = []
         eclass = e.attrib.get('class', None)
         if eclass:
-            classes.append(name_mapping.get(eclass, eclass))
+            for c in eclass.split():
+                classes.append(name_mapping.get(c, c))
         while len(e) == 1:
             if e.text not in {'', '\n', None}:
                 break
@@ -201,18 +204,91 @@ tidy_flags = """-c -w 0 --doctype html5 --quote-nbsp no
     --logical-emphasis yes --merge-emphasis yes --force-output yes --quiet yes
     --drop-proprietary-attributes yes --tidy-mark no --sort-attributes alpha 
     --output-html yes --output-encoding utf8 --css-prefix TIDY"""
+
+def eliminate_attributes(root, threshold=0.9):
+    threshold = float(threshold)
+    tags_in_doc = Counter(e.tag for e in root.iter())
     
+    for tag, count in tags_in_doc.items():
+        # Class
+        eliminate = set()
+        #print('Tag:', tag)
+        c = Counter()
+        attrs = Counter()
+        for e in root.iter(tag):
+            if e.attrib.get('class'):
+                c.update(e.attrib['class'].split())
+            for key, val in e.attrib.items():
+                if key == 'class':
+                    continue
+                if key not in {'lang'}:
+                    continue
+                attrs[(key,val)] += 1
+        
+        for class_, class_count in c.items():
+            #print('Class: {} occurs {}/{} times'.format(class_, class_count, count))
+            if class_count / count >= threshold:
+                print('Culling!')
+                eliminate.add(class_)
+        
+        if eliminate:
+            for e in root.iter(tag):
+                classes = e.attrib.get('class')
+                newclasses = []
+                if classes:
+                    classes = classes.split()
+                    for s in classes:
+                        if s in eliminate:
+                            continue
+                        newclasses.append(s)
+                if not newclasses and classes is not None:
+                    del e.attrib['class']
+                else:
+                    e.attrib['class'] = ' '.join(newclasses)
+        # Attributes
+        eliminate = set()
+        for (key, val), attr_count in attrs.items():
+            if attr_count <= 3:
+                continue
+            if attr_count / count >= threshold:
+                eliminate.add((key, val))
+        for attr, val in eliminate:
+            for e in root.iter(tag):
+                if e.attrib.get(attr) == val:
+                    del e.attrib[attr]
+
+def get_existing_classes(root):
+    out = set()
+    for e in root.iter():
+        classes = e.attrib.get('class')
+        if classes:
+            out.update(classes.split())
+    return out
+
 def crumple(root, options={}):
-    css = root.select_or_fail('style')[0].text
+    
+    css = '\n'.join(e.text for e in root.select('style'))
+    for e in root.select('style')[1:]:
+        e.drop_tree()
     new_css = ['/* Unmodified rules */']
     new_css_rules = dict()
     
     xml_tags = options.get('xml-tags')
-    
+    pseudo_class_rex = regex.compile(r'[^{]*:')
+    if options.get('all-classes'):
+        rex = regex.compile(r'\s*(?<element>[\w]+)\.(?<class>[\w-]+)\s*\{(\s*(?<attr>[\w-]+):\s*(?<value>[^;]+);?)+\}')
+    else:
+        rex = regex.compile(r'\s*(?<element>[\w]+)\.(?<class>TIDY-[0-9]+)\s*\{(\s*(?<attr>[\w-]+):\s*(?<value>[^;]+);?)+\}')
     tidyclass_to_newclass = {}
     # Parse the css using regex. Could well fail if Tidy changes.
+    pseudo_class_rules = []
+    
     for line in css.split('\n'):
-        m = regex.match(r'\s*(?<element>[\w]+)\.(?<class>TIDY-[0-9]+)\s*\{(\s*(?<attr>[\w-]+):\s*(?<value>[\w #%-]+);?)+\}', line)
+        if pseudo_class_rex.match(line):
+            pseudo_class_rules.append(line)
+            continue
+        
+        m = rex.match(line)
         if m:
             css_class = m["class"]
             element = m["element"]
@@ -234,6 +310,11 @@ def crumple(root, options={}):
             tidyclass_to_newclass[css_class] = " ".join(classes)
         else:
             new_css.append(line)
+    if pseudo_class_rules:
+        new_css.append("/* Pseduo classes not supported */")
+        new_css.append('/*')
+        new_css.extend(pseudo_class_rules)
+        new_css.append('*/')
     
     new_css.append("/* Automatically Generated Classes */")
     new_css_rules.update(tag_classes.items())
@@ -241,6 +322,15 @@ def crumple(root, options={}):
     new_css.extend(".%s {%s: %s}" % (name, prop, val) 
                     for name, (prop, val) in sorted(new_css_rules.items()))
     
-    root.select_or_fail('style')[0].text = "\n".join(new_css) + '\n'
-    print(tidyclass_to_newclass)
     crunch(root.body, tidyclass_to_newclass, xml_tags=xml_tags)
+    
+    eliminate_attributes(root, options.get('eliminate-threshold', 0.9))
+    existing_classes = get_existing_classes(root)
+    def okay(s):
+        m = regex.match(r'\.([\w-]+)\s*{', s)
+        if not m or m[1] in existing_classes:
+            return True
+        return False
+        
+    css = "\n".join(r for r in new_css if okay(r)) + '\n'
+    root.select_or_fail('style')[0].text = css
