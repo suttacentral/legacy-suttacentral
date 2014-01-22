@@ -24,6 +24,10 @@ SuttaBase = namedtuple('SuttaBase', (
         'lang', 'subdivision', 'vagga', 'volpage_info', 'alt_volpage_info',
         'biblio_entry', 'text_ref', 'translations', 'parallels',) )
 
+VinayaCollection = namedtuple('VinayaCollection', ['uid', 'name', 'rules'])
+
+VinayaRule = namedtuple('VinayaRule', ['uid', 'name', 'text_ref', 'parallels'])
+
 Language = namedtuple('Language', 'uid, name, isroot, iso_code, priority, collections')
 
 class SearchString(str):

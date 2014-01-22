@@ -404,7 +404,21 @@ class _Imm:
 
         for sutta in self.suttas.values():
             sutta.parallels.sort(key=Parallel.sort_key)
-
+    
+    def build_vinaya(self):
+        # The vinaya data is stored basically as a matrix
+        rows = list(table_reader('vinaya'))
+        collection_uids = [s.replace('_', '-') for s in 
+            rows[0]._fields]
+        
+        vinaya = self.vinaya = OrderedDict(
+            (uid, VinayaCollection(uid, name, []))
+                for uid, name
+                in zip(collection_uids, rows[1]))
+        
+        for row in rows[2:]:
+            pass
+            
     def build_search_data(self):
         """ Build useful search data.
 
