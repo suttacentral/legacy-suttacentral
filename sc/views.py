@@ -261,8 +261,12 @@ class TextView(ViewBase):
                 # fall through to grabbing everything as content
                 (?<content>.*)
             )
+        </div>\n?
         </body>
         ''', flags=regex.DOTALL | regex.VERBOSE)
+    
+    # Note: Links come after section
+    links_regex = regex.compile(r'class="(?:next|previous)"')
     
     def __init__(self, uid, lang_code):
         self.uid = uid
@@ -271,7 +275,9 @@ class TextView(ViewBase):
     def setup_context(self, context):
         from sc.tools import html
         m = self.content_regex.search(self.get_html())
+        m.detach_string() # Free up memory now.
         context.title = '?'
+        
         if m['hgroup'] is not None:
             hgroup_dom = html.fragment_fromstring(m['hgroup'])
             h1 = hgroup_dom.select('h1')
@@ -279,9 +285,13 @@ class TextView(ViewBase):
                 context.title = h1[0].text
             self.annotate_heading(hgroup_dom)
             hgroup_html = str(hgroup_dom)
-            context.text = ''.join([m['preamble'], hgroup_html, m['content']])
+            content = [m['preamble'], hgroup_html, m['content']]
         else:
-            context.text = m['content']
+            content = [m['content']]
+        if not self.links_regex.search(m['content'], pos=-500):
+            content.extend(self.create_nextprev_links())
+        content.append('</div>')
+        context.text = ''.join(content)
     
     @property
     def path(self):
@@ -319,7 +329,25 @@ class TextView(ViewBase):
                 a = hgroup_dom.makeelement('a', href=href,
                     title='Click to go to the division or subdivision page.')
                 subhead.wrap_inner(a)
-
+    
+    def create_nextprev_links(self):
+        # Create links
+        imm = scimm.imm()
+        links = []
+        
+        prev_uid, next_uid = imm.get_text_nextprev(self.uid, self.lang_code)
+        
+        if prev_uid:
+            prev_acro = imm.uid_to_acro(prev_uid)
+            links.append('<a class="previous" href="{}">◀ {}</a>'.format(
+                Sutta.canon_url(uid=prev_uid, lang_code=self.lang_code), prev_acro))
+        links.append('<a class="top" href="#"> ▲ TOP </a>')
+        if next_uid:
+            next_acro = imm.uid_to_acro(next_uid)
+            links.append('<a class="next" href="{}">{} ▶</a>'.format(
+                Sutta.canon_url(uid=next_uid, lang_code=self.lang_code), next_acro))
+        return links
+    
 class SuttaView(TextView):
     """The view for showing the sutta text in original sutta langauge."""
 

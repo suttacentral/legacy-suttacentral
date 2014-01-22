@@ -1,93 +1,372 @@
-#!/usr/bin/env python
-
-""" ANALYTICS:
-
-Displays information about each sutta.
-The colors mean as follow:
-white/blue is purely informative.
-green means there is probably no problem, and the basis for that assumption is printed.
-yellow means there is a problem but the program knows how to and has the information available to fix it.
-red means human intervention is required.
-
-"""
-
 import sys, regex, os, shutil, collections, itertools
 import pathlib
 from copy import copy
 
-import sc
+import sc, sc.scimm, sc.util
 
-def get_existing_uids(_cache=[]):
+def get_existing_file_uids(_cache=sc.util.TimedCache(lifetime=15 * 60)):
     try:
         return _cache[0]
-    except IndexError:
+    except KeyError:
         pass
+    
     imm = sc.scimm.imm()
-    existing_uids = set(imm.suttas.keys())
+    existing_file_uids = set()
     for value in imm.text_paths.values():
-        existing_uids.update(value.keys())
-    _cache.append(existing_uids)
-    return existing_uids
+        existing_file_uids.update(value.keys())
+    
+    _cache[0] = existing_file_uids
+    return existing_file_uids
 
-def get_tag_data(_cache=[]):
+def get_tag_data(_cache=sc.util.TimedCache(lifetime=15 * 60)):
     try:
         return _cache[0]
-    except IndexError:
+    except KeyError:
         pass
     import json
     jsonfile = sc.base_dir / 'utility' / 'tag_data.json'
     with jsonfile.open('r') as f:
         tag_data = json.load(f)
-    _cache.append(tag_data)
+    _cache[0] = tag_data
     return tag_data
 
+def process_metadata(root):
+    metaarea = root.select_one('div#metaarea')
+    if metaarea:
+        return metaarea
+    pes = root.select('p')
+    if pes:
+        parent = pes[0].getparent()
+        if parent.tag == 'blockquote':
+            parent = parent.getparent()
+        parent.tag = 'div'
+        parent.attrib['id'] = 'metaarea'
+        return parent
+    if root.text and root.tag == 'div':
+        root.attrib['id'] = 'metaarea'
+        root.wrap_inner(root.makeelement('p'))
+        return root
+    raise tools.webtools.ProcessingError("Couldn't make sense of metadata")
 
+def discover_author(root, entry):
+    author = root.select_one('meta[author]')
+    if not author:
+        author = root.select_one('meta[data-author]')
+        if author:
+            author.attrib['author'] = author.attrib['data-author']
+            del author.attrib['data-author']
+    if author:
+        return author
+    
+    metaarea = root.select_one('div#metaarea')
+    if metaarea:
+        metatext = metaarea.text_content()
+        transby = None
+        m = regex.search('Transl(?:ated|ion) (?:by|from) ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+(?: and ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+)))', metatext)
+        if m:
+            transby = m[0]
+        else:
+            # Match two words at front if possible commas are allowed, after that
+            # match everything up to the first sentence ender, but permit periods
+            # as abbreviation indicators.
+            m = regex.match(r'(?:\p{alpha}+,? \p{alpha}+,?\s)?(?:(?<!\p{alpha})(?:\bed|\b\p{alpha})\.\s*|[^.:,])+', metatext)
+            if m:
+                transby = m[0]
+            if transby:
+                entry.warning('No explicit author/origin blurb provided, using "{}", if this is not sensible, please add an element \'<meta author="Translated by So-and-so">\' to the metadata'.format(transby))
+                return root.makeelement('meta', author=transby)
+    
+    entry.error('Could not determine author(translator/editor) blurb, please add an element \'<meta author="Translated by So-and-so">\' to the metadata')
+    return None
+    
+def normalize_id(string):
+    # Remove spaces between alpha char and digit
+    string = regex.sub(r'(?<=\p{alpha})\s+(?=\d)', '', string)
+    # Replace space between alpha with hyphen
+    string = regex.sub(r'(?<=\p{alpha})\s+(?=\p{alpha})', '-', string)
+    # Replace space between digits with period
+    string = regex.sub(r'(?<=\d)\s+(?=\d)', '.', string)
+    
+    # WARNING this can still return invalid ids, need to check
+    # the HTML5 standard. This is an area where not being restricted
+    # to the HTML4 standard would be very ideall. From memory
+    # in HTML5 is might be defined as a list of forbidden characters,
+    # with unicode characters in general being okay.
+    
+    return string
+
+def normalize_tags(root, entry):
+    tag_data = get_tag_data()
+    validtags = sc.tools.html.defs.tags
+    warned = set()
+    for e in root.iter():
+        if not isinstance(e.tag, str):
+            continue
+        if e.tag not in validtags:
+            if tag_data['pnum_classes'].get(e.tag):
+                # Certainly a paragraph number
+                
+                e.attrib['class'] = e.tag
+                e.tag = 'a'
+                id = e.attrib.get('id')
+                text = e.text
+                
+                if id and text:
+                    if id == text:
+                        e.text = None
+                
+                elif text:
+                    e.attrib['id'] = normalize_id(text)
+                    e.text = None
+            else:
+                tags = tag_data['by_class'].get(e.tag)
+                if tags:
+                    tags = sorted(tags.items(), key=lambda t: t[1], reverse=True)
+                    e.attrib['class'] = e.tag
+                    e.tag = tags[0][0]
+                else:
+                    if e.tag not in warned:
+                        entry.warning("Don't know what to do with tag: {}".format(e.tag), lineno=e.sourceline)
+                        warned.add(e.tag)
+
+def inspect_classes(root, entry):
+    tag_data = get_tag_data()
+    warned = set()
+    for e in self.iter():
+        if 'class' in e.attrib:
+            for class_ in e.attrib['class'].split():
+                if class_ not in tag_data['by_class']:
+                    if class_ not in warned:
+                        entry.warning("CSS class {} not recognized, this may be an error.".format(_class), lineno=e.sourceline)
+                        warned.add(class_)
+
+    
 def has_ascii_punct(root):
     badpuncts = ('"', '--', "'s")
     for e in root.iter():
         for punct in badpuncts:
             if (e.text and punct in e.text) or (e.tail and punct in e.tail):
-                return True
+                return (punct, e.sourceline)
             return False
 
-def finalize(root, entry, lang=None, metadata=None, options={}):
+def inspect_for_rubbish(root, entry):
+    # Examine for over-nesting
+    pes = []
+    for p in root.select('p'):
+        if p.getparent().attrib.get('id') == 'metaarea':
+            continue
+        pes.append(p)
+    if not pes:
+        entry.warning("Document contains no paragraphs. This is okay only under exceptional circumstances. <div> tags containing text should be changed to <p>")
+    else:
+        midp = pes[int(len(pes)/2)]
+        ancestors = [e.tag for e in midp.iterancestors()]
+        anccount = len(ancestors) - 2 # html and body
+        if 'article' in ancestors:
+            anccount -= 1
+        if 'section' in ancestors:
+            anccount -= 1
+        if 'div' in ancestors:
+            anccount -= 1
+        if 'blockquote' in ancestors:
+            anccount -= 1
+        if anccount > 0:
+            entry.warning("Document content appears to be excessively nested, by {} levels.".format(anccount))
+    
+    rubbish = root.cssselect('body script, body link, body style')
+    if rubbish:
+        entry.warning("Document contains rubbish such as script or style tags. Has this document been cleaned up?")
+    for e in rubbish:
+        e.drop_tree()
+
+def discover_language(root, entry):
+    imm = sc.scimm.imm()
+    language = None
+    if entry.filename:
+        for part in entry.filename.parts:
+            language = imm.languages.get(part)
+            if language:
+                break
+    
+    element = root.select_one('div[lang], section[lang], article[lang]')
+    if element:
+        lang_iso_code = element.attrib['lang']
+        langs = imm.isocode_to_language.get(lang_iso_code, [])
+        if len(langs) == 1 and not language:
+            language = langs[0]
+        elif len(langs) > 1 and not language:
+            possibilities = ", ".join("{}/{}".format(l.uid, l.name) for l in langs)
+            entry.error("Ambigious language, could be ({}), please implicitly specify language uid by enclosing in a sub folder i.e. zh/filename.html".format(possibilities))
+            return
+        elif language and language.iso_code != lang_iso_code:
+            entry.error("Language mismatch, according to path structure language is {}, but according to lang tag language is {}".format(language.iso_code, lang_iso_code))
+            return
+    else:
+        # Language does not exist.
+        if language:
+            lang_iso_code = language.iso_code
+        else:
+            entry.error('No language uid found. Please enclose file(s) in a subfolder en/filename.html')
+            return
+    
+    if not language:
+        if entry.filename:
+            possible_code = entry.filename.parts[0]
+            if 2 <= len(possible_code) <= 3:
+                entry.error("Language could not be determined. If '{}' is a new language, it will need to be added to the database.".format(possible_code))
+                return
+        entry.error("Language could not be determined.")
+    
+    return language
+
+def generate_canonical_path(uid, language):
+    imm = sc.scimm.imm()
+    
+    if isinstance(language, str):
+        language = imm.languages[language]
+    
+    path = pathlib.Path(language.uid)
+    
+    subdivision = imm.subdivisions.get(uid)
+    if not subdivision:
+        sutta = imm.suttas.get(uid)
+        if sutta:
+            subdivision = sutta.subdivision
+    
+    if not subdivision:
+        m = regex.match(r'(.*?)\.?\d+(?:-\d+)?$', uid)
+        if m:
+            subdivision = imm.subdivisions.get(m[1])
+    
+    if subdivision:
+        division = subdivision.division
+    else:
+        division = imm.divisions.get(uid)
+    
+    if division:
+        collection = division.collection
+    else:
+        return path
+    
+    if language != collection.lang:
+        path /= pathlib.Path(collection.lang.uid)
+    m = regex.match(r'.*\.(.*)', collection.uid)
+    if m:
+        path /= m[1]
+
+    if division.uid != uid:
+        path /= division.uid
+    
+    if subdivision and uid != subdivision.uid != None:
+        path /= subdivision.uid
+    
+    return path
+
+def discover_uid(root, entry):
+    section = root.select_one('section[id]')
+    if section:
+        uid = section.attrib['id']
+        if not regex.fullmatch(r'\P{alpha}+', uid):
+            entry._lineno = section.sourceline
+            return uid
+    hgroup = root.select_one('hgroup[id]')
+    if hgroup:
+        uid = hgroup.attrib['id']
+        if not regex.fullmatch(r'\P{alpha}+', uid):
+            entry._lineno = hgroup.sourceline
+            return uid
+    return None
+
+def finalize(root, entry, language=None, metadata=None, 
+             author_blurb=None, num_in_file=-1, options={}):
+    if root.tag != 'html':
+        raise ValueError('Root element should be <html> not <{}>'.format(root.tag))
     pnums = set()
     filename = entry.filename
-    existing_uids = get_existing_uids()
     tag_data = get_tag_data()
-    # Analytics.
-    print("Analyzing {}:".format(filename))
-    # Does this file have a menu?
-    multisutta = len(root.select('article, h1')) > 2
-    needsarticle = len(root.select('article')) == 0
-    try:
-        metadata = root.select_or_throw('#metaarea')[0]
-        hasmeta = True
-    except:
-        hasmeta = False
-        if not metadata:
-            entry.error('No metadata found. Metadata should either be in a \
-            <div id="metaarea"> tag, or a seperate file "meta.html".')
-            # No metadata is an error (i.e. absolutely invalidates text)
-            # But we will continue to find more errors.
-        
-    hasmenu = len(root.select('#menu')) > 0
-    needsmenu = not hasmenu and len(root.select('h1, h2, h3')) > 3 or len(root.select('h1')) > 2
-
-    try:
-        lang = root.select('div[lang], html[lang], section[lang], article[lang]')[0].attrib['lang']
-    except (IndexError, KeyError):
-        if not lang:
-            entry.error('No language code found. Either use <div id="en">, or include \
-            in a subfolder en/filename.html')
-            # No language is an error, but we will forge ahead!
     
-    uid = pathlib.Path(entry.filename).stem
-    if uid not in existing_uids:
-        entry.warning("The filename does not match the uid or filename of an \
-        existing text, this is okay if you are adding something completely \
-        new but is more likely an error.")
-        
+    imm = sc.scimm.imm()
+    
+    if not language:
+        language = discover_language(root, entry if num_in_file == -1 else 
+            sc.tools.webtools.Report.Entry())
+    
+    multisutta = len(root.select('article, h1')) > 2
+    
+    if metadata:
+        # Allow specific metadata.
+        metadata = root.select_one('#metaarea') or metadata
+    else:
+        metadata = root.select_one('#metaarea')
+        if not metadata and num_in_file <= 0:
+            entry.error('No metadata found. Metadata should either be in a \
+        <div id="metaarea"> tag, or a seperate file "meta.html".')
+    
+    if metadata:
+        root.body.append(metadata)
+    
+    uid1 = discover_uid(root, entry)
+    uid2 = pathlib.Path(entry.filename).stem
+    
+    inspect_for_rubbish(root, entry)
+    
+    if len(root.select('section')) > 1:
+        raise ValueError('Should not be called with multiple sections')
+    
+    if language:
+        language_name = language.name
+    else:
+        language_name = 'Unknown'
+    
+    def uid_makes_sense(uid):
+        if not uid:
+            return False
+        for ipass in range(0, 2):
+            if ipass == 1:
+                # Try pruning the end of the uid.
+                m = regex.match(r'(.*?)\.?\d+(?:-\d+)?$', uid)
+                if m:
+                    uid = m[1]
+            
+            if uid in imm.suttas:
+                return "Looks like sutta text {0.acronym}: {0.name} ({1})".format(imm.suttas[uid], language_name)
+                
+            
+            elif uid in imm.divisions:
+                return "Looks like belongs to division {0.uid}: {0.name} ({1})".format(imm.divisions[uid], language_name)
+                
+                
+            elif uid in imm.subdivisions:
+                return "Looks like belongs to subdivision {0.uid}: {0.name} ({1})".format(imm.subdivisions[uid], language_name)
+            
+        return False
+    
+    uid1_sense = uid_makes_sense(uid1)
+    uid2_sense = uid_makes_sense(uid2)
+    if uid1_sense and (not uid2_sense or uid1.startswith(uid2)):
+        entry.info(uid1_sense)
+        uid = uid1
+    elif uid2_sense and not uid1_sense:
+        entry.info(uid2_sense)
+        uid = uid2
+    elif uid1_sense and uid2_sense:
+        entry.warning(uid1_sense)
+        entry.warning('(also) ' + uid2_sense)
+        if len(uid1) > len(uid2):
+            uid = uid1
+        else:
+            uid = uid2
+        entry.warning('Using {}'.format(uid))
+    
+    entry.info('uid looks like {} ({}/{})'.format(uid, uid1, uid2))
+    
+    #Convert non-HTML tags to classes
+    normalize_tags(root, entry)
+    
+    if metadata:
+        for e in metadata.select('a.sc'):
+            e.drop_tag()
+    
     # Does this this file have numbering?
     pnumbers = False
     pnumbers_need_id = False
@@ -105,7 +384,7 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
     if scn:
         pnumbers = "sc"
         def checksanity():
-            global root, pnumbers_need_id, scnumbers_insane
+            nonlocal root, pnumbers_need_id, scnumbers_insane
             for article in root.select('article.sutta'):
                 
                 seen = set()
@@ -156,51 +435,48 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
     if has_ascii_punct(root):
         entry.warning("Contains ascii puncuation, consider applying emdashar or manually fix")
     
-    try:
-        divtext = root.get_element_by_id('text')
-    except KeyError:
-        divtext = root.makeelement('div', {'id':'text'})
-        divtext.extend(root.body)
-        root.body.append(divtext)
-
-    for e in root.select('#metaarea'):
-        divtext.append(e)
-
-    divtext.attrib['lang'] = lang or base_lang
-    # Now do stuff.
-    if needsarticle:
-        if multisutta:
-            raise sc.tools.webtools.ProcessingError("Multiple Suttas per file not implemented yet, sorry.")
-        else:
-            try:
-                section = root.select('section')[0]
-            except IndexError:
-                section = root.makeelement('section', {'class':'sutta'})
-            article = root.makeelement('article')
-            # Move everything inside divtext into the article
-            article.extend(divtext)
-            divtext.append(section)
-            section.append(article)
-            section.attrib['id'] = uid
-
+    # tear down
+    for e in root.select('div#text, section, article'):
+        e.drop_tag()
+        
+    # rebuild document structure
+    article = root.makeelement('article')
+    section = root.makeelement('section', 
+                                {'class':'sutta', 'id': uid})
+    divtext = root.makeelement('div', id="text")
+    
+    for e in root.select('hgroup'):
+        if 'id' in e.attrib:
+            del e.attrib['id']
+    
+    if language:
+        divtext.attrib['lang'] = language.iso_code
+    
+    article.extend(root.body)
+    root.body.append(divtext)
+    divtext.append(section)
+    section.append(article)
+    
     try:
         toc = root.get_element_by_id('toc')
     except KeyError:
         toc = root.makeelement('div', {'id':'toc'})
-        divtext.insert(0, toc)
+    
+    divtext.insert(0, toc)
 
     if h1notinhgroup:
         for h1 in root.iter('h1'):
             hgroup = root.makeelement('hgroup')
             h1.addnext(hgroup)
             hgroup.append(h1)
+    
     if supplied_misused:
         for h in root.select('h1,h2,h3,h4,h5,h6,h7'):
             if 'class' in h.attrib and 'supplied' in h.attrib['class']:
                 if h.attrib['class'] == 'supplied':
                     del h.attrib['class']
                 else:
-                    h.attrib['class'] = regex.sub('supplied,?', '', h.attrib['class'])
+                    h.attrib['class'] = regex.sub(r'supplied\s*,?', '', h.attrib['class']).strip()
                 span = root.makeelement('span', {'class':'add'})
                 span.text = h.text; h.text = None
                 for child in h:
@@ -212,19 +488,23 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
             p = a.getparent()
             a.tail = p.text
             p.text = None
-        for a in root.select('#metaarea p a.sc'):
-            a.drop_tree()
 
     used_ids = set()
     
-    if scnumbers_insane or not pnumbers or options.get('force_sc_nums'):
+    for e in root.select('#metaarea'):
+        e.drop_tree()
+    
+    if metadata:
+        section.append(metadata)
+    
+    if scnumbers_insane or not pnumbers or options.get('force-sc-nums'):
         for a in root.select('a.sc'):
             a.drop_tree()
         for section in root.select('section.sutta'):
             pcount = itertools.count(1)
             uid = section.attrib['id']
             assert uid[0].isalpha()
-            for p in section.select('p'):
+            for p in section.select('article p'):
                 if len(p.text_content()) > 50:
                     id = str(next(pcount))
                     used_ids.add(id)
@@ -247,62 +527,9 @@ def finalize(root, entry, lang=None, metadata=None, options={}):
                     pid = 'p' + str(i)
                 e.attrib['id'] = pid
     
-    if needsmenu and not hasmenu:
-        # We have JavaScript menu generation.
-        pass
-        #try:
-            #menu_list = []
-            #if not multisutta:
-                #headings = root.select('h2, h3, h4, h5, h6')
-                #hcount = itertools.count(1)
-                #for h in headings:
-
-                    #if list(h.iterancestors('hgroup')):
-                        #continue # skip initial heading.
-                    ##try:
-                        ##if h.getnext().tag in 'h2, h3, h4, h5, h6':
-                            ##continue # Skip all but last heading in group
-                    ##except AttributeError:
-                        ##continue
-                    #id = 'm{}'.format(next(hcount))
-                    ## Wrangle the heading.
-                    #a = copy(h)
-                    #a.tag = 'a'
-                    #a.attrib.update({'href':'#toc', 'id':id})
-                    #h.clear()
-                    #h.append(a)
-
-                    ## Create the menu item
-                    #li = '<li><a href="#{}">{}</a></li>'.format(id, h.text_content())
-                    #depth = int(h.tag[1])
-                    #menu_list.append( (depth, li) )
-                #max_d = max(t[0] for t in menu_list)
-                #min_d = min(t[0] for t in menu_list)
-                #menu_list = [ (1 + t[0] - min_d, t[1]) for t in menu_list]
-
-                ## Build the menu
-                #menu = root.makeelement('div', {'id':'menu'})
-                #ul = root.makeelement('ul')
-                #menu.append(ul)
-                #last_d = 1
-                #last_e = ul
-                #for depth, li in menu_list:
-                    ## Create a new ul if the menu is getting deeper.
-                    #while depth > last_d:
-                        #ul = root.makeelement('ul')
-                        #last_e[-1].append(ul)
-                        #last_e = ul
-                        #last_d += 1
-                    #while depth < last_d:
-                        #last_e = last_e.getparent().getparent()
-                        #last_d -= 1
-                    #last_e.append(lxml.html.fromstring(li))
-                #toc.insert(0, menu)
-        #except (AttributeError, IndexError):
-            #menu = '<ul>{}</ul>'.format("\n".join(t[1] for t in menu_list))
-            #toc.insert(0, lxml.html.fragment_fromstring(menu))
-            
-    if not hasmeta:
-        if metadata is not None:
-            divtext.append(copy(metadata))
+    if not author_blurb:
+        author_blurb = discover_author(root, entry)
+    
+    if author_blurb:
+        root.headsure.append(author_blurb)
     

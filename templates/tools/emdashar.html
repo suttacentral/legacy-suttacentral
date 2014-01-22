@@ -1,0 +1,30 @@
+{% set current = 3 %}
+{% extends "tools/tools-base.html" -%}
+{% block tool %}
+
+<form id="tools-emdashar" action="/tools/emdashar" method="post" enctype="multipart/form-data">
+<ul>
+<li><h2>ASCII Puncutation to Unicode</h2></li>
+<li><p>
+This utility will convert ascii punctuation into typographically correct
+unicode equivilants, at present it only understands english puncuation
+conventions. However even for other languages it may be useful since the
+english punctuation marks can be trivially search-replaced with those of
+the other language.
+
+<p>While it is primarly designed to convert ascii to unicode, it will also fix
+mistakes with unicode puncuation, these might arise, for example, from OCR
+or typos.
+
+<p>If the document uses puncutation in unusual ways then results may be poor. It is designed for literature, not scientific or scholary documents.
+<li><input name="details" type="checkbox"> Output details of changes. Is extremely verbose.
+<li>
+Supported formats include txt, html, xml, odt and epub.
+<li>
+<p>Please put all the files you want processed in a zip archive and upload the zip file. Only zip archives are supported. You will receive a zip archive in return.</p>
+<input name="userfile" type="file" data-allowed="zip" accept="application/x-zip" required>
+<button>Submit</button></p>
+</ul>
+</form>
+
+{%- endblock %}

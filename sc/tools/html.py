@@ -11,12 +11,13 @@ which now returns the html code of the element.
 """
 
 import lxml.html as _html
-from lxml.html import tostring, xhtml_to_html
+from lxml.html import tostring, xhtml_to_html, defs
 import lxml.etree as _etree
 import functools as _functools
 from html import escape # lxml.html doesn't define it's own escape
 import regex as _regex
 
+defs.html5_tags = frozenset({'section', 'article', 'hgroup'})
 
 class CssSelectorFailed(Exception):
     " The exception returned by select_or_fail "
@@ -119,6 +120,14 @@ class HtHtmlElementMixin:
             return list(self.iter(*parts))
         return self.cssselect(selector)
     
+    def select_one(self, selector):
+        """ Returns the first matching element, or None """
+        
+        result = self.select(selector)
+        if result:
+            return result[0]
+        return None
+    
     def select_or_fail(self, selector):
         """ Raises ``CssSelectorFailed`` instead of returning an empty list
         
@@ -160,15 +169,35 @@ class HtHtmlElementMixin:
                         break
             
     
-    def pretty(self):
+    def pretty(self, **kwargs):
         """ Return a string with prettified whitespace """
-        string = _html.tostring(self, encoding='utf8', pretty_print=True).decode()
+        string = _html.tostring(self, pretty_print=True, **kwargs).decode()
         extra_tags = ('article', 'section', 'hgroup')
         string = _regex.sub(r'(<(?:{})[^>]*>)'.format('|'.join(extra_tags)), r'\n\1\n', string)
-        string = _regex.sub(r'(</(?:{})>)'.format('|'.join(extra_tags)), r'\1\n', string)
+        string = _regex.sub(r'(</(?:{})>)'.format('|'.join(extra_tags)), r'\n\1\n', string)
         string = string.replace('<br>', '<br>\n')
         string = string.replace('\n\n', '\n')
+        string = _regex.sub(r'\n +', '\n', string)
         return string
+    
+    @property
+    def headsure(self):
+        """ Returns head, creating it if it doesn't exist """
+        try:
+            return self.head
+        except IndexError:
+            head = self.makeelement('head')
+            root = self.getroottree().getroot()
+            assert root.tag == 'html', "Incomplete HTML tree"
+            root.insert(0, head)
+            return head
+    
+    def __bool__(self):
+        """ Objects are always truthy, as in future lxml 
+        
+        Use 'len' to discover if contains children.
+        """
+        return True
     
 # We need to jump through some hoops to ensure the mixins are included
 # in all Element class for every tag type. (in lxml.html, some, like input
@@ -177,7 +206,7 @@ class HtHtmlElementMixin:
 # non-customized tag, so we also need to manually mix them into a new
 # HtmlElement and create a CustomLookup class which returns our new
 # HtmlElement class as the default)
-class HtHtmlElement(_html.HtmlElement, HtHtmlElementMixin):
+class HtHtmlElement(HtHtmlElementMixin, _html.HtmlElement):
     pass
 
 class CustomLookup(_html.HtmlElementClassLookup):
@@ -241,6 +270,15 @@ def parse(filename, encoding='utf8'):
         parser = get_parser(None)
         
     return _html.parse(filename, parser=parser)
+
+def parseXML(filename):
+    """ Parse an XML document, thus also suitable for XHTML """
+    # XML doesn't require jumping through the same hoops as HTML since there
+    # are no existing custom element classes.
+    parser_lookup = _etree.ElementDefaultClassLookup(element=HtHtmlElement)
+    parser = _etree.XMLParser()
+    parser.set_element_class_lookup(parser_lookup)
+    return _etree.parse(filename, parser=parser)
 
 if __name__ == "__main__":
     import doctest

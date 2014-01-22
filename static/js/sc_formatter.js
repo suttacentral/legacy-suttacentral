@@ -6,16 +6,16 @@ if (String.prototype.trimLeft === undefined)
     }
 }
 
-sc_formatter = {
+sc.formatter = {
     //Designed to workaround limitations in css.
     init: function() {//Init is called only once.
-        //$("body").on("mouseover", "span.lookup", function(e){sc_formatter.rePosition($(e.target))})
+        //$("body").on("mouseover", "span.lookup", function(e){sc.formatter.rePosition($(e.target))})
         $(window).resize(function(){
-            //sc_formatter.shove();
+            //sc.formatter.shove();
             
-            //$("span.lookup").mouseenter(function(e){sc_formatter.rePosition($(e.target))});
+            //$("span.lookup").mouseenter(function(e){sc.formatter.rePosition($(e.target))});
         });
-        $(document).on('keydown', sc_formatter.deathToTheBeast);
+        $(document).on('keydown', sc.formatter.deathToTheBeast);
         this.apply();
         this.menuGenerator();
         this.operaFix();
@@ -24,12 +24,12 @@ sc_formatter = {
     },
     apply: function(){
         $("tr").filter(":even").addClass("even"); //Add the .even class to every second tr element
-        sc_formatter.quoteHanger();
+        sc.formatter.quoteHanger();
         
     },
     shove: function(){
         var start = (new Date()).getTime();
-        $("q").each(function(){sc_formatter.rePosition($(this))});
+        $("q").each(function(){sc.formatter.rePosition($(this))});
         //console.log("Resize took: ", (new Date()).getTime() - start, " milliseconds");
     },
     rePosition: function($element){
@@ -111,7 +111,7 @@ sc_formatter = {
             {
                 if (node.nodeValue)
                 {
-                    if (sc_formatter.markOfTheBeast % 2 == 0) {
+                    if (sc.formatter.markOfTheBeast % 2 == 0) {
                         node.nodeValue = node.nodeValue.replace(/ṃ/g, 'ṁ').replace(/Ṃ/g, 'Ṁ');
                     } else {
                         node.nodeValue = node.nodeValue.replace(/ṁ/g, 'ṃ').replace(/Ṁ/g, 'Ṃ');
@@ -119,15 +119,15 @@ sc_formatter = {
                 }
             }
             textualControls.enable();
-            if (sc_formatter.markOfTheBeast % 2 == 0) {
+            if (sc.formatter.markOfTheBeast % 2 == 0) {
             } else {
-                var num = 1 + Math.ceil(sc_formatter.markOfTheBeast / 2);
+                var num = 1 + Math.ceil(sc.formatter.markOfTheBeast / 2);
                 var suffix = 'th';
                 if (num % 10 == 1 && num % 100 != 11) suffix = 'st';
                 if (num % 10 == 2 && num % 100 != 12) suffix = 'nd';
                 if (num % 10 == 3 && num % 100 != 13) suffix = 'rd';
             }
-            sc_formatter.markOfTheBeast += 1
+            sc.formatter.markOfTheBeast += 1
         }
     },
     highlightBookmark: function() {
@@ -156,6 +156,28 @@ sc_formatter = {
         if ($('.tools').length == 0) {
             return
         }
+        
+        $('[data-allowed]').on('change', function(e){
+            var filename = this.value,
+                types = $(this).attr('data-allowed').split(' ,'),
+                m = filename.match('.+[.](.+)');
+            
+            if (m && types.indexOf(m[1].toLowerCase()) != -1) {
+                return
+            }
+            
+            this.value = null;
+            
+            if (!m) {
+                alert('Unknown filetype, only {} allowed'.format(
+                    types.join(', ')));
+            }
+            else {
+                alert('Filename extension .{} not allowed, only .{} allowed'.format(
+                    m[1].toLowerCase(), types.join(', .')));
+            }
+        });
+        
         tidy = {
             tidy: $('[value=html5tidy]'),
             level: $('[name=tidy-level]'),
@@ -194,7 +216,7 @@ sc_formatter = {
             decruft: $('[name=decruft]'),
             what: $('[name^=decruft-]'),
             discard: $('[name=decruft-discard]'),
-            unwrap: $('[name=decruft-unwrap'),
+            unwrap: $('[name=decruft-unwrap]'),
             update: function(e){
                 var self=decruft,
                     selectors = [];
@@ -237,12 +259,10 @@ sc_formatter = {
             $('[data-bound]').each(function(){updateBoundStatus(this)});
         });
         
-        $('[name=hide]').on('change', function(e){
+        $('[name=show]').on('change', function(e){
             $('.entry').show();
-            if (e.target.value == 'okay') 
-                $('.entry').not('.warnings, .errors').hide()
-            else if (e.target.value == 'warnings') 
-                $('.entry').not('.errors').hide();
+            if (e.target.value != 'all')
+                $('.entry').not(e.target.value).hide();
         });
         
         if ($('#tidy').length)
@@ -312,4 +332,4 @@ sc_formatter = {
         }
     }
 }
-sc_formatter.init();
+sc.formatter.init();

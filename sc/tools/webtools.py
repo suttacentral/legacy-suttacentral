@@ -39,6 +39,7 @@ import sc
 from sc.views import InfoView
 from sc.util import humansortkey
 from . import html, crumple, finalizer
+from .emdashar import Emdashar, SortedLogger, fix_broken_paragraphs
 
 logger = logging.Logger(__name__)
 
@@ -86,6 +87,16 @@ def humantime(seconds):
         out = '{:.3g}s'.format(seconds)
     return out
 
+
+def TempFile(infile=None):
+    "Create a suitable temporary file"
+    outfile = TemporaryFile()
+    if infile and hasattr(infile, 'read'):
+        outfile.writelines(infile)
+        outfile.seek(0)
+    return outfile
+        
+
 class Report(list):
     """ A report is generated per upload """
     class Entry:
@@ -95,13 +106,16 @@ class Report(list):
         may generate it's own entry.
         
         """
+        summary = ''
+        filename = ''
+        messages = []
+        errors = False
+        warnings = False
+        modified = False
+        language = None
         
         def __init__(self):
-            self.summary = ''
             self.messages = []
-            self.errors = False
-            self.warnings = False
-            self.modified = False
 
         def __repr__(self):
             out = '<Report.Entry ' + self.summary + ' : '
@@ -111,19 +125,19 @@ class Report(list):
             out += '>'
             return out
         
-        def error(self, msg):
+        def error(self, msg, lineno=None):
             self.errors = True
-            self.messages.append(('error', msg))
+            self.messages.append(('error', msg, lineno))
         
-        def warning(self, msg):
+        def warning(self, msg, lineno=None):
             self.warnings = True
-            self.messages.append(('warning', msg))
+            self.messages.append(('warning', msg, lineno))
         
-        def info(self, msg):
-            self.messages.append(('info', msg))
+        def info(self, msg, lineno=None):
+            self.messages.append(('info', msg, lineno))
             
-        def heading(self, msg):
-            self.messages.append(('heading', msg))
+        def heading(self, msg, lineno=None):
+            self.messages.append(('heading', msg, lineno))
     
     error = None # If error is set, something went badly wrong.
     title = ''
@@ -147,6 +161,10 @@ class Report(list):
             out += ' contents: \n' + '\n'.join(repr(e) for e in self)
         out += '>\n'
         return out
+    
+    def __bool__(self):
+        # A Report is always truthy even if it contains not entries.
+        return True
 
 class ReportView(InfoView):
     def __init__(self, report):
@@ -159,12 +177,37 @@ class ReportView(InfoView):
 
 class ToolsView(InfoView):
     
-    def __init__(self):
-        super().__init__('tools/tools')
+    def __init__(self, template):
+        super().__init__(template)
         
     def setup_context(self, context):
         context.tidy_level = tidy_level
         context.tidy_options = tidy_options
+
+def monkeypatch_ZipExtFile():
+    """ Fix 100% CPU infinite loop bug in zipfile.ZipExtFile.read
+    
+    A monkey patch seemed the best solution since as well as fixing
+    the hang, it also raises an exception on corrupt input (read1 doesn't
+    hang but silently returns corrupt binary data). The stdlib test_zipfile.py
+    passes just the same with this patch applied.
+    
+    This is required to harden the server against zip bombs.
+    
+    """
+    
+    from zipfile import ZipExtFile, BadZipFile
+    
+    _read1_org = ZipExtFile._read1
+    def _read1(self, n):
+        data = _read1_org(self, n)
+        if not data:
+            self._eof = True
+            self._update_crc(data)
+        return data
+    ZipExtFile._read1 = _read1
+
+monkeypatch_ZipExtFile()
 
 class ProcessingError(Exception):
     pass
@@ -172,13 +215,13 @@ class ProcessingError(Exception):
 class ProcessorError(Exception):
     pass
 
-class ProcessorBase:
-    """ The ProcessorBase attempts to implement all the zip and filehandling
+class BaseProcessor:
+    """ The BaseProcessor attempts to implement all the zip and filehandling
     stuff so that derived classes only need to implement process_str,
     and perhaps process_bytes.
     
     As a rule the data is passed around, while the flow control for report 
-    information is far less well defined.
+    information and other little bits of information is far less well defined.
     
     """
     
@@ -224,6 +267,15 @@ class ProcessorBase:
         self.finalize_report(resultfile)
         return report        
     
+    type_map = {'.txt': 'process_txt',
+                '.xml': 'process_xml',
+                '.xhtml': 'process_html',
+                '.html': 'process_html',
+                '.htm': 'process_html',
+                '.epub': 'process_epub',
+                '.odt': 'process_odt',
+                '.sxw': 'process_odt'}
+    
     def process_zip(self, inzipfile, filename):
         """ Process every file in a zip archive
         
@@ -252,14 +304,28 @@ class ProcessorBase:
             if total_size > MAX_ARCHIVE_SIZE:
                 raise ProcessorError("Archive too large. Maximum uncompressed size is {}.".format(humansize(MAX_ARCHIVE_SIZE)))
             
+            self.preprocess_zip(inzip)
+            
             for zinfo in inzip.filelist:
                 data = self.process_file(inzip.open(zinfo, 'r'), zinfo)
                 if data is None:
                     # This happens when an error occured.
                     continue
-                # Manually specify compress_type in case some loony uploads
-                # a -0 archive (archive compression is overridden by ZipInfo)
-                outzip.writestr(zinfo, data, compress_type=ZIP_DEFLATED)
+                if not hasattr(data, 'decode'):
+                    # Under exceptional cirumstances, an iterable of new
+                    # filedata is returned. This requires special handling.
+                    seen = set()
+                    for filename, filedata in data:
+                        if filename in seen:
+                            # WARNING THIS SHOULD NOT HAPPEN!
+                            # TODO FIXIT!
+                            continue
+                        seen.add(filename)
+                        self.report.processed_bytes += len(filedata)
+                        outzip.writestr(str(filename), filedata)
+                else:
+                    self.report.processed_bytes += len(data)
+                    outzip.writestr(zinfo, data, compress_type=ZIP_DEFLATED)
         
         self.finalize_report(resultfile)
         return report
@@ -271,7 +337,7 @@ class ProcessorBase:
         self.entry = entry
         self.report.append(entry)
         
-        entry.filename = zinfo.filename
+        entry.filename = pathlib.Path(zinfo.filename)
         entry.summary = "{}: {}".format(zinfo.filename, humansize(zinfo.file_size))
         if zinfo.file_size > MAX_FILE_SIZE:
             # This is probably malicious so we wont bend over backwards.
@@ -287,18 +353,9 @@ class ProcessorBase:
             if (self.allowed_types and suffix not in self.allowed_types 
                             and suffix[1:] not in self.allowed_types):
                 entry.info("No instructions for {}".format(suffix))
-            elif suffix in {'.txt'}:
-                entry.info("Treating as text")
-                fn = self.process_txt
-            elif suffix in {'.html', '.htm'}:
-                entry.info("Treating as html")
-                fn = self.process_html
-            elif suffix in {'.xml', '.xhtml'}:
-                entry.info("Treating as xml")
-                fn = self.process_xml
-            elif suffix in {'.odt', '.sxw'}:
-                entry.info("Treating as Open Document")
-                fn = self.process_odt
+            elif suffix in self.type_map:
+                # Raises attribute error. Programmer should see.
+                fn = getattr(self, self.type_map[suffix])
             else:
                 entry.info("Unknown file, not processing")
             
@@ -307,7 +364,6 @@ class ProcessorBase:
             else:
                 fileobj = self.preprocess_file(fileobj)
                 outdata = fn(fileobj)
-                self.report.processed_bytes += len(outdata)
             
         except ProcessingError as e:
             entry.error(str(e))
@@ -315,8 +371,15 @@ class ProcessorBase:
         
         zinfo.filename = self.output_filename(zinfo.filename)
         # Out is bytes at the moment. Due to how ZipFile works the alternative
-        # would be to create a TemporaryFile or use a pipe.
+        # would be to create a TemporaryFile, this is because ZipFile's write
+        # method needs to know information like the data length, it thus 
+        # requires the complete data, either as bytes, or a file.
+        # Keeping it zipping around in memory seems expedient.
         return outdata
+    
+    def preprocess_zip(self, zipfile):
+        "May examine the zip and alter zipfile.listlist"
+        pass
     
     def preprocess_file(self, fileobj):
         return fileobj
@@ -330,6 +393,61 @@ class ProcessorBase:
     def process_xml(self, fileobj):
         raise NotImplementedError
     
+    def process_zipfmt(self, inzipfile, fn_map=None):
+        """ Processes a format which is actually just a zip file
+        
+        This includes formats such as odt, epub, docx and many more, however
+        fn_map must declare what contents are actually to be processed, since
+        all these formats will have numerous non-content files in the archive.
+        
+        fn_map should be a dict or dict-like-object, for each
+        file in inzip, process_zipfmt will first try fn_map.get(filename)
+        then fn_map.get(suffix), if get(filename) returns a non-None falsey
+        value (i.e. False) then the file is explicitly skipped even if the
+        suffix check would have permitted it to be processed.
+        
+        Fancier criteria such as regex match or Path match can be implemented
+        by passing in a custom class which defines 'get' and returns either a
+        function or None.
+        
+        """
+        
+        if not fn_map:
+            raise ValueError("Function map must be defined")
+        
+        entry = self.entry
+        
+        outzipfile = TempFile()
+        try:
+            inzipfile.seek(0)
+        except io.UnsupportedOperation:
+            # ZipFile requires a seekable stream
+            inzipfile = TempFile(inzipfile)
+        with ZipFile(inzipfile, 'r') as inzip,\
+                ZipFile(outzipfile, 'w', ZIP_DEFLATED) as outzip:
+            total_size = sum(zinfo.file_size for zinfo in inzip.filelist)
+            entry.summary = '{}: {}'.format(entry.filename, humansize(total_size))
+            for zinfo in inzip.filelist:
+                if zinfo.file_size > MAX_FILE_SIZE:
+                    self.entry.error("File too large. File must be no larger than {}.".format(humansize(MAX_FILE_SIZE)))
+                    # probably malicious so an Error
+                    raise ProcessingError
+                zi_in_obj = inzip.open(zinfo, 'r')
+                filename = zinfo.filename
+                
+                fn = fn_map.get(filename)
+                if fn is None:
+                    fn = fn_map.get(pathlib.Path(filename).suffix.lower())
+                if fn:
+                    zdata = fn(zi_in_obj)
+                else:
+                    # Everything else, just copy straight through.
+                    zdata = zi_in_obj.read()
+                outzip.writestr(zinfo, zdata)
+        
+        outzipfile.seek(0)
+        return outzipfile.read()
+    
     def process_odt(self, odt):
         """ Calls process_xml on content.xml inside the odt 
         
@@ -339,24 +457,20 @@ class ProcessorBase:
         
         """
         
-        outodtdata = io.BytesIO()
-        with ZipFile(odt, 'r') as inodt,\
-                ZipFile(io.BytesIO(outodtdata), 'w', ZIP_DEFLATED) as outodt:
-            for zinfo in inodtzip.filelist:
-                if zinfo.file_size > MAX_FILE_SIZE:
-                    self.entry.error("File too large. File must be no larger than {}.".format(humansize(MAX_FILE_SIZE)))
-                    # probably malicious so an Error
-                    raise ProcessingError
-                zi_in_obj = inodtzip.open(zinfo, 'r')
-                if zinfo.filename == 'content.xml':
-                    # Process content.xml
-                    zdata = self.process_xml(zi_in_obj)
-                else:
-                    # Everything else, just copy straight through.
-                    zdata = zi_in_obj.read()
-                outodtzip.writestr(zinfo, zdata)
+        return self.process_zipfmt(odt, {'content.xml': self.process_xml})
+    
+    def process_epub(self, epub):
+        """ Convert epub 
         
-        return outodtdata.getvalue()
+        I don't have the epub specification on hand but it seems that
+        the content will be either html or xhtml files. However regardless
+        of whether it calls them .html or .xhtml, they seem either way
+        to be approximately polygot or xhtml markup.
+        
+        """
+        
+        return self.process_zipfmt(epub, {'.html': self.process_html, 
+                                   '.xhtml': self.process_html})
     
     def process_bytes(self, data):
         # Default encoding is utf8. If another encoding is needed, 
@@ -367,7 +481,7 @@ class ProcessorBase:
     def process_str(self, string):
         raise NotImplementedError
 
-class TextProcessor(ProcessorBase):
+class TextProcessor(BaseProcessor):
     """ Only process the text contents of the file, leaving markup alone 
     
     The derived class should implement process_str.
@@ -427,7 +541,7 @@ class CSXProcessor(TextProcessor):
                     'àâãäåæ\x83\x88\x8c\x93\x96çèéêëìíîïð¤¥ñòóôõö÷øùú§üýþÿ',
                     'āĀīĪūŪâêîôûṛṚṝṜḷḶḹḸṅṄñÑṭṬḍḌṇṆśŚṣṢṁṃṂḥḤ')
 
-class DetwingleProcessor(ProcessorBase):
+class DetwingleProcessor(BaseProcessor):
     """ Calls bs4.UnicodeDammit.detwingle
     
     Shouldn't cause any harm if the document is already UTF-8.
@@ -447,7 +561,7 @@ class DetwingleProcessor(ProcessorBase):
     # which creates XML would already have re-encoded and detwingle
     # only works on "mixed encoded bytes".
 
-class HTMLProcessor(ProcessorBase):
+class HTMLProcessor(BaseProcessor):
     "Inputs HTML/XHTML, outputs HTML5 with UTF-8 encoding"
     
     allowed_types = {'.htm', '.html', '.xhtml'}
@@ -461,13 +575,20 @@ class HTMLProcessor(ProcessorBase):
     def process_html(self, fileobj):
         doc = html.parse(fileobj)
         root = doc.getroot()
-        self.process_root(root)
         html.xhtml_to_html(doc) # This is very fast.
-        root.head.insert(0, doc.parser.makeelement('meta', charset="UTF-8"))
+        self.process_root(root)
+        
+        return self.root_to_bytes(root)
+    
+    def root_to_bytes(self, root):
+        root.headsure.insert(0, root.makeelement('meta', charset="UTF-8"))
+        if not root.head.select('title'):
+            root.head.append(root.makeelement('title'))
         root.attrib.clear()
-        return html.tostring(doc.getroot(), doctype='<!DOCTYPE html>', 
-                encoding='UTF-8', include_meta_content_type=False)
-                
+        return root.pretty(doctype='<!DOCTYPE html>', 
+                encoding='UTF-8', 
+                include_meta_content_type=False).encode()
+        
     def process_root(self, root):
         raise NotImplementedError
     
@@ -482,7 +603,6 @@ class CleanupProcessor(HTMLProcessor):
     def preprocess_file(self, fileobj):
         """ Apply tidy as a preprocessor """
         
-        
         if self.mode == 'descriptiveclasses':
             # Set special tidy flags.
             self.options['tidy-flags'] = crumple.tidy_flags
@@ -495,7 +615,7 @@ class CleanupProcessor(HTMLProcessor):
         return fileobj
     
     def tidy(self, fileobj):
-        """ Call tidy on a fileobj, generates an Entry """
+        """ Call tidy on a fileobj """
         
         tidy_cmd = self.options.get('tidy-flags', '').split()
         if not tidy_cmd:
@@ -553,7 +673,8 @@ class CleanupProcessor(HTMLProcessor):
             try:
                 crumple.crumple(root, self.options)
             except Exception as e:
-                self.entry.error('{} ({})'.format(type(e), e))
+                from traceback import format_tb
+                self.entry.error('{} ({}) {}'.format(type(e), e, format_tb(e.__traceback__)))
         
         if 'strip-header' in self.options:
             selector = self.options.get("strip-header-css", '')
@@ -564,13 +685,146 @@ class CleanupProcessor(HTMLProcessor):
         
 class FinalizeProcessor(HTMLProcessor):
     name = "Finalize"
+    metadata = {}
+    
+    def output_filename(self, filename):
+        filename = pathlib.Path(filename)
+        if self.options.get('canonical-paths') and self.entry.language:
+            p = finalizer.generate_canonical_path(self.entry.filename.stem, self.entry.language)
+            if p:
+                filename = p / filename.name
+        
+        return super().output_filename(filename)
+    
+    def preprocess_zip(self, zipfile):
+        "Discover metadata and store in instance variable metadata"
+        
+        # We process any files named '*-meta.*', filtering them out.
+        newlist = []
+        for zi in zipfile.filelist:
+            filepath = pathlib.Path(zi.filename)
+            stem = filepath.stem.lower()
+            dirpath = filepath.parent
+            if stem.endswith('meta'):
+                string = zipfile.open(zi).read().decode(encoding='UTF-8')
+                root = html.fromstring(string)
+                
+                self.metadata[dirpath] = finalizer.process_metadata(root)
+                entry = Report.Entry()
+                self.report.append(entry)
+                entry.summary = 'Metadata file: {}'.format(humansize(zi.file_size))
+                entry.info('Will be applied to all files in {} folder'.format(str(dirpath)))
+            else:
+                newlist.append(zi)
+        
+        zipfile.filelist = newlist
+    
+    def process_html(self, fileobj):
+        doc = html.parse(fileobj)
+        html.xhtml_to_html(doc) # This is very fast.
+        
+        root = doc.getroot()
+        
+        sections = root.select('section')
+        if len(sections) > 1:
+            self.entry.info("Looks like file contains {} suttas".format(
+                                                            len(sections)))
+            # Multiple sutta mode.
+            return self.process_many(root)
+        else:
+            # Single sutta mode.
+            self.process_root(root)
+            return self.root_to_bytes(root)
     
     def process_root(self, root):
-        finalizer.finalize(root, entry=self.entry, options=self.options)
+        finalizer.finalize(root, entry=self.entry, options=self.options, 
+            metadata=self.metadata.get(self.entry.filename.parent))
     
-    
-    
+    def process_many(self, root):
+        orgentry = self.entry
+        orgroot = root
+        try:
+            metadata = root.select('div#metaarea')[0]
+        except IndexError:
+            metadata = self.metadata.get(self.entry.filename.parent)
+        author_blurb = finalizer.discover_author(root, self.entry)
+        language = finalizer.discover_language(root, self.entry)
+        
+        es = root.select('section section')
+        if es:
+            entry.error("File contains nested sections. Sections must not be nested.", lineno=es[0].sourceline)
+            raise ProcessingError("Unable to proceed due to nested sections")
+        seen = set()
+        for num, section in enumerate(root.iter('section')):
+            assert section not in seen
+            seen.add(section)
+            root = html.document_fromstring('<html><head></head><body>')
+            root.body.append(section)
+            entry = Report.Entry()
+            try:
+                entry.filename = finalizer.discover_uid(section, entry)
+            except KeyError:
+                entry.error("Section has no 'id' attribute", lineno=section.sourceline)
+                raise ProcessingError("With multiple suttas in one file, <section id=\"uid\"> notation must be used")
+            self.report.append(entry)
+            self.entry = entry
+            entry.language = language
+            
+            finalizer.finalize(root, entry=entry, options=self.options, 
+                metadata=metadata, language=language, author_blurb=author_blurb,
+                num_in_file=num)
+            entry.filename = pathlib.Path(root.select('section')[0].attrib['id']+ '.html') 
+            
+            filename = self.output_filename(orgentry.filename.parent / entry.filename)
+            
+            yield (filename, self.root_to_bytes(root))
 
+class EmdasharProcessor(BaseProcessor):
+    name = "Fix Puncutation"
+    allowed_types = None
+    def process_txt(self, fileobj):
+        text = fileobj.read().decode()
+        text = text.replace('\n\n', '<p>').replace('\n', '<br>')
+        root = html.fromstring(text)
+        self.process_root(root)
+        text = str(html).replace('<p>', '\n\n').replace('<br>', '\n')
+        return text.encode()
+    
+    def process_html(self, fileobj):
+        doc = html.parse(fileobj)
+        self.process_root(doc.getroot())
+        out_bytes = html.tostring(doc, doctype=doc.docinfo.doctype, 
+                        encoding=self.output_encoding or doc.docinfo.encoding)
+        return fix_broken_paragraphs(out_bytes)
+    
+    def process_xml(self, fileobj):
+        doc = html.parseXML(fileobj)
+        self.process_root(doc.getroot())
+        return html._etree.tostring(doc, xml_declaration=True, 
+                        doctype=doc.docinfo.doctype or '<!DOCTYPE html>',
+                        encoding=self.output_encoding or doc.docinfo.encoding)
+    
+    def process_root(self, root):
+        self.entry.info('Applying Emdashar')
+        
+        if self.options.get('details'):
+            logger = SortedLogger()
+            logger.file = TemporaryFile('w+')
+        else:
+            logger = None
+        dashar = Emdashar(logger=logger)
+        
+        for p in root.iter('p'):
+            if p.text:
+                p.text = p.text.lstrip()
+            dashar.emdash(p)
+            
+        if self.options.get('details'):
+            logger.flush()
+            logger.file.seek(0)
+            self.entry.info('Details of {} changes:'.format(logger.count))
+            for line in logger.file:
+                self.entry.info(line)
 
 class Tools:
     """ Provide HTML/XML processing web services.
@@ -578,6 +832,8 @@ class Tools:
     Note that potential for denial of service is very high, since
     this module can do things like dynamically create files and consume
     gobs of cpu. The main consideration has been limiting memory use.
+    
+    Several countermeasures against zip bombs have been employed.
     
     """
     
@@ -597,8 +853,24 @@ class Tools:
         
     @expose()
     def index(self, **kwargs):
-        return ToolsView().render()
+        return ToolsView('tools/about').render()
     
+    @expose()
+    def csx_reencode(self, **kwargs):
+        return ToolsView('tools/reencode').render()
+    
+    @expose()
+    def cleanup_bad_html(self, **kwargs):
+        return ToolsView('tools/cleanup').render()
+    
+    @expose()
+    def fix_punctuation(self, **kwargs):
+        return ToolsView('tools/emdashar').render()
+        
+    @expose()
+    def finalize_for_submission(self, **kwargs):
+        return ToolsView('tools/finalize').render()
+
     @expose()
     def reencode(self, userfile, action=None, **kwargs):
         if action == 'csxplus':
@@ -620,6 +892,12 @@ class Tools:
     @expose()
     def clean(self, userfile, **kwargs):
         processor = CleanupProcessor(**kwargs)
+        report = processor.process_zip(userfile.file, userfile.filename)
+        return ReportView(report).render()
+    
+    @expose()
+    def emdashar(self, userfile, **kwargs):
+        processor = EmdasharProcessor(**kwargs)
         report = processor.process_zip(userfile.file, userfile.filename)
         return ReportView(report).render()
     
@@ -664,7 +942,7 @@ class Tools:
         # control and might need to revert to an earlier version of their work
         # TODO this should be the users time. Check how to do this on-line.
         
-        m = regex.match(r'(.*)_\d{2}-\d{2}-\d{2}_\d{2}:\d{2}:\d{2}', stem, regex.I)
+        m = regex.match(r'(.*?)(?:_\d{2}-\d{2}-\d{2})+(?:_\d{2}:\d{2}:\d{2})+$', stem, regex.I)
         if m:
             stem = m[1]
         

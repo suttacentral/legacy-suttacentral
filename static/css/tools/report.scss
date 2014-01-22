@@ -26,7 +26,16 @@
     
     .error {
         color:white;
-        background:red; /* Illegal color, on purpose :) */
+        background:#d00; /* Illegal color, on purpose :) */
+        border-radius: 0.25em;
+        padding: 0.1em;
+    }
+    
+    .warning {
+        background-color: rgb(255,200,100);
+    }
+    .warning + .warning {
+        border-top: 1px solid #f0c030;
     }
     
     a.result {

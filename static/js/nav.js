@@ -1,50 +1,50 @@
 // AJAX search results.
-var sc_nav = {
+sc.nav = {
     search_element: $('#page-header-search > input'),
     search_results: $('#page-header-search-results'),
     lastXHR: null,
     init: function() {
-        sc_nav.search_element.keyup(sc_nav.handleSearch);
-        $('body').mousedown(sc_nav.hideResultsIfNotSearch);
+        sc.nav.search_element.keyup(sc.nav.handleSearch);
+        $('body').mousedown(sc.nav.hideResultsIfNotSearch);
     },
     handleSearch: function(e) {
         var input = e.target.value;
-        if (sc_nav.lastXHR) {
-            sc_nav.lastXHR.abort();
+        if (sc.nav.lastXHR) {
+            sc.nav.lastXHR.abort();
         }
         if (input.length < 3) {
-            sc_nav.hideResults();
+            sc.nav.hideResults();
             return;
         }
         url = "/search?query=" + encodeURIComponent(input) + "&ajax=1";
         ajax = jQuery.ajax(url, { "cache": "true" });
-        ajax.done(sc_nav.done);
-        sc_nav.lastXHR = ajax;
+        ajax.done(sc.nav.done);
+        sc.nav.lastXHR = ajax;
     },
     done: function(data, code, jqXHR) {
         results = $("<div>" + data + "</div>");
-        sc_nav.search_results.html(results);
-        sc_truncate.apply(sc_nav.search_results, 125);
-        sc_nav.search_results.find("tr").filter(":even").addClass("even");
+        sc.nav.search_results.html(results);
+        sc.truncate.apply(sc.nav.search_results, 125);
+        sc.nav.search_results.find("tr").filter(":even").addClass("even");
         $("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'});
-        sc_nav.showResults();
+        sc.nav.showResults();
     },
     hideResultsIfNotSearch: function(e) {
         var target = $(e.target);
         if (!target.closest('#page-header-search')[0] &&
             !target.closest('#page-header-search-results')[0]) {
-            sc_nav.hideResults();
+            sc.nav.hideResults();
         }
     },
     hideResults: function() {
-        sc_nav.search_results.stop(true, true).slideUp();
+        sc.nav.search_results.stop(true, true).slideUp();
     },
     showResults: function() {
-        sc_nav.search_results.stop(true, true).slideDown();
+        sc.nav.search_results.stop(true, true).slideDown();
     }
 };
 
-sc_nav.init();
+sc.nav.init();
 
 //This code powers the 'more' and 'less' functionality. I checked out
 //jquery.truncator and jquery.expander but they didn't do what I wanted.
@@ -64,14 +64,14 @@ sc_nav.init();
 
 // In the other usage, simply deliver the full content, and give anything which
 // should be truncated class="truncate". If this is delivered by AJAX, you must
-// call sc_truncate.apply on a containing element.
+// call sc.truncate.apply on a containing element.
 
 // To reduce bugapossabilities the auto-generated brief is based on the plain
 // text rendering of the full content and internally the following four selectors
 // are used and reserved:
 // div.showmore, div.showless, a.showmore, a.showless
 
-sc_truncate = {
+sc.truncate = {
     init: function(max_length){
         this.apply(document.body, max_length);
     },
@@ -82,7 +82,7 @@ sc_truncate = {
                 return
             }
 
-            var brief = sc_truncate.brief(this, max_length);
+            var brief = sc.truncate.brief(this, max_length);
             if (brief===false) return; // No enbriefing needed.
             var parent = $(this).parent()
             var showmore = $('<div class="showmore"/>').appendTo(parent);
@@ -120,7 +120,7 @@ sc_truncate = {
     },
 }
 
-sc_truncate.init();
+sc.truncate.init();
 
 $(document.body).on('click', 'a.showmore', function() {
     parent = $(this).parent().parent();

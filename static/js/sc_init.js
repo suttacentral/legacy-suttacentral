@@ -1,5 +1,5 @@
 //This file is designed to be customized by users familiar with css and html.
-//The meat and potato functions are found in sc_functions.js, they should not be
+//The meat and potato functions are found in sc.functions.js, they should not be
 //edited except by someone who knows javascript, also, "use strict"
 
 //The id of the page element which gets populated with the textual control elements.
@@ -18,7 +18,7 @@ sc.pi2en_dict_url = '/js/pi2en_dict_0.03.js'
 
 // Used for different 'modes', such as interface language (defaults to 'en')
 // Also partly to save on transfer and ease of updating titles.
-scMode = {
+sc.mode = {
     'lang':'en',
     'en':{
         'strings':{
@@ -173,7 +173,7 @@ textualControls.init = function(){
     initPaliFunctions();
     $("#metaarea").detach().appendTo("#toc")
     scState.save("clean");
-    sc_init();
+    sc.init();
 }
 
 textualControls.disable = function() {
@@ -195,7 +195,7 @@ function initChineseLookup()
 function initPaliFunctions()
 {
     //Logic for deciding whether to install pali lookup
-    if ($('div').filter($('[lang*="pi"]')).length > 0) scMode.pali = true
+    if ($('div').filter($('[lang*="pi"]')).length > 0) sc.mode.pali = true
 
     //Create elements
     addButtons(document.getElementById(textualControls.id));
@@ -229,41 +229,41 @@ var transFuncs = {
 
 var syllSpacer = '‧'; //Seperates syllables when that mode is activated. (\u2027)
 
-function sc_init(reset)
+sc.init = function(reset)
 {
     if (reset) scState.restore("clean");
     //Bind elements
     bindButtons();
     
     buildTextualInformation();
-    if (scUserPrefs.getPref("textInfo") === true)
+    if (sc.userPrefs.getPref("textInfo") === true)
     {
         toggleTextualInfo(true);
     }
     
-    if (scMode.pali === true) {
+    if (sc.mode.pali === true) {
         translitFunc = null;
-        prefscript = scUserPrefs.getPref("script");
+        prefscript = sc.userPrefs.getPref("script");
         if (prefscript){
-            scMode.translitFunc = transFuncs[prefscript][0];
+            sc.mode.translitFunc = transFuncs[prefscript][0];
         } else {
-            scMode.translitFunc = transFuncs['toRoman'][0];
+            sc.mode.translitFunc = transFuncs['toRoman'][0];
         }
         
         for (f in transFuncs) 
             if (wordMap[f] == undefined)
                 wordMap[f] = {};
         
-        if (!scMode.translitFunc) scMode.translitFunc = transFuncs[0][0];
-        if (scUserPrefs.getPref("paliLookup") === true)
+        if (!sc.mode.translitFunc) sc.mode.translitFunc = transFuncs[0][0];
+        if (sc.userPrefs.getPref("paliLookup") === true)
         {
-            if (scMode.translitFunc.name == 'toSyllables')
+            if (sc.mode.translitFunc.name == 'toSyllables')
             {
                 toSyllablesInit();
             }
             enablePaliLookup(true);
         } else {
-            transliterate(scMode.translitFunc);
+            transliterate(sc.mode.translitFunc);
         }
     }
 }
@@ -271,7 +271,7 @@ function sc_init(reset)
 function addButtons(target){
     if (!target) return;
     var out = '<button id="' + textInfoButtonId + '">Textual Information</button>';
-    if (scMode.pali === true){
+    if (sc.mode.pali === true){
         out += '<button id="' + paliLookupButtonId + '">Pali→English Dictionary</button>' + '<div id="' + paliLookupLogId + '"></div>';
 
         out += '<div id="translitButtons">';
@@ -289,36 +289,36 @@ function addButtons(target){
 
 //Note: These preferences are not shared with the server. If session storage is available,
 //it will be used. Otherwise settings will be forgotten on page refresh.
-scUserPrefs = {
-    sc_storage: getStorage(),
+sc.userPrefs = {
+    storage: getStorage(),
     setRemember: function(value) {
         value = !!value;
-        if (value == false) this.sc_storage.clear();
-        this.sc_storage["remember"] = value;
+        if (value == false) this.storage.clear();
+        this.storage["remember"] = value;
     },
     isRemember: function(){
-        return this.sc_storage["remember"];
+        return this.storage["remember"];
     },
     setPref: function(pref, value, re_init) {
-        this.sc_storage[pref] = value;
-        if (re_init) sc_init(true); //be more refined here perhaps.
+        this.storage[pref] = value;
+        if (re_init) sc.init(true); //be more refined here perhaps.
     },
     getPref: function(pref) {
         
-        var value = this.sc_storage[pref];
+        var value = this.storage[pref];
         if (value === 'false') return false;
         if (value === 'true') return true;
         if (Number(value).toString() === value) return Number(value);
         return value;
     },
     togglePref: function(pref) {
-        this.sc_storage[pref] = !this.sc_storage[pref];
+        this.storage[pref] = !this.storage[pref];
     },
     clearPref: function(pref){
-        this.sc_storage.removeItem(pref);
+        this.storage.removeItem(pref);
     },
     clearAll: function(){
-        this.sc_storage.clear();
+        this.storage.clear();
     }
 }
 

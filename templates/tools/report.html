@@ -1,30 +1,28 @@
-{% from 'macros.html' import time_tag with context %}
-
-{% extends "base.html" -%}
-{% block content %}
-
-<div id="onecol" class="tools">
+{% extends "tools/tools-base.html" -%}
+{% block tool %}
 
 <div class="report">
 
 <h1>{{ report.title }}</h1>
 <p>{{report.header}}</p>
 Show:
-<input type="radio" name="hide" value="nothing" checked> All
-<input type="radio" name="hide" value="okay"> Problems
-<input type="radio" name="hide" value="warnings"> Errors
+<input type="radio" name="show" value="all" checked> All
+<input type="radio" name="show" value=".errors,.warnings"> Warnings
+<input type="radio" name="show" value=".errors"> Errors
 
 <ul>
 {% for entry in report %}
-    <li class="entry {{'even' if loop.index % 2 == 0 else 'odd'}}
+    <li class="entry{{' even' if loop.index % 2 == 0 else ''}}
     {{- ' warnings' if entry.warnings else '' }}{{ ' errors' if entry.errors else ''}}"> <span class="summary">{{entry.summary}}</span>
     {% if entry.messages %}
         <ul>
-            {% for cls, msg in entry.messages %}
+            {% for cls, msg, lineno in entry.messages %}
             {% if cls == 'heading' %}
-            <li class="{{cls}} {{'even' if loop.index % 2 == 0 else 'odd'}}">{{msg|e}}</li>
+            <li class="{{cls}}{{' even' if loop.index % 2 == 0 else ''}}">{{msg|e}}</li>
             {% else %}
-            <li class="{{cls}} {{'even' if loop.index % 2 == 0 else 'odd'}}">{{cls|title}}: {{msg|e}}</li>
+            <li class="{{cls}}{{' even' if loop.index % 2 == 0 else ''}}">
+                {{cls|title}}: {% if lineno %}Line {{lineno }}: {% endif -%}
+                    {{msg|e}}</li>
             {% endif %}
             {% endfor %}
         </ul>
@@ -38,10 +36,6 @@ Show:
 <p>Download your file <a class="result" href="{{report.result.url}}">{{report.result.filename}} ({{report.result.size}})</a></p>
 {% endif %}
 <p>{{report.footer}}</p>
-
-
-
-</div>
 
 </div>
 

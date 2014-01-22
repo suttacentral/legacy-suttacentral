@@ -1,20 +1,19 @@
-{% extends "base.html" -%}
-{% block content %}
+{% set current = 1 %}
+{% extends "tools/tools-base.html" -%}
+{% block tool %}
 
-<div class="tools" id="tools-reencode" style="display: none;">
-<form action="/tools/reencode" method="post" enctype="multipart/form-data">
+<form id="tools-reencode" action="/tools/reencode" method="post" enctype="multipart/form-data">
 <ul><li><h2> Re-encode</h2>
-<li><p>These functions work on the following formats: txt, html, xml and odt.
+<li><p>These functions only work on the following formats: txt, html, odt and xml.
 <li>
-<input name="action" type="radio" value="csxplus">Convert CSX+ to UTF-8. Only use if you know the document contains CSX+, works for both properly encoded CSX+ and CSX+ which has been mistakenly converted to UTF-8, in other words, it fixes the most common cases. If you need to fix a doc file, convert it to odt first.
-<li><input name="action" type="radio" value="detwingle">Attempt to fix corrupted characters which result from mixing Windows encoding with Unicode encoding.
+<input name="action" type="radio" value="csxplus" required>Convert CSX+ to UTF-8. Only use if you know the document contains CSX+, works for both properly encoded CSX+ and CSX+ which has been mistakenly converted to UTF-8, in other words, it fixes the most common cases. If you need to fix a doc file, convert it to odt first.
+<li><input name="action" type="radio" value="detwingle" required>Attempt to fix corrupted characters which result from mixing Windows encoding with Unicode encoding.
 </li>
 <li> Please upload a zip archive containing the file or files to attempt to repair.<p>
-<input type="file" name="userzip" required>
+<input type="file" name="userfile" data-allowed="zip" accept="application/x-zip" required>
 <button>Submit</button>
 </ul>
-
 </form>
 </div>
 
-{% endblock %}
+{%- endblock %}

@@ -161,7 +161,7 @@ var chineseLookup = {
             if (meaning && meaning.length > 0) {
                 meaning = $(meaning);
                 $(node).append(meaning);
-                sc_formatter.rePosition(meaning);
+                sc.formatter.rePosition(meaning);
             }
             chineseLookup.queue.push(meaning);
             if (chineseLookup.queue.length > 5)
@@ -367,18 +367,18 @@ var scPersistantStorage = {
 //Rewriting it is on the to-do.
 
 function togglePaliLookup(){
-    toggleLookupOn = !scUserPrefs.getPref("paliLookup");
+    toggleLookupOn = !sc.userPrefs.getPref("paliLookup");
     scMessage.clear();
-    scUserPrefs.setPref("paliLookup", toggleLookupOn, true);
+    sc.userPrefs.setPref("paliLookup", toggleLookupOn, true);
 }
 
 function transliterateHandler()
 {
-    scUserPrefs.setPref("script", this.id, true);
+    sc.userPrefs.setPref("script", this.id, true);
 }
 
 function toggleTextualInfo(force) {
-    var showTextInfo = scUserPrefs.getPref("textInfo");
+    var showTextInfo = sc.userPrefs.getPref("textInfo");
     showTextInfo = !showTextInfo;
 
     if (force === true) {showTextInfo = true;}
@@ -421,12 +421,12 @@ function toggleTextualInfo(force) {
         $(textualControls.contentClasses).removeClass("infomode")
         $(textualControls.metaarea).removeClass("infomode")
     }
-    scUserPrefs.setPref("textInfo", showTextInfo, false);
+    sc.userPrefs.setPref("textInfo", showTextInfo, false);
 }
 
 function bindButtons(){
      document.getElementById(textInfoButtonId).onclick = toggleTextualInfo;
-     if (scMode.pali === true){
+     if (sc.mode.pali === true){
         document.getElementById(paliLookupButtonId).onclick = togglePaliLookup;
 
         for (f in transFuncs) {
@@ -444,7 +444,7 @@ function buildTextualInformation() {
         var da = $(a);
 
         var aClass = a.className.split(' ')[0];
-        var title = scMode[scMode.lang]["strings"][aClass];
+        var title = sc.mode[sc.mode.lang]["strings"][aClass];
         $(a).attr("title", title);
         var aid = da.attr('id');
         
@@ -474,7 +474,7 @@ function buildTextualInformation() {
     $("#metaarea a").filter(textualControls.marginClasses).each(function(){this.className = ""; this.innerHTML = ""});
     $(textualControls.titleClasses).each(function(){
         var class_ = this.className.split(' ')[0];
-        $(this).attr("title", scMode[scMode.lang]["strings"][class_])
+        $(this).attr("title", sc.mode[sc.mode.lang]["strings"][class_])
     });
 
 
@@ -755,8 +755,8 @@ function toLookupMarkup(startNode)
         for (i = 0; i < parts.length; i++) {
             if (i % 2 == 1) {// Word
                 var word = parts[i]
-                if (scMode.translitFunc.name != 'toRoman')
-                    word = transliterateWord(word, scMode.translitFunc);
+                if (sc.mode.translitFunc.name != 'toRoman')
+                    word = transliterateWord(word, sc.mode.translitFunc);
                 if (node.parentNode.nodeName != 'A')
                     out += '<span class="lookup">' + word + '</span>'
                 else
@@ -800,7 +800,7 @@ function enablePaliLookup(){
 }
 
 function lookupWordHandler(event){
-    if (!scUserPrefs.getPref("paliLookup")) return;
+    if (!sc.userPrefs.getPref("paliLookup")) return;
     if (! 'paliDictionary' in window) return;
 
     if ($(this).children().is("span.meaning")) return;
@@ -817,7 +817,7 @@ function lookupWordHandler(event){
     if (meaning) {
         var textBox = $('<span class="meaning">'+meaning+'</span>');
         $(this).append(textBox);
-        sc_formatter.rePosition(textBox);
+        sc.formatter.rePosition(textBox);
     }
 }
 

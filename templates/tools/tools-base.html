@@ -1,0 +1,22 @@
+{% extends "base.html" -%}
+{% block content %}
+
+<div id="onecol" class="tools">
+<nav>
+<h2 id="menu">HTML Processing Webservice</h1>
+<a {% if current==0 %}class="current" {% endif -%} href="/tools">Info</a> 
+<a {% if current==1 %}class="current" {% endif -%} href="/tools/csx-reencode">CSX to Unicode</a> 
+<a {% if current==2 %}class="current" {% endif -%} href="/tools/cleanup-bad-html">Cleanup HTML</a> 
+<a {% if current==3 %}class="current" {% endif -%} href="/tools/fix-punctuation">Fix Punctuation</a>
+<a {% if current==4 %}class="current" {% endif -%} href="/tools/finalize-for-submission">Finalize HTML</a>
+</nav>
+
+<section>
+<article>
+
+{% block tool %}{% endblock %}
+
+</article>
+</section>
+
+{%- endblock %}
