@@ -64,6 +64,10 @@ def table_reader(tablename):
         NT = namedtuple(NtName, field_names)
         globals()[NtName] = NT
         for row in reader:
+            if not any(row): # Drop entirely blank lines
+                continue
+            if row[0].startswith('#'):
+                continue
             yield NT._make(row)
 
 class _Imm:
@@ -484,7 +488,6 @@ class _Imm:
                     vinaya_rules[rule_uid] = rule
                     
                 division.rules.append(rule)
-        
         
         # Now we set up the parallels.
         # Note that in the vinaya the list of parallels includes
