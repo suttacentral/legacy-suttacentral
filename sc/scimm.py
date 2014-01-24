@@ -72,6 +72,7 @@ class _Imm:
         self.build()
         self.build_parallels_data()
         self.build_parallels()
+        self.build_vinaya()
         self.build_search_data()
         self.timestamp = timestamp
         self.build_time = datetime.now()
@@ -123,7 +124,7 @@ class _Imm:
         
         # Load uid to acro map
         self._uid_to_acro_map = {}
-        for row in table_reader('uid_to_acro'):
+        for row in table_reader('uid_expansion'):
             self._uid_to_acro_map[row.uid] = row.acro
         
         # Build Pitakas
@@ -195,7 +196,7 @@ class _Imm:
 
         # Build divisions (indexed by uid)
         self.divisions = OrderedDict()
-        for row in table_reader('division'):
+        for i, row in enumerate(table_reader('division')):
             collection = self.collections[row.collection_uid]
             try:
                 text_ref = text_refs[row.uid][0]
@@ -207,7 +208,7 @@ class _Imm:
                 alt_name=row.alt_name,
                 acronym=row.acronym,
                 subdiv_ind=row.subdiv_ind,
-                menu_seq=int(row.menu_seq),
+                menu_seq=i,
                 menu_gwn_ind=bool(row.menu_gwn_ind),
                 text_ref=text_ref,
                 collection=collection,
@@ -437,18 +438,91 @@ class _Imm:
             sutta.parallels.sort(key=Parallel.sort_key)
     
     def build_vinaya(self):
+     try:
         # The vinaya data is stored basically as a matrix
-        rows = list(table_reader('vinaya'))
-        collection_uids = [s.replace('_', '-') for s in 
-            rows[0]._fields]
+        # It is very dense and takes a bit of unfolding
+        # to get into a usable form.
+        # It is of a different form to other tables, for that reason
+        # the column heads go A->AW 
+        by_rule = list(table_reader('vinaya'))
+        by_school = list(zip(*by_rule)) # Rotate
         
-        vinaya = self.vinaya = OrderedDict(
-            (uid, VinayaCollection(uid, name, []))
-                for uid, name
-                in zip(collection_uids, rows[1]))
+        division_uids = by_rule[0]
+        division_names = by_rule[1]
+        rule_names = by_school[0]
         
-        for row in rows[2:]:
-            pass
+        vinaya_division = OrderedDict()
+        for uid, name in zip(division_uids[1:], division_names[1:]):
+            vinaya_division[uid] = VinayaDivision(
+                uid=uid,
+                name=name,
+                rules=[])
+        
+        vinaya_rules = OrderedDict()
+        no_rules = {}
+        unknown_rules = {}
+        for school in by_school[1:]:
+            division_uid = school[0]
+            division = vinaya_division[division_uid]
+            i = 0
+            for name, rule_uid in zip(rule_names[2:], school[2:]):
+                if not rule_uid:
+                    rule_uid = ''
+                rule = VinayaRule(
+                    uid=rule_uid.replace('#', '-'),
+                    name=name,
+                    division=division,
+                    text_ref=None,
+                    translations=[],
+                    parallels=[])
+                
+                if rule_uid == '':
+                    no_rules[division_uid] = rule
+                elif rule_uid == '?':
+                    unknown_rules[division_uid] = rule
+                else:
+                    vinaya_rules[rule_uid] = rule
+                    
+                division.rules.append(rule)
+        
+        
+        # Now we set up the parallels.
+        # Note that in the vinaya the list of parallels includes
+        # the rule itself.
+        # Another quirk is that it contains a lot of 'empty' rule
+        # entries. This is because we are interested in knowing
+        # does-not-exist relationship, so we have a uid-less rule 
+        # which references it's division basically saying
+        # this rule not-exists in this division.
+        rulesets = OrderedDict()
+        for i, row in enumerate(by_rule[2:]):
+            ruleset_uid = 'ruleset' + str(i + 1)
+            ruleset = []
+            for div_uid, uid in zip(division_uids[1:], row[1:]):
+                if uid == '':
+                    ruleset.append(no_rules[div_uid])
+                elif uid == '?':
+                    ruleset.append(unknown_rules[div_uid])
+                else:
+                    ruleset.append(vinaya_rules[uid])
+            rulesets[ruleset_uid] = VinayaRuleSet(
+                uid=ruleset_uid,
+                name=row[0],
+                rules=ruleset)
+            for rule in ruleset:
+                rule.parallels = ruleset
+        
+        self.vinaya_division = vinaya_division
+        self.vinaya_ruleset = rulesets
+        self.vinaya_rule = vinaya_rules
+        # Note: While the vinaya rules have individual references
+        # in the IMM, their uids do not represent unique URL's,
+        # they are always displayed as lists, altough of course
+        # the lists may be filtered.
+        
+     except:
+         globals().update(locals())
+         raise
             
     def build_search_data(self):
         """ Build useful search data.

@@ -1,6 +1,7 @@
 import regex
 from collections import namedtuple
 
+
 TextRefBase = namedtuple('TextRef', 'lang, abstract, url, priority')
 
 ParallelBase = namedtuple('ParallelBase',
@@ -26,9 +27,58 @@ SuttaBase = namedtuple('SuttaBase', (
         'lang', 'subdivision', 'vagga', 'volpage_info', 'alt_volpage_info',
         'biblio_entry', 'text_ref', 'translations', 'parallels',) )
 
-VinayaCollection = namedtuple('VinayaCollection', ['uid', 'name', 'rules'])
+VinayaDivision = namedtuple('VinayaDivision', ['uid', 'name', 'rules'])
 
-VinayaRule = namedtuple('VinayaRule', ['uid', 'name', 'text_ref', 'parallels'])
+class Slotted:
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        for key in self.__slots__:
+            if not hasattr(self, key):
+                raise ValueError('required keyword arg {} missing'.format(
+                    key))
+    def __repr__(self):
+        from numbers import Number
+        details = []
+        
+        for attr in sorted(self.__slots__, key=lambda s: '' if s == 'uid' else s):
+            details.append('{}='.format(attr))
+            value = getattr(self, attr)
+            if isinstance(value, str):
+                details[-1] += value
+            elif isinstance(value, Number):
+                details[-1] += str(value)
+            else:
+                try:
+                    details[-1] += self._repr_len(value)
+                except AttributeError:
+                    details[-1] += repr(value)
+        
+        return '<{} {}>'.format(self.__qualname__,
+            '    \n'.join(details))
+    
+    def _repr_len(self, value):
+        if isinstance(value, list):
+            return '[{} values]'.format(len(value))
+        elif isinstance(value, tuple):
+            return '({} values)'.format(len(value))
+        elif isinstance(value, set):
+            return '{{{} values}}'.format(len(value))
+        elif isinstance(value, dict):
+            return '{{{} items}}'.format(len(value))
+        else:
+            return '<{} {} items>'.format(value.__qualname__, len(value))
+        
+            
+class VinayaRule(Slotted):
+    __slots__ = {'uid', 'name', 'division', 'text_ref', 'translations', 'parallels'}
+    def __repr__(self):
+        return "<VinayaRule(uid='{}', division=<{}>, text_ref=<{}>, translations=[{}], parallels=[{}])".format(
+            self.uid, self.division.uid, self.text_ref, 
+            len(self.translations), len(self.parallels))
+
+class VinayaRuleSet(Slotted):
+    __slots__ = {'uid', 'name', 'rules'}    
 
 Language = namedtuple('Language', 'uid, name, isroot, iso_code, priority, collections')
 
@@ -42,6 +92,7 @@ class SearchString(str):
         obj = str.__new__(cls, value, **kwargs)
         obj.target = target
         return obj
+
 
 # Because a Sutta contains references to other complete objects which
 # each have their own verbose default __repr__, it is necessary to make
