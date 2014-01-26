@@ -63,12 +63,16 @@ def table_reader(tablename):
         NtName = '_' + tablename.title()
         NT = namedtuple(NtName, field_names)
         globals()[NtName] = NT
-        for row in reader:
+        for lineno, row in enumerate(reader):
             if not any(row): # Drop entirely blank lines
                 continue
             if row[0].startswith('#'):
                 continue
-            yield NT._make(row)
+            try:
+                yield NT._make(row)
+            except TypeError as e:
+                raise TypeError('Error on line {} in table {}, ({})'.format(
+                    lineno, tablename, e))
 
 class _Imm:
     _uidlangcache = {}
@@ -76,7 +80,7 @@ class _Imm:
         self.build()
         self.build_parallels_data()
         self.build_parallels()
-        self.build_vinaya()
+        self.build_vinaya_rules()
         self.build_search_data()
         self.timestamp = timestamp
         self.build_time = datetime.now()
@@ -92,8 +96,11 @@ class _Imm:
             return self.suttas[uid]
     
     def uid_to_acro(self, uid):
-        m = regex.match(r'(\p{alpha}+(?:-\d+)?)(.*)', uid)
-        return (self._uid_to_acro_map.get(m[1]) or m[1].upper()) + m[2]
+        #m = regex.match(r'(\p{alpha}+(?:-\d+)?)(.*)', uid)
+        #return (self._uid_to_acro_map.get(m[1]) or m[1].upper()) + m[2]
+        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)*', uid)
+        return ' '.join(self._uid_to_acro_map.get(c) or c.upper() for c in components)
+        
     
     def build(self):
         """ Build the sutta central In Memory Model
@@ -173,7 +180,7 @@ class _Imm:
             text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url, priority=row.priority) )
         
         collections = []
-        for row in table_reader('collection'):
+        for i, row in enumerate(table_reader('collection')):
             if row.sect_uid:
                 sect = self.sects[row.sect_uid]
             else:
@@ -185,7 +192,7 @@ class _Imm:
                 lang=self.languages[row.language],
                 sect=sect,
                 pitaka=self.pitakas[row.pitaka_uid],
-                menu_seq=int(row.menu_seq),
+                menu_seq=i,
                 divisions=[] # Populate later
                 )
             collections.append(collection)
@@ -374,13 +381,14 @@ class _Imm:
         
         suttas = sorted(suttas, key=numsortkey)
         
+        
+        
         self.suttas = OrderedDict(suttas)
         
         # Populate subdivisions.suttas
         for sutta in self.suttas.values():
             sutta.subdivision.suttas.append(sutta)
             sutta.vagga.suttas.append(sutta)
-        
         
     def build_parallels_data(self):
         
@@ -440,6 +448,41 @@ class _Imm:
 
         for sutta in self.suttas.values():
             sutta.parallels.sort(key=Parallel.sort_key)
+    
+    def build_vinaya_rules(self):
+        # This is a lot like the Suttas
+        def subdiv(uid, _rex=regex.compile(r'(.*?)\d+$')):
+            return _rex.match(uid)[1]
+        
+        for i, row in enumerate(table_reader('vinaya_rules')):
+            uid = row.uid
+            
+            subdivision = self.subdivisions[subdiv(uid)]
+            lang = subdivision.division.collection.lang
+            vagga = subdivision.vaggas[0]
+            
+            rule = VinayaRule(
+                uid=uid,
+                acronym=self.uid_to_acro(uid),
+                alt_acronym=None,
+                name=row.name,
+                vagga_number=0,
+                lang=lang,
+                subdivision=subdivision,
+                vagga=vagga,
+                number=i,
+                number_in_vagga=0,
+                volpage_info=row.volpage,
+                alt_volpage_info=None,
+                biblio_entry=None,
+                text_ref=None,
+                translations=[],
+                parallels=[],
+            )
+            vagga.suttas.append(rule)
+            subdivision.suttas.append(rule)
+            self.suttas[uid] = rule
+            
     
     def build_vinaya(self):
      try:

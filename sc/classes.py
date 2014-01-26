@@ -1,7 +1,6 @@
 import regex
 from collections import namedtuple
 
-
 TextRefBase = namedtuple('TextRef', 'lang, abstract, url, priority')
 
 ParallelBase = namedtuple('ParallelBase',
@@ -25,7 +24,7 @@ CollectionBase = namedtuple('CollectionBase',
 SuttaBase = namedtuple('SuttaBase', (
         'uid', 'acronym', 'alt_acronym', 'name', 'vagga_number', 'number_in_vagga', 'number',
         'lang', 'subdivision', 'vagga', 'volpage_info', 'alt_volpage_info',
-        'biblio_entry', 'text_ref', 'translations', 'parallels',) )
+        'biblio_entry', 'text_ref', 'translations', 'parallels') )
 
 VinayaDivision = namedtuple('VinayaDivision', ['uid', 'name', 'rules'])
 
@@ -68,8 +67,7 @@ class Slotted:
             return '{{{} items}}'.format(len(value))
         else:
             return '<{} {} items>'.format(value.__qualname__, len(value))
-        
-            
+
 class VinayaRule(Slotted):
     __slots__ = {'uid', 'name', 'division', 'text_ref', 'translations', 'parallels'}
     def __repr__(self):
@@ -78,7 +76,7 @@ class VinayaRule(Slotted):
             len(self.translations), len(self.parallels))
 
 class VinayaRuleSet(Slotted):
-    __slots__ = {'uid', 'name', 'rules'}    
+    __slots__ = {'uid', 'name', 'rules'}
 
 Language = namedtuple('Language', 'uid, name, isroot, iso_code, priority, collections')
 
@@ -123,12 +121,20 @@ class Sutta(SuttaBase):
             "<{}{}>".format(a.sutta.uid, '*' if a.partial else '')
                 for a in self.parallels)),
         )
+    
+    no_show_parallels = False
+    
     def __hash__(self):
         return hash(self.uid)
     
     @staticmethod
     def canon_url(uid, lang_code):
         return '/{uid}/{lang}'.format(uid=uid, lang=lang_code)
+
+class VinayaRule(Sutta):
+    __slots__ = ()
+    
+    no_show_parallels = True
 
 class Vagga(VaggaBase):
     __slots__ = ()
