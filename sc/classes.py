@@ -28,55 +28,53 @@ SuttaBase = namedtuple('SuttaBase', (
 
 VinayaDivision = namedtuple('VinayaDivision', ['uid', 'name', 'rules'])
 
-class Slotted:
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-        for key in self.__slots__:
-            if not hasattr(self, key):
-                raise ValueError('required keyword arg {} missing'.format(
-                    key))
+class NamedTupleBriefRepr:
+    __slots__ = ()
     def __repr__(self):
         from numbers import Number
         details = []
         
-        for attr in sorted(self.__slots__, key=lambda s: '' if s == 'uid' else s):
+        for attr in sorted(self._fields, key=lambda s: '' if s == 'uid' else s):
             details.append('{}='.format(attr))
             value = getattr(self, attr)
             if isinstance(value, str):
-                details[-1] += value
+                details[-1] += repr(value)
             elif isinstance(value, Number):
                 details[-1] += str(value)
+            elif isinstance(value, NamedTupleBriefRepr):
+                if hasattr(value, 'uid'):
+                    details[-1] += '<{} {}>'.format(value.__qualname__, value.uid)
+                else:
+                    details[-1] += '<{}>'.format(value.__qualname__)
             else:
                 try:
                     details[-1] += self._repr_len(value)
-                except AttributeError:
+                except TypeError:
                     details[-1] += repr(value)
         
         return '<{} {}>'.format(self.__qualname__,
             '    \n'.join(details))
     
     def _repr_len(self, value):
-        if isinstance(value, list):
-            return '[{} values]'.format(len(value))
-        elif isinstance(value, tuple):
-            return '({} values)'.format(len(value))
-        elif isinstance(value, set):
-            return '{{{} values}}'.format(len(value))
-        elif isinstance(value, dict):
-            return '{{{} items}}'.format(len(value))
+
+        if len(value) == 0:
+            return "{}()".format(type(value).__qualname__)
+        
+        if isinstance(value, dict):
+            content = value.values()
         else:
-            return '<{} {} items>'.format(value.__qualname__, len(value))
-
-class VinayaRule(Slotted):
-    __slots__ = {'uid', 'name', 'division', 'text_ref', 'translations', 'parallels'}
-    def __repr__(self):
-        return "<VinayaRule(uid='{}', division=<{}>, text_ref=<{}>, translations=[{}], parallels=[{}])".format(
-            self.uid, self.division.uid, self.text_ref, 
-            len(self.translations), len(self.parallels))
-
-class VinayaRuleSet(Slotted):
-    __slots__ = {'uid', 'name', 'rules'}
+            content = value
+        
+        types = {type(e) for e in content}
+        
+        if len(types) == 1:
+            typestring = 'of type <{}>'.format(
+                type(next(iter(content))).__qualname__)
+        else:
+            typestring = 'of mixed type'
+        
+        return '{}({} {})'.format(
+            type(value).__qualname__, len(value), typestring)
 
 Language = namedtuple('Language', 'uid, name, isroot, iso_code, priority, collections')
 
@@ -95,32 +93,8 @@ class SearchString(str):
 # Because a Sutta contains references to other complete objects which
 # each have their own verbose default __repr__, it is necessary to make
 # a custom __repr__ which summarises the enclosed objects.
-class Sutta(SuttaBase):
+class Sutta(NamedTupleBriefRepr, SuttaBase):
     __slots__ = ()
-    def __repr__(self):
-        return """< Sutta: "{self.name}"
-    uid={self.uid},
-    subdivision=<{self.subdivision.uid}>,
-    number={self.number},
-    lang=<{self.lang.uid}>,
-    acronym={self.acronym},
-    alt_acronym={self.alt_acronym},
-    name={self.name},
-    vagga=vagga,
-    number_in_vagga={self.number_in_vagga},
-    volpage_info={self.volpage_info}, alt_volpage_info={self.alt_volpage_info},
-    biblio_entry={self.biblio_entry},
-    text_ref={self.text_ref},
-    translations={translations},
-    parallels={parallels} >\n""".format(
-        self=self,
-        vagga="<{}>".format(self.vagga.name) if self.vagga else '',
-        translations="[{}]".format(", ".join(
-        "<{}>".format(a.lang.uid) for a in self.translations)),
-        parallels="[{}]".format(", ".join(
-            "<{}{}>".format(a.sutta.uid, '*' if a.partial else '')
-                for a in self.parallels)),
-        )
     
     no_show_parallels = False
     
@@ -136,23 +110,11 @@ class VinayaRule(Sutta):
     
     no_show_parallels = True
 
-class Vagga(VaggaBase):
+class Vagga(NamedTupleBriefRepr, VaggaBase):
     __slots__ = ()
-    def __repr__(self):
-        return """<Vagga: "{self.name}"
-    uid={self.uid},
-    subdivision=<{self.subdivision.uid}>,
-    name={self.name},
-    suttas=[{suttas}]\n""".format(self=self,
-        suttas=", ".join("<{}>".format(sutta.uid) for sutta in self.suttas))
-    
 
-class Parallel(ParallelBase):
+class Parallel(NamedTupleBriefRepr, ParallelBase):
     __slots__ = ()
-    def __repr__(self):
-        return ("<Parallel: sutta={self.sutta.uid}, "
-        "partial={self.partial}, "
-        "footnote={self.footnote}>").format(self=self)
 
     @staticmethod
     def sort_key(p):
@@ -168,11 +130,8 @@ class Parallel(ParallelBase):
                 s.subdivision.order,
                 s.number_in_vagga)
 
-class TextRef(TextRefBase):
+class TextRef(NamedTupleBriefRepr, TextRefBase):
     __slots__ = ()
-    
-    def __repr__(self):
-        return '<TextRef: lang=<{self.lang.uid}>, url="{self.url}">'.format(self=self)
 
     @staticmethod
     def sort_key(t):
@@ -182,46 +141,16 @@ class TextRef(TextRefBase):
         To be used with sort() or sorted()."""
         return (not t.url.startswith('/'), t.lang.priority, t.lang.iso_code, t.priority)
 
-class Collection(CollectionBase):
+class Collection(NamedTupleBriefRepr, CollectionBase):
     __slots__ = ()
-    def __repr__(self):
-        return """<Collection: "{self.name}",
-    uid={self.uid},
-    name={self.name},
-    lang=<{self.lang.uid}>,
-    sect=<{sect}>,
-    pitaka=<{self.pitaka.uid}>,
-    menu_seq=<{self.menu_seq}>,
-    divisions={divisions}\n""".format(
-        self=self,
-        sect=getattr(self.sect, 'uid', None),
-        divisions="[{}]".format(", ".join(
-            "<{}>".format(a.name) for a in self.divisions)))
-
+    
     @staticmethod
     def sort_key(collection):
         """Return the canonical sort key."""
         return collection.menu_seq
 
-class Division(DivisionBase):
+class Division(NamedTupleBriefRepr, DivisionBase):
     __slots__ = ()
-    def __repr__(self):
-        return """<Division: "{self.name}"
-    uid={self.uid},
-    collection={collection},
-    name={self.name},
-    alt_name={self.alt_name},
-    acronym={self.acronym},
-    subdiv_ind={self.subdiv_ind},
-    text_ref={self.text_ref},
-    menu_seq={self.menu_seq},
-    menu_gwt_ind={self.menu_gwt_ind},
-    subdivisions={subdivisions}\n""".format(self=self,
-        collection="<Collection>",
-        subdivisions="[{}]".format(
-            ", ".join("<{}>".format(a.uid)
-                for a in self.subdivisions)),
-        )
 
     @staticmethod
     def sort_key(division):
@@ -231,23 +160,8 @@ class Division(DivisionBase):
     def has_subdivisions(self):
         return len(self.subdivisions) > 1
 
-class Subdivision(SubdivisionBase):
+class Subdivision(NamedTupleBriefRepr, SubdivisionBase):
     __slots__ = ()
-    def __repr__(self):
-        return """<Subdivision: "{self.name}"
-    uid={self.uid}
-    division=<{self.division.uid}>
-    name={self.name}
-    acronym={self.acronym}
-    vagga_numbering_ind={self.vagga_numbering_ind},
-    vaggas=[{vaggas}],
-    suttas=[{suttas}]\n""".format(
-        self=self,
-        vaggas=", ".join(str(len(a)) for a in self.vaggas),
-        suttas=", ".join("<{}>".format(a.uid) for a in self.suttas),
-        )
-
-
 
 class SearchResults:
     def __init__(self, query, categories=None):
