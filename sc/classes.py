@@ -9,7 +9,7 @@ Language = namedtuple('Language',
 Sect = namedtuple('Sect', 'uid name')
 
 
-Pitaka = namedtuple('Pitaka', 'uid name')
+Pitaka = namedtuple('Pitaka', 'uid name always_full')
 
 
 class Collection(ConciseRepr, namedtuple('Collection',
@@ -34,6 +34,10 @@ class Division(ConciseRepr, namedtuple('Division',
 
     def has_subdivisions(self):
         return len(self.subdivisions) > 1
+    
+    @property
+    def has_suttas(self):
+        return len(self.subdivisions[0].suttas)
 
 
 class Subdivision(ConciseRepr, namedtuple('Subdivision',
@@ -85,7 +89,22 @@ class Parallel(ConciseRepr, namedtuple('Parallel',
                 p.partial,
                 s.subdivision.order,
                 s.number_in_vagga)
+    
+    negated = False
 
+class NegatedParallel:
+    __slots__ = ('division')
+    negated = '---'
+    maybe = False
+    def __init__(self, division):
+        self.division = division
+
+class MaybeParallel:
+    __slots__ = ('division')
+    negated = '???'
+    maybe = True
+    def __init__(self, division):
+        self.division = division
 
 class TextRef(ConciseRepr, namedtuple('TextRef', 
         'lang abstract url priority')):

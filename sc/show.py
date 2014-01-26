@@ -48,6 +48,9 @@ def default(*args, **kwargs):
     if len(args) == 1 or full:
         division = imm.divisions.get(uid)
         if division:
+            if division.collection.pitaka.always_full:
+                if len(division.subdivisions) > 1:
+                    full = True
             if division.has_subdivisions():
                 if full:
                     return DivisionView(division).render()

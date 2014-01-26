@@ -176,10 +176,16 @@ $home-tabs-height: 2em;
                 padding: 0.4em 0.5em;
                 line-height: 1.75em;
 
-                &:hover {
+                &:hover:not(.no-suttas) {
                     background-color: $home-link-hover-color;
                 }
+                
+                &.no-suttas {
+                    color: $dark-pastel-green;
+                }   
             }
         }
     }
+
+	
 }

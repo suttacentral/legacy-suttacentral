@@ -233,6 +233,8 @@ class ParallelView(ViewBase):
         has_alt_acronym = False
 
         for parallel in parallels:
+            if parallel.negated:
+                continue
             if parallel.sutta.alt_volpage_info:
                 has_alt_volpage = True
             if parallel.sutta.alt_acronym:

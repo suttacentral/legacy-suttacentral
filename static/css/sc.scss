@@ -66,6 +66,10 @@ td .altAcronym:before {content:"[";}
 td .altAcronym:after {content:"]";}
 td .altVolPage, td .altAcronym {font-size: 80%; color: #555}
 
+.negated-parallel {
+    color: $medium-gray;
+}
+
 table.divtable td:nth-of-type(1) > a {white-space:nowrap;}
 
 /* NOTES, TEXT DATA & BIBLIOGRAPHY */

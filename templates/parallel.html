@@ -16,6 +16,19 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 </thead>
 <tbody>
 {% for parallel in parallels -%}
+{% if parallel.negated %}
+<tr class="negated-parallel"><td>{{parallel.division.collection.lang.name}}</td>
+<td>{{parallel.division.acronym}}</td>
+<td colspan=3>
+{% if parallel.maybe %}
+Manuscript incomplete
+{% else %}
+No parallel
+{% endif %}
+</td>
+
+</td></tr>
+{% else %}
 {%- if loop.first -%}
 <tr class='origin'>
 {%- else -%}
@@ -42,8 +55,10 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 <a href='{{translation.url}}' class='tran' title='{{translation.abstract}}'>{{translation.lang.uid}}</a>{% if not loop.last %} | {% endif %} 
 {% endfor -%}
 </td>
+{% endif %}
 </tr>
 {%- endfor %}
+
 </tbody>
 {{macros.table_footer()}}
 </table>

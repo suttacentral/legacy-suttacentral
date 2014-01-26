@@ -157,7 +157,7 @@ class ConciseRepr:
         details = []
         
         for attr in sorted(self._fields, key=lambda s: '' if s == 'uid' else s):
-            details.append('{}='.format(attr))
+            details.append('\n    {}='.format(attr))
             value = getattr(self, attr)
             if isinstance(value, str):
                 details[-1] += repr(value)
@@ -175,7 +175,7 @@ class ConciseRepr:
                     details[-1] += repr(value)
         
         return '<{} {}>'.format(self.__qualname__,
-            '    \n'.join(details))
+            ''.join(details))
     
     def _repr_len(self, value):
 

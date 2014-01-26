@@ -80,6 +80,7 @@ class _Imm:
         self.build()
         self.build_parallels_data()
         self.build_parallels()
+        self.build_vinaya_parallels()
         self.build_vinaya_rules()
         self.build_search_data()
         self.timestamp = timestamp
@@ -141,12 +142,12 @@ class _Imm:
         # Build Pitakas
         self.pitakas = OrderedDict()
         for row in table_reader('pitaka'):
-            self.pitakas[row.uid] = Pitaka(uid=row.uid, name=row.name)
+            self.pitakas[row.uid] = Pitaka(uid=row.uid, name=row.name, always_full=row.always_full)
 
         # Build Sects
         self.sects = OrderedDict()
         for row in table_reader('sect'):
-            self.sects[row.uid] = Pitaka(uid=row.uid, name=row.name)
+            self.sects[row.uid] = Sect(uid=row.uid, name=row.name)
 
         # Build Languages (indexed by id)
         self.languages = OrderedDict()
@@ -217,7 +218,7 @@ class _Imm:
                 uid=row.uid,
                 name=row.name,
                 alt_name=row.alt_name,
-                acronym=row.acronym,
+                acronym=row.acronym or self.uid_to_acro(row.uid),
                 subdiv_ind=row.subdiv_ind,
                 menu_seq=i,
                 menu_gwn_ind=bool(row.menu_gwn_ind),
@@ -454,10 +455,13 @@ class _Imm:
         def subdiv(uid, _rex=regex.compile(r'(.*?)\d+$')):
             return _rex.match(uid)[1]
         
+        vinaya_rules = {}
+        vinaya_divisions = set()
         for i, row in enumerate(table_reader('vinaya_rules')):
             uid = row.uid
             
             subdivision = self.subdivisions[subdiv(uid)]
+            vinaya_divisions.add(subdivision.division.uid)
             lang = subdivision.division.collection.lang
             vagga = subdivision.vaggas[0]
             
@@ -482,94 +486,92 @@ class _Imm:
             vagga.suttas.append(rule)
             subdivision.suttas.append(rule)
             self.suttas[uid] = rule
-            
+            vinaya_rules[uid] = rule
+        self.vinaya_rules = vinaya_rules
+        
+        no_ll = NegatedParallel.negated
+        maybe_ll = MaybeParallel.negated
+        
+        negated_parallels = {d + no_ll: NegatedParallel(self(d))
+                            for d in vinaya_divisions}
+        maybe_parallels = {d + maybe_ll: MaybeParallel(self(d))
+                            for d in vinaya_divisions}
+        
+        # Add Parallels
+        try:
+            for rule in vinaya_rules.values():
+                for uid in self.vinaya_parallels[rule.uid]:
+                    if uid.endswith(no_ll):
+                        rule.parallels.append(
+                            negated_parallels[uid])
+                    elif uid.endswith(maybe_ll):
+                        rule.parallels.append(
+                            maybe_parallels[uid])
+                    else:
+                        parallel = Parallel(
+                            sutta=vinaya_rules[uid],
+                            partial=False,
+                            indirect=False,
+                            footnote=None)
+                        rule.parallels.append(parallel)
+        except KeyError:
+            globals().update(locals())
+            raise
     
-    def build_vinaya(self):
-     try:
-        # The vinaya data is stored basically as a matrix
-        # It is very dense and takes a bit of unfolding
-        # to get into a usable form.
-        # It is of a different form to other tables, for that reason
-        # the column heads go A->AW 
+    def build_vinaya_parallels(self):
+        
+        def normalize_uid(uid):
+            return uid.replace('#', '-').replace('*', '')
+        
         by_rule = list(table_reader('vinaya'))
-        by_school = list(zip(*by_rule)) # Rotate
+        by_school = list(list(e) for e in zip(*by_rule)) # rotate
         
-        division_uids = by_rule[0]
-        division_names = by_rule[1]
-        rule_names = by_school[0]
+        no_ll = NegatedParallel.negated
+        maybe_ll = MaybeParallel.negated
         
-        vinaya_division = OrderedDict()
-        for uid, name in zip(division_uids[1:], division_names[1:]):
-            vinaya_division[uid] = VinayaDivision(
-                uid=uid,
-                name=name,
-                rules=[])
-        
-        vinaya_rules = OrderedDict()
-        no_rules = {}
-        unknown_rules = {}
-        for school in by_school[1:]:
-            division_uid = school[0]
-            division = vinaya_division[division_uid]
-            i = 0
-            for name, rule_uid in zip(rule_names[2:], school[2:]):
-                if not rule_uid:
-                    rule_uid = ''
-                rule = VinayaRule(
-                    uid=rule_uid.replace('#', '-'),
-                    name=name,
-                    division=division,
-                    text_ref=None,
-                    translations=[],
-                    parallels=[])
-                
-                if rule_uid == '':
-                    no_rules[division_uid] = rule
-                elif rule_uid == '?':
-                    unknown_rules[division_uid] = rule
-                else:
-                    vinaya_rules[rule_uid] = rule
-                    
-                division.rules.append(rule)
-        
-        # Now we set up the parallels.
-        # Note that in the vinaya the list of parallels includes
-        # the rule itself.
-        # Another quirk is that it contains a lot of 'empty' rule
-        # entries. This is because we are interested in knowing
-        # does-not-exist relationship, so we have a uid-less rule 
-        # which references it's division basically saying
-        # this rule not-exists in this division.
-        rulesets = OrderedDict()
-        for i, row in enumerate(by_rule[2:]):
-            ruleset_uid = 'ruleset' + str(i + 1)
-            ruleset = []
-            for div_uid, uid in zip(division_uids[1:], row[1:]):
+        start = time.time()
+        # We update empties
+        for column in by_school[1:]:
+            div_uid = column[0]
+            for i, uid in enumerate(column):
+                if i <= 1:
+                    continue
                 if uid == '':
-                    ruleset.append(no_rules[div_uid])
+                    column[i] = div_uid + no_ll
                 elif uid == '?':
-                    ruleset.append(unknown_rules[div_uid])
-                else:
-                    ruleset.append(vinaya_rules[uid])
-            rulesets[ruleset_uid] = VinayaRuleSet(
-                uid=ruleset_uid,
-                name=row[0],
-                rules=ruleset)
-            for rule in ruleset:
-                rule.parallels = ruleset
+                    column[i] = div_uid + maybe_ll
         
-        self.vinaya_division = vinaya_division
-        self.vinaya_ruleset = rulesets
-        self.vinaya_rule = vinaya_rules
-        # Note: While the vinaya rules have individual references
-        # in the IMM, their uids do not represent unique URL's,
-        # they are always displayed as lists, altough of course
-        # the lists may be filtered.
+        by_rule = list(zip(*by_school))
         
-     except:
-         globals().update(locals())
-         raise
-            
+        vinaya_parallels = defaultdict(dict)
+        hrefs = {}
+        for row in by_rule[1:]:
+            row = row[1:]
+            for uid in row:
+                if uid not in {'', '?'}:
+                    hrefs[uid] = uid.replace('*', '')
+                for oth_uid in row:
+                    if uid != oth_uid:
+                        vinaya_parallels[uid][oth_uid] = 1
+        
+        def remove_duplicates(inlist):
+            out = []
+            seen = set()
+            for e in inlist:
+                if e in seen:
+                    continue
+                seen.add(e)
+                out.append(normalize_uid(e))
+            return out
+        
+        self.vinaya_parallels = {normalize_uid(k): remove_duplicates(v) 
+                                    for k, v
+                                    in vinaya_parallels.items()}
+        
+        self.vinaya_text_hrefs = hrefs
+        
+        print('Vinaya generation took {}ms'.format(time.time()-start))
+        
     def build_search_data(self):
         """ Build useful search data.
 

@@ -26,10 +26,10 @@
 {%- endif %}
 </td>
 <td>
-{% if result and result.query.ajax %}
-{%- if sutta.translations -%}
+{% if (result and result.query.ajax) or sutta.no_show_parallels %}
+{%- if sutta.parallels -%}
 <a href='/{{sutta.uid}}/'
- title='Correspondence details for {{sutta.acronym}}' class="details">{{sutta.translations|length}} ►</a>
+ title='Correspondence details for {{sutta.acronym}}' class="details">{{sutta.parallels|length - sutta.parallels|selectattr("negated")|list|length}} ►</a>
 {%- endif -%}
 {%- else -%}
 {%- for parallel in sutta.parallels -%}
