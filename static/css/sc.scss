@@ -378,18 +378,20 @@ span.lookup:hover > span.meaning {
     font-family: serif;
 }
 
-.sutta ul {
-    list-style-type: none;
-}
+.sutta {
+    ul {
+        list-style-type: none;
+    }
 
-.sutta ol   {
-     padding:0 0 1.5em 0;
-     margin:0 0 0 -1em;
-}
+    ol, ul {
+        padding:0 0 1.5em 0;
+        margin:0 0 0 -1em;
+    }
 
-.sutta ol ol  {
-     padding:0 0 0 1em;
-     margin:0 0 0 0;
+    ol ol, ul ul  {
+        padding:0 0 0 1em;
+        margin:0 0 0 0;
+    }
 }
 
 
