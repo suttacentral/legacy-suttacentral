@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="onecol">
+
+<section >
+<h1>Languages</h1>
+<ul style="-webkit-column-count:3">
+{% for uid, language in imm.languages.items() %}
+<li><a title="{{language.name}}">{{uid}}</a></li>
+{% endfor %}
+</ul>
+</section>
+
+<section >
+<h1>Divisions</h1>
+<ul style="-webkit-column-count:3">
+{% for uid in imm.divisions %}
+<li><a title="{{imm.divisions[uid].name}}">{{uid}}</a></li>
+{% endfor %}
+</ul>
+</section>
+
+<section>
+<h1>Unused</h1>
+<ul style="-webkit-column-count:10">
+{% for uid in unused %}
+<li><a>{{uid}}</a></li>
+{% endfor %}
+</ul>
+</section>
+</div>
+
+{% endblock %}

@@ -42,6 +42,9 @@ def default(*args, **kwargs):
         return InfoView(uid).render()
 
     imm = scimm.imm()
+    
+    if uid == 'uids':
+        return UidsView().render()
 
     # Divisions
     full = len(args) == 2 and args[1] == 'full'

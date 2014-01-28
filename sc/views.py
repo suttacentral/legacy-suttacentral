@@ -533,3 +533,28 @@ class AdminIndexView(InfoView):
         context.data_last_update_request = data_repo.last_update()
         context.data_scm = data_scm
         context.imm_build_time = scimm.imm().build_time
+
+class UidsView(InfoView):
+    
+    def __init__(self):
+        super().__init__('uids')
+    
+    def setup_context(self, context):
+        imm = scimm.imm()
+        context.imm = imm
+        alltwo = set(chr(97 + i) + chr(97 + j) for i in range(0, 26) for j in range(0, 26))
+        
+        used = set()
+        for uid in imm.divisions:
+            used.update(uid.split('-'))
+        
+        for uid in imm.languages:
+            used.update(uid.split('-'))
+        
+        for uid in imm.subdivisions:
+            used.update(uid.split('-'))
+        
+        unused = alltwo - used
+        
+        context.unused = sorted(unused)
+        context.used = sorted(u for u in used if u.isalpha())
