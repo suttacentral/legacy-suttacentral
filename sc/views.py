@@ -246,6 +246,9 @@ class ParallelView(ViewBase):
         context.has_alt_acronym = has_alt_acronym
         context.citation = SuttaCitationView(self.sutta).render()
 
+class VinayaParallelView(ParallelView):
+    template_name = 'vinaya_parallel'
+
 class TextView(ViewBase):
     """The view for showing the text of a sutta or tranlsation."""
 

@@ -2,14 +2,15 @@
 
 {# Linkafy acronym if possible and replace spaces with non-breakers.
    Optionally show the alt_sutta_acronym #}
-{% macro sutta_acronym(sutta, show_alt) %}
+{% macro sutta_acronym(sutta, show_alt, brief=false) %}
+{% set acronym=sutta.brief_acronym if brief else sutta.acronym %}
 {%- if sutta.text_ref -%}{# TODO: Insert nbsp where needed #}
 <a href='{{sutta.text_ref.url}}' {%- if sutta.text_ref.title %} title='{{sutta.text_ref.abstract}}' {%- endif %}>
-{{sutta.acronym|sub("(?<![,;]) ", "&nbsp;")}}</a>
+{{acronym|sub("(?<![,;]) ", "&nbsp;")}}
 {%- else -%}
-{{sutta.acronym|sub("(?<![,;]) ", "&nbsp;")}}
-{%- endif -%}
-{%- if sutta.alt_acronym and show_alt %}
+{{acronym|sub("(?<![,;]) ", "&nbsp;")}}
+{%- endif -%}</a>
+{%- if not brief and sutta.alt_acronym and show_alt %}
  <span class='altAcronym'>{{sutta.alt_acronym|sub("(?<![,;]) ", "&nbsp;")}}</span>
 {% endif -%}
 {% endmacro %}

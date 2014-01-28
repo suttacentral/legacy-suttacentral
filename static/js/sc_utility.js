@@ -146,6 +146,25 @@ sc.util = {
         });
         sc.util._asciifyMap = ascmap;
         sc.util._unifyMap = unimap;
+    },
+    acro_to_name: function(acro) {
+        acro = acro.replace('&nbsp;', ' ').replace(' ', ' ');
+        var parts = acro.trim().toLowerCase().split(' '),
+            out = [],
+            n;
+        
+        for (var i = 0; i < parts.length; i++) {
+            if (/[.\d]+/.test(parts[i])) {
+                out.push(parts[i])
+                continue;
+            }
+            n = this.expand_uid_data[parts[i]];
+            if (n === undefined)
+                continue;
+            out.push(n[1])
+        }
+        
+        return out.join(' ');
     }
 }
 

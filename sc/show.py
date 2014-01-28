@@ -69,7 +69,11 @@ def default(*args, **kwargs):
         # Sutta Parallels
         sutta = imm.suttas.get(uid)
         if sutta:
-            return ParallelView(sutta).render()
+            if isinstance(sutta, classes.VinayaRule):
+                return VinayaParallelView(sutta).render()
+            else:
+                return ParallelView(sutta).render()
+        
     elif len(args) == 2:
         if args[1] == 'citation.txt':
             # Citation

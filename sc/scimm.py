@@ -80,7 +80,6 @@ class _Imm:
         self.build()
         self.build_parallels_data()
         self.build_parallels()
-        self.build_vinaya_parallels()
         self.build_vinaya_rules()
         self.build_search_data()
         self.timestamp = timestamp
@@ -451,85 +450,73 @@ class _Imm:
             sutta.parallels.sort(key=Parallel.sort_key)
     
     def build_vinaya_rules(self):
-        # This is a lot like the Suttas
-        def subdiv(uid, _rex=regex.compile(r'(.*?)\d+$')):
-            return _rex.match(uid)[1]
+        """ Generate a cleaned up form of the table data
         
+        But it is not unfolded as completly as for suttas.
+        
+        """
+        
+        start = time.time()
         vinaya_rules = {}
-        vinaya_divisions = set()
         for i, row in enumerate(table_reader('vinaya_rules')):
             uid = row.uid
-            
-            subdivision = self.subdivisions[subdiv(uid)]
-            vinaya_divisions.add(subdivision.division.uid)
-            lang = subdivision.division.collection.lang
-            vagga = subdivision.vaggas[0]
-            
             rule = VinayaRule(
                 uid=uid,
-                acronym=self.uid_to_acro(uid),
-                alt_acronym=None,
-                name=row.name,
-                vagga_number=0,
-                lang=lang,
-                subdivision=subdivision,
-                vagga=vagga,
-                number=i,
-                number_in_vagga=0,
-                volpage_info=row.volpage,
-                alt_volpage_info=None,
-                biblio_entry=None,
-                text_ref=None,
-                translations=[],
-                parallels=[],
+                volpage_info=row.volpage_info,
+                imm=self,
             )
-            vagga.suttas.append(rule)
+            
+            subdivision = rule.subdivision
             subdivision.suttas.append(rule)
+            
+            subdivision.vaggas[0].suttas.append(rule)
+            
             self.suttas[uid] = rule
             vinaya_rules[uid] = rule
-        self.vinaya_rules = vinaya_rules
-        
-        no_ll = NegatedParallel.negated
-        maybe_ll = MaybeParallel.negated
-        
-        negated_parallels = {d + no_ll: NegatedParallel(self(d))
-                            for d in vinaya_divisions}
-        maybe_parallels = {d + maybe_ll: MaybeParallel(self(d))
-                            for d in vinaya_divisions}
-        
-        # Add Parallels
-        try:
-            for rule in vinaya_rules.values():
-                for uid in self.vinaya_parallels[rule.uid]:
-                    if uid.endswith(no_ll):
-                        rule.parallels.append(
-                            negated_parallels[uid])
-                    elif uid.endswith(maybe_ll):
-                        rule.parallels.append(
-                            maybe_parallels[uid])
-                    else:
-                        parallel = Parallel(
-                            sutta=vinaya_rules[uid],
-                            partial=False,
-                            indirect=False,
-                            footnote=None)
-                        rule.parallels.append(parallel)
-        except KeyError:
-            globals().update(locals())
-            raise
-    
-    def build_vinaya_parallels(self):
         
         def normalize_uid(uid):
             return uid.replace('#', '-').replace('*', '')
         
-        by_rule = list(table_reader('vinaya'))
-        by_school = list(list(e) for e in zip(*by_rule)) # rotate
+        org_by_rule = list(table_reader('vinaya'))
         
-        no_ll = NegatedParallel.negated
-        maybe_ll = MaybeParallel.negated
+        by_school = []
+        for i, column in enumerate(zip(*org_by_rule)): #rotate
+            if i == 0:
+                by_school.append(column)
+            else:
+                division_uid = column[0]
+                division = self.divisions[division_uid]
+                division_negated_parallel = NegatedParallel(
+                    division=division)
+                division_maybe_parallel = MaybeParallel(
+                    division=division)
+                new_column = []
+                by_school.append(new_column)
+                for j, uid in enumerate(column):
+                    if j <= 1:
+                        new_column.append(uid)
+                    else:
+                        if not uid:
+                            new_column.append(division_negated_parallel)
+                        elif uid == '?':
+                            new_column.append(division_maybe_parallel)
+                        else:
+                            rule = vinaya_rules[normalize_uid(uid)]
+                            rule.ref_uid = uid
+                            new_column.append(rule)
         
-        start = time.time()
+        by_rule = list(zip(*by_school))
+        self.by_school = by_school
+        self.by_rule = by_rule
+        
+        for row in by_rule[2:]:
+            for rule in row[1:]:
+                if isinstance(rule, VinayaRule):
+                    rule._rule_row = row
+        
+        print('Vinaya generation took {}s'.format(time.time()-start))
+        return
+        
         # We update empties
         for column in by_school[1:]:
             div_uid = column[0]
@@ -570,7 +557,6 @@ class _Imm:
         
         self.vinaya_text_hrefs = hrefs
         
-        print('Vinaya generation took {}ms'.format(time.time()-start))
         
     def build_search_data(self):
         """ Build useful search data.
@@ -578,7 +564,12 @@ class _Imm:
         Note that the size of the data is somewhat less than 2mb """
         
         suttastringsU = []
+        seen = set()
         for sutta in self.suttas.values():
+            if isinstance(sutta, VinayaRule):
+                if sutta.name in seen:
+                    continue
+                seen.add(sutta.name)
             name = sutta.name.lower()
             suttastringsU.append("  {}  ".format("  ".join(
                                 [sutta.uid,

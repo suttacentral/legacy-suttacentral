@@ -21,6 +21,7 @@ sc.formatter = {
         this.operaFix();
         this.highlightBookmark();
         this.toolsMagic();
+        setTimeout(this.acro_expander, 500);
     },
     apply: function(){
         $("tr").filter(":even").addClass("even"); //Add the .even class to every second tr element
@@ -330,6 +331,16 @@ sc.formatter = {
                 tocMenu = $('<div id="menu">').appendTo('#toc')
             $('#menu').html(menu.join(''))
         }
+    },
+    acro_expander: function(){
+        $('#vinaya_parallels td')
+            .filter(':nth-of-type(2), :nth-of-type(3)')
+            .each(function(){
+                var acro = $(this).text().replace('&nbsp;', ' '),
+                    name = sc.util.acro_to_name(acro);
+                
+                $(this).attr('title', name)
+            });
     }
 }
 sc.formatter.init();
