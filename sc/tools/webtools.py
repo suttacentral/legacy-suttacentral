@@ -778,7 +778,18 @@ class FinalizeProcessor(HTMLProcessor):
             filename = self.output_filename(orgentry.filename.parent / entry.filename)
             
             yield (filename, self.root_to_bytes(root))
-
+    
+    def root_to_bytes(self, root):
+        root.headsure.insert(0, root.makeelement('meta', charset="UTF-8"))
+        if not root.head.select('title'):
+            root.head.append(root.makeelement('title'))
+        root.attrib.clear()
+        out = html.tostring(root, doctype='<!DOCTYPE html>',
+            encoding='unicode', include_meta_content_type=False)
+        out = html.prettyprint(out)
+        return out.encode(encoding='utf8')
+        
+        
 class EmdasharProcessor(BaseProcessor):
     name = "Fix Puncutation"
     allowed_types = None

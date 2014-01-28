@@ -280,6 +280,133 @@ def parseXML(filename):
     parser.set_element_class_lookup(parser_lookup)
     return _etree.parse(filename, parser=parser)
 
+class PrettyPrinter:
+    """ Pretty print HTML for Sutta Central
+    
+    Produces results which are exactly in accordance with Ven. Nandiya's
+    arbitary standards for 'looks-right-ness'. Motivation is to provide
+    git-friendlier HTML files by placing things which are more likely
+    to be changed on their own lines and linebreaking longer
+    paragraphs.
+    
+    The existing linebreaks are completely replaced. PrettyPrint makes
+    no effort at all to reuse existing linebreaks. For this reason it
+    should ideally be called *once* on each file. After that, the file
+    should not be re pretty printed since doing so will cause git a hedaache.
+    
+    PrettyPrinter uses regular expressions and a very simple tokenizer
+    to produce the desired result. It does not attempt to parse the
+    document.
+    
+    For input it requires an HTML document with <html> tag.
+    
+    It does not respect '<pre>' blocks.
+    
+    """
+    # The below sets are NOT in accordance with HTML4 or HTML5, they are
+    # actually sets of tags used on Sutta Central.
+    all_tags = {'a', 'address', 'article', 'b', 'big', 'blockquote', 'body',
+                'cite', 'div', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'head',
+                'hgroup', 'html', 'i', 'li', 'ol', 'p', 'section', 'span',
+                'strong', 'sup', 'table', 'td', 'title', 'tr', 'ul'}
+    
+    block_tags = {'article', 'blockquote', 'body', 'div', 'h1', 'h2', 'h3', 
+            'h4', 'h5', 'head', 'hgroup', 'html', 'li', 'ol', 'p', 'section', 
+            'table', 'td', 'title', 'tr', 'ul'}
+
+    inline_tags = all_tags - block_tags
+    
+    # These tags don't deserve an entire line to themselves
+    # (i.e. <section> would be put on a line by itself)
+    condense_tags = {'p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'td'}
+
+    # This will match virtually all open-tags except extremely
+    # corrupt ones (which browsers probably wouldn't handle either)
+    # Slice the ends off opentag[1:-1] to make non-capturing
+    opentag = r'''((?si)<(?:{})(?:[ \n\w=]+|"[^"]*"|'[^']*')*/?>)'''.format
+
+    #slice closetag[1:-1] to make non-capturing
+    closetag = r'((?si)</(?:{})>)'.format
+
+    arex = _regex.compile(opentag('a') + '.*?' + closetag('a'))
+
+    ownline = block_tags | {'a', 'meta', 'link', 'img'}
+
+    ownlineopenrex = _regex.compile(opentag('|'.join(ownline)))
+    ownlinecloserex = _regex.compile(closetag('|'.join(ownline)))
+
+    nextblock = _regex.compile(r'[\w\p{{punct}}]+[ -]?|{0}.*?{1}|{0}|{1}|.'.format(
+        opentag(r'\w+')[1:-1], closetag(r'\w+')[1:-1]))
+        
+    wrap = 78
+    
+    def linebreak(self, string):
+        wrap = self.wrap
+        if len(string) <= wrap:
+            return string
+        lines = ['']
+        for m in self.nextblock.finditer(string):
+            tok = m[0]
+            if len(tok) + len(lines[-1]) < wrap or len(lines[-1]) == 0:
+                lines[-1] += tok
+            else:
+                lines.append(tok)
+        return '\n'.join(lines)
+
+    def prettyprint(self, text, filename='(-)'):
+        opentag = self.opentag
+        closetag = self.closetag
+        block_tags = self.block_tags
+        condense_tags = self.condense_tags
+        # Strip existing newlines.
+        text = text.replace('\n', ' ')
+        text = _regex.sub(' {2,}', ' ', text)
+
+        # Eliminate spaces between block level tags
+        text = _regex.sub(opentag('|'.join(block_tags)) + ' ', r'\1', text)
+        text = _regex.sub(' ' + closetag('|'.join(block_tags)), r'\1', text)
+
+        m = _regex.match(r'(?si)(.*?)(<html>.*</html>\n?)(.*)', text)
+        preamble = m[1]
+        middle = m[2]
+        postamble = m[3]
+        if postamble:
+            if postamble.isspace():
+                postamble = ''
+            else:
+                logger.warn('{} contains trailing content: {}'.format(filename, postamble))
+
+        # Place certain tags on their own line
+        middle = self.ownlineopenrex.sub(r'\n\1', middle)
+        middle = self.ownlinecloserex.sub(r'\1\n', middle)
+        middle = middle.replace('<br>', '<br>\n')
+        prex = _regex.compile(r'({})(.*?)({})'.format(opentag('p')[1:-1],
+            closetag('p')[1:-1]), flags=_regex.DOTALL)
+        
+        def parabreak(m):
+            out = [m[1]]
+            for line in m[2].split('\n'):
+                out.append(self.linebreak(line))
+            out.append(m[3])
+            return '\n'.join(out)
+        
+        middle = prex.sub(parabreak, middle)
+        
+        out = '\n'.join([preamble, middle, postamble])
+        
+        out = out.replace('></head>', '>\n</head>')
+        
+        out = _regex.sub(r'\n[ \n]+', r'\n', out)
+        out = _regex.sub(r'(?m) $', r'', out)
+        out = _regex.sub(r'(<(?:{})>)\n'.format('|'.join(condense_tags)), r'\1', out)
+        out = _regex.sub(r'\n(</(?:{})>)'.format('|'.join(condense_tags)), r'\1', out)
+        
+        if out.endswith('\n'):
+            out = out[:-1]
+        return out
+
+prettyprint = PrettyPrinter().prettyprint
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
