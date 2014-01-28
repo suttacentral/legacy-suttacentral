@@ -96,11 +96,12 @@ class _Imm:
             return self.suttas[uid]
     
     def uid_to_acro(self, uid):
-        #m = regex.match(r'(\p{alpha}+(?:-\d+)?)(.*)', uid)
-        #return (self._uid_to_acro_map.get(m[1]) or m[1].upper()) + m[2]
         components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)*', uid)
         return ' '.join(self._uid_to_acro_map.get(c) or c.upper() for c in components)
         
+    def uid_to_name(self, uid):
+        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)*', uid)
+        return ' '.join(self._uid_to_name_map.get(c) or c.upper() for c in components)
     
     def build(self):
         """ Build the sutta central In Memory Model
@@ -135,8 +136,10 @@ class _Imm:
         
         # Load uid to acro map
         self._uid_to_acro_map = {}
+        self._uid_to_name_map = {}
         for row in table_reader('uid_expansion'):
             self._uid_to_acro_map[row.uid] = row.acro
+            self._uid_to_name_map[row.uid] = row.name
         
         # Build Pitakas
         self.pitakas = OrderedDict()

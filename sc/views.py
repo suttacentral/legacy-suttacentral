@@ -42,6 +42,7 @@ def jinja2_environment():
     env.filters['time'] = util.format_time
     env.filters['datetime'] = util.format_datetime
     env.filters['timedelta'] = util.format_timedelta
+    env.filters['uid_to_name'] = lambda uid: scimm.imm().uid_to_name(uid)
 
     def sub_filter(string, pattern, repl):
         return regex.sub(pattern, repl, string)

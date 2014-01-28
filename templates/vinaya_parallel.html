@@ -7,7 +7,6 @@
 Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}</strong></caption>
 <thead>
 <tr>
-<th>Language</th>
 <th>Identifier</th>
 <th>Division</th>
 <th>Vol/Page</th>
@@ -18,15 +17,15 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 {% for parallel in parallels -%}
 {% if parallel.negated %}
 <tr class="negated-parallel">
-<td>{{parallel.division.collection.lang.name}}</td>
-<td></td>
-<td>{{parallel.division.acronym}}</td>
-<td colspan=3>
+<td>
 {% if parallel.maybe %}
 Gap in manuscript
 {% else %}
 No parallel
 {% endif %}
+</td>
+<td>{{parallel.division.uid|uid_to_name}}</td>
+<td colspan=3>
 </td>
 </tr>
 {% else %}
@@ -35,12 +34,11 @@ No parallel
 {%- else -%}
 <tr>
 {%- endif %}
-<td>{{ parallel.sutta.lang.name }}</td>
 <td>
-{{macros.sutta_acronym(parallel.sutta, show_alt=true, brief=true)}}
+{{macros.sutta_acronym(parallel.sutta, show_alt=true)}}
 {%- if parallel.partial -%}*{%- endif -%}
 </td>
-<td>{{ parallel.sutta.subdivision.division.acronym }}</td>
+<td>{{ parallel.sutta.subdivision.division.uid|uid_to_name }}</td>
 <td>{{parallel.sutta.volpage_info | sht_expansion }}
 {%- if parallel.sutta.alt_volpage_info %} <span class='altVolPage'>{{parallel.sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
 {%- endif -%}

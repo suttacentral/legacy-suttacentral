@@ -334,7 +334,7 @@ sc.formatter = {
     },
     acro_expander: function(){
         $('#vinaya_parallels td')
-            .filter(':nth-of-type(2), :nth-of-type(3)')
+            .filter(':nth-of-type(1)')
             .each(function(){
                 var acro = $(this).text().replace('&nbsp;', ' '),
                     name = sc.util.acro_to_name(acro);
