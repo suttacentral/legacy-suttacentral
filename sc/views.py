@@ -542,8 +542,8 @@ class UidsView(InfoView):
     def setup_context(self, context):
         imm = scimm.imm()
         context.imm = imm
-        alltwo = set(chr(97 + i) + chr(97 + j) for i in range(0, 26) for j in range(0, 26))
-        
+        atoz = ''.join(chr(97 + i) for i in range(0, 26))
+        alltwo = set(a + b for a in atoz for b in atoz)
         used = set()
         for uid in imm.divisions:
             used.update(uid.split('-'))
@@ -558,3 +558,4 @@ class UidsView(InfoView):
         
         context.unused = sorted(unused)
         context.used = sorted(u for u in used if u.isalpha())
+        context.atoz = atoz
