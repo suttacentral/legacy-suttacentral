@@ -272,9 +272,11 @@ sc.formatter = {
             decruft.init();
     },
     menuGenerator: function(headings){
+        
         var self = this;
         if ($('#menu').length) return; //Keep existing menu.
         
+        var start = Date.now()
         if (!headings) {
             headings = $('h1,h2,h3,h4,h5,h6')
                 .filter('#text *')
@@ -283,6 +285,12 @@ sc.formatter = {
                 headings = headings.not('hgroup *')
             else 
                 headings = headings.not('hgroup h2, hgroup h3')
+        }
+        if ($('section.sutta[id*=-pm]').length) {
+            // Patimokkha Text
+            headrex = /(.*?\d+)\.?/;
+        } else {
+            headrex = /[ivx0-9]{1,5}[.:] \(?([^(]+)/i
         }
         
         adjustment = 6
@@ -303,7 +311,7 @@ sc.formatter = {
                 currentDepth--;
             }
             headtext = $(this).text();
-            m = headtext.match(/[ivx0-9]{1,5}[.:] \(?([^(]+)/i)
+            m = headtext.match(headrex)
             if (m){
                 menutext = m[1].trim()
             } else {
@@ -331,16 +339,17 @@ sc.formatter = {
                 tocMenu = $('<div id="menu">').appendTo('#toc')
             $('#menu').html(menu.join(''))
         }
+        self.menuGenTime = Date.now() - start;
     },
     acro_expander: function(){
-        $('#vinaya_parallels td')
+        /*$('#vinaya_parallels td')
             .filter(':nth-of-type(1)')
             .each(function(){
                 var acro = $(this).text().replace('&nbsp;', ' '),
                     name = sc.util.acro_to_name(acro);
                 
                 $(this).attr('title', name)
-            });
+            });*/
     }
 }
 sc.formatter.init();

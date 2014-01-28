@@ -89,7 +89,7 @@ def default(*args, **kwargs):
         # Sutta or Translation Texts
         lang_code = args[1]
         try:
-            imm.text_paths[lang_code][uid]
+            imm.text_paths_by_lang[lang_code][uid]
         except KeyError:
             raise cherrypy.NotFound()
         

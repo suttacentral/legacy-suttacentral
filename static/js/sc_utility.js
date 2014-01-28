@@ -156,12 +156,11 @@ sc.util = {
         for (var i = 0; i < parts.length; i++) {
             if (/[.\d]+/.test(parts[i])) {
                 out.push(parts[i])
-                continue;
+            } else {
+                n = this.expand_uid_data[parts[i]];
+                if (n)
+                    out.push(n[1])
             }
-            n = this.expand_uid_data[parts[i]];
-            if (n === undefined)
-                continue;
-            out.push(n[1])
         }
         
         return out.join(' ');

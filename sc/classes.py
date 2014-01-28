@@ -63,8 +63,11 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
         return hash(self.uid)
     
     @staticmethod
-    def canon_url(uid, lang_code):
-        return '/{uid}/{lang}'.format(uid=uid, lang=lang_code)
+    def canon_url(uid, lang_code, bookmark=''):
+        url = '/{uid}/{lang}'.format(uid=uid, lang=lang_code)
+        if bookmark:
+            url += '#' + bookmark
+        return url
 
 
 class VinayaRule:
@@ -118,13 +121,71 @@ class VinayaRule:
     def vagga(self):
         return self.subdivision.vaggas[0]
     
+    _subdiv_match = regex.compile(r'(.*?)(\d+)$').match
+    _div_match = regex.compile(r'(.*)-(.*)$').match
+    
+    def _get_uid_bookmark_pairs(self):
+        """ Provides uids which can be tried in turn """
+        uid = self.uid
+        yield (uid, '') # Direct match for rule
+        m = self._subdiv_match(uid)
+        if m: 
+            yield (m[1], m[2])
+        m = self._div_match(uid)
+        if m:
+            yield (m[1], m[2])
+        raise StopIteration
+    
     @property
     def text_ref(self):
-        return []
+        # We are not using external references for Vinaya
+        imm = self.imm
+        lang = self.lang
+        uid = self.uid
+        
+        lang_uid_paths = imm.text_paths_by_lang.get(lang.uid)
+        if not lang_uid_paths:
+            return None
+        
+        for ref_uid, bookmark in self._get_uid_bookmark_pairs():
+            path = lang_uid_paths.get(ref_uid)
+            if path:
+                break
+        else:
+            return None
+        
+        return TextRef(lang=lang,
+                        abstract=None,
+                        url=Sutta.canon_url(uid=ref_uid,
+                                            lang_code=lang.uid,
+                                            bookmark=bookmark),
+                        priority=0)
     
     @property
     def translations(self):
-        return []
+        # We are not using external references for Vinaya
+        imm = self.imm
+        lang = self.lang
+        uid = self.uid
+        
+        out = {}
+        
+        for ref_uid, bookmark in self._get_uid_bookmark_pairs():
+            lang_paths = imm.text_paths_by_uid.get(ref_uid, {})
+            for lang_uid, path in lang_paths.items():
+                if lang_uid in out or lang_uid == lang.uid:
+                    continue
+                out[lang_uid] = (ref_uid, bookmark, path)
+        
+        return tuple(sorted((TextRef(lang=lang,
+                                abstract=None,
+                                url=Sutta.canon_url(uid=ref_uid,
+                                    lang_code=lang_uid,
+                                    bookmark=bookmark),
+                                priority=0)
+                        for lang_uid, (ref_uid, bookmark, path)
+                        in out.items()),
+                    key=TextRef.sort_key))
     
     @property
     def parallels(self):

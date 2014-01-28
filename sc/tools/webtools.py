@@ -693,6 +693,7 @@ class FinalizeProcessor(HTMLProcessor):
             p = finalizer.generate_canonical_path(self.entry.filename.stem, self.entry.language)
             if p:
                 filename = p / filename.name
+                self.entry.info('Using {!s} as output filename'.format(filename))
         
         return super().output_filename(filename)
     
@@ -737,6 +738,8 @@ class FinalizeProcessor(HTMLProcessor):
             return self.root_to_bytes(root)
     
     def process_root(self, root):
+        language = finalizer.discover_language(root, self.entry)
+        self.entry.language = language
         finalizer.finalize(root, entry=self.entry, options=self.options, 
             metadata=self.metadata.get(self.entry.filename.parent))
     

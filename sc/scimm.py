@@ -173,7 +173,17 @@ class _Imm:
         
         # Gather up text refs:
         # From filesystem (This also returns important text_paths variable)
-        self.text_paths, text_refs = self.scan_text_dir()
+        self.text_paths_by_lang, text_refs = self.scan_text_dir()
+        # Produce an alternative nesting
+        # (The raw path data can be used to generate TextRef objects
+        # on the fly rather than in advance, this is used for vinaya)
+        text_paths_by_uid = {}
+        for lang, d in self.text_paths_by_lang.items():
+            for uid, path in d.items():
+                if not uid in text_paths_by_uid:
+                    text_paths_by_uid[uid] = {}
+                text_paths_by_uid[uid][lang] = path
+        self.text_paths_by_uid = text_paths_by_uid
         
         # Make a copy, note: we want copy of lists, not refs to them!
         local_text_refs = {key: value[:] for key, value in text_refs.items()}
@@ -268,7 +278,7 @@ class _Imm:
                                 vaggas=[],
                                 suttas=[])
                 division.subdivisions.append(subdivision)
-            self.subdivisions[division.uid] = subdivision
+                self.subdivisions[division.uid] = subdivision
         
         # Build vaggas
         self.vaggas = OrderedDict()
@@ -647,7 +657,7 @@ class _Imm:
         try:
             uids = self._uidlangcache[language_code]
         except KeyError:
-            uids = sorted(self.text_paths[language_code],
+            uids = sorted(self.text_paths_by_lang[language_code],
                 key=sc.util.humansortkey)
             self._uidlangcache[language_code] = uids
             # The cache is eliminated upon imm regeneration.

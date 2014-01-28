@@ -232,6 +232,7 @@ def generate_canonical_path(uid, language):
         sutta = imm.suttas.get(uid)
         if sutta:
             subdivision = sutta.subdivision
+
     
     division = imm.divisions.get(uid)
     
@@ -239,8 +240,9 @@ def generate_canonical_path(uid, language):
         m = regex.match(r'(.*?)\.?\d+(?:-\d+)?$', uid)
         if m:
             subdivision = imm.subdivisions.get(m[1])
-            if subdivision:
-                division = subdivision.division
+    
+    if subdivision:
+        division = subdivision.division
     
     if division:
         collection = division.collection
@@ -260,7 +262,8 @@ def generate_canonical_path(uid, language):
         path /= division.uid
     
     if subdivision and uid != subdivision.uid != None:
-        path /= subdivision.uid
+        if division.collection.pitika == 'su':
+            path /= subdivision.uid
     
     return path
 
