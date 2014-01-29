@@ -286,8 +286,10 @@ sc.formatter = {
             else 
                 headings = headings.not('hgroup h2, hgroup h3')
         }
-        if ($('section.sutta[id*=-pm]').length) {
-            // Patimokkha Text
+        var patimokkhaUid = ($('section.sutta[id*=-pm]').attr('id'))
+        if (patimokkhaUid) {
+            // Use alternative heading regex which
+            // displays numbered component.
             headrex = /(.*?\d+)\.?/;
         } else {
             headrex = /[ivx0-9]{1,5}[.:] \(?([^(]+)/i
@@ -319,17 +321,28 @@ sc.formatter = {
             }
             menutext = menutext.toTitleCase();
             
-            var oref = ref = escape(sc.util.asciify(menutext.toLowerCase().replace(/ /g, '-')))
-            while (ref in seen) {
-                ref = oref + ++i;
+            var ref,
+                existingAnchor = $(this).find('[id]').first();
+            
+            if (existingAnchor.length && existingAnchor.text()) {
+                ref = existingAnchor.attr('id');
+            } else {
+                ref = $(this).attr('id');
+                if (!ref){
+                    var oref = ref = escape(sc.util.asciify(menutext.toLowerCase().replace(/ /g, '-')))
+                    while (ref in seen) {
+                        ref = oref + ++i;
+                    }
+                }
             }
             
             menu.push('<li><a href="#{}">{}</a></li>'.format(ref, menutext))
-            child = $(this).children()[0];
-            if (child && child.tagName == 'A')
-                $(child).attr({id: ref, href: "#menu"})
-            else
+            
+            if (existingAnchor.length) {
+                existingAnchor.attr({href: "#menu"});
+            } else {
                 $(this).wrapInner('<a id="{}" href="#menu" />'.format(ref))
+            }
 
         });
         if (menu.length > 1) {
@@ -338,6 +351,17 @@ sc.formatter = {
             if (tocMenu.length == 0)
                 tocMenu = $('<div id="menu">').appendTo('#toc')
             $('#menu').html(menu.join(''))
+        }
+        
+        if (patimokkhaUid) {
+            var isRule = /(?:pj|ss|an|np|pc|pd|sk|as)\d+/
+            $('h4').each(function(){
+                var h4 = $(this),
+                    id = h4.find('[id]').attr('id');
+                if (!isRule.test(id)) return;
+                href = '/{}-{}'.format(patimokkhaUid, id);
+                h4.append('<a href="{}" class="details" title="Go to parallels page">►</a>'.format(href))
+            });
         }
         self.menuGenTime = Date.now() - start;
     },

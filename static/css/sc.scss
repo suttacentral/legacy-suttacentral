@@ -54,6 +54,18 @@ td.vagga {border:none;}
     padding:0.1em 0.3em 0.1em 0.3em;
 }
 
+.sutta .details {
+    float: none;
+    position:relative;
+    top: 0.1em;
+    font-size: 85%;
+    
+    &:not(:hover) {
+        color: $light-gray;
+    }
+}
+
+
 a.details {text-decoration:none;}
 a.details:link {color:#75A38F;}
 a.details:visited {color:#607A6F;}
