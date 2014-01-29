@@ -177,8 +177,14 @@ class VinayaRule:
                     continue
                 out[lang_uid] = (ref_uid, bookmark, path)
         
-        return tuple(sorted((TextRef(lang=lang,
-                                abstract=None,
+        def create_abstract(lang_uid):
+            lang_name = imm.uid_to_name(lang_uid)
+            if not lang_name or lang_name.lower() == lang_uid:
+                return None
+            return '{} translation'.format(lang_name.title())
+        
+        return tuple(sorted((TextRef(imm.languages[lang_uid],
+                                abstract=create_abstract(lang_uid),
                                 url=Sutta.canon_url(uid=ref_uid,
                                     lang_code=lang_uid,
                                     bookmark=bookmark),
