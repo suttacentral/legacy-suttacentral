@@ -207,9 +207,17 @@ class VinayaRule:
         return out
     
     @property
+    def brief_uid(self):
+        return ' '.join(self.uid.split('-')[-1:])
+    
+    @property
     def brief_acronym(self):
-        return ' '.join(self.acronym.split(' ')[-2:])
-
+        return self.imm.uid_to_acronym(self.brief_uid)
+    
+    @property
+    def brief_name(self):
+        return self.imm.uid_to_name(self.brief_uid)
+    
 class Parallel(ConciseRepr, namedtuple('Parallel',
         'sutta partial indirect footnote')):
     __slots__ = ()

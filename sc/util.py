@@ -165,16 +165,16 @@ class ConciseRepr:
                 details[-1] += str(value)
             elif isinstance(value, ConciseRepr):
                 if hasattr(value, 'uid'):
-                    details[-1] += '<{} {}>'.format(value.__qualname__, value.uid)
+                    details[-1] += '<{} {}>'.format(type(value).__qualname__, value.uid)
                 else:
-                    details[-1] += '<{}>'.format(value.__qualname__)
+                    details[-1] += '<{}>'.format(type(value).__qualname__)
             else:
                 try:
                     details[-1] += self._repr_len(value)
                 except TypeError:
                     details[-1] += repr(value)
         
-        return '<{} {}>'.format(self.__qualname__,
+        return '<{} {}>'.format(type(self).__qualname__,
             ''.join(details))
     
     def _repr_len(self, value):

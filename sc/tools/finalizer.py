@@ -262,7 +262,7 @@ def generate_canonical_path(uid, language):
         path /= division.uid
     
     if subdivision and uid != subdivision.uid != None:
-        if division.collection.pitika == 'su':
+        if division.collection.pitaka == 'su':
             path /= subdivision.uid
     
     return path
@@ -281,6 +281,53 @@ def discover_uid(root, entry):
             entry._lineno = hgroup.sourceline
             return uid
     return None
+
+def generate_next_prev_links(root, language):
+    # Note there is a fallback next/prev link generator
+    # applied at time of serving a file.
+    # This assumes the order in the file provides a betterer
+    # indication of relationships than the automated generator
+    # can determine.
+    sections = root.select('section.sutta')
+    if len(sections) <= 1:
+        return
+    imm = sc.scimm.imm()
+    def get_text(uid):
+        sutta = imm.suttas.get(uid)
+        if sutta:
+            if hasattr(sutta, 'brief_name'):
+                text = sutta.brief_name
+            else:
+                text = sutta.name
+        else:
+            text = imm.uid_to_acro(uid)
+        return text
+    link_count = 0
+    for i, section in enumerate(sections):
+        links = []
+        if section != sections[0]:
+            # Prev link
+            prev_uid = sections[i - 1].attrib['id']
+            href = sc.classes.Sutta.canon_url(uid=prev_uid,
+                                              lang_code=language)
+            prev = root.makeelement('a', {'href':href, 'class':'previous'})
+            prev.text = '◀ {}'.format(get_text(prev_uid))
+            links.append(prev)
+        # Top link
+        top = root.makeelement('a', {'class':'top', 'href':'#'})
+        top.text = ' ▲ TOP '
+        links.append(top)
+        if section != sections[-1]:
+            # Next link
+            next_uid = sections[i + 1].attrib['id']
+            href = sc.classes.Sutta.canon_url(uid=next_uid,
+                                              lang_code=language)
+            prev = root.makeelement('a', {'href':href, 'class':'next'})
+            prev.text = '{} ▶'.format(get_text(next_uid))
+            links.append(prev)
+        section.extend(links)
+        link_count += len(links) - 1
+    return link_count
 
 def finalize(root, entry, language=None, metadata=None, 
              author_blurb=None, num_in_file=-1, options={}):
@@ -362,6 +409,10 @@ def finalize(root, entry, language=None, metadata=None,
         else:
             uid = uid2
         entry.warning('Using {}'.format(uid))
+    else:
+        display_uid = uid1 if (uid1 == uid2) else uid1 + '/' + uid2
+        entry.error('Could not recognize {}, a database entry is probably required'.format(display_uid))
+        uid = uid1
     
     entry.info('uid looks like {} ({}/{})'.format(uid, uid1, uid2))
     
@@ -502,6 +553,9 @@ def finalize(root, entry, language=None, metadata=None,
     if metadata:
         section.append(metadata)
     
+    for e in root.select('a.previous, a.top, a.next'):
+        divtext.append(e)
+    
     if scnumbers_insane or not pnumbers or options.get('force-sc-nums'):
         for a in root.select('a.sc'):
             a.drop_tree()
@@ -537,4 +591,5 @@ def finalize(root, entry, language=None, metadata=None,
     
     if author_blurb:
         root.headsure.append(author_blurb)
+    
     

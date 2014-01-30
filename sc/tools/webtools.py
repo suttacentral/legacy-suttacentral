@@ -757,6 +757,13 @@ class FinalizeProcessor(HTMLProcessor):
         if es:
             entry.error("File contains nested sections. Sections must not be nested.", lineno=es[0].sourceline)
             raise ProcessingError("Unable to proceed due to nested sections")
+        
+        links_created = finalizer.generate_next_prev_links(root, language)
+        if links_created:
+            self.entry.info('Created {} prev/next links, if prev/next links '
+                'should extend outside this file, manually add the required '
+                'link at each end'.format(links_created))
+        
         seen = set()
         for num, section in enumerate(root.iter('section')):
             assert section not in seen
