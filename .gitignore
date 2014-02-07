@@ -9,6 +9,4 @@ data
 utility/out/
 utility/suttacen/
 utility/tables/
-static/js/sc_uid_expansion_data.js
-utility/pali/
-utility/vinaya/unprocessed_texts
+utility/*/*/
