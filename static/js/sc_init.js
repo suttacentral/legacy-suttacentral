@@ -189,7 +189,7 @@ function initChineseLookup()
     if ($('div[lang*=zh]').length == 0) return;//no elements declared to be chinese
 
     //Where to attach the chinese lookup control button.
-    chineseLookup.init('#' + textualControls.id)
+    sc.zh2enLookup.init('#' + textualControls.id, '#text')
 }
 
 function initPaliFunctions()

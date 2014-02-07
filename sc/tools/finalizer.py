@@ -87,12 +87,6 @@ def normalize_id(string):
     # Replace space between digits with period
     string = regex.sub(r'(?<=\d)\s+(?=\d)', '.', string)
     
-    # WARNING this can still return invalid ids, need to check
-    # the HTML5 standard. This is an area where not being restricted
-    # to the HTML4 standard would be very ideall. From memory
-    # in HTML5 is might be defined as a list of forbidden characters,
-    # with unicode characters in general being okay.
-    
     return string
 
 def normalize_tags(root, entry):
@@ -288,6 +282,10 @@ def generate_next_prev_links(root, language):
     # This assumes the order in the file provides a betterer
     # indication of relationships than the automated generator
     # can determine.
+    if isinstance(language, str):
+        lang_uid = language
+    else:
+        lang_uid = language.uid
     sections = root.select('section.sutta')
     if len(sections) <= 1:
         return
@@ -309,7 +307,7 @@ def generate_next_prev_links(root, language):
             # Prev link
             prev_uid = sections[i - 1].attrib['id']
             href = sc.classes.Sutta.canon_url(uid=prev_uid,
-                                              lang_code=language)
+                                              lang_code=lang_uid)
             prev = root.makeelement('a', {'href':href, 'class':'previous'})
             prev.text = '◀ {}'.format(get_text(prev_uid))
             links.append(prev)
@@ -375,8 +373,8 @@ def finalize(root, entry, language=None, metadata=None,
             return False
         for ipass in range(0, 2):
             if ipass == 1:
-                # Try pruning the end of the uid.
-                m = regex.match(r'(.*?)\.?\d+(?:-\d+)?$', uid)
+                # Try pruning the end off the uid.
+                m = regex.match(r'(.*?)\.?\d+[a-z]?(?:-\d+[a-z]?)?$', uid)
                 if m:
                     uid = m[1]
             
@@ -539,11 +537,11 @@ def finalize(root, entry, language=None, metadata=None,
                     span.append(child)
                 h.append(span)
                 
-    if scnumbers_misplaced:
-        for a in scn:
-            p = a.getparent()
-            a.tail = p.text
-            p.text = None
+    # if scnumbers_misplaced:
+    #     for a in scn:
+    #         p = a.getparent()
+    #         a.tail = p.text
+    #         p.text = None
 
     used_ids = set()
     

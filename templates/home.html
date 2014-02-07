@@ -34,7 +34,7 @@
                 {% else %}
                 <li>
                 {% endif %}
-                {% if division.has_suttas %}
+                {% if division.has_suttas or division.text_ref %}
                     <a href="/{{ division.uid }}">{{ division.name }}</a>
                 {% else %}
                     <a title="/{{ division.uid }}" class="no-suttas">{{division.name}}</a>

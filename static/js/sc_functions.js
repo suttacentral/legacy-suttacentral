@@ -29,22 +29,10 @@ var scMessage = {
 $.ajaxSetup({
     cache: true
 });
-
+/*
 var chineseLookup = {
     buttonId: "zh2en",
     chineseClasses: "P, H1, H2, H3",
-    active: false,
-    dictRequested: false,
-    chineseIdeographs: /([\u4E00-\u9FCC])/g, //CFK Unified Ideographs
-    chineseSplitRex: /[\u4E00-\u9FCC]{1,15}|[^\u4E00-\u9FCC]+|./g,
-    maxCarry:4, //This, and the X in the {1,X} above, have a huge effect on performance
-                //and a slight effect on precision of compound-detection (larger=slower)
-    loading: false,
-    queue: [],
-    init: function(insert_where){
-        $(insert_where).append('<button id="'+this.buttonId+'">Chinese→English Dictionary</button>');
-        $(document).on('click', '#' + this.buttonId, function(){chineseLookup.toggle()});
-    },
     activate: function(){
         textualControls.disable();
         if (!this.dictRequested)
@@ -70,33 +58,117 @@ var chineseLookup = {
             }
         }
         if (window.zh2en_dict) this.generateMarkup();
+    }
+
+}*/
+
+sc.zh2enLookup = {
+    buttonId: "zh2en",
+    chineseClasses: "P, H1, H2, H3",
+    active: false,
+    dictRequested: false,
+    chineseIdeographs: /([\u4E00-\u9FCC])/g, //CFK Unified Ideographs
+    chineseSplitRex: /[\u4E00-\u9FCC]{1,15}|[^\u4E00-\u9FCC]+|./g,
+    loading: false,
+    queue: [],
+    markupTarget: null,
+    originalHTML: null,
+    mouseIn: 0,
+    currentLookup: null,
+    lastCurrentLookup: null,
+    baseUrl: $('script[src*="sc_functions"]').attr('src').replace('sc_functions.js', ''),
+    init: function(insert_button_where, markup_target){
+        this.markupTarget = $(markup_target).addClass('zh2enLookup')[0];
+        this.markupTarget
+        this.insertButton(insert_button_where);
+    },
+    insertButton: function(insert_where){
+        this.button = $('<button id="'+this.buttonId+'">Chinese→English Dictionary</button>')
+        $(insert_where).append(this.button);
+        $(document).on('click', '#' + this.buttonId, sc.zh2enLookup.toggle);
+    },
+    ready: function(){
+        self = this
+        var popup = '<table class="popup"><tr><td><center>Chinese to english lookup activated.</center><tr><td>Use the mouse or left, right arrow keys to navigate the text (shift-right to advance more). <tr><td>A red border indicates modern usage, possibly unrelated to early Buddhist usage.</table>'
+        setTimeout(function(){
+            popup = self.popup({left:12, top: $(document).scrollTop()+12}, popup);
+            popup.select('table').addClass('info')
+            }, 250)
+        self.currentLookup = $('span.lookup:first')[0];
+        self.lastCurrentLookup = self.currentLookup;
+            
+        console.log('Ready')
+    },
+    activate: function(){
+        var self = this;
+        if (!this.originalHTML)
+            this.originalHTML = this.markupTarget.innerHTML;
+        
+        if (!this.dictRequested && !window.zh2en_dict)
+        {
+            this.dictRequested = true;
+            jQuery.getScript(this.baseUrl + 'zh2en_data_0.05.js', self.ready());
+            jQuery.getScript(this.baseUrl + 'zh2en_fallback_0.05.js');
+        }
+        this.generateMarkup();
+        $(document).on('mouseenter', 'span.lookup', function(){
+            self.mouseIn ++;
+        })
+        $(document).on('mouseleave', 'span.lookup', function(){
+            self.mouseIn --;
+        })
+        $(document).on('keyup', '', function(e){
+            if (!self.mouseIn)
+                return
+            if (e.keyCode == 39 || e.keyCode == 37)
+                e.preventDefault();
+            if (e.keyCode == 39) {
+                var next = nextInOrder(e.shiftKey ? self.lastCurrentLookup : self.currentLookup, 'span.lookup');
+                if (!next)
+                    return
+                self.setCurrent(next)
+            } else if (e.keyCode == 37){
+                var prev = previousInOrder(self.currentLookup, 'span.lookup');
+                if (!prev)
+                    return
+                self.setCurrent(prev);
+            }
+        });
+    },
+    deactivate: function(){
+        this.markupTarget.innerHTML = this.originalHTML;
     },
     generateMarkup: function() {
+        if (this.button)
+            this.button.attr('disabled', 'disabled');
         this.markupGenerator.start();
-        $(document).on('mouseenter', 'span.lookup', chineseLookup.lookupHandler);
-        $(document).on('click', 'span.lookup', function(e){
-            chineseLookup.clickHandler(e.target)});
+        $(document).on('mouseenter', 'span.lookup', sc.zh2enLookup.lookupHandler);
     },
     markupGenerator: {
         //Applies markup incrementally to avoid a 'browser stall'
         start: function(){
-            this.iter = new Iter(scState._target, 'text');
+            this.node = sc.zh2enLookup.markupTarget;
             this.startTime = Date.now();
             this.step();
         },
         step: function(){
             for (var i = 0; i < 10; i++){
-                var node = this.iter.next();
-                if (node === undefined) {
+                if (this.node === undefined) {
                     this.andfinally();
                     return;
                 }
-                this.textNodeToMarkup(node);
+                var nextNode = nextInOrder(this.node, document.TEXT_NODE)
+                this.textNodeToMarkup(this.node);
+                this.node = nextNode;
             }
-            setTimeout('chineseLookup.markupGenerator.step.call(chineseLookup.markupGenerator)', 5);
+            setTimeout('sc.zh2enLookup.markupGenerator.step.call(sc.zh2enLookup.markupGenerator)', 5);
         },
         andfinally: function(){
-            textualControls.enable()
+            self = sc.zh2enLookup;
+            console.log('Done');
+            if (self.button)
+                self.button.removeAttr('disabled');
+            
         },
         textNodeToMarkup: function(node) {
             if (node === undefined) return;
@@ -108,76 +180,83 @@ var chineseLookup = {
         },
         toLookupMarkup: function(input)
         {
-            var out = "";
-            var parts = input.match(chineseLookup.chineseSplitRex);
+            var self = this,
+                out = "",
+                parts = input.match(sc.zh2enLookup.chineseSplitRex);
             parts.push("")
             for (var i = 0; i < parts.length; i++) {
-                if (!chineseLookup.chineseIdeographs.test(parts[i])){//tag or puncuation
+                if (!sc.zh2enLookup.chineseIdeographs.test(parts[i])){//tag or puncuation
                     out += parts[i];
-                } else { //word
-                    var meaning = chineseLookup.lookupWord(parts[i])
-                    if (meaning) {
-                        out += '<span class="lookup">' + parts[i] + '</span>';
-                    } else {
-                        var compoundize = chineseLookup.divisiveBreakup(parts[i]);
-                        out += compoundize.results;
-                        //insert the lefts at start of next
-                        if (compoundize.lefts.length > 0)
-                        {
-                            if (parts[i + 1].search(chineseLookup.chineseIdeographs) >= 0)
-                            {
-                                parts[i + 1] = compoundize.lefts + parts[i + 1];
-                            }
-                            else {
-                                var results = chineseLookup.divisiveBreakup(compoundize.lefts, true).results;
-                                out += results;
-                            }
-                        }
-                    }
+                } else {
+                    out += parts[i].replace(/[\u4E00-\u9FCC]/g, function(ideograph){
+                        return '<span class="lookup">' + ideograph + '</span>'
+                    });
                 }
             }
             return out;
         }
     },
-    deactivate: function() {
-        $(document).off('mouseenter', 'span.lookup');
-        scState.restore("clean");
-    },
     toggle: function(){
-        this.active = !this.active;
-        if (this.active) this.activate()
-        else this.deactivate();
+        self = sc.zh2enLookup;
+        self.active = !self.active;
+        if (self.active) self.activate()
+        else self.deactivate();
     },
-    clickHandler: function(e){
-        if ($(e).is("a, span.meaning")) return;
-        if ($(e).text().length <= 1) return;
-        $(e).children("span.meaning").remove();
-        e.outerHTML = this.explode(e.innerHTML);
+    setCurrent: function(node) {
+        var self=this,
+            graphs = '',
+            nodes = $(),
+            iter = new Iter(node),
+            i
+        $('.popup').remove()
+        $('.current_lookup').removeClass('current_lookup fallback')
+        this.currentLookup = node
+        while (graphs.length < 10) {
+            if ($(node).is('span.lookup')) {
+                graphs += $(node).text();
+                nodes.push(node)
+            }
+            node = nextInOrder(node, document.ELEMENT_NODE)
+            if (!node) {
+                break
+            }
+        }
+        
+        if (!graphs)
+            return
+
+        var popup = ['<table class="popup">'],
+            first = true,
+            fallback = false;
+        for (i = graphs.length; i > 0; i--) {
+            var snip = graphs.slice(0, i)
+            if (snip in zh2en_dict) {
+                popup.push(self.lookupWord(snip))
+                if (first) {
+                    first = false;
+                    nodes.slice(0, i).addClass('current_lookup')
+                    this.lastCurrentLookup = nodes[i-1];
+                }
+            } else if (i == 1 && snip in zh2en_fallback) {
+                popup.push(self.lookupWord(snip))
+                popup[0] = '<table class="popup fallback">'
+                fallback = true
+                if (first) {
+                    first = false;
+                    nodes.slice(0, i).addClass('current_lookup fallback')
+                    this.lastCurrentLookup = nodes[i-1];
+                }
+            }
+        }
+        if (first)
+            return
+
+        popup.push('</table>')
+
+        popup = self.popup(nodes[0], popup.join('\n'))
     },
     lookupHandler: function(e){
-        function apply(node){
-            if ($(node).find('span.meaning').length > 0) return
-            var meaning = chineseLookup.lookupWord(node.innerHTML)
-            if (meaning && meaning.length > 0) {
-                meaning = $(meaning);
-                $(node).append(meaning);
-                sc.formatter.rePosition(meaning);
-            }
-            chineseLookup.queue.push(meaning);
-            if (chineseLookup.queue.length > 5)
-            {
-                var victim = chineseLookup.queue.shift(1);
-                $(victim).remove();
-            }
-        }
-        var node = e.target;
-        apply(node);
-        for (;node = nextInOrder(node, 1); node != undefined) {
-            if ($(node).is('span.lookup')) {
-                apply(node);
-                break;
-            }
-        }
+        sc.zh2enLookup.setCurrent(e.target);
     },
     lookupWord: function(graph){
         //Check if word exists and return HTML which represents the meaning.
@@ -186,90 +265,61 @@ var chineseLookup = {
         if (zh2en_dict[graph])
         {
             var href = "http://www.buddhism-dict.net/cgi-bin/xpr-ddb.pl?q=" + encodeURI(graph);
-            return ('<span class="meaning"><a href="' + href + '">' + graph + "</a> : " + zh2en_dict[graph][0] + ": " + zh2en_dict[graph][1]) + '</span>';
+            return ('<tr><td class="ideograph"><a href="' + href + '">' + graph + '</a></td> <td class="meaning"> ' + zh2en_dict[graph][0] + ': ' + zh2en_dict[graph][1] + '</td></tr>');
+        } else if (zh2en_fallback[graph]) {
+            return ('<tr class="fallback"><td class="ideograph"><a>' + graph + '</a></td> <td class="meaning"> ' + zh2en_fallback[graph][0] + ': ' + zh2en_fallback[graph][1] + '</td></tr>')
+
         }
         return "";
     },
-    explode: function(graphs){
-        //Break up into single graphs.
-        var out = [];
-        for (var i = 0; i < graphs.length; i++)
-        {
-            if (/[\u4E00-\u9FCC]/.test(graphs[i])) {
-                out.push('<span class="lookup">' + graphs[i] + this.lookupWord(graphs[i]) + '</span>')
-            }
-            else {
-                out.push(graphs[i]);
-            }
+    popup: function(parent, popup) {
+        var offset, docWith, dupe, docWidth, isAbsolute = false
+        if ('left' in parent || 'top' in parent) {
+            offset = parent
+            offset.left = offset.left || 0
+            offset.top = offset.top || 0
+            parent = document.body
+            isAbsolute = true
+
+        } else {
+            parent = $(parent)
+            offset = parent.offset()
         }
-        return out.join("")
-    },
-    divisiveBreakup: function(graphs, nolefts){
-        //Break up into compounds
-        if (graphs.length < 5) nolefts = true; //force
-        var perms = chineseLookup.binaryPermutate(graphs)
-        var best = 0
-        for (var i in perms)
-        {
-            perms[i].quality = 0;
-            for (var j in perms[i])
-            {
-                if (zh2en_dict[perms[i][j]]) {
-                    perms[i].quality += perms[i][j].length * 10 - j;
-                }
-            }
-            if (perms[i].quality > perms[best].quality) best = i;
-        }
-        //When breaking up continuous chinese, append the last few characters to the next part to catch
-        //a compound which spans the arbitary breaks
-        var lefts = [];
-        var ret = perms[best].length;
-        if (!nolefts)
-        {
-            var charsToCarry = this.maxCarry;
-            for (ret = perms[best].length - 1; charsToCarry > 0; ret--)
-            {
-                if (perms[best][ret].length > 1)
-                    break;
-                charsToCarry -= perms[best][ret].length
-            }
+        popup = $(popup)
+
+        //We need to measure the doc width now.
+        docWidth = $(document).width()
+        // We need to create a dupe to measure it.
+        dupe = $(popup).clone()
+            
+        $(this.markupTarget).append(dupe)
+        var popupWidth = dupe.innerWidth(),
+            popupHeight = dupe.innerHeight();
+        dupe.remove()
+        //The reason for the duplicity is because if you realize the
+        //actual popup and measure that, then any transition effects
+        //cause it to zip from it's original position...
+        if (!isAbsolute) {
+            offset.top += parent.innerHeight() - 4;
+            offset.left -= popupWidth / 2;
         }
 
-        var out = [];
-        for (i = 0; i < ret; i++) {
-            if (perms[best][i])
-                out.push('<span class="lookup">' + perms[best][i].replace(/(.)(?=.)/, '$1\u2060') + '</span>');
+        if (offset.left < 1) {
+            offset.left = 1;
+            popup.innerWidth(popupWidth + 5);
         }
-        var outLefts = [];
-        if (!nolefts)
-            for (i = ret; i < perms[best].length; i++)
-            {
-                outLefts.push(perms[best][i]);
-            }
-        return {"results":out.join(""), "lefts":outLefts.join("")}
-    },
-    binaryPermutate: function(graphs){
-        //This function breaks the string of graphs into every possible permutation of compounds, exploiting binary
-        //to do this (1 = space): 000 ABCD, 001 ABC D, 010 AB CD, 011, AB C D, 100, A BCD, 101, A BC D, 111 A B C D
-        var perms = []
-        var max =  Math.pow(2, graphs.length);
-        for (var i = 1; i < max; i++){
-            var lefts = graphs;
-            var parts = [];
-            var dobreak = i;
-            for (var j = graphs.length; j > 0; j--){
-                if(dobreak & 1)
-                {
-                    parts.push(lefts.slice(j));
-                    lefts = lefts.slice(0, j);
-                }
-                dobreak = dobreak >> 1;
-            }
-            parts.push(lefts)
-            parts.reverse()
-            perms.push(parts)
+        
+        if (offset.left + popupWidth + 5 > docWidth)
+        {
+            offset.left = docWidth - (popupWidth + 5);
         }
-        return perms
+        popup.offset(offset)
+        $(this.markupTarget).append(popup)
+        popup.offset(offset)
+
+        popup.mouseleave(function(e){$(this).remove()});
+        
+        return popup;
     }
 }
 

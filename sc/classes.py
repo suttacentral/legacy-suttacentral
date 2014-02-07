@@ -64,6 +64,8 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
     
     @staticmethod
     def canon_url(uid, lang_code, bookmark=''):
+        if not isinstance(lang_code, str):
+            lang_code = lang_code.uid
         url = '/{uid}/{lang}'.format(uid=uid, lang=lang_code)
         if bookmark:
             url += '#' + bookmark

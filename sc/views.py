@@ -322,7 +322,10 @@ class TextView(ViewBase):
         
         # The below should continue to work when new 'hgroup' markup comes in.
         if h1:
-            h1 = h1[0]
+            while len(h1):         # A slightly bodgy way of finding 
+                h1 = h1[0]         # the inner-leftmost element with text
+            while not h1.text:     # to wrap in an anchor. 
+                h1 = h1.getnext()  # The anchor must not wrap any elements.
             href = '/{}'.format(self.uid)
             a = hgroup_dom.makeelement('a', href=href,
                 title='Click for details of parallels and translations.')
@@ -331,6 +334,10 @@ class TextView(ViewBase):
         if hasattr(self, 'subdivision'):
             if len(hgroup_dom) > 1:
                 subhead = hgroup_dom[0]
+                while len(subhead) > 0:
+                    subhead = subhead[0]
+                while not subhead.text:
+                    subhead = subhead.getnext()
                 href = '/{}'.format(self.subdivision.uid)
                 a = hgroup_dom.makeelement('a', href=href,
                     title='Click to go to the division or subdivision page.')
