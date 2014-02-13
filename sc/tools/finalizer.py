@@ -48,7 +48,7 @@ def process_metadata(root):
         return root
     raise tools.webtools.ProcessingError("Couldn't make sense of metadata")
 
-def discover_author(root, entry):
+def discover_author(root, entry, num_in_file):
     author = root.select_one('meta[author]')
     if not author:
         author = root.select_one('meta[data-author]')
@@ -73,10 +73,11 @@ def discover_author(root, entry):
             if m:
                 transby = m[0]
             if transby:
-                entry.warning('No explicit author/origin blurb provided, using "{}", if this is not sensible, please add an element \'<meta author="Translated by So-and-so">\' to the metadata'.format(transby))
+                if num_in_file <= 0:
+                    entry.warning('No explicit author/origin blurb provided, using "{}", if this is not sensible, please add an element \'<meta author="Translated by So-and-so">\' to the metadata'.format(transby))
                 return root.makeelement('meta', author=transby)
-    
-    entry.error('Could not determine author(translator/editor) blurb, please add an element \'<meta author="Translated by So-and-so">\' to the metadata')
+    if num_in_file <= 0:
+        entry.error('Could not determine author(translator/editor) blurb, please add an element \'<meta author="Translated by So-and-so">\' to the metadata')
     return None
     
 def normalize_id(string):
@@ -417,15 +418,21 @@ def finalize(root, entry, language=None, metadata=None,
     #Convert non-HTML tags to classes
     normalize_tags(root, entry)
     
+    sc_numbers_problem = False
     if metadata:
         for e in metadata.select('a.sc'):
+            sc_numbers_problem = True
             e.drop_tag()
     
     # Does this this file have numbering?
     pnumbers = False
     pnumbers_need_id = False
-    scnumbers_misplaced = False
-    scnumbers_insane = False
+    
+    if sc_numbers_problem:
+        entry.warning('There is a problem with the suttacentral paragraph numbers, automatically re-numbering')
+        for e in root.select('a.sc'):
+            e.drop_tree()
+
     scn = root.select('a.sc')
     for a in scn:
         try:
@@ -585,7 +592,7 @@ def finalize(root, entry, language=None, metadata=None,
                 e.attrib['id'] = pid
     
     if not author_blurb:
-        author_blurb = discover_author(root, entry)
+        author_blurb = discover_author(root, entry, num_in_file)
     
     if author_blurb:
         root.headsure.append(author_blurb)

@@ -283,127 +283,223 @@ def parseXML(filename):
 class PrettyPrinter:
     """ Pretty print HTML for Sutta Central
     
-    Produces results which are exactly in accordance with Ven. Nandiya's
-    arbitary standards for 'looks-right-ness'. Motivation is to provide
-    git-friendlier HTML files by placing things which are more likely
-    to be changed on their own lines and linebreaking longer
-    paragraphs.
-    
-    The existing linebreaks are completely replaced. PrettyPrint makes
-    no effort at all to reuse existing linebreaks. For this reason it
-    should ideally be called *once* on each file. After that, the file
-    should not be re pretty printed since doing so will cause git a hedaache.
-    
-    PrettyPrinter uses regular expressions and a very simple tokenizer
-    to produce the desired result. It does not attempt to parse the
-    document.
-    
-    For input it requires an HTML document with <html> tag.
-    
-    It does not respect '<pre>' blocks.
-    
     """
-    # The below sets are NOT in accordance with HTML4 or HTML5, they are
-    # actually sets of tags used on Sutta Central.
-    all_tags = {'a', 'address', 'article', 'b', 'big', 'blockquote', 'body',
-                'cite', 'div', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'head',
-                'hgroup', 'html', 'i', 'li', 'ol', 'p', 'section', 'span',
-                'strong', 'sup', 'table', 'td', 'title', 'tr', 'ul'}
+
+    # The open tag for these elements are put on it's own line.
+    # (Exception: If close tag immediately follows)
+    block_ownline_open = {'html','head','body','div','section',
+        'article', 'hgroup', 'blockquote', 'header', 'footer', 'nav', 'menu',
+        'meta', 'ul', 'ol', 'table', 'tr', 'tbody', 'thead', 'p'}
+
+    block_ownline_close = block_ownline_open - {'p', 'html'}
+
+    # These can be lumped with elements that follow
+    block_ownline_if_followed_by_text = {'li', 'td', 'th', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'}
+
+    # These are placed on their own line as a whole (\n<tag>text</tag>\n)
+    inline_newline_open_before = {'a', 'span', 'strong', 'em', 'title', 'cite'}
+    inline_newline_close_after = {'a'}
+
+
+    always_newline_after = {'br', 'hr', 'p'}
+
+    opentagrex = _regex.compile(r'''<(?<name>\w+)\s*(?<attrs>[\w-]+(?:\s*=\s*(?:'[^']*'|"[^"]*"|\S+))?\s*)*(?<selfclosing>/?)>''')
+    closetagrex = _regex.compile(r'</(?<name>\w+)>')
+    doctyperex = _regex.compile(r'<!DOCTYPE (?<type>[^>]+>)')
+    commentrex = _regex.compile(r'<!--.*?-->')
+    datarex = _regex.compile(r'[^<]+')
+    script_content_rex = _regex.compile(r'.*?(?=</script>)')
+    def __init__(self, output=None):
+        from textwrap import TextWrapper
+        self.wrap = 79
+        self.output = output
+        self.line = ''
+        self.text_wrapper = TextWrapper(width=self.wrap, 
+                replace_whitespace=False, drop_whitespace=False,
+                break_long_words=False, break_on_hyphens=False)
+        self.nl_please = False # Convert the next space into a nl
+        self.nl_okay = False # A nl can be inserted without altering appearance.
     
-    block_tags = {'article', 'blockquote', 'body', 'div', 'h1', 'h2', 'h3', 
-            'h4', 'h5', 'head', 'hgroup', 'html', 'li', 'ol', 'p', 'section', 
-            'table', 'td', 'title', 'tr', 'ul'}
+    def feed(self, data):
+        m = None
+        token = None
+        start = 0
+        while True:
+            if m: # This is the match from the previous token
+                start = m.end()
+                if start == len(data):
+                    return
 
-    inline_tags = all_tags - block_tags
-    
-    # These tags don't deserve an entire line to themselves
-    # (i.e. <section> would be put on a line by itself)
-    condense_tags = {'p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'td'}
+            m = None
+            if data[start] == '<':
+                m = self.opentagrex.match(data, pos=start)
+                if m:
+                    if m['selfclosing']:
+                        self.selfclosingtag(m['name'].lower(), m['attrs'], m[0])
+                    else:
+                        self.opentag(m['name'].lower(), m['attrs'], m[0])
+                    continue
 
-    # This will match virtually all open-tags except extremely
-    # corrupt ones (which browsers probably wouldn't handle either)
-    # Slice the ends off opentag[1:-1] to make non-capturing
-    opentag = r'''((?si)<(?:{})(?:[ \n\w=]+|"[^"]*"|'[^']*')*/?>)'''.format
-
-    #slice closetag[1:-1] to make non-capturing
-    closetag = r'((?si)</(?:{})>)'.format
-
-    arex = _regex.compile(opentag('a') + '.*?' + closetag('a'))
-
-    ownline = block_tags | {'a', 'meta', 'link', 'img'}
-
-    ownlineopenrex = _regex.compile(opentag('|'.join(ownline)))
-    ownlinecloserex = _regex.compile(closetag('|'.join(ownline)))
-
-    nextblock = _regex.compile(r'[\w\p{{punct}}]+[ -]?|{0}.*?{1}|{0}|{1}|.'.format(
-        opentag(r'\w+')[1:-1], closetag(r'\w+')[1:-1]))
-        
-    wrap = 78
-    
-    def linebreak(self, string):
-        wrap = self.wrap
-        if len(string) <= wrap:
-            return string
-        lines = ['']
-        for m in self.nextblock.finditer(string):
-            tok = m[0]
-            if len(tok) + len(lines[-1]) < wrap or len(lines[-1]) == 0:
-                lines[-1] += tok
+                m = self.closetagrex.match(data, pos=start)
+                if m:
+                    self.closetag(m['name'].lower(), m[0])
+                    continue
+                
+                m = self.commentrex.match(data, pos=start)
+                if m:
+                    self.comment(m[0])
+                    continue
+                
+                m = self.doctyperex.match(data, pos=start)
+                if m:
+                    self.doctype(m[0])
+                    continue
             else:
-                lines.append(tok)
-        return '\n'.join(lines)
+                m = self.datarex.match(data, pos=start)
+                if m:
+                    self.data(m[0])
+                    continue
 
-    def prettyprint(self, text, filename='(-)'):
-        opentag = self.opentag
-        closetag = self.closetag
-        block_tags = self.block_tags
-        condense_tags = self.condense_tags
-        # Strip existing newlines.
+            print('SOMETHING WENT WRONG!')
+            print(data[start:start+200])
+            globals().update(locals())
+            raise ValueError
+            return
+
+    def doctype(self, raw):
+        self.write(raw)
+        self.nl()
+
+    def opentag(self, tag, attrs, raw):
+        tag = tag
+        if tag in self.block_ownline_open:
+            self.nl()
+            self.nl_okay = True
+        elif tag in self.inline_newline_open_before:
+            if self.line.endswith(' ') or self.nl_okay:
+                self.nl()
+            else:
+                self.nl_please = True
+
+        self.write(raw)
+        
+        if (tag in self.block_ownline_open or
+            tag in self.always_newline_after):
+            self.nl()
+
+    def closetag(self, tag, raw):
+        tag = tag
+        if tag in self.block_ownline_close:
+            self.nl()
+        self.write(raw)
+
+        if (tag in self.block_ownline_close or
+                tag in self.block_ownline_if_followed_by_text or
+                tag in self.always_newline_after):
+            self.nl()
+        elif tag in self.inline_newline_close_after:
+            if self.line.endswith(' ') or self.nl_okay:
+                self.nl()
+            else:
+                self.nl_please = True
+
+    def selfclosingtag(self, tag, attrs, raw):
+        tag = tag
+        if (tag in self.block_ownline_open or 
+            tag in self.block_ownline_if_followed_by_text):
+            self.nl()
+        self.write(raw)
+        
+        if (tag in block_ownline_close or 
+            tag in self.block_ownline_if_followed_by_text or 
+            tag in self.always_newline_after):
+            self.nl()
+
+    def comment(self, raw):
+        self.write(raw)
+        self.nl()
+
+    def data(self, raw):
+        # Data is the only thing we split.
+        self.write(raw, True)
+        self.nl_okay = False
+
+    # Out commands
+    def nl(self):
+        self.nl_please = False
+        self.nl_okay = True # A forced nl implies that newlines are okay.
+        if not self.line:
+            return
+        else:
+            self.output.write(self.line.rstrip())
+            self.output.write('\n')
+            self.line = ''
+
+    def write(self, string, splittable=False):
+        if self.line == '':
+            string = string.lstrip()
+            if not string:
+                return
+        
+        if not splittable:
+            if (self.line.endswith(' ') or self.nl_okay) and len(self.line) + len(string) > self.wrap:
+                self.nl()
+            self.line += string
+        else:
+            # We can split! Use TextWrapper class to do heavy lifting.
+            # TextWrapper is a bit relaxed about overlong words when
+            # not allowed to break them, it lets the sentence overrun
+            # when it could break it before the overlong word, but
+            # this is a tolerable way of handling overlong words.
+
+            if self.nl_please:
+                if string.startswith(' '):
+                    string = string[1:]
+                    self.nl()
+                    if not string:
+                        return
+                elif self.nl_okay:
+                    self.nl()
+            
+            # Attempt to split the line at the last space
+            m = _regex.match(r'(.*)( [^<>]*)$', self.line)
+            if m:
+                self.line = m[1]
+                string = m[2] + string
+
+            self.text_wrapper.initial_indent = self.line
+            lines = self.text_wrapper.wrap(string)
+            if not lines:
+                self.line += string
+                return
+            
+            for line in lines[:-1]:
+                if not line:
+                    continue
+                self.output.write(line.strip())
+                self.output.write('\n')
+
+            self.line = self.laststr = self.lastdata = lines[-1].lstrip()
+
+    def flush(self):
+        self.output.write(self.line)
+        self.line = self.laststr = self.lastdata = ''
+
+    def __del__(self):
+        self.flush()
+
+    def prettyprint(self, text, filename='(-)', output=None):
+        self.output = output or io.StringIO()
         text = text.replace('\n', ' ')
-        text = _regex.sub(' {2,}', ' ', text)
+        text = _regex.sub(r'\s{2,}', ' ', text)
 
-        # Eliminate spaces between block level tags
-        text = _regex.sub(opentag('|'.join(block_tags)) + ' ', r'\1', text)
-        text = _regex.sub(' ' + closetag('|'.join(block_tags)), r'\1', text)
+        self.feed(text)
+        self.flush()
 
-        m = _regex.match(r'(?si)(.*?)(<html>.*</html>\n?)(.*)', text)
-        preamble = m[1]
-        middle = m[2]
-        postamble = m[3]
-        if postamble:
-            if postamble.isspace():
-                postamble = ''
-            else:
-                logger.warn('{} contains trailing content: {}'.format(filename, postamble))
-
-        # Place certain tags on their own line
-        middle = self.ownlineopenrex.sub(r'\n\1', middle)
-        middle = self.ownlinecloserex.sub(r'\1\n', middle)
-        middle = middle.replace('<br>', '<br>\n')
-        prex = _regex.compile(r'({})(.*?)({})'.format(opentag('p')[1:-1],
-            closetag('p')[1:-1]), flags=_regex.DOTALL)
-        
-        def parabreak(m):
-            out = [m[1]]
-            for line in m[2].split('\n'):
-                out.append(self.linebreak(line))
-            out.append(m[3])
-            return '\n'.join(out)
-        
-        middle = prex.sub(parabreak, middle)
-        
-        out = '\n'.join([preamble, middle, postamble])
-        
-        out = out.replace('></head>', '>\n</head>')
-        
-        out = _regex.sub(r'\n[ \n]+', r'\n', out)
-        out = _regex.sub(r'(?m) $', r'', out)
-        out = _regex.sub(r'(<(?:{})>)\n'.format('|'.join(condense_tags)), r'\1', out)
-        out = _regex.sub(r'\n(</(?:{})>)'.format('|'.join(condense_tags)), r'\1', out)
-        
-        if out.endswith('\n'):
-            out = out[:-1]
-        return out
+        if output:
+            return
+        else:
+            return self.output.getvalue()
 
 prettyprint = PrettyPrinter().prettyprint
 
