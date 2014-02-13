@@ -43,7 +43,6 @@ from .emdashar import Emdashar, SortedLogger, fix_broken_paragraphs
 
 logger = logging.Logger(__name__)
 
-
 tidy_level = OrderedDict((
     ("minimal", "--doctype html5 --output-html 1 --replace-color 1\
     --tidy-mark 0 --quiet 1 --drop-proprietary-attributes 1 \
@@ -809,7 +808,7 @@ class EmdasharProcessor(BaseProcessor):
         
         if self.options.get('details'):
             logger = SortedLogger()
-            logger.file = TemporaryFile('w+')
+            logger.file = TemporaryFile('w+', encoding='utf8')
         else:
             logger = None
         dashar = Emdashar(logger=logger)
