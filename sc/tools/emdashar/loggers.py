@@ -14,8 +14,6 @@ class DefaultLogger:
     ignore = []
     file=None
     def __init__(self):
-        self.file = sys.stdout
-        
         pass
     def register_mss(self, mss):
         self.mss = mss
