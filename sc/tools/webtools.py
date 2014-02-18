@@ -580,13 +580,21 @@ class HTMLProcessor(BaseProcessor):
         return self.root_to_bytes(root)
     
     def root_to_bytes(self, root):
+        for e in root.select('meta[charset]'):
+            e.drop_tag()
         root.headsure.insert(0, root.makeelement('meta', charset="UTF-8"))
         if not root.head.select('title'):
             root.head.append(root.makeelement('title'))
         root.attrib.clear()
-        return root.pretty(doctype='<!DOCTYPE html>', 
-                encoding='UTF-8', 
-                include_meta_content_type=False).encode()
+        out = html.tostring(root, doctype='<!DOCTYPE html>', 
+                encoding='unicode', 
+                include_meta_content_type=False,
+                pretty_print=True)
+        # We pretty print twice, but that's okay, lxml is so fast.
+        return self.prettyprint(out).encode(encoding='UTF8')
+
+    def prettyprint(self, string):
+        return html.prettyprint(string)
         
     def process_root(self, root):
         raise NotImplementedError
@@ -681,7 +689,7 @@ class CleanupProcessor(HTMLProcessor):
             keep.extend(root.select('head .whitelist'))
             root.head.clear()
             root.head.extend(keep)
-        
+            
 class FinalizeProcessor(HTMLProcessor):
     name = "Finalize"
     metadata = {}
@@ -755,28 +763,31 @@ class FinalizeProcessor(HTMLProcessor):
             raise ProcessingError("Unable to proceed due to nested sections")
         seen = set()
         for num, section in enumerate(root.iter('section')):
-            assert section not in seen
-            seen.add(section)
-            root = html.document_fromstring('<html><head></head><body>')
-            root.body.append(section)
-            entry = Report.Entry()
             try:
-                entry.filename = finalizer.discover_uid(section, entry)
-            except KeyError:
-                entry.error("Section has no 'id' attribute", lineno=section.sourceline)
-                raise ProcessingError("With multiple suttas in one file, <section id=\"uid\"> notation must be used")
-            self.report.append(entry)
-            self.entry = entry
-            entry.language = language
-            
-            finalizer.finalize(root, entry=entry, options=self.options, 
-                metadata=metadata, language=language, author_blurb=author_blurb,
-                num_in_file=num)
-            entry.filename = pathlib.Path(root.select('section')[0].attrib['id']+ '.html') 
-            
-            filename = self.output_filename(orgentry.filename.parent / entry.filename)
-            
-            yield (filename, self.root_to_bytes(root))
+                assert section not in seen
+                seen.add(section)
+                root = html.document_fromstring('<html><head></head><body>')
+                root.body.append(section)
+                entry = Report.Entry()
+                try:
+                    entry.filename = finalizer.discover_uid(section, entry)
+                except KeyError:
+                    entry.error("Section has no 'id' attribute", lineno=section.sourceline)
+                    raise ProcessingError("With multiple suttas in one file, <section id=\"uid\"> notation must be used")
+                self.report.append(entry)
+                self.entry = entry
+                entry.language = language
+                
+                finalizer.finalize(root, entry=entry, options=self.options, 
+                    metadata=metadata, language=language, author_blurb=author_blurb,
+                    num_in_file=num)
+                entry.filename = pathlib.Path(root.select('section')[0].attrib['id']+ '.html') 
+                
+                filename = self.output_filename(orgentry.filename.parent / entry.filename)
+                
+                yield (filename, self.root_to_bytes(root))
+            except ProcessingError as e:
+                entry.error(str(e))
 
 class EmdasharProcessor(BaseProcessor):
     name = "Fix Puncutation"

@@ -4,6 +4,13 @@ from copy import copy
 
 import sc, sc.scimm, sc.util
 
+def normalize_anchor(string):
+    string = regex.sub(r'(?<=\d) (?=\d)', '.', string)
+    string = regex.sub(r'(?<=\p{alpha}) (?=\p{alpha})', '_', string)
+    string = regex.sub(r'(\p{lower})(\p{upper})', r'\1_\2', string)
+    string = string.casefold()
+    return string
+
 def get_existing_file_uids(_cache=sc.util.TimedCache(lifetime=15 * 60)):
     try:
         return _cache[0]
@@ -357,72 +364,18 @@ def finalize(root, entry, language=None, metadata=None,
         else:
             uid = uid2
         entry.warning('Using {}'.format(uid))
-    
-    entry.info('uid looks like {} ({}/{})'.format(uid, uid1, uid2))
+    if not uid1_sense and not uid2_sense:
+        if uid1 == uid2:
+            entry.error('{} not recognized as a valid uid, a database entry may be required'.format(uid1))
+            uid = uid1
+        else:
+            entry.error('{} or {} not recognized as valid uids, a database entry may be required'.format(uid1, uid2))
+            uid = uid1
+    else:
+        entry.info('uid looks like {}'.format(uid))
     
     #Convert non-HTML tags to classes
     normalize_tags(root, entry)
-    
-    if metadata:
-        for e in metadata.select('a.sc'):
-            e.drop_tag()
-    
-    # Does this this file have numbering?
-    pnumbers = False
-    pnumbers_need_id = False
-    scnumbers_misplaced = False
-    scnumbers_insane = False
-    scn = root.select('a.sc')
-    for a in scn:
-        try:
-            if a.getparent().text or a.getparent().attrib['id'] == 'metaarea':
-                scnumbers_misplaced = True
-                scnumbers_insane = True
-                break
-        except KeyError:
-            pass
-    if scn:
-        pnumbers = "sc"
-        def checksanity():
-            nonlocal root, pnumbers_need_id, scnumbers_insane
-            for article in root.select('article.sutta'):
-                
-                seen = set()
-                last = 0
-                for a in scn:
-                    try:
-                        num = int(a.attrib['id'].split('.')[-1])
-                    except KeyError:
-                        return
-                    if num - last < 1:
-                        scnumbers_insane = True
-                        return
-                    parent = a.getparent()
-                    if parent in seen:
-                        scnumbers_insane = True
-                        return
-                    seen.add(parent)
-        checksanity()
-    else:
-        c = collections.Counter()
-
-        anchors = root.select('p a')
-        c.update(a.attrib['class'] if 'class' in a.attrib else None for a in anchors)
-        m = c.most_common(1)
-        pcount = len(list(root.iter('p')))
-        if m and m[0][1] >= max(3, pcount / 4):
-            pnumbers = m[0]
-            pnumbers_no_id = ('id' not in root.select('a.'+pnumbers[0])[0].attrib) if pnumbers[0] is not None else False
-            pnums.add(m[0])
-
-    h1notinhgroup = False
-    supplied_misused = False
-    for h1 in root.iter('h1'):
-        if h1.getparent().tag != 'hgroup':
-            h1notinhgroup = True
-    for h in root.select('h1,h2,h3,h4,h5,h6,h7'):
-        if 'class' in h.attrib and 'supplied' in h.attrib['class']:
-            supplied_misused = True
     
     all_ids = ','.join(tag_data['pnum_classes'].keys())
     for e in root.select(all_ids):
@@ -463,16 +416,28 @@ def finalize(root, entry, language=None, metadata=None,
         toc = root.makeelement('div', {'id':'toc'})
     
     divtext.insert(0, toc)
-
+    
+    h1notinhgroup = False
+    for h1 in root.iter('h1'):
+        if h1.getparent().tag != 'hgroup':
+            h1notinhgroup = True
     if h1notinhgroup:
         for h1 in root.iter('h1'):
             hgroup = root.makeelement('hgroup')
             h1.addnext(hgroup)
+            for e in hgroup.itersiblings(preceding=True):
+                if e.tag not in {'h2', 'h3', 'h4'}:
+                    break
+                hgroup.prepend(h1)
             hgroup.append(h1)
     
+    supplied_misused = False
+    for h in root.select('h1,h2,h3,h4,h5,h6,h7'):
+        if 'class' in h.attrib and 'supplied' in h.attrib['class']:
+            supplied_misused = True
     if supplied_misused:
         for h in root.select('h1,h2,h3,h4,h5,h6,h7'):
-            if 'class' in h.attrib and 'supplied' in h.attrib['class']:
+            if 'supplied' in h.attrib.get('class',''):
                 if h.attrib['class'] == 'supplied':
                     del h.attrib['class']
                 else:
@@ -482,52 +447,57 @@ def finalize(root, entry, language=None, metadata=None,
                 for child in h:
                     span.append(child)
                 h.append(span)
-                
-    if scnumbers_misplaced:
-        for a in scn:
-            p = a.getparent()
-            a.tail = p.text
-            p.text = None
-
-    used_ids = set()
     
     for e in root.select('#metaarea'):
         e.drop_tree()
+        e.tail = '\n'
     
     if metadata:
         section.append(metadata)
     
-    if scnumbers_insane or not pnumbers or options.get('force-sc-nums'):
-        for a in root.select('a.sc'):
-            a.drop_tree()
-        for section in root.select('section.sutta'):
-            pcount = itertools.count(1)
-            uid = section.attrib['id']
-            assert uid[0].isalpha()
+    scn_problem = False
+    scn = root.select('a.sc')
+    if root.select('meta a.sc'):
+        scn_problem = True
+
+    used_ids = collections.Counter()
+
+    if not scn or scn_problem or options.get('force-sc-nums'):
+        for e in scn:
+            e.drop_tree()
+        sections = root.select('section.sutta')
+        if len(sections) > 1:
+            comprefix = os.path.commonprefix(s.attrib['id'] for s in sections)
+
+        for section in sections:
+            if len(sections) == 1:
+                base_uid = ''
+            else:
+                base_uid = section.attrib['id'][len(comprefix):]
+                if base_uid[-1].isdigit():
+                    base_uid += '.'
+            pnum = 0
             for p in section.select('article p'):
                 if len(p.text_content()) > 50:
-                    id = str(next(pcount))
-                    used_ids.add(id)
+                    pnum += 1
+                    
+                    id = base_uid + str(pnum)
+                    if id in used_ids:
+                        id += '_' + str(used_ids[id] + 1)
+                    used_ids.update([id])
                     a = p.makeelement('a', {'class':'sc', 'id':id})
-                    a.tail = p.text
-                    p.text = None
-                    p.insert(0, a)
+                    p.prepend(a)
 
-    if pnumbers_need_id:
-        c = collections.Counter(used_ids)
-        for i, e in enumerate(root.select(all_ids)):
-            if 'id' not in e.attrib:
-                if e.text:
-                    c[e.text] += 1
-                    pid = e.text
-                    if c[e.text] > 1:
-                        pid = str(c[e.text]) + '_' + pid
-                    e.text = None
-                else:
-                    pid = 'p' + str(i)
-                e.attrib['id'] = pid
+    for i, e in enumerate(root.select(all_ids)):
+        if e.text and not e.text.isspace():
+            if e.attrib['id'] == 'sc':
+                id = normalize_anchor(e.text)
+            else:
+                id = normalize_anchor(e.attrib['class'] + ' ' + e.text)
+            e.attrib['id'] = id
+            e.text = None
     
-    if not author_blurb:
+    if not author_blurb and num_in_file > 1:
         author_blurb = discover_author(root, entry)
     
     if author_blurb:
