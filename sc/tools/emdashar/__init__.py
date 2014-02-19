@@ -93,19 +93,22 @@ rules = [
     R(358, r"""(?x)
             (?<=\s.{,2})     # Preceeded by a nearby space.
             '                # Singlequote
-            (?=\S{3})        # Proceeded by no nearby space.""",
+            (?=\S{3})        # Proceeded by no nearby space.
+            """,
         "‘"),
     #Straight double quote >> close quote
     R(39, r"""(?x)
             (?<=\S{3})    # Preceeded by no nearby space.
             "             # Doublequote
-            (?=.{,2}\s)   # Proceeded by a nearby space.""",
+            (?=.{,2}\s)   # Proceeded by a nearby space.
+            """,
         "”"),
     #straight single quote >> close quote
     R(40, r"""(?x)
             (?<=\S{3})       # Preceeded by no nearby space.
             '                # Singlequote (not isn't)
-            (?=.{,2}\s)      # Proceeded by a nearby space.""",
+            (?=.{,2}\s)      # Proceeded by a nearby space.
+            """,
         "’"),
     #Obviously mismatched close-quote
     R(41, r"(?<=\w)“(?=\.(?:\s|$))", "”"),
@@ -153,7 +156,8 @@ rules = [
         \p{dash}\s?+ # (spaced) dash of some kind
         (?=.(?<!\d–\d)) # A good honest non-spaced endash negates previous
         (?!\d+-\d+)     # date (negates match)
-        (?=\d+)         # number""", r"–"),
+        (?=\d+)         # number
+        """, r"–"),
         
     # Emdash 
     R(72, r"""(?x)

@@ -16,6 +16,7 @@ import lxml.etree as _etree
 import functools as _functools
 from html import escape # lxml.html doesn't define it's own escape
 import regex as _regex
+import io as _io
 
 defs.html5_tags = frozenset({'section', 'article', 'hgroup'})
 
@@ -291,7 +292,7 @@ class PrettyPrinter:
         'article', 'hgroup', 'blockquote', 'header', 'footer', 'nav', 'menu',
         'meta', 'ul', 'ol', 'table', 'tr', 'tbody', 'thead', 'p'}
 
-    block_ownline_close = block_ownline_open - {'p', 'html'}
+    block_ownline_close = block_ownline_open - {'p', 'li', 'td', 'html'}
 
     # These can be lumped with elements that follow
     block_ownline_if_followed_by_text = {'li', 'td', 'th', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'}
@@ -302,6 +303,8 @@ class PrettyPrinter:
 
 
     always_newline_after = {'br', 'hr', 'p'}
+
+    preserve = {'script', 'style', 'pre'}
 
     opentagrex = _regex.compile(r'''<(?<name>\w+)\s*(?<attrs>[\w-]+(?:\s*=\s*(?:'[^']*'|"[^"]*"|\S+))?\s*)*(?<selfclosing>/?)>''')
     closetagrex = _regex.compile(r'</(?<name>\w+)>')
@@ -360,11 +363,8 @@ class PrettyPrinter:
                     self.data(m[0])
                     continue
 
-            print('SOMETHING WENT WRONG!')
-            print(data[start:start+200])
-            globals().update(locals())
-            raise ValueError
-            return
+            from .webtools import ProcessingError
+            raise ProcessingError('Unable to parse: {}'.format(data[start:start+150] + ' ...'))
 
     def doctype(self, raw):
         self.write(raw)
@@ -482,24 +482,34 @@ class PrettyPrinter:
             self.line = self.laststr = self.lastdata = lines[-1].lstrip()
 
     def flush(self):
-        self.output.write(self.line)
-        self.line = self.laststr = self.lastdata = ''
+        if self.line and self.output:
+            self.output.write(self.line)
+            self.line = self.laststr = self.lastdata = ''
 
     def __del__(self):
         self.flush()
 
     def prettyprint(self, text, filename='(-)', output=None):
-        self.output = output or io.StringIO()
-        text = text.replace('\n', ' ')
-        text = _regex.sub(r'\s{2,}', ' ', text)
-
-        self.feed(text)
-        self.flush()
-
+        self.output = output or _io.StringIO()
+        
+        rex = _regex.compile(r'(?si)<({0}).*?</\1>|(?:(?:[^<]+)|<(?!{0}))+'.format('|'.join(self.preserve)))
+        
+        for m in rex.finditer(text):
+            if m[1]:
+                self.nl()
+                self.output.write(m[0].strip())
+                self.nl()
+            else:
+                chunk = m[0].replace('\n', ' ')
+                chunk = _regex.sub(r' {2,}', ' ', chunk)
+                self.feed(chunk)
+                self.flush()
         if output:
             return
         else:
-            return self.output.getvalue()
+            out = self.output.getvalue()
+            out = _regex.sub(r' ++(?=</(?:p|li|td)>|<br>|$)', '', out)
+            return out
 
 prettyprint = PrettyPrinter().prettyprint
 
