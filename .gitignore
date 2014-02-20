@@ -6,6 +6,7 @@ newrelic.ini
 data
 *.log
 *~
+static/js/sc_uid_expansion_data.js
 utility/out/
 utility/suttacen/
 utility/tables/
