@@ -31,9 +31,9 @@
                 {% if row.html -%}
                     <li class="moreresults">Text Search: {{row.html}}</li>
                 {% else -%}
-                    <li><h3> <a href="/{{row.file}}/{{result.query.lang}}/{{'#' + row.bookmark if row.bookmark else ''}}">{{row.heading}} » </a> </h3>
+                    <li><h3> <a href="/{{result.query.lang}}/{{row.file}}{{'#' + row.bookmark if row.bookmark else ''}}">{{row.heading}} » </a> </h3>
                     <small>{{ imm(row.uid).acronym|replace(" ", " ") }} {{ imm(row.uid).name }}
-                    {%- if imm(row.uid) %} <a class="details" href="/{{row.uid}}/">►</a>
+                    {%- if imm(row.uid) %} <a class="details" href="/{{row.uid}}">►</a>
                     {%- endif -%}
                     </small>
                     <p>{{row.snippet}}</p>

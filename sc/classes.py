@@ -66,7 +66,7 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
     def canon_url(uid, lang_code, bookmark=''):
         if not isinstance(lang_code, str):
             lang_code = lang_code.uid
-        url = '/{uid}/{lang}'.format(uid=uid, lang=lang_code)
+        url = '/{lang}/{uid}'.format(uid=uid, lang=lang_code)
         if bookmark:
             url += '#' + bookmark
         return url
@@ -82,7 +82,7 @@ class VinayaRule:
     
     This is useful because when I did 'unfold' the whole vinaya
     data the memory requirements for the server tripled. It's not
-    a trivial memoy optimization.
+    a trifling memoy optimization.
     
     """
     

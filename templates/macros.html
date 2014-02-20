@@ -29,14 +29,14 @@
 <td>
 {% if (result and result.query.ajax) or sutta.no_show_parallels %}
 {%- if sutta.parallels -%}
-<a href='/{{sutta.uid}}/'
+<a href='/{{sutta.uid}}'
  title='Correspondence details for {{sutta.acronym}}' class="details">{{sutta.parallels|length - sutta.parallels|selectattr("negated")|list|length}} ►</a>
 {%- endif -%}
 {%- else -%}
 {%- for parallel in sutta.parallels -%}
 {{sutta_acronym(parallel.sutta, show_alt=False)}}
 {%- if parallel.partial -%}*{%- endif -%}
-{% if not loop.last %}, {% else %} <a href='/{{sutta.uid}}/' 
+{% if not loop.last %}, {% else %} <a href='/{{sutta.uid}}' 
  title='Correspondence details for {{sutta.acronym}}' class="details">►</a>
 {% endif %}
 {%- endfor %}

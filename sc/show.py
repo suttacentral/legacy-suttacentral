@@ -87,10 +87,22 @@ def default(*args, **kwargs):
             else:
                 raise cherrypy.NotFound()
         # Sutta or Translation Texts
-        lang_code = args[1]
+
+        
+        # New style urls have the language code first then the uid
+        lang_code = args[0]
+        uid = args[1]
+
         try:
             imm.text_paths_by_lang[lang_code][uid]
         except KeyError:
+            try:
+                imm.text_paths_by_lang[uid][lang_code]
+                # This is an old-style url, redirect to new-style url.
+                # (Don't be transparent, we want to keep things canonical)
+                raise cherrypy.HTTPRedirect('/{}/{}'.format(uid, lang_code))
+            except KeyError:
+                pass
             raise cherrypy.NotFound()
         
         sutta = imm.suttas.get(uid)
