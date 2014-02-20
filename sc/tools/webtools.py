@@ -34,6 +34,7 @@ from time import time as current_time
 from tempfile import TemporaryFile, NamedTemporaryFile
 from bs4 import UnicodeDammit
 from subprocess import Popen, PIPE, call
+from copy import deepcopy
 
 import sc
 from sc.views import InfoView
@@ -748,7 +749,7 @@ class FinalizeProcessor(HTMLProcessor):
         language = finalizer.discover_language(root, self.entry)
         self.entry.language = language
         finalizer.finalize(root, entry=self.entry, options=self.options, 
-            metadata=self.metadata.get(self.entry.filename.parent))
+            metadata=deepcopy(self.metadata.get(self.entry.filename.parent)))
     
     def process_many(self, root):
         orgentry = self.entry
@@ -757,7 +758,6 @@ class FinalizeProcessor(HTMLProcessor):
             metadata = root.select('div#metaarea')[0]
         except IndexError:
             metadata = self.metadata.get(self.entry.filename.parent)
-        author_blurb = finalizer.discover_author(root, self.entry)
         language = finalizer.discover_language(root, self.entry)
         
         es = root.select('section section')
@@ -789,7 +789,7 @@ class FinalizeProcessor(HTMLProcessor):
                 entry.language = language
                 
                 finalizer.finalize(root, entry=entry, options=self.options, 
-                    metadata=metadata, language=language, author_blurb=author_blurb,
+                    metadata=deepcopy(metadata), language=language,
                     num_in_file=num)
                 entry.filename = pathlib.Path(root.select('section')[0].attrib['id']+ '.html') 
                 

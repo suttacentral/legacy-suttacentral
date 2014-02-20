@@ -336,7 +336,7 @@ def generate_next_prev_links(root, language):
     return link_count
 
 def finalize(root, entry, language=None, metadata=None, 
-             author_blurb=None, num_in_file=-1, options={}):
+             num_in_file=-1, options={}):
     if root.tag != 'html':
         raise ValueError('Root element should be <html> not <{}>'.format(root.tag))
     pnums = set()
@@ -549,8 +549,7 @@ def finalize(root, entry, language=None, metadata=None,
             e.attrib['id'] = id
             e.text = None
     
-    if not author_blurb and num_in_file > 1:
-        author_blurb = discover_author(root, entry)
+    author_blurb = discover_author(root, entry, num_in_file)
     
     if author_blurb:
         root.headsure.append(author_blurb)
