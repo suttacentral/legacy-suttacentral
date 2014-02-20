@@ -548,6 +548,9 @@ def finalize(root, entry, language=None, metadata=None,
                 id = normalize_anchor(e.attrib['class'] + ' ' + e.text)
             e.attrib['id'] = id
             e.text = None
+
+    for e in root.select('a.previous, a.top, a.next'):
+        divtext.append(e)
     
     author_blurb = discover_author(root, entry, num_in_file)
     
