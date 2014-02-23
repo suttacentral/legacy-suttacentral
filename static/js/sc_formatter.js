@@ -290,7 +290,7 @@ sc.formatter = {
         if (patimokkhaUid) {
             // Use alternative heading regex which
             // displays numbered component.
-            headrex = /(.*?\d+)\.?/;
+            headrex = /(.*)/;
         } else {
             headrex = /[ivx0-9]{1,5}[.:] \(?([^(]+)/i
         }
@@ -315,7 +315,7 @@ sc.formatter = {
             headtext = $(this).text();
             m = headtext.match(headrex)
             if (m){
-                menutext = m[1].trim()
+                menutext = m[0].trim()
             } else {
                 menutext = headtext
             }
@@ -329,7 +329,8 @@ sc.formatter = {
             } else {
                 ref = $(this).attr('id');
                 if (!ref){
-                    var oref = ref = escape(sc.util.asciify(menutext.toLowerCase().replace(/ /g, '-')))
+                    var asciified = (sc.util.asciify(menutext.toLowerCase()) || menutext).replace(/ /g, '-'),
+                        oref = ref = asciified
                     while (ref in seen) {
                         ref = oref + ++i;
                     }
