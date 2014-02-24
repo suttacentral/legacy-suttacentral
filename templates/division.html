@@ -4,10 +4,12 @@
 <div id='onecol'>
 <table class="divtable">
 <caption>
-{% if division_text_url %}<a href="{{ division_text_url }}">{% endif %}
+
 Collection: <strong>{{division.collection.name}}</strong> — Division: 
-<strong>{{division.name}} ({{division.acronym}})</strong>
-{% if division_text_url %}</a>{% endif %}
+<strong>{{division.name}}</strong> (
+{%- if division_text_url %}<a href="{{ division_text_url }}">{% endif -%}
+<strong>{{division.acronym}}</strong>
+{%- if division_text_url -%}</a>{% endif %})
 </caption>
 <thead>
 <tr>

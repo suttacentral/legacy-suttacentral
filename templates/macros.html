@@ -27,8 +27,8 @@
 {%- endif %}
 </td>
 <td>
-{% if (result and result.query.ajax) or sutta.group_parallels %}
-{%- if sutta.parallels or sutta.group_parallels -%}
+{% if (result and result.query.ajax) or sutta.parallel_group %}
+{%- if sutta.parallels or sutta.parallel_group -%}
 <a href='/{{sutta.uid}}'
  title='Correspondence details for {{sutta.acronym}}' class="details">{{sutta.parallels_count}} ►</a>
 {%- endif -%}

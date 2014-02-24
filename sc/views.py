@@ -227,13 +227,12 @@ class ParallelView(ViewBase):
         # parallels. The template will display this at the
         # top of the list with a different style.
         origin = Parallel(sutta=self.sutta, partial=False, footnote="", indirect=False)
-        parallels = [origin] + self.sutta.parallels
-
+        
         # Get the information for the table footer.
         has_alt_volpage = False
         has_alt_acronym = False
 
-        for parallel in parallels:
+        for parallel in self.sutta.parallels:
             if parallel.negated:
                 continue
             if parallel.sutta.alt_volpage_info:
@@ -242,7 +241,7 @@ class ParallelView(ViewBase):
                 has_alt_acronym = True
         
         # Add data specific to the parallel page to the context.
-        context.parallels = parallels
+        context.origin = origin
         context.has_alt_volpage = has_alt_volpage
         context.has_alt_acronym = has_alt_acronym
         context.citation = SuttaCitationView(self.sutta).render()

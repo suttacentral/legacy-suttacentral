@@ -83,7 +83,7 @@ class GroupedSutta:
     """
     
     __slots__ = {'uid', 'ref_uid', 'volpage_info', 'imm',
-                '_parallel_sutta_group'}
+                'parallel_group'}
     
     no_show_parallels = True
     
@@ -99,7 +99,7 @@ class GroupedSutta:
     @property
     def name(self):
         try:
-            return self._parallel_sutta_group[0]
+            return self.parallel_group.name
         except AttributeError as e:
             e.args = list(e.args) + ['No group found for {}'.format(self.uid)]
             raise e
@@ -200,33 +200,11 @@ class GroupedSutta:
                         in out.items()),
                     key=TextRef.sort_key))
     
-    @property
-    def group_parallels(self):
-        if not hasattr(self, '_parallel_sutta_group'):
-            return None
-        out = []
-        for i, e in enumerate(self._parallel_sutta_group):
-            if e == self or i == 0:
-                continue
-            if isinstance(e, GroupedSutta):
-                out.append(Parallel(sutta=e, partial=False,
-                    indirect=False, footnote=None))
-            else:
-                out.append(e)
-        return out
-
     parallels = []
 
     @property
     def parallels_count(self):
-        count = len(self.parallels)
-        if not hasattr(self, '_parallel_sutta_group'):
-            return count
-        for parallel in self._parallel_sutta_group:
-            if isinstance(parallel, NegatedParallel):
-                continue
-            count += 1
-        return count
+        return len(self.parallels) + max(0, self.parallel_group.real_count() - 1)
     
     @property
     def brief_uid(self):
@@ -239,7 +217,59 @@ class GroupedSutta:
     @property
     def brief_name(self):
         return self.imm.uid_to_name(self.brief_uid)
+
+class ParallelSuttaGroup:
+    """ A class which acts a lot like a list of parallels """
+    def __init__(self, name, entries):
+        self.name = name
+        self.entries = entries
+
+    def real_count(self):
+        return len([e for e in self.entries if isinstance(e, GroupedSutta)])
     
+    def parallels(self, sutta=None):
+        "yields a series of Parallel objects"
+        for e in self.entries:
+            if e == sutta:
+                continue
+            if isinstance(e, GroupedSutta):
+                yield Parallel(sutta=e, partial=False,
+                    indirect=False, footnote=None)
+            else:
+                yield e
+
+class MultiParallelSuttaGroup(ParallelSuttaGroup):
+    def __init__(self, initial):
+        self.groups = [initial]
+        self.name = initial.name
+
+    def add_group(self, group):
+        self.groups.append(group)
+
+    def real_count(self):
+        return len(list(self.parallels()))
+
+    def parallels(self, sutta=None):
+        for col in zip(*(g.entries for g in self.groups)):
+            if col[0] == sutta:
+                continue
+            if len(set(col)) == 1:
+                if isinstance(col[0], GroupedSutta):
+                    yield Parallel(sutta=col[0], partial=False,
+                        indirect=False, footnote=None)
+                else:
+                    yield col[0]
+            else:
+                seen = set()
+                for entry in col:
+                    if entry in seen:
+                        continue
+                    if isinstance(entry, GroupedSutta):
+                        yield Parallel(sutta=entry,partial=False,
+                            indirect=False,footnote=None)
+                    else:
+                        yield entry
+
 class Parallel(ConciseRepr, namedtuple('Parallel',
         'sutta partial indirect footnote')):
     __slots__ = ()

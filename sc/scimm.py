@@ -503,10 +503,10 @@ class _Imm:
         
         org_by_rule = list(table_reader(table_name))
         
-        by_school = []
+        by_column = []
         for i, column in enumerate(zip(*org_by_rule)): #rotate
             if i == 0:
-                by_school.append(column)
+                by_column.append(column)
             else:
                 division_uid = column[0]
                 try:
@@ -518,7 +518,7 @@ class _Imm:
                 division_maybe_parallel = MaybeParallel(
                     division=division)
                 new_column = []
-                by_school.append(new_column)
+                by_column.append(new_column)
                 for j, uid in enumerate(column):
                     if j <= 1:
                         new_column.append(uid)
@@ -528,18 +528,24 @@ class _Imm:
                         elif uid == '?':
                             new_column.append(division_maybe_parallel)
                         else:
-                            rule = self.suttas[normalize_uid(uid)]
-                            rule.ref_uid = uid
-                            new_column.append(rule)
+                            sutta = self.suttas[normalize_uid(uid)]
+                            new_column.append(sutta)
         
-        by_rule = list(zip(*by_school))
-        self.by_school = by_school
-        self.by_rule = by_rule
+        by_row = list(zip(*by_column))
+        #self.by_column = by_column
+        #self.by_row = by_row
         
-        for row in by_rule[2:]:
+        for row in by_row[2:]:
+            group = ParallelSuttaGroup(row[0], row[1:])
             for rule in row[1:]:
                 if isinstance(rule, GroupedSutta):
-                    rule._parallel_sutta_group = row
+                    if hasattr(rule, 'parallel_group'):
+                        if isinstance(rule.parallel_group, ParallelSuttaGroup):
+                            rule.parallel_group = MultiParallelSuttaGroup(rule.parallel_group)
+                        rule.parallel_group.add_group(group)
+
+                    else:
+                        rule.parallel_group = group
 
     def build_search_data(self):
         """ Build useful search data.

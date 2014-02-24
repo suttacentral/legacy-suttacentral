@@ -2,6 +2,74 @@
 {% import 'macros.html' as macros with context %}
 {%- block content -%}
 <div id="onecol">
+{# There are two main forms of parallels, normal (uid-pair) parallels, and grouped
+parallels, at the moment only one or the other exists.
+If we have suttas with both, we'll need to update this template. #}
+
+{% if sutta.parallel_group %}
+<table id="vinaya_parallels">
+<caption>
+Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}</strong></caption>
+<thead>
+<tr>
+<th>Identifier</th>
+<th>Division</th>
+<th>Vol/Page</th>
+<th>Translations</th>
+</tr>
+</thead>
+<tbody>
+{#% set parallels = [origin] + sutta.parallel_group.parallels(sutta)|list %#}
+{% for parallel in sutta.parallel_group.parallels() -%}
+{% if parallel.negated %}
+<tr class="negated-parallel">
+<td>
+{% if parallel.maybe %}
+Gap in manuscript
+{% else %}
+No parallel
+{% endif %}
+</td>
+<td>{{parallel.division.uid|uid_to_name}}</td>
+<td colspan=3>
+</td>
+</tr>
+{% else %}
+{%- if parallel.sutta == sutta -%}
+<tr class='origin'>
+{%- else -%}
+<tr>
+{%- endif %}
+<td>
+{{macros.sutta_acronym(parallel.sutta, show_alt=true)}}
+{%- if parallel.partial -%}*{%- endif -%}
+</td>
+<td>{{ parallel.sutta.subdivision.division.uid|uid_to_name }}</td>
+<td>{{parallel.sutta.volpage_info | sht_expansion }}
+{%- if parallel.sutta.alt_volpage_info %} <span class='altVolPage'>{{parallel.sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
+{%- endif -%}
+{%- if parallel.footnote %}
+<a class='note'><div class='tri'>&nbsp;►</div><span class='deets'>{{parallel.footnote}}</span></a>
+{%- endif -%}
+{%- if parallel.sutta.biblio_entry %}
+<a class='bib'><div class='tri'>&nbsp;►</div><span class='deets'>{{parallel.sutta.biblio_entry.text}}</span></a>
+{%- endif -%}
+</td>
+<td>
+{% for translation in parallel.sutta.translations -%}
+<a href='{{translation.url}}' class='tran' {%- if translation.abstract %} title='{{translation.abstract}}'{% endif %}>{{translation.lang.uid}}</a>{% if not loop.last %} | {% endif %} 
+{% endfor -%}
+</td>
+{% endif %}
+</tr>
+{%- endfor %}
+
+</tbody>
+{{macros.table_footer()}}
+</table>
+{% endif %}
+
+{% if sutta.parallels %}
 <table>
 <caption>
 Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}</strong></caption>
@@ -15,20 +83,7 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 </tr>
 </thead>
 <tbody>
-{% for parallel in parallels -%}
-{% if parallel.negated %}
-<tr class="negated-parallel"><td>{{parallel.division.collection.lang.name}}</td>
-<td>{{parallel.division.acronym}}</td>
-<td colspan=3>
-{% if parallel.maybe %}
-Manuscript incomplete
-{% else %}
-No parallel
-{% endif %}
-</td>
-
-</td></tr>
-{% else %}
+{% for parallel in sutta.parallels -%}
 {%- if loop.first -%}
 <tr class='origin'>
 {%- else -%}
@@ -55,12 +110,12 @@ No parallel
 <a href='{{translation.url}}' class='tran' title='{{translation.abstract}}'>{{translation.lang.uid}}</a>{% if not loop.last %} | {% endif %} 
 {% endfor -%}
 </td>
-{% endif %}
 </tr>
 {%- endfor %}
 
 </tbody>
 {{macros.table_footer()}}
 </table>
+{% endif %}
 </div>
 {%- endblock -%}
