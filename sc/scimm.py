@@ -80,7 +80,9 @@ class _Imm:
         self.build()
         self.build_parallels_data()
         self.build_parallels()
-        self.build_vinaya_rules()
+        self.build_grouped_suttas()
+        self.build_parallel_sutta_group('vinaya_pm')
+        self.build_parallel_sutta_group('vinaya_kd')
         self.build_search_data()
         self.timestamp = timestamp
         self.build_time = datetime.now()
@@ -462,18 +464,11 @@ class _Imm:
         for sutta in self.suttas.values():
             sutta.parallels.sort(key=Parallel.sort_key)
     
-    def build_vinaya_rules(self):
-        """ Generate a cleaned up form of the table data
-        
-        But it is not unfolded as completly as for suttas.
-        
-        """
-        
-        start = time.time()
+    def build_grouped_suttas(self):
         vinaya_rules = {}
         for i, row in enumerate(table_reader('vinaya_rules')):
             uid = row.uid
-            rule = VinayaRule(
+            rule = GroupedSutta(
                 uid=uid,
                 volpage_info=row.volpage_info,
                 imm=self,
@@ -485,12 +480,28 @@ class _Imm:
             subdivision.vaggas[0].suttas.append(rule)
             
             self.suttas[uid] = rule
-            vinaya_rules[uid] = rule
+
+
+    def build_parallel_sutta_group(self, table_name):
+        """ Generate a cleaned up form of the table data
+        
+        A parallel group is a different way of defining parallels, in essence
+        it is a group of suttas (in the broader sense) from different
+        traditions, all of which are the same 'thing', this is for example
+        particulary relevant in the Patimokkha which is extremely similiar
+        across the traditions.
+
+        All suttas within a sutta group share the same name (title) this is
+        done mainly because many manuscripts lack titles (these being added
+        by redactors). Also their uids are consistently derived from their
+        division/subdivision uid.
+        
+        """
         
         def normalize_uid(uid):
             return uid.replace('#', '-').replace('*', '')
         
-        org_by_rule = list(table_reader('vinaya'))
+        org_by_rule = list(table_reader(table_name))
         
         by_school = []
         for i, column in enumerate(zip(*org_by_rule)): #rotate
@@ -498,7 +509,10 @@ class _Imm:
                 by_school.append(column)
             else:
                 division_uid = column[0]
-                division = self.divisions[division_uid]
+                try:
+                    division = self.divisions[division_uid]
+                except KeyError:
+                    raise Exception('Bad column data `{}`'.format(column))
                 division_negated_parallel = NegatedParallel(
                     division=division)
                 division_maybe_parallel = MaybeParallel(
@@ -509,12 +523,12 @@ class _Imm:
                     if j <= 1:
                         new_column.append(uid)
                     else:
-                        if not uid:
+                        if not uid or uid == '-':
                             new_column.append(division_negated_parallel)
                         elif uid == '?':
                             new_column.append(division_maybe_parallel)
                         else:
-                            rule = vinaya_rules[normalize_uid(uid)]
+                            rule = self.suttas[normalize_uid(uid)]
                             rule.ref_uid = uid
                             new_column.append(rule)
         
@@ -524,53 +538,9 @@ class _Imm:
         
         for row in by_rule[2:]:
             for rule in row[1:]:
-                if isinstance(rule, VinayaRule):
-                    rule._rule_row = row
-        
-        print('Vinaya generation took {}s'.format(time.time()-start))
-        return
-        
-        # We update empties
-        for column in by_school[1:]:
-            div_uid = column[0]
-            for i, uid in enumerate(column):
-                if i <= 1:
-                    continue
-                if uid == '':
-                    column[i] = div_uid + no_ll
-                elif uid == '?':
-                    column[i] = div_uid + maybe_ll
-        
-        by_rule = list(zip(*by_school))
-        
-        vinaya_parallels = defaultdict(dict)
-        hrefs = {}
-        for row in by_rule[1:]:
-            row = row[1:]
-            for uid in row:
-                if uid not in {'', '?'}:
-                    hrefs[uid] = uid.replace('*', '')
-                for oth_uid in row:
-                    if uid != oth_uid:
-                        vinaya_parallels[uid][oth_uid] = 1
-        
-        def remove_duplicates(inlist):
-            out = []
-            seen = set()
-            for e in inlist:
-                if e in seen:
-                    continue
-                seen.add(e)
-                out.append(normalize_uid(e))
-            return out
-        
-        self.vinaya_parallels = {normalize_uid(k): remove_duplicates(v) 
-                                    for k, v
-                                    in vinaya_parallels.items()}
-        
-        self.vinaya_text_hrefs = hrefs
-        
-        
+                if isinstance(rule, GroupedSutta):
+                    rule._parallel_sutta_group = row
+
     def build_search_data(self):
         """ Build useful search data.
 
@@ -579,7 +549,7 @@ class _Imm:
         suttastringsU = []
         seen = set()
         for sutta in self.suttas.values():
-            if isinstance(sutta, VinayaRule):
+            if isinstance(sutta, GroupedSutta):
                 if sutta.name in seen:
                     continue
                 seen.add(sutta.name)

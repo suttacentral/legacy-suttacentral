@@ -72,7 +72,7 @@ def default(*args, **kwargs):
         # Sutta Parallels
         sutta = imm.suttas.get(uid)
         if sutta:
-            if isinstance(sutta, classes.VinayaRule):
+            if isinstance(sutta, classes.GroupedSutta):
                 return VinayaParallelView(sutta).render()
             else:
                 return ParallelView(sutta).render()

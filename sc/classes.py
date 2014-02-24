@@ -57,7 +57,7 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
         'translations parallels')):
     __slots__ = ()
     
-    no_show_parallels = False
+    group_parallels = None
     
     def __hash__(self):
         return hash(self.uid)
@@ -71,22 +71,19 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
             url += '#' + bookmark
         return url
 
+    @property
+    def parallels_count(self):
+        return len(self.parallels)
 
-class VinayaRule:
-    """The VinayaRule is like a Sutta, except most of the 
-    information is generated on the fly. This involves a bit
-    more CPU but the Vinaya is unlikely to be accessed much,
-    and it requires a huge amount of memory to 'unfold' it
-    in full. So we only 'unfold' data from the master table
-    as required.
-    
-    This is useful because when I did 'unfold' the whole vinaya
-    data the memory requirements for the server tripled. It's not
-    a trifling memoy optimization.
+class GroupedSutta:
+    """The GroupedSutta is like a Sutta, except it belongs to a group of
+    related suttas and most of the information is generated on the fly from
+    it's group data.
     
     """
     
-    __slots__ = {'uid', 'ref_uid', 'volpage_info', 'imm', '_rule_row'}
+    __slots__ = {'uid', 'ref_uid', 'volpage_info', 'imm',
+                '_parallel_sutta_group'}
     
     no_show_parallels = True
     
@@ -101,15 +98,23 @@ class VinayaRule:
     
     @property
     def name(self):
-        return self._rule_row[0]
+        try:
+            return self._parallel_sutta_group[0]
+        except AttributeError as e:
+            e.args = list(e.args) + ['No group found for {}'.format(self.uid)]
+            raise e
     
     @property
     def acronym(self):
         return self.imm.uid_to_acro(self.uid)
     
     @property
-    def _subdivision_uid(self, _rex=regex.compile(r'(.*?)\d+$')):
-        return _rex.match(self.uid)[1]
+    def _subdivision_uid(self, _rex=regex.compile(r'(.*?)\d+[a-g]?$')):
+        m = _rex.match(self.uid)
+        if m:
+            return m[1]
+        else:
+            raise TypeError('`{}` could not be reduced to a subdivision_uid.'.format(self.uid))
     
     @property
     def subdivision(self):
@@ -196,17 +201,32 @@ class VinayaRule:
                     key=TextRef.sort_key))
     
     @property
-    def parallels(self):
+    def group_parallels(self):
+        if not hasattr(self, '_parallel_sutta_group'):
+            return None
         out = []
-        for i, e in enumerate(self._rule_row):
+        for i, e in enumerate(self._parallel_sutta_group):
             if e == self or i == 0:
                 continue
-            if isinstance(e, VinayaRule):
+            if isinstance(e, GroupedSutta):
                 out.append(Parallel(sutta=e, partial=False,
                     indirect=False, footnote=None))
             else:
                 out.append(e)
         return out
+
+    parallels = []
+
+    @property
+    def parallels_count(self):
+        count = len(self.parallels)
+        if not hasattr(self, '_parallel_sutta_group'):
+            return count
+        for parallel in self._parallel_sutta_group:
+            if isinstance(parallel, NegatedParallel):
+                continue
+            count += 1
+        return count
     
     @property
     def brief_uid(self):
