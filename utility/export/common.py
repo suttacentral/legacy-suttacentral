@@ -30,10 +30,11 @@ def zip(out_path, in_path, quiet=False):
 
 def x7z(out_path, in_path, quiet=False):
     with plumbum.local.cwd(str(in_path.parent)):
-        # -mx=5 or greater uses up a lot of memory. Currently the vps
-        # is memory starved so we keep this low for now.
-        cmd = plumbum.local['7z']['a', '-t7z', '-mx=4', str(out_path),
-            in_path.name]
+        # Use 'ultra' settings except dictionary size to reduce
+        # memory use (~40mb rather than ~600mb) while still getting
+        # close to maximum compression.
+        cmd = plumbum.local['7z']['a', '-t7z', '-mx=9', '-md=1m',
+                str(out_path), in_path.name]
         if quiet:
             cmd()
         else:
