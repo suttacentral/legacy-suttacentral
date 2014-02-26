@@ -15,6 +15,7 @@ To create a log message, use the standard Python logging pattern:
 import cherrypy
 import regex
 import logging
+from logging.handlers import RotatingFileHandler
 from colorama import Fore
 from copy import copy
 
@@ -87,8 +88,8 @@ def setup():
         console_log.setLevel(log_level)
         logging.root.addHandler(console_log)
 
-
-file_log = logging.FileHandler(str(config.log_path))
+file_log = RotatingFileHandler(str(config.log_path), 
+                maxBytes=4*1024*1024, backupCount=1)
 file_log.setFormatter(SCLogFormatter())
 
 console_log = logging.StreamHandler()
