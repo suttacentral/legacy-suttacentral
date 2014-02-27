@@ -15,4 +15,17 @@ class I18NTest(unittest.TestCase):
             does_not_exist = i18n.i18n_data['en']
         i18n.add_language('en')
         now_should_exist = i18n.i18n_data['en']
+
+    def test_add_translation(self):
+        i18n = I18N.I18N()
+        i18n.add_language('en')
+        
+        with self.assertRaises(KeyError):
+            does_not_exist = i18n.i18n_data['en']['dn']
+
+        i18n.add_translation('en', 'dn', 'Long Discourses')
+        now_should_exist = i18n.i18n_data['en']['dn']
+
+        with self.assertRaises(KeyError):
+            does_not_exist = i18n.i18n_data['ab']['dn']
         

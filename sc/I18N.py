@@ -65,3 +65,8 @@ class I18N:
     def add_language(self, language):
         self.i18n_data[language] = {}
 
+    # Add a translation for a given key and language
+    def add_translation(self, language, key, translation):
+        self.i18n_data[language][key] = translation
+
+
