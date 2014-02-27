@@ -23,18 +23,9 @@ from collections import OrderedDict, defaultdict, namedtuple
 import sc
 from sc import config, textfunctions
 from sc.classes import *
+from sc.util import ScCsvDialect
 
 logger = logging.getLogger(__name__)
-
-class ScCsvDialect(csv.Dialect):
-    """ Make it explicit. This happens to be exactly what LibreOffice calc
-    outputs on my Ubuntu machine. """
-    quoting = csv.QUOTE_MINIMAL
-    delimiter = ','
-    quotechar = '"'
-    doublequote = True
-    lineterminator = '\n'
-    strict=True
 
 def numsortkey(input, index=0):
     """ Numerical sort. Handles identifiers well.

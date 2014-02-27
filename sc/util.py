@@ -6,6 +6,8 @@ import pathlib
 import textwrap
 import time
 import regex
+import csv
+
 from collections import deque
 from contextlib import contextmanager
 from datetime import datetime
@@ -197,3 +199,16 @@ class ConciseRepr:
         
         return '{}({} {})'.format(
             type(value).__qualname__, len(value), typestring)
+
+# Moved from scimm so we can use it in I18N.py without creating 
+# a circular dependency (scimm.py will want to include I18N.py
+# and vice versa. Perhaps there is a better place to put the class.
+class ScCsvDialect(csv.Dialect):
+    """ Make it explicit. This happens to be exactly what LibreOffice calc
+    outputs on my Ubuntu machine. """
+    quoting = csv.QUOTE_MINIMAL
+    delimiter = ','
+    quotechar = '"'
+    doublequote = True
+    lineterminator = '\n'
+    strict=True
