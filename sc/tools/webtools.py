@@ -314,14 +314,17 @@ class BaseProcessor:
                     # Under exceptional cirumstances, an iterable of new
                     # filedata is returned. This requires special handling.
                     seen = set()
-                    for filename, filedata in data:
-                        if filename in seen:
-                            # WARNING THIS SHOULD NOT HAPPEN!
-                            # TODO FIXIT!
-                            continue
-                        seen.add(filename)
-                        self.report.processed_bytes += len(filedata)
-                        outzip.writestr(str(filename), filedata)
+                    try:
+                        for filename, filedata in data:
+                            if filename in seen:
+                                # WARNING THIS SHOULD NOT HAPPEN!
+                                # TODO FIXIT!
+                                continue
+                            seen.add(filename)
+                            self.report.processed_bytes += len(filedata)
+                            outzip.writestr(str(filename), filedata)
+                    except ProcessingError as e:
+                        self.entry.error(str(e))
                 else:
                     self.report.processed_bytes += len(data)
                     outzip.writestr(zinfo, data, compress_type=ZIP_DEFLATED)
@@ -759,7 +762,7 @@ class FinalizeProcessor(HTMLProcessor):
         
         es = root.select('section section')
         if es:
-            entry.error("File contains nested sections. Sections must not be nested.", lineno=es[0].sourceline)
+            self.entry.error("File contains nested sections. Sections must not be nested.", lineno=es[0].sourceline)
             raise ProcessingError("Unable to proceed due to nested sections")
         seen = set()
         for num, section in enumerate(root.iter('section')):
