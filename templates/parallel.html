@@ -9,7 +9,7 @@ If we have suttas with both, we'll need to update this template. #}
 {% if sutta.parallel_group %}
 <table id="vinaya_parallels">
 <caption>
-Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}</strong></caption>
+Details for <strong><a href="{{sutta.url}}">{{sutta.uid|uid_to_name}}</a> {{sutta.name}}</strong></caption>
 <thead>
 <tr>
 <th>Identifier</th>
