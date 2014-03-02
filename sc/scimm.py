@@ -495,6 +495,9 @@ class _Imm:
         done mainly because many manuscripts lack titles (these being added
         by redactors). Also their uids are consistently derived from their
         division/subdivision uid.
+
+        Some of this code is pretty messy but that can't really be helped
+        because it's really the underlying logic that is pretty messy.
         
         """
         
@@ -540,10 +543,9 @@ class _Imm:
             for rule in row[1:]:
                 if isinstance(rule, GroupedSutta):
                     if hasattr(rule, 'parallel_group'):
-                        if isinstance(rule.parallel_group, ParallelSuttaGroup):
+                        if not isinstance(rule.parallel_group, MultiParallelSuttaGroup):
                             rule.parallel_group = MultiParallelSuttaGroup(rule.parallel_group)
                         rule.parallel_group.add_group(group)
-
                     else:
                         rule.parallel_group = group
 
