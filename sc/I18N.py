@@ -35,38 +35,48 @@ class I18N:
         self.i18n_data = {}
         self.file_name = 'I18N.csv'
 
-    # Open the CSV file containing our localizations
-    # with & as used to make sure the file is unlocked
-    # if an exception is thrown.
+    """ Open the CSV file containing our localizations
+    with & as used to make sure the file is unlocked
+    if an exception is thrown. """
     def read_data(self):
         with (sc.table_dir / self.file_name).open('r',
               encoding='utf-8', newline='') as f:
             reader = csv.reader(f, dialect=ScCsvDialect)
-            field_names = next(reader)
+            column_names = next(reader)
 
             # This gives us all the column headings
-            for index, field_name in enumerate(field_names):
-                print(str(index) + ' ' + field_name)
+            for index, column_name in enumerate(column_names):
+                # TODO Keep the column names in order to 
+                # look them up.
+                print(str(index) + ' ' + column_name)
 
             # Each row may contain several translations
             # We need to pair each translation with its
             # language code specified in the first row
-            for row in reader:
-                if not any(row): # Drop entirely blank lines
-                    continue
-                if row[0].startswith('#'):
-                    continue
+            for line in reader:
+                self.add_line(line)
 
-                key = row[0]
-                for index, translation in enumerate(row[1:]):
-                    print(str(index) + ' ' + translation)
-    
-    # Add a language to which translations can be added.
+    """ Add a language to which translations can be added. """
     def add_language(self, language):
         self.i18n_data[language] = {}
 
-    # Add a translation for a given key and language
+    """ Add a translation for a given key and language """
     def add_translation(self, language, key, translation):
         self.i18n_data[language][key] = translation
 
+    """ Given the data for a single line in the CSV file
+    add whatever translations are present in the line
+    to the i18n_data structure """
+    def add_line(self, line):
+        if not any(line): # Drop entirely blank lines
+            return
+        if line[0].startswith('#'):
+            return
+
+        key = line[0]
+        for index, translation in enumerate(line[1:]):
+            # TODO For each translation, look up the language
+            # for that column and add the pair (language, translation)
+            # to the key.
+            print(str(index) + ' ' + translation)
 
