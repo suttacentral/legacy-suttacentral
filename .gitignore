@@ -5,6 +5,7 @@ daemonize
 newrelic.ini
 data
 *.log
+*.log.*
 *~
 static/js/sc_uid_expansion_data.js
 utility/out/
