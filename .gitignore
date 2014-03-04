@@ -5,6 +5,7 @@ daemonize
 newrelic.ini
 data
 *.log
+*.log.*
 *~
 utility/out/
 utility/suttacen/
