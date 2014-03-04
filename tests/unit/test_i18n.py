@@ -29,3 +29,9 @@ class I18NTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             does_not_exist = i18n.i18n_data['ab']['dn']
         
+    def test_language_exists(self):
+        i18n = I18N.I18N()
+        self.assertFalse(i18n.language_exists('en'))
+        i18n.add_language('en')
+        self.assertTrue(i18n.language_exists('en'))
+        

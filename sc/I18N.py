@@ -60,6 +60,11 @@ class I18N:
     def add_language(self, language):
         self.i18n_data[language] = {}
 
+    """ Return true if the language has already been
+    added to the i18n_data structure """
+    def language_exists(self, language):
+        return language in self.i18n_data
+    
     """ Add a translation for a given key and language """
     def add_translation(self, language, key, translation):
         self.i18n_data[language][key] = translation
@@ -72,11 +77,15 @@ class I18N:
             return
         if line[0].startswith('#'):
             return
-
+"""
+        # The code below needs to be enworkened
         key = line[0]
         for index, translation in enumerate(line[1:]):
-            # TODO For each translation, look up the language
-            # for that column and add the pair (language, translation)
-            # to the key.
-            print(str(index) + ' ' + translation)
+            language = self.get_language(self, index)
+            if self.language_exists(language):
+                self.add_translation(language, translation)
+            else
+                self.add_language(language)
+                self.add_translation(language, translation)
+"""                
 
