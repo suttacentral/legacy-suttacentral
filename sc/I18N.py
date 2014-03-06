@@ -91,7 +91,7 @@ class I18N:
 
         for index, translation in enumerate(line):
             
-            # Have the key, discard.
+            # Have the key, move on to language columns.
             if index == 0:
                 continue
 
