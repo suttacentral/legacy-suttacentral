@@ -131,21 +131,6 @@ $(document).ready(function() {
     }
 });
 
-// Offline bodge
-if (window.location.href.search('file:') == 0) {
-    //This is required because Chrome is draconian in considering
-    //file: to always be crossDomain.
-    $.ajaxPrefilter( "json script", function( options ) {
-        options.crossDomain = true;
-    });
-    // We need to make the dictionary source urls relative. Ideally we
-    // should include the nesting depth in the html file, perhaps in a meta
-    //tag (but this works fine atm since pi files are always at same depth)
-    var jsBase = '../js/'
-    sc.zh2en_dict_url = sc.zh2en_dict_url.replace('/js/', jsBase);
-    sc.pi2en_dict_url = sc.pi2en_dict_url.replace('/js/', jsBase);
-}
-
 function kindAdviceToIEusers(version){
     if (version > 8) return; //Works well enough on IE 9/10
     //Tell the user to upgrade
@@ -187,6 +172,7 @@ function initChineseLookup()
 {
     //Logic for deciding whether to install chinese lookup
     if ($('div[lang*=zh]').length == 0) return;//no elements declared to be chinese
+    if (!sc.zh2enLookup) return;
 
     //Where to attach the chinese lookup control button.
     sc.zh2enLookup.init('#' + textualControls.id, '#text')

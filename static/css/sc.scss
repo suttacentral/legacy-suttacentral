@@ -363,6 +363,12 @@ span.lookup > span.meaning > a:hover {
 span.lookup:hover {
     color:red;
 }
+
+span.lookup.punctuation:hover {
+	color: $dark-medium-gray;
+}
+
+
 span.lookup > span.meaning:hover {
     color:black;
 }

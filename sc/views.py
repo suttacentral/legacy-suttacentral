@@ -302,6 +302,7 @@ class TextView(ViewBase):
         # TODO: This check should use 'language' table
         if self.lang_code in {'zh'}:
             context.text = context.text.replace('\n', '')
+        context.lang_code = self.lang_code
     
     @property
     def path(self):
