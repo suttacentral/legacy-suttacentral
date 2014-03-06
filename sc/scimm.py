@@ -21,7 +21,7 @@ from datetime import datetime
 from collections import OrderedDict, defaultdict, namedtuple
 
 import sc
-from sc import config, textfunctions
+from sc import config, textfunctions, I18N
 from sc.classes import *
 from sc.util import ScCsvDialect
 
@@ -75,6 +75,9 @@ class _Imm:
         self.build_search_data()
         self.timestamp = timestamp
         self.build_time = datetime.now()
+        logger.info('building i18n data')
+        self.i18n = I18N.I18N()
+        self.i18n.read_data()
     
     def __call__(self, uid):
         if uid in self.collections:
