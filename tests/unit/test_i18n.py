@@ -8,6 +8,15 @@ class I18NTest(unittest.TestCase):
         i18n = I18N.I18N()
         i18n.file_name = 'test_I18N.csv'
         i18n.read_data()
+
+        # Here is a translation that exists.
+        self.assertEqual(i18n.get_translation('en', 'key1'), 'en1')
+
+        # This one doesn't exist
+        self.assertEqual(i18n.get_translation('en', 'key666'), '')
+
+        # This language doesn't exist
+        self.assertEqual(i18n.get_translation('en666', 'key666'), '')
     
     def test_add_language(self):
         i18n = I18N.I18N()
