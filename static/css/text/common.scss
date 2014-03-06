@@ -33,3 +33,7 @@
         line-height: 2em;
     }
 }
+
+#text:lang(zh) .sutta p {
+	word-break: break-all;
+}
