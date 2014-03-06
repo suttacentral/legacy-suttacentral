@@ -87,10 +87,14 @@ class I18N:
         if line[0].startswith('#'): # Drop comment lines
             return
         
-        # The key is first in the row.
-        key = line[0]
+        key = line[0] # Get key for this line.
 
-        for index, translation in enumerate(line[1:]):
+        for index, translation in enumerate(line):
+            
+            # Have the key, discard.
+            if index == 0:
+                continue
+
             language = self.get_language(index)
             if self.language_exists(language):
                 self.add_translation(language, key, translation)
