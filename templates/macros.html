@@ -21,7 +21,7 @@
 <td>
 {{sutta_acronym(sutta, show_alt=True)}}
 </td>
-<td>{{sutta.name}}</td>
+<td>{{sutta.uid|translate}}</td>
 <td>{{sutta.volpage_info | sub("(?<![,;]) ", "&nbsp;") | sht_expansion }}
 {%- if sutta.alt_volpage_info %} <span class='altVolPage'>{{sutta.alt_volpage_info|sub("(?<![,;]) ", "&nbsp;")}}</span>
 {%- endif %}
