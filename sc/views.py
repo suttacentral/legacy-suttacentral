@@ -297,6 +297,11 @@ class TextView(ViewBase):
             content.extend(self.create_nextprev_links())
         content.append('</div>')
         context.text = ''.join(content)
+        # Eliminate newlines from Full-width-glyph languages like Chinese
+        # because they convert into spaces when rendered.
+        # TODO: This check should use 'language' table
+        if self.lang_code in {'zh'}:
+            context.text = context.text.replace('\n', '')
     
     @property
     def path(self):
