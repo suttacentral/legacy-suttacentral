@@ -323,18 +323,20 @@ class TextView(ViewBase):
     def annotate_heading(self, hgroup_dom):
         """Add navigation links to the header h1 and h2"""
 
-        h1 = hgroup_dom.select('h1')
+        h1 = hgroup_dom.select_one('h1')
         
         # The below should continue to work when new 'hgroup' markup comes in.
         if h1:
-            while len(h1):         # A slightly bodgy way of finding 
+            while len(h1) and not h1.text:  # A slightly bodgy way of finding 
                 h1 = h1[0]         # the inner-leftmost element with text
             while not h1.text:     # to wrap in an anchor. 
                 h1 = h1.getnext()  # The anchor must not wrap any elements.
             href = '/{}'.format(self.uid)
             a = hgroup_dom.makeelement('a', href=href,
                 title='Click for details of parallels and translations.')
-            h1.wrap_inner(a)
+            a.text = h1.text
+            h1.text = None
+            h1.prepend(a)
             
         if hasattr(self, 'subdivision'):
             if len(hgroup_dom) > 1:

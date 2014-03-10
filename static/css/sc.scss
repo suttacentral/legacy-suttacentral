@@ -174,79 +174,6 @@ span.infomode:hover, span.infomode:hover span, a.bib:hover span.deets, a.note:ho
 #metaarea.infomode {display:inline-block; visibility:visible;}
 /* MARGIN 'NOTES' */
 
-a.msdiv {display:none;}
-
-
-a.da {
-    display: none;
-}
-
-a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.pts, a.pts_pn, a.san87, a.san89, a.sc, a.sen82, a.sht, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus, a.tlinehead, a.ud-sutta, a.ud-vagga-sutta, a.tri62, a.tri95, a.tu, a.uv, a.vai58, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.wal48, a.wal50, a.wal52, a.wal55b, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72
-    {
-    visibility:hidden;
-    position:absolute;
-    text-align:left;
-    width:4em;
-    @include sans-serif;
-    font-size:0.6em;
-    display:table;
-    font-style:normal;
-    font-weight:normal;
-    margin: 1.8em 0 0 -8em;
-    white-space:nowrap;
-    color: #2DB3A7;
-}
-
-a.ms {margin:0.7em 0 0 -14.5em; color:#00B428;}
-a.sc {margin:0.7em 0 0 -5.3em; color:#B3A72D;}
-a.t {margin:0.7em 0 0 -5.3em; color:#00B428;}
-a.wp {margin:0.7em 0 0 -5.3em; color:red;}
-a.pts {margin:-0.2em 0 0 -12.1em; color:#B2AF8C;}
-a.vn {margin:0.7em 0 0 -6em; color:#9B0F00;}
-a.sht {margin:0.8em 0 0 -6em; color:#9B000F;}
-a.wal52 {margin: 0.8em 0 0 -7em; color: #B3A72D;}
-/*a.titus {margin: -0.1em 0 0 -4em; color: #00B428;}*/
-a.titus {display:none}
-
-/* TODO systematically do for all of them (alphabetical order)
-a.bl
-a.bps
-a.eno89
-a.fuk03
-a.fol
-a.gbm
-a.gno78
-a.har04
-a.hoe16
-a.hos89a, a.hos89b, a.hos91
-a.hs
-a.kel
-a.mat85, a.mat88
-a.mit57
-a.ms
-a.pts
-a.san87,, a.san89
-a.sc
-a.sen82
-a.sht
-a.snp-vagga-section-verse
-a.snp-vagga-verse
-a.t,  a.tlinehead
-a.tri62,, a.tri95
-a.ud-sutta
-a.ud-vagga-sutta
-a.uv
-a.vai58, a.vai59, a.vai61
-a.verse-num-pts
-a.vn
-a.wal48, a.wal50, a.wal52, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c
-a.wp
-a.yam72
-a.snp-vagga-verse
-a.snp-vagga-section-verse
-
-*/
-
 a.vimula {color:blue;}
 
 a.pub {
@@ -281,8 +208,6 @@ a.bl {display:none;}
     font-style:normal;
     letter-spacing:0.02em;
 }
-
-a.infomode {visibility:visible;}
 
 
 
