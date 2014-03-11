@@ -5,13 +5,13 @@
 <table class="divtable">
 <caption>
 {% if division_text_url %}<a href="{{ division_text_url }}">{% endif %}
-Collection: <strong>{{division.collection.name}}</strong> — Division: 
-<strong>{{division.name}} ({{division.acronym}})</strong>
+Collection: <strong>{{division.collection.uid|translate('en')}}</strong> — Division: 
+<strong>{{division.uid|translate('en')}} ({{division.acronym}})</strong>
 {% if division_text_url %}</a>{% endif %}
 </caption>
 <thead>
 <tr>
-<th>Identifier</th>
+<th>{{'Identifier'|translate('en')}}</th>
 <th>Title</th>
 <th>Vol/Page</th>
 <th>Parallels</th>
