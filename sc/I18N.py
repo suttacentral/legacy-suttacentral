@@ -18,10 +18,10 @@ I'm happy to change things as the design becomes more clear.
 USAGE:
 
 >>> from sc import I18N
->>> localizer = I18N.I18N()
->>> english = localizer.localize('dn1', 'en')
->>> print(english)
-The All-embracing Net of Views
+>>> i = I18N.I18N()
+>>> i.read_data()
+>>> i.get_translation('en', 'dn')
+'The Long Discourses'
 
 """
 
@@ -85,7 +85,10 @@ class I18N:
         if not self.translation_exists(language, key): 
             return ''
         else:
-            return self.i18n_data[language][key]
+            if not self.translation_exists(language, key):
+                return ''
+            else:
+                return self.i18n_data[language][key]
 
     """ Given the data for a single line in the CSV file
     add whatever translations are present in the line
