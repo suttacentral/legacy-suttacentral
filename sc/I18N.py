@@ -55,10 +55,19 @@ class I18N:
     def add_language(self, language):
         self.i18n_data[language] = {}
 
-    """ Return true if the language has already been
-        added to the i18n_data structure """
+    """ Return true if the language has been
+        added to the i18n_data structure. Can be called 
+        before or after we are finished reading data. """
     def language_exists(self, language):
         return language in self.i18n_data
+
+    """ Return true if a translation exists for this key
+        in this language. May be called before or after
+        we are finished reading data. """
+    def translation_exists(self, language, key):
+        if not self.language_exists(language): 
+            return False
+        return key in self.i18n_data[language]
     
     """ Given the column number return the language """
     def get_language(self, column_number):
@@ -73,10 +82,10 @@ class I18N:
         an empty string. Another way of handling missing data
         would be to throw an exception. But we don't do that. """
     def get_translation(self, language, key):
-        if language not in self.i18n_data: return ''
-        if key not in self.i18n_data[language]: return ''
-
-        return self.i18n_data[language][key]
+        if not self.translation_exists(language, key): 
+            return ''
+        else:
+            return self.i18n_data[language][key]
 
     """ Given the data for a single line in the CSV file
     add whatever translations are present in the line
