@@ -1,7 +1,7 @@
 """ Support for internationalization (I18N is the usual abbreviation) 
 
 The I18N class allows access to the data stored in the I18N CSV file.
-The CSV file will have an arbitrary number of columns, the first being
+The CSV file can have an arbitrary number of columns, the first being
 the key by which localizable elements are identified. The subsequent 
 columns are named according to ISO language conventions. Each language
 has one and only one column (this should be checked!) Some values
