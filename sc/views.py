@@ -323,32 +323,39 @@ class TextView(ViewBase):
     def annotate_heading(self, hgroup_dom):
         """Add navigation links to the header h1 and h2"""
 
-        h1 = hgroup_dom.select_one('h1')
+        imm = scimm.imm()
+        div_text = self.uid in imm.divisions
         
-        # The below should continue to work when new 'hgroup' markup comes in.
-        if h1:
-            while len(h1) and not h1.text:  # A slightly bodgy way of finding 
-                h1 = h1[0]         # the inner-leftmost element with text
-            while not h1.text:     # to wrap in an anchor. 
-                h1 = h1.getnext()  # The anchor must not wrap any elements.
-            href = '/{}'.format(self.uid)
-            a = hgroup_dom.makeelement('a', href=href,
-                title='Click for details of parallels and translations.')
-            a.text = h1.text
-            h1.text = None
-            h1.prepend(a)
+        if not div_text:
+            h1 = hgroup_dom.select_one('h1')
             
-        if hasattr(self, 'subdivision'):
-            if len(hgroup_dom) > 1:
-                subhead = hgroup_dom[0]
-                while len(subhead) > 0:
-                    subhead = subhead[0]
-                while not subhead.text:
-                    subhead = subhead.getnext()
-                href = '/{}'.format(self.subdivision.uid)
+            if h1:
+                for e in h1.iter():
+                    if e.text and len(e.text) > 3:
+                        break
+                href = '/{}'.format(self.uid)
                 a = hgroup_dom.makeelement('a', href=href,
-                    title='Click to go to the division or subdivision page.')
-                subhead.wrap_inner(a)
+                    title='Click for details of parallels and translations.')
+                a.text = e.text
+                e.text = None
+                e.prepend(a)
+            
+        if hasattr(self, 'subdivision') or div_text:
+            if div_text:
+                heading = hgroup_dom.select_one('h1')
+            else:
+                if len(hgroup_dom) > 1:
+                    heading = hgroup_dom[0]
+                
+            for e in heading.iter():
+                if e.text and len(e.text) > 3:
+                    break
+            href = '/{}'.format(self.uid if div_text else self.subdivision.uid)
+            a = hgroup_dom.makeelement('a', href=href,
+                title='Click to go to the division or subdivision page.')
+            a.text = e.text
+            e.text = None
+            e.prepend(a)
     
     def create_nextprev_links(self):
         # Create links
