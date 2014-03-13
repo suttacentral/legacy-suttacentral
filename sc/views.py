@@ -43,7 +43,9 @@ def jinja2_environment():
     env.filters['datetime'] = util.format_datetime
     env.filters['timedelta'] = util.format_timedelta
     env.filters['uid_to_name'] = lambda uid: scimm.imm().uid_to_name(uid)
+    env.filters['i18n_key'] = lambda to_be_translated : scimm.imm().i18n.get_key(to_be_translated)
     env.filters['translate'] = lambda key, language : scimm.imm().i18n.get_translation(language, key)
+    
 
     def sub_filter(string, pattern, repl):
         return regex.sub(pattern, repl, string)
@@ -150,6 +152,7 @@ class ViewBase:
             'nonfree_fonts': config.nonfree_fonts and not cherrypy.request.offline,
             'offline': cherrypy.request.offline,
             'page_lang': 'en',
+            'lang_of_user': 'en', # Not sure if page_lang means the same thing.
             'scm': scm,
             'search_query': '',
         })
