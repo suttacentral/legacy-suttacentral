@@ -24,7 +24,7 @@ Collection: <strong>{{division.collection.uid|translate('en')}}</strong> — Div
 {%- endif %}
 {% for vagga in subdivision.vaggas %}
 {% if vagga.name -%}
-<tr><td colspan='5' class='vagga'>{{vagga.name}}</td></tr>
+<tr><td colspan='5' class='vagga'>{{vagga|i18n_key|translate(lang_of_user)}}</td></tr>
 {%- endif %}
 {% for sutta in vagga.suttas -%}
 {{macros.sutta_row(sutta)}}
