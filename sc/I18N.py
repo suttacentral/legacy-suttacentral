@@ -125,6 +125,7 @@ class I18N:
 
         if(class_name == 'Sutta'):
             return to_be_translated.uid
+
         elif(class_name == 'Vagga'):
             if to_be_translated.subdivision.uid == None:
                 return to_be_translated.subdivision.division.uid + \
@@ -132,6 +133,6 @@ class I18N:
             else:
                 return to_be_translated.subdivision.uid + \
                     '_v' + str(to_be_translated.number)
-            return to_be_translated.subdivision.uid + '_v' + str(to_be_translated.number)
+
         else:
             return ''
