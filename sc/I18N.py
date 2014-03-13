@@ -122,8 +122,8 @@ class I18N:
     @staticmethod
     def get_key(to_be_translated):
         class_name = to_be_translated.__class__.__name__
-
-        if(class_name == 'Sutta'):
+        
+        if(class_name in ['Collection', 'Division', 'Sutta']):
             return to_be_translated.uid
 
         elif(class_name == 'Vagga'):
