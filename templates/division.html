@@ -11,11 +11,11 @@ Collection: <strong>{{division.collection|i18n_key|translate(lang_of_user)}}</st
 </caption>
 <thead>
 <tr>
-<th>{{'Identifier'|translate('en')}}</th>
-<th>Title</th>
-<th>Vol/Page</th>
-<th>Parallels</th>
-<th class='transcol'>Translations</th>
+<th>{{'Identifier'|translate(lang_of_user)}}</th>
+<th>{{'Title'|translate(lang_of_user)}}</th>
+<th>{{'Vol/Page'|translate(lang_of_user)}}</th>
+<th>{{'Parallels'|translate(lang_of_user)}}</th>
+<th class='transcol'>{{'Translations'|translate(lang_of_user)}}</th>
 </tr>
 </thead>
 {% for subdivision in division.subdivisions -%}
