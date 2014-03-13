@@ -32,8 +32,9 @@ a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
 
 a.ms {margin:0.7em 0 0 -14.5em; color:#00B428;}
 a.sc {margin:0.7em 0 0 -4.3em; color:#B3A72D;}
-a.t {margin: -0.5em 0 0 -9.3em; color:#00B428;}
-a.t:nth-of-type(odd) {margin: 0.5em 0 0 -9.3em; color:#00B428;}
+a.t {margin: 0 0 0 -9.3em; color:#00B428;}
+/* Class added in javascript */
+a.t.collides {margin-top: 1em;}
 a.wp {margin:0.7em 0 0 -5.3em; color:red;}
 a.pts {margin:-0.2em 0 0 -12.1em; color:#B2AF8C;}
 a.vn {margin:0.7em 0 0 -6em; color:#9B0F00;}

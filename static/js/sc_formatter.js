@@ -21,6 +21,7 @@ sc.formatter = {
         this.operaFix();
         this.highlightBookmark();
         this.toolsMagic();
+        setTimeout(this.overlapperFixer, 20);
         setTimeout(this.acro_expander, 500);
     },
     apply: function(){
@@ -375,6 +376,31 @@ sc.formatter = {
                 
                 $(this).attr('title', name)
             });*/
+    },
+    overlapperFixer: function(){
+        /* Certain paragraph numbers exist in an overly dense state, it is a
+         * non-trivial (perhaps impossible) task in css to avoid collisions
+         * when using absolute positioning. Fortunately it is easy in js
+         * to flag items which are colliding.
+         *
+         * For the moment we only care about two items overlapping
+         * completely, not partially. It is enough for our purposes.
+         *
+         * The document must be given a chance to render before this
+         * function is called.
+        */
+        var offenders = '.t, .t-linehead'
+        var seen = {};
+        $('.t').each(function(){
+            var top = $(this).offset().top;
+            if (top in seen){
+                $(this).addClass('collides');
+                seen[top] += 1;
+            } else {
+                seen[top] = 1
+            }
+        });
+
     }
 }
 sc.formatter.init();
