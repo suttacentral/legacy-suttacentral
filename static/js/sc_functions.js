@@ -143,13 +143,9 @@ function toggleTextualInfo(force) {
 
     if (showTextInfo)
     {
-        //The tlinehead thing is a nasty little bodge to cull the excessive
-        //numbers of that type.
-        $(textualControls.marginClasses).not('.tlinehead:odd').addClass("infomode");
-        $(textualControls.popupClasses).addClass("infomode");
-        $(textualControls.contentClasses).addClass("infomode");
+        $(document.body).addClass("infomode");
         var meta = $(textualControls.metaarea)[0];
-        if (meta.innerHTML) {
+        if (!meta.innerHTML) {
             var content = false;
             for (var i = 0; i < meta.childNodes.length; i++)
             {
@@ -167,16 +163,12 @@ function toggleTextualInfo(force) {
                     }
                 }
             }
-            if (content){
-                //console.log('Content found');
-                $(meta).addClass("infomode");
+            if (!content){
+                meta.append('<p>No Metadata</p>');
             }
         }
     } else {
-        $(textualControls.marginClasses).removeClass("infomode")
-        $(textualControls.popupClasses).removeClass("infomode")
-        $(textualControls.contentClasses).removeClass("infomode")
-        $(textualControls.metaarea).removeClass("infomode")
+        $(document.body).removeClass("infomode");
     }
     sc.userPrefs.setPref("textInfo", showTextInfo, false);
 }

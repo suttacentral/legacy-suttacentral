@@ -96,15 +96,20 @@ a.bib {
     color:#EED900;
 }
 
-span.var, span.cross, span.end {position:relative;}
+span.var, span.cross, span.end {
+	position:relative;
+	:hover {
+		color:#2b2b2b;
 
-span.var:hover, span.cross:hover, span.end:hover {color:#2b2b2b;}
+	}
+}
 
-span.var.infomode, span.var.infomode:hover {color:#7A39D0;}
+.infomode {
+	span.var, span.var:hover {color:#7A39D0;}
+	span.cross, span.cross:hover {color:#F74F3E;}
+	span.end, span.end:hover {color:blue;}
+}
 
-span.cross.infomode, span.cross.infomode:hover {color:#F74F3E;}
-
-span.end.infomode, span.end.infomode:hover {color:blue;}
 
 a.note .deets, a.note:hover .deets
     {background-color:#F7DBD0;}
@@ -153,8 +158,7 @@ a.note .deets, a.bib .deets, span.var .deets, span.cross .deets, span.end .deets
     transition:visibility 0s ease 0.5s,opacity 0.5s ease;
 }
 
-/*a.note:hover .deets, a.bib:hover .deets, span.varcolor:hover .deets, span.crosscolor:hover .deets, span.endcolor:hover .deets*/
-span.infomode:hover, span.infomode:hover span, a.bib:hover span.deets, a.note:hover span.deets {
+a.bib:hover span.deets, a.note:hover span.deets {
     visibility:visible;
     opacity:1;
     -webkit-transition-delay:0s;
@@ -163,15 +167,16 @@ span.infomode:hover, span.infomode:hover span, a.bib:hover span.deets, a.note:ho
     transition-delay:0s;
 }
 
-.insertion.infomode:before {
-    content:'[';
-}
-.insertion.infomode:after {
-    content:']';
+.infomode {
+	.insertion:before {
+		content:'[';
+	}
+	.insertion:after {
+		content:']';
+	}
 }
 
-#metaarea {display:none; visibility:hidden;}
-#metaarea.infomode {display:inline-block; visibility:visible;}
+
 /* MARGIN 'NOTES' */
 
 a.vimula {color:blue;}
@@ -426,45 +431,61 @@ section:lang(zh) q {
 
 //.cr
 /*cross-reference, i.e. internal references. Used in IBH.*/
-.surplus	{display:none;}
-.surplus.infomode	{display:inline;color:#4805A2}
+.surplus {
+	display:none;
+	color:#4805A2;
+	.infomode & {
+		display:inline;
+	}
+		
+}
+
 /*For Mahaparinirvana text, marks apparently random phrases that are marked in bold in GRETIL. 
 
 Surplus text.
 */
 
-.supplied {}	
-.supplied.infomode	{color:#B3A72D}
+.supplied {
+	.infomode & {
+		color:#B3A72D
+	}
+}
 /*In almost all Sanskrit texts, there is reconstruction by the editor. These are marked <span class="supplied"></span>. In CSS this should by default display normally, and optionally, use 
 
 
 Text hypothetically reconstructed by the editor or translator.
 */
 
-.supplied2 {}
-.supplied2.infomode	{color:#9B8D00}
+.supplied2 {
+	.infomode & {
+		color:#9B8D00;
+	}
+}
 /*In some cases there are two forms of supplied text, usually differentiated in the original by () and []. This difference is retained by using supplied2 for the []. Actually these should be marked more clearly to differentiate them, but this will differ according to the various publications, which I don't have. So for now let them behave as for .supplied, except use 
 
 Text hypothetically reconstructed by the editor or translator.
 */
 
-p .add {display: none; }
+p .add {
+	display: none;
+	.infomode & {
+		display:inline;
+		padding: 0 0.5em;
+		@include sans-serif;
+		color:#b2b2b2;
+		font-size: 80%;
+	}
+}
 .add.show {display: inline;}
 
-
-p .add.infomode  {
-    display:inline;
-    padding: 0 0.5em;
-    @include sans-serif;
-    color:#b2b2b2;
-    font-size: 80%;
+.infomode .add {
+	background:#fefefe;
+	box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);
+	.author {
+		@include sans-serif-small-caps;
+	}
 }
 
-.add.infomode {background:#fefefe; box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);}
-
-.add.infomode .author {
-    @include sans-serif-small-caps;
-}
 /*There are some editorial additions marked <span class="add"></span>. These should be hidden by default.
 
 Text added by the editor or translator for clarification.
@@ -485,22 +506,35 @@ Metre reconstructed by the editor.
 Gap in the manuscript.
 */
 
-.corr {}
-corr.infomode	{color:#00751A} 
+.corr {
+	.infomode & {
+		color:#00751A
+	}	
+}
+
 /*A corrected reading that has been adopted in the text (usually by the latest editor mentioned in the meta). By default display normally.
 
 
 Reading corrected by the editor.
 */
 
-.sic	{display:none}
-.sic.infomode	{display:inline; color:#9B0F00;}
+.sic {
+	display:none;
+	.infomode & {
+		display:inline;
+		color:#9B0F00;
+	}
+}
+
 /*
 Apparently incorrect reading determined by the editor.
 */
 
-.lem {}
-.lem.infomode	{color:#432769}
+.lem {
+	.infomode &	{
+		color:#432769;
+	}
+}
 /*The adopted main reading in a text. Display normally.
 
 
@@ -523,8 +557,13 @@ cite.article	{font-style:normal}
 .gatha-number {}
 /*As it says. Style as for other refs.*/
 
-.del	{display:none;}
-.del.infomode	{color:#EE1700;}
+.del {
+	display:none;
+	.infomode & {
+		color:#EE1700;
+	}
+}
+
 /*(deletion) contains a letter, word, or passage deleted, marked as deleted, or otherwise indicated as superfluous or spurious in the copy text by an author, scribe, annotator, or corrector.
 
 Text deleted by the editor as superfluous.

@@ -152,6 +152,16 @@ button#pali_lookup_button,
     @include sans-serif;
     font-size: $sutta-toc-font-size;
     letter-spacing: 0;
+	visibility:hidden;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: 250ms;
+	.infomode & {
+        height: initial;
+		visibility:visible;
+        opacity: 1;
+	}
 
     @media #{$mobile} {
         margin-left: $mobile-main-side-margin;

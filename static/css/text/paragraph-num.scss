@@ -28,6 +28,14 @@ a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
     white-space:nowrap;
     color: #2DB3A7;
     letter-spacing: normal;
+    transition: 250ms;
+    opacity: 0;
+
+    .infomode & {
+		visibility:visible;
+		opacity: 1;
+		transition: 250ms;
+    }
 }
 
 a.ms {margin:0.7em 0 0 -14.5em; color:#00B428;}
@@ -84,6 +92,3 @@ a.snp-vagga-section-verse
 
 /* This causes paragraph numbers to become visible when
  * Textual Information is active */
- 
-a.infomode {visibility:visible;}
-
