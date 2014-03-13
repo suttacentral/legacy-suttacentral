@@ -5,8 +5,8 @@
 <table class="divtable">
 <caption>
 {% if division_text_url %}<a href="{{ division_text_url }}">{% endif %}
-Collection: <strong>{{division.collection.uid|translate('en')}}</strong> — Division: 
-<strong>{{division.uid|translate('en')}} ({{division.acronym}})</strong>
+Collection: <strong>{{division.collection|i18n_key|translate(lang_of_user)}}</strong> — Division: 
+<strong>{{division|i18n_key|translate(lang_of_user)}} ({{division.acronym}})</strong>
 {% if division_text_url %}</a>{% endif %}
 </caption>
 <thead>
