@@ -27,8 +27,11 @@ USAGE:
 
 import csv
 import sc
+import logging
 
 from sc.util import ScCsvDialect
+
+logger = logging.getLogger(__name__)
 
 class I18N:
     def __init__(self):
@@ -114,4 +117,21 @@ class I18N:
                 self.add_language(language)
                 self.add_translation(language, key, translation)
                 
+    """ For a given object, produce the key with which we lookup 
+        the translation. Some error handling might be a good idea. """
+    @staticmethod
+    def get_key(to_be_translated):
+        class_name = to_be_translated.__class__.__name__
 
+        if(class_name == 'Sutta'):
+            return to_be_translated.uid
+        elif(class_name == 'Vagga'):
+            if to_be_translated.subdivision.uid == None:
+                return to_be_translated.subdivision.division.uid + \
+                    '_v' + str(to_be_translated.number)
+            else:
+                return to_be_translated.subdivision.uid + \
+                    '_v' + str(to_be_translated.number)
+            return to_be_translated.subdivision.uid + '_v' + str(to_be_translated.number)
+        else:
+            return ''
