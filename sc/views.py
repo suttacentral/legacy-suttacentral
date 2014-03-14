@@ -346,6 +346,8 @@ class TextView(ViewBase):
             else:
                 if len(hgroup_dom) > 1:
                     heading = hgroup_dom[0]
+                else:
+                    return # No heading?
                 
             for e in heading.iter():
                 if e.text and len(e.text) > 3:

@@ -21,8 +21,9 @@ sc.formatter = {
         this.operaFix();
         this.highlightBookmark();
         this.toolsMagic();
-        setTimeout(this.overlapperFixer, 20);
+        this.overlapperFixer();
         setTimeout(this.acro_expander, 500);
+        $(window).resize(this.overlapperFixer);
     },
     apply: function(){
         $("tr").filter(":even").addClass("even"); //Add the .even class to every second tr element
@@ -389,18 +390,20 @@ sc.formatter = {
          * The document must be given a chance to render before this
          * function is called.
         */
-        var offenders = '.t, .t-linehead'
-        var seen = {};
-        $('.t').each(function(){
-            var top = $(this).offset().top;
-            if (top in seen){
-                $(this).addClass('collides');
-                seen[top] += 1;
-            } else {
-                seen[top] = 1
-            }
-        });
-
+        var offenders = '.t, .t-linehead';
+        $('.collides').removeClass('collides');
+        setTimeout(function(){
+            var seen = {};
+            $(offenders).each(function(){
+                var top = $(this).offset().top;
+                if (top in seen){
+                    $(this).addClass('collides');
+                    seen[top] += 1;
+                } else {
+                    seen[top] = 1
+                }
+            });
+        }, 25);
     }
 }
 sc.formatter.init();
