@@ -85,11 +85,11 @@ class I18N:
         an empty string. Another way of handling missing data
         would be to throw an exception. But we don't do that. """
     def get_translation(self, language, key):
-        if not self.translation_exists(language, key): 
-            return ''
+        if not self.language_exists(language): 
+            return 'No Language'
         else:
             if not self.translation_exists(language, key):
-                return ''
+                return 'No Translation'
             else:
                 return self.i18n_data[language][key]
 
