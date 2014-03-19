@@ -390,11 +390,25 @@ sc.formatter = {
          * The document must be given a chance to render before this
          * function is called.
         */
-        var offenders = '.t, .t-linehead';
+
+        
+        
+        var offenders = $('.t, .t-linehead');
+
+        
+        if (offenders.length > 50) {
+            if (!this.firstTime) {
+                offenders.filter(':even').hide();
+                this.firstTime = true;
+            }
+            /* DISABLED FOR PERFORMANCE REASONS */
+            return
+        }
+        
         $('.collides').removeClass('collides');
         setTimeout(function(){
             var seen = {};
-            $(offenders).each(function(){
+            offenders.each(function(){
                 var top = $(this).offset().top;
                 if (top in seen){
                     $(this).addClass('collides');
