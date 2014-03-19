@@ -481,7 +481,6 @@ class _Imm:
             
             self.suttas[uid] = rule
 
-
     def build_parallel_sutta_group(self, table_name):
         """ Generate a cleaned up form of the table data
         
@@ -531,7 +530,11 @@ class _Imm:
                         elif uid == '?':
                             new_column.append(division_maybe_parallel)
                         else:
-                            sutta = self.suttas[normalize_uid(uid)]
+                            try:
+                                sutta = self.suttas[uid.rstrip('*')]
+                            except KeyError:
+                                sutta = self.suttas[normalize_uid(uid)]
+                                
                             new_column.append(sutta)
         
         by_row = list(zip(*by_column))

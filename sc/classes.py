@@ -61,6 +61,10 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
     
     def __hash__(self):
         return hash(self.uid)
+
+    @property
+    def details_uid(self):
+        return self.uid.replace('#', '_')
     
     @staticmethod
     def canon_url(uid, lang_code, bookmark=''):
@@ -74,6 +78,10 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
     @property
     def parallels_count(self):
         return len(self.parallels)
+
+    @property
+    def url_uid(self):
+        return self.uid
 
 class GroupedSutta:
     """The GroupedSutta is like a Sutta, except it belongs to a group of
@@ -103,6 +111,10 @@ class GroupedSutta:
         except AttributeError as e:
             e.args = list(e.args) + ['No group found for {}'.format(self.uid)]
             raise e
+
+    @property
+    def details_uid(self):
+        return self.uid.replace('#', '_')
     
     @property
     def acronym(self):
@@ -110,7 +122,8 @@ class GroupedSutta:
     
     @property
     def _subdivision_uid(self, _rex=regex.compile(r'(.*?)\d+[a-g]?$')):
-        m = _rex.match(self.uid)
+        uid = self.uid.split('#')[0]
+        m = _rex.match(uid)
         if m:
             return m[1]
         else:
@@ -135,6 +148,9 @@ class GroupedSutta:
         """ Provides uids which can be tried in turn """
         uid = self.uid
         yield (uid, '') # Direct match for rule
+        if '#' in uid:
+            yield uid.split('#')
+            
         m = self._subdiv_match(uid)
         if m: 
             yield (m[1], m[2])

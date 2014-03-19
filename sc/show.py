@@ -46,6 +46,8 @@ def default(*args, **kwargs):
     if uid == 'uids':
         return UidsView().render()
 
+    uid = uid.replace('_', '#')
+
     # Divisions
     full = len(args) == 2 and args[1] == 'full'
     if len(args) == 1 or full:
