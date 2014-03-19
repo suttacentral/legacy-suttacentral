@@ -260,7 +260,7 @@ class TextView(ViewBase):
         <body[^>]*>
             (?:
                 (?<preamble>.*?)
-                (?<hgroup><hgroup.*?</hgroup>)
+                (?<hgroup><div [^>]*class="hgroup">.*?</div>)
                 (?<content>.*)
             |   # If there is no hgroup the above fails
                 # fall through to grabbing everything as content

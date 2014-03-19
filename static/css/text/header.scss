@@ -2,7 +2,7 @@ $sutta-h1-color: $medium-gray;
 $sutta-h2-color: $light-medium-gray;
 
 .sutta {
-    h1, h2, h3, h4, h5, h6 {
+    h1, h2, h3, h4, h5, h6, .hgroup p {
         @include serif-small-caps;
         text-align: center;
         font-weight: normal;
@@ -13,7 +13,7 @@ $sutta-h2-color: $light-medium-gray;
         color: $sutta-h1-color;
     }
 
-    h2, h2 a, h3, h3 a, h4, h4 a, h5, h5 a, h6, h6 a {
+    h2, h2 a, h3, h3 a, h4, h4 a, h5, h5 a, h6, h6 a, .hgroup p, .hgroup p a {
         color: $sutta-h2-color;
     }
 
@@ -43,14 +43,14 @@ $sutta-h2-color: $light-medium-gray;
     }
 
 
-    hgroup {
+    .hgroup {
         margin-top: 6em;
 
         @media #{$mobile} {
             margin-top: 0;
         }
 
-        & > h2, & > h3 {
+        & > p {
             margin: 0;
             @include sans-serif;
             font-size: 0.8em;
@@ -58,7 +58,7 @@ $sutta-h2-color: $light-medium-gray;
             letter-spacing: 0.2em;
         }
 
-        & > h4 {
+        & > .subheading {
             margin: -2em 0 0;
             font-style: italic;            
         }
