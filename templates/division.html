@@ -5,8 +5,8 @@
 <table class="divtable">
 <caption>
 {% if division_text_url %}<a href="{{ division_text_url }}">{% endif %}
-Collection: <strong>{{division.collection|i18n_key|translate(lang_of_user)}}</strong> — Division: 
-<strong>{{division|i18n_key|translate(lang_of_user)}} ({{division.acronym}})</strong>
+Collection: <strong>{{division.collection.uid|translate(lang_of_user)}}</strong> — Division: 
+<strong>{{division.uid|translate(lang_of_user)}} ({{division.acronym}})</strong>
 {% if division_text_url %}</a>{% endif %}
 </caption>
 <thead>
@@ -24,7 +24,7 @@ Collection: <strong>{{division.collection|i18n_key|translate(lang_of_user)}}</st
 {%- endif %}
 {% for vagga in subdivision.vaggas %}
 {% if vagga.name -%}
-<tr><td colspan='5' class='vagga'>{{vagga|i18n_key|translate(lang_of_user)}}</td></tr>
+<tr><td colspan='5' class='vagga'>{{vagga.uid|translate(lang_of_user)}}</td></tr>
 {%- endif %}
 {% for sutta in vagga.suttas -%}
 {{macros.sutta_row(sutta)}}

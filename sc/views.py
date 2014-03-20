@@ -43,7 +43,6 @@ def jinja2_environment():
     env.filters['datetime'] = util.format_datetime
     env.filters['timedelta'] = util.format_timedelta
     env.filters['uid_to_name'] = lambda uid: scimm.imm().uid_to_name(uid)
-    env.filters['i18n_key'] = lambda to_be_translated : scimm.imm().i18n.get_key(to_be_translated)
     env.filters['translate'] = lambda key, language : scimm.imm().i18n.get_translation(language, key)
     
 

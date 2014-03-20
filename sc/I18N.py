@@ -30,6 +30,7 @@ import sc
 import logging
 
 from sc.util import ScCsvDialect
+from sc.exceptions import NoSuchLanguageError, NoSuchTranslationError
 
 logger = logging.getLogger(__name__)
 
@@ -81,18 +82,23 @@ class I18N:
         self.i18n_data[language][key] = translation
 
     """ Given a key and a language, return the translation 
-        If we can't find what we are looking for, return 
-        an empty string. Another way of handling missing data
-        would be to throw an exception. But we don't do that. """
+        or an empty string. """
     def get_translation(self, language, key):
         if not self.language_exists(language): 
-            return 'No Language'
+            raise NoSuchLanguageError(language)
         else:
             if not self.translation_exists(language, key):
-                return 'No Translation'
+                raise NoSuchTranslationError(language, key)
             else:
                 return self.i18n_data[language][key]
 
+    def find_name(self, language, nameable):
+        """ Find a translation for name or return untranslated name. """
+        if self.translation_exists(language, nameable.uid):
+            return self.get_translation(language, nameable.uid)
+        else:
+            return nameable.name
+        
     """ Given the data for a single line in the CSV file
     add whatever translations are present in the line
     to the i18n_data structure """
@@ -116,23 +122,3 @@ class I18N:
             else:
                 self.add_language(language)
                 self.add_translation(language, key, translation)
-                
-    """ For a given object, produce the key with which we lookup 
-        the translation. Some error handling might be a good idea. """
-    @staticmethod
-    def get_key(to_be_translated):
-        class_name = to_be_translated.__class__.__name__
-        
-        if(class_name in ['Collection', 'Division', 'Sutta']):
-            return to_be_translated.uid
-
-        elif(class_name == 'Vagga'):
-            if to_be_translated.subdivision.uid == None:
-                return to_be_translated.subdivision.division.uid + \
-                    '_v' + str(to_be_translated.number)
-            else:
-                return to_be_translated.subdivision.uid + \
-                    '_v' + str(to_be_translated.number)
-
-        else:
-            return ''
