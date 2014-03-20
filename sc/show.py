@@ -92,17 +92,13 @@ def default(*args, **kwargs):
         lang_code = args[0]
         uid = args[1]
 
-        try:
-            imm.text_paths_by_lang[lang_code][uid]
-        except KeyError:
-            try:
-                imm.text_paths_by_lang[uid][lang_code]
+        if not imm.text_exists(uid, lang_code):        
+            if imm.text_exists(lang_code, uid):
                 # This is an old-style url, redirect to new-style url.
                 # (Don't be transparent, we want to keep things canonical)
                 raise cherrypy.HTTPRedirect('/{}/{}'.format(uid, lang_code))
-            except KeyError:
-                pass
-            raise cherrypy.NotFound()
+            else:
+                raise cherrypy.NotFound()
         
         sutta = imm.suttas.get(uid)
         lang = imm.languages[lang_code]

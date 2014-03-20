@@ -21,7 +21,7 @@ from datetime import datetime
 from collections import OrderedDict, defaultdict, namedtuple
 
 import sc
-from sc import config, textfunctions
+from sc import config, textfunctions, textdata
 from sc.classes import *
 
 logger = logging.getLogger(__name__)
@@ -77,6 +77,7 @@ def table_reader(tablename):
 class _Imm:
     _uidlangcache = {}
     def __init__(self, timestamp):
+        self.tim = textdata.tim()
         self.build()
         self.build_parallels_data()
         self.build_parallels()
@@ -173,26 +174,13 @@ class _Imm:
                 self.isocode_to_language[language.iso_code] = []
             self.isocode_to_language[language.iso_code].append(language)
         
-        # Gather up text refs:
-        # From filesystem (This also returns important text_paths variable)
-        self.text_paths_by_lang, text_refs = self.scan_text_dir()
-        # Produce an alternative nesting
-        # (The raw path data can be used to generate TextRef objects
-        # on the fly rather than in advance, this is used for vinaya)
-        text_paths_by_uid = {}
-        for lang, d in self.text_paths_by_lang.items():
-            for uid, path in d.items():
-                if not uid in text_paths_by_uid:
-                    text_paths_by_uid[uid] = {}
-                text_paths_by_uid[uid][lang] = path
-        self.text_paths_by_uid = text_paths_by_uid
-        
-        # Make a copy, note: we want copy of lists, not refs to them!
-        local_text_refs = {key: value[:] for key, value in text_refs.items()}
-        
         # From external_text table
+        text_refs = defaultdict(list)
         for row in table_reader('external_text'):
             text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url, priority=row.priority) )
+
+        self._external_text_refs = {uid: {tref.lang.uid: tref for tref in trefs}
+                                    for uid, trefs in text_refs.items()}
         
         collections = []
         for i, row in enumerate(table_reader('collection')):
@@ -322,39 +310,6 @@ class _Imm:
             
             lang = self.languages[row.language]
             
-            text_ref = None;
-            translations = []
-            translangs = set()
-            if uid in text_refs:
-                for ref in text_refs[uid]:
-                    if ref.lang == lang:
-                        text_ref = ref
-                    else:
-                        translations.append(ref)
-                        translangs.add(ref.lang.uid)
-            variants = []
-            m = regex.match(r'(.*?)\.?(\d+[a-z]?)$', uid)
-            if m:
-                variants.append((m[1], m[2]))
-            m = regex.match(r'(.*?)((\d+)-\d+$)', uid)
-            if m:
-                variants.append((m[1] + m[3], m[2]))
-            for sub_uid, bookmark in variants:
-                if sub_uid in local_text_refs:
-                    for ref in local_text_refs[sub_uid]:
-                        ref = TextRef(lang=ref.lang,
-                                    abstract=ref.abstract,
-                                    url=ref.url.split('#')[0] + '#' + bookmark,
-                                    priority=0,
-                                    )
-                        if ref.lang == lang:
-                            if not text_ref:
-                                text_ref = ref
-                        elif ref.lang.uid not in translangs:
-                            translations.append(ref)
-                
-            translations.sort(key=TextRef.sort_key)
-            
             subdivision = self.subdivisions[row.subdivision_uid]
             
             if row.vagga_number:
@@ -388,15 +343,12 @@ class _Imm:
                 volpage_info=volpage[0],
                 alt_volpage_info=volpage[1] if len(volpage) > 1 else None,
                 biblio_entry=biblio_entry,
-                text_ref=text_ref,
-                translations=translations,
                 parallels=[],
+                imm=self,
             )
             suttas.append( (uid, sutta) )
         
         suttas = sorted(suttas, key=numsortkey)
-        
-        
         
         self.suttas = OrderedDict(suttas)
         
@@ -585,60 +537,48 @@ class _Imm:
             for sutta in self.suttas.values()])
 
         self.searchstrings = list(zip(self.suttas.values(), suttastrings, suttastringsU, suttanamesimplified))
-       
-    def scan_text_dir(self):
-        """ Provides fully qualified paths for all texts.
+
+    def get_text_ref(self, uid, lang_uid):
+        textinfo = self.tim.get(uid=uid, lang_uid=lang_uid)
+        if textinfo:
+            return TextRef.from_textinfo(textinfo, self.languages[lang_uid])
         
-        Texts are keyed [lang][uid]
-        Note that subfolders within a langroot are ignored. For example a file:
-        text_dir/pi/sn/56/sn56.11.html would be found by the key ('pi', 'sn56.11'),
-        thus subfolders exist solely for ease of file organization.
-        """
-        import glob
-        text_paths = {}
-        text_refs = defaultdict(list)
+        for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
+            if lang_uid_k == lang_uid:
+                return textref
+
+    def get_translations(self, uid, root_lang_uid):
         
-        for full_path in sc.text_dir.glob('**/*.html'):
-            relative_path = full_path.relative_to(sc.text_dir)
-            lang = relative_path.parts[0]
-            if lang not in text_paths:
-                text_paths[lang] = {}
-            uid = relative_path.name.replace('.html', '')
-            assert uid not in text_paths[lang]
-            text_paths[lang][uid] = str(relative_path)
+        out = []
+        for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
+            if textref.lang.uid == root_lang_uid:
+                continue
+            out.append(textref)
 
-            author = self.get_text_author(full_path)
-            url = Sutta.canon_url(lang_code=lang, uid=uid)
-            text_refs[uid].append( TextRef(self.languages[lang], author, url, 0) )
+        textinfos = self.tim.get(uid=uid)
 
-            # In the case of a sutta range, we create new entries
-            # for the entire range. Unneeded entries will be gc'd
-            m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
-            if m:
-                range_start, range_end = int(m[2]), int(m[3])
+        for lang_uid, textinfo in textinfos.items():
+            if lang_uid == root_lang_uid:
+                continue
+            out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
 
-                for i in range(range_start, range_end + 1):
-                    try:
-                        text_refs[m[1]+str(i)].append( TextRef(self.languages[lang], author, url + '#' + str(i), 0))                            
-                    except KeyError:
-                        globals().update(locals())
-                        raise
+        out.sort(key=TextRef.sort_key)
+        return out
 
-        return (text_paths, text_refs)
-    
-    def get_text_path(self, lang, uid):
-        try:
-            return self.text_paths[lang][uid]
-        except KeyError:
+    def text_path(self, uid, lang_uid):
+        textinfo = self.tim.get(uid, lang_uid)
+        if not textinfo:
             return None
-    
-    _author_search = regex.compile(r'''(?s)<meta[^>]+author=(?|"(.*?)"|'(.*?)')''').search
+        return textinfo.path
+        
+    def text_exists(self, uid, lang_uid):
+        return self.tim.exists(uid, lang_uid)
     
     def get_text_nextprev(self, uid, language_code):
         try:
             uids = self._uidlangcache[language_code]
         except KeyError:
-            uids = sorted(self.text_paths_by_lang[language_code],
+            uids = sorted((k for k in self.tim.get(lang_uid=language_code) if '#' not in k),
                 key=sc.util.humansortkey)
             self._uidlangcache[language_code] = uids
             # The cache is eliminated upon imm regeneration.

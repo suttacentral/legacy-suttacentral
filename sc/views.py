@@ -306,9 +306,8 @@ class TextView(ViewBase):
     
     @property
     def path(self):
-        try:
-            relative_path = scimm.imm().text_paths_by_lang[self.lang_code][self.uid]
-        except KeyError:
+        relative_path = scimm.imm().text_path(self.uid, self.lang_code)
+        if not relative_path:
             return None
         return sc.text_dir / relative_path
     

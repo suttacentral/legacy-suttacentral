@@ -53,8 +53,8 @@ class Vagga(ConciseRepr, namedtuple('Vagga',
 class Sutta(ConciseRepr, namedtuple('Sutta',
         'uid acronym alt_acronym name vagga_number '
         'number_in_vagga number lang subdivision vagga '
-        'volpage_info alt_volpage_info biblio_entry text_ref '
-        'translations parallels')):
+        'volpage_info alt_volpage_info biblio_entry '
+        'parallels, imm')):
     __slots__ = ()
     
     group_parallels = None
@@ -83,6 +83,15 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
     def url_uid(self):
         return self.uid
 
+    @property
+    def text_ref(self):
+        return self.imm.get_text_ref(self.uid, self.lang.uid)
+
+    @property
+    def translations(self):
+        return self.imm.get_translations(self.uid, self.lang.uid)
+        
+
 class GroupedSutta:
     """The GroupedSutta is like a Sutta, except it belongs to a group of
     related suttas and most of the information is generated on the fly from
@@ -90,7 +99,7 @@ class GroupedSutta:
     
     """
     
-    __slots__ = {'uid', 'ref_uid', 'volpage_info', 'imm',
+    __slots__ = {'uid', 'ref_uid', 'volpage_info', 'imm', '_textinfo',
                 'parallel_group'}
     
     no_show_parallels = True
@@ -103,9 +112,14 @@ class GroupedSutta:
         self.uid = uid
         self.volpage_info = volpage_info
         self.imm = imm
+        self._textinfo = imm.tim.get(uid, self.lang.uid)
     
     @property
     def name(self):
+        if self._textinfo:
+            name = self._textinfo.name
+            if name:
+                return name
         try:
             return self.parallel_group.name
         except AttributeError as e:
@@ -144,77 +158,13 @@ class GroupedSutta:
     _subdiv_match = regex.compile(r'(.*?)(\d+)$').match
     _div_match = regex.compile(r'(.*)-(.*)$').match
     
-    def _get_uid_bookmark_pairs(self):
-        """ Provides uids which can be tried in turn """
-        uid = self.uid
-        yield (uid, '') # Direct match for rule
-        if '#' in uid:
-            yield uid.split('#')
-            
-        m = self._subdiv_match(uid)
-        if m: 
-            yield (m[1], m[2])
-        m = self._div_match(uid)
-        if m:
-            yield (m[1], m[2])
-        raise StopIteration
-    
     @property
     def text_ref(self):
-        # We are not using external references for Vinaya
-        imm = self.imm
-        lang = self.lang
-        uid = self.uid
+        return self.imm.get_text_ref(self.uid, self.lang.uid)
         
-        lang_uid_paths = imm.text_paths_by_lang.get(lang.uid)
-        if not lang_uid_paths:
-            return None
-        
-        for ref_uid, bookmark in self._get_uid_bookmark_pairs():
-            path = lang_uid_paths.get(ref_uid)
-            if path:
-                break
-        else:
-            return None
-        
-        return TextRef(lang=lang,
-                        abstract=None,
-                        url=Sutta.canon_url(uid=ref_uid,
-                                            lang_code=lang.uid,
-                                            bookmark=bookmark),
-                        priority=0)
-    
     @property
     def translations(self):
-        # We are not using external references for Vinaya
-        imm = self.imm
-        lang = self.lang
-        uid = self.uid
-        
-        out = {}
-        
-        for ref_uid, bookmark in self._get_uid_bookmark_pairs():
-            lang_paths = imm.text_paths_by_uid.get(ref_uid, {})
-            for lang_uid, path in lang_paths.items():
-                if lang_uid in out or lang_uid == lang.uid:
-                    continue
-                out[lang_uid] = (ref_uid, bookmark, path)
-        
-        def create_abstract(lang_uid):
-            lang_name = imm.uid_to_name(lang_uid)
-            if not lang_name or lang_name.lower() == lang_uid:
-                return None
-            return '{} translation'.format(lang_name.title())
-        
-        return tuple(sorted((TextRef(imm.languages[lang_uid],
-                                abstract=create_abstract(lang_uid),
-                                url=Sutta.canon_url(uid=ref_uid,
-                                    lang_code=lang_uid,
-                                    bookmark=bookmark),
-                                priority=0)
-                        for lang_uid, (ref_uid, bookmark, path)
-                        in out.items()),
-                    key=TextRef.sort_key))
+        return self.imm.get_translations(self.uid, self.lang.uid)
     
     parallels = []
 
@@ -331,6 +281,16 @@ class TextRef(ConciseRepr, namedtuple('TextRef',
             2) sequence number
         To be used with sort() or sorted()."""
         return (not t.url.startswith('/'), t.lang.priority, t.lang.iso_code, t.priority)
+
+    @classmethod
+    def from_textinfo(cls, textinfo, lang):
+        return cls(lang=lang,
+                        abstract=textinfo.author or lang.name,
+                        url=Sutta.canon_url(uid=textinfo.path.stem,
+                                            lang_code=lang.uid,
+                                            bookmark=textinfo.bookmark),
+                        priority=0)
+        
 
 
 BiblioEntry = namedtuple('BiblioEntry', 'uid name text')

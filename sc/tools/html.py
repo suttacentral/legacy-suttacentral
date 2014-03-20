@@ -193,6 +193,22 @@ class HtHtmlElementMixin:
             assert root.tag == 'html', "Incomplete HTML tree"
             root.insert(0, head)
             return head
+
+    def add_class(self, value):
+        if 'class' in self.attrib:
+            if value not in self.attrib['class']:
+                self.attrib['class'] += ' ' + value
+        else:
+            self.attrib['class'] = value
+
+    def remove_class(self, value):
+        if 'class' in self.attrib:
+            if 'value' in self.attrib['class']:
+                new_class = ' '.join(e for e in self.attr['class'].split() if e != value)
+                if new_class:
+                    self.attrib['class'] = new_class
+                else:
+                    del self.attrib['class']
     
     def __bool__(self):
         """ Objects are always truthy, as in future lxml 
