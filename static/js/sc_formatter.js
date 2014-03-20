@@ -274,19 +274,20 @@ sc.formatter = {
             decruft.init();
     },
     menuGenerator: function(headings){
-        
         var self = this;
         if ($('#menu').length) return; //Keep existing menu.
         
         var start = Date.now()
         if (!headings) {
-            headings = $('h1,h2,h3,h4,h5,h6')
-                .filter('#text *')
+            headings = $('#text').find('h2,h3,h4,h5,h6');
+            /*
+            headings = $('h2,h3,h4,h5,h6')
+                .filter('#text h2, ')
             
-            if (headings.filter('hgroup').length <= 1)
-                headings = headings.not('hgroup *')
+            if (headings.filter('.hgroup > *').length <= 1)
+                headings = headings.not('.hgroup > *')
             else 
-                headings = headings.not('hgroup h2, hgroup h3')
+                headings = headings.not('.hgroup > *:not(h1)')*/
         }
         var patimokkhaUid = ($('section.sutta[id*=-pm]').attr('id'))
         if (patimokkhaUid) {

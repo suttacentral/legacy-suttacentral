@@ -7,8 +7,8 @@
         padding: 0 !important;
     }
     /*bilingual headings*/
-.mirror{display:table;margin-left: auto;margin-right: auto;margin-bottom:4.6em;}
-.mirror-row{display:table-row;}
+.mirror {display:table;margin-left: auto;margin-right: auto;margin-bottom:4.6em;}
+.mirror > * {display:table-row;}
 .mirror-left{text-align:right;display:table-cell;padding-right: 1rem;border-right: 1px solid #e2e2e2;}
 .mirror-right{text-align:left;display:table-cell;padding-left: 1rem;}
 .mirror-middle{text-align:right;position:absolute;margin-top:0.2em;}
