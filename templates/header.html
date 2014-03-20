@@ -34,7 +34,12 @@
                     <a href="#" class="sublink">{{ sect_menu.sect.name }}</a>
                     <ul>
                         {% for division in sect_menu %}
-                        <li><a href="/{{ division.uid }}">{{ division.name }}</a></li>
+                        {% if division.menu_gwn_ind %}
+                        <li class="group-with-next">
+                        {% else %}
+                        <li>
+                        {% endif %}
+                        <a href="/{{ division.uid }}">{{ division.name }}</a></li>
                         {% endfor %}
                     </ul>
                 </li>

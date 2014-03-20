@@ -17,6 +17,8 @@ $tablet-header-menu-font-size: 14px;
 $mobile-header-menu-height: 22px;
 $mobile-header-menu-font-size: 14px;
 
+$menu-delay: 0.33s;
+
 #page-header-menu {
     position: absolute;
     bottom: 0;
@@ -103,6 +105,7 @@ $mobile-header-menu-font-size: 14px;
         visibility: hidden;
         opacity: 0;
         @include transition(opacity 0.1s ease-out, visibility 0.1s ease-out);
+        transition-delay: $menu-delay;
     }
 
     &:hover > ul
@@ -110,6 +113,7 @@ $mobile-header-menu-font-size: 14px;
         visibility: visible;
         opacity: 1;
         @include transition(opacity 0s linear, visibility 0s linear);
+        transition-delay: $menu-delay;
     }
 
     li {
@@ -118,6 +122,7 @@ $mobile-header-menu-font-size: 14px;
         &:last-child > a {
             border-bottom: none;
         };
+
     }
 
     a {
@@ -133,6 +138,10 @@ $mobile-header-menu-font-size: 14px;
             color: $dark-medium-gray;
             cursor: default;
         }
+    }
+
+    li.group-with-next > a {
+        border-bottom-color: $header-menu-background-color;
     }
 
     .triangle {
@@ -169,6 +178,7 @@ $mobile-header-menu-font-size: 14px;
         visibility: visible;
         opacity: 1;
         @include transition(opacity 0s linear, visibility 0s linear);
+        transition-delay:$menu-delay;
     }
 
     ul ul ul {
@@ -181,5 +191,6 @@ $mobile-header-menu-font-size: 14px;
         visibility: visible;
         opacity: 1;
         @include transition(opacity 0s linear, visibility 0s linear);
+        transition-delay:$menu-delay;
     }
 }

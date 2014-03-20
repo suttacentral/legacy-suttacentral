@@ -402,23 +402,11 @@ span.lookup:hover > span.meaning {
 
 /*CHINESE*/
 
-a.tlinehead:before {content:"CBETA "}
-
 section:lang(zh) {
     letter-spacing:0.2em;
 }
 section:lang(zh) q {
     letter-spacing: normal;
-}
-
-.tlinehead {
-    @include sans-serif(!important);
-    color:#0099cc;
-    margin: 1em 0 0 -16em;
-    font-size:0.5em !important;
-    letter-spacing:0 !important;
-    visibility:hidden;
-    position:absolute;
 }
 
 .tlineheadnote {color:red;}
