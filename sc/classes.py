@@ -48,7 +48,15 @@ class Subdivision(ConciseRepr, namedtuple('Subdivision',
 class Vagga(ConciseRepr, namedtuple('Vagga', 
         'subdivision number name suttas')):
     __slots__ = ()
-
+    
+    @property
+    def uid(self):
+        if self.subdivision.uid == None:
+            return self.subdivision.division.uid + \
+                '_vagga_' + str(self.number)
+        else:
+            return self.subdivision.uid + \
+                '_vagga_' + str(to_be_translated.number)
 
 class Sutta(ConciseRepr, namedtuple('Sutta',
         'uid acronym alt_acronym name vagga_number '
