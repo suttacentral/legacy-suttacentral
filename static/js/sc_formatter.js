@@ -16,6 +16,7 @@ sc.formatter = {
             //$("span.lookup").mouseenter(function(e){sc.formatter.rePosition($(e.target))});
         });
         $(document).on('keydown', sc.formatter.deathToTheBeast);
+        this.tocAmmender();
         this.apply();
         this.menuGenerator();
         this.operaFix();
@@ -368,6 +369,28 @@ sc.formatter = {
             });
         }
         self.menuGenTime = Date.now() - start;
+    },
+    tocAmmender: function(){
+        var data = JSON.parse($('#sc_text_info').text());
+        var details = $('<div id="links">');
+        /*if (data.subdivision_uid && data.subdivision_uid != data.division_uid) {
+            details.append('<a title="Goto Subdivision Page" href="../../{}">▲</a>'.format(data.subdivision_uid));
+        } else*/
+        if (data.division_uid) {
+            details.append('<a title="Goto Division Page" class="division" href="../../{}">▲</a>'.format(data.division_uid));
+        }
+        
+        if (data.sutta_uid) {
+            details.append('<a title="Goto Details Page" class="details" href="../../{}">►</a>'.format(data.sutta_uid));
+        }
+        data.all_lang_codes.sort().forEach(function(lang_code){console.log(lang_code);
+                if (lang_code == data.lang_code) return;
+                details.append('<a href="../../{}/{}">{}</a>'.format(lang_code, data.uid, lang_code));
+            })
+        if ($('#menu').length == 0){
+            $('<div id="menu" />').prependTo('#toc')
+        }
+        $('#menu').prepend(details);
     },
     acro_expander: function(){
         /*$('#vinaya_parallels td')

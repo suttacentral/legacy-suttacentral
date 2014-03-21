@@ -49,6 +49,27 @@ $sutta-toc-menu-font-size: 11px;
         letter-spacing: 0;
         word-spacing: 0;
     }
+
+    
+}
+
+#links:not(:last-child) {
+    border-bottom: 1px solid $sutta-toc-text-border-color;
+}
+
+#links {
+    
+    a {
+        float:none;
+        margin:0 0.5em;
+        padding:0;
+        color: $sutta-toc-text-color;
+        font-size: 80%;
+    }
+
+    .division {
+        vertical-align: top;
+    }
 }
 
 #menu {

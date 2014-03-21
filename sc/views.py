@@ -6,6 +6,7 @@ import newrelic.agent
 import regex
 import socket
 import time
+import json
 import urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
 
@@ -258,14 +259,7 @@ class TextView(ViewBase):
     # and non-greedy matching makes this straightforward.
     content_regex = regex.compile(r'''
         <body[^>]*>
-            (?:
-                (?<preamble>.*?)
-                (?<hgroup><div [^>]*class="hgroup">.*?</div>)
-                (?<content>.*)
-            |   # If there is no hgroup the above fails
-                # fall through to grabbing everything as content
-                (?<content>.*)
-            )
+        (?<content>.*)
         </div>\n?
         </body>
         ''', flags=regex.DOTALL | regex.VERBOSE)
@@ -281,27 +275,22 @@ class TextView(ViewBase):
         from sc.tools import html
         m = self.content_regex.search(self.get_html())
         m.detach_string() # Free up memory now.
-        context.title = '?'
+        imm = scimm.imm()
         
-        if m['hgroup'] is not None:
-            hgroup_dom = html.fragment_fromstring(m['hgroup'])
-            h1 = hgroup_dom.select('h1')
-            if h1:
-                context.title = h1[0].text
-            self.annotate_heading(hgroup_dom)
-            hgroup_html = str(hgroup_dom)
-            content = [m['preamble'], hgroup_html, m['content']]
-        else:
-            content = [m['content']]
+        textinfo = imm.tim.get(self.uid, self.lang_code)
+        context.title = textinfo.name if textinfo else '?'
+        contents = [m['content']]
         if not self.links_regex.search(m['content'], pos=-500):
-            content.extend(self.create_nextprev_links())
-        content.append('</div>')
-        context.text = ''.join(content)
+            contents.extend(self.create_nextprev_links())
+        contents.append('</div>')
+        contents.append('<script id="sc_text_info" type="text/json">\n{}\n</script>'.format(
+            self.text_json()))
+        context.text = '\n'.join(contents)
         # Eliminate newlines from Full-width-glyph languages like Chinese
         # because they convert into spaces when rendered.
         # TODO: This check should use 'language' table
         if self.lang_code in {'zh'}:
-            context.text = context.text.replace('\n', '')
+            context.text = context.text.replace('\n', '').replace('<p', '\n<p')
         context.lang_code = self.lang_code
     
     @property
@@ -319,7 +308,46 @@ class TextView(ViewBase):
         else:
             raise cherrypy.NotFound()
 
-    def annotate_heading(self, hgroup_dom):
+    def text_json(self):
+        # Put some useful information for javascript into a script field
+        # The absolute path relative to the domain
+        imm = scimm.imm()
+        sutta = imm.suttas.get(self.uid)
+        if sutta:
+            subdivision = sutta.subdivision
+            division = subdivision.division
+            root_lang = sutta.lang.uid
+        else:
+            division = imm.divisions.get(self.uid)
+            subdivision = None
+            sutta = None
+            
+
+        if not subdivision:
+            subdiv_uid = self.uid
+            while not subdivision:
+                if subdiv_uid in imm.subdivisions:
+                    subdivision = imm.subdivisions[subdiv_uid]
+                    division = subdivision.division
+                    break
+                subdiv_uid = subdiv_uid[:-1]
+            else:
+                subdivision = None
+
+        root_lang = division.collection.lang.uid
+        
+        out = {'lang_code':self.lang_code,
+        'uid': self.uid,
+        'sutta_uid': sutta.uid if sutta else None,
+        'subdivision_uid': subdivision.uid if subdivision else None,
+        'division_uid': division.uid if division else None,
+        'all_lang_codes': list(imm.tim.get(uid=self.uid)),
+        'root_lang_code': root_lang,
+        }
+
+        return json.dumps(out, ensure_ascii=False, sort_keys=True)
+        
+        
         """Add navigation links to the header h1 and h2"""
 
         imm = scimm.imm()
