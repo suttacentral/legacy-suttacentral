@@ -55,7 +55,8 @@ def default(*args, **kwargs):
         if division:
             if division.collection.pitaka.always_full:
                 if len(division.subdivisions) > 1:
-                    full = True
+                    if division.collection.pitaka.always_full:
+                        full = True
             if division.has_subdivisions():
                 if full:
                     return DivisionView(division).render()

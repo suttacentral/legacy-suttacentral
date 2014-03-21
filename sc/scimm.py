@@ -212,19 +212,18 @@ class _Imm:
         self.divisions = OrderedDict()
         for i, row in enumerate(table_reader('division')):
             collection = self.collections[row.collection_uid]
-            try:
-                text_ref = text_refs[row.uid][0]
-            except (KeyError, IndexError):
-                text_ref = None
+            
+            text_ref = self.get_text_ref(uid=row.uid, lang_uid=collection.lang.uid);
+            
             division = Division(
                 uid=row.uid,
                 name=row.name,
                 alt_name=row.alt_name,
+                text_ref=text_ref,
                 acronym=row.acronym or self.uid_to_acro(row.uid),
                 subdiv_ind=row.subdiv_ind,
                 menu_seq=i,
                 menu_gwn_ind=bool(row.menu_gwn_ind),
-                text_ref=text_ref,
                 collection=collection,
                 subdivisions=[], # Populate later
             )
@@ -259,7 +258,7 @@ class _Imm:
         for division in self.divisions.values():
             if not division.subdivisions:
                 subdivision = Subdivision(
-                                uid=None,
+                                uid=division.uid,
                                 acronym=None,
                                 division=division,
                                 name=None,
@@ -340,7 +339,7 @@ class _Imm:
                 vagga=vagga,
                 number=number,
                 number_in_vagga=row.number_in_vagga,
-                volpage_info=volpage[0],
+                volpage=volpage[0],
                 alt_volpage_info=volpage[1] if len(volpage) > 1 else None,
                 biblio_entry=biblio_entry,
                 parallels=[],
@@ -420,9 +419,10 @@ class _Imm:
         vinaya_rules = {}
         for i, row in enumerate(table_reader('vinaya_rules')):
             uid = row.uid
+            
             rule = GroupedSutta(
                 uid=uid,
-                volpage_info=row.volpage_info,
+                volpage=row.volpage_info,
                 imm=self,
             )
             
@@ -547,22 +547,34 @@ class _Imm:
             if lang_uid_k == lang_uid:
                 return textref
 
+        m = regex.match(r'(.*?)(\d+)-(\d+)', uid)
+        if m:
+            textinfo = self.tim.get(uid=m[1]+m[2], lang_uid=lang_uid)
+            if textinfo:
+                return TextRef.from_textinfo(textinfo, self.languages[lang_uid])
+
     def get_translations(self, uid, root_lang_uid):
+        
         
         out = []
         for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
             if textref.lang.uid == root_lang_uid:
                 continue
             out.append(textref)
-
+        
         textinfos = self.tim.get(uid=uid)
+        if not textinfos:
+            m = regex.match(r'(.*?)(\d+)-(\d+)', uid)
+            if m:
+                textinfos = self.tim.get(uid=m[1]+m[2])
 
         for lang_uid, textinfo in textinfos.items():
             if lang_uid == root_lang_uid:
                 continue
             out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
-
+            
         out.sort(key=TextRef.sort_key)
+        
         return out
 
     def text_path(self, uid, lang_uid):

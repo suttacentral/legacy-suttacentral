@@ -1,4 +1,5 @@
 import time
+import regex
 import pickle
 import pathlib
 import threading
@@ -112,6 +113,23 @@ class TextInfoModel:
                     if child.uid not in self.by_uid:
                         self.by_uid[child.uid] = {}
                     self.by_uid[child.uid][lang_uid] = child
+
+                m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
+                if m:
+                    range_textinfo = TextInfo(uid=uid+'#', path=path, name=name, author=author, volpage=volpage)
+                    for i in range(int(m[2]), int(m[3]) + 1):
+                        iuid = m[1] + str(i)
+                        if iuid in self.by_uid:
+                            if lang_uid in self.by_uid[iuid]:
+                                continue
+                        
+                        self.by_lang[lang_uid][iuid] = range_textinfo
+                        if iuid not in self.by_uid:
+                            self.by_uid[iuid] = {}
+                        self.by_uid[iuid][lang_uid] = range_textinfo
+                        
+                        
+                        
         self.build_time = time.time()-start
         logger.info('Text Info Model built in {}s'.format(self.build_time))
 
@@ -176,13 +194,23 @@ def _get_embedded_uids(root, lang_uid, uid):
     for e in root.select('.embeddedparallel'):
         if 'data-uid' in e.attrib:
             # Explicit
-            uid = e.attrib['data-uid']
+            new_uid = e.attrib['data-uid']
         else:
             # Implicit
-            uid = '{}#{}'.format(uid, e.attrib['id'])
+            new_uid = '{}#{}'.format(uid, e.attrib['id'])
         out.append(TextInfo(
-            uid=uid,
+            uid=new_uid,
             bookmark = e.attrib['id']))
+
+    sections = root.select('section.sutta')
+    if len(sections) > 1:
+        for section in sections:
+            data_uid = section.attrib.get('data-uid')
+            id = section.attrib.get('id')
+            if data_uid:
+                out.append(TextInfo(
+                    uid=data_uid,
+                    bookmark=id))
 
     return out
 

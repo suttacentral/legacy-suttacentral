@@ -1,5 +1,5 @@
 import regex
-from collections import namedtuple
+from collections import namedtuple, Counter
 from sc.util import ConciseRepr
 
 Language = namedtuple('Language', 
@@ -50,30 +50,12 @@ class Vagga(ConciseRepr, namedtuple('Vagga',
     __slots__ = ()
 
 
-class Sutta(ConciseRepr, namedtuple('Sutta',
-        'uid acronym alt_acronym name vagga_number '
-        'number_in_vagga number lang subdivision vagga '
-        'volpage_info alt_volpage_info biblio_entry '
-        'parallels, imm')):
+class SuttaCommon:
     __slots__ = ()
     
-    group_parallels = None
-    
-    def __hash__(self):
-        return hash(self.uid)
-
     @property
     def details_uid(self):
         return self.uid.replace('#', '_')
-    
-    @staticmethod
-    def canon_url(uid, lang_code, bookmark=''):
-        if not isinstance(lang_code, str):
-            lang_code = lang_code.uid
-        url = '/{lang}/{uid}'.format(uid=uid, lang=lang_code)
-        if bookmark:
-            url += '#' + bookmark
-        return url
 
     @property
     def parallels_count(self):
@@ -90,17 +72,49 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
     @property
     def translations(self):
         return self.imm.get_translations(self.uid, self.lang.uid)
-        
+    
+    def __hash__(self):
+        return hash(self.uid)
 
-class GroupedSutta:
+    group_parallels = None
+
+    @property
+    def volpage_info(self):
+        if self.volpage:
+            return self.volpage
+        
+        textinfo = self.imm.tim.get(uid=self.uid, lang_uid=self.lang.uid)
+        if textinfo and textinfo.volpage:
+            return textinfo.volpage
+        return ''
+    
+class Sutta(ConciseRepr, namedtuple('Sutta',
+        'uid acronym alt_acronym name vagga_number '
+        'number_in_vagga number lang subdivision vagga '
+        'volpage alt_volpage_info biblio_entry '
+        'parallels, imm'), SuttaCommon):
+    __slots__ = ()
+    
+    @staticmethod
+    def canon_url(uid, lang_code, bookmark=''):
+        if not isinstance(lang_code, str):
+            lang_code = lang_code.uid
+        url = '/{lang}/{uid}'.format(uid=uid, lang=lang_code)
+        if bookmark:
+            url += '#' + bookmark
+        return url
+
+
+
+class GroupedSutta(SuttaCommon):
     """The GroupedSutta is like a Sutta, except it belongs to a group of
     related suttas and most of the information is generated on the fly from
     it's group data.
     
     """
     
-    __slots__ = {'uid', 'ref_uid', 'volpage_info', 'imm', '_textinfo',
-                'parallel_group'}
+    __slots__ = {'uid', 'ref_uid', 'volpage', '_textinfo',
+                'parallel_group', 'imm'}
     
     no_show_parallels = True
     
@@ -108,9 +122,9 @@ class GroupedSutta:
     biblio_entry = None
     alt_acronym = None
     
-    def __init__(self, uid, volpage_info, imm):
+    def __init__(self, uid, volpage, imm):
         self.uid = uid
-        self.volpage_info = volpage_info
+        self.volpage = volpage
         self.imm = imm
         self._textinfo = imm.tim.get(uid, self.lang.uid)
     
@@ -125,24 +139,23 @@ class GroupedSutta:
         except AttributeError as e:
             e.args = list(e.args) + ['No group found for {}'.format(self.uid)]
             raise e
-
-    @property
-    def details_uid(self):
-        return self.uid.replace('#', '_')
     
     @property
     def acronym(self):
         return self.imm.uid_to_acro(self.uid)
     
     @property
-    def _subdivision_uid(self, _rex=regex.compile(r'(.*?)\d+[a-g]?$')):
-        uid = self.uid.split('#')[0]
-        m = _rex.match(uid)
-        if m:
-            return m[1]
-        else:
-            raise TypeError('`{}` could not be reduced to a subdivision_uid.'.format(self.uid))
-    
+    def _subdivision_uid(self):
+        imm = self.imm
+        uid = self.uid
+        uid = uid.replace('#', '-')
+        # Just keep slicing it until we find something that
+        # matches. It's good enough.
+        while len(uid) > 0:
+            if uid in imm.subdivisions:
+                return uid
+            uid = uid[:-1]
+        
     @property
     def subdivision(self):
         return self.imm.subdivisions[self._subdivision_uid]
@@ -157,14 +170,6 @@ class GroupedSutta:
     
     _subdiv_match = regex.compile(r'(.*?)(\d+)$').match
     _div_match = regex.compile(r'(.*)-(.*)$').match
-    
-    @property
-    def text_ref(self):
-        return self.imm.get_text_ref(self.uid, self.lang.uid)
-        
-    @property
-    def translations(self):
-        return self.imm.get_translations(self.uid, self.lang.uid)
     
     parallels = []
 
@@ -183,7 +188,7 @@ class GroupedSutta:
     @property
     def brief_name(self):
         return self.imm.uid_to_name(self.brief_uid)
-
+    
 class ParallelSuttaGroup:
     """ A class which acts a lot like a list of parallels """
     def __init__(self, name, entries):
@@ -191,7 +196,7 @@ class ParallelSuttaGroup:
         self.entries = entries
 
     def real_count(self):
-        return len([e for e in self.entries if isinstance(e, GroupedSutta)])
+        return len(set(e.sutta.subdivision.uid for e in self.parallels() if hasattr(e, 'sutta')))
     
     def parallels(self, sutta=None):
         "yields a series of Parallel objects"
@@ -204,6 +209,11 @@ class ParallelSuttaGroup:
             else:
                 yield e
 
+    def groupees(self):
+        c = Counter()
+        c.update(e.sutta.subdivision.uid for e in self.parallels() if hasattr(e, 'sutta'))
+        return {uid: count for uid, count in c.items() if count > 1}
+
 class MultiParallelSuttaGroup(ParallelSuttaGroup):
     def __init__(self, initial):
         self.groups = [initial]
@@ -211,10 +221,7 @@ class MultiParallelSuttaGroup(ParallelSuttaGroup):
 
     def add_group(self, group):
         self.groups.append(group)
-
-    def real_count(self):
-        return len(list(self.parallels()))
-
+    
     def parallels(self, sutta=None):
         for col in zip(*(g.entries for g in self.groups)):
             if col[0] == sutta:
