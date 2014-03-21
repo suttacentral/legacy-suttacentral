@@ -57,8 +57,11 @@ def quick(branch=None):
     blurb(quick)
     _staging_run(
         _branch_or_pull(branch),
+	'cd data',
+	_branch_or_pull(branch),
         'pip install -q -r requirements.txt',
         'invoke assets.compile',
+        'invoke textdata.refresh',
         'sudo supervisorctl restart sc-staging',
         'invoke assets.clean --older'
     )

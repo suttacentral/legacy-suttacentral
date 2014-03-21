@@ -54,6 +54,7 @@ def quick():
         'git pull',
         'pip install -q -r requirements.txt',
         'invoke assets.compile',
+        'invoke textdata.refresh',
         'sudo supervisorctl restart sc-production',
         'invoke assets.clean --older'
     )

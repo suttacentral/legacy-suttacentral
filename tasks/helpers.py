@@ -21,6 +21,7 @@ _PP_HINTS = {
     'Setup': 'Setting up',
     'Stop': 'Stopping',
     'Update': 'Updating',
+    'Ensure': 'Ensuring',
 }
 
 

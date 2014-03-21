@@ -17,6 +17,7 @@ collections = [
     'newrelic',
     'search',
     'test',
+    'textdata',
     'tmp',
     'travis',
 ]
