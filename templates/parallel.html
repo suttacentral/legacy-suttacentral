@@ -19,8 +19,12 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.uid|uid_to_name}}</a> {{sutt
 </tr>
 </thead>
 <tbody>
+
 {#% set parallels = [origin] + sutta.parallel_group.parallels(sutta)|list %#}
-{% for parallel in sutta.parallel_group.parallels() -%}
+{% set groupees = sutta.parallel_group.groupees() %}
+{% set groupees_seen = {} %}
+{% set parallels = sutta.parallel_group.parallels()|list %}
+{% for parallel in parallels -%}
 {% if parallel.negated %}
 <tr class="negated-parallel">
 <td>
@@ -35,11 +39,20 @@ No parallel
 </td>
 </tr>
 {% else %}
-{%- if parallel.sutta == sutta -%}
-<tr class='origin'>
-{%- else -%}
+{% set _class = ['origin'] if parallel.sutta == sutta else [] %}
+
+{% set subdiv_uid = parallel.sutta.subdivision.uid %}
+{% set next_parallel = parallels[loop.index0 + 1] %}
+
+{% if next_parallel|attr('sutta') and next_parallel.sutta.subdivision.uid == subdiv_uid %}
+    {% set _class = _class + ['group-with-next'] %}
+{% endif %}
+
+{% if _class %}
+<tr class="{{ _class|join(' ') }}">
+{% else %}
 <tr>
-{%- endif %}
+{% endif %}
 <td>
 {{macros.sutta_acronym(parallel.sutta, show_alt=true)}}
 {%- if parallel.partial -%}*{%- endif -%}
@@ -69,7 +82,7 @@ No parallel
 </table>
 {% endif %}
 
-{% if sutta.parallels %}
+{% if sutta.parallels or not sutta.parallel_group %}
 <table>
 <caption>
 Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}</strong></caption>
@@ -83,7 +96,8 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 </tr>
 </thead>
 <tbody>
-{% for parallel in sutta.parallels -%}
+{% set parallels = [origin] + sutta.parallels|list %}
+{% for parallel in parallels -%}
 {%- if loop.first -%}
 <tr class='origin'>
 {%- else -%}

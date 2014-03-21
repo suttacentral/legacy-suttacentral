@@ -63,3 +63,23 @@ td {
     }
 }
 
+.group-with-next:first-of-type {
+    
+}
+
+
+
+tr.group-with-next td {
+    border-bottom: none;
+    border-top-width: 2px;
+    padding: 0.6em 1em;
+    background-color:$off-white;
+}
+
+tr.group-with-next + tr td {
+    border-top: none;
+    border-bottom-width: 2px;
+    padding: 0.6em 1em;
+    background-color:$off-white;
+}
+
