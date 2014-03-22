@@ -51,12 +51,13 @@ class Root(object):
 
     @cherrypy.expose
     def default(self, *args, **kwargs):
-        if sc.config.realtime_profiling:
+        if sc.config.realtime_profiling or kwargs.get('profile'):
             import cProfile
+            statsfile = str(sc.base_dir / 'log' / 'default.pstats')
             cProfile.runctx("show.default(*args, **kwargs)",
                 globals=globals(),
                 locals=locals(),
-                filename=str(sc.base_dir / 'log' / 'default.pstats'))
+                filename=statsfile)
         
         return show.default(*args, **kwargs)
 
