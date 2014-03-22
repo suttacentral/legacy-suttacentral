@@ -35,22 +35,23 @@ def default(*args, **kwargs):
     TODO: Collections?
     """
 
-    uid = args[0]
-
-    # Static Pages
-    if uid in STATIC_PAGES:
-        return InfoView(uid).render()
-
     imm = scimm.imm()
-    
-    if uid == 'uids':
-        return UidsView().render()
 
-    uid = uid.replace('_', '#')
-
-    # Divisions
     full = len(args) == 2 and args[1] == 'full'
+    
     if len(args) == 1 or full:
+        uid = args[0]
+
+        # Static Pages
+        if uid in STATIC_PAGES:
+            return InfoView(uid).render()
+
+        if uid == 'uids':
+            return UidsView().render()
+
+        uid = uid.replace('_', '#')
+
+        # Divisions
         division = imm.divisions.get(uid)
         if division:
             if division.collection.pitaka.always_full:
@@ -65,13 +66,11 @@ def default(*args, **kwargs):
             elif not full:
                 return DivisionView(division).render()
 
-    # Subdivisions
-    if len(args) == 1:
+        # Subdivisions
         subdivision = imm.subdivisions.get(uid)
         if subdivision:
             return SubdivisionView(subdivision).render()
 
-    if len(args) == 1:
         # Sutta Parallels
         sutta = imm.suttas.get(uid)
         if sutta:
@@ -88,7 +87,6 @@ def default(*args, **kwargs):
                 raise cherrypy.NotFound()
         # Sutta or Translation Texts
 
-        
         # New style urls have the language code first then the uid
         lang_code = args[0]
         uid = args[1]

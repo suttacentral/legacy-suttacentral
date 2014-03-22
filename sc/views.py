@@ -325,7 +325,7 @@ class TextView(ViewBase):
 
         if not subdivision:
             subdiv_uid = self.uid
-            while not subdivision:
+            while subdiv_uid and not subdivision:
                 if subdiv_uid in imm.subdivisions:
                     subdivision = imm.subdivisions[subdiv_uid]
                     division = subdivision.division
