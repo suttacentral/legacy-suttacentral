@@ -130,7 +130,7 @@ class GroupedSutta(SuttaCommon):
     
     @property
     def name(self):
-        if self._textinfo:
+        if self._textinfo and '-pm' not in self.uid and '-vb' not in self.uid:
             name = self._textinfo.name
             if name:
                 return name
