@@ -169,7 +169,30 @@ class HtHtmlElementMixin:
                     if desc.tag in blocktags:
                         e.tag='div'
                         break
-            
+
+    def next_in_order(self):
+        """ Returns the next element in document order
+
+        If you started at the root element and called this until
+        reaching the end, the order would be identical to that
+        returned by 'iter'. The difference is that this function
+        can traverse sideways and upwards as well as down.
+
+        """
+        try:
+            return next(self.iterchildren())
+        except StopIteration:
+            try:
+                return next(self.itersiblings())
+            except StopIteration:
+                parent = self.getparent()
+                while parent:
+                    try:
+                        return next(parent.itersiblings())
+                    except StopIteration:
+                        pass
+                    parent = parent.getparent()
+        return None
     
     def pretty(self, **kwargs):
         """ Return a string with prettified whitespace """
