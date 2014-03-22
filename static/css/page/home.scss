@@ -7,7 +7,7 @@ $home-tabs-hover-color: $dark-pastel-green;
 $home-shadow-color: rgba($medium-gray, 0.3);
 $home-line-color: $light-gray;
 $home-link-hover-color: $light-light-gray;
-$home-heading-color: $medium-gray;
+$home-heading-color: $dark-medium-gray;
 
 $home-tabs-height: 2em;
 
@@ -164,7 +164,7 @@ $home-tabs-height: 2em;
                 padding: 0.75em 0.5em 0.5em;
                 border-radius: 0.25em;
                 font-size: 1.1em;
-                font-weight: normal;
+                font-weight: bold;
                 color: $home-heading-color;
                 background-color: $light-off-white;
                 cursor: default;
