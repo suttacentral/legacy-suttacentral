@@ -102,6 +102,6 @@ class Scm(object):
         with plumbum.local.cwd(self.dir):
             return plumbum.local['git'](*args).strip()
 
-_timeout = 4 if config['global']['engine.autoreload.on'] else 8
+_timeout = 120 if config['global']['engine.autoreload.on'] else None
 scm = Scm(sc.base_dir, _timeout)
 data_scm = Scm(sc.data_dir, 1)
