@@ -17,7 +17,7 @@ caption {
     }
 }
 
-tr.even {
+tr:nth-child(even) {
     background-color: $table-row-even-background-color;
 }
 

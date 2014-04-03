@@ -58,7 +58,7 @@ $sutta-h2-color: $light-medium-gray;
             letter-spacing: 0.2em;
         }
 
-        & > .subheading {
+        h1 ~ p {
             margin: -2em 0 0;
             font-style: italic;            
         }
