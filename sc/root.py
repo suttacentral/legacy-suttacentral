@@ -51,13 +51,11 @@ class Root(object):
 
     @cherrypy.expose
     def default(self, *args, **kwargs):
-        if sc.config.realtime_profiling or kwargs.get('profile'):
-            import cProfile
-            statsfile = str(sc.base_dir / 'log' / 'default.pstats')
-            cProfile.runctx("show.default(*args, **kwargs)",
-                globals=globals(),
-                locals=locals(),
-                filename=statsfile)
+        if 'profile' in kwargs:
+            try:
+                return show.profile(locals(), globals(), *args, **kwargs)
+            except ValueError:
+                pass
         
         return show.default(*args, **kwargs)
 
@@ -76,6 +74,7 @@ class Root(object):
     @cherrypy.expose
     def sht_lookup(self, query, **kwargs):
         return show.sht_lookup(query)
+    
 
 class Admin(object):
     """Requests to /admin/*"""

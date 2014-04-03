@@ -179,3 +179,69 @@ def admin_data_notify(json_payload):
     else:
         logger.info('Data update request ignored')
     raise cherrypy.HTTPRedirect('/admin', 303)
+
+def profile(locals_dict, globals_dict, *args, **kwargs):
+    """ Generates a profile
+
+    You can request a profile anytime by appending ?profile to the url.
+
+    If config.profile_passhash is set, then you must use ?profile=password
+    where sha1(password.encode() + b'foobarusrex') == profile_passhash
+
+    If the password is required and not correct, raises a value error.
+
+    """
+    
+    from tempfile import NamedTemporaryFile
+    from hashlib import sha1
+    from io import StringIO
+    import cProfile
+    from pstats import Stats
+    import regex
+    key = kwargs['profile'].encode() + b'spambarusrex'
+    if sc.config.app['profile_passhash'] and (sha1(key).hexdigest() !=
+        sc.config.app['profile_passhash']):
+            raise ValueError('Invalid Password')
+    with NamedTemporaryFile(prefix='profile') as tmpfile:
+        cProfile.runctx("show.default(*args, **kwargs)",
+            globals=globals_dict,
+            locals=locals_dict,
+            filename=tmpfile.name)
+        stats = Stats(tmpfile.name)
+    stats.sort_stats('tottime')
+    stats.stream = StringIO()
+    stats.print_stats()
+    out = stats.stream.getvalue()
+    splitpoint = out.find('ncalls')
+    preamble = out[:splitpoint]
+    table = out[splitpoint:]
+    def splitdict(d):
+        return ['{}: {}'.format(k, d[k]) for k in sorted(d)]
+            
+    m = regex.search(r'(?<= )(/home/.*)(/site-packages)(?=/)', table)
+    site_packages = m[1] + m[2] if m else 'Unknown'
+    table = table.replace(site_packages, '…')
+            
+    return '''<!DOCTYPE html><html><head><meta charset="utf8">
+<title>{}</title>\
+<body style="font-family: monospace;">
+<h1> {} : Debug and Profile information</h1>
+<h2> Request Info: </h2>
+
+<pre>cherrypy.request.config = {{\n{}\n}}</pre>
+<pre>cherrypy.request.headers = {{\n{}\n}}</pre>
+
+<h2> Profile </h2>
+<pre>{}\nsite-packages (…) = {}</pre>
+<table><tbody>{}</tbody></table>
+<script src="/js/vendor/jquery-1.10.2.min.js"></script>
+<script src="/js/tablesort.js"></script>'''.format(
+        'Profile',
+        ''.join('/' + a for a in args),
+        '\n'.join('    ' + e for e in splitdict(cherrypy.request.config)),
+        '\n'.join('    ' + e for e in splitdict(cherrypy.request.headers)),
+        preamble,
+        site_packages,
+        '\n'.join('<tr>' + ''.join(
+            '<td>{}'.format(s) for s in line.split(maxsplit=5)) for line in table.split('\n'))
+    )
