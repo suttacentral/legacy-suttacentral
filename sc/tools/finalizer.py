@@ -467,20 +467,38 @@ def finalize(root, entry, language=None, metadata=None,
         toc = root.makeelement('div', {'id':'toc'})
     
     divtext.insert(0, toc)
+
+    # Convert old-style hgroups
+    for hgroup in root.iter('hgroup'):
+        hgroup.tag = 'div'
+        hgroup.add_class('hgroup')
+        if hgroup[0].tag != 'h1':
+            hgroup[0].tag = 'p'
+            hgroup[0].attrib['class'] = 'division'
+
+        for e in hgroup.select('h4'):
+            e.tag = 'p'
+            
+        for e in hgroup[1:-1]:
+            if e.tag not in {'h2','h3','h4','h5','h6', 'p'}:
+                continue
+            e.tag = 'p'
+        del hgroup
     
     h1notinhgroup = False
     for h1 in root.iter('h1'):
-        if h1.getparent().tag != 'hgroup':
+        if 'hgroup' not in h1.getparent().get('class', ''):
             h1notinhgroup = True
+
     if h1notinhgroup:
-        for h1 in root.iter('h1'):
-            hgroup = root.makeelement('hgroup')
-            h1.addnext(hgroup)
-            for e in hgroup.itersiblings(preceding=True):
-                if e.tag not in {'h2', 'h3', 'h4'}:
-                    break
-                hgroup.prepend(h1)
-            hgroup.append(h1)
+        entry.error('<h1> not in hgroup, please enclose the <h1> in a <div class="hgroup>, the division or subdivision heading should be <p class="division">, other subheadings (such as chapters) should be simple <p> but included inside the hgroup.')
+
+    for e in root.select('.hgroup > h2:last-child'):
+        e.getparent().addnext(e)
+
+    for e in root.select('.hgroup > *'):
+        if e.tag not in {'h1', 'p'}:
+            entry.warning('Inappropriate tag in div.hgroup: <{}>. Only <h1> and <p> are permissible.'.format(e.tag))
     
     supplied_misused = False
     for h in root.select('h1,h2,h3,h4,h5,h6,h7'):
@@ -548,6 +566,31 @@ def finalize(root, entry, language=None, metadata=None,
                 id = normalize_anchor(e.attrib['class'] + ' ' + e.text)
             e.attrib['id'] = id
             e.text = None
+
+    # Merge blockquotes
+    blockquotes = root.select('blockquote')
+    if blockquotes:
+        e = blockquotes[0]
+        i = 1
+        while i < len(blockquotes):
+            if e.tail and not e.tail.isspace():
+                continue
+            nextbq = e.getnext()
+            if nextbq == blockquotes[i]:
+                e.append(nextbq)
+                nextbq.drop_tag()
+            else:
+                e = blockquotes[i]
+
+            i += 1
+                
+                
+                
+    
+        
+        
+        
+        
 
     for e in root.select('a.previous, a.top, a.next'):
         divtext.append(e)
