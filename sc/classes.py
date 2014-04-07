@@ -83,10 +83,24 @@ class SuttaCommon:
         if self.volpage:
             return self.volpage
         
-        textinfo = self.imm.tim.get(uid=self.uid, lang_uid=self.lang.uid)
+        textinfo = self._textinfo
         if textinfo and textinfo.volpage:
             return textinfo.volpage
         return ''
+
+    @property
+    def _textinfo(self):
+        return self.imm.tim.get(self.uid, self.lang.uid)
+
+    def _fixname(self, name):
+        if name:
+            m = regex.match(r'(\d+(?:\.\d+)?(?:–\d+)?)?\s*(.*)', name)
+            if m[2]:
+                return m[2]
+            else:
+                return m[1]
+        else:
+            return ''
     
 class Sutta(ConciseRepr, namedtuple('Sutta',
         'uid acronym alt_acronym name vagga_number '
@@ -104,7 +118,13 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
             url += '#' + bookmark
         return url
 
-
+    @property
+    def name(self):
+        supname = super().name
+        if supname:
+            return supname
+        ti = self._textinfo
+        return self._fixname(ti.name if ti else '')
 
 class GroupedSutta(SuttaCommon):
     """The GroupedSutta is like a Sutta, except it belongs to a group of
@@ -131,9 +151,8 @@ class GroupedSutta(SuttaCommon):
     @property
     def name(self):
         if self._textinfo and '-pm' not in self.uid and '-vb' not in self.uid:
-            name = self._textinfo.name
-            if name:
-                return name
+            ti = self._textinfo
+            return self._fixname(ti.name if ti else '')
         try:
             return self.parallel_group.name
         except AttributeError as e:

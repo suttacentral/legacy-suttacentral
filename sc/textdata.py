@@ -9,7 +9,7 @@ from itertools import chain
 import sc
 from sc.tools import html
 import logging
-logger = logging.Logger(__name__)
+logger = logging.getLogger(__name__)
 
 """ A tool responsible for collating information from the texts
 
@@ -25,7 +25,7 @@ def text_dir_md5(extra_files=[__file__]):
     likely to result in a different final database.
 
     """
-    files = chain(sc.text_dir.glob('**/.'), (pathlib.Path(f) for f in extra_files))
+    files = chain(sc.text_dir.glob('**/*.html'), (pathlib.Path(f) for f in extra_files))
     mtimes = (file.stat().st_mtime_ns for file in files)
     
     from hashlib import md5
@@ -112,12 +112,13 @@ class TextInfoModel:
         start=time.time()
         # The pagenumbinator should be scoped because it uses
         # a large chunk of memory which should be gc'd.
-        
+        logger.info('Building Text Info Model')
         p = PaliPageNumbinator() 
         for lang_dir in sc.text_dir.glob('*'):
             lang_uid = lang_dir.stem
             
             for htmlfile in lang_dir.glob('**/*.html'):
+             try:
                 uid = htmlfile.stem
                 root = html.parse(str(htmlfile)).getroot()
                 
@@ -133,7 +134,7 @@ class TextInfoModel:
                 for child in embedded:
                     child.path = path
                     child.author = author
-                    self.add_text_info(lang_uid, uid, child)
+                    self.add_text_info(lang_uid, child.uid, child)
 
                 m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
                 if m:
@@ -144,6 +145,8 @@ class TextInfoModel:
                             continue
 
                         self.add_text_info(lang_uid, iuid, range_textinfo)
+             except Exception as e:
+                 print('An exception occured: {!s}'.format(htmlfile))
         
         self.build_time = time.time()-start
         logger.info('Text Info Model built in {}s'.format(self.build_time))
@@ -177,7 +180,7 @@ class TextInfoModel:
     def _get_volpage(self, element, lang_uid, uid, ppn):
         if lang_uid == 'zh':
             e = element.next_in_order()
-            while e:
+            while e is not None:
                 if e.tag =='a' and e.select_one('.t, .t-linehead'):
                     break
                 e = e.next_in_order()
@@ -189,7 +192,7 @@ class TextInfoModel:
             while e:
                 if e.tag == 'a' and e.select_one('.ms'):
                     return ppn.get_pts_ref_from_pid(e.attrib['id'])
-                e = e.next_in_order()        
+                e = e.next_in_order()
 
         return None
     
@@ -198,7 +201,7 @@ class TextInfoModel:
         # within this text.
         out = []
         
-        if uid.endswith('-pm'):
+        if '-pm' in uid:
             # This is a patimokkha text
             for h4 in root.select('h4'):
                 a = h4.select_one('a[id]')
@@ -211,9 +214,16 @@ class TextInfoModel:
                     bookmark=a.attrib['id'],
                     name=None,
                     volpage=volpage))
+
+        data_uid_seen = set()
+        for e in root.select('[data-uid]'):
+            out.append(TextInfo(uid=e.get('data-uid'), bookmark=e.get('id')))
+            data_uid_seen.add(e)
         
         for e in root.select('.embeddedparallel'):
             if 'data-uid' in e.attrib:
+                if e in data_uid_seen:
+                    continue
                 # Explicit
                 new_uid = e.attrib['data-uid']
             else:
@@ -286,17 +296,21 @@ class SqliteBackedTIM(TextInfoModel):
         self._local.con = sqlite3.connect(self._filename)
 
     def _init_table(self):
+        pathlib.Path(self._filename).unlink()
+        self.reconnect()
         self._con.execute('CREATE TABLE data(lang, uid, path, bookmark, name, author, volpage)')
-        self._con.execute('CREATE INDEX lang_x ON data(lang)')
-        self._con.execute('CREATE INDEX uid_x ON data(uid)')
         # Presently we build the whole lot in one go and disabling
         # journaling dramatically improves bulk insert performance.
         self._con.execute('PRAGMA journal_mode = OFF')
+    def _finally_table(self):
+        self._con.execute('CREATE INDEX lang_x ON data(lang)')
+        self._con.execute('CREATE INDEX uid_x ON data(uid)')
         
     def build(self):
         self._init_table()
         super().build()
         self.set_happy()
+        self._finally_table()
         self._con.commit()
 
     def set_happy(self):
@@ -375,23 +389,23 @@ class SqliteBackedTIM(TextInfoModel):
 def tim(force_build=False, Model=SqliteBackedTIM):
     """ Returns an instance of the TIM
 
-    Will rebuild if and only if needed.
+    When this is called for the first time, it will check if the cached
+    TIM is up to date. If it is, the cached copy will be loaded and
+    returned. If it's not, it will rebuild.
 
-    Note that while this will happily build on demand, ideally it should
-    be called in advance from a seperate process before restarting the server,
-    thus preparing the cached copy.
+    The TIM can take some time to build, perhaps a couple of minutes.
+    For this reason, it's a reasonable idea to load it in a seperate
+    process before restarting the server, thus ensuring it is fresh.
 
     i.e.
     import sc.textdata
     sc.textdata.tim()
-
-    It takes a considerable time to return
     
      """
 
     if not force_build and Model._build_ready.set():
         return Model._instance
-
+    
     Model.build_once(force_build)
     Model._build_ready.wait()
     return Model._instance

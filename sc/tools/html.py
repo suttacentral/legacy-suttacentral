@@ -18,6 +18,7 @@ import functools as _functools
 from html import escape # lxml.html doesn't define it's own escape
 import regex as _regex
 import io as _io
+import itertools
 
 defs.html5_tags = frozenset({'section', 'article', 'hgroup'})
 
@@ -179,19 +180,19 @@ class HtHtmlElementMixin:
         can traverse sideways and upwards as well as down.
 
         """
-        try:
-            return next(self.iterchildren())
-        except StopIteration:
-            try:
-                return next(self.itersiblings())
-            except StopIteration:
-                parent = self.getparent()
-                while parent:
-                    try:
-                        return next(parent.itersiblings())
-                    except StopIteration:
-                        pass
-                    parent = parent.getparent()
+
+        def iterparentsiblings(e):
+            parent = e.getparent()
+            while parent:
+                yield from parent.itersiblings()
+                parent = parent.getparent()
+            
+        ees = itertools.chain(self.iterchildren(), self.itersiblings(), iterparentsiblings(self))
+        
+        for e in ees:
+            if isinstance(e, HtHtmlElement):
+                return e
+                
         return None
     
     def pretty(self, **kwargs):

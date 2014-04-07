@@ -251,8 +251,7 @@ def generate_canonical_path(uid, language):
     else:
         return path
     
-    if collection.pitaka.uid != 'su':
-        path /= collection.pitaka.uid
+    path /= collection.pitaka.uid
     
     if language != collection.lang:
         path /= pathlib.Path(collection.lang.uid)
@@ -263,7 +262,7 @@ def generate_canonical_path(uid, language):
     if division.uid != uid:
         path /= division.uid
     
-    if subdivision and uid != subdivision.uid != None:
+    if (subdivision and uid != subdivision.uid != None) or subdivision.uid == 'kn':
         if division.collection.pitaka == 'su':
             path /= subdivision.uid
     
@@ -424,7 +423,9 @@ def finalize(root, entry, language=None, metadata=None,
             uid = uid1
     else:
         entry.info('uid looks like {}'.format(uid))
-    
+
+    if not uid:
+        uid = uid2
     #Convert non-HTML tags to classes
     normalize_tags(root, entry)
     

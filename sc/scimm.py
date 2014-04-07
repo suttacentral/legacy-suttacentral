@@ -554,8 +554,6 @@ class _Imm:
                 return TextRef.from_textinfo(textinfo, self.languages[lang_uid])
 
     def get_translations(self, uid, root_lang_uid):
-        
-        
         out = []
         for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
             if textref.lang.uid == root_lang_uid:
@@ -575,6 +573,30 @@ class _Imm:
             
         out.sort(key=TextRef.sort_key)
         
+        return out
+
+    def get_text_refs(self, uid):
+        out = []
+        for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
+            out.append(textref)
+        def fuzzy_attempts(uid):
+            yield uid
+            m = regex.match(r'(.*?)(\d+)(-\d+)?', uid)
+            if m:
+                # Dedash
+                if m[3]:
+                    yield m[1] + m[2]
+                # Remove number
+                yield m[1].rstrip('.')
+        textinfos = None
+        for fuid in fuzzy_attempts(uid):
+            textinfos = self.tim.get(uid=fuid)
+            if textinfos:
+                for lang_uid, textinfo in textinfos.items():
+                    out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
+                break
+        
+        out.sort(key=TextRef.sort_key)
         return out
 
     def text_path(self, uid, lang_uid):

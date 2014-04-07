@@ -95,7 +95,8 @@ def default(*args, **kwargs):
             if imm.text_exists(lang_code, uid):
                 # This is an old-style url, redirect to new-style url.
                 # (Don't be transparent, we want to keep things canonical)
-                raise cherrypy.HTTPRedirect('/{}/{}'.format(uid, lang_code))
+                # (Also, use 301. This is a permament change)
+                raise cherrypy.HTTPRedirect('/{}/{}'.format(uid, lang_code), 301)
             else:
                 raise cherrypy.NotFound()
         
