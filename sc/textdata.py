@@ -107,26 +107,34 @@ class TextInfoModel:
         if uid not in self._by_uid:
             self._by_uid[uid] = {}
         self._by_uid[uid][lang_uid] = textinfo
-        
+
+    def get_palipagenumbinator(self):
+        if not self._ppn:
+            self._ppn = PaliPageNumbinator()
+        return self._ppn
+    
     def build(self):
-        start=time.time()
         # The pagenumbinator should be scoped because it uses
         # a large chunk of memory which should be gc'd.
-        logger.info('Building Text Info Model')
-        p = PaliPageNumbinator() 
+        # But it shouldn't be created at all if we don't need it.
+        # So we use a getter, and delete it when we are done.
+        self._ppn = None
+        
         for lang_dir in sc.text_dir.glob('*'):
             lang_uid = lang_dir.stem
-            
             for htmlfile in lang_dir.glob('**/*.html'):
              try:
+                if not self._should_process_file(htmlfile):
+                    continue
+                logger.info('Adding file: {!s}'.format(htmlfile))
                 uid = htmlfile.stem
                 root = html.parse(str(htmlfile)).getroot()
                 
                 path = htmlfile.relative_to(sc.text_dir)
                 author = self._get_author(root, lang_uid, uid)
                 name = self._get_name(root, lang_uid, uid)
-                volpage = self._get_volpage(root, lang_uid, uid, p)
-                embedded = self._get_embedded_uids(root, lang_uid, uid, p)
+                volpage = self._get_volpage(root, lang_uid, uid)
+                embedded = self._get_embedded_uids(root, lang_uid, uid)
 
                 textinfo = TextInfo(uid=uid, lang=lang_uid, path=path, name=name, author=author, volpage=volpage)
                 self.add_text_info(lang_uid, uid, textinfo)
@@ -147,10 +155,14 @@ class TextInfoModel:
                         self.add_text_info(lang_uid, iuid, range_textinfo)
              except Exception as e:
                  print('An exception occured: {!s}'.format(htmlfile))
+                 raise
         
-        self.build_time = time.time()-start
-        logger.info('Text Info Model built in {}s'.format(self.build_time))
+        del self._ppn
 
+
+    def _should_process_file(self, file):
+        return True
+    
     # Class Variables
     _build_lock = threading.Lock()
     _build_ready = threading.Event()
@@ -177,7 +189,7 @@ class TextInfoModel:
             logger.warn('Could not determine name for {}/{}'.format(lang_uid, uid))
             return ''
     
-    def _get_volpage(self, element, lang_uid, uid, ppn):
+    def _get_volpage(self, element, lang_uid, uid):
         if lang_uid == 'zh':
             e = element.next_in_order()
             while e is not None:
@@ -188,6 +200,7 @@ class TextInfoModel:
                 return
             return 'T {}'.format(e.attrib['id'])
         elif lang_uid == 'pi':
+            ppn = self.get_palipagenumbinator()
             e = element.next_in_order()
             while e:
                 if e.tag == 'a' and e.select_one('.ms'):
@@ -196,7 +209,7 @@ class TextInfoModel:
 
         return None
     
-    def _get_embedded_uids(self, root, lang_uid, uid, ppn):
+    def _get_embedded_uids(self, root, lang_uid, uid):
         # Generates possible uids that might be contained
         # within this text.
         out = []
@@ -296,23 +309,62 @@ class SqliteBackedTIM(TextInfoModel):
         self._local.con = sqlite3.connect(self._filename)
 
     def _init_table(self):
-        pathlib.Path(self._filename).unlink()
+        try:
+            pathlib.Path(self._filename).unlink()
+        except FileNotFoundError:
+            pass
         self.reconnect()
         self._con.execute('CREATE TABLE data(lang, uid, path, bookmark, name, author, volpage)')
+        self._con.execute('CREATE TABLE mtimes(path, mtime)')
         # Presently we build the whole lot in one go and disabling
         # journaling dramatically improves bulk insert performance.
         self._con.execute('PRAGMA journal_mode = OFF')
+
     def _finally_table(self):
         self._con.execute('CREATE INDEX lang_x ON data(lang)')
         self._con.execute('CREATE INDEX uid_x ON data(uid)')
+        self._con.execute('PRAGMA journal_mode = wal')
         
     def build(self):
-        self._init_table()
+        happy = self.is_happy()
+        if happy:
+            self._mtimes = {path:mtime for path, mtime in self._con.execute('SELECT * FROM mtimes')}
+            self._check_for_deleted()
+        else:
+            self._init_table()
+            self._mtimes = {}
         super().build()
-        self.set_happy()
-        self._finally_table()
+        if not happy:
+            self._finally_table()
+            self.set_happy()
         self._con.commit()
+        del self._mtimes
 
+    def _check_for_deleted(self):
+        sc_dir = str(sc.text_dir) + '/'
+        existing = {str(file).replace(sc_dir, '') for file in sc.text_dir.glob('**/*.html')}
+        for path in self._mtimes.keys():
+            if path not in existing:
+                logger.info('File removed: {!s}.'.format(path))
+                self._delete_entries(pathlib.Path(path))
+        
+    def _should_process_file(self, file):
+        mtime = file.stat().st_mtime_ns
+        path = file.relative_to(sc.text_dir)
+        
+        if self._mtimes.get(str(path)) == mtime:
+            return False
+
+        self._delete_entries(path)
+        self._con.execute('INSERT INTO mtimes VALUES(?, ?)', (str(path), mtime))
+        return True
+
+    def _delete_entries(self, path):
+        lang_uid = path.parts[0]
+        uid = path.stem
+        self._con.execute('DELETE FROM data WHERE lang=? and uid=?', (lang_uid, uid))
+        self._con.execute('DELETE FROM mtimes WHERE path=?', (str(path),))
+        
     def set_happy(self):
         self._con.execute('CREATE TABLE happy(yes)')
 
@@ -368,20 +420,14 @@ class SqliteBackedTIM(TextInfoModel):
     def build_once(cls, force_build):
         if cls._build_lock.acquire(blocking=False):
             try:
-                tim_base_filename = 'text_info_model_'
-                textmd5 = text_dir_md5()[:10]
-                timfile = sc.db_dir / (tim_base_filename + textmd5 + '.db')
-                newtim = cls(str(timfile))
-                if not newtim.is_happy() or force_build:
-                    newtim.reconnect()
-                    newtim.build()
-                
-                for file in sc.db_dir.glob(tim_base_filename + '*'):
-                    if file != timfile:
-                        file.unlink()
-
-                cls._instance = newtim
+                start=time.time()
+                logger.info('Acquiring SQLite Backed Text Info Model')
+                timfile = str(sc.db_dir / 'text_info_model.db')
+                cls._instance = cls(timfile)
+                cls._instance.build()
                 cls._build_ready.set()
+                build_time = time.time()-start
+                logger.info('Text Info Model ready in {:.4f}s'.format(build_time))
             finally:
                 cls._build_lock.release()
         
@@ -405,7 +451,6 @@ def tim(force_build=False, Model=SqliteBackedTIM):
 
     if not force_build and Model._build_ready.set():
         return Model._instance
-    
     Model.build_once(force_build)
     Model._build_ready.wait()
     return Model._instance
