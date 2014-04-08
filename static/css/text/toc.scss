@@ -53,17 +53,13 @@ $sutta-toc-menu-font-size: 11px;
     
 }
 
-#links:not(:last-child) {
-    border-bottom: 1px solid $sutta-toc-text-border-color;
-}
-
 #links {
+    padding: 0.5em;
     
     a {
         float:none;
         margin:0 0.5em;
         padding:0;
-        color: $sutta-toc-text-color;
         font-size: 80%;
     }
 
@@ -202,4 +198,9 @@ button#pali_lookup_button,
     margin-top: -1em;
     padding: 0;
     color: #ddd;
+}
+
+#menu, #metaarea {
+    max-height: 16em;
+    overflow-y: scroll;
 }

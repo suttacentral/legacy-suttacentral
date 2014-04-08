@@ -276,7 +276,7 @@ sc.formatter = {
     },
     menuGenerator: function(headings){
         var self = this;
-        if ($('#menu').length) return; //Keep existing menu.
+        if ($('#menu ul').length) return; //Keep existing menu.
         
         var start = Date.now()
         if (!headings) {
@@ -296,7 +296,7 @@ sc.formatter = {
             // displays numbered component.
             headrex = /(.*)/;
         } else {
-            headrex = /[ivx0-9]{1,5}[.:] \(?([^(]+)/i
+            headrex = /[ivx0-9]{1,5}[.:] \(?([^(]+)/i;
         }
         
         adjustment = 6
@@ -317,11 +317,11 @@ sc.formatter = {
                 currentDepth--;
             }
             headtext = $(this).text();
-            m = headtext.match(headrex)
+            m = headtext.match(headrex);
             if (m){
-                menutext = m[0].trim()
+                menutext = m[0].trim();
             } else {
-                menutext = headtext
+                menutext = headtext;
             }
             menutext = menutext.toTitleCase();
             
@@ -334,14 +334,14 @@ sc.formatter = {
                 ref = $(this).attr('id');
                 if (!ref){
                     var asciified = (sc.util.asciify(menutext.toLowerCase()) || menutext).replace(/ /g, '-'),
-                        oref = ref = asciified
+                        oref = ref = asciified;
                     while (ref in seen) {
                         ref = oref + ++i;
                     }
                 }
             }
             
-            menu.push('<li><a href="#{}">{}</a></li>'.format(ref, menutext))
+            menu.push('<li><a href="#{}">{}</a></li>'.format(ref, menutext));
             
             if (existingAnchor.length) {
                 existingAnchor.attr({href: "#menu"});
@@ -351,15 +351,16 @@ sc.formatter = {
 
         });
         if (menu.length > 1) {
-            menu.push('</ul>')
-            tocMenu = $('#menu')
-            if (tocMenu.length == 0)
-                tocMenu = $('<div id="menu">').appendTo('#toc')
-            $('#menu').html(menu.join(''))
+            menu.push('</ul>');
+            tocMenu = $('#menu');
+            if (tocMenu.length == 0) {
+                tocMenu = $('<div id="menu">').appendTo('#toc');
+            }
+            $('#menu').append(menu.join(''));
         }
         
         if (patimokkhaUid) {
-            var isRule = /(?:pj|ss|an|np|pc|pd|sk|as)\d+/
+            var isRule = /(?:pj|ss|an|np|pc|pd|sk|as)\d+/;
             $('h4').each(function(){
                 var h4 = $(this),
                     id = h4.find('[id]').attr('id');
@@ -377,20 +378,18 @@ sc.formatter = {
             details.append('<a title="Goto Subdivision Page" href="../../{}">▲</a>'.format(data.subdivision_uid));
         } else*/
         if (data.division_uid) {
-            details.append('<a title="Goto Division Page" class="division" href="../../{}">▲</a>'.format(data.division_uid));
+            details.append('<a title="Go to Division Page" class="division" href="../../{}">▲</a>'.format(data.division_uid));
         }
         
         if (data.sutta_uid) {
-            details.append('<a title="Goto Details Page" class="details" href="../../{}">►</a>'.format(data.sutta_uid));
+            details.append('<a title="Go to Details Page" class="details" href="../../{}">►</a>'.format(data.sutta_uid));
         }
         data.all_lang_codes.sort().forEach(function(lang_code){console.log(lang_code);
                 if (lang_code == data.lang_code) return;
                 details.append('<a href="../../{}/{}">{}</a>'.format(lang_code, data.uid, lang_code));
-            })
-        if ($('#menu').length == 0){
-            $('<div id="menu" />').prependTo('#toc')
-        }
-        $('#menu').prepend(details);
+            });
+        
+        $('#toc').prepend(details);
     },
     acro_expander: function(){
         /*$('#vinaya_parallels td')
