@@ -221,7 +221,7 @@ class TextInfoModel:
                 if not a:
                     continue
                 
-                volpage = self._get_volpage(h4, lang_uid, uid, ppn)
+                volpage = self._get_volpage(h4, lang_uid, uid)
                 out.append(TextInfo(
                     uid='{}#{}'.format(uid, a.attrib['id']),
                     bookmark=a.attrib['id'],
