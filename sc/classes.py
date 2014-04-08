@@ -125,6 +125,10 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
             return supname
         ti = self._textinfo
         return self._fixname(ti.name if ti else '')
+    
+    def __hash__(self):
+        return hash(self.uid)
+    
 
 class GroupedSutta(SuttaCommon):
     """The GroupedSutta is like a Sutta, except it belongs to a group of
@@ -174,6 +178,14 @@ class GroupedSutta(SuttaCommon):
             if uid in imm.subdivisions:
                 return uid
             uid = uid[:-1]
+
+    @property
+    def number(self):
+        try:
+            return int(regex.search(r'(\d+)(-\d+)?$', self.uid)[1])
+        except:
+            print(self.uid)
+            raise
         
     @property
     def subdivision(self):

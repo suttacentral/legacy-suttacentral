@@ -76,7 +76,7 @@ def get_and_rank_results(query, lang=None):
     if len(results) == 0:
         return ((),())
     ranker = Ranker(query, lang)
-    ranks, suttas = zip(*sorted((ranker(s), s[0]) for s in results))
+    ranks, suttas = zip(*sorted(((ranker(s), s[0]) for s in results), key=lambda t:t[0]))
     return (ranks, suttas)
 
 def search(query=None, limit=25, offset=0):
