@@ -74,6 +74,7 @@ $sutta-toc-menu-font-size: 11px;
     border: 1px solid $sutta-toc-text-border-color;
     border-radius: $sutta-toc-border-radius;
     background-color: $sutta-toc-background-color;
+    max-width: 10em;
 
     @media #{$mobile} {
         margin-left: $mobile-main-side-margin;
@@ -97,6 +98,7 @@ $sutta-toc-menu-font-size: 11px;
         font-size: $sutta-toc-menu-font-size;
         line-height: 1.5em;
         font-weight: bold;
+        white-space: nowrap;
 
         a {
             display: block;
@@ -172,7 +174,6 @@ button#pali_lookup_button,
 	visibility:hidden;
     opacity: 0;
     height: 0;
-    overflow: hidden;
     transition: 250ms;
 	.infomode & {
         height: initial;
@@ -202,5 +203,6 @@ button#pali_lookup_button,
 
 #menu, #metaarea {
     max-height: 16em;
-    overflow-y: scroll;
+    overflow: hidden;
+    overflow-y: auto;
 }

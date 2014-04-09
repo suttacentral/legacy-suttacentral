@@ -40,14 +40,14 @@ No parallel
 </tr>
 {% else %}
 {% set _class = ['origin'] if parallel.sutta == sutta else [] %}
-
+{% if not loop.last %}
 {% set subdiv_uid = parallel.sutta.subdivision.uid %}
 {% set next_parallel = parallels[loop.index0 + 1] %}
 
 {% if next_parallel|attr('sutta') and next_parallel.sutta.subdivision.uid == subdiv_uid %}
     {% set _class = _class + ['group-with-next'] %}
 {% endif %}
-
+{% endif %}
 {% if _class %}
 <tr class="{{ _class|join(' ') }}">
 {% else %}

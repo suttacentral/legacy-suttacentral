@@ -365,7 +365,7 @@ sc.formatter = {
                 var h4 = $(this),
                     id = h4.find('[id]').attr('id');
                 if (!isRule.test(id)) return;
-                href = '/{}-{}'.format(patimokkhaUid, id);
+                href = '/{}_{}'.format(patimokkhaUid, id);
                 h4.append('<a href="{}" class="details" title="Go to parallels page">►</a>'.format(href))
             });
         }
