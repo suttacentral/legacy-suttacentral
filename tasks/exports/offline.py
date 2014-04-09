@@ -38,4 +38,4 @@ def create_dev():
 @task
 def create_production():
     """Create an offline SuttaCentral export for the production environment."""
-    create(host='suttacentral.net', quiet=True, wait=0.05)
+    create(host='suttacentral.net', quiet=True, wait=0.15)
