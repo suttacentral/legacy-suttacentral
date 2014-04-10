@@ -126,7 +126,16 @@ span.cross .deets, span.cross:hover .deets
 span.end .deets, span.end:hover .deets
     {background-color:blue;}
 
-a.note .deets,a.note:hover .deets, a.bib .deets, a.bib:hover .deets, span.var .deets, span.var.infomode:hover .deets,span.cross .deets, span.cross.infomode:hover .deets, span.end .deets, span.end.infomode:hover .deets
+a.note .deets,
+    a.note:hover .deets,
+    a.bib .deets,
+    a.bib:hover .deets,
+    span.var .deets,
+    span.var:hover .deets,
+    span.cross .deets,
+    span.cross:hover .deets,
+    span.end .deets,
+    span.end:hover .deets
     {
     position:absolute;
     z-index:2;
@@ -336,7 +345,7 @@ span.lookup:hover > span.meaning {
 
 .sutta ol   {
      padding:0 0 1.5em 0;
-     margin:0 0 0 -1em;
+     margin:0 0 0 3em;
 }
 
 .sutta ol ol  {
@@ -565,7 +574,11 @@ Unclear reading.
 .namo		{font-style:italic;text-align:center;}
 /*dedication at the start of texts*/
 
-.scribe		{font-style:italic}
+.scribe	{
+    font-style:italic;
+    text-align: right;
+}
+
 /*note in the text recording who copied the text*/
 hr		{width:33%;color:#b2b2b2;margin:0 auto 2em}
 .rule	{font-weight:bold}

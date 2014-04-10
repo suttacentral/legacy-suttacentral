@@ -221,10 +221,16 @@ function buildTextualInformation() {
         das[i].innerHTML = das[i].id;
     buildVariantNotes();
     $("#metaarea a").filter(textualControls.marginClasses).each(function(){this.className = ""; this.innerHTML = ""});
-    $(textualControls.titleClasses).each(function(){
-        var class_ = this.className.split(' ')[0];
-        $(this).attr("title", sc.mode[sc.mode.lang]["strings"][class_])
-    });
+    //$(textualControls.titleClasses).each(function(){
+        //var class_ = this.className.split(' ')[0];
+        //$(this).attr("title", sc.mode[sc.mode.lang]["strings"][class_])
+    //});
+    var titleClasses = sc.mode[sc.mode.lang].strings;
+    var _class, title;
+    for (_class in titleClasses) {
+        title = titleClasses[_class];
+        $('.' + _class).attr('title', title);
+    }
 
 
 }

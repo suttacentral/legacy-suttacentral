@@ -37,3 +37,45 @@
 #text:lang(zh) .sutta p {
 	/*word-break: break-all;*/
 }
+
+.infomode {
+    .term, .gloss {
+        color: $dirty-pastel-green;
+    }
+}
+
+.term {
+    font-weight: bold;
+}
+
+.choice {
+    .sic {
+        display: none;
+    }
+}
+
+.infomode {
+    .choice {
+        .sic {
+            display: inline-block;
+            position: absolute;
+            background: $light-pastel-red;
+            padding: 0.5em;
+            border-radius: 3px;
+            margin-top: -2.5em;
+            margin-left: -0.5em;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 3px;
+            border:1px solid #ccc;
+            box-shadow:6px 4px 10px rgba(136, 136, 136, 0.3);
+            @include sans-serif;
+        }
+    }
+    .choice:hover .sic {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+}
