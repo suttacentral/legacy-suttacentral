@@ -62,7 +62,7 @@ class TextInfoModel:
     consisting entirely of python dicts which can be pickled.
 
     """
-
+    FILES_N = 200
     def __init__(self):
         self._by_lang = {}
         self._by_uid = {}
@@ -113,18 +113,18 @@ class TextInfoModel:
             self._ppn = PaliPageNumbinator()
         return self._ppn
     
-    def build(self):
+    def build(self, force=False):
         # The pagenumbinator should be scoped because it uses
         # a large chunk of memory which should be gc'd.
         # But it shouldn't be created at all if we don't need it.
         # So we use a getter, and delete it when we are done.
         self._ppn = None
-        
+        file_i = 0
         for lang_dir in sc.text_dir.glob('*'):
             lang_uid = lang_dir.stem
             for htmlfile in lang_dir.glob('**/*.html'):
              try:
-                if not self._should_process_file(htmlfile):
+                if not self._should_process_file(htmlfile, force):
                     continue
                 logger.info('Adding file: {!s}'.format(htmlfile))
                 uid = htmlfile.stem
@@ -153,14 +153,20 @@ class TextInfoModel:
                             continue
 
                         self.add_text_info(lang_uid, iuid, range_textinfo)
+                file_i += 1
+                if (file_i % self.FILES_N) == 0:
+                    self._on_n_files()
              except Exception as e:
                  print('An exception occured: {!s}'.format(htmlfile))
                  raise
+        if (file_i % self.FILES_N) != 0:
+            self._on_n_files()
         
         del self._ppn
 
-
-    def _should_process_file(self, file):
+    def _on_n_files(self):
+        return
+    def _should_process_file(self, file, force):
         return True
     
     # Class Variables
@@ -230,7 +236,14 @@ class TextInfoModel:
 
         data_uid_seen = set()
         for e in root.select('[data-uid]'):
-            out.append(TextInfo(uid=e.get('data-uid'), bookmark=e.get('id')))
+            if e.tag in {'h1','h2','h3','h4','h5','h6'}:
+                heading = e.text_content()
+                add = e.select_one('.add')
+                if add and add.text_content() == heading:
+                    heading = '[' + heading + ']'
+            else:
+                heading = None
+            out.append(TextInfo(uid=e.get('data-uid'), name=heading, bookmark=e.get('id')))
             data_uid_seen.add(e)
         
         for e in root.select('.embeddedparallel'):
@@ -281,7 +294,6 @@ class TextInfoModel:
             finally:
                 TextInfoModel._build_lock.release()
 
-
 class SqliteBackedTIM(TextInfoModel):
     """ A memory-saving version of the TIM
 
@@ -315,7 +327,7 @@ class SqliteBackedTIM(TextInfoModel):
             pass
         self.reconnect()
         self._con.execute('CREATE TABLE data(lang, uid, path, bookmark, name, author, volpage)')
-        self._con.execute('CREATE TABLE mtimes(path, mtime)')
+        self._con.execute('CREATE TABLE mtimes(path UNIQUE, mtime)')
         # Presently we build the whole lot in one go and disabling
         # journaling dramatically improves bulk insert performance.
         self._con.execute('PRAGMA journal_mode = OFF')
@@ -323,9 +335,11 @@ class SqliteBackedTIM(TextInfoModel):
     def _finally_table(self):
         self._con.execute('CREATE INDEX lang_x ON data(lang)')
         self._con.execute('CREATE INDEX uid_x ON data(uid)')
+        self._con.execute('CREATE UNIQUE INDEX path_x ON data(path)')
+        self._con.execute('CREATE INDEX mtimes_path_x on mtimes(path)')
         self._con.execute('PRAGMA journal_mode = wal')
         
-    def build(self):
+    def build(self, force=False):
         happy = self.is_happy()
         if happy:
             self._mtimes = {path:mtime for path, mtime in self._con.execute('SELECT * FROM mtimes')}
@@ -333,7 +347,7 @@ class SqliteBackedTIM(TextInfoModel):
         else:
             self._init_table()
             self._mtimes = {}
-        super().build()
+        super().build(force)
         if not happy:
             self._finally_table()
             self.set_happy()
@@ -348,11 +362,12 @@ class SqliteBackedTIM(TextInfoModel):
                 logger.info('File removed: {!s}.'.format(path))
                 self._delete_entries(pathlib.Path(path))
         
-    def _should_process_file(self, file):
+    def _should_process_file(self, file, force):
+        
         mtime = file.stat().st_mtime_ns
         path = file.relative_to(sc.text_dir)
         
-        if self._mtimes.get(str(path)) == mtime:
+        if not force and self._mtimes.get(str(path)) == mtime:
             return False
 
         self._delete_entries(path)
@@ -360,11 +375,13 @@ class SqliteBackedTIM(TextInfoModel):
         return True
 
     def _delete_entries(self, path):
-        lang_uid = path.parts[0]
-        uid = path.stem
-        self._con.execute('DELETE FROM data WHERE lang=? and uid=?', (lang_uid, uid))
-        self._con.execute('DELETE FROM mtimes WHERE path=?', (str(path),))
-        
+        con = self._con
+        con.execute('DELETE FROM data WHERE path=?', (str(path),))
+        con.execute('DELETE FROM mtimes WHERE path=?', (str(path),))
+
+    def _on_n_files(self):
+        self._con.commit()
+    
     def set_happy(self):
         self._con.execute('CREATE TABLE happy(yes)')
 
@@ -415,6 +432,8 @@ class SqliteBackedTIM(TextInfoModel):
         self._con.execute('INSERT INTO data VALUES(?, ?, ?, ?, ?, ?, ?)',
             (lang_uid, uid, str(textinfo.path), textinfo.bookmark,
             textinfo.name, textinfo.author, textinfo.volpage))
+
+    filename = str(sc.db_dir / 'text_info_model.db')
     
     @classmethod
     def build_once(cls, force_build):
@@ -422,14 +441,40 @@ class SqliteBackedTIM(TextInfoModel):
             try:
                 start=time.time()
                 logger.info('Acquiring SQLite Backed Text Info Model')
-                timfile = str(sc.db_dir / 'text_info_model.db')
-                cls._instance = cls(timfile)
-                cls._instance.build()
+                cls._instance = cls(cls.filename)
+                cls._instance.build(force_build)
                 cls._build_ready.set()
                 build_time = time.time()-start
                 logger.info('Text Info Model ready in {:.4f}s'.format(build_time))
             finally:
                 cls._build_lock.release()
+
+    @classmethod
+    def parallel_rebuild(cls):
+        """ Rebuild the Model from stratch
+
+        Leaves the existing database intact so that the server can
+        continue to use it while the build is in progress. Once the build
+        is finished, the database file is overwitten, existing connections
+        will continue to use the old (now unlinked) database, the server
+        will need to be restarted to re-create the connections.
+
+        This method is useful because a complete rebuild can take upwards
+        of 10 minutes, hence it is better that such a task be delegated
+        to a background thread or process.
+
+        """
+        
+        import os
+        logger.info('Rebuilding SQLite Backed Text Info Model in background')
+        timfile = cls.filename + '.working'
+        tim = cls(timfile)
+        tim.build()
+        logger.info('Rebuild complete')
+        os.replace(timfile, cls.filename)
+        return True
+        
+        
         
 
 def tim(force_build=False, Model=SqliteBackedTIM):
@@ -454,6 +499,9 @@ def tim(force_build=False, Model=SqliteBackedTIM):
     Model.build_once(force_build)
     Model._build_ready.wait()
     return Model._instance
+
+def rebuild_tim(Model=SqliteBackedTIM):
+    Model.parallel_rebuild()
 
 class PaliPageNumbinator:
     msbook_to_ptsbook_mapping = {
@@ -489,7 +537,7 @@ class PaliPageNumbinator:
         'vv': 'Vv',
         'y': 'Ya'}
 
-    default_attempts = [0,-1,-2,-3,-4,-5,-6,-7,-8,-9,-10,1,2,3,4,5,6,7,8,9,10]
+    default_attempts = [0,-1,-2,-3,-4,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,1,2,3,4,5]
     def __init__(self):
         self.load()
 
