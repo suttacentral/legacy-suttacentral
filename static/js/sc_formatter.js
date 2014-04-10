@@ -366,7 +366,7 @@ sc.formatter = {
                     id = h4.find('[id]').attr('id');
                 if (!isRule.test(id)) return;
                 href = '/{}_{}'.format(patimokkhaUid, id);
-                h4.append('<a href="{}" class="details" title="Go to parallels page">►</a>'.format(href))
+                h4.append('<a href="{}" class="details" title="Go to parallels page">▶</a>'.format(href))
             });
         }
         self.menuGenTime = Date.now() - start;
@@ -382,7 +382,7 @@ sc.formatter = {
         }
         
         if (data.sutta_uid) {
-            details.append('<a title="Go to Details Page" class="details" href="../../{}">►</a>'.format(data.sutta_uid));
+            details.append('<a title="Go to Details Page" class="details" href="../../{}">▶</a>'.format(data.sutta_uid));
         }
         data.all_lang_codes.sort().forEach(function(lang_code){console.log(lang_code);
                 if (lang_code == data.lang_code) return;
