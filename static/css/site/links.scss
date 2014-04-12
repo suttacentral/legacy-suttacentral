@@ -3,7 +3,7 @@ $link-visited-color:       $cool-blue;
 $link-hover-color:         $dark-saturated-red;
 $link-active-color:        $bright-saturated-red;
 $link-active-shadow-color: $bright-saturated-yellow;
-$link-offsite-color:       $medium-gray;
+$link-offline-color:       $dark-pastel-red;
 
 a {
     text-decoration: none;
@@ -26,8 +26,12 @@ a {
     }
 
     // De-emphasize offsite translations
-    &.tran[href^="http"] {
-        color: $link-offsite-color;
-        font-style: italic;
+    &[href^="http"] {
+        &.tran {
+            font-style: italic;
+        }
+        body.offline & {
+            color: $link-offline-color;
+        }
     }
 }

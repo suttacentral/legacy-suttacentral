@@ -117,9 +117,6 @@ var scPersistantStorage = {
         return this.database.check(key, version);
     }
 }
-        
-
-//The code below here is quite disorganized and messy relative to the chineseLookup above.
 
 //Rewriting it is on the to-do.
 
@@ -221,16 +218,10 @@ function buildTextualInformation() {
         das[i].innerHTML = das[i].id;
     buildVariantNotes();
     $("#metaarea a").filter(textualControls.marginClasses).each(function(){this.className = ""; this.innerHTML = ""});
-    //$(textualControls.titleClasses).each(function(){
-        //var class_ = this.className.split(' ')[0];
-        //$(this).attr("title", sc.mode[sc.mode.lang]["strings"][class_])
-    //});
-    var titleClasses = sc.mode[sc.mode.lang].strings;
-    var _class, title;
-    for (_class in titleClasses) {
-        title = titleClasses[_class];
-        $('.' + _class).attr('title', title);
-    }
+    $(textualControls.titleClasses).each(function(){
+        var class_ = this.className.split(' ')[0];
+        $(this).attr("title", sc.mode[sc.mode.lang]["strings"][class_])
+    });
 
 
 }
@@ -326,9 +317,6 @@ var syllabousRex = (function(){
     var cons = "[kgcjtdnpbmyrlvshṭḍṅṇṃṁñḷ]"
     return RegExp('('+cons+'*[aiueoāīū]('+cons+'(?='+other+')|[yrlvshṅṁñ](?=h)|' + cons + '(?!h)' + '(?='+cons+'))?'+')|('+other+'+)', 'gi');})();
 
-//(Defining this outside the function saves 10% runtime).
-
-
 function toSyllables(input){
     var out = "";
     var parts = input.match(syllabousRex);
@@ -360,34 +348,6 @@ function toSyllablesIteratively(node){
         parent.insertBefore(proxy, node);
         node.nodeValue = '';
         proxy.outerHTML = out;
-        //XHTML code - but it runs much slower on all browsers except Chrome
-        /*parent = node.parentNode;
-        if (parent.nodeName == 'A') continue;
-        //node.parentNode.replaceChild(tmp, node);
-        parts = node.nodeValue.replace(/­/g, '').match(syllabousRex);
-        if (parts && parts.length)
-        for (i = 0; i < parts.length; i++) {
-            if (anychar.test(parts[i])) {
-                if (/[aiu]$/i.test(parts[i])) {
-                    text += parts[i];
-                } else {
-                    if (text) {
-                        parent.insertBefore(T(text), node);
-                        text = "";
-                    }
-                    parent.insertBefore(E('u', parts[i]), node);
-                }
-                if (parts[i+1] && (/[aiueoāīū]/i).test(parts[i+1]))
-                    text += syllSpacer;
-            } else {
-                text += parts[i];
-            }
-        }
-        if (text) {
-            parent.insertBefore(T(text), node);
-            text = "";
-        }
-        parent.removeChild(node)*/
     }
 }
 
@@ -531,25 +491,23 @@ var toggleLookupOn = false;
 var paliDictRequested = false;
 var pi2en_dict = null;
 function enablePaliLookup(){
+    function ready(){
+        generateLookupMarkup();
+        scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
+        return
+    }
     $(document).on('mouseenter', 'span.lookup', lookupWordHandler);
     if (!pi2en_dict)
     {
-        if (scPersistantStorage.check('pi2en_dict', sc.pi2en_dict_url))
-        {
-            scMessage.show("Retrieving Pali Dictionary from local storage …", 100000);
-            pi2en_dict = scPersistantStorage.retrive('pi2en_dict', sc.pi2en_dict_url);
-            generateLookupMarkup();
-            scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
-            return
-        } else {
-            scMessage.show("Requesting Pali Dictionary...", 10000);
-            jQuery.getScript(sc.pi2en_dict_url, function(){
-                scPersistantStorage.store('pi2en_dict', pi2en_dict, sc.pi2en_dict_url);
-                generateLookupMarkup();
-                scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
-                return
+        scMessage.show("Requesting Pali Dictionary...", 10000);
+        sc.pi2enDataScripts.forEach(function(url, i){
+            jQuery.ajax({
+                url: url,
+                dataType: "script",
+                success: i == 0 ? ready : null,
+                crossDomain: true
             });
-        }
+        });
     } else
         generateLookupMarkup();
 }

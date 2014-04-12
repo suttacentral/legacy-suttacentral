@@ -11,19 +11,21 @@ import env
 
 import sc
 
+
 license_path = sc.base_dir / 'LICENSE.txt'
 export_code_dir = pathlib.Path(__file__).parent
 
 def export_file_date():
     # Use the most recent modification time of the git repositories
     # so a new build is created only after updates to the server.
+    fmtstr = '%Y-%m-%d_%H:%M:%S'
     try:
-        time1 = (sc.base_dir / '.git').stat().st_mtime
-        time2 = (sc.data_dir / '.git').stat().st_mtime
-        time_to_use = time.gmtime(time1 if time1 > time2 else time2)
-    except FileNotFoundError:
-        time_to_use = time.localtime()
-    return time.strftime('%Y-%m-%d_%H:%M:%S', time_to_use)
+        from sc.scm import scm
+        return scm.last_commit_time.strftime(fmtstr)
+    except:
+        raise
+        
+    return time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime())
 
 def copy(src, dst):
     shutil.copyfile(str(src), str(dst))
@@ -57,9 +59,8 @@ def ensure_not_exists(path, force=False, quiet=False):
             sys.stderr.write('ERROR: {} exists\n'.format(path))
             sys.exit(1)
 
-def update_latest_symlink(path):
-    symlink_path = pathlib.Path(regex.sub(
-        r'([0-9]+)(\.[a-z0-9]{1,4})$', r'latest\2', str(path)))
+def update_latest_symlink(path, basestem):
+    symlink_path = path.parent / (basestem + '-latest' + path.suffix)
     if symlink_path.exists():
         symlink_path.unlink()
     symlink_path.symlink_to(path)

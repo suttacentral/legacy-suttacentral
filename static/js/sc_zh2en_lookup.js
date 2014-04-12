@@ -14,7 +14,6 @@ sc.zh2enLookup = {
     mouseIn: 0,
     currentLookup: null,
     lastCurrentLookup: null,
-    baseUrl: $('script[src*="sc_zh2en_lookup.js"]').attr('src').replace('sc_zh2en_lookup.js', ''),
     init: function(insert_button_where, markup_target){
         this.markupTarget = $(markup_target).addClass('zh2enLookup')[0];
         this.markupTarget
@@ -45,8 +44,14 @@ sc.zh2enLookup = {
         if (!this.dictRequested && !window.zh2en_dict)
         {
             this.dictRequested = true;
-            jQuery.getScript(this.baseUrl + 'zh2en_data_0.05.js', self.ready());
-            jQuery.getScript(this.baseUrl + 'zh2en_fallback_0.05.js');
+            sc.zh2enDataScripts.forEach(function(url, i){
+                jQuery.ajax({
+                    url: url,
+                    dataType: "script",
+                    success: i == 0 ? self.ready : null,
+                    crossDomain: true
+                });
+            });
         }
         this.generateMarkup();
         $(document).on('mouseenter', 'span.lookup', function(){
