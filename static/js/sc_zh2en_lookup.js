@@ -24,33 +24,48 @@ sc.zh2enLookup = {
         $(insert_where).append(this.button);
         $(document).on('click', '#' + this.buttonId, sc.zh2enLookup.toggle);
     },
-    ready: function(){
-        self = this
-        var popup = '<table class="popup"><tr><td><center>Chinese to english lookup activated.</center><tr><td>Use the mouse or left, right arrow keys to navigate the text (shift-right to advance more). <tr><td>A red border indicates modern usage, possibly unrelated to early Buddhist usage.</table>'
-        setTimeout(function(){
-            popup = self.popup({left:12, top: $(document).scrollTop()+12}, popup);
-            popup.select('table').addClass('info')
-            }, 250)
+    before: function(){
+        self = sc.zh2enLookup;
+        var popup = '<div>Loading zh to en dictionary data, this may take some time (~1MB)</div>'
+        scMessage.show(popup, 8000);
+    },
+    done: function(){
+        self = sc.zh2enLookup;
+        var popup = '<div>Chinese to english lookup activated.</div>\
+            <div>Use the mouse or left, right arrow keys to navigate the text (shift-right to advance more).</div>\
+            <div>A red border indicates modern usage, possibly unrelated to early Buddhist usage.</div>'
+        scMessage.show(popup, 8000);
+        console.log('Successfully loaded dictionary data')
         self.currentLookup = $('span.lookup:first')[0];
         self.lastCurrentLookup = self.currentLookup;
             
         console.log('Ready')
+    },
+    fail: function(jqXHR, textStatus, errorThrown){
+        var popup = '<div>Failed to download dictionary data because of <em>{}</em></div>'.format(textStatus);
+        scMessage.show(popup, 8000);
     },
     activate: function(){
         var self = this;
         if (!this.originalHTML)
             this.originalHTML = this.markupTarget.innerHTML;
         
-        if (!this.dictRequested && !window.zh2en_dict)
+        if (!this.dictRequested && !window.sc.zh2enData)
         {
+            self.before();
             this.dictRequested = true;
             sc.zh2enDataScripts.forEach(function(url, i){
-                jQuery.ajax({
-                    url: url,
-                    dataType: "script",
-                    success: i == 0 ? self.ready : null,
-                    crossDomain: true
+                var jqXHR = jQuery.ajax({
+                    url: sc.jsBaseUrl+url,
+                    dataType: "script",                    
+                    crossDomain: true,
+                    cache: true,
+                    timeout: 180 * 1000
                 });
+                if (i == 0) {
+                    jqXHR.done(self.done);
+                    jqXHR.fail(self.fail);
+                }
             });
         }
         this.generateMarkup();
@@ -66,12 +81,15 @@ sc.zh2enLookup = {
             if (e.keyCode == 39 || e.keyCode == 37)
                 e.preventDefault();
             if (e.keyCode == 39) {
-                var next = nextInOrder(e.shiftKey ? self.lastCurrentLookup : self.currentLookup, 'span.lookup');
+                var from = self.currentLookup;
+                if (self.lastCurrentLookup && e.shiftKey)
+                    from = self.lastCurrentLookup;
+                var next = nextInOrder(from, 'span.lookup:not(.punctuation)');
                 if (!next)
                     return
                 self.setCurrent(next)
             } else if (e.keyCode == 37){
-                var prev = previousInOrder(self.currentLookup, 'span.lookup');
+                var prev = previousInOrder(self.currentLookup, 'span.lookup:not(.punctuation)');
                 if (!prev)
                     return
                 self.setCurrent(prev);
@@ -130,7 +148,7 @@ sc.zh2enLookup = {
             
             return input.replace(self.chineseIdeographs, function(ideograph){
                 var eclass = 'lookup';
-                if (chinesePunctuation.test(ideograph))
+                if (ideograph.match(chinesePunctuation))
                     eclass += ' punctuation';
                 return '<span class="' + eclass +'">' + ideograph + '</span>'
             });
@@ -165,19 +183,19 @@ sc.zh2enLookup = {
         if (!graphs)
             return
 
-        var popup = ['<table class="popup">'],
+        var popup = ['<div class="popup"><table>'],
             first = true,
             fallback = false;
         for (i = graphs.length; i > 0; i--) {
             var snip = graphs.slice(0, i)
-            if (snip in zh2en_dict) {
+            if (snip in sc.zh2enData) {
                 popup.push(self.lookupWord(snip))
                 if (first) {
                     first = false;
                     nodes.slice(0, i).addClass('current_lookup')
                     this.lastCurrentLookup = nodes[i-1];
                 }
-            } else if (i == 1 && snip in zh2en_fallback) {
+            } else if (i == 1 && snip in sc.zh2enFallbackData) {
                 popup.push(self.lookupWord(snip))
                 popup[0] = '<table class="popup fallback">'
                 fallback = true
@@ -188,10 +206,12 @@ sc.zh2enLookup = {
                 }
             }
         }
+        if (this.lastCurrentLookup == null)
+            this.lastCurrentLookup = this.currentLookup;
         if (first)
             return
 
-        popup.push('</table>')
+        popup.push('</table></div>')
 
         popup = self.popup(nodes[0], popup.join('\n'))
     },
@@ -202,13 +222,12 @@ sc.zh2enLookup = {
         //Check if word exists and return HTML which represents the meaning.
         var out = "";
         graph = graph.replace(/\u2060/, '');
-        if (zh2en_dict[graph])
+        if (sc.zh2enData[graph])
         {
             var href = "http://www.buddhism-dict.net/cgi-bin/xpr-ddb.pl?q=" + encodeURI(graph);
-            return ('<tr><td class="ideograph"><a href="' + href + '">' + graph + '</a></td> <td class="meaning"> ' + zh2en_dict[graph][0] + ': ' + zh2en_dict[graph][1] + '</td></tr>');
-        } else if (zh2en_fallback[graph]) {
-            return ('<tr class="fallback"><td class="ideograph"><a>' + graph + '</a></td> <td class="meaning"> ' + zh2en_fallback[graph][0] + ': ' + zh2en_fallback[graph][1] + '</td></tr>')
-
+            return ('<tr><td class="ideograph"><a href="' + href + '">' + graph + '</a></td> <td class="meaning"> ' + sc.zh2enData[graph][0] + ': ' + sc.zh2enData[graph][1] + '</td></tr>');
+        } else if (sc.zh2enFallbackData[graph]) {
+            return ('<tr class="fallback"><td class="ideograph"><a>' + graph + '</a></td> <td class="meaning"> ' + sc.zh2enFallbackData[graph][0] + ': ' + sc.zh2enFallbackData[graph][1] + '</td></tr>')
         }
         return "";
     },

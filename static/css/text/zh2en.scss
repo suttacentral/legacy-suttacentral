@@ -1,42 +1,60 @@
 .zh2enLookup {
 	.popup {
 	    position: absolute;
-	    background: lightgoldenrodyellow;
-	    z-index: 1;
-	    padding: 0.2em;
-	    border: 2px palegoldenrod solid;
+	    background: $bright-pastel-yellow;
+	    z-index: 103;
+	    padding: 1px;
+	    border: 1px solid #ccc;
+        border-radius: 3px;
 	    transition: visibility 0s ease 0.15s,opacity 0.3s ease;
 	    transition-delay:1ms;
-	    box-shadow:3px 2px 5px rgba(136, 136, 136, 0.3);
+	    box-shadow:6px 4px 10px rgba(136, 136, 136, 0.3);
 	    max-width: 27em;
+        
 	    td {
-	    	padding: 0.3em 0.3em;
+	    	padding: 0.3em 0.3em;            
 	    }
+        
+        .meaning {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 80%;
+        }
+            
+        table {
+            margin: 0;
+            padding: 0;
+            border-collapse: none;
+        }
+
+        table, tr, td {
+            border: none;
+            background: none;
+        }
+
+
 	}
 
-	table.fallback {
-	    border: 2px crimson solid;
+	.popup.fallback {
+	    border: 1px crimson solid;
+        margin:1px;
 	}
 
-	table.info {
+	.popup.info {
 	    border: 2px lightskyblue solid;
 	}
 
-	table.info tr {
-	    font-size: 80%;
-	}
+    td:nth-child(odd) td {
+        background: $light-pastel-yellow;
+    }
 
-	tr td {
-	    border-top: 2px palegoldenrod solid;
+	tr:not(:first-child) td {
+	    border-top: 1px grey solid;
 	    margin: 0.2em;
 	}
 
-	tr:first-of-type td {
-	    border-top: none;
-	}
-
-	.ideograph a {
+	.ideograph a:link {
 	    text-decoration: none;
+        color: black;
 	}
 
 	.ideograph {
@@ -44,9 +62,8 @@
 	    font-size: 1.2em;
 	}
 
-	.current_lookup {
+	span.current_lookup:not(.punctuation){
+        color: $dark-saturated-purple;
 	    background: yellow;
-	    padding: 0.1em;
-	    margin: -0.1em;
 	}
 }

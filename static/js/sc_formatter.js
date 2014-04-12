@@ -372,21 +372,25 @@ sc.formatter = {
         self.menuGenTime = Date.now() - start;
     },
     tocAmmender: function(){
-        var data = JSON.parse($('#sc_text_info').text());
-        var details = $('<div id="links">');
+        var textInfo = $('#sc_text_info').text();
+        if (!textInfo) return;
+        var data = JSON.parse(textInfo),
+            details = $('<div id="links">'),
+            dothtml = location.href.search(/\.html\b/) == -1 ? '' : '.html';
+        
         /*if (data.subdivision_uid && data.subdivision_uid != data.division_uid) {
             details.append('<a title="Goto Subdivision Page" href="../../{}">▲</a>'.format(data.subdivision_uid));
         } else*/
         if (data.division_uid) {
-            details.append('<a title="Go to Division Page" class="division" href="../../{}">▲</a>'.format(data.division_uid));
+            details.append('<a title="Go to Division Page" class="division" href="../{}{}">▲</a>'.format(data.division_uid, dothtml));
         }
         
         if (data.sutta_uid) {
-            details.append('<a title="Go to Details Page" class="details" href="../../{}">▶</a>'.format(data.sutta_uid));
+            details.append('<a title="Go to Details Page" class="details" href="../{}{}">▶</a>'.format(data.sutta_uid, dothtml));
         }
         data.all_lang_codes.sort().forEach(function(lang_code){console.log(lang_code);
                 if (lang_code == data.lang_code) return;
-                details.append('<a href="../../{}/{}">{}</a>'.format(lang_code, data.uid, lang_code));
+                details.append('<a href="../{}/{}{}">{}</a>'.format(lang_code, data.uid, dothtml, lang_code));
             });
         
         $('#toc').prepend(details);

@@ -32,6 +32,7 @@ def full(branch=None):
         'cd ..',
         'pip install -q -r requirements.txt',
         'invoke clean --aggressive',
+        'invoke jsdata.build',
         'invoke assets.compile',
         'sudo supervisorctl start sc-staging',
         'sudo service apache2 reload',

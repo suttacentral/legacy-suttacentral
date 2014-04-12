@@ -502,10 +502,11 @@ function enablePaliLookup(){
         scMessage.show("Requesting Pali Dictionary...", 10000);
         sc.pi2enDataScripts.forEach(function(url, i){
             jQuery.ajax({
-                url: url,
+                url: sc.jsBaseUrl+url,
                 dataType: "script",
                 success: i == 0 ? ready : null,
-                crossDomain: true
+                crossDomain: true,
+                cache: true
             });
         });
     } else
@@ -896,6 +897,9 @@ function nextInOrder(node, permissables) {
         if (node.nodeType == permissables)
             return node;
     }
+    else if (typeof permissables == 'string') {
+        if ($(node).is(permissables)) return node;
+    }
     else if (permissables.indexOf(node.nodeType) != -1)
         return node;
     return nextInOrder(node, permissables);
@@ -917,6 +921,9 @@ function previousInOrder(node, permissables) {
     if (typeof permissables == 'number') {
         if (node.nodeType == permissables)
             return node;
+    }
+    else if (typeof permissables == 'string') {
+        if ($(node).is(permissables)) return node;
     }
     else if (permissables.indexOf(node.nodeType) != -1)
         return node;

@@ -22,6 +22,7 @@ def full():
         'git pull',
         'cd ..',
         'pip install -q -r requirements.txt',
+        'invoke jsdata.build --minify',
         'invoke assets.compile',
         'sudo supervisorctl start sc-production',
         'sudo service apache2 reload',

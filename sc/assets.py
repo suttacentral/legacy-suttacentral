@@ -120,6 +120,7 @@ def get_env():
         'js/sc_functions.js',
         'js/sc_init.js',
         'js/sc_formatter.js',
+        'js/data/zh2en-data-scripts-names.js',
         sc_uid_expansion_data_file,
         filters='rjsmin',
         output='js/compiled/core-%(version)s.js'

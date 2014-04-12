@@ -34,9 +34,11 @@
     }
 }
 
-#text:lang(zh) .sutta p {
-	/*word-break: break-all;*/
+#text:lang(zh) {
+    .sc {display: none}
+
 }
+
 
 .infomode {
     .term, .gloss {

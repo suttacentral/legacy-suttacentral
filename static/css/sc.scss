@@ -254,7 +254,7 @@ a.bl {display:none;}
 }
 
 span.lookup {position:relative;}
-[lang=zh] span.lookup {display:inline-block;}
+
 span.lookup > q {position:relative;}/* display:block;float:left}*/
 span.lookup:before {content: none;}
 
@@ -290,16 +290,12 @@ span.lookup > span.meaning > a {
     color:black;
     font-weight: bold;
 }
-[lang=zh] span.lookup > span.meaning > a {
-    font-weight: normal;
-    font-size: 110%;
-}
 
 span.lookup > span.meaning > a:hover {
     color:#DF00FF;
 }
 
-span.lookup:hover {
+div#text:lang(pi) span.lookup:hover {
     color:red;
 }
 

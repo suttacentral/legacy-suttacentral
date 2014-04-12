@@ -50,7 +50,9 @@ $sutta-toc-menu-font-size: 11px;
         word-spacing: 0;
     }
 
-    
+    #translitButtons {
+        height: $sutta-toc-button-height;
+    }
 }
 
 #links {
