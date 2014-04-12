@@ -141,13 +141,18 @@ class ViewBase:
 
     def get_global_context(self):
         """Return a dictionary of variables accessible by all templates."""
+        nonfree_fonts = config.nonfree_fonts
+        if cherrypy.request.offline:
+            if not config.always_nonfree_fonts:
+                nonfree_fonts = False
+                
         return ViewContext({
             'menu': get_menu(),
             'config': config,
             'current_datetime': datetime.datetime.now(),
             'development_bar': config.development_bar,
             'newrelic_browser_timing': NewRelicBrowserTimingProxy(),
-            'nonfree_fonts': config.nonfree_fonts and not cherrypy.request.offline,
+            'nonfree_fonts': nonfree_fonts,
             'offline': cherrypy.request.offline,
             'page_lang': 'en',
             'scm': scm,
@@ -193,19 +198,22 @@ class DownloadsView(InfoView):
 
     def __file_data(self, basename, exports_path):
         data = []
-        for format in self.formats:
-            latest_filename = '{}-latest.{}'.format(basename, format)
-            latest_path = exports_path / latest_filename
-            if latest_path.exists():
-                local_path = latest_path.resolve()
-                relative_url = local_path.relative_to(sc.static_dir)
-                data.append({
-                    'filename': local_path.name,
-                    'url': '/{}'.format(relative_url),
-                    'time': local_path.stat().st_ctime,
-                    'size': local_path.stat().st_size,
-                    'format': format,
-                })
+        
+        for latest_path in sorted(exports_path.glob('*-latest.*')):
+            if latest_path.suffix.lstrip('.') not in self.formats:
+                continue
+            #latest_filename = '{}-latest.{}'.format(basename, format)
+            #latest_path = exports_path / latest_filename
+            #if latest_path.exists():
+            local_path = latest_path.resolve()
+            relative_url = local_path.relative_to(sc.static_dir)
+            data.append({
+                'filename': local_path.name,
+                'url': '/{}'.format(relative_url),
+                'time': local_path.stat().st_ctime,
+                'size': local_path.stat().st_size,
+                'format': format,
+            })
         return data
 
     def __offline_data(self):
