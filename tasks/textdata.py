@@ -17,7 +17,7 @@ def refresh(force=False):
     """Ensure TIM is up-to-date."""
     blurb(refresh)
     from sc import textdata
-    tim = textdata.tim(force)
+    tim = textdata.tim()
 
 
 @task
