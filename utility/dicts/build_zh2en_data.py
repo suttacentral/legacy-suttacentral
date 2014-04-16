@@ -23,6 +23,9 @@ from pathlib import Path
 import tempfile
 import logging
 import webassets
+import gzip
+from urllib.request import urlopen
+from zipfile import ZipFile
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -226,13 +229,51 @@ js_process_fn = None
 if args.minify:
     js_process_fn = minify_js
 
-with (sc.tmp_dir / 'buddhdic.txt').open(encoding='utf8') as srcfo:
+
+buddhdic_file = sc.tmp_dir / 'buddhdic.txt.gz'
+buddhdic_url = 'http://www.acmuller.net/download/buddhdic.txt.gz'
+
+unihanzip_file = sc.tmp_dir / 'Unihan.zip'
+unihanzip_url = 'http://www.unicode.org/Public/zipped/6.3.0/Unihan.zip'
+unihan_readings_filename = 'Unihan_Readings.txt'
+
+
+from urllib.request import urlopen
+
+def dl_file(url, target_file):
+    logging.info('Downloading {}'.format(target_file.name))
+    with urlopen(url) as response:
+        try:
+            outf = target_file.open('wb')
+            while True:
+                chunk = response.read(4096)
+                if not chunk:
+                    break
+                outf.write(chunk)
+                
+            outf.close()
+            logging.info('{} downloaded okay'.format(target_file.name))
+        except:
+            target_file.unlink()
+            raise
+            
+
+if not buddhdic_file.exists() or args.download:
+    dl_file(buddhdic_url, buddhdic_file)
+
+with gzip.open(str(buddhdic_file), 'rt', encoding='utf8') as srcfo:
     bdstr = bdbuilder.process(srcfo)
 
 maindata_file = writeout_js(maindata_stem, bdstr, js_process_fn)
 
-with (sc.tmp_dir / 'unihan_readings.txt').open(encoding='utf8') as srcfo:
-    fbstr = fbbuilder.process(srcfo)
+if not unihanzip_file.exists():
+    dl_file(unihanzip_url, unihanzip_file)
+
+with ZipFile(str(unihanzip_file)) as zipf:
+    with tempfile.TemporaryDirectory() as tmpdir_name:
+        filename = zipf.extract(unihan_readings_filename, tmpdir_name)
+        with open(filename, 'r', encoding='utf8') as srcfo:
+            fbstr = fbbuilder.process(srcfo)
 
 fallback_file = writeout_js(fallback_stem, fbstr, js_process_fn)
 
