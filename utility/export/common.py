@@ -36,15 +36,17 @@ def zip(out_path, in_path, quiet=False):
         if quiet:
             args.append('-q')
         args += ['-r', '-9', str(out_path), in_path.name]
-        plumbum.local['zip'][tuple(args)] & plumbum.FG
+        plumbum.cmd.nice['-20',
+            plumbum.local['zip'][tuple(args)]] & plumbum.FG
 
 def x7z(out_path, in_path, quiet=False):
     with plumbum.local.cwd(str(in_path.parent)):
         # Use 'ultra' settings except dictionary size to reduce
         # memory use (~40mb rather than ~600mb) while still getting
         # close to maximum compression.
-        cmd = plumbum.local['7z']['a', '-t7z', '-mx=9', '-md=1m',
-                str(out_path), in_path.name]
+        cmd = plumbum.cmd.nice['-20',
+                plumbum.local['7z']['a', '-t7z', '-mx=9', '-md=1m',
+                    str(out_path), in_path.name]]
         if quiet:
             cmd()
         else:
