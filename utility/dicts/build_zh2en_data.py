@@ -27,6 +27,20 @@ import gzip
 from urllib.request import urlopen
 from zipfile import ZipFile
 
+# Paths and urls, these are quite close to being static.
+js_script_data_dir = sc.static_dir / 'js' / 'data'
+
+zh2en_data_script_names_file = js_script_data_dir / 'zh2en-data-scripts-names.js'
+fallback_stem = 'zh2en-fallback'
+maindata_stem = 'zh2en-maindata'
+
+buddhdic_file = sc.tmp_dir / 'buddhdic.txt.gz'
+buddhdic_url = 'http://www.acmuller.net/download/buddhdic.txt.gz'
+
+unihanzip_file = sc.tmp_dir / 'Unihan.zip'
+unihanzip_url = 'http://www.unicode.org/Public/zipped/6.3.0/Unihan.zip'
+unihan_readings_filename = 'Unihan_Readings.txt'
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description='Build Chinese Lookup Dictionary Data Scripts',
@@ -214,11 +228,6 @@ logging.basicConfig(format='%(levelname)s: %(message)s', level=loglevel)
 
 existing_charcodes = discover_existing_charcodes()
 
-js_script_data_dir = sc.static_dir / 'js' / 'data'
-
-zh2en_data_script_names_file = js_script_data_dir / 'zh2en-data-scripts-names.js'
-fallback_stem = 'zh2en-fallback'
-maindata_stem = 'zh2en-maindata'
 
 bdbuilder = BuddhdicBuilder(existing=existing_charcodes)
 bdbuilder.args = args
@@ -228,15 +237,6 @@ fbbuilder = FallbackBuilder(existing=existing_charcodes, seen=bdbuilder.seen)
 js_process_fn = None
 if args.minify:
     js_process_fn = minify_js
-
-
-buddhdic_file = sc.tmp_dir / 'buddhdic.txt.gz'
-buddhdic_url = 'http://www.acmuller.net/download/buddhdic.txt.gz'
-
-unihanzip_file = sc.tmp_dir / 'Unihan.zip'
-unihanzip_url = 'http://www.unicode.org/Public/zipped/6.3.0/Unihan.zip'
-unihan_readings_filename = 'Unihan_Readings.txt'
-
 
 from urllib.request import urlopen
 
