@@ -147,7 +147,9 @@ class TextInfoModel:
                 m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
                 if m:
                     range_textinfo = TextInfo(uid=uid+'#', lang=lang_uid, path=path, name=name, author=author, volpage=volpage)
-                    for i in range(int(m[2]), int(m[3]) + 1):
+                    start = int(m[2])
+                    end = int(m[3]) + 1
+                    for i in (range(start, end) if end - start < 20 else [0]):
                         iuid = m[1] + str(i)
                         if self.exists(iuid, lang_uid):
                             continue
@@ -335,7 +337,7 @@ class SqliteBackedTIM(TextInfoModel):
     def _finally_table(self):
         self._con.execute('CREATE INDEX lang_x ON data(lang)')
         self._con.execute('CREATE INDEX uid_x ON data(uid)')
-        self._con.execute('CREATE UNIQUE INDEX path_x ON data(path)')
+        self._con.execute('CREATE INDEX path_x ON data(path)')
         self._con.execute('CREATE INDEX mtimes_path_x on mtimes(path)')
         self._con.execute('PRAGMA journal_mode = wal')
         
@@ -346,11 +348,12 @@ class SqliteBackedTIM(TextInfoModel):
             self._check_for_deleted()
         else:
             self._init_table()
+            self.set_happy()
             self._mtimes = {}
         super().build(force)
         if not happy:
             self._finally_table()
-            self.set_happy()
+            
         self._con.commit()
         del self._mtimes
 
