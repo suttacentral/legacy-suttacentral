@@ -393,6 +393,8 @@ class PrettyPrinter:
                 if not e.text or not e.text.startswith('\n'):
                     if len(e) > 0:
                         e.text = '\n' + (e.text or '').lstrip()
+                if e.text:
+                    e.text = e.text.lstrip()
 
             if should_nl_before_close:
                 if not e.tail or not e.tail.startswith('\n'):
@@ -408,6 +410,14 @@ class PrettyPrinter:
             if should_nl_after_close:
                 if not e.tail or not e.tail.startswith('\n'):
                     e.tail = '\n' + (e.tail or '')
+                # Strip preceeding spaces also
+                if len(e) == 0:
+                    if e.text:
+                        e.text = e.text.rstrip(' ')
+                else:
+                    if e[-1].tail:
+                        e[-1].tail = e[-1].tail.rstrip(' ')
+                    
 
         for p in root.iter('p'):
             if p.text and p.text.isspace() and p.text.startswith('\n'):
@@ -420,25 +430,42 @@ class PrettyPrinter:
                 child.tail = '\n' + (child.tail or '').lstrip()
                 if text and not text.isspace():
                     break
-        wsrex = _regex.compile(r'\n\s*\n')
+        # Convert every combination of spaces containing a newline
+        # with a single newline.
+        wsrex = _regex.compile(r'[ \n]*\n[ \n]*')
         for e in root.iter():
             if e.tail:
                 e.tail = wsrex.sub(r'\n', e.tail)
+                e.tail = self.simple_stupid_wrap(e.tail)
             if e.text:
                 e.text = wsrex.sub(r'\n', e.text)
+                e.text = self.simple_stupid_wrap(e.text)
 
-        # Calculate Opentag length:
-        def calc_opentag_length(e):
-            length = 2 + len(e.tag)
-            attrc = 0
-            for attr, value in e.attrib.items():
-                length += len(attr)
-                if value is not None:
-                    length += 1 + 2 + len(value)
-            length += len(e.attrib)
-            return length
+        root.select_one('html').tail = None
         
-                
+    def simple_stupid_wrap(self, string):
+        """ As the name suggets, a simple and stupid way to wrap long strings
+
+        """
+        if len(string) < 80:
+            return string
+        out = []
+        if string[0] == '\n':
+            out.append('')
+            string = string[1:]
+            
+        string = string.replace('\n', ' ')
+        
+        while len(string) > 78:
+            m = _regex.match(r'(.{60,79}) (.*)', string)
+            if m:
+                out.append(m[1])
+                string = m[2]
+            else:
+                break
+        out.append(string)
+        return '\n'.join(out)
+        
 
 prettyprint = PrettyPrinter().prettyprint
 

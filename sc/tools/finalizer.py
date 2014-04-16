@@ -71,14 +71,14 @@ def discover_author(root, entry, num_in_file):
         transby = None
         m = regex.search('Transl(?:ated|ion) (?:by|from) ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+(?: and ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+)))', metatext)
         if m:
-            transby = m[0]
+            transby = m[0].strip()
         else:
             # Match two words at front if possible commas are allowed, after that
             # match everything up to the first sentence ender, but permit periods
             # as abbreviation indicators.
             m = regex.match(r'(?:\p{alpha}+,? \p{alpha}+,?\s)?(?:(?<!\p{alpha})(?:\bed|\b\p{alpha})\.\s*|[^.:,])+', metatext)
             if m:
-                transby = m[0]
+                transby = m[0].strip()
             if transby:
                 if num_in_file <= 0:
                     entry.warning('No explicit author/origin blurb provided, using "{}", if this is not sensible, please add an element \'<meta author="Translated by So-and-so">\' to the metadata'.format(transby))
@@ -584,15 +584,7 @@ def finalize(root, entry, language=None, metadata=None,
                 e = blockquotes[i]
 
             i += 1
-                
-                
-                
     
-        
-        
-        
-        
-
     for e in root.select('a.previous, a.top, a.next'):
         divtext.append(e)
     
@@ -600,5 +592,6 @@ def finalize(root, entry, language=None, metadata=None,
     
     if author_blurb:
         root.headsure.append(author_blurb)
-    
+
+    sc.tools.html.prettyprint(root)
     

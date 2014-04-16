@@ -591,14 +591,10 @@ class HTMLProcessor(BaseProcessor):
             root.head.append(root.makeelement('title'))
         root.attrib.clear()
         out = html.tostring(root, doctype='<!DOCTYPE html>', 
-                encoding='unicode', 
+                encoding='utf8', 
                 include_meta_content_type=False,
                 pretty_print=True)
-        # We pretty print twice, but that's okay, lxml is so fast.
-        return self.prettyprint(out).encode(encoding='UTF8')
-
-    def prettyprint(self, string):
-        return html.prettyprint(string)
+        return out
         
     def process_root(self, root):
         raise NotImplementedError
