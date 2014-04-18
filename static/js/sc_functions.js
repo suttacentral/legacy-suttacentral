@@ -187,28 +187,31 @@ function buildTextualInformation() {
     var anchors = $(textualControls.marginClasses);
     for (var i = 0; i < anchors.length; i++) {
         var a = anchors[i];
-        var da = $(a);
+        var $a = $(a);
 
         var aClass = a.className.split(' ')[0];
         var title = sc.mode[sc.mode.lang]["strings"][aClass];
-        $(a).attr("title", title);
-        var aid = da.attr('id');
+        $a.attr("title", title);
+        var aid = $a.attr('id');
+        aid = aid.replace(RegExp('^' + $a.attr('class'), 'i'), '');
         
         if (aClass == 'ms') {
-            $(a).text( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
+            $a.text( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
         } else if (aClass == 'vnS') {
-            $(a).text(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
+            $a.text(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
         } else if (aClass == 'pts_pn'){
             var m = aid.split('.')
             m[0] = m[0].toUpperCase();
-            $(a).text( m.join('.') )
+            $a.text( m.join('.') )
         }
+
         
-        if (da.text() == '') {
-            da.text(aid.replace(/\d+_/, '').replace(aClass+'_', ''));
+        
+        if ($a.text() == '') {
+            $a.text(aid.replace(/\d+_/, '').replace(aClass+'_', ''));
         }
-        if (!da.attr('href') && aid) {
-            da.attr('href', '#' + aid);
+        if (!$a.attr('href') && aid) {
+            $a.attr('href', '#' + aid);
         }
 
         a.innerHTML = a.innerHTML.replace(/(\d)-(\d)/, '$1\u2060—\u2060$2')

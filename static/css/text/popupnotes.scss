@@ -73,14 +73,26 @@ a.bib:hover span.deets, a.note:hover span.deets,
     max-width: inherit;
     padding: 0em;
 
+    td:first-child:not(:last-child) {
+        font-weight: bold;
+    }
     td:last-child {
         font-size: 75%;
     }
     tr {
         background-color: inherit;
     }
+    
+    ul {
+        margin: 0;
+    }
 
     
+}
+
+.cross ul.deets {
+    margin-left: -15em;
+    margin-top: 0.5em;
 }
 
 

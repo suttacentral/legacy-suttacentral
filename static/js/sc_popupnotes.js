@@ -20,6 +20,7 @@ sc.notes = {
         } else if ($e.is('.cross')) {
             $e.append(self.markupXRefNote(note_obj));
         }
+        $e.removeAttr(self.sourceAttr);
     },
     markupVarNote: function(note_obj) {
         var self = this,
@@ -28,7 +29,7 @@ sc.notes = {
             row,
             td,
             i;
-        //$(e).removeAttr(self.sourceAttr)
+        
         /* The note object at the top level is an array */
         for (i = 0; i < note_obj.length; i++) {
             note = note_obj[i];
@@ -80,9 +81,9 @@ sc.notes = {
          * desc - A description of the page (normally the heading)
          */
 
-        var title,
-            href,
-            out = $('<a class="xref">');
+        var title = '',
+            acro = '',
+            href;
 
         href = obj.lang ? '../{}/'.format(obj.lang) : './';
         
@@ -91,16 +92,15 @@ sc.notes = {
             href += '#' + obj.bm;
         }
         
-        out.attr('href', href)
-        title = sc.util.uidToAcro(obj.uid)
+        acro = sc.util.uidToAcro(obj.uid)
         if (obj.bm) {
-            title += '.' + obj.bm;
+            acro += '.' + obj.bm;
         }
         if (obj.desc) {
-            title += ' ' + obj.desc.replace(/^[\d–.\u2060]*\s*/, '');
+            title = obj.desc.replace(/^[\d–.\u2060]*\s*/, '');
         }
-        out.text(title);
-        return out
+
+        return '<a class="xref" href="{}">{}</a> {}'.format(href, acro, title)
     },
 }
 
