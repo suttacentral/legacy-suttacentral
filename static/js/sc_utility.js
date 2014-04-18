@@ -9,8 +9,8 @@
  * to be particulary more featureful, however.
  */
 
-"use strict"
 String.prototype.format = function(){
+    "use strict"
     var args = arguments, fs = this, i=0, j=-1;
     fs = fs.replace('{{', '\x01\x02').replace('}}', '\x03\x04');
     fs = fs.replace(/\{[^}]*\}/g, function(m){
@@ -164,6 +164,22 @@ sc.util = {
         }
         
         return out.join(' ');
+    },
+    _expandUid: function(uid, i){
+        var self = this,
+            spaced = uid.replace(/(\D)(\d)/g, '$1 $2'),
+            expansion;
+        return spaced.replace(/[^\d\s]+/g, function(m){
+            expansion = self.expand_uid_data[m];
+            return expansion ? expansion[i] : m;
+        })
+        return acro;
+    },
+    uidToAcro: function(uid) {
+        return this._expandUid(uid, 0);
+    },
+    uidToName: function(uid){
+        return this._expandUid(uid, 1);
     }
 }
 
