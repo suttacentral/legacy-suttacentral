@@ -41,11 +41,11 @@ def zip(out_path, in_path, quiet=False):
 
 def x7z(out_path, in_path, quiet=False):
     with plumbum.local.cwd(str(in_path.parent)):
-        # Use 'ultra' settings except dictionary size to reduce
-        # memory use (~40mb rather than ~600mb) while still getting
-        # close to maximum compression.
+        # These settings chosen after some testing, -mx=3 is 6x faster
+        # than -mx=5, and 15% larger. 10 minutes to do the compression
+        # is more reasonable than 1 hour.
         cmd = plumbum.cmd.nice['-20',
-                plumbum.local['7z']['a', '-t7z', '-mx=9', '-md=1m',
+                plumbum.local['7z']['a', '-t7z', '-mx=3', '-md=1m', '-mmt=off',
                     str(out_path), in_path.name]]
         if quiet:
             cmd()
