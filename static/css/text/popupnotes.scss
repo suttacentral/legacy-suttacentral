@@ -72,12 +72,14 @@ a.bib:hover span.deets, a.note:hover span.deets,
     display: inline-block;
     max-width: inherit;
     padding: 0em;
+    @include serif;
 
     td:first-child:not(:last-child) {
         font-weight: bold;
     }
-    td:last-child {
+    td:nth-child(2) {
         font-size: 75%;
+        vertical-align: middle;
     }
     tr {
         background-color: inherit;
@@ -85,6 +87,9 @@ a.bib:hover span.deets, a.note:hover span.deets,
     
     ul {
         margin: 0;
+    }
+    td[colspan="2"] {
+        font-size: inherit;
     }
 
     
