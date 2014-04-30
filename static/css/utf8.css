@@ -20,7 +20,7 @@ a.kel:before {content:"Kel "}
 a.mat85:before, a.mat88:before {content:"Mat "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
-a.pts:before {content:"PTS "}
+a.pts:before, a.pts1:before, a.pts2:before {content:"PTS "}
 a.pts_pn:before {content:"PTS "}
 a.san87:before,, a.san89:before {content:"San "}
 a.sc:before {content:"SC "}

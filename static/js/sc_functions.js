@@ -192,8 +192,14 @@ function buildTextualInformation() {
         var aClass = a.className.split(' ')[0];
         var title = sc.mode[sc.mode.lang]["strings"][aClass];
         $a.attr("title", title);
-        var aid = $a.attr('id');
-        aid = aid.replace(RegExp('^' + $a.attr('class'), 'i'), '');
+        var aid = $a.attr('id'),
+            idPrefix;
+        if (aClass == 'pts1' || aClass == 'pts2') {
+            idPrefix = 'pts';
+        } else {
+            idPrefix = $a.attr('class');
+        }
+        aid = aid.replace(RegExp('^' + idPrefix, 'i'), '');
         
         if (aClass == 'ms') {
             $a.text( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
@@ -203,15 +209,13 @@ function buildTextualInformation() {
             var m = aid.split('.')
             m[0] = m[0].toUpperCase();
             $a.text( m.join('.') )
-        }
-
-        
+        }        
         
         if ($a.text() == '') {
             $a.text(aid.replace(/\d+_/, '').replace(aClass+'_', ''));
         }
         if (!$a.attr('href') && aid) {
-            $a.attr('href', '#' + aid);
+            $a.attr('href', '#' + $a.attr('id'));
         }
 
         a.innerHTML = a.innerHTML.replace(/(\d)-(\d)/, '$1\u2060—\u2060$2')
@@ -459,7 +463,7 @@ function generateMarkupCallback() {
 }
 
 var paliRex = /([aiueokgcjtdnpbmyrlvshāīūṭḍṅṇṁñḷ’­”]+)/i;
-var splitRex = /([^  ,.– —:;?!"'“‘-]+)/;
+var splitRex = /([^  \n,.– —:;?!"'“‘-]+)/;
 function toLookupMarkup(startNode)
 {
     var parts, i, out = "", proxy, node;
