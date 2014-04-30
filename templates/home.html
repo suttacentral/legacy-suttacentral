@@ -17,7 +17,7 @@
 <div id="home-main" style="display: block;">
 
 {% for pitaka_menu in menu %}
-<section class="pitaka columns-{{ pitaka_menu|length }}">
+<section class="pitaka columns-{{ pitaka_menu|length }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
     <h1>{{ pitaka_menu.pitaka.name }}</h1>
     {% for lang_menu in pitaka_menu %}
     <div class="column">

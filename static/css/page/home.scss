@@ -91,11 +91,8 @@ $home-tabs-height: 2em;
         @include grid-container;
         margin-bottom: 3em;
 
-        &.columns-3 {
-            width: 70%;
-            margin: 0 auto;
-        }
-
+        margin: 0 auto;
+        
         & > h1 {
             @include serif-small-caps;
             margin: 0 0 0.5em;
@@ -105,15 +102,18 @@ $home-tabs-height: 2em;
         }
 
         &.columns-5 .column {
-            @include grid-unit(20%, 0.5em, 0.5em);
+            @include grid-unit(19%, 0.5em, 0.5em);
+            min-width: 12em;
         }
 
         &.columns-4 .column {
-            @include grid-unit(25%, 0.5em, 0.5em);
+            @include grid-unit(24%, 0.5em, 0.5em);
+            min-width: 12em;
         }
 
         &.columns-3 .column {
-            @include grid-unit(33.3%, 0.5em, 0.5em);
+            @include grid-unit(32%, 0.5em, 0.5em);
+            min-width: 12em;
         }
 
     }
@@ -149,7 +149,6 @@ $home-tabs-height: 2em;
         & > li {
 
             border-bottom: 1px solid $home-line-color;
-            word-wrap: break-word;
 
             &.group-with-next {
                 border-bottom: 1px solid white;
@@ -174,6 +173,7 @@ $home-tabs-height: 2em;
 
                 display: block;
                 padding: 0.4em 0.5em;
+                padding-right: 1px;
                 line-height: 1.75em;
 
                 &:hover:not(.no-suttas) {
@@ -186,6 +186,14 @@ $home-tabs-height: 2em;
             }
         }
     }
+}
 
-	
+#home-sutta {
+    white-space: nowrap;
+    li {
+        overflow: hidden;
+    }
+}
+#home-vinaya {
+    word-break: break-word;
 }

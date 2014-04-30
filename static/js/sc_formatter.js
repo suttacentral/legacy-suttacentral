@@ -23,6 +23,9 @@ sc.formatter = {
         this.highlightBookmark();
         this.toolsMagic();
         this.overlapperFixer();
+        if ($('#home').length){
+            this.fixHome();
+        }
         setTimeout(this.acro_expander, 500);
         $(window).resize(this.overlapperFixer);
     },
@@ -35,6 +38,35 @@ sc.formatter = {
         var start = (new Date()).getTime();
         $("q").each(function(){sc.formatter.rePosition($(this))});
         //console.log("Resize took: ", (new Date()).getTime() - start, " milliseconds");
+    },
+    fixHome: function(){
+        /* This function is responsible for tweaking the column widths and alignment on the
+         * home page creating a very fluid experience
+         */
+        $(window).on('ready resize', function(){
+            var bodyWidth = $('#home-main').innerWidth(),
+                ruler = $('<span>m</span>').appendTo('.column li:last'),
+                t = $('.column:first'),
+                extraWidth = t.outerWidth(true) - t.width(),
+                minWidth = ruler.innerWidth() * 12.5 + extraWidth,
+                columnWidth = Math.max(minWidth, bodyWidth / 5.25) + extraWidth,
+                columnCount = Math.floor(bodyWidth / columnWidth);
+            ruler.remove();
+            // Remove this line to make the columns only ever shrink.
+            columnWidth = bodyWidth / columnCount;
+            $('.column').css({'width': columnWidth, 'min-width': minWidth});
+            //$('.column').width(Math.max(columnWidth, minWidth)).each(function(){$(this).css('style', $(this).css('style'
+            ['.columns-3', '.columns-4', '.columns-5'].forEach(function(sel){
+                var num = Number(sel.slice(-1));
+                $(sel).innerWidth(Math.min(bodyWidth, Math.min(num, columnCount) * columnWidth * 1.01));
+            });
+        });
+    },
+    headerMenuFix: function(){
+        $(window).on('ready resize', function(){
+
+
+        });
     },
     rePosition: function($element){
         return $element;
