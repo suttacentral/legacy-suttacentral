@@ -26,7 +26,7 @@
     }
 }
 
-.origin {background:#ececec;}
+tr.origin {background:#ececec;}
 
 .vagga {
     color:#aaa;
@@ -50,9 +50,21 @@ td.vagga {border:none;}
     @include sans-serif;
     float:right;
     color:#75A38F;
-    margin:0.3em 1.5em 0 0;
+    margin:0 1.5em 0 0;
     padding:0.1em 0.3em 0.1em 0.3em;
 }
+
+.sutta .details {
+    float: none;
+    position:relative;
+    top: 0.1em;
+    font-size: 85%;
+    
+    &:not(:hover) {
+        color: $light-gray;
+    }
+}
+
 
 a.details {text-decoration:none;}
 a.details:link {color:#75A38F;}
@@ -66,170 +78,24 @@ td .altAcronym:before {content:"[";}
 td .altAcronym:after {content:"]";}
 td .altVolPage, td .altAcronym {font-size: 80%; color: #555}
 
+.negated-parallel {
+    color: $medium-gray;
+}
+
 table.divtable td:nth-of-type(1) > a {white-space:nowrap;}
 
-/* NOTES, TEXT DATA & BIBLIOGRAPHY */
 
-a.note {
-    position:relative;
-    color:#EE1700;
+.infomode {
+	.insertion:before {
+		content:'[';
+	}
+	.insertion:after {
+		content:']';
+	}
 }
 
-a.bib {
-    position:relative;
-    color:#EED900;
-}
 
-span.var, span.cross, span.end {position:relative;}
-
-span.var:hover, span.cross:hover, span.end:hover {color:#2b2b2b;}
-
-span.var.infomode, span.var.infomode:hover {color:#7A39D0;}
-
-span.cross.infomode, span.cross.infomode:hover {color:#F74F3E;}
-
-span.end.infomode, span.end.infomode:hover {color:blue;}
-
-a.note .deets, a.note:hover .deets
-    {background-color:#F7DBD0;}
-
-a.bib .deets, a.bib:hover .deets
-    {background-color:#F7F2C2;}
-
-span.var .deets, span.var:hover .deets
-    {background-color:#E5E0EC;}
-
-span.cross .deets, span.cross:hover .deets
-    {background-color:#F7D1C2;}
-
-span.end .deets, span.end:hover .deets
-    {background-color:blue;}
-
-a.note .deets,a.note:hover .deets, a.bib .deets, a.bib:hover .deets, span.var .deets, span.var.infomode:hover .deets,span.cross .deets, span.cross.infomode:hover .deets, span.end .deets, span.end.infomode:hover .deets
-    {
-    position:absolute;
-    z-index:2;
-    top:1.5em;
-    left:-22em;
-    width:20em;
-    color:#2b2b2b;
-    padding:0.5em;
-    font-size:0.8em;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    border:1px solid #ccc;
-    box-shadow:6px 4px 10px rgba(136, 136, 136, 0.3);
-    @include sans-serif;
-    line-height:1.2;
-}
-
-a.note .deets, a.bib .deets, span.var .deets, span.cross .deets, span.end .deets{
-    -webkit-transition:opacity 0.5s ease;
-    -moz-transition:opacity 0.5s ease;
-    -o-transition:opacity 0.5s ease;
-    transition:opacity 0.5s ease;
-    visibility:hidden;
-    opacity:0;
-    -webkit-transition:visibility 0s ease 0.5s,opacity 0.5s ease;
-    -moz-transition:visibility 0s ease 0.5s,opacity 0.5s ease;
-    -o-transition:visibility 0s ease 0.5s,opacity 0.5s ease;
-    transition:visibility 0s ease 0.5s,opacity 0.5s ease;
-}
-
-/*a.note:hover .deets, a.bib:hover .deets, span.varcolor:hover .deets, span.crosscolor:hover .deets, span.endcolor:hover .deets*/
-span.infomode:hover, span.infomode:hover span, a.bib:hover span.deets, a.note:hover span.deets {
-    visibility:visible;
-    opacity:1;
-    -webkit-transition-delay:0s;
-    -moz-transition-delay:0s;
-    -o-transition-delay:0s;
-    transition-delay:0s;
-}
-
-.insertion.infomode:before {
-    content:'[';
-}
-.insertion.infomode:after {
-    content:']';
-}
-
-#metaarea {display:none; visibility:hidden;}
-#metaarea.infomode {display:inline-block; visibility:visible;}
 /* MARGIN 'NOTES' */
-
-a.msdiv {display:none;}
-
-
-a.da {
-    display: none;
-}
-
-a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.pts, a.pts_pn, a.san87, a.san89, a.sc, a.sen82, a.sht, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus, a.tlinehead, a.ud-sutta, a.ud-vagga-sutta, a.tri62, a.tri95, a.tu, a.uv, a.vai58, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.wal48, a.wal50, a.wal52, a.wal55b, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72
-    {
-    visibility:hidden;
-    position:absolute;
-    text-align:left;
-    width:4em;
-    @include sans-serif;
-    font-size:0.6em;
-    display:table;
-    font-style:normal;
-    font-weight:normal;
-    margin: 1.8em 0 0 -8em;
-    white-space:nowrap;
-    color: #2DB3A7;
-}
-
-a.ms {margin:0.7em 0 0 -14.5em; color:#00B428;}
-a.sc {margin:0.7em 0 0 -5.3em; color:#B3A72D;}
-a.t {margin:0.7em 0 0 -5.3em; color:#00B428;}
-a.wp {margin:0.7em 0 0 -5.3em; color:red;}
-a.pts {margin:-0.2em 0 0 -12.1em; color:#B2AF8C;}
-a.vn {margin:0.7em 0 0 -6em; color:#9B0F00;}
-a.sht {margin:0.8em 0 0 -6em; color:#9B000F;}
-a.wal52 {margin: 0.8em 0 0 -7em; color: #B3A72D;}
-/*a.titus {margin: -0.1em 0 0 -4em; color: #00B428;}*/
-a.titus {display:none}
-
-/* TODO systematically do for all of them (alphabetical order)
-a.bl
-a.bps
-a.eno89
-a.fuk03
-a.fol
-a.gbm
-a.gno78
-a.har04
-a.hoe16
-a.hos89a, a.hos89b, a.hos91
-a.hs
-a.kel
-a.mat85, a.mat88
-a.mit57
-a.ms
-a.pts
-a.san87,, a.san89
-a.sc
-a.sen82
-a.sht
-a.snp-vagga-section-verse
-a.snp-vagga-verse
-a.t,  a.tlinehead
-a.tri62,, a.tri95
-a.ud-sutta
-a.ud-vagga-sutta
-a.uv
-a.vai58, a.vai59, a.vai61
-a.verse-num-pts
-a.vn
-a.wal48, a.wal50, a.wal52, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c
-a.wp
-a.yam72
-a.snp-vagga-verse
-a.snp-vagga-section-verse
-
-*/
 
 a.vimula {color:blue;}
 
@@ -266,8 +132,6 @@ a.bl {display:none;}
     letter-spacing:0.02em;
 }
 
-a.infomode {visibility:visible;}
-
 
 
 /* BOOKMARKED SECTION HIGHLIGHTING */
@@ -280,88 +144,6 @@ a.infomode {visibility:visible;}
 /* The bottom margin is transfered to the highlighting element */
 .embeddedparallel.bookmarkeded p:last-child {
     margin-bottom: 0em;
-}
-
-/* POPUP DICTIONARY LOOKUP */
-
-#message_box{
-    position:fixed;
-    @include sans-serif;
-    font-size:80%;
-    box-shadow:3px 2px 10px rgba(136, 136, 136, 0.3);
-    background:#B0D1C3;
-    border:1px solid #75A38F;
-    border-radius:3px;
-    position:fixed;
-    top:10em;
-    left:5%;
-    padding:0.5em;
-}
-
-span.lookup {position:relative;}
-[lang=zh] span.lookup {display:inline-block;}
-span.lookup > q {position:relative;}/* display:block;float:left}*/
-span.lookup:before {content: none;}
-
-span.lookup > span.meaning {
-    position:absolute;
-    display:block;
-    font-size: 11pt;
-    z-index:2;
-    bottom:0.6em;
-    margin-bottom:1.2em;
-    padding-bottom:0em;
-    right: -50%;
-    left: -50%;
-    min-width: 10em;
-    max-width: 20em;
-    color:#1d1d1d;
-    padding:0em 1em 0em 1em;
-    font-size:normal;
-    @include sans-serif;
-    box-shadow:3px 2px 5px rgba(136, 136, 136, 0.3);
-    background-color:#F7D1C2;
-    border-radius: 3px 3px 3px 3px;
-    border:1px solid #f74f3e;
-    visibility:hidden;
-    opacity:0;
-    letter-spacing:0;
-    word-spacing:0;
-    text-transform: none;
-}
-
-span.lookup > span.meaning > a {
-    font-size:105%;
-    color:black;
-    font-weight: bold;
-}
-[lang=zh] span.lookup > span.meaning > a {
-    font-weight: normal;
-    font-size: 110%;
-}
-
-span.lookup > span.meaning > a:hover {
-    color:#DF00FF;
-}
-
-span.lookup:hover {
-    color:red;
-}
-span.lookup > span.meaning:hover {
-    color:black;
-}
-
-span.lookup:hover > span.meaning {
-    visibility:visible;
-    opacity:1;
-}
-
-.syllables {
-        word-spacing: 1em;
-}
-.syllables  u {
-        text-decoration:none;
-        border-bottom:3px solid #999;
 }
 
 /*#text_info_button, #pali_lookup_button, #zh2en*/
@@ -378,20 +160,18 @@ span.lookup:hover > span.meaning {
     font-family: serif;
 }
 
-.sutta {
-    ul {
-        list-style-type: none;
-    }
+.sutta ul {
+    list-style-type: none;
+}
 
-    ol, ul {
-        padding:0 0 1.5em 0;
-        margin:0 0 0 -1em;
-    }
+.sutta ol   {
+     padding:0 0 1.5em 0;
+     margin:0 0 0 3em;
+}
 
-    ol ol, ul ul  {
-        padding:0 0 0 1em;
-        margin:0 0 0 0;
-    }
+.sutta ol ol  {
+     padding:0 0 0 1em;
+     margin:0 0 0 0;
 }
 
 
@@ -452,23 +232,11 @@ span.lookup:hover > span.meaning {
 
 /*CHINESE*/
 
-a.tlinehead:before {content:"CBETA "}
-
 section:lang(zh) {
-    letter-spacing:0.2em;
+    letter-spacing:0.4em;
 }
 section:lang(zh) q {
     letter-spacing: normal;
-}
-
-.tlinehead {
-    @include sans-serif(!important);
-    color:#0099cc;
-    margin: 1em 0 0 -16em;
-    font-size:0.5em !important;
-    letter-spacing:0 !important;
-    visibility:hidden;
-    position:absolute;
 }
 
 .tlineheadnote {color:red;}
@@ -481,45 +249,61 @@ section:lang(zh) q {
 
 //.cr
 /*cross-reference, i.e. internal references. Used in IBH.*/
-.surplus	{display:none;}
-.surplus.infomode	{display:inline;color:#4805A2}
+.surplus {
+	display:none;
+	color:#4805A2;
+	.infomode & {
+		display:inline;
+	}
+		
+}
+
 /*For Mahaparinirvana text, marks apparently random phrases that are marked in bold in GRETIL. 
 
 Surplus text.
 */
 
-.supplied {}	
-.supplied.infomode	{color:#B3A72D}
+.supplied {
+	.infomode & {
+		color:#B3A72D
+	}
+}
 /*In almost all Sanskrit texts, there is reconstruction by the editor. These are marked <span class="supplied"></span>. In CSS this should by default display normally, and optionally, use 
 
 
 Text hypothetically reconstructed by the editor or translator.
 */
 
-.supplied2 {}
-.supplied2.infomode	{color:#9B8D00}
+.supplied2 {
+	.infomode & {
+		color:#9B8D00;
+	}
+}
 /*In some cases there are two forms of supplied text, usually differentiated in the original by () and []. This difference is retained by using supplied2 for the []. Actually these should be marked more clearly to differentiate them, but this will differ according to the various publications, which I don't have. So for now let them behave as for .supplied, except use 
 
 Text hypothetically reconstructed by the editor or translator.
 */
 
-p .add {display: none; }
+p .add {
+	display: none;
+	.infomode & {
+		display:inline;
+		padding: 0 0.5em;
+		@include sans-serif;
+		color:#b2b2b2;
+		font-size: 80%;
+	}
+}
 .add.show {display: inline;}
 
-
-p .add.infomode  {
-    display:inline;
-    padding: 0 0.5em;
-    @include sans-serif;
-    color:#b2b2b2;
-    font-size: 80%;
+.infomode .add {
+	background:#fefefe;
+	box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);
+	.author {
+		@include sans-serif-small-caps;
+	}
 }
 
-.add.infomode {background:#fefefe; box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);}
-
-.add.infomode .author {
-    @include sans-serif-small-caps;
-}
 /*There are some editorial additions marked <span class="add"></span>. These should be hidden by default.
 
 Text added by the editor or translator for clarification.
@@ -540,22 +324,35 @@ Metre reconstructed by the editor.
 Gap in the manuscript.
 */
 
-.corr {}
-corr.infomode	{color:#00751A} 
+.corr {
+	.infomode & {
+		color:#00751A
+	}	
+}
+
 /*A corrected reading that has been adopted in the text (usually by the latest editor mentioned in the meta). By default display normally.
 
 
 Reading corrected by the editor.
 */
 
-.sic	{display:none}
-.sic.infomode	{display:inline; color:#9B0F00;}
+.sic {
+	display:none;
+	.infomode & {
+		display:inline;
+		color:#9B0F00;
+	}
+}
+
 /*
 Apparently incorrect reading determined by the editor.
 */
 
-.lem {}
-.lem.infomode	{color:#432769}
+.lem {
+	.infomode &	{
+		color:#432769;
+	}
+}
 /*The adopted main reading in a text. Display normally.
 
 
@@ -578,8 +375,13 @@ cite.article	{font-style:normal}
 .gatha-number {}
 /*As it says. Style as for other refs.*/
 
-.del	{display:none;}
-.del.infomode	{color:#EE1700;}
+.del {
+	display:none;
+	.infomode & {
+		color:#EE1700;
+	}
+}
+
 /*(deletion) contains a letter, word, or passage deleted, marked as deleted, or otherwise indicated as superfluous or spurious in the copy text by an author, scribe, annotator, or corrector.
 
 Text deleted by the editor as superfluous.
@@ -593,7 +395,11 @@ Unclear reading.
 .namo		{font-style:italic;text-align:center;}
 /*dedication at the start of texts*/
 
-.scribe		{font-style:italic}
+.scribe	{
+    font-style:italic;
+    text-align: right;
+}
+
 /*note in the text recording who copied the text*/
 hr		{width:33%;color:#b2b2b2;margin:0 auto 2em}
 .rule	{font-weight:bold}

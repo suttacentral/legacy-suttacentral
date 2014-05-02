@@ -1,47 +1,72 @@
-# Return the context of collections and divisions for menu display
+"""The SuttaCentral Menu.
 
-other_divisions = [{"name": "Prākrit", "link": "/pf"},
-			       {"name": "Gāndhārī", "link": "/gf"},
-			       {"name": "Khotanese", "link": "/kf"},
-			       {"name": "Uighur", "link": "/uf"}]
+Example:
+    >>> import sc.menu
+    >>> menu = sc.menu.get_menu()
+    >>> len(menu)
+    3
+    >>> menu[0].pitaka.name
+    'Sutta'
+    >>> menu[1].pitaka.name
+    'Vinaya'
+    >>> menu[1][2].lang.name
+    'Sanskrit'
+    >>> menu[1][2][0].sect.name
+    'Mahāsaṅghika'
+    >>> menu[1][2][0][1].name
+    'Śrīghanācārasaṁgrahaṭīkā'
+"""
 
-sanskrit_divisions = [
-							{"name": "Arthaviniścayasūtra", "link": "/arv"},
-							{"name": "Avadānaśataka", "link": "/avs"},
-				      {"name": "Divyāvadāna", "link": "/divy"},
-				      {"name": "Lalitavistara", "link": "/lal"},
-				      {"name": "Mahāvastu", "link": "/mvu"},
-				      {"name": "Saṅghabhedavastu", "link": "/sbv"},
-				      {"name": "Udānavarga", "link": "/uv"},
-				      {"name": "SHT fragments", "link": "/sht"},
-				      {"name": "Other fragments", "link": "/sf"}]
+from collections import namedtuple
 
-tibetan_divisions = [{"name": "Derge / Peking editions", "link": "/dq"},
-				     {"name": "Upāyikā", "link": "/up"},
-				     {"name": "Critical editions", "link": "/tc"}]
+import sc.scimm
 
-chinese_divisions = [{"name": "Dīrghāgama", "link": "/da"},
-				     {"name": "Madhyamāgama", "link": "/ma"},
-				     {"name": "Saṃyuktāgama", "link": "/sa"},
-				     {"name": "Saṃyuktāgama (2nd)", "link": "/sa-2"},
-				     {"name": "Saṃyuktāgama (3rd)", "link": "/sa-3"},
-				     {"name": "Ekottarikāgama", "link": "/ea"},
-				     {"name": "Ekottarikāgama (2nd)", "link": "/ea-2"},
-				     {"name": "Other Āgama sūtras", "link": "/oa"},
-				     {"name": "Other Taishō texts", "link": "/ot"}]
 
-pali_divisions = [{"name": "Dīgha Nikāya", "link": "/dn"},
-			      {"name": "Majjhima Nikāya", "link": "/mn"},
-			      {"name": "Saṃyutta Nikāya", "link": "/sn"},
-			      {"name": "Aṅguttara Nikāya", "link": "/an"},
-			      {"name": "Khuddaka Nikāya", "link": "/kn"}]
+class Menu(list):
+    pass
 
-collections = []
 
-collections.append({"name": "Other", "divisions": other_divisions})
-collections.append({"name": "Sanskrit", "divisions": sanskrit_divisions})
-collections.append({"name": "Tibetan", "divisions": tibetan_divisions})
-collections.append({"name": "Chinese", "divisions": chinese_divisions})
-collections.append({"name": "Pali", "divisions": pali_divisions})
+class PitakaMenu(list):
 
-menu_data = collections
+    def __init__(self, pitaka):
+        self.pitaka = pitaka
+
+
+class LanguageMenu(list):
+
+    def __init__(self, lang):
+        self.lang = lang
+
+
+class SectMenu(list):
+
+    def __init__(self, sect, divisions):
+        self.sect = sect
+        super().__init__(divisions)
+
+
+def build_menu():
+    """Build and return the SuttaCentral menu."""
+    imm = sc.scimm.imm()
+    menu = Menu()
+    pitaka_menu = None
+    lang_menu = None
+    for collection in imm.collections.values():
+        if not pitaka_menu or pitaka_menu.pitaka != collection.pitaka:
+            pitaka_menu = PitakaMenu(collection.pitaka)
+            menu.append(pitaka_menu)
+        if not lang_menu or lang_menu.lang != collection.lang:
+            lang_menu = LanguageMenu(collection.lang)
+            pitaka_menu.append(lang_menu)
+        sect_menu = SectMenu(collection.sect, collection.divisions)
+        lang_menu.append(sect_menu)
+    return menu
+
+
+_menu = None
+def get_menu():
+    """Return the cached SuttaCentral menu."""
+    global _menu
+    if _menu is None:
+        _menu = build_menu()
+    return _menu

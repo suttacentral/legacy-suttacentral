@@ -17,6 +17,9 @@ offline cookie flag.
 """
 
 import argparse, collections, os, regex, sys, time, urllib, urllib.request
+import env
+import sc
+import json
 from lxml import html
 from urllib.parse import urljoin
 
@@ -28,13 +31,16 @@ def parse_args():
     parser.add_argument('dir', type=str, help='output directory')
     parser.add_argument('-w', '--wait', type=float, default=0.0,
         help='time to wait between requests in seconds')
+    parser.add_argument('--omit', type=str, default='',
+        help='Do not crawl pages for these language codes, comma or space seperated')
     parser.add_argument('-q', '--quiet', action='store_true',
         help='suppress non-errors from output')
     return parser.parse_args()
 
-def readurl(url):
-    opener = urllib.request.build_opener()
-    opener.addheaders.append(('Cookie', 'offline=1'))
+opener = urllib.request.build_opener()
+opener.addheaders = [e for e in opener.addheaders if e[0] != 'User-agent'] + [('User-agent', 'SC Offline Build Crawler')]
+opener.addheaders.append(('Cookie', 'offline=1'))
+def readurl(url):    
     with opener.open(url) as f:
         return f.read()
 
@@ -71,7 +77,7 @@ def fixcss(text, depth):
     return regex.sub(r'url\(([\'"])?(/[^\'")]+)([\'"])?\)', callback, text,
         flags=regex.MULTILINE)
 
-def process(host, url):
+def process(host, url, omit_codes=None, omit_rex=None, timeout=30):
     global output_dir
     fullurl = urljoin(host, url)
     ending = getending(url)
@@ -87,15 +93,15 @@ def process(host, url):
         os.makedirs(os.path.dirname(filename))
     except OSError:
         pass
-    bytes = readurl(fullurl)
+    pagedata = readurl(fullurl)
 
     if ending not in ('html', 'js', 'css'):
         with open(filename, 'wb') as f:
-            f.write(bytes)
+            f.write(pagedata)
         return
 
     if ending in ('css', 'js'):
-        text = bytes.decode(encoding='utf8')
+        text = pagedata.decode(encoding='utf8')
         if ending == 'css':
             text = fixcss(text, depth)
         with open(filename, 'w', encoding='utf8') as f:
@@ -105,9 +111,17 @@ def process(host, url):
     # We need to be very careful and explicit with lxml to handle utf8
     # correctly. See http://stackoverflow.com/questions/15302125/html-encoding-and-lxml-parsing
     parser = html.HTMLParser(encoding='utf8')
-    dom = html.document_fromstring(bytes, parser=parser)
+    root = html.fromstring(pagedata, parser=parser)
     
-    for a in dom.cssselect('[href], [src]'):
+    if omit_codes:
+        s = root.cssselect('script#sc_text_info')
+        if s:
+            text_info = s[0]
+            jso = json.loads(text_info.text)
+            jso["all_lang_codes"] = [code for code in jso["all_lang_codes"] if code not in omit_codes]
+            text_info.text = json.dumps(jso)
+    
+    for a in root.cssselect('[href], [src]'):
         attr = 'href'
         if 'src' in a.attrib:
             attr = 'src'
@@ -115,6 +129,12 @@ def process(host, url):
             href = a.attrib[attr]
         except KeyError:
             continue
+        # If omit_rex is defined, and matches href, then absolutize link
+        # and do not crawl target page.
+        if omit_rex and omit_rex.search(href) or omit_rex.search(a.text_content()):
+            a.set(attr, 'http://suttacentral.net/' + a.get(attr))
+            continue
+        
         if not href or not href.startswith('/'):
             continue
         addtotaskqueue(href)
@@ -130,8 +150,8 @@ def process(host, url):
         a.attrib[attr] = new_href
 
     with open(filename, 'wb') as f:
-        f.write('<!DOCTYPE html>\n'.encode(encoding='utf8'))
-        f.write(html.tostring(dom, encoding='utf8'))
+        f.write(b'<!DOCTYPE html>\n')
+        f.write(html.tostring(root, encoding='utf8'))
 
 if __name__ == '__main__':
 
@@ -140,10 +160,25 @@ if __name__ == '__main__':
     output_dir = args.dir
     quiet = args.quiet
     wait = args.wait
+    extra_omit = {'sht-lookup'}
+    if args.omit:
+        omit_codes = {s for s in regex.split(r'[ ,]', args.omit) if s != ''}
+    else:
+        omit_codes = set()
+    omit_rex = regex.compile(r'\b({})\b(?!-)'.format('|'.join(omit_codes | extra_omit)))
 
     taskqueue = collections.deque()
     seen = set()
     addtotaskqueue('/')
+    # Add js files which are requested via AJAX thus lacking
+    # href or src references.
+    tomatch = ['zh2en', 'pi2en']
+    for file in sc.static_dir.glob('js/*.js'):
+        filename = file.name
+        for string in tomatch:
+            if string in filename:
+                addtotaskqueue('/js/{}'.format(filename))
+                break
 
     start = time.time()
     count = 0
@@ -152,7 +187,7 @@ if __name__ == '__main__':
             path = taskqueue.popleft()
             if not quiet:
                 print(path)
-            process(host, path)
+            process(host, path, omit_codes, omit_rex)
             count += 1
         except (urllib.error.HTTPError, urllib.error.URLError) as e:
             sys.stderr.write("{}: {}\n".format(path, str(e)))

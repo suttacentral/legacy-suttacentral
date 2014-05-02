@@ -34,6 +34,7 @@ from time import time as current_time
 from tempfile import TemporaryFile, NamedTemporaryFile
 from bs4 import UnicodeDammit
 from subprocess import Popen, PIPE, call
+from copy import deepcopy
 
 import sc
 from sc.views import InfoView
@@ -590,14 +591,10 @@ class HTMLProcessor(BaseProcessor):
             root.head.append(root.makeelement('title'))
         root.attrib.clear()
         out = html.tostring(root, doctype='<!DOCTYPE html>', 
-                encoding='unicode', 
+                encoding='utf8', 
                 include_meta_content_type=False,
                 pretty_print=True)
-        # We pretty print twice, but that's okay, lxml is so fast.
-        return self.prettyprint(out).encode(encoding='UTF8')
-
-    def prettyprint(self, string):
-        return html.prettyprint(string)
+        return out
         
     def process_root(self, root):
         raise NotImplementedError
@@ -703,6 +700,7 @@ class FinalizeProcessor(HTMLProcessor):
             p = finalizer.generate_canonical_path(self.entry.filename.stem, self.entry.language)
             if p:
                 filename = p / filename.name
+                self.entry.info('Using {!s} as output filename'.format(filename))
         
         return super().output_filename(filename)
     
@@ -747,8 +745,10 @@ class FinalizeProcessor(HTMLProcessor):
             return self.root_to_bytes(root)
     
     def process_root(self, root):
+        language = finalizer.discover_language(root, self.entry)
+        self.entry.language = language
         finalizer.finalize(root, entry=self.entry, options=self.options, 
-            metadata=self.metadata.get(self.entry.filename.parent))
+            metadata=deepcopy(self.metadata.get(self.entry.filename.parent)))
     
     def process_many(self, root):
         orgentry = self.entry
@@ -757,13 +757,19 @@ class FinalizeProcessor(HTMLProcessor):
             metadata = root.select('div#metaarea')[0]
         except IndexError:
             metadata = self.metadata.get(self.entry.filename.parent)
-        author_blurb = finalizer.discover_author(root, self.entry)
         language = finalizer.discover_language(root, self.entry)
         
         es = root.select('section section')
         if es:
             self.entry.error("File contains nested sections. Sections must not be nested.", lineno=es[0].sourceline)
             raise ProcessingError("Unable to proceed due to nested sections")
+        
+        links_created = finalizer.generate_next_prev_links(root, language)
+        if links_created:
+            self.entry.info('Created {} prev/next links, if prev/next links '
+                'should extend outside this file, manually add the required '
+                'link at each end'.format(links_created))
+        
         seen = set()
         for num, section in enumerate(root.iter('section')):
             try:
@@ -782,7 +788,7 @@ class FinalizeProcessor(HTMLProcessor):
                 entry.language = language
                 
                 finalizer.finalize(root, entry=entry, options=self.options, 
-                    metadata=metadata, language=language, author_blurb=author_blurb,
+                    metadata=deepcopy(metadata), language=language,
                     num_in_file=num)
                 entry.filename = pathlib.Path(root.select('section')[0].attrib['id']+ '.html') 
                 

@@ -2,6 +2,87 @@
 {% import 'macros.html' as macros with context %}
 {%- block content -%}
 <div id="onecol">
+{# There are two main forms of parallels, normal (uid-pair) parallels, and grouped
+parallels, at the moment only one or the other exists.
+If we have suttas with both, we'll need to update this template. #}
+
+{% if sutta.parallel_group %}
+<table id="vinaya_parallels">
+<caption>
+Details for <strong><a href="{{sutta.url}}">{{sutta.uid|uid_to_name}}</a> {{sutta.name}}</strong></caption>
+<thead>
+<tr>
+<th>Identifier</th>
+<th>Division</th>
+<th>Vol/Page</th>
+<th>Translations</th>
+</tr>
+</thead>
+<tbody>
+
+{#% set parallels = [origin] + sutta.parallel_group.parallels(sutta)|list %#}
+{% set groupees = sutta.parallel_group.groupees() %}
+{% set groupees_seen = {} %}
+{% set parallels = sutta.parallel_group.parallels()|list %}
+{% for parallel in parallels -%}
+{% if parallel.negated %}
+<tr class="negated-parallel">
+<td>
+{% if parallel.maybe %}
+Gap in manuscript
+{% else %}
+No parallel
+{% endif %}
+</td>
+<td>{{parallel.division.uid|uid_to_name}}</td>
+<td colspan=3>
+</td>
+</tr>
+{% else %}
+{% set _class = ['origin'] if parallel.sutta == sutta else [] %}
+{% if not loop.last %}
+{% set subdiv_uid = parallel.sutta.subdivision.uid %}
+{% set next_parallel = parallels[loop.index0 + 1] %}
+
+{% if next_parallel|attr('sutta') and next_parallel.sutta.subdivision.uid == subdiv_uid %}
+    {% set _class = _class + ['group-with-next'] %}
+{% endif %}
+{% endif %}
+{% if _class %}
+<tr class="{{ _class|join(' ') }}">
+{% else %}
+<tr>
+{% endif %}
+<td>
+{{macros.sutta_acronym(parallel.sutta, show_alt=true)}}
+{%- if parallel.partial -%}*{%- endif -%}
+</td>
+<td>{{ parallel.sutta.subdivision.division.uid|uid_to_name }}</td>
+<td>{{parallel.sutta.volpage_info | sht_expansion }}
+{%- if parallel.sutta.alt_volpage_info %} <span class='altVolPage'>{{parallel.sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
+{%- endif -%}
+{%- if parallel.footnote %}
+<a class='note'><div class='tri'>&nbsp;▶</div><span class='deets'>{{parallel.footnote}}</span></a>
+{%- endif -%}
+{%- if parallel.sutta.biblio_entry %}
+<a class='bib'><div class='tri'>&nbsp;▶</div><span class='deets'>{{parallel.sutta.biblio_entry.text}}</span></a>
+{%- endif -%}
+</td>
+<td>
+{% for translation in parallel.sutta.translations -%}
+<a href='{{translation.url}}' class='tran' {%- if translation.abstract %} title='{{translation.abstract}}'{% endif %}>{{translation.lang.uid}}</a>{% if not loop.last %} | {% endif %} 
+{% endfor -%}
+</td>
+{% endif %}
+</tr>
+{%- endfor %}
+
+</tbody>
+{{macros.table_footer()}}
+</table>
+{% endif %}
+
+{% if sutta.parallels or not sutta.parallel_group %}
 <table>
 <caption>
 Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}</strong></caption>
@@ -15,6 +96,7 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 </tr>
 </thead>
 <tbody>
+{% set parallels = [origin] + sutta.parallels|list %}
 {% for parallel in parallels -%}
 {%- if loop.first -%}
 <tr class='origin'>
@@ -31,10 +113,10 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 {%- if parallel.sutta.alt_volpage_info %} <span class='altVolPage'>{{parallel.sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
 {%- endif -%}
 {%- if parallel.footnote %}
-<a class='note'><div class='tri'>&nbsp;►</div><span class='deets'>{{parallel.footnote}}</span></a>
+<a class='note'><div class='tri'>&nbsp;▶</div><span class='deets'>{{parallel.footnote}}</span></a>
 {%- endif -%}
 {%- if parallel.sutta.biblio_entry %}
-<a class='bib'><div class='tri'>&nbsp;►</div><span class='deets'>{{parallel.sutta.biblio_entry.text}}</span></a>
+<a class='bib'><div class='tri'>&nbsp;▶</div><span class='deets'>{{parallel.sutta.biblio_entry.text}}</span></a>
 {%- endif -%}
 </td>
 <td>
@@ -44,8 +126,10 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 </td>
 </tr>
 {%- endfor %}
+
 </tbody>
 {{macros.table_footer()}}
 </table>
+{% endif %}
 </div>
 {%- endblock -%}

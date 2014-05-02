@@ -6,12 +6,13 @@ import newrelic.agent
 import regex
 import socket
 import time
+import json
 import urllib.parse
 from webassets.ext.jinja2 import AssetsExtension
 
 import sc
 from sc import assets, config, data_repo, scimm, util
-from sc.menu import menu_data
+from sc.menu import get_menu
 from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
 
@@ -42,6 +43,7 @@ def jinja2_environment():
     env.filters['time'] = util.format_time
     env.filters['datetime'] = util.format_datetime
     env.filters['timedelta'] = util.format_timedelta
+    env.filters['uid_to_name'] = lambda uid: scimm.imm().uid_to_name(uid)
 
     def sub_filter(string, pattern, repl):
         return regex.sub(pattern, repl, string)
@@ -139,13 +141,18 @@ class ViewBase:
 
     def get_global_context(self):
         """Return a dictionary of variables accessible by all templates."""
+        nonfree_fonts = config.nonfree_fonts
+        if cherrypy.request.offline:
+            if not config.always_nonfree_fonts:
+                nonfree_fonts = False
+                
         return ViewContext({
-            'collections': menu_data,
+            'menu': get_menu(),
             'config': config,
             'current_datetime': datetime.datetime.now(),
             'development_bar': config.development_bar,
             'newrelic_browser_timing': NewRelicBrowserTimingProxy(),
-            'nonfree_fonts': config.nonfree_fonts and not cherrypy.request.offline,
+            'nonfree_fonts': nonfree_fonts,
             'offline': cherrypy.request.offline,
             'page_lang': 'en',
             'scm': scm,
@@ -191,19 +198,22 @@ class DownloadsView(InfoView):
 
     def __file_data(self, basename, exports_path):
         data = []
-        for format in self.formats:
-            latest_filename = '{}-latest.{}'.format(basename, format)
-            latest_path = exports_path / latest_filename
-            if latest_path.exists():
-                local_path = latest_path.resolve()
-                relative_url = local_path.relative_to(sc.static_dir)
-                data.append({
-                    'filename': local_path.name,
-                    'url': '/{}'.format(relative_url),
-                    'time': local_path.stat().st_ctime,
-                    'size': local_path.stat().st_size,
-                    'format': format,
-                })
+        
+        for latest_path in sorted(exports_path.glob('*-latest.*')):
+            if latest_path.suffix.lstrip('.') not in self.formats:
+                continue
+            #latest_filename = '{}-latest.{}'.format(basename, format)
+            #latest_path = exports_path / latest_filename
+            #if latest_path.exists():
+            local_path = latest_path.resolve()
+            relative_url = local_path.relative_to(sc.static_dir)
+            data.append({
+                'filename': local_path.name,
+                'url': '/{}'.format(relative_url),
+                'time': local_path.stat().st_ctime,
+                'size': local_path.stat().st_size,
+                'format': format,
+            })
         return data
 
     def __offline_data(self):
@@ -226,23 +236,27 @@ class ParallelView(ViewBase):
         # parallels. The template will display this at the
         # top of the list with a different style.
         origin = Parallel(sutta=self.sutta, partial=False, footnote="", indirect=False)
-        parallels = [origin] + self.sutta.parallels
-
+        
         # Get the information for the table footer.
         has_alt_volpage = False
         has_alt_acronym = False
 
-        for parallel in parallels:
+        for parallel in self.sutta.parallels:
+            if parallel.negated:
+                continue
             if parallel.sutta.alt_volpage_info:
                 has_alt_volpage = True
             if parallel.sutta.alt_acronym:
                 has_alt_acronym = True
         
         # Add data specific to the parallel page to the context.
-        context.parallels = parallels
+        context.origin = origin
         context.has_alt_volpage = has_alt_volpage
         context.has_alt_acronym = has_alt_acronym
         context.citation = SuttaCitationView(self.sutta).render()
+
+class VinayaParallelView(ParallelView):
+    template_name = 'vinaya_parallel'
 
 class TextView(ViewBase):
     """The view for showing the text of a sutta or tranlsation."""
@@ -253,14 +267,7 @@ class TextView(ViewBase):
     # and non-greedy matching makes this straightforward.
     content_regex = regex.compile(r'''
         <body[^>]*>
-            (?:
-                (?<preamble>.*?)
-                (?<hgroup><hgroup.*?</hgroup>)
-                (?<content>.*)
-            |   # If there is no hgroup the above fails
-                # fall through to grabbing everything as content
-                (?<content>.*)
-            )
+        (?<content>.*)
         </div>\n?
         </body>
         ''', flags=regex.DOTALL | regex.VERBOSE)
@@ -276,28 +283,29 @@ class TextView(ViewBase):
         from sc.tools import html
         m = self.content_regex.search(self.get_html())
         m.detach_string() # Free up memory now.
-        context.title = '?'
+        imm = scimm.imm()
         
-        if m['hgroup'] is not None:
-            hgroup_dom = html.fragment_fromstring(m['hgroup'])
-            h1 = hgroup_dom.select('h1')
-            if h1:
-                context.title = h1[0].text
-            self.annotate_heading(hgroup_dom)
-            hgroup_html = str(hgroup_dom)
-            content = [m['preamble'], hgroup_html, m['content']]
-        else:
-            content = [m['content']]
+        textinfo = imm.tim.get(self.uid, self.lang_code)
+        context.title = textinfo.name if textinfo else '?'
+        contents = [m['content']]
         if not self.links_regex.search(m['content'], pos=-500):
-            content.extend(self.create_nextprev_links())
-        content.append('</div>')
-        context.text = ''.join(content)
+            contents.extend(self.create_nextprev_links())
+        contents.append('</div>')
+        
+        contents.append('<script id="sc_text_info" type="text/json">\n{}\n</script>'.format(
+            self.text_json()))
+        context.text = '\n'.join(contents)
+        # Eliminate newlines from Full-width-glyph languages like Chinese
+        # because they convert into spaces when rendered.
+        # TODO: This check should use 'language' table
+        if self.lang_code in {'zh'}:
+            context.text = self.massage_cjk(context.text)
+        context.lang_code = self.lang_code
     
     @property
     def path(self):
-        try:
-            relative_path = scimm.imm().text_paths[self.lang_code][self.uid]
-        except KeyError:
+        relative_path = scimm.imm().text_path(self.uid, self.lang_code)
+        if not relative_path:
             return None
         return sc.text_dir / relative_path
     
@@ -309,26 +317,83 @@ class TextView(ViewBase):
         else:
             raise cherrypy.NotFound()
 
-    def annotate_heading(self, hgroup_dom):
+    def text_json(self):
+        # Put some useful information for javascript into a script field
+        # The absolute path relative to the domain
+        imm = scimm.imm()
+        sutta = imm.suttas.get(self.uid)
+        if sutta:
+            subdivision = sutta.subdivision
+            division = subdivision.division
+            root_lang = sutta.lang.uid
+        else:
+            division = imm.divisions.get(self.uid)
+            subdivision = None
+            sutta = None
+            
+
+        if not subdivision:
+            subdiv_uid = self.uid
+            while subdiv_uid and not subdivision:
+                if subdiv_uid in imm.subdivisions:
+                    subdivision = imm.subdivisions[subdiv_uid]
+                    division = subdivision.division
+                    break
+                subdiv_uid = subdiv_uid[:-1]
+            else:
+                subdivision = None
+
+        root_lang = division.collection.lang.uid
+        
+        out = {'lang_code':self.lang_code,
+        'uid': self.uid,
+        'sutta_uid': sutta.uid if sutta else None,
+        'subdivision_uid': subdivision.uid if subdivision else None,
+        'division_uid': division.uid if division else None,
+        'all_lang_codes': list(imm.tim.get(uid=self.uid)),
+        'root_lang_code': root_lang,
+        }
+
+        return json.dumps(out, ensure_ascii=False, sort_keys=True)
+        
+        
         """Add navigation links to the header h1 and h2"""
 
-        h1 = hgroup_dom.select('h1')
+        imm = scimm.imm()
+        div_text = self.uid in imm.divisions
         
-        # The below should continue to work when new 'hgroup' markup comes in.
-        if h1:
-            h1 = h1[0]
-            href = '/{}'.format(self.uid)
-            a = hgroup_dom.makeelement('a', href=href,
-                title='Click for details of parallels and translations.')
-            h1.wrap_inner(a)
+        if not div_text:
+            h1 = hgroup_dom.select_one('h1')
             
-        if hasattr(self, 'subdivision'):
-            if len(hgroup_dom) > 1:
-                subhead = hgroup_dom[0]
-                href = '/{}'.format(self.subdivision.uid)
+            if h1:
+                for e in h1.iter():
+                    if e.text and len(e.text) > 3:
+                        break
+                href = '/{}'.format(self.uid)
                 a = hgroup_dom.makeelement('a', href=href,
-                    title='Click to go to the division or subdivision page.')
-                subhead.wrap_inner(a)
+                    title='Click for details of parallels and translations.')
+                a.text = e.text
+                e.text = None
+                e.prepend(a)
+            
+        if hasattr(self, 'subdivision') or div_text:
+            if div_text:
+                heading = hgroup_dom.select_one('h1')
+            else:
+                if len(hgroup_dom) > 1:
+                    heading = hgroup_dom[0]
+                else:
+                    return # No heading?
+                
+            for e in heading.iter():
+                if e.text and len(e.text) > 3:
+                    break
+            href = '/{}'.format(self.uid if div_text else self.subdivision.uid)
+            a = hgroup_dom.makeelement('a', href=href,
+                title='Click to go to the division or subdivision page.')
+            a.text = e.text
+            e.text = None
+            e.prepend(a)
     
     def create_nextprev_links(self):
         # Create links
@@ -347,6 +412,17 @@ class TextView(ViewBase):
             links.append('<a class="next" href="{}">{} ▶</a>'.format(
                 Sutta.canon_url(uid=next_uid, lang_code=self.lang_code), next_acro))
         return links
+    
+    @staticmethod
+    def massage_cjk(text):
+        def deline(string):
+            return string.replace('\n', '').replace('<p', '\n<p')
+        
+        m = regex.match(r'(?s)(.*?)(<div[^>]+id="metaarea".*?</div>)(.*)', text)
+        if m or not m:
+            pre, meta, post = m[1:]
+            return ''.join([deline(pre), meta, deline(post)])
+        return deline(text)
     
 class SuttaView(TextView):
     """The view for showing the sutta text in original sutta langauge."""
@@ -527,3 +603,29 @@ class AdminIndexView(InfoView):
         context.data_last_update_request = data_repo.last_update()
         context.data_scm = data_scm
         context.imm_build_time = scimm.imm().build_time
+
+class UidsView(InfoView):
+    
+    def __init__(self):
+        super().__init__('uids')
+    
+    def setup_context(self, context):
+        imm = scimm.imm()
+        context.imm = imm
+        atoz = ''.join(chr(97 + i) for i in range(0, 26))
+        alltwo = set(a + b for a in atoz for b in atoz)
+        used = set()
+        for uid in imm.divisions:
+            used.update(uid.split('-'))
+        
+        for uid in imm.languages:
+            used.update(uid.split('-'))
+        
+        for uid in imm.subdivisions:
+            used.update(uid.split('-'))
+        
+        unused = alltwo - used
+        
+        context.unused = sorted(unused)
+        context.used = sorted(u for u in used if u.isalpha())
+        context.atoz = atoz

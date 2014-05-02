@@ -12,11 +12,14 @@ which now returns the html code of the element.
 
 import lxml.html as _html
 from lxml.html import tostring, xhtml_to_html, defs
+from lxml.html.builder import E
 import lxml.etree as _etree
 import functools as _functools
 from html import escape # lxml.html doesn't define it's own escape
 import regex as _regex
 import io as _io
+import itertools
+from copy import copy, deepcopy
 
 defs.html5_tags = frozenset({'section', 'article', 'hgroup'})
 
@@ -168,7 +171,30 @@ class HtHtmlElementMixin:
                     if desc.tag in blocktags:
                         e.tag='div'
                         break
+
+    def next_in_order(self):
+        """ Returns the next element in document order
+
+        If you started at the root element and called this until
+        reaching the end, the order would be identical to that
+        returned by 'iter'. The difference is that this function
+        can traverse sideways and upwards as well as down.
+
+        """
+
+        def iterparentsiblings(e):
+            parent = e.getparent()
+            while parent:
+                yield from parent.itersiblings()
+                parent = parent.getparent()
             
+        ees = itertools.chain(self.iterchildren(), self.itersiblings(), iterparentsiblings(self))
+        
+        for e in ees:
+            if isinstance(e, HtHtmlElement):
+                return e
+                
+        return None
     
     def pretty(self, **kwargs):
         """ Return a string with prettified whitespace """
@@ -192,6 +218,22 @@ class HtHtmlElementMixin:
             assert root.tag == 'html', "Incomplete HTML tree"
             root.insert(0, head)
             return head
+
+    def add_class(self, value):
+        if 'class' in self.attrib:
+            if value not in self.attrib['class']:
+                self.attrib['class'] += ' ' + value
+        else:
+            self.attrib['class'] = value
+
+    def remove_class(self, value):
+        if 'class' in self.attrib:
+            if 'value' in self.attrib['class']:
+                new_class = ' '.join(e for e in self.attr['class'].split() if e != value)
+                if new_class:
+                    self.attrib['class'] = new_class
+                else:
+                    del self.attrib['class']
     
     def __bool__(self):
         """ Objects are always truthy, as in future lxml 
@@ -300,218 +342,130 @@ class PrettyPrinter:
     # These are placed on their own line as a whole (\n<tag>text</tag>\n)
     inline_newline_open_before = {'a', 'span', 'strong', 'em', 'title', 'cite'}
     inline_newline_close_after = {'a'}
-
-
+    
     always_newline_after = {'br', 'hr', 'p'}
 
     preserve = {'script', 'style', 'pre'}
 
-    opentagrex = _regex.compile(r'''<(?<name>\w+)\s*(?<attrs>[\w-]+(?:\s*=\s*(?:'[^']*'|"[^"]*"|\S+))?\s*)*(?<selfclosing>/?)>''')
-    closetagrex = _regex.compile(r'</(?<name>\w+)>')
-    doctyperex = _regex.compile(r'<!DOCTYPE (?<type>[^>]+>)')
-    commentrex = _regex.compile(r'<!--.*?-->')
-    datarex = _regex.compile(r'[^<]+')
-    script_content_rex = _regex.compile(r'.*?(?=</script>)')
-    def __init__(self, output=None):
-        from textwrap import TextWrapper
-        self.wrap = 79
-        self.output = output
-        self.line = ''
-        self.text_wrapper = TextWrapper(width=self.wrap, 
-                replace_whitespace=False, drop_whitespace=False,
-                break_long_words=False, break_on_hyphens=False)
-        self.nl_please = False # Convert the next space into a nl
-        self.nl_okay = False # A nl can be inserted without altering appearance.
-    
-    def feed(self, data):
-        m = None
-        token = None
-        start = 0
-        while True:
-            if m: # This is the match from the previous token
-                start = m.end()
-                if start == len(data):
-                    return
-
-            m = None
-            if data[start] == '<':
-                m = self.opentagrex.match(data, pos=start)
-                if m:
-                    if m['selfclosing']:
-                        self.selfclosingtag(m['name'].lower(), m['attrs'], m[0])
-                    else:
-                        self.opentag(m['name'].lower(), m['attrs'], m[0])
-                    continue
-
-                m = self.closetagrex.match(data, pos=start)
-                if m:
-                    self.closetag(m['name'].lower(), m[0])
-                    continue
-                
-                m = self.commentrex.match(data, pos=start)
-                if m:
-                    self.comment(m[0])
-                    continue
-                
-                m = self.doctyperex.match(data, pos=start)
-                if m:
-                    self.doctype(m[0])
-                    continue
-            else:
-                m = self.datarex.match(data, pos=start)
-                if m:
-                    self.data(m[0])
-                    continue
-
-            from .webtools import ProcessingError
-            raise ProcessingError('Unable to parse: {}'.format(data[start:start+150] + ' ...'))
-
-    def doctype(self, raw):
-        self.write(raw)
-        self.nl()
-
-    def opentag(self, tag, attrs, raw):
-        tag = tag
-        if tag in self.block_ownline_open:
-            self.nl()
-            self.nl_okay = True
-        elif tag in self.inline_newline_open_before:
-            if self.line.endswith(' ') or self.nl_okay:
-                self.nl()
-            else:
-                self.nl_please = True
-
-        self.write(raw)
-        
-        if (tag in self.block_ownline_open or
-            tag in self.always_newline_after):
-            self.nl()
-
-    def closetag(self, tag, raw):
-        tag = tag
-        if tag in self.block_ownline_close:
-            self.nl()
-        self.write(raw)
-
-        if (tag in self.block_ownline_close or
-                tag in self.block_ownline_if_followed_by_text or
-                tag in self.always_newline_after):
-            self.nl()
-        elif tag in self.inline_newline_close_after:
-            if self.line.endswith(' ') or self.nl_okay:
-                self.nl()
-            else:
-                self.nl_please = True
-
-    def selfclosingtag(self, tag, attrs, raw):
-        tag = tag
-        if (tag in self.block_ownline_open or 
-            tag in self.block_ownline_if_followed_by_text):
-            self.nl()
-        self.write(raw)
-        
-        if (tag in block_ownline_close or 
-            tag in self.block_ownline_if_followed_by_text or 
-            tag in self.always_newline_after):
-            self.nl()
-
-    def comment(self, raw):
-        self.write(raw)
-        self.nl()
-
-    def data(self, raw):
-        # Data is the only thing we split.
-        self.write(raw, True)
-        self.nl_okay = False
-
-    # Out commands
-    def nl(self):
-        self.nl_please = False
-        self.nl_okay = True # A forced nl implies that newlines are okay.
-        if not self.line:
-            return
-        else:
-            self.output.write(self.line.rstrip())
-            self.output.write('\n')
-            self.line = ''
-
-    def write(self, string, splittable=False):
-        if self.line == '':
-            string = string.lstrip()
-            if not string:
-                return
-        
-        if not splittable:
-            if (self.line.endswith(' ') or self.nl_okay) and len(self.line) + len(string) > self.wrap:
-                self.nl()
-            self.line += string
-        else:
-            # We can split! Use TextWrapper class to do heavy lifting.
-            # TextWrapper is a bit relaxed about overlong words when
-            # not allowed to break them, it lets the sentence overrun
-            # when it could break it before the overlong word, but
-            # this is a tolerable way of handling overlong words.
-
-            if self.nl_please:
-                if string.startswith(' '):
-                    string = string[1:]
-                    self.nl()
-                    if not string:
-                        return
-                elif self.nl_okay:
-                    self.nl()
+    def prettyprint(self, root):
+        lasttail = None
+        for e in root.iter():
+            should_nl_before_open = False
+            should_nl_after_open = False
+            should_nl_before_close = False
+            should_nl_after_close = False
             
-            # Attempt to split the line at the last space
-            m = _regex.match(r'(.*)( [^<>]*)$', self.line)
+            if e.tag in self.block_ownline_open:
+                should_nl_before_open = True
+                should_nl_after_open = True
+
+            if e.tag in self.block_ownline_close:
+                should_nl_before_close = True
+                should_nl_after_close = True
+
+            if e.tag in self.block_ownline_if_followed_by_text:
+                should_nl_before_open = True
+                should_nl_after_close = True
+
+            if e.tag in self.always_newline_after:
+                should_nl_after_close = True
+
+            if e.tag in self.inline_newline_open_before:
+                prev = e.getprevious()
+                if prev and prev.tail and prev.tail[-1].isspace():
+                    should_nl_before_open = True
+
+            if e.tag in self.inline_newline_close_after:
+                if e.tail and e.tail[0].isspace():
+                    should_nl_after_close = True
+            
+            if should_nl_before_open:
+                prev = e.getprevious()
+                if prev:
+                    if not prev.tail or not prev.tail.endswith('\n'):
+                        prev.tail = (prev.tail or '').rstrip() + '\n'
+                parent = e.getparent()
+                if parent:
+                    if not parent.text or not parent.text.endswith('\n'):
+                        parent.text = (parent.text or '').rstrip() + '\n'
+
+            if should_nl_after_open:
+                if not e.text or not e.text.startswith('\n'):
+                    if len(e) > 0:
+                        e.text = '\n' + (e.text or '').lstrip()
+                if e.text:
+                    e.text = e.text.lstrip()
+
+            if should_nl_before_close:
+                if not e.tail or not e.tail.startswith('\n'):
+                    e.tail = '\n' + (e.tail or '').lstrip()
+                if len(e) > 0:
+                    lastchild = e[-1]
+                    if not lastchild.tail or not lastchild.tail.endswith('\n'):
+                        lastchild.tail = (lastchild.tail or '').rstrip() + '\n'
+                else:
+                    if e.text and not e.text.isspace() and not e.text.endswith('\n'):
+                        e.text = e.text.rstrip() + '\n'
+
+            if should_nl_after_close:
+                if not e.tail or not e.tail.startswith('\n'):
+                    e.tail = '\n' + (e.tail or '')
+                # Strip preceeding spaces also
+                if len(e) == 0:
+                    if e.text:
+                        e.text = e.text.rstrip(' ')
+                else:
+                    if e[-1].tail:
+                        e[-1].tail = e[-1].tail.rstrip(' ')
+                    
+
+        for p in root.iter('p'):
+            if p.text and p.text.isspace() and p.text.startswith('\n'):
+                p.text = p.text[1:]
+            text = p.text or ''
+            for i, child in enumerate(p):
+                if child.tag != 'a':
+                    break
+                text += (child.tail or '')
+                child.tail = '\n' + (child.tail or '').lstrip()
+                if text and not text.isspace():
+                    break
+        # Convert every combination of spaces containing a newline
+        # with a single newline.
+        wsrex = _regex.compile(r'[ \n]*\n[ \n]*')
+        for e in root.iter():
+            if e.tail:
+                e.tail = wsrex.sub(r'\n', e.tail)
+                e.tail = self.simple_stupid_wrap(e.tail)
+            if e.text:
+                e.text = wsrex.sub(r'\n', e.text)
+                e.text = self.simple_stupid_wrap(e.text)
+
+        root.select_one('html').tail = None
+        
+    def simple_stupid_wrap(self, string):
+        """ As the name suggets, a simple and stupid way to wrap long strings
+
+        """
+        if len(string) < 80:
+            return string
+        out = []
+        if string[0] == '\n':
+            out.append('')
+            string = string[1:]
+            
+        string = string.replace('\n', ' ')
+        
+        while len(string) > 78:
+            m = _regex.match(r'(.{60,79}) (.*)', string)
             if m:
-                self.line = m[1]
-                string = m[2] + string
-
-            self.text_wrapper.initial_indent = self.line
-            lines = self.text_wrapper.wrap(string)
-            if not lines:
-                self.line += string
-                return
-            
-            for line in lines[:-1]:
-                if not line:
-                    continue
-                self.output.write(line.strip())
-                self.output.write('\n')
-
-            self.line = self.laststr = self.lastdata = lines[-1].lstrip()
-
-    def flush(self):
-        if self.line and self.output:
-            self.output.write(self.line)
-            self.line = self.laststr = self.lastdata = ''
-
-    def __del__(self):
-        self.flush()
-
-    def prettyprint(self, text, filename='(-)', output=None):
-        self.output = output or _io.StringIO()
-        
-
-        rex = _regex.compile(r'(?si)<({0}).*?</\1>|(?:(?:[^<]+)|<(?!{0}))+'.format('|'.join(self.preserve)))
-        
-        for m in rex.finditer(text):
-            if m[1]:
-                self.nl()
-                self.output.write(m[0].strip())
-                self.nl()
+                out.append(m[1])
+                string = m[2]
             else:
-                chunk = m[0].replace('\n', ' ')
-                chunk = _regex.sub(r' {2,}', ' ', chunk)
-                self.feed(chunk)
-                self.flush()
-
-        if output:
-            return
-        else:
-            out = self.output.getvalue()
-            out = _regex.sub(r' ++(?=</(?:p|li|td)>|<br>|$)', '', out)
-            return out
+                break
+        out.append(string)
+        return '\n'.join(out)
+        
 
 prettyprint = PrettyPrinter().prettyprint
 

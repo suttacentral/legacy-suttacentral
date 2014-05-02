@@ -9,8 +9,8 @@
  * to be particulary more featureful, however.
  */
 
-"use strict"
 String.prototype.format = function(){
+    "use strict"
     var args = arguments, fs = this, i=0, j=-1;
     fs = fs.replace('{{', '\x01\x02').replace('}}', '\x03\x04');
     fs = fs.replace(/\{[^}]*\}/g, function(m){
@@ -146,6 +146,40 @@ sc.util = {
         });
         sc.util._asciifyMap = ascmap;
         sc.util._unifyMap = unimap;
+    },
+    acro_to_name: function(acro) {
+        acro = acro.replace('&nbsp;', ' ').replace(' ', ' ');
+        var parts = acro.trim().toLowerCase().split(' '),
+            out = [],
+            n;
+        
+        for (var i = 0; i < parts.length; i++) {
+            if (/[.\d]+/.test(parts[i])) {
+                out.push(parts[i])
+            } else {
+                n = this.expand_uid_data[parts[i]];
+                if (n)
+                    out.push(n[1])
+            }
+        }
+        
+        return out.join(' ');
+    },
+    _expandUid: function(uid, i){
+        var self = this,
+            spaced = uid.replace(/(\D)(\d)/g, '$1 $2'),
+            expansion;
+        return spaced.replace(/[^\d\s]+/g, function(m){
+            expansion = self.expand_uid_data[m];
+            return expansion ? expansion[i] : m;
+        })
+        return acro;
+    },
+    uidToAcro: function(uid) {
+        return this._expandUid(uid, 0);
+    },
+    uidToName: function(uid){
+        return this._expandUid(uid, 1);
     }
 }
 

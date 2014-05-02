@@ -149,3 +149,51 @@ class TimedCache:
         
     def __contains__(self, key):
         raise RuntimeError("Inappropriate operation, use Try/Catch.")
+
+class ConciseRepr:
+    __slots__ = ()
+    def __repr__(self):
+        from numbers import Number
+        details = []
+        
+        for attr in sorted(self._fields, key=lambda s: '' if s == 'uid' else s):
+            details.append('\n    {}='.format(attr))
+            value = getattr(self, attr)
+            if isinstance(value, str):
+                details[-1] += repr(value)
+            elif isinstance(value, Number):
+                details[-1] += str(value)
+            elif isinstance(value, ConciseRepr):
+                if hasattr(value, 'uid'):
+                    details[-1] += '<{} {}>'.format(type(value).__qualname__, value.uid)
+                else:
+                    details[-1] += '<{}>'.format(type(value).__qualname__)
+            else:
+                try:
+                    details[-1] += self._repr_len(value)
+                except TypeError:
+                    details[-1] += repr(value)
+        
+        return '<{} {}>'.format(type(self).__qualname__,
+            ''.join(details))
+    
+    def _repr_len(self, value):
+
+        if len(value) == 0:
+            return "{}()".format(type(value).__qualname__)
+        
+        if isinstance(value, dict):
+            content = value.values()
+        else:
+            content = value
+        
+        types = {type(e) for e in content}
+        
+        if len(types) == 1:
+            typestring = 'of type <{}>'.format(
+                type(next(iter(content))).__qualname__)
+        else:
+            typestring = 'of mixed type'
+        
+        return '{}({} {})'.format(
+            type(value).__qualname__, len(value), typestring)

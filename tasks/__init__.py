@@ -13,10 +13,12 @@ collections = [
     'dictionary',
     'exports',
     'fonts',
+    'jsdata',
     'log',
     'newrelic',
     'search',
     'test',
+    'textdata',
     'tmp',
     'travis',
 ]

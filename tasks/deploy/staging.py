@@ -32,9 +32,10 @@ def full(branch=None):
         'cd ..',
         'pip install -q -r requirements.txt',
         'invoke clean --aggressive',
+        'invoke jsdata.build',
         'invoke assets.compile',
+        'invoke textdata.refresh',
         'sudo supervisorctl start sc-staging',
-        'sudo service apache2 reload',
         'rm -f tmp/maintenance',
         'invoke dictionary.build',
         'invoke search.index'
@@ -57,8 +58,13 @@ def quick(branch=None):
     blurb(quick)
     _staging_run(
         _branch_or_pull(branch),
+        'cd data',
+        _branch_or_pull(branch),
+        'cd ..',
         'pip install -q -r requirements.txt',
+        'invoke jsdata.build',
         'invoke assets.compile',
+        'invoke textdata.refresh',
         'sudo supervisorctl restart sc-staging',
         'invoke assets.clean --older'
     )

@@ -44,6 +44,20 @@ def compile():
     cmd = CommandLineEnvironment(get_env(), log)
     cmd.build()
 
+def build_sc_uid_expansion(env):
+    from sc.scimm import table_reader
+    import json, os.path
+    filename = 'js/sc_uid_expansion_data.js'
+    fullname = os.path.join(env.directory, filename)
+    
+    with open(fullname, 'w', encoding='UTF8') as outfile:
+        data = {uid: [acro, name] for uid, acro, name in
+            table_reader('uid_expansion')}
+        
+        outfile.write('sc.util.expand_uid_data = {}'.format(
+            json.dumps(data, ensure_ascii=False)))
+    
+    return filename
 
 def get_env():
     """Return the SuttaCentral webassets environment."""
@@ -94,7 +108,9 @@ def get_env():
 
     env.register('css_free', css_free)
     env.register('css_nonfree', css_nonfree)
-
+    
+    sc_uid_expansion_data_file = build_sc_uid_expansion(env)
+    
     js_core = webassets.Bundle(
         'js/vendor/ZeroClipboard-1.2.3.js',
         'js/vendor/jquery.hashchange-1.3.min.js',
@@ -104,6 +120,9 @@ def get_env():
         'js/sc_functions.js',
         'js/sc_init.js',
         'js/sc_formatter.js',
+        'js/sc_popupnotes.js',
+        'js/data/zh2en-data-scripts-names.js',
+        sc_uid_expansion_data_file,
         filters='rjsmin',
         output='js/compiled/core-%(version)s.js'
     )

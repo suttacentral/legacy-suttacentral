@@ -30,249 +30,6 @@ $.ajaxSetup({
     cache: true
 });
 
-var chineseLookup = {
-    buttonId: "zh2en",
-    chineseClasses: "P, H1, H2, H3",
-    active: false,
-    dictRequested: false,
-    chineseIdeographs: /([\u4E00-\u9FCC])/g, //CFK Unified Ideographs
-    chineseSplitRex: /[\u4E00-\u9FCC]{1,15}|[^\u4E00-\u9FCC]+|./g,
-    maxCarry:4, //This, and the X in the {1,X} above, have a huge effect on performance
-                //and a slight effect on precision of compound-detection (larger=slower)
-    loading: false,
-    queue: [],
-    init: function(insert_where){
-        $(insert_where).append('<button id="'+this.buttonId+'">Chinese→English Dictionary</button>');
-        $(document).on('click', '#' + this.buttonId, function(){chineseLookup.toggle()});
-    },
-    activate: function(){
-        textualControls.disable();
-        if (!this.dictRequested)
-        {
-            this.dictRequested = true;
-            if (scPersistantStorage.check('zh2en_dict', sc.zh2en_dict_url))
-            {
-                scMessage.show("Retrieving Chinese Dictionary from local storage …", 100000);
-                window.zh2en_dict = scPersistantStorage.retrive('zh2en_dict', sc.zh2en_dict_url);
-                chineseLookup.generateMarkup();
-                scMessage.show("Hover with the mouse to display meaning.<br> Click a compound to break it up.", 10000);
-                return
-            }
-            if (!window.zh2en_dict) {
-                scMessage.show("Requesting Chinese Dictionary, this may take some time...", 1000000);
-                jQuery.getScript(sc.zh2en_dict_url, function() {
-                    scMessage.show("Analyzing Text...", 2000);
-                    chineseLookup.generateMarkup();
-                    scMessage.show("Hover with the mouse to display meaning.<br> Click a compound to break it up.", 10000);
-                    scPersistantStorage.store('zh2en_dict', window.zh2en_dict, sc.zh2en_dict_url)
-                    return
-                });
-            }
-        }
-        if (window.zh2en_dict) this.generateMarkup();
-    },
-    generateMarkup: function() {
-        this.markupGenerator.start();
-        $(document).on('mouseenter', 'span.lookup', chineseLookup.lookupHandler);
-        $(document).on('click', 'span.lookup', function(e){
-            chineseLookup.clickHandler(e.target)});
-    },
-    markupGenerator: {
-        //Applies markup incrementally to avoid a 'browser stall'
-        start: function(){
-            this.iter = new Iter(scState._target, 'text');
-            this.startTime = Date.now();
-            this.step();
-        },
-        step: function(){
-            for (var i = 0; i < 10; i++){
-                var node = this.iter.next();
-                if (node === undefined) {
-                    this.andfinally();
-                    return;
-                }
-                this.textNodeToMarkup(node);
-            }
-            setTimeout('chineseLookup.markupGenerator.step.call(chineseLookup.markupGenerator)', 5);
-        },
-        andfinally: function(){
-            textualControls.enable()
-        },
-        textNodeToMarkup: function(node) {
-            if (node === undefined) return;
-            var text = node.nodeValue;
-            if (/^[^\u4E00-\u9FCC]*$/.test(text)) return; //No chinese
-            var proxy = document.createElement("span");
-            node.parentNode.replaceChild(proxy, node);
-            proxy.outerHTML = this.toLookupMarkup(text);
-        },
-        toLookupMarkup: function(input)
-        {
-            var out = "";
-            var parts = input.match(chineseLookup.chineseSplitRex);
-            parts.push("")
-            for (var i = 0; i < parts.length; i++) {
-                if (!chineseLookup.chineseIdeographs.test(parts[i])){//tag or puncuation
-                    out += parts[i];
-                } else { //word
-                    var meaning = chineseLookup.lookupWord(parts[i])
-                    if (meaning) {
-                        out += '<span class="lookup">' + parts[i] + '</span>';
-                    } else {
-                        var compoundize = chineseLookup.divisiveBreakup(parts[i]);
-                        out += compoundize.results;
-                        //insert the lefts at start of next
-                        if (compoundize.lefts.length > 0)
-                        {
-                            if (parts[i + 1].search(chineseLookup.chineseIdeographs) >= 0)
-                            {
-                                parts[i + 1] = compoundize.lefts + parts[i + 1];
-                            }
-                            else {
-                                var results = chineseLookup.divisiveBreakup(compoundize.lefts, true).results;
-                                out += results;
-                            }
-                        }
-                    }
-                }
-            }
-            return out;
-        }
-    },
-    deactivate: function() {
-        $(document).off('mouseenter', 'span.lookup');
-        scState.restore("clean");
-    },
-    toggle: function(){
-        this.active = !this.active;
-        if (this.active) this.activate()
-        else this.deactivate();
-    },
-    clickHandler: function(e){
-        if ($(e).is("a, span.meaning")) return;
-        if ($(e).text().length <= 1) return;
-        $(e).children("span.meaning").remove();
-        e.outerHTML = this.explode(e.innerHTML);
-    },
-    lookupHandler: function(e){
-        function apply(node){
-            if ($(node).find('span.meaning').length > 0) return
-            var meaning = chineseLookup.lookupWord(node.innerHTML)
-            if (meaning && meaning.length > 0) {
-                meaning = $(meaning);
-                $(node).append(meaning);
-                sc.formatter.rePosition(meaning);
-            }
-            chineseLookup.queue.push(meaning);
-            if (chineseLookup.queue.length > 5)
-            {
-                var victim = chineseLookup.queue.shift(1);
-                $(victim).remove();
-            }
-        }
-        var node = e.target;
-        apply(node);
-        for (;node = nextInOrder(node, 1); node != undefined) {
-            if ($(node).is('span.lookup')) {
-                apply(node);
-                break;
-            }
-        }
-    },
-    lookupWord: function(graph){
-        //Check if word exists and return HTML which represents the meaning.
-        var out = "";
-        graph = graph.replace(/\u2060/, '');
-        if (zh2en_dict[graph])
-        {
-            var href = "http://www.buddhism-dict.net/cgi-bin/xpr-ddb.pl?q=" + encodeURI(graph);
-            return ('<span class="meaning"><a href="' + href + '">' + graph + "</a> : " + zh2en_dict[graph][0] + ": " + zh2en_dict[graph][1]) + '</span>';
-        }
-        return "";
-    },
-    explode: function(graphs){
-        //Break up into single graphs.
-        var out = [];
-        for (var i = 0; i < graphs.length; i++)
-        {
-            if (/[\u4E00-\u9FCC]/.test(graphs[i])) {
-                out.push('<span class="lookup">' + graphs[i] + this.lookupWord(graphs[i]) + '</span>')
-            }
-            else {
-                out.push(graphs[i]);
-            }
-        }
-        return out.join("")
-    },
-    divisiveBreakup: function(graphs, nolefts){
-        //Break up into compounds
-        if (graphs.length < 5) nolefts = true; //force
-        var perms = chineseLookup.binaryPermutate(graphs)
-        var best = 0
-        for (var i in perms)
-        {
-            perms[i].quality = 0;
-            for (var j in perms[i])
-            {
-                if (zh2en_dict[perms[i][j]]) {
-                    perms[i].quality += perms[i][j].length * 10 - j;
-                }
-            }
-            if (perms[i].quality > perms[best].quality) best = i;
-        }
-        //When breaking up continuous chinese, append the last few characters to the next part to catch
-        //a compound which spans the arbitary breaks
-        var lefts = [];
-        var ret = perms[best].length;
-        if (!nolefts)
-        {
-            var charsToCarry = this.maxCarry;
-            for (ret = perms[best].length - 1; charsToCarry > 0; ret--)
-            {
-                if (perms[best][ret].length > 1)
-                    break;
-                charsToCarry -= perms[best][ret].length
-            }
-        }
-
-        var out = [];
-        for (i = 0; i < ret; i++) {
-            if (perms[best][i])
-                out.push('<span class="lookup">' + perms[best][i].replace(/(.)(?=.)/, '$1\u2060') + '</span>');
-        }
-        var outLefts = [];
-        if (!nolefts)
-            for (i = ret; i < perms[best].length; i++)
-            {
-                outLefts.push(perms[best][i]);
-            }
-        return {"results":out.join(""), "lefts":outLefts.join("")}
-    },
-    binaryPermutate: function(graphs){
-        //This function breaks the string of graphs into every possible permutation of compounds, exploiting binary
-        //to do this (1 = space): 000 ABCD, 001 ABC D, 010 AB CD, 011, AB C D, 100, A BCD, 101, A BC D, 111 A B C D
-        var perms = []
-        var max =  Math.pow(2, graphs.length);
-        for (var i = 1; i < max; i++){
-            var lefts = graphs;
-            var parts = [];
-            var dobreak = i;
-            for (var j = graphs.length; j > 0; j--){
-                if(dobreak & 1)
-                {
-                    parts.push(lefts.slice(j));
-                    lefts = lefts.slice(0, j);
-                }
-                dobreak = dobreak >> 1;
-            }
-            parts.push(lefts)
-            parts.reverse()
-            perms.push(parts)
-        }
-        return perms
-    }
-}
-
 //Used for rollback and caching.
 var scState = {
     _target: (function(){
@@ -360,9 +117,6 @@ var scPersistantStorage = {
         return this.database.check(key, version);
     }
 }
-        
-
-//The code below here is quite disorganized and messy relative to the chineseLookup above.
 
 //Rewriting it is on the to-do.
 
@@ -386,13 +140,9 @@ function toggleTextualInfo(force) {
 
     if (showTextInfo)
     {
-        //The tlinehead thing is a nasty little bodge to cull the excessive
-        //numbers of that type.
-        $(textualControls.marginClasses).not('.tlinehead:odd').addClass("infomode");
-        $(textualControls.popupClasses).addClass("infomode");
-        $(textualControls.contentClasses).addClass("infomode");
+        $(document.body).addClass("infomode");
         var meta = $(textualControls.metaarea)[0];
-        if (meta.innerHTML) {
+        if (!meta.innerHTML) {
             var content = false;
             for (var i = 0; i < meta.childNodes.length; i++)
             {
@@ -410,16 +160,12 @@ function toggleTextualInfo(force) {
                     }
                 }
             }
-            if (content){
-                //console.log('Content found');
-                $(meta).addClass("infomode");
+            if (!content){
+                meta.append('<p>No Metadata</p>');
             }
         }
     } else {
-        $(textualControls.marginClasses).removeClass("infomode")
-        $(textualControls.popupClasses).removeClass("infomode")
-        $(textualControls.contentClasses).removeClass("infomode")
-        $(textualControls.metaarea).removeClass("infomode")
+        $(document.body).removeClass("infomode");
     }
     sc.userPrefs.setPref("textInfo", showTextInfo, false);
 }
@@ -441,28 +187,35 @@ function buildTextualInformation() {
     var anchors = $(textualControls.marginClasses);
     for (var i = 0; i < anchors.length; i++) {
         var a = anchors[i];
-        var da = $(a);
+        var $a = $(a);
 
         var aClass = a.className.split(' ')[0];
         var title = sc.mode[sc.mode.lang]["strings"][aClass];
-        $(a).attr("title", title);
-        var aid = da.attr('id');
+        $a.attr("title", title);
+        var aid = $a.attr('id'),
+            idPrefix;
+        if (aClass == 'pts1' || aClass == 'pts2') {
+            idPrefix = 'pts';
+        } else {
+            idPrefix = $a.attr('class');
+        }
+        aid = aid.replace(RegExp('^' + idPrefix, 'i'), '');
         
         if (aClass == 'ms') {
-            $(a).text( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
+            $a.text( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
         } else if (aClass == 'vnS') {
-            $(a).text(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
+            $a.text(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
         } else if (aClass == 'pts_pn'){
             var m = aid.split('.')
             m[0] = m[0].toUpperCase();
-            $(a).text( m.join('.') )
-        }
+            $a.text( m.join('.') )
+        }        
         
-        if (da.text() == '') {
-            da.text(aid.replace(/\d+_/, '').replace(aClass+'_', ''));
+        if ($a.text() == '') {
+            $a.text(aid.replace(/\d+_/, '').replace(aClass+'_', ''));
         }
-        if (!da.attr('href') && aid) {
-            da.attr('href', '#' + aid);
+        if (!$a.attr('href') && aid) {
+            $a.attr('href', '#' + $a.attr('id'));
         }
 
         a.innerHTML = a.innerHTML.replace(/(\d)-(\d)/, '$1\u2060—\u2060$2')
@@ -571,9 +324,6 @@ var syllabousRex = (function(){
     var cons = "[kgcjtdnpbmyrlvshṭḍṅṇṃṁñḷ]"
     return RegExp('('+cons+'*[aiueoāīū]('+cons+'(?='+other+')|[yrlvshṅṁñ](?=h)|' + cons + '(?!h)' + '(?='+cons+'))?'+')|('+other+'+)', 'gi');})();
 
-//(Defining this outside the function saves 10% runtime).
-
-
 function toSyllables(input){
     var out = "";
     var parts = input.match(syllabousRex);
@@ -605,34 +355,6 @@ function toSyllablesIteratively(node){
         parent.insertBefore(proxy, node);
         node.nodeValue = '';
         proxy.outerHTML = out;
-        //XHTML code - but it runs much slower on all browsers except Chrome
-        /*parent = node.parentNode;
-        if (parent.nodeName == 'A') continue;
-        //node.parentNode.replaceChild(tmp, node);
-        parts = node.nodeValue.replace(/­/g, '').match(syllabousRex);
-        if (parts && parts.length)
-        for (i = 0; i < parts.length; i++) {
-            if (anychar.test(parts[i])) {
-                if (/[aiu]$/i.test(parts[i])) {
-                    text += parts[i];
-                } else {
-                    if (text) {
-                        parent.insertBefore(T(text), node);
-                        text = "";
-                    }
-                    parent.insertBefore(E('u', parts[i]), node);
-                }
-                if (parts[i+1] && (/[aiueoāīū]/i).test(parts[i+1]))
-                    text += syllSpacer;
-            } else {
-                text += parts[i];
-            }
-        }
-        if (text) {
-            parent.insertBefore(T(text), node);
-            text = "";
-        }
-        parent.removeChild(node)*/
     }
 }
 
@@ -741,7 +463,7 @@ function generateMarkupCallback() {
 }
 
 var paliRex = /([aiueokgcjtdnpbmyrlvshāīūṭḍṅṇṁñḷ’­”]+)/i;
-var splitRex = /([^  ,.– —:;?!"'“‘-]+)/;
+var splitRex = /([^  \n,.– —:;?!"'“‘-]+)/;
 function toLookupMarkup(startNode)
 {
     var parts, i, out = "", proxy, node;
@@ -776,25 +498,24 @@ var toggleLookupOn = false;
 var paliDictRequested = false;
 var pi2en_dict = null;
 function enablePaliLookup(){
+    function ready(){
+        generateLookupMarkup();
+        scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
+        return
+    }
     $(document).on('mouseenter', 'span.lookup', lookupWordHandler);
     if (!pi2en_dict)
     {
-        if (scPersistantStorage.check('pi2en_dict', sc.pi2en_dict_url))
-        {
-            scMessage.show("Retrieving Pali Dictionary from local storage …", 100000);
-            pi2en_dict = scPersistantStorage.retrive('pi2en_dict', sc.pi2en_dict_url);
-            generateLookupMarkup();
-            scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
-            return
-        } else {
-            scMessage.show("Requesting Pali Dictionary...", 10000);
-            jQuery.getScript(sc.pi2en_dict_url, function(){
-                scPersistantStorage.store('pi2en_dict', pi2en_dict, sc.pi2en_dict_url);
-                generateLookupMarkup();
-                scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
-                return
+        scMessage.show("Requesting Pali Dictionary...", 10000);
+        sc.pi2enDataScripts.forEach(function(url, i){
+            jQuery.ajax({
+                url: sc.jsBaseUrl+url,
+                dataType: "script",
+                success: i == 0 ? ready : null,
+                crossDomain: true,
+                cache: true
             });
-        }
+        });
     } else
         generateLookupMarkup();
 }
@@ -1183,6 +904,9 @@ function nextInOrder(node, permissables) {
         if (node.nodeType == permissables)
             return node;
     }
+    else if (typeof permissables == 'string') {
+        if ($(node).is(permissables)) return node;
+    }
     else if (permissables.indexOf(node.nodeType) != -1)
         return node;
     return nextInOrder(node, permissables);
@@ -1204,6 +928,9 @@ function previousInOrder(node, permissables) {
     if (typeof permissables == 'number') {
         if (node.nodeType == permissables)
             return node;
+    }
+    else if (typeof permissables == 'string') {
+        if ($(node).is(permissables)) return node;
     }
     else if (permissables.indexOf(node.nodeType) != -1)
         return node;

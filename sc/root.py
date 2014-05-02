@@ -51,6 +51,12 @@ class Root(object):
 
     @cherrypy.expose
     def default(self, *args, **kwargs):
+        if 'profile' in kwargs:
+            try:
+                return show.profile(locals(), globals(), *args, **kwargs)
+            except ValueError:
+                pass
+        
         return show.default(*args, **kwargs)
 
     @cherrypy.expose
@@ -68,6 +74,7 @@ class Root(object):
     @cherrypy.expose
     def sht_lookup(self, query, **kwargs):
         return show.sht_lookup(query)
+    
 
 class Admin(object):
     """Requests to /admin/*"""

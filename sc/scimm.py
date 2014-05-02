@@ -21,7 +21,7 @@ from datetime import datetime
 from collections import OrderedDict, defaultdict, namedtuple
 
 import sc
-from sc import config, textfunctions
+from sc import config, textfunctions, textdata
 from sc.classes import *
 
 logger = logging.getLogger(__name__)
@@ -63,15 +63,27 @@ def table_reader(tablename):
         NtName = '_' + tablename.title()
         NT = namedtuple(NtName, field_names)
         globals()[NtName] = NT
-        for row in reader:
-            yield NT._make(row)
+        for lineno, row in enumerate(reader):
+            if not any(row): # Drop entirely blank lines
+                continue
+            if row[0].startswith('#'):
+                continue
+            try:
+                yield NT._make(row)
+            except TypeError as e:
+                raise TypeError('Error on line {} in table {}, ({})'.format(
+                    lineno, tablename, e))
 
 class _Imm:
     _uidlangcache = {}
     def __init__(self, timestamp):
+        self.tim = textdata.tim()
         self.build()
         self.build_parallels_data()
         self.build_parallels()
+        self.build_grouped_suttas()
+        self.build_parallel_sutta_group('vinaya_pm')
+        self.build_parallel_sutta_group('vinaya_kd')
         self.build_search_data()
         self.timestamp = timestamp
         self.build_time = datetime.now()
@@ -87,8 +99,12 @@ class _Imm:
             return self.suttas[uid]
     
     def uid_to_acro(self, uid):
-        m = regex.match(r'(\p{alpha}+(?:-\d+)?)(.*)', uid)
-        return (self._uid_to_acro_map.get(m[1]) or m[1].upper()) + m[2]
+        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)*', uid)
+        return ' '.join(self._uid_to_acro_map.get(c) or c.upper() for c in components)
+        
+    def uid_to_name(self, uid):
+        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)*', uid)
+        return ' '.join(self._uid_to_name_map.get(c) or c.upper() for c in components)
     
     def build(self):
         """ Build the sutta central In Memory Model
@@ -123,9 +139,21 @@ class _Imm:
         
         # Load uid to acro map
         self._uid_to_acro_map = {}
-        for row in table_reader('uid_to_acro'):
+        self._uid_to_name_map = {}
+        for row in table_reader('uid_expansion'):
             self._uid_to_acro_map[row.uid] = row.acro
+            self._uid_to_name_map[row.uid] = row.name
         
+        # Build Pitakas
+        self.pitakas = OrderedDict()
+        for row in table_reader('pitaka'):
+            self.pitakas[row.uid] = Pitaka(uid=row.uid, name=row.name, always_full=row.always_full)
+
+        # Build Sects
+        self.sects = OrderedDict()
+        for row in table_reader('sect'):
+            self.sects[row.uid] = Sect(uid=row.uid, name=row.name)
+
         # Build Languages (indexed by id)
         self.languages = OrderedDict()
         for row in table_reader('language'):
@@ -146,49 +174,66 @@ class _Imm:
                 self.isocode_to_language[language.iso_code] = []
             self.isocode_to_language[language.iso_code].append(language)
         
-        # Gather up text refs:
-        # From filesystem (This also returns important text_paths variable)
-        self.text_paths, text_refs = self.scan_text_dir()
-        
-        # Make a copy, note: we want copy of lists, not refs to them!
-        local_text_refs = {key: value[:] for key, value in text_refs.items()}
-        
         # From external_text table
+        text_refs = defaultdict(list)
         for row in table_reader('external_text'):
             text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url, priority=row.priority) )
+
+        self._external_text_refs = {uid: {tref.lang.uid: tref for tref in trefs}
+                                    for uid, trefs in text_refs.items()}
         
-        self.collections = OrderedDict()
-        for row in table_reader('collection'):
+        collections = []
+        for i, row in enumerate(table_reader('collection')):
+            if row.sect_uid:
+                sect = self.sects[row.sect_uid]
+            else:
+                sect = None
             collection = Collection(
                 uid=row.uid,
                 name=row.name,
                 abbrev_name=row.abbrev_name,
                 lang=self.languages[row.language],
+                sect=sect,
+                pitaka=self.pitakas[row.pitaka_uid],
+                menu_seq=i,
                 divisions=[] # Populate later
                 )
-            self.collections[row.uid] = collection
-            self.languages[row.language].collections.append(collection)
-        
+            collections.append(collection)
+
+        # Sort collections by menu_seq
+        collections.sort(key=Collection.sort_key)
+
+        self.collections = OrderedDict()
+        for collection in collections:
+            self.collections[collection.uid] = collection
+            self.languages[collection.lang.uid].collections.append(collection)
+
         # Build divisions (indexed by uid)
         self.divisions = OrderedDict()
-        for row in table_reader('division'):
+        for i, row in enumerate(table_reader('division')):
             collection = self.collections[row.collection_uid]
-            try:
-                text_ref = text_refs[row.uid][0]
-            except (KeyError, IndexError):
-                text_ref = None
+            
+            text_ref = self.get_text_ref(uid=row.uid, lang_uid=collection.lang.uid);
+            
             division = Division(
                 uid=row.uid,
                 name=row.name,
-                acronym=row.acronym,
-                subdiv_ind=row.subdiv_ind,
+                alt_name=row.alt_name,
                 text_ref=text_ref,
+                acronym=row.acronym or self.uid_to_acro(row.uid),
+                subdiv_ind=row.subdiv_ind,
+                menu_seq=i,
+                menu_gwn_ind=bool(row.menu_gwn_ind),
                 collection=collection,
                 subdivisions=[], # Populate later
             )
             self.divisions[row.uid] = division
             # Populate collections
             collection.divisions.append(division)
+
+        # Sort divisions within collections by menu_seq
+        for collection in self.collections.values():
+            collection.divisions.sort(key=Division.sort_key)
 
         # Build subdivisions (indexed by uid)
         self.subdivisions = OrderedDict()
@@ -213,7 +258,7 @@ class _Imm:
         for division in self.divisions.values():
             if not division.subdivisions:
                 subdivision = Subdivision(
-                                uid=None,
+                                uid=division.uid,
                                 acronym=None,
                                 division=division,
                                 name=None,
@@ -222,7 +267,7 @@ class _Imm:
                                 vaggas=[],
                                 suttas=[])
                 division.subdivisions.append(subdivision)
-            self.subdivisions[division.uid] = subdivision
+                self.subdivisions[division.uid] = subdivision
         
         # Build vaggas
         self.vaggas = OrderedDict()
@@ -264,39 +309,6 @@ class _Imm:
             
             lang = self.languages[row.language]
             
-            text_ref = None;
-            translations = []
-            translangs = set()
-            if uid in text_refs:
-                for ref in text_refs[uid]:
-                    if ref.lang == lang:
-                        text_ref = ref
-                    else:
-                        translations.append(ref)
-                        translangs.add(ref.lang.uid)
-            variants = []
-            m = regex.match(r'(.*?)\.?(\d+[a-z]?)$', uid)
-            if m:
-                variants.append((m[1], m[2]))
-            m = regex.match(r'(.*?)((\d+)-\d+$)', uid)
-            if m:
-                variants.append((m[1] + m[3], m[2]))
-            for sub_uid, bookmark in variants:
-                if sub_uid in local_text_refs:
-                    for ref in local_text_refs[sub_uid]:
-                        ref = TextRef(lang=ref.lang,
-                                    abstract=ref.abstract,
-                                    url=ref.url.split('#')[0] + '#' + bookmark,
-                                    priority=0,
-                                    )
-                        if ref.lang == lang:
-                            if not text_ref:
-                                text_ref = ref
-                        elif ref.lang.uid not in translangs:
-                            translations.append(ref)
-                
-            translations.sort(key=TextRef.sort_key)
-            
             subdivision = self.subdivisions[row.subdivision_uid]
             
             if row.vagga_number:
@@ -327,12 +339,11 @@ class _Imm:
                 vagga=vagga,
                 number=number,
                 number_in_vagga=row.number_in_vagga,
-                volpage_info=volpage[0],
+                volpage=volpage[0],
                 alt_volpage_info=volpage[1] if len(volpage) > 1 else None,
                 biblio_entry=biblio_entry,
-                text_ref=text_ref,
-                translations=translations,
                 parallels=[],
+                imm=self,
             )
             suttas.append( (uid, sutta) )
         
@@ -344,7 +355,6 @@ class _Imm:
         for sutta in self.suttas.values():
             sutta.subdivision.suttas.append(sutta)
             sutta.vagga.suttas.append(sutta)
-        
         
     def build_parallels_data(self):
         
@@ -404,6 +414,95 @@ class _Imm:
 
         for sutta in self.suttas.values():
             sutta.parallels.sort(key=Parallel.sort_key)
+    
+    def build_grouped_suttas(self):
+        vinaya_rules = {}
+        for i, row in enumerate(table_reader('vinaya_rules')):
+            uid = row.uid
+            
+            rule = GroupedSutta(
+                uid=uid,
+                volpage=row.volpage_info,
+                imm=self,
+            )
+            
+            subdivision = rule.subdivision
+            subdivision.suttas.append(rule)
+            
+            subdivision.vaggas[0].suttas.append(rule)
+            
+            self.suttas[uid] = rule
+
+    def build_parallel_sutta_group(self, table_name):
+        """ Generate a cleaned up form of the table data
+        
+        A parallel group is a different way of defining parallels, in essence
+        it is a group of suttas (in the broader sense) from different
+        traditions, all of which are the same 'thing', this is for example
+        particulary relevant in the Patimokkha which is extremely similiar
+        across the traditions.
+
+        All suttas within a sutta group share the same name (title) this is
+        done mainly because many manuscripts lack titles (these being added
+        by redactors). Also their uids are consistently derived from their
+        division/subdivision uid.
+
+        Some of this code is pretty messy but that can't really be helped
+        because it's really the underlying logic that is pretty messy.
+        
+        """
+        
+        def normalize_uid(uid):
+            return uid.replace('#', '-').replace('*', '')
+        
+        org_by_rule = list(table_reader(table_name))
+        
+        by_column = []
+        for i, column in enumerate(zip(*org_by_rule)): #rotate
+            if i == 0:
+                by_column.append(column)
+            else:
+                division_uid = column[0]
+                try:
+                    division = self.divisions[division_uid]
+                except KeyError:
+                    raise Exception('Bad column data `{}`'.format(column))
+                division_negated_parallel = NegatedParallel(
+                    division=division)
+                division_maybe_parallel = MaybeParallel(
+                    division=division)
+                new_column = []
+                by_column.append(new_column)
+                for j, uid in enumerate(column):
+                    if j <= 1:
+                        new_column.append(uid)
+                    else:
+                        if not uid or uid == '-':
+                            new_column.append(division_negated_parallel)
+                        elif uid == '?':
+                            new_column.append(division_maybe_parallel)
+                        else:
+                            try:
+                                sutta = self.suttas[uid.rstrip('*')]
+                            except KeyError:
+                                sutta = self.suttas[normalize_uid(uid)]
+                                
+                            new_column.append(sutta)
+        
+        by_row = list(zip(*by_column))
+        #self.by_column = by_column
+        #self.by_row = by_row
+        
+        for row in by_row[2:]:
+            group = ParallelSuttaGroup(row[0], row[1:])
+            for rule in row[1:]:
+                if isinstance(rule, GroupedSutta):
+                    if hasattr(rule, 'parallel_group'):
+                        if not isinstance(rule.parallel_group, MultiParallelSuttaGroup):
+                            rule.parallel_group = MultiParallelSuttaGroup(rule.parallel_group)
+                        rule.parallel_group.add_group(group)
+                    else:
+                        rule.parallel_group = group
 
     def build_search_data(self):
         """ Build useful search data.
@@ -411,7 +510,12 @@ class _Imm:
         Note that the size of the data is somewhat less than 2mb """
         
         suttastringsU = []
+        seen = set()
         for sutta in self.suttas.values():
+            if isinstance(sutta, GroupedSutta):
+                if sutta.name in seen:
+                    continue
+                seen.add(sutta.name)
             name = sutta.name.lower()
             suttastringsU.append("  {}  ".format("  ".join(
                                 [sutta.uid,
@@ -433,60 +537,82 @@ class _Imm:
             for sutta in self.suttas.values()])
 
         self.searchstrings = list(zip(self.suttas.values(), suttastrings, suttastringsU, suttanamesimplified))
-       
-    def scan_text_dir(self):
-        """ Provides fully qualified paths for all texts.
-        
-        Texts are keyed [lang][uid]
-        Note that subfolders within a langroot are ignored. For example a file:
-        text_dir/pi/sn/56/sn56.11.html would be found by the key ('pi', 'sn56.11'),
-        thus subfolders exist solely for ease of file organization.
-        """
-        import glob
-        text_paths = {}
-        text_refs = defaultdict(list)
-        
-        for full_path in sc.text_dir.glob('**/*.html'):
-            relative_path = full_path.relative_to(sc.text_dir)
-            lang = relative_path.parts[0]
-            if lang not in text_paths:
-                text_paths[lang] = {}
-            uid = relative_path.name.replace('.html', '')
-            assert uid not in text_paths[lang]
-            text_paths[lang][uid] = str(relative_path)
 
-            author = self.get_text_author(full_path)
-            url = Sutta.canon_url(lang_code=lang, uid=uid)
-            text_refs[uid].append( TextRef(self.languages[lang], author, url, 0) )
+    def get_text_ref(self, uid, lang_uid):
+        textinfo = self.tim.get(uid=uid, lang_uid=lang_uid)
+        if textinfo:
+            return TextRef.from_textinfo(textinfo, self.languages[lang_uid])
+        
+        for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
+            if lang_uid_k == lang_uid:
+                return textref
 
-            # In the case of a sutta range, we create new entries
-            # for the entire range. Unneeded entries will be gc'd
-            m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
+        m = regex.match(r'(.*?)(\d+)-(\d+)', uid)
+        if m:
+            textinfo = self.tim.get(uid=m[1]+m[2], lang_uid=lang_uid)
+            if textinfo:
+                return TextRef.from_textinfo(textinfo, self.languages[lang_uid])
+
+    def get_translations(self, uid, root_lang_uid):
+        out = []
+        for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
+            if textref.lang.uid == root_lang_uid:
+                continue
+            out.append(textref)
+        
+        textinfos = self.tim.get(uid=uid)
+        if not textinfos:
+            m = regex.match(r'(.*?)(\d+)-(\d+)', uid)
             if m:
-                range_start, range_end = int(m[2]), int(m[3])
+                textinfos = self.tim.get(uid=m[1]+m[2])
 
-                for i in range(range_start, range_end + 1):
-                    try:
-                        text_refs[m[1]+str(i)].append( TextRef(self.languages[lang], author, url + '#' + str(i), 0))                            
-                    except KeyError:
-                        globals().update(locals())
-                        raise
+        for lang_uid, textinfo in textinfos.items():
+            if lang_uid == root_lang_uid:
+                continue
+            out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
+            
+        out.sort(key=TextRef.sort_key)
+        
+        return out
 
-        return (text_paths, text_refs)
-    
-    def get_text_path(self, lang, uid):
-        try:
-            return self.text_paths[lang][uid]
-        except KeyError:
+    def get_text_refs(self, uid):
+        out = []
+        for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
+            out.append(textref)
+        def fuzzy_attempts(uid):
+            yield uid
+            m = regex.match(r'(.*?)(\d+)(-\d+)?', uid)
+            if m:
+                # Dedash
+                if m[3]:
+                    yield m[1] + m[2]
+                # Remove number
+                yield m[1].rstrip('.')
+        textinfos = None
+        for fuid in fuzzy_attempts(uid):
+            textinfos = self.tim.get(uid=fuid)
+            if textinfos:
+                for lang_uid, textinfo in textinfos.items():
+                    out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
+                break
+        
+        out.sort(key=TextRef.sort_key)
+        return out
+
+    def text_path(self, uid, lang_uid):
+        textinfo = self.tim.get(uid, lang_uid)
+        if not textinfo:
             return None
-    
-    _author_search = regex.compile(r'''(?s)<meta[^>]+author=(?|"(.*?)"|'(.*?)')''').search
+        return textinfo.path
+        
+    def text_exists(self, uid, lang_uid):
+        return self.tim.exists(uid, lang_uid)
     
     def get_text_nextprev(self, uid, language_code):
         try:
             uids = self._uidlangcache[language_code]
         except KeyError:
-            uids = sorted(self.text_paths[language_code],
+            uids = sorted((k for k in self.tim.get(lang_uid=language_code) if '#' not in k),
                 key=sc.util.humansortkey)
             self._uidlangcache[language_code] = uids
             # The cache is eliminated upon imm regeneration.

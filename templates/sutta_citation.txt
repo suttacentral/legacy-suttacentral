@@ -1,5 +1,7 @@
 Parallels for {{ sutta.acronym }} {{ sutta.name }} ({{ sutta.volpage_info }}):
 {%- for parallel in sutta.parallels -%}
+    {%- if parallel.negated -%}
+    {%- else -%}
     {%- set psutta = parallel.sutta -%}
     {%- set sht_test = psutta.acronym[0:3] | upper -%}
     {%- if sht_test == 'SHT' -%}
@@ -14,6 +16,7 @@ Parallels for {{ sutta.acronym }} {{ sutta.name }} ({{ sutta.volpage_info }}):
     {%- endif -%}
     {%- if not loop.last -%}
         {{ ';' }}
+    {%- endif -%}
     {%- endif -%}
 {%- endfor -%}
 . Retrieved from {{ config.base_url }}/{{ sutta.uid }} on {{ current_datetime | date('medium') }}.

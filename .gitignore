@@ -7,7 +7,10 @@ data
 *.log
 *.log.*
 *~
+static/js/sc_uid_expansion_data.js
 utility/out/
 utility/suttacen/
 utility/tables/
+utility/vinaya
 utility/*/*/
+

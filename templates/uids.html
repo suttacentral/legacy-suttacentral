@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% set langcodes = {'xh': 'Xhosa', 'rn': 'Kirundi', 'my': 'Burmese', 'mt': 'Maltese', 'ms': 'Malay', 'mr': 'Marathi (Marāṭhī)', 'ml': 'Malayalam', 'pi': 'Pāli', 'mi': 'Māori', 'mh': 'Marshallese', 'pl': 'Polish', 'hy': 'Armenian', 'mg': 'Malagasy', 'pa': 'Panjabi, Punjabi', 'eu': 'Basque', 'et': 'Estonian', 'cy': 'Welsh', 'es': 'Spanish; Castilian', 'lb': 'Luxembourgish, Letzeburgesch', 'ee': 'Ewe', 'kn': 'Kannada', 'el': 'Greek, Modern', 'eo': 'Esperanto', 'en': 'English', 'cu': 'Old Church Slavonic, Church Slavonic, Old Bulgarian', 'nd': 'North Ndebele', 'ne': 'Nepali', 'ug': 'Uyghur, Uighur', 'ng': 'Ndonga', 'na': 'Nauru', 'nb': 'Norwegian Bokmål', 'nl': 'Dutch', 'cs': 'Czech', 'nn': 'Norwegian Nynorsk', 'no': 'Norwegian', 'uk': 'Ukrainian', 'cr': 'Cree', 'nv': 'Navajo, Navaho', 'nr': 'South Ndebele', 'ur': 'Urdu', 'ny': 'Chichewa; Chewa; Nyanja', 'uz': 'Uzbek', 'zh': 'Chinese', 'br': 'Breton', 'bs': 'Bosnian', 'za': 'Zhuang, Chuang', 'ba': 'Bashkir', 'be': 'Belarusian', 'bg': 'Bulgarian', 'bh': 'Bihari', 'bi': 'Bislama', 'bm': 'Bambara', 'bn': 'Bengali; Bangla', 'bo': 'Tibetan Standard, Tibetan, Central', 'oc': 'Occitan', 'oj': 'Ojibwe, Ojibwa', 'rm': 'Romansh', 'om': 'Oromo', 'ro': 'Romanian', 'os': 'Ossetian, Ossetic', 'or': 'Oriya', 'ru': 'Russian', 'rw': 'Kinyarwanda', 'ts': 'Tsonga', 'tg': 'Tajik', 'ak': 'Akan', 'gu': 'Gujarati', 'gv': 'Manx', 'gn': 'Guaraní', 'gl': 'Galician', 'am': 'Amharic', 'ga': 'Irish', 'gd': 'Scottish Gaelic; Gaelic', 'hr': 'Croatian', 'wo': 'Wolof', 'ht': 'Haitian; Haitian Creole', 'hu': 'Hungarian', 'hz': 'Herero', 'wa': 'Walloon', 'ta': 'Tamil', 'tn': 'Tswana', 'ha': 'Hausa', 'ps': 'Pashto, Pushto', 'hi': 'Hindi', 'ho': 'Hiri Motu', 'dv': 'Divehi; Dhivehi; Maldivian;', 'dz': 'Dzongkha', 'de': 'German', 'pt': 'Portuguese', 'da': 'Danish', 'af': 'Afrikaans', 'ia': 'Interlingua', 'is': 'Icelandic', 'te': 'Telugu', 'iu': 'Inuktitut', 'it': 'Italian', 'an': 'Aragonese', 'aa': 'Afar', 'to': 'Tonga (Tonga Islands)', 'tl': 'Tagalog', 'ab': 'Abkhaz', 'ae': 'Avestan', 'tk': 'Turkmen', 'th': 'Thai', 'ti': 'Tigrinya', 'ay': 'Aymara', 'tw': 'Twi', 'tt': 'Tatar', 'az': 'South Azerbaijani', 'tr': 'Turkish', 'id': 'Indonesian', 'ig': 'Igbo', 'ii': 'Nuosu', 'ie': 'Interlingue', 'as': 'Assamese', 'ar': 'Arabic', 'io': 'Ido', 'av': 'Avaric', 'mk': 'Macedonian', 'yi': 'Yiddish', 'yo': 'Yoruba', 'mn': 'Mongolian', 'ik': 'Inupiaq', 'ky': 'Kyrgyz', 'qu': 'Quechua', 'jv': 'Javanese', 'sw': 'Swahili', 'ja': 'Japanese', 'ty': 'Tahitian', 'lt': 'Lithuanian', 'lu': 'Luba-Katanga', 'fy': 'Western Frisian', 'fr': 'French', 'fo': 'Faroese', 'fi': 'Finnish', 'fj': 'Fijian', 'ff': 'Fula; Fulah; Pulaar; Pular', 'fa': 'Persian (Farsi)', 'co': 'Corsican', 'kv': 'Komi', 'ku': 'Kurdish', 'vo': 'Volapük', 'ks': 'Kashmiri', 'kr': 'Kanuri', 'ch': 'Chamorro', 've': 'Venda', 'ce': 'Chechen', 'ca': 'Catalan; Valencian', 'zu': 'Zulu', 'kg': 'Kongo', 'ka': 'Georgian', 'ko': 'Korean', 'cv': 'Chuvash', 'km': 'Khmer', 'kl': 'Kalaallisut, Greenlandic', 'kk': 'Kazakh', 'kj': 'Kwanyama, Kuanyama', 'ki': 'Kikuyu, Gikuyu', 'kw': 'Cornish', 'ln': 'Lingala', 'he': 'Hebrew (modern)', 'vi': 'Vietnamese', 'lo': 'Lao', 'lv': 'Latvian', 'sv': 'Swedish', 'su': 'Sundanese', 'st': 'Southern Sotho', 'ss': 'Swati', 'sr': 'Serbian', 'sq': 'Albanian', 'so': 'Somali', 'sn': 'Shona', 'sm': 'Samoan', 'sl': 'Slovene', 'sk': 'Slovak', 'si': 'Sinhala, Sinhalese', 'li': 'Limburgish, Limburgan, Limburger', 'sg': 'Sango', 'lg': 'Ganda', 'se': 'Northern Sami', 'sd': 'Sindhi', 'sc': 'Sardinian', 'sa': 'Sanskrit (Saṁskṛta)', 'la': 'Latin'} %}
+<div id="onecol">
+<article>
+<section >
+<h1>Languages</h1>
+<ul style="-webkit-column-count:3">
+{% for uid, language in imm.languages.items() %}
+<li><a title="{{language.name}}">{{uid}}</a></li>
+{% endfor %}
+</ul>
+</section>
+
+<section >
+<h1>Divisions</h1>
+<ul style="-webkit-column-count:3">
+{% for uid in imm.divisions %}
+<li><a title="{{imm.divisions[uid].name}}">{{uid}}</a></li>
+{% endfor %}
+</ul>
+</section>
+<style>
+#unused a {
+    width: 4em;
+    float: left;
+}
+
+#unused a[title]:after{
+content:'*'
+}
+
+#unused li {
+height: 6em;
+}
+
+#unused ul {
+    list-style: none;
+}
+
+</style>
+
+<section id="unused">
+<h1>Unused</h1>
+<ul>
+{% for letter1 in atoz %}
+<li>
+
+{% for letter2 in atoz %}
+{% set uid = letter1 + letter2 %}
+{% if uid in unused %}
+{% if uid in langcodes %}
+<a title="{{langcodes[uid]}}">{{uid}}</a>
+{% else %}
+<a>{{uid}}</a>
+{% endif %}
+{% endif %}
+{% endfor %}
+</li>
+{% endfor %}
+</ul>
+</section>
+</div>
+</article>
+{% endblock %}

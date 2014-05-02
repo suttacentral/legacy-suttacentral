@@ -55,7 +55,7 @@ def process_metadata(root):
         return root
     raise tools.webtools.ProcessingError("Couldn't make sense of metadata")
 
-def discover_author(root, entry):
+def discover_author(root, entry, num_in_file):
     author = root.select_one('meta[author]')
     if not author:
         author = root.select_one('meta[data-author]')
@@ -71,19 +71,20 @@ def discover_author(root, entry):
         transby = None
         m = regex.search('Transl(?:ated|ion) (?:by|from) ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+(?: and ((?:(?<!\p{alpha})\p{alpha}\.\s|[^.:,])+)))', metatext)
         if m:
-            transby = m[0]
+            transby = m[0].strip()
         else:
             # Match two words at front if possible commas are allowed, after that
             # match everything up to the first sentence ender, but permit periods
             # as abbreviation indicators.
             m = regex.match(r'(?:\p{alpha}+,? \p{alpha}+,?\s)?(?:(?<!\p{alpha})(?:\bed|\b\p{alpha})\.\s*|[^.:,])+', metatext)
             if m:
-                transby = m[0]
+                transby = m[0].strip()
             if transby:
-                entry.warning('No explicit author/origin blurb provided, using "{}", if this is not sensible, please add an element \'<meta author="Translated by So-and-so">\' to the metadata'.format(transby))
+                if num_in_file <= 0:
+                    entry.warning('No explicit author/origin blurb provided, using "{}", if this is not sensible, please add an element \'<meta author="Translated by So-and-so">\' to the metadata'.format(transby))
                 return root.makeelement('meta', author=transby)
-    
-    entry.error('Could not determine author(translator/editor) blurb, please add an element \'<meta author="Translated by So-and-so">\' to the metadata')
+    if num_in_file <= 0:
+        entry.error('Could not determine author(translator/editor) blurb, please add an element \'<meta author="Translated by So-and-so">\' to the metadata')
     return None
     
 def normalize_id(string):
@@ -93,12 +94,6 @@ def normalize_id(string):
     string = regex.sub(r'(?<=\p{alpha})\s+(?=\p{alpha})', '-', string)
     # Replace space between digits with period
     string = regex.sub(r'(?<=\d)\s+(?=\d)', '.', string)
-    
-    # WARNING this can still return invalid ids, need to check
-    # the HTML5 standard. This is an area where not being restricted
-    # to the HTML4 standard would be very ideall. From memory
-    # in HTML5 is might be defined as a list of forbidden characters,
-    # with unicode characters in general being okay.
     
     return string
 
@@ -239,21 +234,24 @@ def generate_canonical_path(uid, language):
         sutta = imm.suttas.get(uid)
         if sutta:
             subdivision = sutta.subdivision
+
     
-    if not subdivision:
+    division = imm.divisions.get(uid)
+    
+    if not (subdivision or division):
         m = regex.match(r'(.*?)\.?\d+(?:-\d+)?$', uid)
         if m:
             subdivision = imm.subdivisions.get(m[1])
     
     if subdivision:
         division = subdivision.division
-    else:
-        division = imm.divisions.get(uid)
     
     if division:
         collection = division.collection
     else:
         return path
+    
+    path /= collection.pitaka.uid
     
     if language != collection.lang:
         path /= pathlib.Path(collection.lang.uid)
@@ -264,8 +262,9 @@ def generate_canonical_path(uid, language):
     if division.uid != uid:
         path /= division.uid
     
-    if subdivision and uid != subdivision.uid != None:
-        path /= subdivision.uid
+    if (subdivision and uid != subdivision.uid != None) or subdivision.uid == 'kn':
+        if division.collection.pitaka == 'su':
+            path /= subdivision.uid
     
     return path
 
@@ -284,8 +283,59 @@ def discover_uid(root, entry):
             return uid
     return None
 
+def generate_next_prev_links(root, language):
+    # Note there is a fallback next/prev link generator
+    # applied at time of serving a file.
+    # This assumes the order in the file provides a betterer
+    # indication of relationships than the automated generator
+    # can determine.
+    if isinstance(language, str):
+        lang_uid = language
+    else:
+        lang_uid = language.uid
+    sections = root.select('section.sutta')
+    if len(sections) <= 1:
+        return
+    imm = sc.scimm.imm()
+    def get_text(uid):
+        sutta = imm.suttas.get(uid)
+        if sutta:
+            if hasattr(sutta, 'brief_name'):
+                text = sutta.brief_name
+            else:
+                text = sutta.name
+        else:
+            text = imm.uid_to_acro(uid)
+        return text
+    link_count = 0
+    for i, section in enumerate(sections):
+        links = []
+        if section != sections[0]:
+            # Prev link
+            prev_uid = sections[i - 1].attrib['id']
+            href = sc.classes.Sutta.canon_url(uid=prev_uid,
+                                              lang_code=lang_uid)
+            prev = root.makeelement('a', {'href':href, 'class':'previous'})
+            prev.text = '◀ {}'.format(get_text(prev_uid))
+            links.append(prev)
+        # Top link
+        top = root.makeelement('a', {'class':'top', 'href':'#'})
+        top.text = ' ▲ TOP '
+        links.append(top)
+        if section != sections[-1]:
+            # Next link
+            next_uid = sections[i + 1].attrib['id']
+            href = sc.classes.Sutta.canon_url(uid=next_uid,
+                                              lang_code=language)
+            prev = root.makeelement('a', {'href':href, 'class':'next'})
+            prev.text = '{} ▶'.format(get_text(next_uid))
+            links.append(prev)
+        section.extend(links)
+        link_count += len(links) - 1
+    return link_count
+
 def finalize(root, entry, language=None, metadata=None, 
-             author_blurb=None, num_in_file=-1, options={}):
+             num_in_file=-1, options={}):
     if root.tag != 'html':
         raise ValueError('Root element should be <html> not <{}>'.format(root.tag))
     pnums = set()
@@ -330,8 +380,8 @@ def finalize(root, entry, language=None, metadata=None,
             return False
         for ipass in range(0, 2):
             if ipass == 1:
-                # Try pruning the end of the uid.
-                m = regex.match(r'(.*?)\.?\d+(?:-\d+)?$', uid)
+                # Try pruning the end off the uid.
+                m = regex.match(r'(.*?)\.?\d+[a-z]?(?:-\d+[a-z]?)?$', uid)
                 if m:
                     uid = m[1]
             
@@ -373,7 +423,9 @@ def finalize(root, entry, language=None, metadata=None,
             uid = uid1
     else:
         entry.info('uid looks like {}'.format(uid))
-    
+
+    if not uid:
+        uid = uid2
     #Convert non-HTML tags to classes
     normalize_tags(root, entry)
     
@@ -416,20 +468,38 @@ def finalize(root, entry, language=None, metadata=None,
         toc = root.makeelement('div', {'id':'toc'})
     
     divtext.insert(0, toc)
+
+    # Convert old-style hgroups
+    for hgroup in root.iter('hgroup'):
+        hgroup.tag = 'div'
+        hgroup.add_class('hgroup')
+        if hgroup[0].tag != 'h1':
+            hgroup[0].tag = 'p'
+            hgroup[0].attrib['class'] = 'division'
+
+        for e in hgroup.select('h4'):
+            e.tag = 'p'
+            
+        for e in hgroup[1:-1]:
+            if e.tag not in {'h2','h3','h4','h5','h6', 'p'}:
+                continue
+            e.tag = 'p'
+        del hgroup
     
     h1notinhgroup = False
     for h1 in root.iter('h1'):
-        if h1.getparent().tag != 'hgroup':
+        if 'hgroup' not in h1.getparent().get('class', ''):
             h1notinhgroup = True
+
     if h1notinhgroup:
-        for h1 in root.iter('h1'):
-            hgroup = root.makeelement('hgroup')
-            h1.addnext(hgroup)
-            for e in hgroup.itersiblings(preceding=True):
-                if e.tag not in {'h2', 'h3', 'h4'}:
-                    break
-                hgroup.prepend(h1)
-            hgroup.append(h1)
+        entry.error('<h1> not in hgroup, please enclose the <h1> in a <div class="hgroup>, the division or subdivision heading should be <p class="division">, other subheadings (such as chapters) should be simple <p> but included inside the hgroup.')
+
+    for e in root.select('.hgroup > h2:last-child'):
+        e.getparent().addnext(e)
+
+    for e in root.select('.hgroup > *'):
+        if e.tag not in {'h1', 'p'}:
+            entry.warning('Inappropriate tag in div.hgroup: <{}>. Only <h1> and <p> are permissible.'.format(e.tag))
     
     supplied_misused = False
     for h in root.select('h1,h2,h3,h4,h5,h6,h7'):
@@ -454,7 +524,7 @@ def finalize(root, entry, language=None, metadata=None,
     
     if metadata:
         section.append(metadata)
-    
+
     scn_problem = False
     scn = root.select('a.sc')
     if root.select('meta a.sc'):
@@ -477,6 +547,7 @@ def finalize(root, entry, language=None, metadata=None,
                 if base_uid[-1].isdigit():
                     base_uid += '.'
             pnum = 0
+
             for p in section.select('article p'):
                 if len(p.text_content()) > 50:
                     pnum += 1
@@ -496,10 +567,31 @@ def finalize(root, entry, language=None, metadata=None,
                 id = normalize_anchor(e.attrib['class'] + ' ' + e.text)
             e.attrib['id'] = id
             e.text = None
+
+    # Merge blockquotes
+    blockquotes = root.select('blockquote')
+    if blockquotes:
+        e = blockquotes[0]
+        i = 1
+        while i < len(blockquotes):
+            if e.tail and not e.tail.isspace():
+                continue
+            nextbq = e.getnext()
+            if nextbq == blockquotes[i]:
+                e.append(nextbq)
+                nextbq.drop_tag()
+            else:
+                e = blockquotes[i]
+
+            i += 1
     
-    if not author_blurb and num_in_file > 1:
-        author_blurb = discover_author(root, entry)
+    for e in root.select('a.previous, a.top, a.next'):
+        divtext.append(e)
+    
+    author_blurb = discover_author(root, entry, num_in_file)
     
     if author_blurb:
         root.headsure.append(author_blurb)
+
+    sc.tools.html.prettyprint(root)
     

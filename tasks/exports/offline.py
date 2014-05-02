@@ -15,7 +15,7 @@ def clean(older=False):
 
 
 @task
-def create(host='localhost:8800', force=False, quiet=False, wait=None):
+def create(host='localhost:8800', basestem='sc-offline', force=False, quiet=False, wait=None, omit=None):
     """Create an offline SuttaCentral export."""
     blurb(create)
     command = 'utility/export/offline.py'
@@ -25,7 +25,10 @@ def create(host='localhost:8800', force=False, quiet=False, wait=None):
         command += ' --quiet'
     if wait:
         command += ' --wait={}'.format(wait)
-    command += ' {}'.format(host)
+    if omit:
+        command += ' --omit={}'.format(omit)
+    
+    command += ' {} {}'.format(host, basestem)
     run(command)
 
 
@@ -38,4 +41,6 @@ def create_dev():
 @task
 def create_production():
     """Create an offline SuttaCentral export for the production environment."""
-    create(host='suttacentral.net', quiet=True, wait=0.05)
+    create(host='suttacentral.net', quiet=True, wait=0.15)
+    create(host='suttacentral.net', quiet=True, wait=0.15,
+        basestem='sc-offline-en', omit='de,es,fr,it,ko,ru,my,vn')

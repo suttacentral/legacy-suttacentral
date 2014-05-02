@@ -49,6 +49,26 @@ $sutta-toc-menu-font-size: 11px;
         letter-spacing: 0;
         word-spacing: 0;
     }
+
+    #translitButtons {
+        height: $sutta-toc-button-height;
+    }
+}
+
+#links {
+    padding: 0.5em;
+    
+    a {
+        float:none;
+        margin:0 0.5em;
+        padding:0;
+        font-size: 80%;
+        font-family: source sans pro;
+    }
+
+    .division {
+        vertical-align: top;
+    }
 }
 
 #menu {
@@ -57,6 +77,7 @@ $sutta-toc-menu-font-size: 11px;
     border: 1px solid $sutta-toc-text-border-color;
     border-radius: $sutta-toc-border-radius;
     background-color: $sutta-toc-background-color;
+    max-width: 10em;
 
     @media #{$mobile} {
         margin-left: $mobile-main-side-margin;
@@ -70,6 +91,9 @@ $sutta-toc-menu-font-size: 11px;
 
     ul {
         list-style: none;
+        ul {
+            margin-top: 0.1em;
+        }
     }
 
     li {
@@ -77,8 +101,9 @@ $sutta-toc-menu-font-size: 11px;
         font-size: $sutta-toc-menu-font-size;
         line-height: 1.5em;
         font-weight: bold;
+        white-space: nowrap;
 
-        & > a {
+        a {
             display: block;
             width: 100%;
             padding: 0.2em 0.1em;
@@ -91,6 +116,7 @@ $sutta-toc-menu-font-size: 11px;
 
         li {
             font-weight: normal;
+            padding-left: 0.4em;
         }
     }
 }
@@ -148,6 +174,15 @@ button#pali_lookup_button,
     @include sans-serif;
     font-size: $sutta-toc-font-size;
     letter-spacing: 0;
+	visibility:hidden;
+    opacity: 0;
+    height: 0;
+    transition: 250ms;
+	.infomode & {
+        height: initial;
+		visibility:visible;
+        opacity: 1;
+	}
 
     @media #{$mobile} {
         margin-left: $mobile-main-side-margin;
@@ -167,4 +202,10 @@ button#pali_lookup_button,
     margin-top: -1em;
     padding: 0;
     color: #ddd;
+}
+
+#menu, #metaarea {
+    max-height: 16em;
+    overflow: hidden;
+    overflow-y: auto;
 }

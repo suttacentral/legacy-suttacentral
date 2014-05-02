@@ -2,14 +2,15 @@
 
 {# Linkafy acronym if possible and replace spaces with non-breakers.
    Optionally show the alt_sutta_acronym #}
-{% macro sutta_acronym(sutta, show_alt) %}
+{% macro sutta_acronym(sutta, show_alt, brief=false) %}
+{% set acronym=sutta.brief_acronym if brief else sutta.acronym %}
 {%- if sutta.text_ref -%}{# TODO: Insert nbsp where needed #}
 <a href='{{sutta.text_ref.url}}' {%- if sutta.text_ref.title %} title='{{sutta.text_ref.abstract}}' {%- endif %}>
-{{sutta.acronym|sub("(?<![,;]) ", "&nbsp;")}}</a>
+{{acronym|sub("(?<![,;]) ", "&nbsp;")}}
 {%- else -%}
-{{sutta.acronym|sub("(?<![,;]) ", "&nbsp;")}}
-{%- endif -%}
-{%- if sutta.alt_acronym and show_alt %}
+{{acronym|sub("(?<![,;]) ", "&nbsp;")}}
+{%- endif -%}</a>
+{%- if not brief and sutta.alt_acronym and show_alt %}
  <span class='altAcronym'>{{sutta.alt_acronym|sub("(?<![,;]) ", "&nbsp;")}}</span>
 {% endif -%}
 {% endmacro %}
@@ -26,24 +27,24 @@
 {%- endif %}
 </td>
 <td>
-{% if result and result.query.ajax %}
-{%- if sutta.translations -%}
-<a href='/{{sutta.uid}}/'
- title='Correspondence details for {{sutta.acronym}}' class="details">{{sutta.translations|length}} ►</a>
+{% if (result and result.query.ajax) or sutta.parallel_group %}
+{%- if sutta.parallels or sutta.parallel_group -%}
+<a href='/{{sutta.details_uid}}'
+ title='Correspondence details for {{sutta.acronym}}' class="details">{{sutta.parallels_count}} ▶</a>
 {%- endif -%}
 {%- else -%}
 {%- for parallel in sutta.parallels -%}
 {{sutta_acronym(parallel.sutta, show_alt=False)}}
 {%- if parallel.partial -%}*{%- endif -%}
-{% if not loop.last %}, {% else %} <a href='/{{sutta.uid}}/' 
- title='Correspondence details for {{sutta.acronym}}' class="details">►</a>
+{% if not loop.last %}, {% else %} <a href='/{{sutta.uid}}' 
+ title='Correspondence details for {{sutta.acronym}}' class="details">▶</a>
 {% endif %}
 {%- endfor %}
 {%- endif -%}
 </td>
 <td>
 {% for translation in sutta.translations -%}
-<a href='{{translation.url}}' class='tran' title='{{translation.abstract}}'>{{translation.lang.iso_code}}</a>{% if not loop.last %} | {% endif %} 
+<a href='{{translation.url}}' class='tran' {% if translation.abstract -%} title='{{translation.abstract}}'{% endif %}>{{translation.lang.iso_code}}</a>{% if not loop.last %} | {% endif %} 
 {% endfor -%}
 </td>
 </tr>

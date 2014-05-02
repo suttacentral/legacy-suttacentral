@@ -15,20 +15,40 @@
 <div id="home-content">
 
 <div id="home-main" style="display: block;">
-<!-- Collections/Divisions go here -->
-{# HACK: We use reverse to collections because its defined in reverse in
-   menu.py. When menu.py gets updated to use the database, this should
-   reflect the proper ordering. #}
-{% for collection in collections|reverse -%}
-<div class="column">
-    <ul>
-        <li><h2>{{collection.name}}</h2></li>
-        {% for division in collection.divisions %}
-            <li><a href="{{division.link}}">{{division.name}}</a></li>
-        {% endfor %}
-    </ul>
-</div>
+
+{% for pitaka_menu in menu %}
+<section class="pitaka columns-{{ pitaka_menu|length }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
+    <h1>{{ pitaka_menu.pitaka.name }}</h1>
+    {% for lang_menu in pitaka_menu %}
+    <div class="column">
+        <div class="language">
+            <h2>{{ lang_menu.lang.name }}</h2>
+            {% for sect_menu in lang_menu %}
+            <ul class="sect">
+                {% if sect_menu.sect %}
+                <li><h3>{{ sect_menu.sect.name }}</h3></li>
+                {% endif %}
+                {% for division in sect_menu %}
+                {% if division.menu_gwn_ind %}
+                <li class="group-with-next">
+                {% else %}
+                <li>
+                {% endif %}
+                {% if division.has_suttas or division.text_ref %}
+                    <a href="/{{ division.uid }}">{{ division.name }}</a>
+                {% else %}
+                    <a title="/{{ division.uid }}" class="no-suttas">{{division.name}}</a>
+                {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</section>
 {% endfor %}
+
 </div><!-- home-main -->
 
 <div id="home-start" style="display: none;">
@@ -37,7 +57,8 @@
 		<h3>Who is SuttaCentral for?</h3>
 		<p><strong>SuttaCentral</strong> is for anyone who has an interest in Buddhism and wants to delve deeper into the canonical scriptures of the <a href="http://en.wikipedia.org/wiki/Pre-sectarian_Buddhism" title="Wikipedia article on pre-sectarian Buddhism" target="_blank">earliest period</a>.</p>
 		<h3>What does it have?</h3>
-		<p><strong>SuttaCentral</strong> includes detailed references, shows relationships between texts in diverse collections, and, where possible, provides original text and translations. Texts include the <a href="http://en.wikipedia.org/wiki/Pali_Canon" title="Wikipedia article on the Pali Canon" target="_blank">Pali canon</a> of the <a href="http://en.wikipedia.org/wiki/Theravada" title="Wikipedia article on Theravāda" target="_blank">Theravāda</a> school, which we have in both modern translations and the original <a href="http://en.wikipedia.org/wiki/P%C4%81li" title="Wikipedia article on Pali" target="_blank">Pali</a>. <strong>SuttaCentral</strong> also provides the early <a href="http://en.wikipedia.org/wiki/%C4%80gama_(Buddhism)" title="Wikipedia article on Āgamas" target="_blank">Āgama</a> texts in the <a href="http://en.wikipedia.org/wiki/Taisho_Tripitaka" title="Wikipedia article on Taishō Tripiṭaka" target="_blank">Taishō edition</a> of the <a href="http://en.wikipedia.org/wiki/Chinese_Buddhist_canon" title="Wikipedia article on Chinese Canon" target="_blank">Chinese canon</a>, as well as references for the <a href="http://en.wikipedia.org/wiki/Kangyur" title="Wikipedia article on Tibetan Kangyur" target="_blank">Tibetan Kangyur</a>, <a href="http://www.ancient-buddhist-texts.net/Buddhist-Texts/XX-Early-Buddhist-Texts/index.htm" title="Introduction to the Early Buddhist Texts in Sanskritised Prākrit" target="_blank">Sanskrit</a>, and <a href="http://en.wikipedia.org/wiki/G%C4%81ndh%C4%81r%C4%AB_language" title="Wikipedia article on Gandhāri" target="_blank">other languages</a>, which are much smaller in number than the Pali and Chinese collections.</p>
+		<p><strong>SuttaCentral</strong> includes detailed references, shows relationships between texts in diverse collections, and, where possible, provides original text and translations. Texts include the <a href="http://en.wikipedia.org/wiki/Pali_Canon" title="Wikipedia article on the Pali Canon" target="_blank">Pali canon</a> of the <a href="http://en.wikipedia.org/wiki/Theravada" title="Wikipedia article on Theravāda" target="_blank">Theravāda</a> school, which we have in both modern translations and the original <a href="http://en.wikipedia.org/wiki/P%C4%81li" title="Wikipedia article on Pali" target="_blank">Pali</a>. <strong>SuttaCentral</strong> also provides the early <a href="http://en.wikipedia.org/wiki/%C4%80gama_(Buddhism)" title="Wikipedia article on Āgamas" target="_blank">Āgama</a> texts in the <a href="http://en.wikipedia.org/wiki/Taisho_Tripitaka" title="Wikipedia article on Taishō Tripiṭaka" target="_blank">Taishō edition</a> of the <a href="http://en.wikipedia.org/wiki/Chinese_Buddhist_canon"
+ title="Wikipedia article on Chinese Canon" target="_blank">Chinese canon</a>, as well as references for the <a href="http://en.wikipedia.org/wiki/Kangyur" title="Wikipedia article on Tibetan Kangyur" target="_blank">Tibetan Kangyur</a>, <a href="http://www.ancient-buddhist-texts.net/Buddhist-Texts/XX-Early-Buddhist-Texts/index.htm" title="Introduction to the Early Buddhist Texts in Sanskritised Prākrit" target="_blank">Sanskrit</a>, and <a href="http://en.wikipedia.org/wiki/G%C4%81ndh%C4%81r%C4%AB_language" title="Wikipedia article on Gandhāri" target="_blank">other languages</a>, which are much smaller in number than the Pali and Chinese collections.</p>
 <h3>How do I find things?</h3>
 <p>The main navigation is through the tables of parallels on the “Home” tab, which you can also access through the navigation menu bar in the top header. If you’re looking for a particular Sutta, try searching the title. If you want to read some translations, click the “Read” tab. Still lost? See our <a href="/help" title="SuttaCentral help">help page</a>.</p>
 </div><!-- home-start -->
@@ -47,11 +68,11 @@
 		<p><strong>SuttaCentral</strong> aims to gather the best translations for early Buddhist texts in various world languages. The Buddha told his followers to learn the Dhamma in their own language, so students should not have to undergo a lengthy course in arcane languages before studying the Dhamma. We are, however, limted by the availability of translations, so this is a work in progress.</p>
 
 <h3>What are the translations?</h3>
-<p>These include classic works by <a href="http://en.wikipedia.org/wiki/Bhikkhu_Bodhi" target="_blank">Bhikkhu Bodhi</a>, new English translations of Chinese <a href="/sa1-100/">Saṁyukta Āgama</a> texts by <a href="http://www.buddhismuskunde.uni-hamburg.de/fileadmin/pdf/analayo/publications.htm" title="Publications by Anālayo" target="_blank">Bhikkhu Anālayo</a>, fresh translations from the Tibetan <a href="/up/">Upāyikā</a> by Sāmaṇerī Dhammadinnā, and others from a variety of sources.</p>
+<p>These include classic works by <a href="http://en.wikipedia.org/wiki/Bhikkhu_Bodhi" target="_blank">Bhikkhu Bodhi</a>, new English translations of Chinese <a href="/sa1-100">Saṁyukta Āgama</a> texts by <a href="http://www.buddhismuskunde.uni-hamburg.de/fileadmin/pdf/analayo/publications.htm" title="Publications by Anālayo" target="_blank">Bhikkhu Anālayo</a>, fresh translations from the Tibetan <a href="/up">Upāyikā</a> by Sāmaṇerī Dhammadinnā, and others from a variety of sources.</p>
 		<h3>How do I find translations?</h3>
 		<p>In the lists of texts on the “Home” tab, you’ll see that some of the items have English titles. These are the collections for which we have translations. Click through to the next page, and the list of translated texts is on the right.</p>	
 		<h3>Where should I start?</h3>
-		<p>SuttaCentral include three of the most important discourses of the Dīgha Nikāya, translated by the eminent Pali translator, Bhikkhu Bodhi: the <a href="/dn2/en/">Sāmaññaphala Sutta</a> on the fruits of the spiritual path, the <a href="/dn1/en/">Brahmajāla Sutta</a> on the net of misleading views, and the <a href="/dn15/en/">Mahānidāna Sutta</a> on causation.</p>
+		<p>SuttaCentral include three of the most important discourses of the Dīgha Nikāya, translated by the eminent Pali translator, Bhikkhu Bodhi: the <a href="/en/dn2">Sāmaññaphala Sutta</a> on the fruits of the spiritual path, the <a href="/en/dn1">Brahmajāla Sutta</a> on the net of misleading views, and the <a href="/en/dn15">Mahānidāna Sutta</a> on causation.</p>
 		<p>&nbsp;</p>
 </div><!-- home-read -->
 
