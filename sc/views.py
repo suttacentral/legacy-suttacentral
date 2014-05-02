@@ -291,6 +291,7 @@ class TextView(ViewBase):
         if not self.links_regex.search(m['content'], pos=-500):
             contents.extend(self.create_nextprev_links())
         contents.append('</div>')
+        
         contents.append('<script id="sc_text_info" type="text/json">\n{}\n</script>'.format(
             self.text_json()))
         context.text = '\n'.join(contents)
@@ -298,7 +299,7 @@ class TextView(ViewBase):
         # because they convert into spaces when rendered.
         # TODO: This check should use 'language' table
         if self.lang_code in {'zh'}:
-            context.text = context.text.replace('\n', '').replace('<p', '\n<p')
+            context.text = self.massage_cjk(context.text)
         context.lang_code = self.lang_code
     
     @property
@@ -411,6 +412,17 @@ class TextView(ViewBase):
             links.append('<a class="next" href="{}">{} ▶</a>'.format(
                 Sutta.canon_url(uid=next_uid, lang_code=self.lang_code), next_acro))
         return links
+    
+    @staticmethod
+    def massage_cjk(text):
+        def deline(string):
+            return string.replace('\n', '').replace('<p', '\n<p')
+        
+        m = regex.match(r'(?s)(.*?)(<div[^>]+id="metaarea".*?</div>)(.*)', text)
+        if m or not m:
+            pre, meta, post = m[1:]
+            return ''.join([deline(pre), meta, deline(post)])
+        return deline(text)
     
 class SuttaView(TextView):
     """The view for showing the sutta text in original sutta langauge."""
