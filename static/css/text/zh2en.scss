@@ -1,7 +1,8 @@
 .zh2enLookup {
 	.popup {
 	    position: absolute;
-	    background: $bright-pastel-yellow;
+	    display: inline-block;
+	    background: #F7D1C2;
 	    z-index: 103;
 	    padding: 1px;
 	    border: 1px solid #ccc;
@@ -35,7 +36,7 @@
 	}
 
 	.popup.fallback {
-	    border: 1px crimson solid;
+	    border: 2px crimson dotted;
         margin:1px;
 	}
 

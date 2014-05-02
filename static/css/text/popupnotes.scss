@@ -68,19 +68,16 @@ a.bib:hover span.deets, a.note:hover span.deets,
     transition-delay:0s;
 }
 
-.var table.deets {
+.var table.deets, .cross table.deets {
     display: inline-block;
     max-width: inherit;
     padding: 0em;
-    @include serif;
+    /*@include serif;*/
 
     td:first-child:not(:last-child) {
         font-weight: bold;
     }
-    td:nth-child(2) {
-        font-size: 75%;
-        vertical-align: middle;
-    }
+
     tr {
         background-color: inherit;
     }
@@ -95,11 +92,23 @@ a.bib:hover span.deets, a.note:hover span.deets,
     
 }
 
-.cross ul.deets {
-    margin-left: -15em;
-    margin-top: 0.5em;
+.var table.deets {
+    td:nth-child(2) {
+        font-size: 75%;
+        vertical-align: middle;
+    }
 }
 
+.cross table.deets {
+	td:first-child {
+		white-space: nowrap;
+	}
+
+}
+
+body:not(.infomode) .cross {
+	display: none;
+}
 
 
 /* POPUP DICTIONARY LOOKUP */
