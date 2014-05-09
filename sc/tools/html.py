@@ -440,8 +440,8 @@ class PrettyPrinter:
             if e.text:
                 e.text = wsrex.sub(r'\n', e.text)
                 e.text = self.simple_stupid_wrap(e.text)
-
-        root.select_one('html').tail = None
+        if root.tag == 'html':
+            root.tail = None
         
     def simple_stupid_wrap(self, string):
         """ As the name suggets, a simple and stupid way to wrap long strings
