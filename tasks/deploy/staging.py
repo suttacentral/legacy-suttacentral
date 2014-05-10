@@ -62,7 +62,6 @@ def quick(branch=None):
         _branch_or_pull(branch),
         'cd ..',
         'pip install -q -r requirements.txt',
-        'invoke jsdata.build',
         'invoke assets.compile',
         'invoke textdata.refresh',
         'sudo supervisorctl restart sc-staging',
