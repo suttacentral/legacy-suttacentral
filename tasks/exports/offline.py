@@ -42,5 +42,5 @@ def create_dev():
 def create_production():
     """Create an offline SuttaCentral export for the production environment."""
     create(host='suttacentral.net', quiet=True, wait=0.15)
-    create(host='suttacentral.net', quiet=True, wait=0.15,
-        basestem='sc-offline-en', omit='de,es,fr,it,ko,ru,my,vn')
+    #create(host='suttacentral.net', quiet=True, wait=0.15,
+        #basestem='sc-offline-en', omit='de,es,fr,it,ko,ru,my,vn')

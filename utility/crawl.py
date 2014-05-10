@@ -173,7 +173,7 @@ if __name__ == '__main__':
     # Add js files which are requested via AJAX thus lacking
     # href or src references.
     tomatch = ['zh2en', 'pi2en']
-    for file in sc.static_dir.glob('js/*.js'):
+    for file in sc.static_dir.glob('js/**/*.js'):
         filename = file.name
         for string in tomatch:
             if string in filename:
