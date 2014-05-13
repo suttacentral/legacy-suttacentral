@@ -3,7 +3,6 @@ $body-background-color: $light-off-white;
 $body-subheading-color: $medium-gray;
 
 $body-font-size: 16px;
-$mobile-body-font-size: 14px;
 
 body {
     @include serif;
@@ -22,10 +21,6 @@ body {
     // See http://blog.fontdeck.com/post/15777165734/opentype-1
     @include font-feature-settings("kern" 1, "liga" 1, "dlig" 1);
 
-    @media #{$mobile} {
-        font-size: $mobile-body-font-size;
-    }
-    
     // Fonts look absolutely apalling in Opera, it is a known issue
     // that Opera only works well with a certain set of fonts. Opera
     // users generally force Opera to only use those fonts.
