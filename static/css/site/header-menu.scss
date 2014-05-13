@@ -30,7 +30,7 @@ $menu-delay: 50ms;
 
     @media #{$tablet} {
         left: inherit;
-        right: 0;
+        right: 32px;
         height: $tablet-header-menu-height;
         font-size: $tablet-header-menu-font-size;
         line-height: $tablet-header-menu-height;
@@ -97,6 +97,7 @@ $menu-delay: 50ms;
     ul {
         position: absolute;
         padding: 0;
+        margin-left: 8px;
         border: 1px solid $header-menu-border-color;
         list-style-type: none;
         white-space: nowrap;
