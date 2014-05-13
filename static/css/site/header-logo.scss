@@ -115,7 +115,7 @@ $mobile-header-title-font-size: 20px;
     }
 
     // Fudge...
-    @media only screen and (min-width: #{$mobile-max-width + 1px}) and (max-width: 600px) {
+    @media only screen and (max-width: 888px) {
         display: none;
     }
 

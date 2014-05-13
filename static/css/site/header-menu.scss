@@ -29,13 +29,16 @@ $menu-delay: 50ms;
     line-height: $header-menu-height;
 
     @media #{$tablet} {
-        left: inherit;
-        right: 32px;
         height: $tablet-header-menu-height;
         font-size: $tablet-header-menu-font-size;
         line-height: $tablet-header-menu-height;
     }
-
+    //fudge (and evil one)
+    @media only screen and (max-width: 735px) {
+        left: inherit;
+        right: 242px;    
+    }
+    
     @media #{$mobile} {
         left: 0;
         bottom: 0;
