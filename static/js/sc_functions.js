@@ -194,6 +194,7 @@ function buildTextualInformation() {
         $a.attr("title", title);
         var aid = $a.attr('id'),
             idPrefix;
+        if (!aid) continue;
         if (aClass == 'pts1' || aClass == 'pts2') {
             idPrefix = 'pts';
         } else {
