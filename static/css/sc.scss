@@ -283,27 +283,21 @@ Text hypothetically reconstructed by the editor or translator.
 Text hypothetically reconstructed by the editor or translator.
 */
 
-p .add {
-	display: none;
-	.infomode & {
+ p .add{
+                                border:1px solid rgb(190, 190, 190);
 		display:inline;
 		padding: 0 0.5em;
 		@include sans-serif;
-		color:#b2b2b2;
-		font-size: 80%;
-	}
-}
-.add.show {display: inline;}
-
-.infomode .add {
+		color:#767676;
+		font-size: 100%;
 	background:#fefefe;
 	box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);
-	.author {
-		@include sans-serif-small-caps;
-	}
 }
+p .add .author {
+        @include sans-serif-small-caps;
+    }
 
-/*There are some editorial additions marked <span class="add"></span>. These should be hidden by default.
+/*There are some editorial additions marked <span class="add"></span>. Previously these were hidden by default, but they are now visible by default.
 
 Text added by the editor or translator for clarification.
 */
