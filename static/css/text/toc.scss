@@ -73,7 +73,7 @@ $sutta-toc-menu-font-size: 11px;
 
 #menu {
     margin: 0 0 1em 0;
-    padding: 0.5em 1em;
+    padding: 0.5em;
     border: 1px solid $sutta-toc-text-border-color;
     border-radius: $sutta-toc-border-radius;
     background-color: $sutta-toc-background-color;
@@ -116,7 +116,6 @@ $sutta-toc-menu-font-size: 11px;
 
         li {
             font-weight: normal;
-            padding-left: 0.4em;
         }
     }
 }

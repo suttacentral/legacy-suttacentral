@@ -190,28 +190,26 @@ a.bl {display:none;}
     display: table;
     width: auto;
     margin: 0 auto;
-    font-style:italic !important;color:#b2b2b2;
+    font-style:italic !important;color:#767676;
 }
 
-.endh2, .endh3, .endh4, .endh5, .endh6, .endsutta, .endvagga, .endsubdivision, .endsection, .enddivision, .bhanavara, .enduddesa
+.endh2, .endh3, .endh4, .endh5, .endh6, .endsutta, .endvagga, .endsubdivision, .endsection, .enddivision, .bhanavara, .enduddesa, .end
     {
     text-align:center;
     @include serif(!important);
-    font-style:italic !important;color:#b2b2b2;
+    font-style:italic !important;color:#767676;
 }
 
 .uddana {
-    text-align:center !important;
-    font-size:0.8em !important;
     margin-bottom:2em;
     @include serif(!important);
-    font-style:italic !important;color:#b2b2b2;
+    font-style:italic !important;color:#767676;
 }
 
 .endbook {
     text-align:center;
     @include serif(!important);
-    font-weight:bold;color:#b2b2b2;
+    font-weight:bold;color:#767676;
 }
 
 .dquo {margin-left: -0.9ex;position:absolute;}
@@ -283,33 +281,27 @@ Text hypothetically reconstructed by the editor or translator.
 Text hypothetically reconstructed by the editor or translator.
 */
 
-p .add {
-	display: none;
-	.infomode & {
+ p .add{
+                                border:1px solid rgb(215, 215, 215);
 		display:inline;
-		padding: 0 0.5em;
+		padding: 0 0.3em;
 		@include sans-serif;
-		color:#b2b2b2;
-		font-size: 80%;
-	}
-}
-.add.show {display: inline;}
-
-.infomode .add {
+		color:#767676;
+		font-size: 100%;
 	background:#fefefe;
 	box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);
-	.author {
-		@include sans-serif-small-caps;
-	}
 }
+p .add .author {
+        @include sans-serif-small-caps;
+    }
 
-/*There are some editorial additions marked <span class="add"></span>. These should be hidden by default.
+/*There are some editorial additions marked <span class="add"></span>. Previously these were hidden by default, but they are now visible by default.
 
 Text added by the editor or translator for clarification.
 */
 
 .suppliedmetre {
-    color: #b2b2b2;
+    color: #767676;
     @include sans-serif-small-caps;
 }
 /*This is for cases where the editor has "filled in the blanks" (hence "supplied") with metrical notation (hence "metre"). 
@@ -386,7 +378,7 @@ cite.article	{font-style:normal}
 Text deleted by the editor as superfluous.
 */
 
-.unclear	{color:#b2b2b2}
+.unclear	{color:#767676}
 /*Text marked as uncertain, usually with a "?", in the transcribed text.
 
 Unclear reading.
@@ -400,7 +392,7 @@ Unclear reading.
 }
 
 /*note in the text recording who copied the text*/
-hr		{width:33%;color:#b2b2b2;margin:0 auto 2em}
+hr		{width:33%;color:#767676;margin:0 auto 2em}
 .rule	{font-weight:bold}
 /*text in vibhanga, etc., of the rule itself.*/
 
