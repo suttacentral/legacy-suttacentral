@@ -439,7 +439,7 @@ class _Imm:
         A parallel group is a different way of defining parallels, in essence
         it is a group of suttas (in the broader sense) from different
         traditions, all of which are the same 'thing', this is for example
-        particulary relevant in the Patimokkha which is extremely similiar
+        particulary relevant in the Patimokkha which is extremely similar
         across the traditions.
 
         All suttas within a sutta group share the same name (title) this is
