@@ -16,7 +16,9 @@ def clean(older=False):
 
 
 @task(aliases=('build',))
-def compile():
+def compile(precompress=False):
     """Compile the (CSS/JS) assets."""
     blurb(compile)
     assets.compile()
+    if precompress:
+        assets.compress_static()

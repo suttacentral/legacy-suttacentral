@@ -134,3 +134,35 @@ def get_env():
         sc.webassets_cache_dir.mkdir(parents=True)
 
     return env
+
+def compress_static():
+    """Pre-compress static data (for Nginx ngx_http_gzip_static_module)"""
+    import plumbum
+    try:
+        compress_cmd = plumbum.local['zopfli']['--gzip']
+    except plumbum.CommandNotFound:
+        print('zopfli not available, falling back to gzip')
+        compress_cmd = plumbum.local['gzip']['-9 -k']
+    
+    extensions = {'.js', '.css', '.svg', '.ttf'}
+    files = set(sc.static_dir.glob('fonts/**/*'))
+    files.update(sc.static_dir.glob('js/data/*'))
+    files.update(sc.static_dir.glob('js/compiled/*'))
+    files.update(sc.static_dir.glob('css/compiled/*'))
+    to_process = []
+    for file in sorted(files):
+        if file.suffix == '.gz':
+            if file.with_name(file.stem) not in files:
+                # Remove if original does not exist anymore
+                file.unlink()
+            continue
+        if file.suffix not in extensions:
+            continue
+        if file.with_suffix(file.suffix + '.gz') in files:
+            continue
+        to_process.append(file)
+    if to_process:
+        print('Compressing {} files'.format(len(to_process)))
+        plumbum.local['gzip']['-k', '-1', to_process]()
+        
+    
