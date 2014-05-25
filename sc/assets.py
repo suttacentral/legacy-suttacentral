@@ -163,6 +163,6 @@ def compress_static():
         to_process.append(file)
     if to_process:
         print('Compressing {} files'.format(len(to_process)))
-        plumbum.local['gzip']['-k', '-1', to_process]()
+        compress_cmd[to_process]()
         
     
