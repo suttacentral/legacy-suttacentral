@@ -44,6 +44,7 @@ sc.mode = {
             'mat88': "Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988.",
             'mit57': "Paragraph numbers in Mittal, 1957.",
             'ms': "Mahāsaṅgīti paragraph number.",
+            'of': "Paragraph numbers in Otto Franke, 1913.",
             'pts': "Pali Text Society vol/page number.",
             'pts1': "Pali Text Society 1st ed. 1881-1992",
             'pts2': "Pali Text Society 2nd ed. 1974-1998",
