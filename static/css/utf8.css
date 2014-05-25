@@ -38,6 +38,7 @@ a.vn:before {content:"Vn "}
 a.wal48:before, a.wal50:before, a.wal52:before, a.wal57c:before, a.wal58:before, a.wal59a:before, a.wal60:before, a.wal61:before, a.wal68a:before, a.wal70a:before, a.wal70b:before, a.wal76:before, a.wal78:before, a.wal80c:before {content:"Wal "}
 a.wp:before {content:"WP "}
 a.yam72:before {content:"Yam "}
+a.of:before {content:"OF "}
 
 
 /*Rare character indicated in Chinese text of CBETA. These are coded thus:
@@ -152,7 +153,10 @@ CSS Class	HTML Title
 .vai58		"Page numbers in Vaidya, 1958."
 
 .sen82		"Section and paragraph numbers in Senart, 1882."
+
 .roth		"Paragraph numbers in Roth, 1970."
+
+.of		"Paragraph numbers in Otto Franke, 1913."
 
 The following references are secondary. They appear in the same files as some of the ones above, and should be styled as more distant from the text.
 
