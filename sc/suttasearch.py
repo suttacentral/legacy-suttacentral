@@ -124,7 +124,7 @@ def search(query=None, limit=25, offset=0):
     if e_results:
         out.add("Exact results", e_results)
     if s_results and not quoted:
-        out.add("Similiar results", s_results)
+        out.add("Similar results", s_results)
     return out
         
 def search_imm(query, lang):
