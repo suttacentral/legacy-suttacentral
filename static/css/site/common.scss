@@ -2,7 +2,7 @@ $body-text-color: $dark-gray;
 $body-background-color: $light-off-white;
 $body-subheading-color: $medium-gray;
 
-$body-font-size: 16px;
+$body-font-size: 1em;
 
 body {
     @include serif;
