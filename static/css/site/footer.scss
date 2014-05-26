@@ -1,7 +1,8 @@
 $footer-background-color: $light-pastel-green;
 $footer-separator-color: $medium-gray;
 
-
+$footer-font-size: 1em;
+$mobile-footer-font-size: 1em;
 
 #page-footer {
     width: 100%;
@@ -21,11 +22,11 @@ $footer-separator-color: $medium-gray;
         display: block;
         width: 100%;
         padding: 1.5em 0 0 0;
-        @include sans-serif;
+        @include sans-serif-small-caps;
         font-size: $footer-font-size;
         line-height: 2em;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        text-transform: lowercase;
+        letter-spacing: 0.05em;
         text-align: center;
         white-space: nowrap;
 
