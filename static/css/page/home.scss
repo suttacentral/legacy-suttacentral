@@ -14,12 +14,11 @@ $home-tabs-height: 2em;
 #home-tabs {
     width: 100%;
     height: $home-tabs-height;
-    font-size: 14px;
     line-height: $home-tabs-height;
     background-color: $home-tabs-background-color;
 
     @media #{$mobile} {
-        font-size: 12px;
+       
     }
 
     @media print {
@@ -47,9 +46,9 @@ $home-tabs-height: 2em;
                 padding: 0 0 0 0.75em;
                 color: $home-tabs-text-color;
                 background-color: $home-tabs-background-color;
-                @include sans-serif;
-                font-weight: bold;
-                text-transform: uppercase;
+                @include sans-serif-small-caps;
+                font-weight: regular;
+                text-transform: lowercase;
                 text-decoration: none;
                 overflow: hidden;
 
