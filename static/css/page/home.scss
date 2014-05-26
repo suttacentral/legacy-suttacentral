@@ -46,11 +46,12 @@ $home-tabs-height: 2em;
                 padding: 0 0 0 0.75em;
                 color: $home-tabs-text-color;
                 background-color: $home-tabs-background-color;
-                @include sans-serif-small-caps;
-                font-weight: regular;
-                text-transform: lowercase;
+                @include sans-serif;
+                font-weight: bold;
+                text-transform: uppercase;
                 text-decoration: none;
                 overflow: hidden;
+                letterspacing:0.1em;
 
                 @media #{$mobile} {
                     padding-left: 0.5em;
