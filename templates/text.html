@@ -1,20 +1,23 @@
 {% extends "base.html" -%}
 {%- block content -%}
-<div id="sidebar" style="display:none">
-  <ul class='tabs'>
-    <li><a href="#controls">Controls</a></li>
-    <li><a href="#contents">Contents</a></li>
-    <li><a href="#metadata">Metadata</a></li>
-  </ul>
-  <div id="controls">
-
-  </div>
-  <div id="contents">
-
-  </div>
-  <div id="metadata">
-
-  </div>
+<div id="sidebar" class="open" style="display:none">
+      <ul class='tabs'>
+        <li><a href="#controls-tab">Controls</a></li>
+        <li><a href="#contents-tab">Contents</a></li>
+        <li><a href="#metadata-tab">Metadata</a></li>
+      </ul>
+      <div class="tab" id="controls-tab">
+        <div class="inner-wrap">
+        </div>
+      </div>
+      <div class="tab" id="contents-tab">
+        <div class="inner-wrap">
+        </div>
+      </div>
+      <div class="tab" id="metadata-tab">
+        <div class="inner-wrap">
+        </div>
+      </div>
 </div>
 {{text}}
 {%- endblock -%}

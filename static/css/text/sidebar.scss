@@ -1,14 +1,18 @@
+$sidebar-width = 20em;
+$sidebar-tabs-height = 3.5em;
+$sidebar-tabs-vertical-padding = 1em;
+$sidebar-dongle-height = 6em;
+$sidebar-dongle-width = 2em;
+
 #sidebar {
+    position: fixed;
     top: 0;
     bottom: 0;
-    position: fixed;
     left: 0;
-    width:20em;
+    width:$sidebar-width;
+    z-index: 100;
     background:#fff;
     box-shadow:.25em .25em .5em rgba(118,118,118,0.3);
-    z-index:100;
-    overflow:hidden;
-
     ul {
         list-style-type: none;
         margin:0;
@@ -37,16 +41,10 @@
         background:#ddd;
     }
 
-    & > div {
-        position: absolute;
-        top: 3em;
-        bottom: 0em;
-    }
-
     .tabs {
         text-align: center;
         width: 100%;
-        height:15%;
+        height: $sidebar-tabs-height;
         position:relative;
         z-index:1;
     }
@@ -54,12 +52,13 @@
     .tabs li {
         width:33.33%;
         float: left;
-        padding:1em 0;
+        padding:$sidebar-tabs-vertical-padding 0;
         background:#eee;
         margin: 0 0 0 0;
         text-transform:uppercase;
         font-weight:bold;
         color:#767676;
+        height: $sidebar-tabs-height - 2 * $sidebar-tabs-vertical-padding;
     }
 
     .tabs li:hover {
@@ -69,12 +68,45 @@
     .active {
         background:white !important;
     }
+
+    .tab {
+        position: absolute;
+        top: 3.5em;
+        bottom: 0em;
+        width: 100%;
+        overflow-y:auto;
+        overflow-x:hidden;
+        /* This is required for proper display of scroll bar */
+        & > .inner-wrap {
+            padding: 1em;
+        }
+    }
+    /* Movement Controls */
+    left: -$sidebar-width;
+    @include transition(all 0.5s ease-in-out);
+    &:hover, &:focus, &.open {
+        left: 0;
+    }
+    
+}
+
+#sidebar:after {
+    /* We use fixed positioning to resolve some z-index issues */
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    left: $sidebar-width;
+    height: $sidebar-dongle-height;
+    width: $sidebar-dongle-width;
+    background: #fff;
+    z-index: 1;
+    content: "";
+    box-shadow:.25em .25em .5em rgba(118,118,118,0.3);
+    
+    
 }
 
 #contents-tab {
-    overflow-y:auto;
-    overflow-x:hidden;
-
     li {
         font-family:'Source Sans Pro',sans-serif;
         font-weight:bold;
@@ -134,7 +166,7 @@
     border-right:0;
 }
 
-#meta-tab {
+#metadata-tab {
     font-family:'Source Sans Pro',sans-serif;
     margin: 0 5%;
     color:#767676
