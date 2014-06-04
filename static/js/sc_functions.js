@@ -170,19 +170,6 @@ function toggleTextualInfo(force) {
     sc.userPrefs.setPref("textInfo", showTextInfo, false);
 }
 
-function bindButtons(){
-     document.getElementById(textInfoButtonId).onclick = toggleTextualInfo;
-     if (sc.mode.pali === true){
-        document.getElementById(paliLookupButtonId).onclick = togglePaliLookup;
-
-        for (f in transFuncs) {
-            try {
-                document.getElementById(f).onclick = transliterateHandler;
-            } catch (e) {/*If button doesn't exist.*/}
-        }
-    }
-}
-
 function buildTextualInformation() {
     var anchors = $(textualControls.marginClasses);
     for (var i = 0; i < anchors.length; i++) {

@@ -3,13 +3,6 @@
 //edited except by someone who knows javascript, also, "use strict"
 
 //The id of the page element which gets populated with the textual control elements.
-textualControls = {
-    id: "textual_controls",
-    marginClasses: "a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm, a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.mat85, a.mat88, a.mit57, a.ms, a.ms-pa, a.of, a.pts, a.pts1, .pts2, a.pts-cs, a.pts-vp-en, a.pts-vp-pi, a.pts_pn, a.roth, a.san87, a.san89, a.sc, a.sen82, a.sht, a.snp-vagga-section-verse, a.snp-vagga-verse, a.t, a.titus, a.t-linehead, a.ud-sutta, a.ud-vagga-sutta, a.tri62, a.tri95, a.tu, a.uv, a.vai58, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.wal48, a.wal50, a.wal52, a.wal55b, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.yam72",
-    popupClasses: ".pub, .var, .rdg, .cross, .end",
-    contentClasses: ".supplied, .supplied2, .add, .corr, .del, .end, .lem, .sic, .surplus",
-    metaarea: "#metaarea"
-}
 
 var sc = window.sc || {}
 sc.jsBaseUrl = $('script[src*="js/"]').last().attr('src').match(/(.*\/js\/)/)[0];
@@ -105,7 +98,8 @@ $(document).ready(function() {
         updateHash: false
     });
     if ($('.sutta').length > 0){
-        textualControls.init();
+        sc.sidebar.init();
+        sc.init();
     }
     var parallelCitationLabel = $('#parallel-citation .label');
     var parallelCitationTextField = $('#parallel-citation > input');
@@ -143,54 +137,6 @@ function kindAdviceToIEusers(version){
 if (m = navigator.appVersion.match(/MSIE ([0-9]+)/))
     kindAdviceToIEusers(m[1]);
 
-textualControls.init = function(){
-    this.allInfoClasses = this.textInfoClasses + ", " + this.textmarginInfoClasses;
-    if (document.getElementById(this.id)){
-        document.getElementById(this.id).innerHTML = "";
-    } else { //Create at the best position.
-        controls = '<div id="' + this.id + '"></div>';
-        if ($("#toc").append(controls).length) {}//Bottom of the #toc
-        else if ($("#menu, menu").last().after(controls).length){}//Below the menu
-        else if ($("#onecol").prepend(controls).length) {}//Start of the #onecol
-        else if ($("header").last().after(controls).length) {}//Below the header
-        else if ($("body").prepend(controls).length) {}//Start of the body
-        else {
-            alert("Something seriously weird has happened! Failed to find anywhere to insert the textual controls. No #toc, no (#)menu, no header, not even a body! What kind of weird html document is this?");
-        }
-    }
-    initChineseLookup();
-    initPaliFunctions();
-    $("#metaarea").detach().appendTo("#toc")
-    scState.save("clean");
-    sc.init();
-}
-
-textualControls.disable = function() {
-    $('#' + this.id + ' button').attr('disabled', 'disabled');
-}
-textualControls.enable = function() {
-    $('#' + this.id + ' button').removeAttr('disabled');
-}
-
-function initChineseLookup()
-{
-    //Logic for deciding whether to install chinese lookup
-    if ($('div[lang*=zh]').length == 0) return;//no elements declared to be chinese
-    if (!sc.zh2enLookup) return;
-
-    //Where to attach the chinese lookup control button.
-    sc.zh2enLookup.init('#' + textualControls.id, '#text')
-}
-
-function initPaliFunctions()
-{
-    //Logic for deciding whether to install pali lookup
-    if ($('div').filter($('[lang*="pi"]')).length > 0) sc.mode.pali = true
-
-    //Create elements
-    addButtons(document.getElementById(textualControls.id));
-}
-
 //The code below here is quite disorganized and messy
 //Rewriting it is on the to-do.
 
@@ -198,11 +144,6 @@ function initPaliFunctions()
 //The dictionary of pali to english glosses.
 var paliDictSrc = "lookup_data.js"//"lookup_data.js"
 var paliLookupLogId = "pali_lookup_log"
-
-//The id of the button which generates text info (for styling in css)
-var textInfoButtonId = "text_info_button"
-var paliLookupButtonId = "pali_lookup_button"
-
 
 // These are respectively, the id's of the buttons which peform transliteration,
 // and the name of the function responsible for transliterating raw text
@@ -222,8 +163,6 @@ var syllSpacer = '‧'; //Seperates syllables when that mode is activated. (\u20
 sc.init = function(reset)
 {
     if (reset) scState.restore("clean");
-    //Bind elements
-    bindButtons();
     
     buildTextualInformation();
     if (sc.userPrefs.getPref("textInfo") === true)
@@ -257,24 +196,6 @@ sc.init = function(reset)
         }
     }
 }
-
-function addButtons(target){
-    if (!target) return;
-    var out = ''
-    if (sc.mode.pali === true){
-        out += '<button id="' + paliLookupButtonId + '">Pali→English Dictionary</button>' + '<div id="' + paliLookupLogId + '"></div>';
-
-        out += '<div id="translitButtons">';
-        for (f in transFuncs) {
-            out += '<button id="' + f + '">' + transFuncs[f][1] + '</button>'
-        }
-        out += '</div>';
-    }
-
-    out += '<button id="' + textInfoButtonId + '">Textual Information</button>';
-
-    $(target).append(out);
-};
 
 //"use strict"//
 

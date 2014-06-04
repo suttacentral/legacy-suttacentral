@@ -114,10 +114,11 @@ def get_env():
     js_core = webassets.Bundle(
         'js/vendor/ZeroClipboard-1.2.3.js',
         'js/vendor/jquery.hashchange-1.3.min.js',
-        'js/vendor/jquery.easytabs-3.2.0.min.js',
+        'js/vendor/jquery.easytabs.js',
         'js/sc_utility.js',
         'js/nav.js',
         'js/sc_functions.js',
+        'js/sidebar.js',
         'js/sc_init.js',
         'js/sc_formatter.js',
         'js/sc_popupnotes.js',
