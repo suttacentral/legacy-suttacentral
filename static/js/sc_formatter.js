@@ -107,7 +107,7 @@ sc.formatter = {
                     node = node.nextSibling
                 }
                 else {
-                    node = nextInOrder(node, '1,3');
+                    node = nextInOrder(node);
                 }
                 if (!node) return;
             }
