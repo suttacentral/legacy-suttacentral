@@ -76,7 +76,7 @@ $sidebar-dongle-width = 1em;
 
     .tab {
         position: absolute;
-        top: 3.5em;
+        top: $sidebar-tabs-height;
         bottom: 0em;
         width: 100%;
         overflow-y:auto;
