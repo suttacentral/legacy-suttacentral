@@ -110,7 +110,9 @@ sc.sidebar = {
         });
         setTimeout(function(){
             self.node.removeClass('open');
-        }, 2500);
+        }, 500);
+        $('#sidebar-dongle').on('click', function(){$('#sidebar').toggleClass('open')});
+        
     },
     generateTextualControls: function(){
 

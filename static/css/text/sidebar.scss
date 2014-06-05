@@ -85,13 +85,13 @@ $sidebar-dongle-width = 1em;
     /* Movement Controls */
     left: -$sidebar-width;
     @include transition(all 0.5s ease-in-out);
-    &:hover, &:focus, &.open {
+    &.open {
         left: 0;
     }
     
 }
 
-#sidebar:after {
+#sidebar-dongle {
     position: absolute;
     top: 50%;
     bottom: 50%;
@@ -102,11 +102,11 @@ $sidebar-dongle-width = 1em;
     width: $sidebar-dongle-width;
     background: #eee;
     z-index: 1;
-    content: "≡";
     box-shadow:.05em .05em .25em rgba(118,118,118,0.3);
     text-align:center;
     padding:.35em 0.05em 0 0;
     border-radius: 0 3px 3px 0;
+    cursor: pointer;
 }
 
 #contents-tab {
