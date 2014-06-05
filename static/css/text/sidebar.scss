@@ -12,7 +12,7 @@ $sidebar-dongle-width = 1em;
     width:$sidebar-width;
     z-index: 100;
     background:#fff;
-    box-shadow:.25em .25em .5em rgba(118,118,118,0.3);
+    box-shadow:.1em .1em .5em rgba(118,118,118,0.3);
     ul {
         list-style-type: none;
         margin:0;
@@ -100,14 +100,12 @@ $sidebar-dongle-width = 1em;
     left: $sidebar-width;
     height: $sidebar-dongle-height;
     width: $sidebar-dongle-width;
-    background: #fff;
+    background: #eee;
     z-index: 1;
     content: "≡";
-    box-shadow:.1em .1em .2em rgba(118,118,118,0.3);
+    box-shadow:.05em .05em .25em rgba(118,118,118,0.3);
     text-align:center;
     padding:.35em 0.05em 0 0;
-    border: 1px solid rgb(235, 235, 235);
-    border-left:0;
     border-radius: 0 3px 3px 0;
 }
 
@@ -176,3 +174,13 @@ $sidebar-dongle-width = 1em;
     margin: 0 5%;
     color:#767676
 }
+
+$mobile:#sidebar:after{width: 0.5em;}
+
+
+#sidebar:after {
+        @media #{$mobile} {
+            width: 0.3em;
+            overflow:hidden;
+            text-indent: -5px;
+        }}
