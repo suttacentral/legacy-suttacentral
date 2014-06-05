@@ -52,14 +52,18 @@ $sidebar-dongle-width = 1em;
     .tabs li {
         width:33.33%;
         float: left;
-        padding:$sidebar-tabs-vertical-padding 0;
         background:#eee;
         margin: 0 0 0 0;
         text-transform:lowercase;
         letter-spacing:0.02em;
         @include sans-serif-small-caps;
         color:#767676;
-        height: $sidebar-tabs-height - 2 * $sidebar-tabs-vertical-padding;
+        height: $sidebar-tabs-height;
+        & > a {
+            display: inline-block;
+            width: 100%;
+            padding:$sidebar-tabs-vertical-padding 0;
+        }
     }
 
     .tabs li:hover {
