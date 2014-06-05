@@ -55,9 +55,9 @@ $sidebar-dongle-width = 1em;
         padding:$sidebar-tabs-vertical-padding 0;
         background:#eee;
         margin: 0 0 0 0;
-        font-family:'Source Sans Pro',sans-serif;
-        text-transform:uppercase;
-        font-weight:bold;
+        text-transform:lowercase;
+        letter-spacing:0.02em;
+        @include sans-serif-small-caps;
         color:#767676;
         height: $sidebar-tabs-height - 2 * $sidebar-tabs-vertical-padding;
     }
