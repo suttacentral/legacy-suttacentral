@@ -91,7 +91,6 @@ $sidebar-dongle-width = 2em;
 }
 
 #sidebar:after {
-    /* We use fixed positioning to resolve some z-index issues */
     position: absolute;
     top: 50%;
     bottom: 50%;
