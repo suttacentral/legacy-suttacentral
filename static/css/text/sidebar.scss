@@ -1,7 +1,7 @@
 $sidebar-width = 20em;
 $sidebar-tabs-height = 3.5em;
 $sidebar-tabs-vertical-padding = 1em;
-$sidebar-dongle-height = 12em;
+$sidebar-dongle-height = 6em;
 $sidebar-dongle-width = 2em;
 
 #sidebar {
@@ -100,7 +100,7 @@ $sidebar-dongle-width = 2em;
     width: $sidebar-dongle-width;
     background: #fff;
     z-index: 1;
-    content: "";
+    content: "≡";
     box-shadow:.25em .25em .5em rgba(118,118,118,0.3);
     
     
