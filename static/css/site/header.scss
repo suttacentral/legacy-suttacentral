@@ -1,7 +1,7 @@
 $header-background-color: $pastel-yellow;
 $header-border-color: $dark-saturated-red;
 
-$header-height: 2em;
+$header-height: rem;
 $header-padding: 6px;
 $header-border-width: 4px;
 
@@ -38,13 +38,14 @@ header {
     }
     #wheel {
         color: white;
-        font-size: 2.2em;
+        font-size: 2.5em;
         display: inline-block;
+        margin-top:2px;
     }
 
     #title {
         position: relative;
-        top: -0.2em;
+        top:-4px;
         font-weight: normal;
         display: inline;
         font-size: 1.5em;
@@ -66,6 +67,7 @@ header {
         float:left;
         overflow:hidden;
         border-left:1px solid #B3AF8C;
+        height:2em;
     }
     
     nav:last-child{
