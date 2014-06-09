@@ -24,7 +24,6 @@ header {
     right: 0;
     z-index: 2;
     
-    
     #hgroup {
         position: relative;
         display: inline-block;
@@ -34,9 +33,7 @@ header {
         height: 2rem;
         float: left;
     }
-    nav:hover {
-        background: white;
-    }
+
     #wheel {
         color: white;
         font-size: 2.2em;
@@ -65,23 +62,52 @@ header {
         width:30%;
         text-align:center;
         float:left;
-        overflow:hidden;
-        border-left:1px solid #B3AF8C;
-    }
-    
-    nav:last-child{
-        border-right:1px solid #B3AF8C;
-    }
-    
-    h3 {
-        position: relative;
-        font-family:"hetusc" !important;
-        display:inline;
-        font-weight: normal;
-        font-size:1em;
-        color:#585858;
-        text-transform: lowercase;
-        letter-spacing: 0.02em;
+        
+        & > h3 {
+            position: relative;
+            font-family:"hetusc" !important;
+            display:block;
+            font-weight: normal;
+            font-size:1em;
+            color:#585858;
+            text-transform: lowercase;
+            letter-spacing: 0.02em;
+            border-left:1px solid #B3AF8C;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+        }
+        &:last-child > h3 {
+            border-right:1px solid #B3AF8C;
+        }
+
+        & > .contents {
+            background: white;
+            border: 1px solid $light-gray;
+            box-shadow: .05em .05em .25em rgba(118,118,118,0.3);
+            border-radius: 3px;
+            opacity: 0;
+            visibility: hidden;
+            transition: 100ms;
+            position: fixed;
+            width: 1024px;
+            left: 1em;
+            top: 2.2em;
+            & > .column {
+                display: block;
+                float: left;
+            }
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+        }
+        
+        &.active > .contents {
+            opacity: 1;
+            visibility: visible;
+        }
     }
     
     #search {

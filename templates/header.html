@@ -7,11 +7,7 @@
 <h1 id="title"><a href="/">SuttaCentral</a></h1>
 
 <div id="menu">
-{% for pitaka_menu in menu -%}
-<nav>
-    <h3>{{ pitaka_menu.pitaka.name }}</h3>
-</nav>
-{%- endfor %}
+{% include 'pitaka_menu.html' %}
 </div><!-- page-header-menu -->
 
 {% if not offline %}

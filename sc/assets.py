@@ -119,6 +119,7 @@ def get_env():
         'js/nav.js',
         'js/sc_functions.js',
         'js/sc_init.js',
+        'js/header_menu.js',
         'js/sidebar.js',
         'js/sc_formatter.js',
         'js/sc_popupnotes.js',

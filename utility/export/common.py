@@ -30,6 +30,9 @@ def export_file_date():
 def copy(src, dst):
     shutil.copyfile(str(src), str(dst))
 
+def move(src, dst):
+    shutil.move(str(src), str(dst))
+
 def zip(out_path, in_path, quiet=False):
     with plumbum.local.cwd(str(in_path.parent)):
         args = []
