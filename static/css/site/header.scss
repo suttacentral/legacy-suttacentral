@@ -25,14 +25,13 @@ header {
     z-index: 2;
     
     
-    #hgroup {
+    #title-group {
         position: relative;
         display: inline-block;
         padding: 0 1%;
         vertical-align: top;
         height: 2em;
-        height: 2rem;
-        float: left;
+       float: left;
     }
     nav:hover {
         background: white;
@@ -49,7 +48,7 @@ header {
         font-weight: normal;
         display: inline;
         font-size: 1.5em;
-        @include serif;
+        @include serif-small-caps;
         color: #005179;
     }
     
