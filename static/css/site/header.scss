@@ -1,7 +1,7 @@
 $header-background-color: $pastel-yellow;
 $header-border-color: $dark-saturated-red;
 
-$header-height: 2em;
+$header-height: rem;
 $header-padding: 6px;
 $header-border-width: 4px;
 
@@ -24,29 +24,32 @@ header {
     right: 0;
     z-index: 2;
     
-    #hgroup {
+    
+    #title-group {
         position: relative;
         display: inline-block;
         padding: 0 1%;
         vertical-align: top;
         height: 2em;
-        height: 2rem;
-        float: left;
+       float: left;
     }
-
+    nav:hover {
+        background: white;
+    }
     #wheel {
         color: white;
-        font-size: 2.2em;
+        font-size: 2.5em;
         display: inline-block;
+        margin-top:2px;
     }
 
     #title {
         position: relative;
-        top: -0.2em;
+        top:-4px;
         font-weight: normal;
         display: inline;
         font-size: 1.5em;
-        @include serif;
+        @include serif-small-caps;
         color: #005179;
     }
     
