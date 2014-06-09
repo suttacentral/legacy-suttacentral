@@ -5,13 +5,7 @@ $header-height: rem;
 $header-padding: 6px;
 $header-border-width: 4px;
 
-$tablet-header-height: 54px;
-$tablet-header-padding: 6px;
-$tablet-header-border-width: 4px;
 
-$mobile-header-height: 68px;
-$mobile-header-padding: 3px;
-$mobile-header-border-width: 2px;
 
 header {
     background: $header-background-color;
@@ -126,9 +120,11 @@ header {
             box-shadow:0 0 0 #EEE8AA;
             }
         }
-    @media screen and (max-width: 510px) {
+    @media #{$mobile} {
         #title {
             display:none;
         }	
     }
 }
+
+

@@ -180,12 +180,14 @@ $sidebar-dongle-width = 1em;
 
 }
 
-$mobile:#sidebar:after{width: 0.5em;}
 
 
-#sidebar:after {
+
+#sidebar-dongle {
         @media #{$mobile} {
             width: 0.3em;
             overflow:hidden;
             text-indent: -5px;
         }}
+
+
