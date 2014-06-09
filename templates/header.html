@@ -1,66 +1,23 @@
 <div id="page-header">
 <header>
 
-<div id="page-header-wheel">
+<div id="wheel">
     <a href="/">☸</a>
 </div>
-<h1 id="page-header-title">
-    <a href="/">SuttaCentral
-        {%- if offline -%}<em>Offline</em>{%- endif -%}
-    </a>
-</h1>
-<h2 id="page-header-caption">
-    <a href="/">Early Buddhist texts, translations, and parallels</a>
-</h2>
+<h1 id="title"><a href="/">SuttaCentral</a></h1>
 
-<div id="page-header-menu">
+<div id="menu">
 {% for pitaka_menu in menu -%}
 <nav>
     <h3>{{ pitaka_menu.pitaka.name }}</h3>
-    <ul>
-        {% for lang_menu in pitaka_menu %}
-        <li>
-            <div class="triangle">▶</div>
-            <a href="#" class="sublink">{{ lang_menu.lang.name }}</a>
-            <ul>
-                {% if lang_menu|length < 2 %}
-                {% for division in lang_menu[0] %}
-                <li><a href="/{{ division.uid }}">{{ division.name }}</a></li>
-                {% endfor %}
-                {% else %}
-                {% for sect_menu in lang_menu %}
-                <li>
-                    <div class="triangle">▶</div>
-                    <a href="#" class="sublink">{{ sect_menu.sect.name }}</a>
-                    <ul>
-                        {% for division in sect_menu %}
-                        {% if division.menu_gwn_ind %}
-                        <li class="group-with-next">
-                        {% else %}
-                        <li>
-                        {% endif %}
-                        <a href="/{{ division.uid }}">{{ division.name }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </li>
-                {% endfor %}
-                {% endif %}
-            </ul>
-        </li>
-        {% endfor %}
-    </ul>
 </nav>
 {%- endfor %}
 </div><!-- page-header-menu -->
 
 {% if not offline %}
-<form id="page-header-search" action="/search">
-    <input type="text" name="query" tabindex="1" size="25"
-        placeholder="Search" autocomplete="off" value="{{ search_query }}">
-    <button title="Search">
-        <img src="/img/search-icon-16.png">
-    </button>
-</form><!-- page-header-search -->
+<div id="search">
+<span class="search-button"><span class="search-symbol">⚲</span></span>
+</div>
 {% endif %}
 
 <div id="page-header-search-results" style="display: none;"></div>

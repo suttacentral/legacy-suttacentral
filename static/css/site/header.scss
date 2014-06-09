@@ -1,7 +1,7 @@
 $header-background-color: $pastel-yellow;
 $header-border-color: $dark-saturated-red;
 
-$header-height: 54px;
+$header-height: 2em;
 $header-padding: 6px;
 $header-border-width: 4px;
 
@@ -13,35 +13,121 @@ $mobile-header-height: 68px;
 $mobile-header-padding: 3px;
 $mobile-header-border-width: 2px;
 
-#page-header {
-    position: relative;
+header {
+    background: $header-background-color;
     height: $header-height;
-    padding: $header-padding;
+    line-height: 2em;
     border-bottom: $header-border-width solid $header-border-color;
-    background-color: $header-background-color;
-    z-index: 100;
-
-    @media #{$tablet} {
-        height: $tablet-header-height;
-        padding: $tablet-header-padding;
-        border-bottom-width: $tablet-header-border-width;
-    }
-
-    @media #{$mobile} {
-        height: $mobile-header-height;
-        padding: $mobile-header-padding;
-        border-bottom-width: $mobile-header-border-width;
-    }
-
-    @media print {
-        display: none;
-    }
-
-    & > header {
-        display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    
+    
+    #hgroup {
         position: relative;
-        margin: 0 auto;
-        max-width: $page-max-width - ($header-padding * 2);
-        height: 100%;
+        display: inline-block;
+        padding: 0 1%;
+        vertical-align: top;
+        height: 2em;
+        height: 2rem;
+        float: left;
+    }
+    nav:hover {
+        background: white;
+    }
+    #wheel {
+        color: white;
+        font-size: 2.2em;
+        display: inline-block;
+    }
+
+    #title {
+        position: relative;
+        top: -0.2em;
+        font-weight: normal;
+        display: inline;
+        font-size: 1.5em;
+        @include serif;
+        color: #005179;
+    }
+    
+    #menu{
+        position: absolute;
+        width: 50%;
+        display: inline-block;
+        float: left;
+    }
+    
+    nav {
+        display:inline-block;
+        width:30%;
+        text-align:center;
+        float:left;
+        overflow:hidden;
+        border-left:1px solid #B3AF8C;
+    }
+    
+    nav:last-child{
+        border-right:1px solid #B3AF8C;
+    }
+    
+    h3 {
+        position: relative;
+        font-family:"hetusc" !important;
+        display:inline;
+        font-weight: normal;
+        font-size:1em;
+        color:#585858;
+        text-transform: lowercase;
+        letter-spacing: 0.02em;
+    }
+    
+    #search {
+        position: absolute;
+        width:20%;
+        box-shadow:0 0 1px rgba(0,0,0,0.8)inset;
+        padding: 0.2rem;
+        top:0.3rem;
+        height:1em;
+        right:1%;
+        border-radius: 3px;
+        background: white;
+    }
+
+    .search-symbol{
+        position: absolute;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+        color:#585858;
+        font-weight: bold;
+        font-size: 1.3em;
+        right:0.2em;
+        top:-5px;
+    }
+
+    @media screen and (max-width: 760px) {
+      
+        nav{	
+            width: initial;
+            padding: 0 0.3em;
+        }
+        #menu{
+            width: initial;
+        }
+      }
+      
+      @media screen and (max-width: 610px){
+        #search{
+            width:1em;
+            background:#EEE8AA;
+            box-shadow:0 0 0 #EEE8AA;
+            }
+        }
+    @media screen and (max-width: 510px) {
+        #title {
+            display:none;
+        }	
     }
 }

@@ -17,9 +17,7 @@ sc.formatter = {
         });
         $(document).on('keydown', sc.formatter.deathToTheBeast);
         setTimeout(this.navMenuFixer, 1000);
-        this.tocAmmender();
         this.apply();
-        this.menuGenerator();
         this.operaFix();
         this.highlightBookmark();
         this.toolsMagic();
