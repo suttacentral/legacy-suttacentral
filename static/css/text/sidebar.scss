@@ -47,14 +47,14 @@ $sidebar-dongle-width = 1em;
         height: $sidebar-tabs-height;
         position:relative;
         z-index:1;
-        top: 2em;
+        top: 2.2em;
     }
 
     .tabs li {
         width:33.33%;
         float: left;
         background:#eee;
-        margin: 0 0 0 0;
+        
         text-transform:lowercase;
         letter-spacing:0.02em;
         @include sans-serif-small-caps;
