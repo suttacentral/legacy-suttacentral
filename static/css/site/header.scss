@@ -1,7 +1,7 @@
 $header-background-color: $pastel-yellow;
 $header-border-color: $dark-saturated-red;
 
-$header-height: rem;
+$header-height: 2em;
 $header-padding: 6px;
 $header-border-width: 4px;
 
@@ -13,6 +13,10 @@ $mobile-header-height: 68px;
 $mobile-header-padding: 3px;
 $mobile-header-border-width: 2px;
 
+#page-header {
+
+}
+
 header {
     background: $header-background-color;
     height: $header-height;
@@ -23,7 +27,6 @@ header {
     left: 0;
     right: 0;
     z-index: 2;
-    
     
     #title-group {
         position: relative;
@@ -83,34 +86,6 @@ header {
         &:last-child > h3 {
             border-right:1px solid #B3AF8C;
         }
-
-        & > .contents {
-            background: white;
-            border: 1px solid $light-gray;
-            box-shadow: .05em .05em .25em rgba(118,118,118,0.3);
-            border-radius: 3px;
-            opacity: 0;
-            visibility: hidden;
-            transition: 100ms;
-            position: fixed;
-            width: 1024px;
-            left: 1em;
-            top: 2.2em;
-            & > .column {
-                display: block;
-                float: left;
-            }
-            ul {
-                list-style: none;
-                margin: 0;
-                padding: 0;
-            }
-        }
-        
-        &.active > .contents {
-            opacity: 1;
-            visibility: visible;
-        }
     }
     
     #search {
@@ -158,5 +133,55 @@ header {
         #title {
             display:none;
         }	
+    }
+}
+
+#panel-screen-wrap {
+    position: fixed;
+    top: $header-height;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(200, 200, 200, 0.25);
+
+}
+
+#panel {
+    background: white;
+    border: 1px solid $light-gray;
+    box-shadow: .05em .05em .25em rgba(118,118,118,0.3);
+    margin: 0 1em;
+    left: 1em;
+    right: 1em;
+    position: absolute;
+    left: 1em;
+    right: 1em;
+    top: 0em;
+    bottom: 2em;
+    overflow-y: scroll;
+    .contents {
+        border-radius: 3px;
+        opacity: 0;
+        visibility: hidden;
+        transition: 100ms;
+        position: absolute;
+        margin: auto;
+        width: 100%;
+        & > .column {
+            display: block;
+            float: left;
+            width: 18%;
+            margin: 1%;
+        }
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+    }
+    
+    .contents.active {
+        opacity: 1;
+        visibility: visible;
     }
 }
