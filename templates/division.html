@@ -5,19 +5,19 @@
 <table class="divtable">
 <caption>
 
-Collection: <strong>{{division.collection.name}}</strong> — Division: 
-<strong>{{division.name}}</strong> (
+Collection: {{division.collection.name}} <br>Division: 
+{{division.name}} (
 {%- if division_text_url %}<a href="{{ division_text_url }}">{% endif -%}
-<strong>{{division.acronym}}</strong>
+{{division.acronym}}
 {%- if division_text_url -%}</a>{% endif %})
 </caption>
 <thead>
 <tr>
-<th>Identifier</th>
+<th>ID</th>
 <th>Title</th>
 <th>Vol/Page</th>
-<th>Parallels</th>
-<th class='transcol'>Translations</th>
+<th>Para&shy;llels</th>
+<th class='transcol'>Trans&shy;la&shy;tions</th>
 </tr>
 </thead>
 {% for subdivision in division.subdivisions -%}
