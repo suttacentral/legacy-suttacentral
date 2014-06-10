@@ -5,7 +5,6 @@
 
 <div id="home-tabs">
     <ul class="tabs">
-        <li class="active"><a href="#home-main">Home</a></li>
         <li><a href="#home-start">Start</a></li>
         <li><a href="#home-read">Read</a></li>
         <li><a href="#home-methodology">Methodology</a></li>
@@ -13,43 +12,6 @@
 </div>
 
 <div id="home-content">
-
-<div id="home-main" style="display: block;">
-
-{% for pitaka_menu in menu %}
-<section class="pitaka columns-{{ pitaka_menu|length }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
-    <h1>{{ pitaka_menu.pitaka.name }}</h1>
-    {% for lang_menu in pitaka_menu %}
-    <div class="column">
-        <div class="language">
-            <h2>{{ lang_menu.lang.name }}</h2>
-            {% for sect_menu in lang_menu %}
-            <ul class="sect">
-                {% if sect_menu.sect %}
-                <li><h3>{{ sect_menu.sect.name }}</h3></li>
-                {% endif %}
-                {% for division in sect_menu %}
-                {% if division.menu_gwn_ind %}
-                <li class="group-with-next">
-                {% else %}
-                <li>
-                {% endif %}
-                {% if division.has_suttas or division.text_ref %}
-                    <a href="/{{ division.uid }}">{{ division.name }}</a>
-                {% else %}
-                    <a title="/{{ division.uid }}" class="no-suttas">{{division.name}}</a>
-                {% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-            {% endfor %}
-        </div>
-    </div>
-    {% endfor %}
-</section>
-{% endfor %}
-
-</div><!-- home-main -->
 
 <div id="home-start" style="display: none;">
 		<h3>What is SuttaCentral?</h3>
