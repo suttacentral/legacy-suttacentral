@@ -29,7 +29,7 @@ $sidebar-dongle-width = 1em;
         font-size:1em;
         margin: 0;
         padding:1em 0.8em;
-        font-family:'Source Sans Pro', sans-serif;
+        @include sans-serif;
         color:#767676;
     }
 

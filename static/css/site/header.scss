@@ -70,7 +70,7 @@ header {
     
     h3 {
         position: relative;
-        font-family:"hetusc" !important;
+        @include sans-serif-small-caps;
         display:inline;
         font-weight: normal;
         font-size:1em;
