@@ -46,9 +46,7 @@ $sutta-h2-color: $medium-gray;
     .hgroup {
         margin-top: 6em;
 
-        @media #{$mobile} {
-            margin-top: 0;
-        }
+   
 
         & > p {
             margin: 0;
