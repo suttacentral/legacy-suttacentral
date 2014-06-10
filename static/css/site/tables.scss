@@ -42,3 +42,24 @@ td > a:hover:not(.bib):not(.note) {
 .tdindent {
     padding-left: 3em;
 }
+
+@media #{$tablet} {
+       td, th {
+    padding: 0.25em 0.5em;
+    }
+
+        }
+
+        @media #{$mobile} {
+       td, th {
+       
+    padding: 0.25em 0.25em;
+     
+    }
+    td:nth-child(3), th:nth-child(3) {
+    display:none;
+}
+
+
+
+}
