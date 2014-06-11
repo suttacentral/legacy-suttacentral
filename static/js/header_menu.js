@@ -32,10 +32,11 @@ sc.headerMenu = {
             self.hideAll();
             $('#panel-screen-wrap').show()
             target.addClass('active');
+            element.addClass('active');
         }
     },
     hideAll: function(e){
-        $('#panel > .contents').removeClass('active');
+        $('#panel  .active, header  .active').removeClass('active');
         $('#panel-screen-wrap').hide();
     }
         
