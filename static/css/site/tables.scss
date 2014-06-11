@@ -42,24 +42,40 @@ td > a:hover:not(.bib):not(.note) {
 .tdindent {
     padding-left: 3em;
 }
+.transcol::after{ 
+content:"Translations";
+}
 
 @media #{$tablet} {
        td, th {
     padding: 0.25em 0.5em;
     }
+    .transcol::after{ 
+content:"Trans-lations";
+}
+   td:nth-child(3), th:nth-child(3) {
+    display:none;
+}
 
         }
 
         @media #{$mobile} {
        td, th {
-       
+       max-width:8em;
     padding: 0.25em 0.25em;
-     
+     overflow:hidden;
+
     }
-    td:nth-child(3), th:nth-child(3) {
+ 
+td:nth-child(3), th:nth-child(3) {
     display:none;
 }
+   .transcol::after{ 
+content:"Trans-lations";
+}
 
-
+td:nth-child(2){
+-webkit-mask-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);}
+-moz-mask-image: -moz-linear-gradient(left, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);}
 
 }
