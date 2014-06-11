@@ -1,16 +1,15 @@
 $citation-border-color: $medium-gray;
 
 #parallel-citation {
-    float: right;
+    margin-top:1em;
 
     & > input, & > button {
-        @include box-sizing(border-box);
-        display: inline-block;
-        position: relative;
-        margin: 0;
+        
+        
         padding: 0 0.5em;
         height: 24px;
-        border: 1px solid $citation-border-color;
+        border: 0;
+        box-shadow:0 0 1px rgba(0,0,0,0.8)inset;
         border-radius: 0.25em;
         vertical-align: middle;
     }
@@ -24,17 +23,18 @@ $citation-border-color: $medium-gray;
     }
 
     & > button {
+    background:#eee;
         border-left: 0;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
         @include sans-serif;
 
         &.hover {
-            @include button-hover-background;
+            background:#ddd;
         }
 
         &.active {
-            @include button-active-background;
+            background:#ccc;
         }
     }
 

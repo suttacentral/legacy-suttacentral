@@ -29,10 +29,14 @@ td, th {
 }
 
 tfoot > tr > td {
+@include sans-serif;
     padding: 0.5em 0.5em 0em 0.5em;
     border: none;
     font-size: 0.8em;
+    color:#565656;
 }
+
+
 
 td > a:hover:not(.bib):not(.note) {
     background-color: $table-link-hover-background-color;

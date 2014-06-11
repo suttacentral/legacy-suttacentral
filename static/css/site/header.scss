@@ -74,6 +74,7 @@ header {
         height:2em;
         
     }
+
     
    nav h1 {
         position: relative;
@@ -142,9 +143,11 @@ header {
  
     }
 
-    button:hover{border:2px solid #585858;
+    button:hover{
+        border:2px solid #585858;
     border-radius:50%;
-    background:none;}
+    background:none;
+    }
 
   
 

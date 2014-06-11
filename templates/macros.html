@@ -56,18 +56,17 @@
 {% macro table_footer() %}
 {% if citation or has_alt_acronym or has_alt_volpage %}
 <tfoot><tr><td colspan="5">
+{% if has_alt_acronym %}
+    [...] indicates alternative PTS or Taishō numbering.<br>
+{% endif %}
+{% if has_alt_volpage %}
+    &lt;...&gt; refers to PTS 1998 (Somaratne) edition of SN Vol I.
+{% endif %}
 {% if citation %}
     <div id="parallel-citation">
-        <span class="label">Citation:</span>
         <input type="text" readonly value="{{ citation | e }}"><!--
         --><button title="Click to copy table data to clipboard" style="display: none">Cite</button>
     </div>
-{% endif %}
-{% if has_alt_acronym %}
-    <p>[...] indicates alternative PTS or Taishō numbering.</p>
-{% endif %}
-{% if has_alt_volpage %}
-    <p>&lt;...&gt; refers to PTS 1998 (Somaratne) edition of SN Vol I.</p>
 {% endif %}
 </td></tr></tfoot>
 {% endif %}
