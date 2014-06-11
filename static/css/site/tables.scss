@@ -9,9 +9,8 @@ table {
 
 caption {
     margin: 0 0 1em 0;
-    white-space: nowrap;
-    font-weight:bold;
-
+    white-space: normal;
+    
     @media #{$mobile} {
         margin-left: 1em;
         text-align: left;
@@ -51,11 +50,9 @@ content:"Translations";
     padding: 0.25em 0.5em;
     }
     .transcol::after{ 
-content:"Trans-lations";
+content:"Trans­­lations";
 }
-   td:nth-child(3), th:nth-child(3) {
-    display:none;
-}
+  
 
         }
 
@@ -71,11 +68,10 @@ td:nth-child(3), th:nth-child(3) {
     display:none;
 }
    .transcol::after{ 
-content:"Trans-lations";
+content:"Trans­­lations";
 }
 
 td:nth-child(2){
 -webkit-mask-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);}
--moz-mask-image: -moz-linear-gradient(left, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);}
 
 }
