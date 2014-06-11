@@ -7,7 +7,7 @@
 <div id="menu">
         {% for pitaka_menu in menu %}
             <nav class="pitaka columns-{{ pitaka_menu|length }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
-                <h3><a href="#{{pitaka_menu.pitaka.uid}}-content">{{ pitaka_menu.pitaka.name }}</a></h3>
+                <a href="#{{pitaka_menu.pitaka.uid}}-content"><h1>{{ pitaka_menu.pitaka.name }}</h1></a>
             </nav>
         {% endfor %}
 </div><!-- page-header-menu -->
