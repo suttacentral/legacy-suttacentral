@@ -110,6 +110,8 @@ def get_env():
     env.register('css_nonfree', css_nonfree)
     
     sc_uid_expansion_data_file = build_sc_uid_expansion(env)
+
+    sc_data_scripts_file = get_js_datascripts_filename()
     
     js_core = webassets.Bundle(
         'js/vendor/ZeroClipboard-1.2.3.js',
@@ -123,7 +125,7 @@ def get_env():
         'js/sidebar.js',
         'js/sc_formatter.js',
         'js/sc_popupnotes.js',
-        'js/data/zh2en-data-scripts-names.js',
+        sc_data_scripts_file,
         sc_uid_expansion_data_file,
         filters='rjsmin',
         output='js/compiled/core-%(version)s.js'
@@ -167,4 +169,11 @@ def compress_static():
         print('Compressing {} files'.format(len(to_process)))
         compress_cmd[to_process]()
         
+def get_js_datascripts_filename():
+    import pathlib
+    filepath = sc.static_dir / 'js/data/zh2en-data-scripts-names.js'
+    if not filepath.exists():        
+        import tasks.jsdata
+        tasks.jsdata.build(minify=True, quiet=True)
+    return str(filepath)
     
