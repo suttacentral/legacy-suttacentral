@@ -1,40 +1,28 @@
 $citation-border-color: $medium-gray;
 
 #parallel-citation {
-    margin-top:1em;
+    margin-top:0.5em;
 
-    & > input, & > button {
-        
-        
-        padding: 0 0.5em;
-        height: 24px;
-        border: 0;
-        box-shadow:0 0 1px rgba(0,0,0,0.8)inset;
-        border-radius: 0.25em;
-        vertical-align: middle;
-    }
-
+    
     & > input {
-        width: 14em;
-        @include monospace;
-        font-size: 0.75em;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
+       display:none;
     }
 
     & > button {
-    background:#eee;
-        border-left: 0;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
+    padding: .25em 0.5em;
+       border: 0;
+        box-shadow:0 0 1px rgba(0,0,0,0.8)inset;
+        border-radius: 50%;
+        background:0;
+        color:#565656;
         @include sans-serif;
 
         &.hover {
-            background:#ddd;
+            background:#eee;
         }
 
         &.active {
-            background:#ccc;
+            background:#ddd;
         }
     }
 
