@@ -9,16 +9,30 @@
         padding: 0 !important;
         margin: 0 0.5em;
     }
-    &>h1{
-    font-style:italic;
+
+.hgroup{margin: 0 0 4em 0}
+
+    h1{
+    @include serif-small-caps;
     color:$medium-gray;
     text-align:center;
+    letter-spacing:0.02em;
+    margin:0;
+    font-size:3em
     }
+    .subtitle{
+    color:$medium-gray;
+    text-align:center;
+    font-style:italic;
+    font-size:1.5em
+        }
+
     .epigraph{
     text-align:right;
     margin-top:-1em;
     letter-spacing:0.02em;
     @include serif-small-caps;
+    text-transform:lowercase;
 
 
     }
