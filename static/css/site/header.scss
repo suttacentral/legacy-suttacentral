@@ -1,7 +1,7 @@
 $header-background-color: $pastel-yellow;
 $header-border-color: $dark-saturated-red;
 
-$header-height: 2rem;
+$header-height: 36px;
 $header-padding: 6px;
 $header-border-width: 4px;
 
@@ -10,7 +10,7 @@ $header-border-width: 4px;
 header {
     background: $header-background-color;
     height: $header-height;
-    line-height: 2em;
+    line-height: 2.2em;
     border-bottom: $header-border-width solid $header-border-color;
     position: fixed;
     top: 0;
@@ -24,8 +24,7 @@ header {
         position: relative;
         display: inline-block;
         padding: 0 1%;
-        vertical-align: top;
-        height: 2em;
+        height: $header-height;
        float: left;
     }
    
@@ -63,7 +62,7 @@ header {
         border-left:1px solid #B3AF8C;
         border-right:1px solid #B3AF8C;
         margin-right:-1px;
-        height:2em;
+        height:$header-height;
     }
     
     nav:last-child{
@@ -72,11 +71,11 @@ header {
 
      nav:hover {
         background: white;
-        height:2em;}
+        height:$header-height;}
 
         nav.active {
         background: white;
-        height:40px !important;
+        height:40px;
          
     }
 
@@ -126,7 +125,9 @@ header {
          box-shadow:0 0 1px rgba(0,0,0,0.8)inset;
         background: $light-off-white;
     }
-#page-header-search input:focus{background:white}
+#page-header-search input:focus{
+background:white
+}
     button{
         position: absolute;
         color:#585858;
@@ -187,6 +188,7 @@ header {
 #panel-screen-wrap {
     position: fixed;
     top: 40px;
+    
     left: 0;
     bottom: 0;
     right: 0;
