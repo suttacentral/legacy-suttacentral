@@ -47,12 +47,17 @@ $mobile-footer-font-size: 1em;
                     border-left: none;
                 }
 
+
+	& > a {
+                    color: $dark-medium-gray;
+                }
                 & > a:visited {
-                    color: $link-color;
+                    color: $dark-medium-gray;
                 }
 
                 & > a:hover {
                     color: $link-hover-color;
+                    
                 }
 
                 & > a:active {
