@@ -28,9 +28,8 @@ header {
         height: 2em;
        float: left;
     }
-    nav.active {
-        background: white;
-        height:40px;
+   
+
     }
     #wheel {
         color: white;
@@ -62,6 +61,8 @@ header {
         text-align:center;
         float:left;
         border-left:1px solid #B3AF8C;
+        border-right:1px solid #B3AF8C;
+        margin-right:-1px;
         height:2em;
     }
     
@@ -71,8 +72,12 @@ header {
 
      nav:hover {
         background: white;
-        height:2em;
-        
+        height:2em;}
+
+        nav.active {
+        background: white;
+        height:40px !important;
+         
     }
 
     
@@ -119,9 +124,9 @@ header {
         border:none;
          border-radius: 3px;
          box-shadow:0 0 1px rgba(0,0,0,0.8)inset;
-        background: white;
+        background: $light-off-white;
     }
-
+#page-header-search input:focus{background:white}
     button{
         position: absolute;
         color:#585858;
@@ -192,8 +197,10 @@ header {
 #panel {
 @include sans-serif;
     background: white;
-    border: 1px solid $light-gray;
-    box-shadow: .05em .05em .25em rgba(118,118,118,0.3);
+    border-left: 1px solid $light-gray;
+    border-right: 1px solid $light-gray;
+    border-bottom: 1px solid $light-gray;
+    box-shadow: .05em .15em .25em rgba(118,118,118,0.3);
     margin: 0 ;
     left: 0.5em;
     right: 0.5em;
