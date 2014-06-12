@@ -47,14 +47,14 @@ $sidebar-dongle-width = 1em;
         height: $sidebar-tabs-height;
         position:relative;
         z-index:1;
-        top: 2em;
+        top: 2.2em;
     }
 
     .tabs li {
         width:33.33%;
         float: left;
         background:#eee;
-        margin: 0 0 0 0;
+        
         text-transform:lowercase;
         letter-spacing:0.02em;
         @include sans-serif-small-caps;
@@ -107,12 +107,14 @@ $sidebar-dongle-width = 1em;
     width: $sidebar-dongle-width;
     background: #eee;
     z-index: 1;
-    box-shadow:.05em .05em .25em rgba(118,118,118,0.3);
+    box-shadow:.05em .05em .15em rgba(118,118,118,0.3);
     text-align:center;
     padding:.35em 0.05em 0 0;
     border-radius: 0 3px 3px 0;
     cursor: pointer;
 }
+
+
 
 #contents-tab {
     li {
@@ -188,6 +190,7 @@ $sidebar-dongle-width = 1em;
             width: 0.3em;
             overflow:hidden;
             text-indent: -5px;
+            padding:0.1em 0.05em 0.35em 0;
         }}
 
 

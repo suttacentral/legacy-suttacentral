@@ -1,4 +1,4 @@
-<div id="page-header">
+
 <header>
 <div id="title-group"><a href="/">
 <div id="wheel">☸</div>
@@ -7,20 +7,27 @@
 <div id="menu">
         {% for pitaka_menu in menu %}
             <nav class="pitaka columns-{{ pitaka_menu|length }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
-                <h3><a href="#{{pitaka_menu.pitaka.uid}}-content">{{ pitaka_menu.pitaka.name }}</a></h3>
+                <a href="#{{pitaka_menu.pitaka.uid}}-content"><h1>{{ pitaka_menu.pitaka.name }}</h1></a>
             </nav>
         {% endfor %}
 </div><!-- page-header-menu -->
 
 {% if not offline %}
-<div id="search">
-<span class="search-button"><span class="search-symbol">⚲</span></span>
-</div>
+<form id="page-header-search" action="/search">
+    <input type="text" name="query" tabindex="1" 
+        placeholder="" autocomplete="off" value="">
+    <button title="Search">
+        ⚲
+    </button>
+</form>
 {% endif %}
 
 <div id="page-header-search-results" style="display: none;"></div>
 
 </header>
+
+<!-- page-header -->
+
 <div id="panel-screen-wrap" style="display:none">
     <div id="panel">
         {% for pitaka_menu in menu %}
@@ -57,3 +64,4 @@
     </div>
 </div>
 </div><!-- page-header -->
+

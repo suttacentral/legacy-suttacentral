@@ -21,7 +21,7 @@ $mobile-footer-font-size: 1em;
     & > footer {
         display: block;
         width: 100%;
-        padding: 1.5em 0 0 0;
+        padding: 1em 0 1em 0;
         @include sans-serif-small-caps;
         font-size: $footer-font-size;
         text-transform: lowercase;
@@ -29,12 +29,7 @@ $mobile-footer-font-size: 1em;
         text-align: center;
         white-space: nowrap;
 
-        @media #{$mobile} {
-            padding-top: 1em;
-            font-size: $mobile-footer-font-size;
-            line-height: 1.5em;
-            letter-spacing: 0;
-        }
+        @media #{$mobile} 
 
         & > ul {
             margin: 0;
