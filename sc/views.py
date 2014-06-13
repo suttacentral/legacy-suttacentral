@@ -450,6 +450,16 @@ class SuttaView(TextView):
         else:
             return subdivision
 
+class PitakaView(ViewBase):
+    template_name = 'pitaka'
+
+    def __init__(self, pitaka):
+        self.pitaka = pitaka
+
+    def setup_context(self, context):
+        context.pitaka = self.pitaka
+        
+
 class DivisionView(ViewBase):
     """Thew view for a division."""
 

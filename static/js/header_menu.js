@@ -44,8 +44,9 @@ sc.headerMenu = {
 
 
 setTimeout(function(){
-    $('header nav').on('click', function(){sc.headerMenu.update($(this));});
+    $('header nav a').each(function(){
+        $(this).attr('href', $(this).attr('href').replace('/', '#'));
+    });
+    $('header nav').on('click', function(){sc.headerMenu.update($(this)); return false});
     $('#panel-screen-wrap').on('click', sc.headerMenu.hideAll);
-    //$('#panel').on('click', function(e){e.stopPropagation()});
-    console.log('Okay');
 }, 10);

@@ -6,8 +6,8 @@
 </a></div>
 <div id="menu">
         {% for pitaka_menu in menu %}
-            <nav class="pitaka columns-{{ pitaka_menu|length }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
-                <a href="#{{pitaka_menu.pitaka.uid}}-content"><h1>{{ pitaka_menu.pitaka.name }}</h1></a>
+            <nav class="pitaka_menu{{ ' active' if pitaka and pitaka.uid == pitaka_menu.pitaka.uid else '' }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
+                <a href="/{{pitaka_menu.pitaka.uid}}"><h1>{{ pitaka_menu.pitaka.name }}</h1></a>
             </nav>
         {% endfor %}
 </div><!-- page-header-menu -->
@@ -31,7 +31,7 @@
 <div id="panel-screen-wrap" style="display:none">
     <div id="panel">
         {% for pitaka_menu in menu %}
-            <div class="contents" id="{{pitaka_menu.pitaka.uid}}-content">
+            <div class="contents pitaka" id="{{pitaka_menu.pitaka.uid}}">
             {% for lang_menu in pitaka_menu %}
                 <div class="column">
                     <div class="language">
