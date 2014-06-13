@@ -26,7 +26,6 @@ body {
     height: auto !important;
     height: 100%;
     margin: 0 auto -$footer-height;
-    position:absolute;
 
     @media #{$mobile} {
         margin-bottom: -$mobile-footer-height;
