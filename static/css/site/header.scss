@@ -136,25 +136,25 @@ background:white
         color:#585858;
         font-weight: bold;
         font-size: 1.2em;
-        right:1.5%;
-        text-indent:-0.2em;
-        top:5px;
         background:none;
-        border:none;
-        box-shadow:none;
-        width:1.1em;
-        height:1.1em;
-        line-height:0.9em;
+       box-shadow:none;
         border:2px solid rgba(0,0,0,0);
+        border-radius:50%;
         -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
-    padding-top:2px;
- 
+    font-size:1.2em;
+    right:1.5%;
+ height:1.1em;
+ line-height:1.1em;
+ width:1.1em;
+ top:0.3em;
+ text-indent:-0.22em;
+
     }
 
     button:hover{
         border:2px solid #585858;
-    border-radius:50%;
+    
     background:none;
     }
 

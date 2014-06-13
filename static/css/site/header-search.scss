@@ -36,7 +36,7 @@ $mobile-header-search-button-img-size: 12px;
     height: $header-search-height;
     @include sans-serif;
     font-size: $header-search-font-size;
-    z-index: 1;
+    z-index: 10;
 
     @media #{$tablet} {
         width: $tablet-header-search-width;
