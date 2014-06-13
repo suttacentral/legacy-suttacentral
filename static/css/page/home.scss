@@ -1,39 +1,43 @@
 /* Home Page */
 
 
-#home{ max-width: 40em;
+#home {
+    max-width: 40em;
     margin: 0 auto;
     padding: 0 5% !important;
+    &.pitaka_page {
+        max-width: 65em;
+    }
 
     @media #{$mobile} {
         padding: 0 !important;
         margin: 0 0.5em;
     }
 
-.hgroup{margin: 0 0 4em 0}
-
-    h1{
-    @include serif-small-caps;
-    color:$medium-gray;
-    text-align:center;
-    letter-spacing:0.02em;
-    margin:0;
-    font-size:3em
+    .hgroup {
+        margin: 0 0 4em 0
     }
-    .subtitle{
-    color:$medium-gray;
-    text-align:center;
-    font-style:italic;
-    font-size:1.5em
-        }
 
-    .epigraph{
-    text-align:right;
-    margin-top:-1em;
-    letter-spacing:0.02em;
-    @include serif-small-caps;
-    text-transform:lowercase;
+    h1 {
+        @include serif-small-caps;
+        color:$medium-gray;
+        text-align:center;
+        letter-spacing:0.02em;
+        margin:0;
+        font-size:3em
+    }
+    .subtitle {
+        color:$medium-gray;
+        text-align:center;
+        font-style:italic;
+        font-size:1.5em
+    }
 
-
+    .epigraph {
+        text-align:right;
+        margin-top:-1em;
+        letter-spacing:0.02em;
+        @include serif-small-caps;
+        text-transform:lowercase;
     }
 }

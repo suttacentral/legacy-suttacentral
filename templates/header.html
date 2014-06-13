@@ -6,8 +6,8 @@
 </a></div>
 <div id="menu">
         {% for pitaka_menu in menu %}
-            <nav class="pitaka columns-{{ pitaka_menu|length }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
-                <a href="#{{pitaka_menu.pitaka.uid}}-content"><h1>{{ pitaka_menu.pitaka.name }}</h1></a>
+            <nav class="pitaka_menu{{ ' active' if pitaka and pitaka.uid == pitaka_menu.pitaka.uid else '' }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
+                <a href="/{{pitaka_menu.pitaka.uid}}"><h1>{{ pitaka_menu.pitaka.name }}</h1></a>
             </nav>
         {% endfor %}
 </div><!-- page-header-menu -->
@@ -25,43 +25,3 @@
 <div id="page-header-search-results" style="display: none;"></div>
 
 </header>
-
-<!-- page-header -->
-
-<div id="panel-screen-wrap" style="display:none">
-    <div id="panel">
-        {% for pitaka_menu in menu %}
-            <div class="contents" id="{{pitaka_menu.pitaka.uid}}-content">
-            {% for lang_menu in pitaka_menu %}
-                <div class="column">
-                    <div class="language">
-                        <h2>{{ lang_menu.lang.name }}</h2>
-                        {% for sect_menu in lang_menu %}
-                        <ul class="sect">
-                            {% if sect_menu.sect %}
-                            <li><h3>{{ sect_menu.sect.name }}</h3></li>
-                            {% endif %}
-                            {% for division in sect_menu %}
-                            {% if division.menu_gwn_ind %}
-                            <li class="group-with-next">
-                            {% else %}
-                            <li>
-                            {% endif %}
-                            {% if division.has_suttas or division.text_ref %}
-                                <a href="/{{ division.uid }}">{{ division.name }}</a>
-                            {% else %}
-                                <a title="/{{ division.uid }}" class="no-suttas">{{division.name}}</a>
-                            {% endif %}
-                            </li>
-                        {% endfor %}
-                        </ul>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
-    </div>
-</div>
-</div><!-- page-header -->
-

@@ -1,4 +1,5 @@
 sc.headerMenu = {
+    lastScreenScroll: 0,
     activate: function(e){
         $(this).addClass('active');
     },
@@ -33,19 +34,81 @@ sc.headerMenu = {
             $('#panel-screen-wrap').show()
             target.addClass('active');
             element.addClass('active');
+            //$(document.body).addClass('overflow-hidden');
+            setTimeout(self.adjustColumns, 50);
         }
     },
     hideAll: function(e){
         $('#panel  .active, header  .active').removeClass('active');
         $('#panel-screen-wrap').hide();
-    }
+        //$(document.body).removeClass('overflow-hidden');
+    },
+    adjustColumns: function(){
+        /* This function is responsible for tweaking the column widths and alignment on the
+         * home page creating a very fluid experience
+         */
         
+        console.log('Adjusting column widths');
+
+        var contents = $('.contents.active'),
+            contentsWidth = contents.width(),
+            ruler = $('<span>m</span>').appendTo(contents.find('.column li:last')),
+            t = contents.find('.column:first'),
+            extraWidth = t.outerWidth(true) - t.width(),
+            minWidth = ruler.innerWidth() * 12.5 + extraWidth,
+            columnWidth = Math.max(minWidth, contentsWidth / 5.25) + extraWidth;
+
+        ruler.remove();
+        columnCount = Math.floor(contentsWidth / columnWidth);
+        columnWidth = contentsWidth / columnCount - 10;
+        
+        $('#panel').find('.column').css({'width': columnWidth, 'min-width': minWidth});
+
+        var maxColumnHeight = Math.max.apply(null,
+            contents.find('.column')
+                    .map(function(){return $(this).outerHeight(true)}))
+        maxHeight = $(window).height() * 0.9 - $('header').height();
+        panelHeight = Math.min(maxColumnHeight + 5, maxHeight - 10)
+        $('#panel').css({'height': panelHeight})
+    },
+    scrollShowHide: function(e){
+        var self = sc.headerMenu,
+            scrollTop = $(document.body).scrollTop(),
+            scrollAmount = scrollTop - self.lastScreenScroll;
+        self.lastScreenScroll = scrollTop;
+        
+        if (scrollTop == 0) {
+            $('header').removeClass('retracted');
+        }
+        else {
+            $('header').addClass('retracted');
+        }
+
+
+    }
 }
 
 
 setTimeout(function(){
-    $('header nav').on('click', function(){sc.headerMenu.update($(this));});
-    $('#panel-screen-wrap').on('click', sc.headerMenu.hideAll);
-    //$('#panel').on('click', function(e){e.stopPropagation()});
-    console.log('Okay');
-}, 10);
+    $('header nav a').each(function(){
+        $(this).attr('href', $(this).attr('href').replace('/', '#'));
+    });
+    $('header nav').on('click', function(){sc.headerMenu.update($(this)); return false});
+    $('#panel-screen-wrap').on('click', function(e) {
+        console.log(e.target);
+        if ($(e.target).is('a'))
+            return true;
+        sc.headerMenu.hideAll();
+        return false
+    }).on('mousewheel', function(e){
+        if (e.target == this) {
+            sc.headerMenu.hideAll();
+            return false;
+        }
+        return true
+    })
+        
+    $(window).on('ready resize', sc.headerMenu.adjustColumns);
+    $(window).scroll(sc.headerMenu.scrollShowHide);
+});
+    

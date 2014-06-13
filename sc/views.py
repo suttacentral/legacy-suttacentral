@@ -159,12 +159,15 @@ class ViewBase:
             'search_query': '',
         })
 
+    def massage_whitespace(self, text):
+        return regex.sub(r'\n[ \n\t]+', r'\n', text)
+
     def render(self):
         """Return the HTML for this view."""
         template = self.get_template()
         context = self.get_global_context()
         self.setup_context(context)
-        return template.render(dict(context))
+        return self.massage_whitespace(template.render(dict(context)))
 
 class InfoView(ViewBase):
     """A simple view that renders the template page_name; mostly used for
@@ -446,6 +449,16 @@ class SuttaView(TextView):
             return subdivision.division
         else:
             return subdivision
+
+class PitakaView(ViewBase):
+    template_name = 'pitaka'
+
+    def __init__(self, pitaka):
+        self.pitaka = pitaka
+
+    def setup_context(self, context):
+        context.pitaka = self.pitaka
+        
 
 class DivisionView(ViewBase):
     """Thew view for a division."""

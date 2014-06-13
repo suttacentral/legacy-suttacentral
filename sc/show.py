@@ -46,6 +46,9 @@ def default(*args, **kwargs):
         if uid in STATIC_PAGES:
             return InfoView(uid).render()
 
+        if uid in imm.pitakas:
+            return PitakaView(imm.pitakas[uid]).render()
+
         if uid == 'uids':
             return UidsView().render()
 

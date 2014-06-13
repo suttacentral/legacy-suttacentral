@@ -109,9 +109,10 @@ sc.sidebar = {
             updateHash: false
         });
         setTimeout(function(){
-            self.node.removeClass('open');
+            self.node.removeClass('active');
         }, 500);
-        $('#sidebar-dongle').on('click', function(){$('#sidebar').toggleClass('open')});
+        $('#sidebar-dongle').on('click', function(){$('#sidebar').toggleClass('active'); return false});
+        self.node.on('click', function(e){if ($(e.target).is('a, p')) return true; self.node.removeClass('active')});
         
     },
     generateTextualControls: function(){
