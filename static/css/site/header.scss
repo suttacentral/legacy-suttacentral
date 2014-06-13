@@ -25,6 +25,7 @@ header {
         display: inline-block;
         padding: 0 1%;
         height: $header-height;
+        line-height:$header-height;
        float: left;
     }
    
@@ -63,6 +64,7 @@ header {
         border-right:1px solid #B3AF8C;
         margin-right:-1px;
         height:$header-height;
+        line-height:$header-height;
     }
     
     nav:last-child{
@@ -135,13 +137,13 @@ background:white
         font-size: 1.2em;
         right:1.5%;
         text-indent:-0.2em;
-        top:0.29em;
-        line-height:0.9;
+        top:5px;
         background:none;
         border:none;
         box-shadow:none;
         width:1.1em;
         height:1.1em;
+        line-height:0.9em;
         border:2px solid rgba(0,0,0,0);
         -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
