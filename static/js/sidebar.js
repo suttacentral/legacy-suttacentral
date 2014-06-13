@@ -112,7 +112,7 @@ sc.sidebar = {
             self.node.removeClass('active');
         }, 500);
         $('#sidebar-dongle').on('click', function(){$('#sidebar').toggleClass('active'); return false});
-        self.node.on('click', function(e){if ($(e.target).is('a, p')) return false; self.node.removeClass('active')});
+        self.node.on('click', function(e){if ($(e.target).is('a, p')) return true; self.node.removeClass('active')});
         
     },
     generateTextualControls: function(){
