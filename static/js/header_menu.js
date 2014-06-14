@@ -56,19 +56,23 @@ sc.headerMenu = {
             t = contents.find('.column:first'),
             extraWidth = t.outerWidth(true) - t.width(),
             minWidth = ruler.innerWidth() * 12.5 + extraWidth,
-            columnWidth = Math.max(minWidth, contentsWidth / 5.25) + extraWidth;
-
+            columnWidth = Math.max(minWidth, contentsWidth / 5.25) + extraWidth,
+            actualColumnCount = contents.find('.column').length;
         ruler.remove();
-        columnCount = Math.floor(contentsWidth / columnWidth);
-        columnWidth = contentsWidth / columnCount - 10;
+        fitColumnCount = Math.floor(contentsWidth / columnWidth);
+        columnWidth = contentsWidth / fitColumnCount - 10;
         
         $('#panel').find('.column').css({'width': columnWidth, 'min-width': minWidth});
 
-        var maxColumnHeight = Math.max.apply(null,
-            contents.find('.column')
-                    .map(function(){return $(this).outerHeight(true)}))
         maxHeight = $(window).height() * 0.9 - $('header').height();
-        panelHeight = Math.min(maxColumnHeight + 5, maxHeight - 10)
+        if (actualColumnCount > fitColumnCount) {
+            panelHeight = maxHeight;
+        } else {
+            var maxColumnHeight = Math.max.apply(null,
+                contents.find('.column')
+                        .map(function(){return $(this).outerHeight(true)}))
+            panelHeight = Math.min(maxColumnHeight + 5, maxHeight)
+        }
         $('#panel').css({'height': panelHeight})
     },
     scrollShowHide: function(e){
@@ -82,6 +86,7 @@ sc.headerMenu = {
         }
         else {
             $('header').addClass('retracted');
+            self.hideAll();
         }
 
 
