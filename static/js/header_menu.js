@@ -115,5 +115,6 @@ setTimeout(function(){
         
     $(window).on('ready resize', sc.headerMenu.adjustColumns);
     $(window).scroll(sc.headerMenu.scrollShowHide);
+    $('#panel').scrollLock();
 });
     
