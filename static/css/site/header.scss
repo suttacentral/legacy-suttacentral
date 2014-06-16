@@ -108,8 +108,8 @@ header {
     @include sans-serif;
         position: absolute;
         width:20%;
-        padding: 0.3rem;
-        top:0.2rem;
+        padding: 0.3em;
+        top:0.2em;
         height:1.0em;
         right:1%;
         border:none;
@@ -122,24 +122,20 @@ background:white
 }
 
     button{
-   font-size:1.2em;
         position: absolute;
         color:#585858;
-      
-        background:none;
+       background:none;
        box-shadow:none;
         border:2px solid rgba(0,0,0,0);
         border-radius:50%;
-        
-    right:2%;
-    top:0.3em;
-   line-height:1.4em;
-   height:1.1em;
-   width:1.1em;
-   
-   
-
-  @include sans-serif-small-caps;
+        right:1.5%;
+        top:0.4em;
+        height:1.2em;
+        width:1.2em;
+        line-height:0;
+     @include sans-serif-small-caps;
+     text-indent:-0.07em;
+     bottom:-1em;
     }
 
     button:hover{
