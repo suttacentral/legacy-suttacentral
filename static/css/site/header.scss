@@ -131,30 +131,35 @@ header {
 #page-header-search input:focus{
 background:white
 }
+
     button{
-   
+   font-size:1.2em;
         position: absolute;
         color:#585858;
-       font-weight:bold;
+      
         background:none;
        box-shadow:none;
         border:2px solid rgba(0,0,0,0);
         border-radius:50%;
-        font-size:0.7em;
-    right:1.5%;
-    top:0.35em;
-    line-height:2.4em;
- height:2.2em;
- width:2.2em;
- text-indent:-.29em;
+        
+    right:2%;
+    top:0.3em;
+   line-height:1.4em;
+   height:1.1em;
+   width:1.1em;
+   
+   
+
   @include sans-serif-small-caps;
     }
 
     button:hover{
         border:2px solid #585858;
-    
-    background:none;
+        background:none;
     }
+
+
+
 
   
 
