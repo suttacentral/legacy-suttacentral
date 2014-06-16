@@ -84,17 +84,24 @@ header {
         height:40px;
          
     }
-
     
-   nav h1 {
-        position: relative;
-        @include sans-serif-small-caps;
-        display:inline;
-        font-weight: normal;
-        font-size:1em;
-        color:#585858;
-        text-transform: lowercase;
-        letter-spacing: 0.02em;
+   nav {
+        > a {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            
+            > h1 {
+                position: relative;
+                @include sans-serif-small-caps;
+                display:inline;
+                font-weight: normal;
+                font-size:1em;
+                color:#585858;
+                text-transform: lowercase;
+                letter-spacing: 0.02em;
+            }
+        }
     }
     
     #page-header-search input {
