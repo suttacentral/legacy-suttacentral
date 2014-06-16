@@ -64,15 +64,12 @@ sc.headerMenu = {
         
         $('#panel').find('.column').css({'width': columnWidth, 'min-width': minWidth});
 
-        maxHeight = $(window).height() * 0.9 - $('header').height();
-        if (actualColumnCount > fitColumnCount) {
-            panelHeight = maxHeight;
-        } else {
-            var maxColumnHeight = Math.max.apply(null,
+        var maxHeight = $(window).height() * 0.9 - $('header').height(),
+            maxColumnHeight = Math.max.apply(null,
                 contents.find('.column')
-                        .map(function(){return $(this).outerHeight(true)}))
-            panelHeight = Math.min(maxColumnHeight + 5, maxHeight)
-        }
+                        .map(function(){return $(this).offset().top + $(this).outerHeight(true)}))
+        panelHeight = Math.min(maxColumnHeight + 5, maxHeight)
+        
         $('#panel').css({'height': panelHeight})
     },
     scrollShowHide: function(e){
