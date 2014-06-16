@@ -95,25 +95,6 @@ header {
         color:#585858;
         text-transform: lowercase;
         letter-spacing: 0.02em;
-        
-        & > h1 {
-            position: relative;
-            @include sans-serif-small-caps;
-            display:block;
-            font-weight: normal;
-            font-size:1em;
-            color:#585858;
-            text-transform: lowercase;
-            letter-spacing: 0.02em;
-            border-left:1px solid #B3AF8C;
-            margin: 0;
-            padding: 0;
-            cursor: pointer;
-        }
-        &:last-child > h1 {
-            border-right:1px solid #B3AF8C;
-        }
-
     }
     
     #page-header-search input {
