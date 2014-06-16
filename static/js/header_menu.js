@@ -31,7 +31,7 @@ sc.headerMenu = {
         }
         else {
             self.hideAll();
-            $('#panel-screen-wrap').show()
+            $('#panel-screen-wrap, #panel').addClass('active')
             target.addClass('active');
             element.addClass('active');
             //$(document.body).addClass('overflow-hidden');
@@ -40,7 +40,7 @@ sc.headerMenu = {
     },
     hideAll: function(e){
         $('#panel  .active, header  .active').removeClass('active');
-        $('#panel-screen-wrap').hide();
+        $('#panel-screen-wrap, #panel').removeClass('active');
         //$(document.body).removeClass('overflow-hidden');
     },
     adjustColumns: function(){

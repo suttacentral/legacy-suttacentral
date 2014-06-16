@@ -4,6 +4,7 @@ $header-border-color: $dark-saturated-red;
 $header-height: 36px;
 $header-padding: 6px;
 $header-border-width: 4px;
+$panel-offset-top: $header-height + $header-padding - 2px;
 
 
 
@@ -189,12 +190,16 @@ background:white
 #panel-screen-wrap {
     position: fixed;
     display: none;
-    top: 40px;
+    top: $panel-offset-top;
     left: 0;
     bottom: 0;
     right: 0;
-    background: rgba(200, 200, 200, 0.25);
-    z-index:100;
+    background: rgba(0,0,0,.25);
+    z-index:5;
+}
+
+#panel-screen-wrap.active {
+    display: block;
 }
 
 #panel {
@@ -208,11 +213,22 @@ background:white
     left: 0.5em;
     right: 0.5em;
     position: absolute;
-    top: 0em;
+    top: $panel-offset-top;
     padding-left: 0.5em;
-    bottom: 2em;
+    z-index: 10;
     overflow-y: auto;
     overflow-x: hidden;
+
+    // It is probably best for transitions to be applied to the panel
+    // and not to the contents.
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 250ms ease;
+    height: 0;
+    &.active {
+        opacity: 1;
+        visibility: visible;
+    }
 
     .contents {
         position: absolute;
