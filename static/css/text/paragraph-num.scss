@@ -1,4 +1,4 @@
-a.msdiv {display:none;}
+a.msdiv,a.ms, a.ms-pa,  {display:none;}
 
 
 a.da {
@@ -16,7 +16,7 @@ a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
     a.yam72
 a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
     a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel,
-    a.mat85, a.mat88, a.mit57, a.ms, a.ms-pa, a.of, 
+    a.mat85, a.mat88, a.mit57, a.of, 
     a.pts, a.pts1, a.pts2, a.pts-cs, a.pts-vp-en, a.pts-vp-pi, a.pts_pn, a.roth,
     a.san87, a.san89, a.sc, a.sen82, a.sht, a.snp-vagga-section-verse, a.snp-vagga-verse,
     a.t, a.titus, a.t-linehead, a.ud-sutta, a.ud-vagga-sutta, a.tri62, a.tri95,
@@ -50,7 +50,7 @@ a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
     }
 }
 
-a.ms {margin:0.7em 0 0 -14.5em; color:#00B428;}
+
 a.sc {margin:0.7em 0 0 -4.3em; color:#B3A72D;}
 a.t, a.t-linehead {
 	margin: 0 0 0 -9.3em;
@@ -83,9 +83,7 @@ a.pts-vp-pi {
     margin: -0.3em 0 0 -9em;
 }
 
-a.ms-pa {
-    margin: 0.7em 0 0 -5em;
-}
+
 
 /* TODO systematically do for all of them (alphabetical order)
 a.bl

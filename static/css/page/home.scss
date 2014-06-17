@@ -12,6 +12,9 @@
     @media #{$mobile} {
         padding: 0 !important;
         margin: 0 0.5em;
+         .epigraph-reference {
+               margin-top:0 !important;
+           }
     }
 
     .hgroup {
@@ -32,12 +35,20 @@
         font-style:italic;
         font-size:1.5em
     }
+.epigraph{
+    font-style:italic;
+    margin: 0 10%;
+    border:1px solid $light-gray;
+padding: 1.5em 1.5em 0 1.5em;
+}
 
-    .epigraph {
+    .epigraph-reference {
         text-align:right;
         margin-top:-1em;
         letter-spacing:0.02em;
         @include serif-small-caps;
         text-transform:lowercase;
+        font-style:normal;
+
     }
 }
