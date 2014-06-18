@@ -100,8 +100,10 @@ sc.sidebar = {
             $('#toc').remove();
         } else {
             return
-        }
-        this.doMenu('#contents-tab > .inner-wrap');
+        } 
+        /* TEMPORARY */
+        $('#text').find('.next, .previous, .top').remove();
+        this.doMenu('#navigation-tab > .inner-wrap');
         this.doMetadata('#metadata-tab > .inner-wrap');
         this.node.show().easytabs({
             animate: false,

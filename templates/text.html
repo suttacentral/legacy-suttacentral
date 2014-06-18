@@ -3,21 +3,21 @@
 <div id="sidebar" class="active" style="display:none">
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
-        <li><a href="#contents-tab">Navigation</a></li>
+        <li><a href="#navigation-tab">Navigation</a></li>
         <li><a href="#metadata-tab">Metadata</a></li>
       </ul>
       <div class="tab" id="controls-tab">
         <div class="inner-wrap">
         </div>
       </div>
-      <div class="tab" id="contents-tab">
+      <div class="tab" id="navigation-tab">
         <div class="inner-wrap">
-            <div class="links">
+            <div id="links">
             {% if sutta %}
                 {% set versions = sutta.local_text_refs %}
                 {% for ref in versions %}
                     {% if ref %}
-                        <a href='{{ref.url}}' class='tran'
+                        <a href='{{ref.url}}' class='tran{{ " active" if ref.lang.iso_code == lang_code else "" }}'
                             {% if ref.abstract -%} title='{{ref.abstract}}'{% endif %}
                             >{{ref.lang.iso_code}}</a>
                             {% if not loop.last %} | {% endif %}
@@ -27,6 +27,15 @@
                     title='Correspondence details for {{sutta.acronym}}'
                     class="details">▶</a>
             {% endif %}
+            </div>
+            <div id="nextprev">
+                {% if prev_uid %}
+                    <a class="previous" href="{{sutta.canon_url(prev_uid, lang_code)}}">◀ {{imm.uid_to_acro(prev_uid)}}</a>
+                {% endif %}
+                <a class="top" href="#"> ▲ TOP</a>
+                {% if next_uid %}
+                    <a class="next" href="{{sutta.canon_url(next_uid, lang_code)}}">{{imm.uid_to_acro(next_uid)}} ▶</a>
+                {% endif %}
             </div>
         </div>
       </div>

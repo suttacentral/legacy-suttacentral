@@ -1,56 +1,20 @@
-$text-nav-text-color: $bright-cool-blue;
-$text-nav-hover-color: $light-light-gray;
-
-#text {
-
-    & > .previous,
-    & > .top,
-    & > .next {
-        display: block;
-        padding: 1em 3em;
-        border-radius: 0.5em;
-        margin-bottom: 6em;
-        @include sans-serif;
-        color: $text-nav-text-color;
-        font-size: 0.7em;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: .1em;
-        white-space: nowrap;
-
-
-        @media #{$mobile} {
-            position: static;
-            float: inherit;
-            width: 80%;
-            padding: 0;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        @media print {
-            display: none;
-        }
-    }
-
-    & > .previous {
-        float: left;
-    }
-
-    & > .top {
-        position: absolute;
-        text-align: center;
-        left: 45%;
-    }
-
-    & > .next {
-        float: right;
-        text-align: right;
-    }
-
-    & > .previous:hover,
-    & > .top:hover,
-    & > .next:hover {
-        background: $text-nav-hover-color;
+.previous,
+.top,
+.next {
+    display: inline-block;
+    padding: 0.5em 0;
+    border-radius: 0.5em;
+    @include sans-serif;
+    color: $bright-cool-blue;
+    font-size: 0.7em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    white-space: nowrap;
+    width: 29%;
+    text-align: center;
+    
+    &:hover {
+        background: $light-light-gray;
     }
 }

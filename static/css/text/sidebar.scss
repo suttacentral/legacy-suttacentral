@@ -88,6 +88,10 @@ $sidebar-dongle-width = 1em;
     &.active {
         left: 0;
     }
+
+    .inner-wrap > div + div {
+        border-top: 1px solid $light-light-gray;
+    }
     
 }
 
@@ -111,7 +115,7 @@ $sidebar-dongle-width = 1em;
 
 
 
-#contents-tab {
+#navigation-tab {
     li {
         font-family:'Source Sans Pro',sans-serif;
         font-weight:bold;
@@ -131,6 +135,24 @@ $sidebar-dongle-width = 1em;
     li li {
         font-weight:normal;
         padding-left:1em;
+    }
+}
+
+#links > a {
+    float:none;
+    display: inline-block;
+    min-width: 3em;
+    text-align: center;
+    padding: 0;
+    font-size: 90%;
+    font-family: source sans pro;
+    &.details {
+        margin: 0;
+    }
+    &.active {
+        padding-bottom: 1em;
+        margin-bottom: -1em;
+        font-weight: bold;
     }
 }
 
@@ -190,5 +212,6 @@ $sidebar-dongle-width = 1em;
             text-indent: -5px;
             padding:0.1em 0.05em 0.35em 0;
         }}
+
 
 
