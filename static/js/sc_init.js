@@ -110,6 +110,9 @@ $(document).ready(function() {
         updateHash: false
     });
     if ($('.sutta').length > 0){
+        if ($('#toc').length == 0) {
+            $('#text').prepend('<div id="toc"></div>');
+        }
         textualControls.init();
     }
     var parallelCitationLabel = $('#parallel-citation .label');
