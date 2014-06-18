@@ -288,6 +288,9 @@ class TextView(ViewBase):
         m.detach_string() # Free up memory now.
         imm = scimm.imm()
         
+        context.sutta = imm.suttas.get(self.uid)
+        context.division = imm.divisions.get(self.uid)
+        
         textinfo = imm.tim.get(self.uid, self.lang_code)
         context.title = textinfo.name if textinfo else '?'
         contents = [m['content']]

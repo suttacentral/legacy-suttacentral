@@ -5,8 +5,7 @@ sc.headerMenu = {
     },
     deactivate: function(e) {
         $(this).removeClass('active');
-    }
-    ,
+    },
     toggle: function(e){
         $(this).toggleClass('active');
         $('header nav').not(this).removeClass('active')

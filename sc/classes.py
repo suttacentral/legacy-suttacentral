@@ -72,6 +72,14 @@ class SuttaCommon:
     @property
     def translations(self):
         return self.imm.get_translations(self.uid, self.lang.uid)
+
+    @property
+    def local_text_refs(self):
+        allrefs = []
+        if self.text_ref and self.text_ref.url.startswith('/'):
+            allrefs.append(self.text_ref)
+        allrefs.extend(self.translations)
+        return [tref for tref in allrefs if tref.url.startswith('/')]
     
     def __hash__(self):
         return hash(self.uid)

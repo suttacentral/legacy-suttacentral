@@ -3,7 +3,7 @@
 <div id="sidebar" class="active" style="display:none">
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
-        <li><a href="#contents-tab">Contents</a></li>
+        <li><a href="#contents-tab">Navigation</a></li>
         <li><a href="#metadata-tab">Metadata</a></li>
       </ul>
       <div class="tab" id="controls-tab">
@@ -12,6 +12,22 @@
       </div>
       <div class="tab" id="contents-tab">
         <div class="inner-wrap">
+            <div class="links">
+            {% if sutta %}
+                {% set versions = sutta.local_text_refs %}
+                {% for ref in versions %}
+                    {% if ref %}
+                        <a href='{{ref.url}}' class='tran'
+                            {% if ref.abstract -%} title='{{ref.abstract}}'{% endif %}
+                            >{{ref.lang.iso_code}}</a>
+                            {% if not loop.last %} | {% endif %}
+                    {% endif %}
+                {% endfor %}
+                <a href='/{{sutta.uid}}' 
+                    title='Correspondence details for {{sutta.acronym}}'
+                    class="details">▶</a>
+            {% endif %}
+            </div>
         </div>
       </div>
       <div class="tab" id="metadata-tab">
