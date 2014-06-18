@@ -72,7 +72,8 @@ $mobile-header-search-button-img-size: 12px;
     line-height: 2em;
     background-color: $header-search-results-background-color;
     box-shadow: -0.5em 0.5em 3em $header-search-box-shadow-color;
-     
+    
+   
 
     @media #{$tablet} {
         top: $tablet-header-height - 2px;
