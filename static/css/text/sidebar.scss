@@ -19,11 +19,6 @@ $sidebar-dongle-width = 1em;
         padding:0;
     }
 
-    a {
-        text-decoration: none;
-        color:#767676;
-    }
-
     button {
         background:white;
         font-size:1em;
@@ -181,8 +176,11 @@ $sidebar-dongle-width = 1em;
     color:#767676;
 
 }
-
-
+/* Internal page links */
+.tabs a, #menu a {
+    text-decoration: none;
+    color:#767676;
+}
 
 
 #sidebar-dongle {
