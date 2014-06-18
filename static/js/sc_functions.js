@@ -908,9 +908,7 @@ function nextInOrder(node, permissables) {
     else if (typeof permissables == 'string') {
         if ($(node).is(permissables)) return node;
     }
-    else if (permissables.indexOf(node.nodeType) != -1)
-        return node;
-    return nextInOrder(node, permissables);
+    return node
 }
 
 function previousInOrder(node, permissables) {

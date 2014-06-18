@@ -421,7 +421,7 @@ sc.formatter = {
         if (data.sutta_uid) {
             details.append('<a title="Go to Details Page" class="details" href="../{}{}">▶</a>'.format(data.sutta_uid, dothtml));
         }
-        data.all_lang_codes.sort().forEach(function(lang_code){console.log(lang_code);
+        data.all_lang_codes.sort().forEach(function(lang_code){
                 if (lang_code == data.lang_code) return;
                 details.append('<a href="../{}/{}{}">{}</a>'.format(lang_code, data.uid, dothtml, lang_code));
             });
