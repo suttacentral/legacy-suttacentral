@@ -179,8 +179,7 @@ class _Imm:
         for row in table_reader('external_text'):
             text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url, priority=row.priority) )
 
-        self._external_text_refs = {uid: {tref.lang.uid: tref for tref in trefs}
-                                    for uid, trefs in text_refs.items()}
+        self._external_text_refs = text_refs.copy()
         
         collections = []
         for i, row in enumerate(table_reader('collection')):
@@ -555,7 +554,7 @@ class _Imm:
 
     def get_translations(self, uid, root_lang_uid):
         out = []
-        for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
+        for textref in self._external_text_refs.get(uid, []):
             if textref.lang.uid == root_lang_uid:
                 continue
             out.append(textref)
