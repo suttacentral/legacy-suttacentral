@@ -23,7 +23,7 @@ $sidebar-dongle-width = 1em;
         background:white;
         font-size:1em;
         margin: 0;
-        padding:1em 0.8em;
+        padding:1em 0em;
         @include sans-serif;
         color:#767676;
         border-top:1px solid #ddd;
@@ -170,31 +170,27 @@ $sidebar-dongle-width = 1em;
     top:3em;
 }
 
-#translitButtons {
-    display: table-row;
-
+#translit-buttons {
     button {
         width:16.6666%;
-        display: table-cell;
         white-space: nowrap;
     }
 }
 
-#text_info_button {
+#text-info {
     width:100%;
 }
 
 
 #lookup {
-    display: table-row;
     > #pali-lookup {
-        width: 75%;
+        width: 66%;
     }
     > select {
-        width: 25%;
+        width: 34%;
     }
 }
-#pali_lookup_button {
+#pali-lookup {
     width:100%;
     border-top:1px solid #ddd;
     border-bottom: 0;

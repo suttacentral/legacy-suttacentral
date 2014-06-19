@@ -141,29 +141,6 @@ function toggleTextualInfo(force) {
     if (showTextInfo)
     {
         $(document.body).addClass("infomode");
-        var meta = $(textualControls.metaarea)[0];
-        if (!meta.innerHTML) {
-            var content = false;
-            for (var i = 0; i < meta.childNodes.length; i++)
-            {
-                var child = meta.childNodes[i]
-                if (child.nodeType == 3) {
-                    if (child.nodeValue.trim()){
-                        content = true;
-                        break;
-                    }
-                } else if (child.nodeType == 1) {
-                    //console.log(child);
-                    if ($(child).not(".hidden").length > 0){
-                        content = true;
-                        break;
-                    }
-                }
-            }
-            if (!content){
-                meta.append('<p>No Metadata</p>');
-            }
-        }
     } else {
         $(document.body).removeClass("infomode");
     }
@@ -171,65 +148,47 @@ function toggleTextualInfo(force) {
 }
 
 function buildTextualInformation() {
-    var anchors = $(textualControls.marginClasses);
-    for (var i = 0; i < anchors.length; i++) {
-        var a = anchors[i];
-        var $a = $(a);
-
-        var aClass = a.className.split(' ')[0];
-        var title = sc.mode[sc.mode.lang]["strings"][aClass];
-        $a.attr("title", title);
-        var aid = $a.attr('id'),
-            idPrefix;
-        if (!aid) continue;
-        if (aClass == 'pts1' || aClass == 'pts2') {
-            idPrefix = 'pts';
+    var marginClasses = sc.classes.margin,
+        idRex,
+        idRepl;
+    for (var marginClass in sc.classes.margin) {
+        var elements = $('.' + marginClass);
+        if (elements.length == 0) {
+            continue
+        }
+        var title = sc.classes.margin[marginClass];
+        if (title) {
+            elements.attr("title", title);
+        }
+        if (marginClass == 'ms') {
+            idRex = /p_([0-9A-Z]+)_([0-9]+)/;
+            idRepl = "$1:$2";
+        } else if (marginClass == 'vnS') {
+            idRex = /S.([iv]+),([0-9])/;
+            idRepl = "S $1 $2";
+        }
+        else if (marginClass == 'pts1' || marginClass == 'pts2') {
+            idRex = RegExp('^pts', 'i');
+            idRepl = '';
         } else {
-            idPrefix = $a.attr('class');
+            idRex = RegExp('^' + marginClass, 'i');
+            idRepl = '';
         }
-        aid = aid.replace(RegExp('^' + idPrefix, 'i'), '');
-        
-        if (aClass == 'ms') {
-            $a.text( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
-        } else if (aClass == 'vnS') {
-            $a.text(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
-        } else if (aClass == 'pts_pn'){
-            var m = aid.split('.')
-            m[0] = m[0].toUpperCase();
-            $a.text( m.join('.') )
-        }        
-        
-        if ($a.text() == '') {
-            $a.text(aid.replace(/\d+_/, '').replace(aClass+'_', ''));
-        }
-        if (!$a.attr('href') && aid) {
-            $a.attr('href', '#' + $a.attr('id'));
-        }
-
-        a.innerHTML = a.innerHTML.replace(/(\d)-(\d)/, '$1\u2060—\u2060$2')
+        elements.each(function(){
+            var id = $(this).attr('id');
+            if (!id) {
+                return
+            }
+            if ($(this).text() == '') {
+                $(this).text(id.replace(/^\d+_/, '')
+                               .replace(idRex, idRepl)
+                               .replace(/(\d)-(\d)/, '$1\u2060—\u2060$2'));
+            }
+        });
     }
-    var das = $('a.da');
-    for (i = 0; i < das.length; i += 3)
-        das[i].innerHTML = das[i].id;
-    buildVariantNotes();
-    $("#metaarea a").filter(textualControls.marginClasses).each(function(){this.className = ""; this.innerHTML = ""});
-    $(textualControls.titleClasses).each(function(){
-        var class_ = this.className.split(' ')[0];
-        $(this).attr("title", sc.mode[sc.mode.lang]["strings"][class_])
-    });
 
-
-}
-
-function buildVariantNotes(){
-    var notes = $(textualControls.popupClasses);
-
-    for (var i = 0; i < notes.length; i++)
-    {
-        var mula = notes[i].getAttribute("data-mula");
-        var content = notes[i].getAttribute("data-content");
-        if (!mula || !content) continue;
-        $(notes[i]).append($('<span class="deets">'+content+'</span>'));
+    for (var contentClass in sc.classes.content) {
+        $('.' + contentClass).attr('title', sc.classes.content[contentClass]);
     }
 }
 
@@ -430,14 +389,10 @@ k++}c+=j[g];if(a[f]&&g!="ṁ"){c+="ฺ"}k++}else{if(!j[g]){c+=g;if(a[h]||(h=="h"
 function generateLookupMarkup(){
     //We want to wrap every word in a tag.
     var classes = ".sutta P, .sutta H1, .sutta H2, .sutta H3"
-//     $(marginInfoClasses).html('');
-//     $("span.deets").remove();
-//     $(textInfoClasses).replaceWith(function(){$(this).text()});
     generateMarkupCallback.nodes = $(classes).toArray();
     generateMarkupCallback.start = Date.now();
     textualControls.disable()
     generateMarkupCallback();
-//     buildTextualInformation();
     return;
 }
 

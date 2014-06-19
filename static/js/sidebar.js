@@ -118,10 +118,15 @@ sc.sidebar = {
             if (!$(e.target).is('div')) return true;
             self.node.removeClass('active')
         });
+        self.bindButtons();
         
     },
-    generateTextualControls: function(){
-
+    bindButtons: function(){
+        $('#text-info').click(toggleTextualInfo);
+        $('#pali-lookup').click(togglePaliLookup);
+        for (f in transFuncs) {
+            $('#' + f).click(transliterateHandler);
+        }
     },
     doMenu: function(target, headings){
         var self = this;
