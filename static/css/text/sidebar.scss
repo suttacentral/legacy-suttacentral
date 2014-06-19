@@ -19,29 +19,44 @@ $sidebar-dongle-width = 1em;
         padding:0;
     }
 
-    button, select {
-        background:white;
-        font-size:1em;
-        margin: 0;
-        padding:1em 0em;
-        @include sans-serif;
-        color:#767676;
-        border-top:1px solid #ddd;
-        border-bottom: 0;
-        border-right:0;
-        border-left:1px solid #ddd;
-        float:left;
-        &:last-child {
-            border-right:1px solid #ddd;
-        }
-        &:hover {
-            background:#eee;
-        }
+    .button-row {
+        > button, select {
+            background:white;
+            font-size:1em;
+            margin: 0;
+            padding: 0;
+            height: 3em;
+            vertical-align: middle;
 
-        &:active {
-            background:#ddd;
+            @include sans-serif;
+            color:#767676;
+            
+            float:left;
+            &:hover {
+                background:#eee;
+            }
+
+            &:active {
+                background:#ddd;
+            }
+            
+            border-top: 1px solid #ddd;
+            border-bottom: none;
+            border-left: 1px solid #ddd;
+            border-right: none;
+
+            &:last-child {
+                border-right: 1px solid #ddd;
+            }
+        }
+        &:last-of-type {
+            > button, select {
+                border-bottom: 1px solid #ddd;
+            }
         }
     }
+
+    
 
 
 
@@ -171,31 +186,21 @@ $sidebar-dongle-width = 1em;
 }
 
 #translit-buttons {
-    button {
+   > button {
         width:16.6666%;
         white-space: nowrap;
     }
 }
 
+#pali-lookup {
+    width: 66.6666%;
+}
+#lookup-to-lang {
+    width: 33.3333%;
+}
+
 #text-info {
     width:100%;
-}
-
-
-#lookup {
-    > #pali-lookup {
-        width: 66%;
-    }
-    > select {
-        width: 34%;
-    }
-}
-#pali-lookup {
-    width:100%;
-    border-top:1px solid #ddd;
-    border-bottom: 0;
-    border-left:0;
-    border-right:0;
 }
 
 #metadata-tab {

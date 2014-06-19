@@ -10,14 +10,14 @@
         <div class="inner-wrap">
             <div id="textual-controls">
                 {% if lang_code == 'pi' %}
-                <div id="lookup">
+                <div class="button-row">
                 <button id="pali-lookup">Pali Lookup</button>
-                <select>
+                <select id="lookup-to-lang">
                         <option value="en" title="English">→English</option>
                         <option value="es" title="Spanish">→Spanish</option>
                 </select>
                 </div>
-                <div id="translit-buttons">
+                <div class="button-row" id="translit-buttons">
                     <button id="toRoman">kā</button>
                     <button id="toSinhala">කා</button>
                     <button id="toThai">กา</button>
@@ -27,9 +27,13 @@
                 </div>
                 {% endif %}
                 {% if lang_code == 'zh' %}
-                <button id="zh2en">Chinese→English Dictionary</button>
+                <div class="button-row">
+                    <button id="zh2en">Chinese→English Dictionary</button>
+                </div>
                 {% endif %}
-                <button id="text-info">Textual Information</button>
+                <div class="button-row">
+                    <button id="text-info">Textual Information</button>
+                </div>
             </div>
         </div>
       </div>
