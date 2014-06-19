@@ -19,22 +19,31 @@ $sidebar-dongle-width = 1em;
         padding:0;
     }
 
-    button {
+    button, select {
         background:white;
         font-size:1em;
         margin: 0;
         padding:1em 0.8em;
         @include sans-serif;
         color:#767676;
+        border-top:1px solid #ddd;
+        border-bottom: 0;
+        border-right:0;
+        border-left:1px solid #ddd;
+        float:left;
+        &:last-child {
+            border-right:1px solid #ddd;
+        }
+        &:hover {
+            background:#eee;
+        }
+
+        &:active {
+            background:#ddd;
+        }
     }
 
-    button:hover {
-        background:#eee;
-    }
 
-    button:active {
-        background:#ddd;
-    }
 
     .tabs {
         text-align: center;
@@ -161,30 +170,30 @@ $sidebar-dongle-width = 1em;
     top:3em;
 }
 
-#navButtons button {
-    width:20%;
-    border-top:1px solid #ddd;
-    border-bottom: 0;
-    border-right:0;
-    border-left:1px solid #ddd;
-}
+#translitButtons {
+    display: table-row;
 
-#translitButtons button {
-    width:16.6666%;
-    border-top:1px solid #ddd;
-    border-bottom: 0;
-    border-right:0;
-    border-left:1px solid #ddd;
+    button {
+        width:16.6666%;
+        display: table-cell;
+        white-space: nowrap;
+    }
 }
 
 #text_info_button {
     width:100%;
-    border-top:1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    border-left:0;
-    border-right:0;
 }
 
+
+#lookup {
+    display: table-row;
+    > #pali-lookup {
+        width: 75%;
+    }
+    > select {
+        width: 25%;
+    }
+}
 #pali_lookup_button {
     width:100%;
     border-top:1px solid #ddd;

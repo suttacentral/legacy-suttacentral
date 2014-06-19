@@ -8,6 +8,29 @@
       </ul>
       <div class="tab" id="controls-tab">
         <div class="inner-wrap">
+            <div id="textual_controls">
+                {% if lang_code == 'pi' %}
+                <div id="lookup">
+                <button id="pali-lookup">Pali Lookup</button>
+                <select>
+                        <option value="en" title="English">En</option>
+                        <option value="es" title="Spanish">Es</option>
+                </select>
+                </div>
+                <div id="translitButtons">
+                    <button id="toRoman">kā</button>
+                    <button id="toSinhala">කා</button>
+                    <button id="toThai">กา</button>
+                    <button id="toMyanmar">ကာ</button>
+                    <button id="toDevar">का</button>
+                    <button id="toSyllables">k-ā</button>
+                </div>
+                {% endif %}
+                {% if lang_code == 'zh' %}
+                <button id="zh2en">Chinese→English Dictionary</button>
+                {% endif %}
+                <button id="text_info_button">Textual Information</button>
+            </div>
         </div>
       </div>
       <div class="tab" id="navigation-tab">
