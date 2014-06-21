@@ -11,11 +11,12 @@
             <div id="textual-controls">
                 {% if lang_code == 'pi' %}
                 <div class="button-row">
-                <button id="pali-lookup">Pali Lookup</button>
                 <select id="lookup-to-lang">
-                        <option value="en" title="English">→English</option>
-                        <option value="es" title="Spanish">→Spanish</option>
+                        <option value="en" title="English">Pali → English</option>
+                        <option value="es" title="Spanish">Pali → Spanish</option>
                 </select>
+                <button id="pali-lookup">Lookup</button>
+                
                 </div>
                 <div class="button-row" id="translit-buttons">
                     <button id="toRoman">kā</button>
@@ -28,7 +29,7 @@
                 {% endif %}
                 {% if lang_code == 'zh' %}
                 <div class="button-row">
-                    <button id="zh2en">Chinese→English Dictionary</button>
+                    <button id="zh2en">Chinese → English Lookup</button>
                 </div>
                 {% endif %}
                 <div class="button-row">
@@ -42,32 +43,38 @@
       </div>
       <div class="tab" id="navigation-tab">
         <div class="inner-wrap">
-            <div id="links">
-            {% if sutta %}
-                {% set versions = sutta.local_text_refs %}
-                {% for ref in versions %}
-                    {% if ref %}
-                        <a href='{{ref.url}}' class='tran{{ " active" if ref.lang.iso_code == lang_code else "" }}'
-                            {% if ref.abstract -%} title='{{ref.abstract}}'{% endif %}
-                            >{{ref.lang.iso_code}}</a>
-                            {% if not loop.last %} | {% endif %}
-                    {% endif %}
-                {% endfor %}
-                <a href='/{{sutta.uid}}' 
-                    title='Correspondence details for {{sutta.acronym}}'
-                    class="details">▶</a>
-            {% endif %}
+        <div id="textual-controls">
+        <div id="text-details">
+        <div class="button-row">
+        <button id="text-info">Textual Details ▶</button>
+        </div>
+        </div>
+
+            <div id="languages">
+            <div class="button-row">
+                <select id="language-select" name="Languages">
+                <option value="" style="display:none">Languages ▼</option>
+                        <option value="en" title="English">English ▶</option>
+                        <option value="es" title="Spanish">Spanish ▶</option>
+                        <option value="my" title="Burmese">Burmese ▶</option>
+                        <option value="zh" title="Chinese">Chinese ▶</option>
+                </select>
+                                
+                </div>
             </div>
             <div id="nextprev">
+            <div class="button-row">
                 {% if prev_uid %}
-                    <a class="previous" href="{{sutta.canon_url(prev_uid, lang_code)}}">◀ {{imm.uid_to_acro(prev_uid)}}</a>
+                    <button class="previous" href="{{sutta.canon_url(prev_uid, lang_code)}}">◀ {{imm.uid_to_acro(prev_uid)}}</button>
                 {% endif %}
-                <a class="top" href="#"> ▲ TOP</a>
+                <button class="top" href="#"> ▲ TOP</button>
                 {% if next_uid %}
-                    <a class="next" href="{{sutta.canon_url(next_uid, lang_code)}}">{{imm.uid_to_acro(next_uid)}} ▶</a>
+                    <button class="next" href="{{sutta.canon_url(next_uid, lang_code)}}">{{imm.uid_to_acro(next_uid)}} ▶</button>
                 {% endif %}
+                </div>
             </div>
         </div>
+      </div>
       </div>
       <div class="tab" id="metadata-tab">
         <div class="inner-wrap">

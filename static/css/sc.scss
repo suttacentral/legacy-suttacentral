@@ -132,7 +132,10 @@ a.bl {display:none;}
     
 }
 
-
+q:before,
+q:after {
+ content: "";
+}
 
 /* BOOKMARKED SECTION HIGHLIGHTING */
 .embeddedparallel.bookmarkeded {
