@@ -119,6 +119,7 @@ sc.sidebar = {
             self.node.removeClass('active')
         });
         self.bindButtons();
+        scState.save("clean");
         
     },
     bindButtons: function(){
