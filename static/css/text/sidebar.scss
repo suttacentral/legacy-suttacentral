@@ -1,5 +1,5 @@
 $sidebar-width = 20rem;
-$sidebar-tabs-height = 2.25em;
+$sidebar-tabs-height = 2.5em;
 $sidebar-tabs-vertical-padding = 0.4em;
 $sidebar-dongle-height = 1em;
 $sidebar-dongle-width = 1em;
@@ -10,6 +10,8 @@ $sidebar-dongle-width = 1em;
     bottom: 0;
     left: 0;
     width:$sidebar-width;
+    @include sans-serif;
+    color:$dark-medium-gray;
     z-index: 1;
     background:$light-light-gray;
     box-shadow:.1em .1em .5em rgba(118,118,118,0.3);
@@ -22,18 +24,14 @@ $sidebar-dongle-width = 1em;
     .button-row {
         > button, select {
             background:white;
-            font-size:1em;
+            color:$dark-medium-gray;
             margin: 0;
             padding: 0;
-            height: 3em;
+            height: $sidebar-tabs-height;
             vertical-align: middle;
-
-            @include sans-serif;
-            color:#767676;
-            
             float:left;
             &:hover {
-                background:$light-light-gray;
+            background:$light-light-gray;
             }
           
             &:active {
@@ -45,17 +43,17 @@ $sidebar-dongle-width = 1em;
             border-left: 1px solid $light-gray;
             border-right: none;
 
-            &:last-child {
-                border-right: 1px solid $light-gray;
-            }
+            
         }
         &:last-of-type {
-            > button, select {
+            > button  {
                 border-bottom: 1px solid $light-gray;
             }
         }
     }
-
+#text-details #text-info{
+    border-bottom: none;
+}
 
 
 
@@ -65,18 +63,16 @@ $sidebar-dongle-width = 1em;
         height: $sidebar-tabs-height;
         position:relative;
         z-index:1;
-        top: 2.2em;
+        top: $sidebar-tabs-height;
     }
 
     .tabs li {
         width:33.33%;
         float: left;
         background:$light-light-gray;
-        
         text-transform:lowercase;
         letter-spacing:0.02em;
         @include sans-serif-small-caps;
-        color:#767676;
         height: $sidebar-tabs-height;
         & > a {
             display: inline-block;
@@ -95,14 +91,16 @@ $sidebar-dongle-width = 1em;
 
     .tab {
         position: absolute;
-        top: $sidebar-tabs-height + 2em;
+        top: $sidebar-tabs-height;
         bottom: 0em;
         width: 100%;
         overflow-y:auto;
         overflow-x:hidden;
-        /* This is required for proper display of scroll bar */
+        /* This is required for proper display of scroll bar --- or is it?*/
         & > .inner-wrap {
             padding: 0;
+            position: relative;
+            top:$sidebar-tabs-height;
         }
     }
     /* Movement Controls */
@@ -112,9 +110,7 @@ $sidebar-dongle-width = 1em;
         left: 0;
     }
 
-    .inner-wrap > div + div {
-        border-top: 1px solid $light-light-gray;
-    }
+   
     
 }
 
@@ -123,7 +119,7 @@ $sidebar-dongle-width = 1em;
     top: 50%;
     bottom: 50%;
     font-size:2rem;
-    color:rgb(190, 190, 190);
+    color:$light-medium-gray;
     left: $sidebar-width;
     height: $sidebar-dongle-height;
     width: $sidebar-dongle-width;
@@ -138,11 +134,12 @@ $sidebar-dongle-width = 1em;
 
 #navigation-tab ul, #metadata-tab p{
     padding:1em;
+
 }
 
 #navigation-tab {
     li {
-        font-family:'Source Sans Pro',sans-serif;
+       
         font-weight:bold;
     }
 
@@ -150,7 +147,7 @@ $sidebar-dongle-width = 1em;
         display:block;
         width:100%;
         padding:.2em .1em;
-        color:#767676
+        
     }
 
     li a:hover {
@@ -169,9 +166,11 @@ $sidebar-dongle-width = 1em;
     min-width: 3em;
     text-align: center;
     padding: 0;
+    height:$sidebar-tabs-height;
+    top:$sidebar-tabs-height;
     font-size: 90%;
-    font-family: source sans pro;
-    &.details {
+    color:$dark-medium-gray;
+     &.details {
         margin: 0;
     }
     &.active {
@@ -183,7 +182,7 @@ $sidebar-dongle-width = 1em;
 
 #textual-controls {
     position:relative;
-    top:3em;
+    top:$sidebar-tabs-height;
   
 
 }
@@ -204,21 +203,15 @@ $sidebar-dongle-width = 1em;
 #lookup-to-lang:hover{background-color: white !important}
 #lookup-to-lang:active{background-color: white !important}
 
-
-
-#text-info {
+#text-info, #text-details {
     width:100%;
 }
 
-#metadata-tab {
-    font-family:'Source Sans Pro',sans-serif;
-    color:#767676;
 
-}
 /* Internal page links */
 .tabs a, #menu a {
     text-decoration: none;
-    color:#767676;
+    color:$dark-medium-gray;
 }
 
 
@@ -231,4 +224,40 @@ $sidebar-dongle-width = 1em;
         }}
 
 
+#languages select{  background: transparent;
+   padding: 0 2em;
+   width:100%;
 
+   height: $sidebar-tabs-height;
+   -webkit-appearance: none;}
+
+   #languages{
+   width:100%;
+
+       }
+
+
+
+#nextprev{height: $sidebar-tabs-height;}
+
+#sidebar #menu{
+margin-top:7.45em !important;}
+
+
+.previous,
+.top,
+.next {
+    
+    text-transform:lowercase;
+        letter-spacing:0.02em;
+        @include sans-serif-small-caps;
+    
+    width: 33.3%;
+    
+    border-left: 1px solid $light-gray;
+
+        &:hover {
+        background: $light-light-gray;
+    }
+  
+}
