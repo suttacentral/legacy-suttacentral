@@ -1,8 +1,6 @@
 $footer-background-color: $light-pastel-green;
-$footer-separator-color: $medium-gray;
 
-$footer-font-size: 1em;
-$mobile-footer-font-size: 1em;
+
 
 #page-footer {
     width: 100%;
@@ -19,33 +17,29 @@ $mobile-footer-font-size: 1em;
     }
 
     & > footer {
-        display: block;
-        width: 100%;
-        padding: 1em 0 1em 0;
+       
+        margin: 0 auto;
+      max-width:18em;
+       padding: 2em 0 0 0;
+       clear: both;
         @include sans-serif-small-caps;
-        font-size: $footer-font-size;
-        text-transform: lowercase;
+       text-transform: lowercase;
         letter-spacing: 0.03em;
-        text-align: center;
-        white-space: nowrap;
+        text-align: left;
+        
 
-        @media #{$mobile} 
 
         & > ul {
-            margin: 0;
-            padding: 0;
+                        margin:0 0 0 2.5em;
             list-style: none;
+            float:left;
+            
 
             & > li {
-                display: inline;
-                margin: 0;
-                padding: 0 0.2em 0 0.5em;
-                border-left: 1px solid $footer-separator-color;
-
-                &:first-child {
-                    padding-left: 0;
-                    border-left: none;
-                }
+              
+                padding: 0 0 0.5em 0;
+                
+               
 
 
 	& > a {
