@@ -7,7 +7,7 @@ $footer-background-color: $light-pastel-green;
     height: $footer-height;
     overflow: hidden;
     background-color: $footer-background-color;
-
+white-space:nowrap;
     @media #{$mobile} {
         height: $mobile-footer-height;
     }
@@ -30,7 +30,7 @@ $footer-background-color: $light-pastel-green;
 
 
         & > ul {
-                        margin:0 0 0 2.5em;
+                        margin:0 0 0 2em;
             list-style: none;
             float:left;
             
