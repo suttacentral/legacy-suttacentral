@@ -85,6 +85,7 @@ class _Imm:
         self.build_parallel_sutta_group('vinaya_pm')
         self.build_parallel_sutta_group('vinaya_kd')
         self.build_search_data()
+        self.load_epigraphs()
         self.timestamp = timestamp
         self.build_time = datetime.now()
     
@@ -99,12 +100,16 @@ class _Imm:
             return self.suttas[uid]
     
     def uid_to_acro(self, uid):
-        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)*', uid)
-        return ' '.join(self._uid_to_acro_map.get(c) or c.upper() for c in components)
+        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)?(?:-\d+)?', uid)
+        acro = ' '.join(self._uid_to_acro_map.get(c) or c.upper() for c in components)
+        acro = regex.sub(r'(?<=\d+)-(?=\d+)', r'–', acro)
+        return acro        
         
     def uid_to_name(self, uid):
-        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)*', uid)
-        return ' '.join(self._uid_to_name_map.get(c) or c.upper() for c in components)
+        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)?(?:-\d+)?', uid)
+        name = ' '.join(self._uid_to_name_map.get(c) or c.upper() for c in components)
+        name = regex.sub(r'(?<=\d+)-(?=\d+)', r'–', name)
+        return name        
     
     def build(self):
         """ Build the sutta central In Memory Model
@@ -668,6 +673,43 @@ class _Imm:
                 if m:
                     return m[1]
         return None
+
+    def load_epigraphs(self):
+        import lxml.etree
+        file = sc.data_dir / 'table' / 'epigraphs.xml'
+        self.epigraphs = []
+        
+        doc = lxml.etree.parse(str(file))
+        valid = 0
+        for count, element in enumerate(doc.findall('//epigraph')):
+            id = element.get('id')
+            uid = element.find('uid').text
+            content = regex.match(r'(?s)<content>\n?(.*)</content>',
+                lxml.etree.tostring(element.find('content'),
+                encoding='unicode'))[1]
+            
+            if uid not in self.suttas:
+                logger.warning('{}:{} - "{}" does not match any known sutta uid'.format(file.name, element.sourceline, uid))
+            else:
+                sutta = self.suttas[uid]
+                href = None
+                if element.find('href').text:
+                    href = element.find('href').text
+                else:
+                    for tr in sutta.translations:
+                        if tr.url.startswith('/en'):
+                            href = tr.url
+                if href is None:
+                    logger.warning('{}:{} - Sutta "{}" has no english translation. Using details page instead.'.format(file.name, element.sourceline, uid))
+                    href = '/{}'.format(uid)
+                else:
+                    self.epigraphs.append({'sutta': self.suttas[uid], 'content': content, 'href': href})
+                    valid += 1
+        logger.info('Loaded {} epigraphs, {} are valid, {} are invalid'.format(count + 1, valid, count - valid))
+
+    def get_random_epigraph(self):
+        import random
+        return random.choice(self.epigraphs)
 
     def _deep_md5(self, ids=False):
         """ Calculate a md5 for the data. Takes ~0.5s on a fast cpu.

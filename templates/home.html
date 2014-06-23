@@ -8,17 +8,14 @@
 <h1>SuttaCentral</h1>
 <p class="subtitle">Early Buddhist texts, translations, and parallels</p>
 </div>
+{% set epigraph = imm.get_random_epigraph() %}
+
 <div class="epigraph">
 <div class="epigraph-text">
-<p>Venerable Ānanda approached the Blessed One, paid homage, sat down to one side, and said to him:</p>
-
-<p>“Venerable sir, this is half of the holy life, that is, good friendship, good companionship, good comradeship.”</p>
-
-<p>“Not so, Ānanda! Not so, Ānanda! This is the entire holy life, Ānanda, that is, good friendship, good companionship, good comradeship. When a bhikkhu has a good friend, a good companion, a good comrade, it is to be expected that he will develop and cultivate the Noble Eightfold Path.</p>
+    {{ epigraph.content }}
 </div>
 
-<p class="epigraph-reference">Upaḍḍha Sutta, Saṃyutta Nikāya 45.2 (<a href="/en/sn45.2">SN 45.2</a>)</p>
-<p class="epigraph-parallels">Parallels: <a href="/sa726">SA 726</a>; <a href="/sa768">SA 768</a>; D 300.</p>
+<p class="epigraph-reference"><span class="reference">{{epigraph.sutta.name}}, {{imm.uid_to_name(epigraph.sutta.uid)}} {% if epigraph.href %}</span><a class="read-this" href="{{ epigraph.href }}">Read this sutta</a>{% endif %}</p>
 
 
 </div>
