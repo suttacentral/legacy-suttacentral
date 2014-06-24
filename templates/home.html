@@ -15,7 +15,7 @@
     {{ epigraph.content }}
 </div>
 
-<p class="epigraph-reference"><span class="reference">{{epigraph.sutta.name}}, {{imm.uid_to_name(epigraph.sutta.uid)}} {% if epigraph.href %}</span><a class="read-this" href="{{ epigraph.href }}">Read this sutta</a>{% endif %}</p>
+<p class="epigraph-reference"><span class="reference">{{epigraph.sutta.name}}, {{imm.uid_to_name(epigraph.sutta.uid)}} {% if epigraph.href %}</span></p><p class="read-this"><a href="{{ epigraph.href }}">Read this sutta ▶</a>{% endif %}</p>
 
 
 </div>

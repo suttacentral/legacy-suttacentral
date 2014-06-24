@@ -40,10 +40,15 @@
     border:1px solid $light-gray;
 padding: 1.5em 1.5em 0 1.5em;
 
-    .read-this {
-        margin-left: 2em;
-        white-space: nowrap;
+  .read-this{
+        text-align:right;
+       @include sans-serif-small-caps;
+       text-transform:lowercase;
+
     }
+
+     .read-this a{padding:0.2em 0.4em;}
+    .read-this a:hover{background:$light-light-gray;}
 }
 
 .epigraph-text{font-style:italic;}
