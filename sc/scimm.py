@@ -98,18 +98,17 @@ class _Imm:
             return self.subdivisions[uid]
         elif uid in self.suttas:
             return self.suttas[uid]
+    def _expand_uid(self, uid, mapping):
+        components = regex.findall(r'-?\p{alpha}+|\d+(?:\.\d+)?(?:-\d+)?', uid)
+        out = ' '.join(mapping.get(c) or c.upper() for c in components)
+        out = regex.sub(r'(?<=\d+)-(?=\d+)', r'–', out)
+        return out
     
     def uid_to_acro(self, uid):
-        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)?(?:-\d+)?', uid)
-        acro = ' '.join(self._uid_to_acro_map.get(c) or c.upper() for c in components)
-        acro = regex.sub(r'(?<=\d+)-(?=\d+)', r'–', acro)
-        return acro        
+        return self._expand_uid(uid, self._uid_to_acro_map)
         
     def uid_to_name(self, uid):
-        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)?(?:-\d+)?', uid)
-        name = ' '.join(self._uid_to_name_map.get(c) or c.upper() for c in components)
-        name = regex.sub(r'(?<=\d+)-(?=\d+)', r'–', name)
-        return name        
+        return self._expand_uid(uid, self._uid_to_name_map)
     
     def build(self):
         """ Build the sutta central In Memory Model
