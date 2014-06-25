@@ -99,7 +99,7 @@ class _Imm:
         elif uid in self.suttas:
             return self.suttas[uid]
     def _expand_uid(self, uid, mapping):
-        components = regex.findall(r'-?\p{alpha}+|\d+(?:\.\d+)?(?:-\d+)?', uid)
+        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)?(?:-\d+)?', uid)
         out = ' '.join(mapping.get(c) or c.upper() for c in components)
         out = regex.sub(r'(?<=\d+)-(?=\d+)', r'–', out)
         return out
