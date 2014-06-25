@@ -26,6 +26,7 @@ td, th {
     border-top: 1px solid $table-cell-border-color;
     border-bottom: 1px solid $table-cell-border-color;
     text-align: left;
+    position:static;
 }
 
 tfoot > tr > td {

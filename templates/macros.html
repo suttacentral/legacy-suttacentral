@@ -30,14 +30,14 @@
 {% if (result and result.query.ajax) or sutta.parallel_group %}
 {%- if sutta.parallels or sutta.parallel_group -%}
 <a href='/{{sutta.details_uid}}'
- title='Correspondence details for {{sutta.acronym}}' class="details">{{sutta.parallels_count}} ▶</a>
+ title='Full details for {{sutta.acronym}}' class="details">{{sutta.parallels_count}} ▶</a>
 {%- endif -%}
 {%- else -%}
 {%- for parallel in sutta.parallels -%}
 {{sutta_acronym(parallel.sutta, show_alt=False)}}
 {%- if parallel.partial -%}*{%- endif -%}
 {% if not loop.last %}, {% else %} <a href='/{{sutta.uid}}' 
- title='Correspondence details for {{sutta.acronym}}' class="details">▶</a>
+ title='Full details for {{sutta.acronym}}' class="details">▶</a>
 {% endif %}
 {%- endfor %}
 {%- endif -%}

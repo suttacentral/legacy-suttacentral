@@ -18,22 +18,22 @@ a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
     a.yam72
 {
     visibility:hidden;
-    position:absolute;
+    
     text-align:left;
     width:4em;
     @include sans-serif;
-    font-size:0.6em;
+    font-size:0.7em;
     display:table;
     font-style:normal;
     font-weight:normal;
-    margin: 1.8em 0 0 -8em;
+    margin: 1.8em -8em 0 0;
     white-space:nowrap;
-    color: #2DB3A7;
+    color: $dark-saturated-green;
     letter-spacing: normal;
     transition: 250ms;
     transition-property:opacity;
     opacity: 0;
-
+    float:right;
     .infomode & {
 		visibility:visible;
 		opacity: 1;
@@ -43,36 +43,36 @@ a.as, a.bl, a.bps, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
 }
 
 
-a.sc {margin:0.7em 0 0 -4.3em; color:#B3A72D;}
+a.sc {margin:0.7em -6em 0 0em; color:$bright-saturated-purple;}
 a.t, a.t-linehead {
-	margin: 0 0 0 -9.3em;
-	color:#00B428;
+	margin: 0 -10em 0 0;
+	color:$saturated-green;
 	/* Class added in javascript */
 	&.collides {margin-top: 1em;}
 }
 
-a.wp {margin:0.7em 0 0 -5.3em; color:red;}
-a.pts {margin:-0.5em 0 0 -9.1em; color:#B2AF8C;}
-a.pts1, a.snp-vagga-section-verse {margin:-0.3em 0 0 -8.2em; color:#B2AF8C;}
-a.pts2, a.snp-vagga-verse {margin:1.8em 0 0 -9.1em; color:#B2AF8C;}
-a.vn {margin:0.7em 0 0 -6em; color:#9B0F00;}
-a.sht {margin:0.8em 0 0 -6em; color:#9B000F;}
-a.wal52 {margin: 0.8em 0 0 -7em; color: #B3A72D;}
-/*a.titus {margin: -0.1em 0 0 -4em; color: #00B428;}*/
+a.wp {margin:-0.7em -6em 0 0; color:$saturated-red;}
+a.pts {margin:-0.5em -9em 0 0; color:$dark-saturated-yellow;}
+a.pts1, a.snp-vagga-section-verse {margin:-0.3em -10em 0 0; color:$dirty-saturated-yellow;}
+a.pts2, a.snp-vagga-verse {margin:1.8em 0 0 -9.1em; color:$saturated-green;}
+a.vn {margin:0.7em -6em 0 0; color:$saturated-purple;}
+a.sht {margin:0.8em -6em 0 0; color:$saturated-purple;}
+a.wal52,a.mat88,a.vai58 {margin: 0.8em -6em 0 0; color: $saturated-purple;}
+/*a.titus {margin: -0.1em -6em 0 0; color: $saturated-purple;}*/
 a.titus {display:none}
 
 /* Buddhist Discipline Paragraph Numbers */
 a.pts-vp-en {
-    margin: 0.75em 0 0 -9em;
+    margin: 0.75em -10em 0 0;
 }
 
 
 a.pts-cs {
-    margin: -0.35em 0 0 -5em;
+    margin: -0.35em -10em 0 0;
 }
 
 a.pts-vp-pi {
-    margin: -0.3em 0 0 -9em;
+    margin: 0 -10em 0 0;
 }
 
 
