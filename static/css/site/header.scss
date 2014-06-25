@@ -157,11 +157,9 @@ header {
         button {
             background: none;
         }
-        #page-header-search input {
-            display: none;
-        }
+        
     }
-    @media #{$mobile} {
+    @media screen and (max-width: 550px) {
         #title {
             display: none;
         }
