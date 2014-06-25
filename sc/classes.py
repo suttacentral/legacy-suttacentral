@@ -96,6 +96,15 @@ class SuttaCommon:
             return textinfo.volpage
         return ''
 
+    @staticmethod
+    def canon_url(uid, lang_code, bookmark=''):
+        if not isinstance(lang_code, str):
+            lang_code = lang_code.uid
+        url = '/{lang}/{uid}'.format(uid=uid, lang=lang_code)
+        if bookmark:
+            url += '#' + bookmark
+        return url
+
     @property
     def _textinfo(self):
         return self.imm.tim.get(self.uid, self.lang.uid)
@@ -116,15 +125,6 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
         'volpage alt_volpage_info biblio_entry '
         'parallels, imm'), SuttaCommon):
     __slots__ = ()
-    
-    @staticmethod
-    def canon_url(uid, lang_code, bookmark=''):
-        if not isinstance(lang_code, str):
-            lang_code = lang_code.uid
-        url = '/{lang}/{uid}'.format(uid=uid, lang=lang_code)
-        if bookmark:
-            url += '#' + bookmark
-        return url
 
     @property
     def name(self):
