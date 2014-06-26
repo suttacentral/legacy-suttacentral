@@ -65,11 +65,11 @@
             <div id="nextprev">
             <div class="button-row">
                 {% if prev_uid %}
-                    <button class="previous" href="{{sutta.canon_url(prev_uid, lang_code)}}">◀ {{imm.uid_to_acro(prev_uid)}}</button>
+                    <button class="previous" href="{{ lang_code }}/{{ prev_uid }}">◀ {{imm.uid_to_acro(prev_uid)}}</button>
                 {% endif %}
                 <button class="top" href="#"> ▲ TOP</button>
                 {% if next_uid %}
-                    <button class="next" href="{{sutta.canon_url(next_uid, lang_code)}}">{{imm.uid_to_acro(next_uid)}} ▶</button>
+                    <button class="next" href="{{ lang_code }}/{{ next_uid }}">{{imm.uid_to_acro(next_uid)}} ▶</button>
                 {% endif %}
                 </div>
             </div>
