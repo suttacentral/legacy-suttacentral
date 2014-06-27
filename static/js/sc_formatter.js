@@ -44,6 +44,24 @@ sc.formatter = {
             $(document.body).addClass('badfonts');
         }
     },
+    rePosition: function($element){
+        return $element;
+        var setLeft = false;
+        var offset = $element.offset();
+        var width = $element.innerWidth();
+        if (offset.left < 1) {
+            offset.left = 1;
+            $element.offset(offset).innerWidth(width+1);
+            //(width+1 is required for Chrome)
+            setLeft = true;
+        }
+        if (offset.left + width > $(document).width())
+        {
+            offset.left = $(document).width() - (width + 2);
+            $element.offset(offset).innerWidth(width+1);
+        }
+        return $element;
+    },
     quoteHanger: function(){
         $('p').each(function(){
             children = this.childNodes

@@ -106,6 +106,8 @@ sc.classes = {
 }
 
 sc.mode = {}
+sc.data = {}
+sc.jsBaseUrl = $('script[src*="js/"]').last().attr('src').match(/(.*\/js\/)/)[0];
 
 $(document).ready(function() {
     $('#home').easytabs({
@@ -114,6 +116,7 @@ $(document).ready(function() {
         updateHash: false
     });
     if ($('.sutta').length > 0){
+        sc.mode.pali = ($('#text').attr('lang') == 'pi');
         sc.sidebar.init();
         sc.init();
     }
@@ -156,11 +159,6 @@ if (m = navigator.appVersion.match(/MSIE ([0-9]+)/))
 //The code below here is quite disorganized and messy
 //Rewriting it is on the to-do.
 
-
-//The dictionary of pali to english glosses.
-var paliDictSrc = "lookup_data.js"//"lookup_data.js"
-var paliLookupLogId = "pali_lookup_log"
-
 // These are respectively, the id's of the buttons which peform transliteration,
 // and the name of the function responsible for transliterating raw text
 var transFuncs = {
@@ -185,10 +183,16 @@ sc.init = function(reset)
     {
         toggleTextualInfo(true);
     }
+
     
     if (sc.mode.pali === true) {
-        translitFunc = null;
-        prefscript = sc.userPrefs.getPref("script");
+        var lookupToLang = sc.userPrefs.getPref('lookupToLang'),
+            translitFunc = null;
+            prefscript = sc.userPrefs.getPref("script");
+
+        if (lookupToLang) {
+            $('#lookup-to-lang').val(lookupToLang);
+        }
         if (prefscript){
             sc.mode.translitFunc = transFuncs[prefscript][0];
         } else {

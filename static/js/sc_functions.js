@@ -128,6 +128,7 @@ function togglePaliLookup(){
 
 function transliterateHandler()
 {
+    console.log('hi');
     sc.userPrefs.setPref("script", this.id, true);
 }
 
@@ -205,6 +206,7 @@ function toSyllablesInit(){
         
 
 function transliterate(func){
+    if (!wordMap[func.name]) wordMap[func.name] = {};
     if (func == toMyanmar) {
         $('#text').attr('lang', 'my');
     } else {
@@ -391,7 +393,7 @@ function generateLookupMarkup(){
     var classes = ".sutta P, .sutta H1, .sutta H2, .sutta H3"
     generateMarkupCallback.nodes = $(classes).toArray();
     generateMarkupCallback.start = Date.now();
-    textualControls.disable()
+    sc.sidebar.disableControls()
     generateMarkupCallback();
     return;
 }
@@ -399,7 +401,7 @@ function generateLookupMarkup(){
 function generateMarkupCallback() {
     var node = generateMarkupCallback.nodes.shift();
     if (!node) {
-        textualControls.enable();
+        sc.sidebar.enableControls();
         return}
     toLookupMarkup(node);
     setTimeout(generateMarkupCallback, 5);
@@ -439,25 +441,49 @@ function toLookupMarkup(startNode)
 var G_uniRegExpNSG = /[–   :;?!,.“‘]+/gi;
 var toggleLookupOn = false;
 var paliDictRequested = false;
-var pi2en_dict = null;
+
 function enablePaliLookup(){
-    function ready(){
-        generateLookupMarkup();
-        scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
-        return
-    }
     $(document).on('mouseenter', 'span.lookup', lookupWordHandler);
-    if (!pi2en_dict)
+
+    /* Contains language-neutral information on declensions and
+     * conjugations */
+    if (!sc.data.piEndings) {
+        jQuery.ajax({
+            url: sc.jsBaseUrl + 'data/pi-endings.js',
+            dataType: "script",
+            success: undefined,
+            crossDomain: true,
+            cache: true
+        });
+    }
+    var script = $('#lookup-to-lang').val(),
+        scriptUrl,
+        dictObjectName;
+    if (script == 'en') {
+        scriptUrl = 'data/pi2en-maindata.js';
+        dictObjectName = 'pi2enDict';
+    } else if (script == 'es') {
+        scriptUrl = 'data/pi2es-maindata.js';
+        dictObjectName = 'pi2esDict';
+    } else {
+        throw Error('Unknown script: ' + script);
+    }
+    if (!sc.data[dictObjectName])
     {
-        scMessage.show("Requesting Pali Dictionary...", 10000);
-        sc.pi2enDataScripts.forEach(function(url, i){
-            jQuery.ajax({
-                url: sc.jsBaseUrl+url,
-                dataType: "script",
-                success: i == 0 ? ready : null,
-                crossDomain: true,
-                cache: true
-            });
+        scMessage.show("Requesting Pali Dictionary...", {id: "requestDict", timeout: null});
+    
+        jQuery.ajax({
+            url: sc.jsBaseUrl + scriptUrl,
+            dataType: "script",
+            success: function() {
+                sc.data.piLookup = sc.data[dictObjectName];
+                generateLookupMarkup();
+                scMessage.clear("requestDict");
+                scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
+                return
+            },
+            crossDomain: true,
+            cache: true
         });
     } else
         generateLookupMarkup();
@@ -635,8 +661,8 @@ function matchPartial(word, maxlength){
         for (var i = 0; i < word.length; i++){
             var part = word.substring(0, word.length - i);
             if (part.length < maxlength) break;
-            if(typeof(pi2en_dict[part]) == 'object') {
-                var meaning = pi2en_dict[part][1];
+            if(typeof(sc.data.piLookup[part]) == 'object') {
+                var meaning = sc.data.piLookup[part][1];
                 return {"base":part, "meaning": meaning, "leftover": word.substring(word.length - i, word.length)}
             }
         }
@@ -650,20 +676,20 @@ function matchPartial(word, maxlength){
 
 function exactMatch(word)
 {
-    if(typeof(pi2en_dict[word]) == 'object') {
-        var meaning = pi2en_dict[word][1]+' ('+pi2en_dict[word][0]+')';
+    if(typeof(sc.data.piLookup[word]) == 'object') {
+        var meaning = sc.data.piLookup[word][1]+' ('+sc.data.piLookup[word][0]+')';
         return {"base": word, "meaning": meaning};
     }
     return null;
 }
 
 function fuzzyMatch(word){
-    var end = pi2en_dict._end;
+    var end = sc.data.piEndings;
     for(var i = 0; i < end.length; i++) {
         if(word.length > end[i][2] && word.substring(word.length - end[i][0].length, word.length) === end[i][0]) {
             var orig = word.substring(0,word.length - end[i][0].length + end[i][1]) + end[i][3];
-            if(typeof(pi2en_dict[orig]) == 'object') {
-                var meaning = pi2en_dict[orig][1] + ' ('+pi2en_dict[orig][0]+')';
+            if(typeof(sc.data.piLookup[orig]) == 'object') {
+                var meaning = sc.data.piLookup[orig][1] + ' ('+sc.data.piLookup[orig][0]+')';
                 return {"base": orig, "meaning": meaning};
             }
         }

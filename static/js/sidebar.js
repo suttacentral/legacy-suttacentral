@@ -79,12 +79,6 @@ sc.sidebar = {
         this.textualControls.init();       
         scState.save("clean");
     },
-    disable: function() {
-        $('#' + this.id + ' button').attr('disabled', 'disabled');
-    },
-    enable: function() {
-        $('#' + this.id + ' button').removeAttr('disabled');
-    }
 }
 
 /* The sidebar class is responsible for everything in the aside navigation
@@ -128,6 +122,18 @@ sc.sidebar = {
         for (f in transFuncs) {
             $('#' + f).click(transliterateHandler);
         }
+        $('#lookup-to-lang').change(function(){
+            sc.userPrefs.setPref('lookupToLang', $(this).val());
+            if (sc.userPrefs.getPref("paliLookup") === true) {
+                sc.init(true);
+            }            
+        });
+    },
+    disableControls: function(){
+        $('#textual-controls button').attr('disabled', 'disabled');
+    },
+    enableControls: function() {
+        $('#textual-controls button').removeAttr('disabled');
     },
     doMenu: function(target, headings){
         var self = this;
