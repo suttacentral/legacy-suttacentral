@@ -5,7 +5,7 @@ from tasks.helpers import *
 
 def _production_run(*commands):
     remote_run('sc-production@vps.suttacentral.net', [
-        'source $HOME/.virtualenvs/suttacentral/bin/activate',
+        'source $HOME/.pyenv/versions/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
     ] + list(commands))
 

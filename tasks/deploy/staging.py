@@ -14,7 +14,7 @@ def _branch_or_pull(branch):
 
 def _staging_run(*commands):
     remote_run('sc-staging@vps.suttacentral.net', [
-        'source $HOME/.virtualenvs/suttacentral/bin/activate',
+        'source $HOME/.pyenv/versions/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
     ] + list(commands))
 
