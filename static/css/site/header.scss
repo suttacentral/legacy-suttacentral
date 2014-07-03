@@ -16,6 +16,7 @@ header {
     left: 0;
     right: 0;
     z-index: 3;
+
     // slide up and down
     transition: 200ms;
     &.retracted {
@@ -35,6 +36,7 @@ header {
         font-size: 2.5em;
         display: inline-block;
         margin-top: 2px;
+        
     }
     #title {
         position: relative;

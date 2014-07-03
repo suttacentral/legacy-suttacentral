@@ -21,7 +21,9 @@ a.mat85:before, a.mat88:before {content:"Mat "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
 a.of:before {content:"OF "}
-a.pts:before, a.pts1:before, a.pts2:before {content:"PTS "}
+a.pts:before {content:"PTS "}
+a.pts1:before {content:"PTS (1st ed.) "}
+a.pts2:before {content:"PTS (2nd ed.) "}
 a.pts_pn:before {content:"PTS "}
 a.san87:before,, a.san89:before {content:"San "}
 a.sc:before {content:"SC "}
@@ -34,7 +36,7 @@ a.ud-sutta:before,, a.ud-vagga-sutta:before {content:"Ud "}
 /*a.tu:before {content:" "}*/
 a.uv:before {content:"Uv "}
 a.vai58:before, a.vai59:before, a.vai61:before {content:"Vai "}
-a.verse-num-pts:before {content:"PTS "}
+a.verse-num-pts:before {content:"PTS verse "}
 a.vn:before {content:"Vn "}
 a.wal48:before, a.wal50:before, a.wal52:before, a.wal57c:before, a.wal58:before, a.wal59a:before, a.wal60:before, a.wal61:before, a.wal68a:before, a.wal70a:before, a.wal70b:before, a.wal76:before, a.wal78:before, a.wal80c:before {content:"Wal "}
 a.wp:before {content:"WP "}
