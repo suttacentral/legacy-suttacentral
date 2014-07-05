@@ -10,33 +10,31 @@
         <div class="inner-wrap">
             <div id="textual-controls">
                 {% if lang_code == 'pi' %}
-                <div class="button-row">
-                <select id="lookup-to-lang">
-                        <option value="en" title="English">Pali → English</option>
-                        <option value="es" title="Spanish">Pali → Spanish</option>
-                </select>
-                <button id="pali-lookup">Lookup</button>
-                
+                <div class="button-row" id="lookup"> 
+                <button id="lookup-2-lang" title="Select a lookup tool">
+                        <a class="dropdown" id="pi2en">Pali → English ▼</a>
+                         </button>
+               <button id="pi-lookup" title="Activate Pali lookup">Lookup ▶</button>
                 </div>
                 <div class="button-row" id="translit-buttons">
-                    <button id="toRoman">kā</button>
-                    <button id="toSinhala">කා</button>
-                    <button id="toThai">กา</button>
-                    <button id="toMyanmar">ကာ</button>
-                    <button id="toDevar">का</button>
-                    <button id="toSyllables">k-ā</button>
+                    <button id="toRoman" title="Read Pali text in Roman script">kā</button>
+                    <button id="toSinhala" title="Read Pali text in Sinhala script">කා</button>
+                    <button id="toThai" title="Read Pali text in Thai script">กา</button>
+                    <button id="toMyanmar" title="Read Pali text in Burmese script">ကာ</button>
+                    <button id="toDevar" title="Read Pali text in Devanagari script">का</button>
+                    <button id="toSyllables" title="Read Pali text in Roman script, broken into syllables, with long syllables underlined">k-ā</button>
                 </div>
                 {% endif %}
                 {% if lang_code == 'zh' %}
                 <div class="button-row">
-                    <button id="zh2en">Chinese → English Lookup</button>
+                    <button id="zh2en" title="Activate Chinese lookup">Chinese → English Lookup</button>
                 </div>
                 {% endif %}
                 <div class="button-row">
-                    <button id="text-info">Textual Information</button>
+                    <button id="text-info" title="View reference numbers, variant readings, etc.">Textual Information</button>
                 </div>
                 {# I'm using last-of-type keyed to div, so need a non-div
-                    element after the buttons #}
+                    element after the buttons --- no longer the case, now we just use the IDs#}
                 <aside id="message-box"></aside>
             </div>
         </div>
@@ -46,30 +44,26 @@
         <div id="textual-controls">
         <div id="text-details">
         <div class="button-row">
-        <button id="text-info">Textual Details ▶</button>
+        <button id="text-details-button" title="Go to parallels and references">Textual Details ▶</button>
         </div>
         </div>
 
             <div id="languages">
             <div class="button-row">
-                <select id="language-select" name="Languages">
-                <option value="" style="display:none">Languages ▼</option>
-                        <option value="en" title="English">English ▶</option>
-                        <option value="es" title="Spanish">Spanish ▶</option>
-                        <option value="my" title="Burmese">Burmese ▶</option>
-                        <option value="zh" title="Chinese">Chinese ▶</option>
-                </select>
+                <button id="language-select" title="Go to translation">
+               <a class="dropdown" id="language-select-dropdown">Languages ▼</a>
+                </button>
                                 
                 </div>
             </div>
             <div id="nextprev">
             <div class="button-row">
                 {% if prev_uid %}
-                    <button class="previous" href="{{ lang_code }}/{{ prev_uid }}">◀ {{imm.uid_to_acro(prev_uid)}}</button>
+                    <button class="previous" href="{{ lang_code }}/{{ prev_uid }}" title="Go to previous sutta">◀ {{imm.uid_to_acro(prev_uid)}}</button>
                 {% endif %}
-                <button class="top" href="#"> ▲ TOP</button>
+                <button class="top" href="#" title="Go to top of page"> ▲ TOP</button>
                 {% if next_uid %}
-                    <button class="next" href="{{ lang_code }}/{{ next_uid }}">{{imm.uid_to_acro(next_uid)}} ▶</button>
+                    <button class="next" href="{{ lang_code }}/{{ next_uid }}" title="Go to next sutta">{{imm.uid_to_acro(next_uid)}} ▶</button>
                 {% endif %}
                 </div>
             </div>
