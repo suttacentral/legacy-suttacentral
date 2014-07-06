@@ -22,8 +22,8 @@ a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
 a.of:before {content:"OF "}
 a.pts:before {content:"PTS "}
-a.pts1:before {content:"PTS (1st ed.) "}
-a.pts2:before {content:"PTS (2nd ed.) "}
+a.pts1:before {content:"PTS (1st ed.) "}
+a.pts2:before {content:"PTS (2nd ed.) "}
 a.pts_pn:before {content:"PTS "}
 a.san87:before,, a.san89:before {content:"San "}
 a.sc:before {content:"SC "}
