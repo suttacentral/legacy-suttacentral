@@ -34,7 +34,7 @@ def text_dir_md5(extra_files=[__file__]):
     return md5(array('Q', mtimes)).hexdigest()
 
 class TextInfo:
-    __slots__ = ('uid', 'lang', 'path', 'bookmark', 'name', 'author', 'volpage')
+    __slots__ = ('uid', 'lang', 'path', 'bookmark', 'name', 'author', 'volpage', 'prev_uid', 'next_uid')
     def __init__(self, **kwargs):
         for key in self.__slots__:
             setattr(self, key, kwargs.get(key, None))
@@ -112,6 +112,19 @@ class TextInfoModel:
         if not self._ppn:
             self._ppn = PaliPageNumbinator()
         return self._ppn
+
+    @staticmethod
+    def uids_are_related(uid1, uid2, _rex=regex.compile(r'\p{alpha}*(?:-\d+)?')):
+        # We will perform a simple uid comparison
+        # We could be more sophisticated! For example we could
+        # inspect whether they belong to the same division
+        if uid1 is None or uid2 is None:
+            return False
+        
+        m1 = _rex.match(uid1)[0]
+        m2 = _rex.match(uid2)[0]
+        if m1 and m2 and m1 == m2:
+            return True
     
     def build(self, force=False):
         # The pagenumbinator should be scoped because it uses
@@ -122,13 +135,31 @@ class TextInfoModel:
         file_i = 0
         for lang_dir in sc.text_dir.glob('*'):
             lang_uid = lang_dir.stem
-            for htmlfile in lang_dir.glob('**/*.html'):
+            files = sorted(lang_dir.glob('**/*.html'), key=lambda f: sc.util.numericsortkey(f.stem))
+            for i, htmlfile in enumerate(files):
              try:
                 if not self._should_process_file(htmlfile, force):
                     continue
                 logger.info('Adding file: {!s}'.format(htmlfile))
                 uid = htmlfile.stem
                 root = html.parse(str(htmlfile)).getroot()
+
+                # Set the previous and next uids, using explicit data
+                # if available, otherwise making a safe guess.
+                # The safe guess relies on comparing uids, and will not
+                # capture relationships such as the order of patimokha
+                # rules.
+                prev_uid = root.get('data-prev')
+                next_uid = root.get('data-next')
+                if not (prev_uid or next_uid):
+                    if i > 0:
+                        prev_uid = files[i - 1].stem
+                        if not self.uids_are_related(uid, prev_uid):
+                            prev_uid = None
+                    if i + 1 < len(files):
+                        next_uid = files[i + 1].stem
+                        if not self.uids_are_related(uid, next_uid):
+                            next_uid = None
                 
                 path = htmlfile.relative_to(sc.text_dir)
                 author = self._get_author(root, lang_uid, uid)
@@ -136,7 +167,7 @@ class TextInfoModel:
                 volpage = self._get_volpage(root, lang_uid, uid)
                 embedded = self._get_embedded_uids(root, lang_uid, uid)
 
-                textinfo = TextInfo(uid=uid, lang=lang_uid, path=path, name=name, author=author, volpage=volpage)
+                textinfo = TextInfo(uid=uid, lang=lang_uid, path=path, name=name, author=author, volpage=volpage, prev_uid=prev_uid, next_uid=next_uid)
                 self.add_text_info(lang_uid, uid, textinfo)
 
                 for child in embedded:
@@ -328,7 +359,7 @@ class SqliteBackedTIM(TextInfoModel):
         except FileNotFoundError:
             pass
         self.reconnect()
-        self._con.execute('CREATE TABLE data(lang, uid, path, bookmark, name, author, volpage)')
+        self._con.execute('CREATE TABLE data(lang, uid, path, bookmark, name, author, volpage, prev_uid, next_uid)')
         self._con.execute('CREATE TABLE mtimes(path UNIQUE, mtime)')
         # Presently we build the whole lot in one go and disabling
         # journaling dramatically improves bulk insert performance.
@@ -401,10 +432,10 @@ class SqliteBackedTIM(TextInfoModel):
         def text_info_from_row(row):
             return TextInfo(lang = row[0], uid=row[1],
                             path=pathlib.Path(row[2]), bookmark=row[3],
-                            name=row[4], author=row[5], volpage=row[6])
+                            name=row[4], author=row[5], volpage=row[6], prev_uid=row[7], next_uid=row[8])
         
         if uid and lang_uid:
-            cur = con.execute('''SELECT lang, uid, path, bookmark, name, author, volpage
+            cur = con.execute('''SELECT lang, uid, path, bookmark, name, author, volpage, prev_uid, next_uid
                                 FROM data
                                 WHERE lang=?
                                 AND uid=?''',
@@ -414,7 +445,7 @@ class SqliteBackedTIM(TextInfoModel):
                 return None
             return text_info_from_row(result)
         else:
-            sql_fmtstr = '''SELECT lang, uid, path, bookmark, name, author, volpage
+            sql_fmtstr = '''SELECT lang, uid, path, bookmark, name, author, volpage, prev_uid, next_uid
                                 FROM data
                                 WHERE {field}=?'''
             if uid:
@@ -432,9 +463,9 @@ class SqliteBackedTIM(TextInfoModel):
         return cur.fetchone() != None
 
     def add_text_info(self, lang_uid, uid, textinfo):
-        self._con.execute('INSERT INTO data VALUES(?, ?, ?, ?, ?, ?, ?)',
+        self._con.execute('INSERT INTO data VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',
             (lang_uid, uid, str(textinfo.path), textinfo.bookmark,
-            textinfo.name, textinfo.author, textinfo.volpage))
+            textinfo.name, textinfo.author, textinfo.volpage, textinfo.prev_uid, textinfo.next_uid))
 
     filename = str(sc.db_dir / 'text_info_model.db')
     

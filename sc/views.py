@@ -296,7 +296,7 @@ class TextView(ViewBase):
         context.title = textinfo.name if textinfo else '?'
         contents = [m['content']]
         contents.append('</div>')
-        context.prev_uid, context.next_uid = imm.get_text_nextprev(self.uid, self.lang_code)
+        context.prev_uid, context.next_uid = self.get_nextprev(m)
         contents.append('<script id="sc_text_info" type="text/json">\n{}\n</script>'.format(
             self.text_json()))
         context.text = '\n'.join(contents)
@@ -306,7 +306,7 @@ class TextView(ViewBase):
         if self.lang_code in {'zh'}:
             context.text = self.massage_cjk(context.text)
         context.lang_code = self.lang_code
-    
+        
     @property
     def path(self):
         relative_path = scimm.imm().text_path(self.uid, self.lang_code)

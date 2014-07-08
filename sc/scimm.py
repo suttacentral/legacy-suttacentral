@@ -636,18 +636,6 @@ class _Imm:
         if not self.uids_are_related(uid, next_uid):
             next_uid = None
         return (prev_uid, next_uid)
-        
-    def uids_are_related(self, uid1, uid2):
-        # We will perform a simple uid comparison
-        # We could be more sophisticated! For example we could
-        # inspect whether they belong to the same division
-        if uid1 is None or uid2 is None:
-            return False
-        
-        m1 = regex.match(r'\p{alpha}*(?:-\d+)?', uid1)[0]
-        m2 = regex.match(r'\p{alpha}*(?:-\d+)?', uid2)[0]
-        if m1 and m2 and m1 == m2:
-            return True
     
     @staticmethod
     def get_text_author(filepath):
