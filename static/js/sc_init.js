@@ -184,11 +184,16 @@ sc.init = function(reset)
         toggleTextualInfo(true);
     }
 
-    if (sc.userPrefs.getPref("sidebar") === true)
+    if (sc.userPrefs.getPref("sidebar") === false)
     {
-        sc.sidebar.show();
-    } else {
         sc.sidebar.hide();
+    } else {
+        sc.sidebar.show();        
+    }
+    
+    var selectedTab = sc.userPrefs.getPref('sidebar-selected-tab');
+    if (selectedTab && selectedTab != "undefined") {
+        sc.sidebar.selectTab(selectedTab);
     }
     
     if (sc.mode.pali === true) {

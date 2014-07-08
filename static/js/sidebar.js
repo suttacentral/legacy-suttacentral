@@ -106,6 +106,10 @@ sc.sidebar = {
             tabs: '.tabs > li',
             updateHash: false
         });
+
+        this.node.on('easytabs:before', function(e, $clicked, $target){
+            sc.userPrefs.setPref('sidebar-selected-tab', $target.attr('id'));
+        });
         
         $('#sidebar-dongle').on('click',
                 function(){
@@ -136,6 +140,9 @@ sc.sidebar = {
         this.node.removeClass('active');
         sc.userPrefs.setPref('sidebar', false);
     },
+    selectTab: function(tab) {
+        this.node.easytabs('select', '#' + tab);
+    },
     bindButtons: function(){
         $('#text-info').click(toggleTextualInfo);
         $('#pali-lookup').click(togglePaliLookup);
@@ -156,10 +163,9 @@ sc.sidebar = {
         $('#textual-controls button').removeAttr('disabled');
     },
     doMenu: function(target, headings){
-        var self = this;
-        if ($('#menu ul').length) return; //Keep existing menu.
+        var self = this,
+            start = Date.now()
         
-        var start = Date.now()
         if (!headings) {
             headings = $('#text').find('h2,h3,h4,h5,h6');
         }
@@ -217,15 +223,15 @@ sc.sidebar = {
             menu.push('<li><a href="#{}">{}</a></li>'.format(ref, menutext));
             
             if (existingAnchor.length) {
-                existingAnchor.attr({href: "#menu"});
+                existingAnchor.attr({href: "#table-of-contents"});
             } else {
-                $(this).wrapInner('<a id="{}" href="#menu" />'.format(ref))
+                $(this).wrapInner('<a id="{}" href="#table-of-contents" />'.format(ref))
             }
 
         });
         if (menu.length > 1) {
             menu.push('</ul>');
-            $('<div id="menu">').append(menu.join('')).appendTo(target);
+            $('<div id="table-of-contents">').append(menu.join('')).appendTo(target);
         }
         
         if (patimokkhaUid) {

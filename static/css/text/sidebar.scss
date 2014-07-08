@@ -46,14 +46,14 @@ $sidebar-dongle-width = 1em;
     .button {
         background:white;
         color:$dark-medium-gray;
-        /* -0.5px to accomodate border */
-        margin: 0px -0.5px; 
         display:inline-block;
         text-align:center;
         float:left;
-        height: 1.5em;
+        height: 2.5em;
+        line-height: 2.5em;
+        box-sizing: border-box;
         
-        &:hover {
+        &:hover:not(.empty) {
             background:$light-light-gray;
         }
       
@@ -64,6 +64,11 @@ $sidebar-dongle-width = 1em;
         & + .button {
             border-left: 1px solid $light-gray;
         }
+
+        .options {
+            display: none;
+        }
+        
     }
 
     .x1 > .button {
@@ -88,14 +93,6 @@ $sidebar-dongle-width = 1em;
 
     .x6 > .button {
         width: 16.66%;
-    }
-
-    .dropdown:after {
-        content: '▼';
-        position: absolute;
-        right: 1px;
-        opacity: 0.5;
-        text-shadow: 2px 2px 3px $light-gray;
     }
 
 
@@ -141,8 +138,9 @@ $sidebar-dongle-width = 1em;
         /* This is required for proper display of scroll bar --- or is it?*/
         & > .inner-wrap {
             padding: 0;
-            position: relative;
-            top:$sidebar-tabs-height;
+            position: absolute;
+            width: 100%;
+            top: $sidebar-tabs-height * 2;
         }
     }
     /* Movement Controls */
@@ -151,15 +149,17 @@ $sidebar-dongle-width = 1em;
     &.active {
         left: 0;
     }
-
-   
-    
 }
 
 #message-box {
+    float: left;
+    clear: both;
     margin: 1em;
     > div {
         font-style: italic;
+        padding: 0.5em;
+        border-radius: 0.5em;
+        background-color: $bright-pastel-red;
     }
 }
 
@@ -216,8 +216,6 @@ $sidebar-dongle-width = 1em;
     min-width: 3em;
     text-align: center;
     padding: 0;
-    height:$sidebar-tabs-height;
-    top:$sidebar-tabs-height;
     font-size: 90%;
     color:$dark-medium-gray;
      &.details {
@@ -232,9 +230,6 @@ $sidebar-dongle-width = 1em;
 
 #textual-controls {
     position:relative;
-    top:$sidebar-tabs-height;
-  
-
 }
 
 #translit-buttons > .button {
@@ -246,7 +241,7 @@ $sidebar-dongle-width = 1em;
 }
 
 /* Internal page links */
-.tabs a, #menu a {
+.tabs a, #table-of-contents a {
     text-decoration: none;
     color:$dark-medium-gray;
 }
@@ -264,7 +259,6 @@ $sidebar-dongle-width = 1em;
     background: transparent;
     padding: 0 2em;
     width:100%;
-    height: $sidebar-tabs-height;
     -webkit-appearance: none;
 }
 
@@ -272,12 +266,11 @@ $sidebar-dongle-width = 1em;
     width:100%;
 }
 
-#nextprev {
-    height: $sidebar-tabs-height;
-}
-
-#sidebar #menu {
-    margin-top:7.45em !important;
+#table-of-contents {
+    margin-top: 1em;
+    float: left;
+    clear: both;
+    width: 100%;
 }
 
 

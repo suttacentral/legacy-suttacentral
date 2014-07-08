@@ -8,62 +8,61 @@
       </ul>
       <div class="tab" id="controls-tab">
         <div class="inner-wrap">
-            <div id="textual-controls">
-                {% if lang_code == 'pi' %}
-                <div class="x2 button-row" id="lookup"> 
-                <select class="button" id="lookup-to-lang" title="Select a lookup language">
-                    <option value="en">Pali → English</option>
-                    <option value="es">Pali → Spanish</option>               
-                </select>
-               <button class="button" id="pali-lookup" title="Activate Pali lookup">Lookup ▶</button>
-                </div>
-                <div class="x6 button-row" id="translit-buttons">
-                    <a class="button" id="toRoman" title="Read Pali text in Roman script">kā</a>
-                    <a class="button" id="toSinhala" title="Read Pali text in Sinhala script">කා</a>
-                    <a class="button" id="toThai" title="Read Pali text in Thai script">กา</a>
-                    <a class="button" id="toMyanmar" title="Read Pali text in Burmese script">ကာ</a>
-                    <a class="button" id="toDevar" title="Read Pali text in Devanagari script">का</a>
-                    <a class="button" id="toSyllables" title="Read Pali text in Roman script, broken into syllables, with long syllables underlined">k-ā</a>
-                </div>
-                {% endif %}
-                {% if lang_code == 'zh' %}
-                <div class="x1 button-row">
-                    <a class="button" id="zh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
-                </div>
-                {% endif %}
-                <div class="x1 button-row">
-                    <a class="button" id="text-info" title="View reference numbers, variant readings, etc.">Textual Information</a>
-                </div>
-                {# I'm using last-of-type keyed to div, so need a non-div
-                    element after the buttons --- no longer the case, now we just use the IDs#}
-                <div id="message-box"></div>
+            {% if lang_code == 'pi' %}
+            <div class="x2 button-row" id="lookup"> 
+            <select class="button" id="lookup-to-lang" title="Select a lookup language">
+                <option value="en">Pali → English</option>
+                <option value="es">Pali → Spanish</option>               
+            </select>
+           <button class="button" id="pali-lookup" title="Activate Pali lookup">Lookup ▶</button>
             </div>
+            <div class="x6 button-row" id="translit-buttons">
+                <a class="button" id="toRoman" title="Read Pali text in Roman script">kā</a>
+                <a class="button" id="toSinhala" title="Read Pali text in Sinhala script">කා</a>
+                <a class="button" id="toThai" title="Read Pali text in Thai script">กา</a>
+                <a class="button" id="toMyanmar" title="Read Pali text in Burmese script">ကာ</a>
+                <a class="button" id="toDevar" title="Read Pali text in Devanagari script">का</a>
+                <a class="button" id="toSyllables" title="Read Pali text in Roman script, broken into syllables, with long syllables underlined">k-ā</a>
+            </div>
+            {% endif %}
+            {% if lang_code == 'zh' %}
+            <div class="x1 button-row">
+                <a class="button" id="zh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
+            </div>
+            {% endif %}
+            <div class="x1 button-row">
+                <a class="button" id="text-info" title="View reference numbers, variant readings, etc.">Textual Information</a>
+            </div>
+            {# I'm using last-of-type keyed to div, so need a non-div
+                element after the buttons --- no longer the case, now we just use the IDs#}
+            <div id="message-box"></div>
         </div>
       </div>
       <div class="tab" id="navigation-tab">
         <div class="inner-wrap">
-            <div id="text-details">
-                <div class="button-row">
-                    <a class="button" id="text-details-button" title="Go to parallels and references">Textual Details ▶</a>
-                </div>
-                <div class="dropdown">
-                    <a class="button">Languages</a>
+            <div class="x1 button-row">
+                <a class="button" id="text-details-button" title="Go to parallels and references">Textual Details ▶</a>
+            </div>
+            <div class="x1 button-row">
+                <div class="button dropdown">Languages ▼
                     <ul class="options">
                         <li><a>English</a></li>
                         <li><a>Spanish</a></li>
                     </ul>
                 </div>
-                <div id="nextprev">
-                    <div class="x3 button-row">
-                        {% if textdata.prev_uid %}
-                            <a class="button" class="previous" href="/{{ lang_code }}/{{ textdata.prev_uid }}" title="Go to previous sutta">◀ {{imm.uid_to_acro(textdata.prev_uid)}}</a>
-                        {% endif %}
-                        <a class="button" class="top" href="#" title="Go to top of page"> ▲ TOP</a>
-                        {% if textdata.next_uid %}
-                            <a class="button" class="next" href="/{{ lang_code }}/{{ textdata.next_uid }}" title="Go to next sutta">{{imm.uid_to_acro(textdata.next_uid)}} ▶</a>
-                        {% endif %}
-                        </div>
-                    </div>
+            </div>
+            <div class="x3 button-row">
+                {% if textdata.prev_uid %}
+                    <a class="button" class="previous" href="/{{ lang_code }}/{{ textdata.prev_uid }}" title="Go to previous sutta">◀ {{imm.uid_to_acro(textdata.prev_uid)}}</a>
+                {% else %}
+                    <a class="button empty"></a>
+                {% endif %}
+                <a class="button" class="top" href="#" title="Go to top of page"> ▲ TOP</a>
+                {% if textdata.next_uid %}
+                    <a class="button" class="next" href="/{{ lang_code }}/{{ textdata.next_uid }}" title="Go to next sutta">{{imm.uid_to_acro(textdata.next_uid)}} ▶</a>
+                {% else %}
+                    <a class="button empty"></a>
+                {% endif %}
                 </div>
             </div>
       </div>
