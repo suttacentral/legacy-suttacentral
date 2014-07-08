@@ -272,7 +272,6 @@ class TextView(ViewBase):
     content_regex = regex.compile(r'''
         <body[^>]*>
         (?<content>.*)
-        </div>\n?
         </body>
         ''', flags=regex.DOTALL | regex.VERBOSE)
     
@@ -292,14 +291,9 @@ class TextView(ViewBase):
         context.sutta = imm.suttas.get(self.uid)
         context.division = imm.divisions.get(self.uid)
         
-        textinfo = imm.tim.get(self.uid, self.lang_code)
-        context.title = textinfo.name if textinfo else '?'
-        contents = [m['content']]
-        contents.append('</div>')
-        context.prev_uid, context.next_uid = self.get_nextprev(m)
-        contents.append('<script id="sc_text_info" type="text/json">\n{}\n</script>'.format(
-            self.text_json()))
-        context.text = '\n'.join(contents)
+        context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
+        context.title = textdata.name if textdata else '?'
+        context.text = m['content']
         # Eliminate newlines from Full-width-glyph languages like Chinese
         # because they convert into spaces when rendered.
         # TODO: This check should use 'language' table

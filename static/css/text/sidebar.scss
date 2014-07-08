@@ -15,6 +15,16 @@ $sidebar-dongle-width = 1em;
     z-index: 1;
     background:$light-light-gray;
     box-shadow:.1em .1em .5em rgba(118,118,118,0.3);
+
+    select, button {
+        /* Override user agent styling */
+        font: inherit;
+        font-size: inherit;
+        padding: 0;
+        border: none;
+        background: none;
+    }
+    
     ul {
         list-style-type: none;
         margin:0;
@@ -41,8 +51,10 @@ $sidebar-dongle-width = 1em;
         display:inline-block;
         text-align:center;
         float:left;
+        height: 1.5em;
+        
         &:hover {
-        background:$light-light-gray;
+            background:$light-light-gray;
         }
       
         &:active {
@@ -76,6 +88,14 @@ $sidebar-dongle-width = 1em;
 
     .x6 > .button {
         width: 16.66%;
+    }
+
+    .dropdown:after {
+        content: '▼';
+        position: absolute;
+        right: 1px;
+        opacity: 0.5;
+        text-shadow: 2px 2px 3px $light-gray;
     }
 
 
@@ -135,6 +155,14 @@ $sidebar-dongle-width = 1em;
    
     
 }
+
+#message-box {
+    margin: 1em;
+    > div {
+        font-style: italic;
+    }
+}
+
 
 #sidebar-dongle {
     position: absolute;
@@ -213,10 +241,9 @@ $sidebar-dongle-width = 1em;
     white-space: nowrap;
 }
 
-#pi-lookup {
+#pali-lookup {
     border-left: none !important;
 }
-.dropdown{text-align:center;}
 
 /* Internal page links */
 .tabs a, #menu a {

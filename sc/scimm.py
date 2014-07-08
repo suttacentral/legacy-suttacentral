@@ -611,31 +611,10 @@ class _Imm:
     def text_exists(self, uid, lang_uid):
         return self.tim.exists(uid, lang_uid)
     
-    def get_text_nextprev(self, uid, language_code):
-        try:
-            uids = self._uidlangcache[language_code]
-        except KeyError:
-            uids = sorted((k for k in self.tim.get(lang_uid=language_code) if '#' not in k),
-                key=sc.util.humansortkey)
-            self._uidlangcache[language_code] = uids
-            # The cache is eliminated upon imm regeneration.
-        
-        # This is a horrible way to find an index but can still run 
-        # 4000 times a second on the largest collections :).
-        try:
-            i = uids.index(uid)
-        except ValueError:
-            return (None, None)
+    def get_text_data(self, uid, language_code):
+        return self.tim.get(uid, language_code)
         
         
-        prev_uid = uids[i - 1] if i > 0 else None
-        next_uid = uids[i + 1] if i < len(uids) - 1 else None
-            
-        if not self.uids_are_related(uid, prev_uid):
-            prev_uid = None
-        if not self.uids_are_related(uid, next_uid):
-            next_uid = None
-        return (prev_uid, next_uid)
     
     @staticmethod
     def get_text_author(filepath):

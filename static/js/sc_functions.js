@@ -122,7 +122,7 @@ var scPersistantStorage = {
 
 function togglePaliLookup(){
     toggleLookupOn = !sc.userPrefs.getPref("paliLookup");
-    scMessage.clear();
+    sc.sidebar.messageBox.clear();
     sc.userPrefs.setPref("paliLookup", toggleLookupOn, true);
 }
 
@@ -470,7 +470,7 @@ function enablePaliLookup(){
     }
     if (!sc.data[dictObjectName])
     {
-        scMessage.show("Requesting Pali Dictionary...", {id: "requestDict", timeout: null});
+        sc.sidebar.messageBox.print("Requesting Pali Dictionary...", {id: "msg-request-dict", timeout: null});
     
         jQuery.ajax({
             url: sc.jsBaseUrl + scriptUrl,
@@ -478,8 +478,9 @@ function enablePaliLookup(){
             success: function() {
                 sc.data.piLookup = sc.data[dictObjectName];
                 generateLookupMarkup();
-                scMessage.clear("requestDict");
-                scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
+                sc.sidebar.messageBox.remove("msg-request-dict");
+                sc.sidebar.messageBox.print("Dictionary Enabled. Hover with the mouse to display meaning.", {id: "msg-lookup-success", timeout: 10000});
+                
                 return
             },
             crossDomain: true,

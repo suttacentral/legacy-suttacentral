@@ -184,6 +184,12 @@ sc.init = function(reset)
         toggleTextualInfo(true);
     }
 
+    if (sc.userPrefs.getPref("sidebar") === true)
+    {
+        sc.sidebar.show();
+    } else {
+        sc.sidebar.hide();
+    }
     
     if (sc.mode.pali === true) {
         var lookupToLang = sc.userPrefs.getPref('lookupToLang'),

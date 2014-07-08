@@ -97,6 +97,8 @@ sc.sidebar = {
         } 
         /* TEMPORARY */
         $('#text').find('.next, .previous, .top').remove();
+        /* END TEMPORARY */
+        
         this.doMenu('#navigation-tab > .inner-wrap');
         this.doMetadata('#metadata-tab > .inner-wrap');
         this.node.show().easytabs({
@@ -104,17 +106,35 @@ sc.sidebar = {
             tabs: '.tabs > li',
             updateHash: false
         });
-        setTimeout(function(){
-            self.node.removeClass('active');
-        }, 500);
-        $('#sidebar-dongle').on('click', function(){$('#sidebar').toggleClass('active'); return false});
+        
+        $('#sidebar-dongle').on('click',
+                function(){
+                    if (self.isVisible()) {
+                        self.hide();                        
+                    } else {
+                        self.show();
+                    }
+                    return false
+                }
+            );
         self.node.on('click', function(e){
             if (!$(e.target).is('div')) return true;
-            self.node.removeClass('active')
+            self.hide();
         });
         self.bindButtons();
         scState.save("clean");
         
+    },
+    isVisible: function() {
+        return this.node.hasClass('active');
+    },
+    show: function() {
+        this.node.addClass('active');
+        sc.userPrefs.setPref('sidebar', true);
+    },
+    hide: function() {
+        this.node.removeClass('active');
+        sc.userPrefs.setPref('sidebar', false);
     },
     bindButtons: function(){
         $('#text-info').click(toggleTextualInfo);
@@ -222,29 +242,22 @@ sc.sidebar = {
     doMetadata: function(target){
         $(target).append($('#metaarea'));
     },
-    sidebarAmmender: function(){
-        var textInfo = $('#sc_text_info').text();
-        if (!textInfo) return;
-        var data = JSON.parse(textInfo),
-            details = $('<div id="links">'),
-            dothtml = location.href.search(/\.html\b/) == -1 ? '' : '.html';
-        
-        /*if (data.subdivision_uid && data.subdivision_uid != data.division_uid) {
-            details.append('<a title="Goto Subdivision Page" href="../../{}">▲</a>'.format(data.subdivision_uid));
-        } else*/
-        if (data.division_uid) {
-            details.append('<a title="Go to Division Page" class="division" href="../{}{}">▲</a>'.format(data.division_uid, dothtml));
+    messageBox: {
+        print: function(message, args) {
+            var msgObj = $('<div>').append(message).attr('id', args.id);
+            $('#message-box').append(msgObj);
+            if (args.timeout) {
+                setTimeout(function(){
+                    msgObj.fadeOut();                
+                }, args.timeout)
+            }
+        },
+        remove: function(id) {
+            $('#message-box').find('[id="' + id + '"]').fadeOut();
+        },
+        clear: function(){
+            $('#message-box > *').remove();
         }
-        
-        if (data.sutta_uid) {
-            details.append('<a title="Go to Details Page" class="details" href="../{}{}">▶</a>'.format(data.sutta_uid, dothtml));
-        }
-        data.all_lang_codes.sort().forEach(function(lang_code){console.log(lang_code);
-                if (lang_code == data.lang_code) return;
-                details.append('<a href="../{}/{}{}">{}</a>'.format(lang_code, data.uid, dothtml, lang_code));
-            });
-        
-        $('#sidebar').prepend(details);
-    },
+    }
 }
 
