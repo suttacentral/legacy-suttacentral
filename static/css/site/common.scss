@@ -7,7 +7,7 @@ $body-font-size: 1em;
 body {
     @include serif;
     font-size: $body-font-size;
-    line-height: 1.5em;
+    line-height: 1.5;
     color: $body-text-color;
     background: $body-background-color;
 
@@ -34,6 +34,20 @@ body {
     @media #{$mobile} {
       line-height:1.4;
 }
+}
+
+::selection {
+background:#F7E63E;
+color:$dark-saturated-purple;
+}
+::-webkit-selection {
+background:#F7E63E;
+color:$dark-saturated-purple;
+}
+
+::-moz-selection {
+background:#F7E63E;
+color:$dark-saturated-purple;
 }
 //
 // Headings, paragraphs and lists

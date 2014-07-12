@@ -68,3 +68,125 @@ padding: 1.5em 1.5em 0 1.5em;
     }
   
 }
+.introduction p{
+    
+    max-width:40rem;
+    margin:0 auto 1rem;}
+}
+
+.image-left, .image-right, .image-big-left{
+    padding:1em;
+    box-shadow:.0 0 2em rgba(0,0,0,0.1) inset,
+    0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+}
+.image-left{
+    float:left;
+    margin:0 2em 2em 0;
+    width:50%;
+}
+.image-right{
+    float:right;
+    margin:0 0 2em 2em;
+    width:50%;
+}
+.image-big-left{
+    width:75%;
+    float:left;
+    margin:0 2em 2em 0;}
+
+
+
+
+
+
+
+    .wheel1{
+    position: relative;
+    z-index:1;
+    font-size: 18em;
+     line-height:1.5rem;
+    width:1em;
+    color:#F77C6F;
+    margin:5rem 40% 0;
+    text-shadow: 3px 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+
+    }
+    .wheel2{
+    position: relative;
+    z-index:2;
+    font-size: 20em;
+    line-height:1.5rem;
+    color:#62DA7C;
+   margin:4rem 0 0 50%;
+    width:1em;
+    text-shadow: 3px 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+    }
+    .wheel3{
+    z-index:3;
+    position: relative;
+    font-size: 21em;
+     line-height:1.5rem;
+    color:#9161D0;
+    margin:2rem 0 8rem 28%;
+    width:1em;
+    text-shadow: 3px 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+    }
+section{
+    margin:5%;
+    overflow:hidden;
+    padding:2rem;
+    font-size:1.2em;}
+
+    @media screen and (max-width: 860px) {
+.image-left, .image-right,.image-big-left, .image-big-right {
+    width:100%;
+            float:none;
+            display:block;
+            margin: 0 auto 2em;
+            margin-left:-1em;
+
+        }
+}
