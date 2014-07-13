@@ -77,17 +77,13 @@ padding: 1.5em 1.5em 0 1.5em;
 .image-left, .image-right, .image-big-left{
     padding:1em;
     box-shadow:.0 0 2em rgba(0,0,0,0.1) inset,
-    0 2px 0 #c9c9c9,
-               0 3px 0 #bbb,
-               0 4px 0 #b9b9b9,
-               0 5px 0 #aaa,
-               0 6px 1px rgba(0,0,0,.1),
+    
+               
+              
                0 0 5px rgba(0,0,0,.1),
                0 1px 3px rgba(0,0,0,.3),
-               0 3px 5px rgba(0,0,0,.2),
-               0 5px 10px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 20px 20px rgba(0,0,0,.15);
+               0 3px 5px rgba(0,0,0,.2);
+               
 }
 .image-left{
     float:left;
@@ -100,7 +96,7 @@ padding: 1.5em 1.5em 0 1.5em;
     width:50%;
 }
 .image-big-left{
-    width:75%;
+    width:70%;
     float:left;
     margin:0 2em 2em 0;}
 
@@ -116,8 +112,9 @@ padding: 1.5em 1.5em 0 1.5em;
     font-size: 18em;
      line-height:1.5rem;
     width:1em;
+
     color:#F77C6F;
-    margin:5rem 40% 0;
+    margin:7rem 40% 0;
     text-shadow: 3px 1px 0 #ccc,
                0 2px 0 #c9c9c9,
                0 3px 0 #bbb,
@@ -179,6 +176,14 @@ section{
     overflow:hidden;
     padding:2rem;
     font-size:1.2em;}
+
+summary{background:$dirty-pastel-green;
+padding:1em;
+text-align:center;
+font-size:1.2em;
+color:white;
+font-weight:bold;}
+
 
     @media screen and (max-width: 860px) {
 .image-left, .image-right,.image-big-left, .image-big-right {
