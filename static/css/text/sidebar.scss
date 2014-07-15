@@ -207,11 +207,15 @@ $sidebar-dongle-width = 1em;
 
     }
 
+#metadata-tab p{
+    padding: 0 1em;
+}
 
-
-#navigation-tab ul, #metadata-tab p{
-    padding:1em;
-
+#navigation-tab ul{
+    padding: 2em 0 2em 1em;
+}
+#navigation-tab li ul{
+    padding: 0 0 0 1em;
 }
 
 #navigation-tab {
@@ -223,7 +227,7 @@ $sidebar-dongle-width = 1em;
     li a {
         display:block;
         width:100%;
-        padding:.2em .1em;
+        padding:.2em 0.1em;
         
     }
 
@@ -233,8 +237,7 @@ $sidebar-dongle-width = 1em;
 
     li li {
         font-weight:normal;
-        padding-left:1em;
-    }
+            }
 }
 
 #links > a {
