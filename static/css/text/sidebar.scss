@@ -193,9 +193,9 @@ $sidebar-dongle-width = 1em;
 
     #darkness{
     position:absolute;
-    z-index:-1;
-    width:1000em;
+    z-index:-10;
     height:100%;
+    width:0;
     transition:400ms ease-out;
     background:rgba(0,0,0,0);
 
@@ -204,6 +204,7 @@ $sidebar-dongle-width = 1em;
         .active #darkness{
     background:rgba(0,0,0,0.1);
     transition:400ms ease-out;
+    width:1000em;
 
     }
 
@@ -212,10 +213,10 @@ $sidebar-dongle-width = 1em;
 }
 
 #navigation-tab ul{
-    padding: 2em 0 2em 1em;
+    margin: 2em 0 2em 1em;
 }
 #navigation-tab li ul{
-    padding: 0 0 0 1em;
+    margin: 0 0 0 1em;
 }
 
 #navigation-tab {
