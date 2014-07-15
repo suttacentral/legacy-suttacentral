@@ -175,15 +175,23 @@ section{
     margin:5%;
     overflow:hidden;
     padding:2rem;
-    font-size:1.2em;}
+    font-size:1.2em;
+    }
 
-summary{background:$dirty-pastel-green;
-padding:1em;
-text-align:center;
-font-size:1.2em;
-color:white;
-font-weight:bold;}
+summary{
+    
+    padding:1em;
+    text-align:center;
+    font-size:1.2em;
+   color:$dirty-pastel-green;
+    font-weight:bold;
+    
 
+    }
+    details[open] summary{
+    background:$dirty-pastel-green;
+    color:white;
+    }
 
     @media screen and (max-width: 860px) {
 .image-left, .image-right,.image-big-left, .image-big-right {

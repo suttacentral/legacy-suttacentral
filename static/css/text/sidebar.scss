@@ -1,7 +1,7 @@
 $sidebar-width = 20rem;
 $sidebar-tabs-height = 2.5em;
 $sidebar-tabs-vertical-padding = 0.4em;
-$sidebar-dongle-height = 1em;
+$sidebar-dongle-height = 40px;
 $sidebar-dongle-width = 1em;
 
 #sidebar {
@@ -14,7 +14,8 @@ $sidebar-dongle-width = 1em;
     color:$dark-medium-gray;
     z-index: 1;
     background:$light-light-gray;
-    box-shadow:.1em .1em .5em rgba(118,118,118,0.3);
+    box-shadow: 0.1em 0.1em 0.2em rgba(0,0,0,0.2);
+    
 
     select, button {
         /* Override user agent styling */
@@ -166,21 +167,27 @@ $sidebar-dongle-width = 1em;
 
 #sidebar-dongle {
     position: absolute;
-    top: 50%;
-    bottom: 50%;
+    top:50%;
+    bottom:50%;
     font-size:2rem;
-    color:$light-medium-gray;
+    color:white;
     left: $sidebar-width;
-    height: $sidebar-dongle-height;
-    width: $sidebar-dongle-width;
-    background: $light-light-gray;
-    z-index: 1;
-    box-shadow:.05em .05em .15em rgba(118,118,118,0.3);
+    height: 40px;
+    width: 40px;
+    background: $dirty-pastel-green;
+    z-index: -1;
+    line-height:1.1;
+    box-shadow: 0.03em 0.02em 0.15em rgba(0,0,0,0.15);
     text-align:center;
-    padding:.35em 0.05em 0 0;
-    border-radius: 0 3px 3px 0;
     cursor: pointer;
-}
+    transition: 400ms ease-out;
+    
+    }
+    .active #sidebar-dongle{
+    margin-left:-45px;
+    transition: 400ms ease-out;
+    box-shadow:none;
+    }
 
 #navigation-tab ul, #metadata-tab p{
     padding:1em;
@@ -248,10 +255,10 @@ $sidebar-dongle-width = 1em;
 
 #sidebar-dongle {
     @media #{$mobile} {
-        width: 0.3em;
-        overflow:hidden;
-        text-indent: -5px;
-        padding:0.1em 0.05em 0.35em 0;
+        margin-left:-30px;
+        text-align:right;
+        padding:0 0.1em 0 0;
+        
     }
 }
 
