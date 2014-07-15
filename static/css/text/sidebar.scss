@@ -12,7 +12,7 @@ $sidebar-dongle-width = 1em;
     width:$sidebar-width;
     @include sans-serif;
     color:$dark-medium-gray;
-    z-index: 1;
+    z-index: 2;
     background:$light-light-gray;
     box-shadow: 0.1em 0.1em 0.2em rgba(0,0,0,0.2);
     
@@ -81,7 +81,7 @@ $sidebar-dongle-width = 1em;
     }
 
     .x3 > .button {
-        width: 33.3%;
+        width: 50%;
     }
 
     .x4 > .button {
@@ -129,6 +129,7 @@ $sidebar-dongle-width = 1em;
         background:white !important;
     }
 
+
     .tab {
         position: absolute;
         top: $sidebar-tabs-height;
@@ -146,7 +147,7 @@ $sidebar-dongle-width = 1em;
     }
     /* Movement Controls */
     left: -$sidebar-width;
-    @include transition(all 0.5s ease-in-out);
+    @include transition(all 0.5s ease-out);
     &.active {
         left: 0;
     }
@@ -187,7 +188,26 @@ $sidebar-dongle-width = 1em;
     margin-left:-45px;
     transition: 400ms ease-out;
     box-shadow:none;
+    z-index:-10;
     }
+
+    #darkness{
+    position:absolute;
+    z-index:-1;
+    width:1000em;
+    height:100%;
+    transition:400ms ease-out;
+    background:rgba(0,0,0,0);
+
+    }
+
+        .active #darkness{
+    background:rgba(0,0,0,0.1);
+    transition:400ms ease-out;
+
+    }
+
+
 
 #navigation-tab ul, #metadata-tab p{
     padding:1em;

@@ -1,6 +1,8 @@
 {% extends "base.html" -%}
 {%- block content -%}
+
 <div id="sidebar">
+<div id="darkness"></div>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
         <li><a href="#navigation-tab">Navigation</a></li>
@@ -57,7 +59,7 @@
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}
-                <a class="button" class="top" href="#" title="Go to top of page"> ▲ TOP</a>
+                
                 {% if textdata.next_uid %}
                     <a class="button" class="next" href="/{{ lang_code }}/{{ textdata.next_uid }}" title="Go to next sutta">{{imm.uid_to_acro(textdata.next_uid)}} ▶</a>
                 {% else %}
