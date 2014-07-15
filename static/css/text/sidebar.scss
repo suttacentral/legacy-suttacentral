@@ -103,7 +103,7 @@ $sidebar-dongle-width = 1em;
         height: $sidebar-tabs-height;
         position:relative;
         z-index:1;
-        top: $sidebar-tabs-height;
+        border-top: $sidebar-tabs-height solid $light-light-gray;
     }
 
     .tabs li {
