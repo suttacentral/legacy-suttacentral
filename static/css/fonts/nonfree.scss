@@ -6,24 +6,6 @@
 
 // Source: http://rosettatype.com/Skolar
 // Source: David Březina <brezina@davi.cz>
-$skolar-devanagari-web: 'Skolar Devanagari Web';
-
-@font-face {
-    font-family: $skolar-devanagari-web;
-    @include font-face-src('nonfree/SkolarDevanagariWeb-Bold',
-                           'SkolarDevanagariWeb-Bold');
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: $skolar-devanagari-web;
-    @include font-face-src('nonfree/SkolarDevanagariWeb-Regular',
-                           'SkolarDevanagariWeb-Regular');
-    font-weight: normal;
-    font-style: normal;
-}
-
 $skolar-sutta-web: 'Skolar Sutta Web';
 $skolar-sutta-web-sc: 'Skolar Sutta Web SC';
 
