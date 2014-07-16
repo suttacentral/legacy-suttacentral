@@ -15,11 +15,11 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 3;
+    z-index: 5;
     box-shadow: 0 0 0.3em rgba(0,0,0,0.4);
 
     // slide up and down
-    transition: 200ms;
+    transition: 400ms ease-out;
     &.retracted {
         top: -$header-height;
         margin-top: -$header-border-width;
@@ -171,54 +171,64 @@ header {
 
 #panel-screen-wrap {
     position: fixed;
-    display: none;
     top: $panel-offset-top;
     left: 0;
     bottom: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.25);
-    z-index: 5;
+    background: rgba(0,0,0,0);
+    z-index: -3;
+    opacity:0;
+   transition:z-index 400ms ease-out,opacity 400ms ease-out;
+   display:block;
+    
 }
 
 #panel-screen-wrap.active{
-    display: block;
+opacity:1;
+    background: rgba(0,0,0,0.2);
+       transition:z-index 400ms ease-out,opacity 400ms ease-out;
+       z-index: 3;
 }
 
 #panel {
     @include sans-serif;
     background: white;
     border-bottom: 1px solid $light-gray;
-    box-shadow: 0.05em 0.15em 0.25em rgba(118, 118, 118, 0.3);
+    box-shadow: 0.05em 0.15em 0.25em rgba(0,0,0,0.15);
     margin: 0;
     left: 0;
     right: 0;
-    position: absolute;
-    top: $panel-offset-top;
+    top:0;
+    position: fixed;
     padding-left: 1.5em;
-    z-index: 10;
+    z-index: -4;
     overflow-y: auto;
     overflow-x: hidden;
+    top: $panel-offset-top;
     // It is probably best for transitions to be applied to the panel
     // and not to the contents.
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 250ms ease;
-    height: 0;
+     display:block;
+     opacity:0;
+     
+     transition:height 400ms ease-out;
+     
+     
     &.active {
-        opacity: 1;
-        visibility: visible;
+    z-index: 5;
+       opacity:1;
+       
+     transition:height 400ms ease-out;
+ 
     }
     .contents {
         position: absolute;
-        display: none;
-        opacity: 0;
-        visibility: hidden;
-        transition: 100ms;
+         display:block;
+     opacity:0;
+     transition:opacity 400ms ease-out;
     }
     .contents.active {
-        display: block;
-        opacity: 1;
-        visibility: visible;
+      opacity:1;
+     transition:opacity 400ms ease-out;
     }
 }
 
@@ -275,8 +285,8 @@ header {
     position: absolute;
     top: $panel-offset-top;
     padding-left: 0.5em;
-    z-index: 10;
+    z-index: 40;
     overflow-y: auto;
     overflow-x: hidden;
-    line-height:1.5;
+    
     }

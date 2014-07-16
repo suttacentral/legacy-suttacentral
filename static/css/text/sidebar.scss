@@ -147,7 +147,7 @@ $sidebar-dongle-width = 1em;
     }
     /* Movement Controls */
     left: -$sidebar-width;
-    @include transition(all 0.5s ease-out);
+    @include transition(all 400ms ease-out);
     &.active {
         left: 0;
     }
