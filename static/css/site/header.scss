@@ -223,11 +223,14 @@ opacity:1;
     .contents {
         position: absolute;
          display:block;
-     opacity:0;
+      visibility:hidden;
+      opacity:0;
      transition:opacity 400ms ease-out;
+     background:white;
     }
     .contents.active {
-      opacity:1;
+    opacity:1;
+      visibility:visible;
      transition:opacity 400ms ease-out;
     }
 }
