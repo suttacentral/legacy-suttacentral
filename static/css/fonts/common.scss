@@ -93,7 +93,7 @@ $tharlon: 'TharLon';
 }
 
 @mixin sans-serif-small-caps($extra:'') {
-    font-family: $hetu-schetu-sc, sans-serif unquote($extra);
+    font-family: $hetu-schetu-sc, $source-sans-pro, sans-serif unquote($extra);
 }
 
 @mixin monospace($extra:'') {
