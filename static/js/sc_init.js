@@ -110,11 +110,10 @@ sc.data = {}
 sc.jsBaseUrl = $('script[src*="js/"]').last().attr('src').match(/(.*\/js\/)/)[0];
 
 $(document).ready(function() {
-    $('#home').easytabs({
-        animate: false,
-        tabs: '.tabs > li',
-        updateHash: false
-    });
+    var images = $("img");
+    console.log("Unveiling", images);
+    images.unveil(50);
+    
     if ($('.sutta').length > 0){
         sc.mode.pali = ($('#text').attr('lang') == 'pi');
         sc.sidebar.init();
