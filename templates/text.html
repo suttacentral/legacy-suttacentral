@@ -45,15 +45,14 @@
             <div class="x1 button-row">
                 <a class="button" id="text-details-button" title="Go to parallels and references">Textual Details ▶</a>
             </div>
-            <div class="x1 button-row">
-                <div class="button dropdown">Languages ▼
-                    <ul class="options">
-                        <li><a>English</a></li>
-                        <li><a>Spanish</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="x3 button-row">
+            <details class="x1 button-row">
+                <summary class="button">Languages</summary>
+                <ul class="options">
+                    <li><a>English</a></li>
+                    <li><a>Spanish</a></li>
+                </ul>
+            </details>
+            <div class="x2 button-row">
                 {% if textdata.prev_uid %}
                     <a class="button" class="previous" href="/{{ lang_code }}/{{ textdata.prev_uid }}" title="Go to previous sutta">◀ {{imm.uid_to_acro(textdata.prev_uid)}}</a>
                 {% else %}
