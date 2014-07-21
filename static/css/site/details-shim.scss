@@ -1,0 +1,14 @@
+
+details.no-details {
+    > summary:before {
+        content: "▶  ";
+        font-size: 80%;
+        margin-left: -1em;
+    }
+
+    &.open > summary:before {
+        content: "▼  ";
+        font-size: 80%;
+        margin-left: -1em;
+    }
+}

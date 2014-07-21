@@ -119,6 +119,7 @@ def get_env():
         'js/vendor/jquery.easytabs-3.2.0.min.js',
         'js/lib/jquery.scrolllock.js',
         'js/lib/jquery.unveil.js',
+        'js/lib/jquery.details.js',
         'js/sc_utility.js',
         'js/nav.js',
         'js/sc_functions.js',

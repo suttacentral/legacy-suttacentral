@@ -113,6 +113,14 @@ $(document).ready(function() {
     var images = $("img");
     console.log("Unveiling", images);
     images.unveil(50);
+    //polyfill details if needed
+    $("details").details()
+    if (!$.fn.details.support){
+        // For css
+        $("details").addClass('no-details').on('open.details', function(){
+            $(this).attr('open', true);}).on('close.details', function(){
+                $(this).attr('open', false);});
+    }
     
     if ($('.sutta').length > 0){
         sc.mode.pali = ($('#text').attr('lang') == 'pi');

@@ -287,7 +287,8 @@ class TextView(ViewBase):
         m = self.content_regex.search(self.get_html())
         m.detach_string() # Free up memory now.
         imm = scimm.imm()
-        
+
+        context.uid = self.uid
         context.sutta = imm.suttas.get(self.uid)
         context.division = imm.divisions.get(self.uid)
         
@@ -300,6 +301,19 @@ class TextView(ViewBase):
         if self.lang_code in {'zh'}:
             context.text = self.massage_cjk(context.text)
         context.lang_code = self.lang_code
+
+        context.text_refs = []
+        if context.sutta:
+            if context.sutta.text_ref:
+                context.text_refs.append(context.sutta.text_ref)
+            context.text_refs.extend(context.sutta.translations)
+            
+        elif context.division:
+            if context.division.text_ref:
+                context.text_refs.append(context.division.text_ref)
+            context.text_refs.extend(context.division.translations)
+
+        
         
     @property
     def path(self):

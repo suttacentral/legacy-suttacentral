@@ -53,7 +53,13 @@ $sidebar-dongle-width = 1em;
         height: 2.5em;
         line-height: 2.5em;
         box-sizing: border-box;
-        
+        cursor: pointer;
+
+        // Distinguish between buttons which are hyperlinks and buttons
+        // which are not hyperlinks.
+        &:not(:link) {
+            cursor: default;
+        }
         &:hover:not(.empty) {
             background:$light-light-gray;
         }
@@ -219,7 +225,40 @@ $sidebar-dongle-width = 1em;
     margin: 0 0 0 1em;
 }
 
-#navigation-tab {
+.languages {
+    > ul {
+        text-align: center;
+        > li {        
+            > a {
+                display: inline-block;
+                width: 100%;
+            }
+
+            &.offsite > a {
+                font-style: italic;
+                &:after {
+                    content: "";
+                    background: url(http://upload.wikimedia.org/wikipedia/commons/4/44/External.png)  center right no-repeat;
+                    padding-right:14px;
+                }
+            } 
+            /* The currently loaded text */
+            &.this > a{
+                &:before {
+                    content: "→ ";
+                    margin-left: -1.5em;
+                }
+            }
+            /* The root language for the text */
+            &.root > a {
+                font-weight: bold;
+            }
+        }
+    }
+}
+    
+
+#table-of-contents {
     li {
        
         font-weight:bold;
