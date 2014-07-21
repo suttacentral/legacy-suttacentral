@@ -611,7 +611,7 @@ class _Imm:
     def text_exists(self, uid, lang_uid):
         return self.tim.exists(uid, lang_uid)
     
-    def get_text_data(self, uid, language_code):
+    def get_text_data(self, uid, language_code=None):
         return self.tim.get(uid, language_code)
         
         

@@ -1,6 +1,5 @@
 /* Home Page */
 
-
 #home {
     max-width: 40em;
     margin: 6em auto 0;
@@ -8,187 +7,142 @@
     &.pitaka_page {
         max-width: 65em;
     }
-
     @media #{$mobile} {
         padding: 0 !important;
         margin: 0 0.5em;
-         .epigraph-reference {
-               margin-top:0 !important;
-           }
+        .epigraph-reference {
+            margin-top: 0 !important;
+        }
     }
-
     .hgroup {
-        margin: 0 0 4em 0
+        margin: 0 0 4em 0;
     }
-
     h1 {
         @include serif-small-caps;
-        color:$medium-gray;
-        text-align:center;
-        letter-spacing:0.02em;
-        margin:0;
-        font-size:3em
+        color: $medium-gray;
+        text-align: center;
+        letter-spacing: 0.02em;
+        margin: 0;
+        font-size: 3em;
     }
     .subtitle {
-        color:$medium-gray;
-        text-align:center;
-        font-style:italic;
-        font-size:1.5em
+        color: $medium-gray;
+        text-align: center;
+        font-style: italic;
+        font-size: 1.5em;
     }
-.epigraph{
+    .epigraph {
         margin: 0 5% 4em;
-    border:1px solid $light-gray;
-padding: 1.5em 1.5em 0 1.5em;
-
-  .read-this{
-        text-align:right;
-       @include sans-serif-small-caps;
-       text-transform:lowercase;
-
+        border: 1px solid $light-gray;
+        padding: 1.5em 1.5em 0 1.5em;
+        .read-this {
+            text-align: right;
+            @include sans-serif-small-caps;
+            text-transform: lowercase;
+        }
+        .read-this a {
+            padding: 0.2em 0.4em;
+        }
+        .read-this a:hover {
+            background: $light-light-gray;
+        }
     }
-
-     .read-this a{padding:0.2em 0.4em;}
-    .read-this a:hover{background:$light-light-gray;}
-}
-
-.epigraph-text{font-style:italic;}
-
+    .epigraph-text {
+        font-style: italic;
+    }
     .epigraph-reference {
-      
-        margin-top:-1em;
-       margin-bottom:0.5em;
-        letter-spacing:0.02em;
+        margin-top: -1em;
+        margin-bottom: 0.5em;
+        letter-spacing: 0.02em;
         @include serif-small-caps;
-        text-transform:lowercase;
-        font-style:normal;
+        text-transform: lowercase;
+        font-style: normal;
     }
-    .epigraph-parallels{
-    font-size:0.85em;
-    line-height:1.2;
+    .epigraph-parallels {
+        font-size: 0.85em;
+        line-height: 1.2;
     }
-  
-}
-.introduction p{
-    
-    max-width:40rem;
-    margin:0 auto 1rem;}
 }
 
-
-.image-home{
-   width:50%;
-   float:right;
-   margin:0 0 2em 2em;
-}
-
-.image-home-big{
-    width:70%;
-    float:right;
-    margin:0 0 2em 2em;
+#intro {
+    .introduction p {
+        max-width: 40rem;
+        margin: 0 auto 1rem;
     }
 
-
-
-
-
-
-
-    .wheel1{
-    position: relative;
-    z-index:1;
-    font-size: 18em;
-     line-height:1.5rem;
-    width:1em;
-
-    color:#F77C6F;
-    margin:7rem 40% 0;
-    text-shadow: 3px 1px 0 #ccc,
-               0 2px 0 #c9c9c9,
-               0 3px 0 #bbb,
-               0 4px 0 #b9b9b9,
-               0 5px 0 #aaa,
-               0 6px 1px rgba(0,0,0,.1),
-               0 0 5px rgba(0,0,0,.1),
-               0 1px 3px rgba(0,0,0,.3),
-               0 3px 5px rgba(0,0,0,.2),
-               0 5px 10px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 20px 20px rgba(0,0,0,.15);
-
-    }
-    .wheel2{
-    position: relative;
-    z-index:2;
-    font-size: 20em;
-    line-height:1.5rem;
-    color:#62DA7C;
-   margin:4rem 0 0 50%;
-    width:1em;
-    text-shadow: 3px 1px 0 #ccc,
-               0 2px 0 #c9c9c9,
-               0 3px 0 #bbb,
-               0 4px 0 #b9b9b9,
-               0 5px 0 #aaa,
-               0 6px 1px rgba(0,0,0,.1),
-               0 0 5px rgba(0,0,0,.1),
-               0 1px 3px rgba(0,0,0,.3),
-               0 3px 5px rgba(0,0,0,.2),
-               0 5px 10px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 20px 20px rgba(0,0,0,.15);
-    }
-    .wheel3{
-    z-index:3;
-    position: relative;
-    font-size: 21em;
-     line-height:1.5rem;
-    color:#9161D0;
-    margin:2rem 0 8rem 28%;
-    width:1em;
-    text-shadow: 3px 1px 0 #ccc,
-               0 2px 0 #c9c9c9,
-               0 3px 0 #bbb,
-               0 4px 0 #b9b9b9,
-               0 5px 0 #aaa,
-               0 6px 1px rgba(0,0,0,.1),
-               0 0 5px rgba(0,0,0,.1),
-               0 1px 3px rgba(0,0,0,.3),
-               0 3px 5px rgba(0,0,0,.2),
-               0 5px 10px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 20px 20px rgba(0,0,0,.15);
-    }
-section{
-    margin:5%;
-    overflow:hidden;
-    padding:2rem;
-    font-size:1.2em;
+    .image-home {
+        width: 50%;
+        float: right;
+        margin: 0 0 2em 2em;
     }
 
-summary{
-    
-    padding:1em;
-    text-align:center;
-    font-size:1.2em;
-   color:$dirty-pastel-green;
-    font-weight:bold;
-    border:0;
-
+    .image-home-big {
+        width: 70%;
+        float: right;
+        margin: 0 0 2em 2em;
     }
-    details[open] summary{
-    background:$dirty-pastel-green;
-    color:white;
 
-     }
-    
+    .wheel1 {
+        position: relative;
+        z-index: 1;
+        font-size: 18em;
+        line-height: 1.5rem;
+        width: 1em;
+        color: #F77C6F;
+        margin: 7rem 40% 0;
+        text-shadow: 3px 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .wheel2 {
+        position: relative;
+        z-index: 2;
+        font-size: 20em;
+        line-height: 1.5rem;
+        color: #62DA7C;
+        margin: 4rem 0 0 50%;
+        width: 1em;
+        text-shadow: 3px 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .wheel3 {
+        z-index: 3;
+        position: relative;
+        font-size: 21em;
+        line-height: 1.5rem;
+        color: #9161D0;
+        margin: 2rem 0 8rem 28%;
+        width: 1em;
+        text-shadow: 3px 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    section {
+        margin: 5%;
+        overflow: hidden;
+        padding: 2rem;
+        font-size: 1.2em;
+    }
+
+    summary {
+        padding: 1em;
+        text-align: center;
+        font-size: 1.2em;
+        color: $dirty-pastel-green;
+        font-weight: bold;
+        border: 0;
+    }
+
+    details[open] summary {
+        background: $dirty-pastel-green;
+        color: white;
+    }
 
     @media screen and (max-width: 860px) {
-.image-home, .image-home-big {
-    width:100%;
-            float:none;
-            display:block;
+        .image-home, .image-home-big {
+            width: 100%;
+            float: none;
+            display: block;
             margin: 0 auto 2em;
-            margin-left:-1em;
-
+            margin-left: -1em;
         }
+    }
 }
