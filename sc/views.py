@@ -311,7 +311,7 @@ class TextView(ViewBase):
         elif context.division:
             if context.division.text_ref:
                 context.text_refs.append(context.division.text_ref)
-            context.text_refs.extend(context.division.translations)
+            #context.text_refs.extend(context.division.translations)
 
         
         
