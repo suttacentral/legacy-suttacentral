@@ -59,9 +59,9 @@ def generate(host, basestem, wait=0.0, force=False, quiet=False, omit=None):
         zip(tmp_output_zip, output_dir, quiet=quiet)
         x7z(tmp_output_7z, output_dir, quiet=quiet)
 
-        # Copy the files to the final location
-        copy(tmp_output_zip, output_zip)
-        copy(tmp_output_7z, output_7z)
+        # Move the files to the final location
+        move(tmp_output_zip, output_zip)
+        move(tmp_output_7z, output_7z)
 
     # Update the latest symlinks to point to the files we just created
     update_latest_symlink(output_zip, basestem)

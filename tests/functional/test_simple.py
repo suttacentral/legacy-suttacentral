@@ -6,7 +6,7 @@ class SimpleTestCase(SCTestCase):
 
     def test_homepage_title(self):
         self.goto('/')
-        self.assertIn('Correspondence of early Buddhist discourses', self.title)
+        self.assertIn('Early Buddhist texts, translations, and parallels', self.title)
 
     def test_homepage_tabs(self):
         self.goto('/')

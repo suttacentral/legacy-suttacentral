@@ -106,10 +106,11 @@ a.pub {
 a.bl {display:none;}
 
 
-#metaarea .author, #metaarea .smallcaps, #metaarea .roman_numerals {
+#metaarea .author, #metaarea .smallcaps, #metaarea .roman_numerals, .deets .author, .deets .smallcaps, .deets .roman_numerals {
     @include sans-serif-small-caps;
     font-style:normal;
     letter-spacing:0.02em;
+    text-transform:lowercase;
 }
 
 .author {
@@ -128,10 +129,13 @@ a.bl {display:none;}
   text-transform:lowercase;
     @include serif-small-caps;
     font-style:normal;
-    letter-spacing:0.02em;
+    
 }
 
-
+q:before,
+q:after {
+ content: "";
+}
 
 /* BOOKMARKED SECTION HIGHLIGHTING */
 .embeddedparallel.bookmarkeded {

@@ -2,7 +2,7 @@ $link-color:               $bright-cool-blue;
 $link-visited-color:       $cool-blue;
 $link-hover-color:         $dark-saturated-red;
 $link-active-color:        $bright-saturated-red;
-$link-active-shadow-color: $bright-saturated-yellow;
+
 $link-offline-color:       $dark-pastel-red;
 
 a, .text_results h3 a {
@@ -22,7 +22,7 @@ a, .text_results h3 a {
 
     &:active {
         color: $link-active-color;
-        text-shadow: 0px 0px 0.5em $link-active-shadow-color;
+        
     }
 
     // De-emphasize offsite translations

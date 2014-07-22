@@ -1,199 +1,148 @@
 /* Home Page */
 
-$home-tabs-background-color: $light-pastel-green;
-$home-tabs-text-color: $body-background-color;
-$home-tabs-active-color: $pastel-green;
-$home-tabs-hover-color: $dark-pastel-green;
-$home-shadow-color: rgba($medium-gray, 0.3);
-$home-line-color: $light-gray;
-$home-link-hover-color: $light-light-gray;
-$home-heading-color: $dark-medium-gray;
-
-$home-tabs-height: 2em;
-
-#home-tabs {
-    width: 100%;
-    height: $home-tabs-height;
-    line-height: $home-tabs-height;
-    background-color: $home-tabs-background-color;
-
+#home {
+    max-width: 40em;
+    margin: 6em auto 0;
+    padding: 0 5% !important;
+    &.pitaka_page {
+        max-width: 65em;
+    }
     @media #{$mobile} {
-       
-    }
-
-    @media print {
-        display: none;
-    }
-
-    & > .tabs {
-        margin: 0 auto;
-        max-width: $page-max-width;
-        height: 100%;
-
-        li {
-            width: 24.5%;
-            margin: 0;
-            border-right: 1px solid $home-tabs-text-color;
-            float: left;
-            list-style-type: none;
-            
-            &:last-child {
-                border-right: none;
-            }
-
-            & > a {
-                display: block;
-                padding: 0 0 0 0.75em;
-                color: $home-tabs-text-color;
-                background-color: $home-tabs-background-color;
-                @include sans-serif;
-                font-weight: bold;
-                text-transform: uppercase;
-                text-decoration: none;
-                overflow: hidden;
-                letter-spacing:0.05em;
-
-                @media #{$mobile} {
-                    padding-left: 0.5em;
-                }
-
-                &:hover {
-                    background-color: $home-tabs-hover-color;
-                }
-            }
-
-            &.active > a {
-                color: $home-tabs-active-color;
-                background-color: $home-tabs-text-color;
-            }
+        padding: 0 !important;
+        margin: 0 0.5em;
+        .epigraph-reference {
+            margin-top: 0 !important;
         }
+    }
+    .hgroup {
+        margin: 0 0 4em 0;
+    }
+    h1 {
+        @include serif-small-caps;
+        color: $medium-gray;
+        text-align: center;
+        letter-spacing: 0.02em;
+        margin: 0;
+        font-size: 3em;
+    }
+    .subtitle {
+        color: $medium-gray;
+        text-align: center;
+        font-style: italic;
+        font-size: 1.5em;
+    }
+    .epigraph {
+        margin: 0 5% 4em;
+        border: 1px solid $light-gray;
+        padding: 1.5em 1.5em 0 1.5em;
+        .read-this {
+            text-align: right;
+            @include sans-serif-small-caps;
+            text-transform: lowercase;
+        }
+        .read-this a {
+            padding: 0.2em 0.4em;
+        }
+        .read-this a:hover {
+            background: $light-light-gray;
+        }
+    }
+    .epigraph-text {
+        font-style: italic;
+    }
+    .epigraph-reference {
+        margin-top: -1em;
+        margin-bottom: 0.5em;
+        letter-spacing: 0.02em;
+        @include serif-small-caps;
+        text-transform: lowercase;
+        font-style: normal;
+    }
+    .epigraph-parallels {
+        font-size: 0.85em;
+        line-height: 1.2;
     }
 }
 
-#home-content {
-    margin: 2em auto;
-    max-width: $page-max-width;
-    overflow: auto;
-
-    @media #{$mobile} {
-        margin: 0.5em auto;
+#intro {
+    .introduction p {
+        max-width: 40rem;
+        margin: 0 auto 1rem;
     }
 
-    h3 {
+    .image-home {
+        width: 50%;
+        float: right;
+        margin: 0 0 2em 2em;
+    }
+
+    .image-home-big {
+        width: 70%;
+        float: right;
+        margin: 0 0 2em 2em;
+    }
+
+    .wheel1 {
+        position: relative;
+        z-index: 1;
+        font-size: 18em;
+        line-height: 1.5rem;
+        width: 1em;
+        color: #F77C6F;
+        margin: 7rem 40% 0;
+        text-shadow: 3px 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .wheel2 {
+        position: relative;
+        z-index: 2;
+        font-size: 20em;
+        line-height: 1.5rem;
+        color: #62DA7C;
+        margin: 4rem 0 0 50%;
+        width: 1em;
+        text-shadow: 3px 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .wheel3 {
+        z-index: 3;
+        position: relative;
+        font-size: 21em;
+        line-height: 1.5rem;
+        color: #9161D0;
+        margin: 2rem 0 8rem 28%;
+        width: 1em;
+        text-shadow: 3px 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    section {
+        margin: 5%;
+        overflow: hidden;
+        padding: 2rem;
         font-size: 1.2em;
     }
-}
 
-#home-main {
-
-    .pitaka {
-
-        @include grid-container;
-        margin-bottom: 3em;
-
-        margin: 0 auto;
-        
-        & > h1 {
-            @include serif-small-caps;
-            margin: 1em 0 0.5em;
-            font-size: 2em;
-            text-align: center;
-            color: $home-heading-color;
-        }
-
-        &.columns-5 .column {
-            @include grid-unit(19%, 0.5em, 0.5em);
-            min-width: 12em;
-        }
-
-        &.columns-4 .column {
-            @include grid-unit(24%, 0.5em, 0.5em);
-            min-width: 12em;
-        }
-
-        &.columns-3 .column {
-            @include grid-unit(32%, 0.5em, 0.5em);
-            min-width: 12em;
-        }
-
+    summary {
+        padding: 1em;
+        text-align: center;
+        font-size: 1.2em;
+        color: $dirty-pastel-green;
+        font-weight: bold;
+        border: 0;
     }
 
-    .language {
-        padding: 0.5em;
-        border: 1px solid rgba($home-line-color, 0.3);
-        border-radius: 0.3em;
-        box-shadow: 0 0 0.3em $home-shadow-color;
-        background-color: $off-white;
-
-        & > h2 {
-            margin: 0.5em 0 0.5em 0.35em;
-            font-size: 1.5em;
-            font-weight: normal;
-            color: $home-heading-color;
-        }
+    details[open] summary {
+        background: $dirty-pastel-green;
+        color: white;
     }
 
-    .sect {
-
-        margin: 0 0 0.5em;
-        padding: 0;
-        border: 1px solid $home-line-color;
-        border-radius: 0.25em;
-        list-style: none;
-        background-color: white;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-
-        & > li {
-
-            border-bottom: 1px solid $home-line-color;
-
-            &.group-with-next {
-                border-bottom: 1px solid white;
-            }
-
-            &:last-child {
-                border-bottom: none;
-            }
-
-            & > h3 {
-                margin: 0;
-                padding: 0.75em 0.5em 0.5em;
-                border-radius: 0.25em;
-                font-size: 1.1em;
-                font-weight: bold;
-                color: $home-heading-color;
-                background-color: $light-off-white;
-                cursor: default;
-            }
-
-            & > a {
-
-                display: block;
-                padding: 0.4em 0.5em;
-                padding-right: 1px;
-                line-height: 1.75em;
-
-                &:hover:not(.no-suttas) {
-                    background-color: $home-link-hover-color;
-                }
-                
-                &.no-suttas {
-                    color: $dark-pastel-green;
-                }   
-            }
+    @media screen and (max-width: 860px) {
+        .image-home, .image-home-big {
+            width: 100%;
+            float: none;
+            display: block;
+            margin: 0 auto 2em;
+            margin-left: -1em;
         }
     }
-}
-
-#home-sutta {
-    white-space: nowrap;
-    li {
-        overflow: hidden;
-    }
-}
-#home-vinaya {
-    word-break: break-word;
 }

@@ -1,11 +1,11 @@
 $page-min-width: 320px;
 $page-max-width: 1100px;
-$footer-height: 115px;
+$footer-height: 240px;
 $main-top-margin: 6em;
 
 $tablet-main-top-margin: 3em;
 
-$mobile-footer-height: 75px;
+$mobile-footer-height: 240px;
 $mobile-main-top-margin: 2em;
 $mobile-main-side-margin: 1em;
 
@@ -37,6 +37,11 @@ body {
     }
 }
 
+#page-main{
+
+    
+}
+
 #page-footer-push {
     width: 100%;
     height: $footer-height;
@@ -58,6 +63,10 @@ body {
     @media #{$mobile-and-tablet} {
         max-width: inherit;
     }
+}
+
+#page-main {
+    margin-top: 3em;
 }
 
 #onecol article,

@@ -23,7 +23,7 @@ def full():
         'cd ..',
         'pip install -q -r requirements.txt',
         'invoke jsdata.build --minify',
-        'invoke assets.compile',
+        'invoke assets.compile --precompress',
         'sudo supervisorctl start sc-production',
         'sudo service apache2 reload',
         'rm -f tmp/maintenance',
@@ -54,7 +54,7 @@ def quick():
     _production_run(
         'git pull',
         'pip install -q -r requirements.txt',
-        'invoke assets.compile',
+        'invoke assets.compile --precompress',
         'sudo supervisorctl restart sc-production',
         'invoke assets.clean --older'
     )

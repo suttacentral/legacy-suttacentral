@@ -122,12 +122,13 @@ var scPersistantStorage = {
 
 function togglePaliLookup(){
     toggleLookupOn = !sc.userPrefs.getPref("paliLookup");
-    scMessage.clear();
+    sc.sidebar.messageBox.clear();
     sc.userPrefs.setPref("paliLookup", toggleLookupOn, true);
 }
 
 function transliterateHandler()
 {
+    console.log('hi');
     sc.userPrefs.setPref("script", this.id, true);
 }
 
@@ -141,108 +142,54 @@ function toggleTextualInfo(force) {
     if (showTextInfo)
     {
         $(document.body).addClass("infomode");
-        var meta = $(textualControls.metaarea)[0];
-        if (!meta.innerHTML) {
-            var content = false;
-            for (var i = 0; i < meta.childNodes.length; i++)
-            {
-                var child = meta.childNodes[i]
-                if (child.nodeType == 3) {
-                    if (child.nodeValue.trim()){
-                        content = true;
-                        break;
-                    }
-                } else if (child.nodeType == 1) {
-                    //console.log(child);
-                    if ($(child).not(".hidden").length > 0){
-                        content = true;
-                        break;
-                    }
-                }
-            }
-            if (!content){
-                meta.append('<p>No Metadata</p>');
-            }
-        }
     } else {
         $(document.body).removeClass("infomode");
     }
     sc.userPrefs.setPref("textInfo", showTextInfo, false);
 }
 
-function bindButtons(){
-     document.getElementById(textInfoButtonId).onclick = toggleTextualInfo;
-     if (sc.mode.pali === true){
-        document.getElementById(paliLookupButtonId).onclick = togglePaliLookup;
-
-        for (f in transFuncs) {
-            try {
-                document.getElementById(f).onclick = transliterateHandler;
-            } catch (e) {/*If button doesn't exist.*/}
-        }
-    }
-}
-
 function buildTextualInformation() {
-    var anchors = $(textualControls.marginClasses);
-    for (var i = 0; i < anchors.length; i++) {
-        var a = anchors[i];
-        var $a = $(a);
-
-        var aClass = a.className.split(' ')[0];
-        var title = sc.mode[sc.mode.lang]["strings"][aClass];
-        $a.attr("title", title);
-        var aid = $a.attr('id'),
-            idPrefix;
-        if (!aid) continue;
-        if (aClass == 'pts1' || aClass == 'pts2') {
-            idPrefix = 'pts';
+    var marginClasses = sc.classes.margin,
+        idRex,
+        idRepl;
+    for (var marginClass in sc.classes.margin) {
+        var elements = $('.' + marginClass);
+        if (elements.length == 0) {
+            continue
+        }
+        var title = sc.classes.margin[marginClass];
+        if (title) {
+            elements.attr("title", title);
+        }
+        if (marginClass == 'ms') {
+            idRex = /p_([0-9A-Z]+)_([0-9]+)/;
+            idRepl = "$1:$2";
+        } else if (marginClass == 'vnS') {
+            idRex = /S.([iv]+),([0-9])/;
+            idRepl = "S $1 $2";
+        }
+        else if (marginClass == 'pts1' || marginClass == 'pts2') {
+            idRex = RegExp('^pts', 'i');
+            idRepl = '';
         } else {
-            idPrefix = $a.attr('class');
+            idRex = RegExp('^' + marginClass, 'i');
+            idRepl = '';
         }
-        aid = aid.replace(RegExp('^' + idPrefix, 'i'), '');
-        
-        if (aClass == 'ms') {
-            $a.text( aid.replace(/p_([0-9A-Z]+)_([0-9]+)/, "$1:$2."))
-        } else if (aClass == 'vnS') {
-            $a.text(aid.replace(/S.([iv]+),([0-9])/, "S $1 $2"))
-        } else if (aClass == 'pts_pn'){
-            var m = aid.split('.')
-            m[0] = m[0].toUpperCase();
-            $a.text( m.join('.') )
-        }        
-        
-        if ($a.text() == '') {
-            $a.text(aid.replace(/\d+_/, '').replace(aClass+'_', ''));
-        }
-        if (!$a.attr('href') && aid) {
-            $a.attr('href', '#' + $a.attr('id'));
-        }
-
-        a.innerHTML = a.innerHTML.replace(/(\d)-(\d)/, '$1\u2060—\u2060$2')
+        elements.each(function(){
+            var id = $(this).attr('id');
+            if (!id) {
+                return
+            }
+            if ($(this).text() == '') {
+                $(this).text(id.replace(/^\d+_/, '')
+                               .replace(idRex, idRepl)
+                               .replace(/(\d)-(\d)/, '$1\u2060—\u2060$2'));
+            }
+        });
     }
-    var das = $('a.da');
-    for (i = 0; i < das.length; i += 3)
-        das[i].innerHTML = das[i].id;
-    buildVariantNotes();
-    $("#metaarea a").filter(textualControls.marginClasses).each(function(){this.className = ""; this.innerHTML = ""});
-    $(textualControls.titleClasses).each(function(){
-        var class_ = this.className.split(' ')[0];
-        $(this).attr("title", sc.mode[sc.mode.lang]["strings"][class_])
-    });
 
-
-}
-
-function buildVariantNotes(){
-    var notes = $(textualControls.popupClasses);
-
-    for (var i = 0; i < notes.length; i++)
-    {
-        var mula = notes[i].getAttribute("data-mula");
-        var content = notes[i].getAttribute("data-content");
-        if (!mula || !content) continue;
-        $(notes[i]).append($('<span class="deets">'+content+'</span>'));
+    for (var contentClass in sc.classes.content) {
+        $('.' + contentClass).attr('title', sc.classes.content[contentClass]);
     }
 }
 
@@ -259,6 +206,7 @@ function toSyllablesInit(){
         
 
 function transliterate(func){
+    if (!wordMap[func.name]) wordMap[func.name] = {};
     if (func == toMyanmar) {
         $('#text').attr('lang', 'my');
     } else {
@@ -443,21 +391,17 @@ k++}c+=j[g];if(a[f]&&g!="ṁ"){c+="ฺ"}k++}else{if(!j[g]){c+=g;if(a[h]||(h=="h"
 function generateLookupMarkup(){
     //We want to wrap every word in a tag.
     var classes = ".sutta P, .sutta H1, .sutta H2, .sutta H3"
-//     $(marginInfoClasses).html('');
-//     $("span.deets").remove();
-//     $(textInfoClasses).replaceWith(function(){$(this).text()});
     generateMarkupCallback.nodes = $(classes).toArray();
     generateMarkupCallback.start = Date.now();
-    textualControls.disable()
+    sc.sidebar.disableControls()
     generateMarkupCallback();
-//     buildTextualInformation();
     return;
 }
 
 function generateMarkupCallback() {
     var node = generateMarkupCallback.nodes.shift();
     if (!node) {
-        textualControls.enable();
+        sc.sidebar.enableControls();
         return}
     toLookupMarkup(node);
     setTimeout(generateMarkupCallback, 5);
@@ -497,25 +441,50 @@ function toLookupMarkup(startNode)
 var G_uniRegExpNSG = /[–   :;?!,.“‘]+/gi;
 var toggleLookupOn = false;
 var paliDictRequested = false;
-var pi2en_dict = null;
+
 function enablePaliLookup(){
-    function ready(){
-        generateLookupMarkup();
-        scMessage.show("Dictionary Enabled. Hover with the mouse to display meaning.", 10000);
-        return
-    }
     $(document).on('mouseenter', 'span.lookup', lookupWordHandler);
-    if (!pi2en_dict)
+
+    /* Contains language-neutral information on declensions and
+     * conjugations */
+    if (!sc.data.piEndings) {
+        jQuery.ajax({
+            url: sc.jsBaseUrl + 'data/pi-endings.js',
+            dataType: "script",
+            success: undefined,
+            crossDomain: true,
+            cache: true
+        });
+    }
+    var script = $('#lookup-to-lang').val(),
+        scriptUrl,
+        dictObjectName;
+    if (script == 'en') {
+        scriptUrl = 'data/pi2en-maindata.js';
+        dictObjectName = 'pi2enDict';
+    } else if (script == 'es') {
+        scriptUrl = 'data/pi2es-maindata.js';
+        dictObjectName = 'pi2esDict';
+    } else {
+        throw Error('Unknown script: ' + script);
+    }
+    if (!sc.data[dictObjectName])
     {
-        scMessage.show("Requesting Pali Dictionary...", 10000);
-        sc.pi2enDataScripts.forEach(function(url, i){
-            jQuery.ajax({
-                url: sc.jsBaseUrl+url,
-                dataType: "script",
-                success: i == 0 ? ready : null,
-                crossDomain: true,
-                cache: true
-            });
+        sc.sidebar.messageBox.print("Requesting Pali Dictionary...", {id: "msg-request-dict", timeout: null});
+    
+        jQuery.ajax({
+            url: sc.jsBaseUrl + scriptUrl,
+            dataType: "script",
+            success: function() {
+                sc.data.piLookup = sc.data[dictObjectName];
+                generateLookupMarkup();
+                sc.sidebar.messageBox.remove("msg-request-dict");
+                sc.sidebar.messageBox.print("Dictionary Enabled. Hover with the mouse to display meaning.", {id: "msg-lookup-success", timeout: 10000});
+                
+                return
+            },
+            crossDomain: true,
+            cache: true
         });
     } else
         generateLookupMarkup();
@@ -693,8 +662,8 @@ function matchPartial(word, maxlength){
         for (var i = 0; i < word.length; i++){
             var part = word.substring(0, word.length - i);
             if (part.length < maxlength) break;
-            if(typeof(pi2en_dict[part]) == 'object') {
-                var meaning = pi2en_dict[part][1];
+            if(typeof(sc.data.piLookup[part]) == 'object') {
+                var meaning = sc.data.piLookup[part][1];
                 return {"base":part, "meaning": meaning, "leftover": word.substring(word.length - i, word.length)}
             }
         }
@@ -708,20 +677,20 @@ function matchPartial(word, maxlength){
 
 function exactMatch(word)
 {
-    if(typeof(pi2en_dict[word]) == 'object') {
-        var meaning = pi2en_dict[word][1]+' ('+pi2en_dict[word][0]+')';
+    if(typeof(sc.data.piLookup[word]) == 'object') {
+        var meaning = sc.data.piLookup[word][1]+' ('+sc.data.piLookup[word][0]+')';
         return {"base": word, "meaning": meaning};
     }
     return null;
 }
 
 function fuzzyMatch(word){
-    var end = pi2en_dict._end;
+    var end = sc.data.piEndings;
     for(var i = 0; i < end.length; i++) {
         if(word.length > end[i][2] && word.substring(word.length - end[i][0].length, word.length) === end[i][0]) {
             var orig = word.substring(0,word.length - end[i][0].length + end[i][1]) + end[i][3];
-            if(typeof(pi2en_dict[orig]) == 'object') {
-                var meaning = pi2en_dict[orig][1] + ' ('+pi2en_dict[orig][0]+')';
+            if(typeof(sc.data.piLookup[orig]) == 'object') {
+                var meaning = sc.data.piLookup[orig][1] + ' ('+sc.data.piLookup[orig][0]+')';
                 return {"base": orig, "meaning": meaning};
             }
         }

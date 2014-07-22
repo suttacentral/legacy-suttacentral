@@ -7,10 +7,10 @@
 
 // Site-wide styles
 @import 'site/common';
-@import 'site/buttons';
 @import 'site/links';
 @import 'site/tables';
 @import 'site/layout';
+@import 'site/details-shim';
 
 // Page header and footer
 @import 'site/development-bar';
@@ -31,11 +31,11 @@
 
 // Sutta styles
 @import 'text/common';
-@import 'text/header';
+@import 'text/headings';
 @import 'text/nav';
 @import 'text/paragraph-num';
 @import 'text/popupnotes';
-@import 'text/toc';
+@import 'text/sidebar';
 @import 'text/zh2en';
 
 // Tool styles

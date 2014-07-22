@@ -1,4 +1,87 @@
 {% extends "base.html" -%}
 {%- block content -%}
+
+<div id="sidebar">
+<div id="darkness"></div>
+      <ul class='tabs'>
+        <li><a href="#controls-tab">Controls</a></li>
+        <li><a href="#navigation-tab">Navigation</a></li>
+        <li><a href="#metadata-tab">Metadata</a></li>
+      </ul>
+      <div class="tab" id="controls-tab">
+        <div class="inner-wrap">
+            {% if lang_code == 'pi' %}
+            <div class="x2 button-row" id="lookup"> 
+            <select class="button" id="lookup-to-lang" title="Select a lookup language">
+                <option value="en">Pali → English</option>
+                <option value="es">Pali → Spanish</option>               
+            </select>
+           <button class="button" id="pali-lookup" title="Activate Pali lookup">Lookup ▶</button>
+            </div>
+            <div class="x6 button-row" id="translit-buttons">
+                <a class="button" id="toRoman" title="Read Pali text in Roman script">kā</a>
+                <a class="button" id="toSinhala" title="Read Pali text in Sinhala script">කා</a>
+                <a class="button" id="toThai" title="Read Pali text in Thai script">กา</a>
+                <a class="button" id="toMyanmar" title="Read Pali text in Burmese script">ကာ</a>
+                <a class="button" id="toDevar" title="Read Pali text in Devanagari script">का</a>
+                <a class="button" id="toSyllables" title="Read Pali text in Roman script, broken into syllables, with long syllables underlined">k-ā</a>
+            </div>
+            {% endif %}
+            {% if lang_code == 'zh' %}
+            <div class="x1 button-row">
+                <a class="button" id="zh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
+            </div>
+            {% endif %}
+            <div class="x1 button-row">
+                <a class="button" id="text-info" title="View reference numbers, variant readings, etc.">Textual Information</a>
+            </div>
+            {# I'm using last-of-type keyed to div, so need a non-div
+                element after the buttons --- no longer the case, now we just use the IDs#}
+            <div id="message-box"></div>
+        </div>
+      </div>
+      <div class="tab" id="navigation-tab">
+        <div class="inner-wrap">
+            
+            {% if imm(uid) %}
+            <div class="x1 button-row">
+                <a class="button" href="/{{ uid }}" id="text-details-button" title="Go to parallels and references">Textual Details ▶</a>
+            </div>
+            {% endif %}
+            <details class="x1 button-row languages">
+                <summary class="button">Languages</summary>
+                <ul>
+                    {% for text_ref in text_refs %}
+                    {% set offsite = text_ref.url[0] != '/' %}
+                    {% set classes =  (['offsite'] if offsite else [])
+                                    + (['root'] if text_ref.lang.uid == (sutta if sutta else division.collection).lang.uid else [])
+                                    + (['this'] if not offsite and lang_code == text_ref.lang.uid else []) %}
+                    <li{% if classes %} class="{{ classes|join(' ') }}"{% endif %}>
+                        <a href="{{ text_ref.url }}" title="{{ text_ref.abstract }}" {% if offsite %}target="_blank"{% endif %}>{{ text_ref.lang.name }}</a></li>
+                    {% endfor %}
+                    
+                </ul>
+            </details>
+            <div class="x2 button-row">
+                {% if textdata.prev_uid %}
+                    <a class="button" class="previous" href="/{{ lang_code }}/{{ textdata.prev_uid }}" title="Go to previous sutta">◀ {{imm.uid_to_acro(textdata.prev_uid)}}</a>
+                {% else %}
+                    <a class="button empty"></a>
+                {% endif %}
+                
+                {% if textdata.next_uid %}
+                    <a class="button" class="next" href="/{{ lang_code }}/{{ textdata.next_uid }}" title="Go to next sutta">{{imm.uid_to_acro(textdata.next_uid)}} ▶</a>
+                {% else %}
+                    <a class="button empty"></a>
+                {% endif %}
+                </div>
+            </div>
+      </div>
+      <div class="tab" id="metadata-tab">
+        <div class="inner-wrap">
+        </div>
+      </div>
+      <div id="sidebar-dongle">▶</div>
+</div>
 {{text}}
 {%- endblock -%}

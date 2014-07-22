@@ -157,14 +157,18 @@ class ViewBase:
             'page_lang': 'en',
             'scm': scm,
             'search_query': '',
+            'imm': sc.scimm.imm(),
         })
+
+    def massage_whitespace(self, text):
+        return regex.sub(r'\n[ \n\t]+', r'\n', text)
 
     def render(self):
         """Return the HTML for this view."""
         template = self.get_template()
         context = self.get_global_context()
         self.setup_context(context)
-        return template.render(dict(context))
+        return self.massage_whitespace(template.render(dict(context)))
 
 class InfoView(ViewBase):
     """A simple view that renders the template page_name; mostly used for
@@ -268,7 +272,6 @@ class TextView(ViewBase):
     content_regex = regex.compile(r'''
         <body[^>]*>
         (?<content>.*)
-        </div>\n?
         </body>
         ''', flags=regex.DOTALL | regex.VERBOSE)
     
@@ -284,24 +287,34 @@ class TextView(ViewBase):
         m = self.content_regex.search(self.get_html())
         m.detach_string() # Free up memory now.
         imm = scimm.imm()
+
+        context.uid = self.uid
+        context.sutta = imm.suttas.get(self.uid)
+        context.division = imm.divisions.get(self.uid)
         
-        textinfo = imm.tim.get(self.uid, self.lang_code)
-        context.title = textinfo.name if textinfo else '?'
-        contents = [m['content']]
-        if not self.links_regex.search(m['content'], pos=-500):
-            contents.extend(self.create_nextprev_links())
-        contents.append('</div>')
-        
-        contents.append('<script id="sc_text_info" type="text/json">\n{}\n</script>'.format(
-            self.text_json()))
-        context.text = '\n'.join(contents)
+        context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
+        context.title = textdata.name if textdata else '?'
+        context.text = m['content']
         # Eliminate newlines from Full-width-glyph languages like Chinese
         # because they convert into spaces when rendered.
         # TODO: This check should use 'language' table
         if self.lang_code in {'zh'}:
             context.text = self.massage_cjk(context.text)
         context.lang_code = self.lang_code
-    
+
+        context.text_refs = []
+        if context.sutta:
+            if context.sutta.text_ref:
+                context.text_refs.append(context.sutta.text_ref)
+            context.text_refs.extend(context.sutta.translations)
+            
+        elif context.division:
+            if context.division.text_ref:
+                context.text_refs.append(context.division.text_ref)
+            context.text_refs.extend(context.division.translations)
+
+        
+        
     @property
     def path(self):
         relative_path = scimm.imm().text_path(self.uid, self.lang_code)
@@ -355,63 +368,6 @@ class TextView(ViewBase):
         }
 
         return json.dumps(out, ensure_ascii=False, sort_keys=True)
-        
-        
-        """Add navigation links to the header h1 and h2"""
-
-        imm = scimm.imm()
-        div_text = self.uid in imm.divisions
-        
-        if not div_text:
-            h1 = hgroup_dom.select_one('h1')
-            
-            if h1:
-                for e in h1.iter():
-                    if e.text and len(e.text) > 3:
-                        break
-                href = '/{}'.format(self.uid)
-                a = hgroup_dom.makeelement('a', href=href,
-                    title='Click for details of parallels and translations.')
-                a.text = e.text
-                e.text = None
-                e.prepend(a)
-            
-        if hasattr(self, 'subdivision') or div_text:
-            if div_text:
-                heading = hgroup_dom.select_one('h1')
-            else:
-                if len(hgroup_dom) > 1:
-                    heading = hgroup_dom[0]
-                else:
-                    return # No heading?
-                
-            for e in heading.iter():
-                if e.text and len(e.text) > 3:
-                    break
-            href = '/{}'.format(self.uid if div_text else self.subdivision.uid)
-            a = hgroup_dom.makeelement('a', href=href,
-                title='Click to go to the division or subdivision page.')
-            a.text = e.text
-            e.text = None
-            e.prepend(a)
-    
-    def create_nextprev_links(self):
-        # Create links
-        imm = scimm.imm()
-        links = []
-        
-        prev_uid, next_uid = imm.get_text_nextprev(self.uid, self.lang_code)
-        
-        if prev_uid:
-            prev_acro = imm.uid_to_acro(prev_uid)
-            links.append('<a class="previous" href="{}">◀ {}</a>'.format(
-                Sutta.canon_url(uid=prev_uid, lang_code=self.lang_code), prev_acro))
-        links.append('<a class="top" href="#"> ▲ TOP </a>')
-        if next_uid:
-            next_acro = imm.uid_to_acro(next_uid)
-            links.append('<a class="next" href="{}">{} ▶</a>'.format(
-                Sutta.canon_url(uid=next_uid, lang_code=self.lang_code), next_acro))
-        return links
     
     @staticmethod
     def massage_cjk(text):
@@ -446,6 +402,16 @@ class SuttaView(TextView):
             return subdivision.division
         else:
             return subdivision
+
+class PitakaView(ViewBase):
+    template_name = 'pitaka'
+
+    def __init__(self, pitaka):
+        self.pitaka = pitaka
+
+    def setup_context(self, context):
+        context.pitaka = self.pitaka
+        
 
 class DivisionView(ViewBase):
     """Thew view for a division."""

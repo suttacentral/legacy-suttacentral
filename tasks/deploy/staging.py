@@ -33,7 +33,7 @@ def full(branch=None):
         'pip install -q -r requirements.txt',
         'invoke clean --aggressive',
         'invoke jsdata.build',
-        'invoke assets.compile',
+        'invoke assets.compile --precompress',
         'invoke textdata.refresh',
         'sudo supervisorctl start sc-staging',
         'rm -f tmp/maintenance',
@@ -62,7 +62,7 @@ def quick(branch=None):
         _branch_or_pull(branch),
         'cd ..',
         'pip install -q -r requirements.txt',
-        'invoke assets.compile',
+        'invoke assets.compile --precompress',
         'invoke textdata.refresh',
         'sudo supervisorctl restart sc-staging',
         'invoke assets.clean --older'

@@ -72,6 +72,14 @@ class SuttaCommon:
     @property
     def translations(self):
         return self.imm.get_translations(self.uid, self.lang.uid)
+
+    @property
+    def local_text_refs(self):
+        allrefs = []
+        if self.text_ref and self.text_ref.url.startswith('/'):
+            allrefs.append(self.text_ref)
+        allrefs.extend(self.translations)
+        return [tref for tref in allrefs if tref.url.startswith('/')]
     
     def __hash__(self):
         return hash(self.uid)
@@ -87,6 +95,15 @@ class SuttaCommon:
         if textinfo and textinfo.volpage:
             return textinfo.volpage
         return ''
+
+    @staticmethod
+    def canon_url(uid, lang_code, bookmark=''):
+        if not isinstance(lang_code, str):
+            lang_code = lang_code.uid
+        url = '/{lang}/{uid}'.format(uid=uid, lang=lang_code)
+        if bookmark:
+            url += '#' + bookmark
+        return url
 
     @property
     def _textinfo(self):
@@ -108,15 +125,6 @@ class Sutta(ConciseRepr, namedtuple('Sutta',
         'volpage alt_volpage_info biblio_entry '
         'parallels, imm'), SuttaCommon):
     __slots__ = ()
-    
-    @staticmethod
-    def canon_url(uid, lang_code, bookmark=''):
-        if not isinstance(lang_code, str):
-            lang_code = lang_code.uid
-        url = '/{lang}/{uid}'.format(uid=uid, lang=lang_code)
-        if bookmark:
-            url += '#' + bookmark
-        return url
 
     @property
     def name(self):

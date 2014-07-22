@@ -1,5 +1,5 @@
 $sutta-h1-color: $dark-medium-gray;
-$sutta-h2-color: $medium-gray;
+$sutta-h2-color: $dark-medium-gray;
 
 .sutta {
     h1, h2, h3, h4, h5, h6, .hgroup p {
@@ -46,9 +46,7 @@ $sutta-h2-color: $medium-gray;
     .hgroup {
         margin-top: 6em;
 
-        @media #{$mobile} {
-            margin-top: 0;
-        }
+   
 
         & > p {
             margin: 0;

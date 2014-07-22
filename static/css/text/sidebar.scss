@@ -1,0 +1,353 @@
+$sidebar-width = 20rem;
+$sidebar-tabs-height = 2.5em;
+$sidebar-tabs-vertical-padding = 0.4em;
+$sidebar-dongle-height = 40px;
+$sidebar-dongle-width = 1em;
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width:$sidebar-width;
+    @include sans-serif;
+    color:$dark-medium-gray;
+    z-index: 2;
+    background:$light-light-gray;
+    box-shadow: 0.1em 0.1em 0.2em rgba(0,0,0,0.2);
+    
+
+    select, button {
+        /* Override user agent styling */
+        font: inherit;
+        font-size: inherit;
+        padding: 0;
+        border: none;
+        background: none;
+    }
+    
+    ul {
+        list-style-type: none;
+        margin:0;
+        padding:0;
+    }
+
+    .button-row {
+        float:left;
+        width:100%;
+        clear: both;
+
+        border: 1px solid $light-gray;
+
+        & + .button-row {
+            border-top: none;
+        }
+    }
+
+    .button {
+        background:white;
+        color:$dark-medium-gray;
+        display:inline-block;
+        text-align:center;
+        float:left;
+        height: 2.5em;
+        line-height: 2.5em;
+        box-sizing: border-box;
+        cursor: pointer;
+
+        // Distinguish between buttons which are hyperlinks and buttons
+        // which are not hyperlinks.
+        &:not(:link) {
+            cursor: default;
+        }
+        &:hover:not(.empty) {
+            background:$light-light-gray;
+        }
+      
+        &:active {
+            background:$light-gray;
+        }
+        
+        & + .button {
+            border-left: 1px solid $light-gray;
+        }
+
+        .options {
+            display: none;
+        }
+        
+    }
+
+    .x1 > .button {
+        width: 100%;
+    }
+
+    .x2 > .button {
+        width: 50%;
+    }
+
+    .x3 > .button {
+        width: 33.33%;
+    }
+
+    .x4 > .button {
+        width: 25%;
+    }
+
+    .x5 > .button {
+        width: 20%;
+    }
+
+    .x6 > .button {
+        width: 16.66%;
+    }
+
+
+    .tabs {
+        text-align: center;
+        width: 100%;
+        height: $sidebar-tabs-height;
+        position:relative;
+        z-index:1;
+        border-top: $sidebar-tabs-height solid $light-light-gray;
+    }
+
+    .tabs li {
+        width:33.33%;
+        float: left;
+        background:$light-light-gray;
+        text-transform:lowercase;
+        letter-spacing:0.02em;
+        @include sans-serif-small-caps;
+        height: $sidebar-tabs-height;
+        & > a {
+            display: inline-block;
+            width: 100%;
+            padding:$sidebar-tabs-vertical-padding 0;
+        }
+    }
+
+    .tabs li:hover {
+        background:$light-gray;
+    }
+
+    .active {
+        background:white !important;
+    }
+
+
+    .tab {
+        position: absolute;
+        top: $sidebar-tabs-height;
+        bottom: 0em;
+        width: 100%;
+        overflow-y:auto;
+        overflow-x:hidden;
+        /* This is required for proper display of scroll bar --- or is it?*/
+        & > .inner-wrap {
+            padding: 0;
+            position: absolute;
+            width: 100%;
+            top: $sidebar-tabs-height * 2;
+        }
+    }
+    /* Movement Controls */
+    left: -$sidebar-width;
+    @include transition(all 400ms ease-out);
+    &.active {
+        left: 0;
+    }
+}
+
+#message-box {
+    float: left;
+    clear: both;
+    margin: 1em;
+    > div {
+        font-style: italic;
+        padding: 0.5em;
+        border-radius: 0.5em;
+        background-color: $bright-pastel-red;
+    }
+}
+
+
+#sidebar-dongle {
+    position: absolute;
+    top:50%;
+    bottom:50%;
+    font-size:2rem;
+    color:white;
+    left: $sidebar-width;
+    height: 40px;
+    width: 40px;
+    background: $dirty-pastel-green;
+    z-index: -1;
+    line-height:1.1;
+    box-shadow: 0.03em 0.02em 0.15em rgba(0,0,0,0.15);
+    text-align:center;
+    cursor: pointer;
+    transition: 400ms ease-out;
+    
+    }
+    .active #sidebar-dongle{
+    margin-left:-45px;
+    transition: 400ms ease-out;
+    box-shadow:none;
+    z-index:-10;
+    }
+
+    #darkness{
+    position:absolute;
+    z-index:-10;
+    height:100%;
+    width:0;
+    transition:400ms ease-out;
+    background:rgba(0,0,0,0);
+
+    }
+
+        .active #darkness{
+    background:rgba(0,0,0,0.1);
+    transition:400ms ease-out;
+    width:1000em;
+
+    }
+
+#metadata-tab p{
+    padding: 0 1em;
+}
+
+#navigation-tab ul{
+    margin: 2em 0 2em 1em;
+}
+#navigation-tab li ul{
+    margin: 0 0 0 1em;
+}
+
+.languages {
+    > ul {
+        text-align: center;
+        > li {        
+            > a {
+                display: inline-block;
+                width: 100%;
+            }
+
+            &.offsite > a {
+                font-style: italic;
+                &:after {
+                    content: "";
+                    background: url(http://upload.wikimedia.org/wikipedia/commons/4/44/External.png)  center right no-repeat;
+                    padding-right:14px;
+                }
+            } 
+            /* The currently loaded text */
+            &.this > a{
+                &:before {
+                    content: "→ ";
+                    margin-left: -1.5em;
+                }
+            }
+            /* The root language for the text */
+            &.root > a {
+                font-weight: bold;
+            }
+        }
+    }
+}
+    
+
+#table-of-contents {
+    li {
+       
+        font-weight:bold;
+    }
+
+    li a {
+        display:block;
+        width:100%;
+        padding:.2em 0.1em;
+        
+    }
+
+    li a:hover {
+        background-color:$light-light-gray
+    }
+
+    li li {
+        font-weight:normal;
+            }
+}
+
+#links > a {
+    float:none;
+    display: inline-block;
+    min-width: 3em;
+    text-align: center;
+    padding: 0;
+    font-size: 90%;
+    color:$dark-medium-gray;
+     &.details {
+        margin: 0;
+    }
+    &.active {
+        padding-bottom: 1em;
+        margin-bottom: -1em;
+        font-weight: bold;
+    }
+}
+
+#textual-controls {
+    position:relative;
+}
+
+#translit-buttons > .button {
+    white-space: nowrap;
+}
+
+#pali-lookup {
+    border-left: none !important;
+}
+
+/* Internal page links */
+.tabs a, #table-of-contents a {
+    text-decoration: none;
+    color:$dark-medium-gray;
+}
+
+#sidebar-dongle {
+    @media #{$mobile} {
+        margin-left:-30px;
+        text-align:right;
+        padding:0 0.1em 0 0;
+        
+    }
+}
+
+#languages a {
+    background: transparent;
+    padding: 0 2em;
+    width:100%;
+    -webkit-appearance: none;
+}
+
+#languages {
+    width:100%;
+}
+
+#table-of-contents {
+    margin-top: 1em;
+    float: left;
+    clear: both;
+    width: 100%;
+}
+
+
+.previous,
+.top,
+.next {
+    text-transform:lowercase;
+        letter-spacing:0.02em;
+        @include sans-serif-small-caps;  
+}

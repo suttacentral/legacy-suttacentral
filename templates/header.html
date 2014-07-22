@@ -1,69 +1,25 @@
-<div id="page-header">
+
 <header>
-
-<div id="page-header-wheel">
-    <a href="/">☸</a>
-</div>
-<h1 id="page-header-title">
-    <a href="/">SuttaCentral
-        {%- if offline -%}<em>Offline</em>{%- endif -%}
-    </a>
-</h1>
-<h2 id="page-header-caption">
-    <a href="/">Early Buddhist texts, translations, and parallels</a>
-</h2>
-
-<div id="page-header-menu">
-{% for pitaka_menu in menu -%}
-<nav>
-    <h3>{{ pitaka_menu.pitaka.name }}</h3>
-    <ul>
-        {% for lang_menu in pitaka_menu %}
-        <li>
-            <div class="triangle">▶</div>
-            <a href="#" class="sublink">{{ lang_menu.lang.name }}</a>
-            <ul>
-                {% if lang_menu|length < 2 %}
-                {% for division in lang_menu[0] %}
-                <li><a href="/{{ division.uid }}">{{ division.name }}</a></li>
-                {% endfor %}
-                {% else %}
-                {% for sect_menu in lang_menu %}
-                <li>
-                    <div class="triangle">▶</div>
-                    <a href="#" class="sublink">{{ sect_menu.sect.name }}</a>
-                    <ul>
-                        {% for division in sect_menu %}
-                        {% if division.menu_gwn_ind %}
-                        <li class="group-with-next">
-                        {% else %}
-                        <li>
-                        {% endif %}
-                        <a href="/{{ division.uid }}">{{ division.name }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </li>
-                {% endfor %}
-                {% endif %}
-            </ul>
-        </li>
+<div id="title-group"><a href="/">
+<div id="wheel">☸</div>
+<h1 id="title">SuttaCentral</h1>
+</a></div>
+<div id="menu">
+        {% for pitaka_menu in menu %}
+            <nav class="pitaka_menu{{ ' active' if pitaka and pitaka.uid == pitaka_menu.pitaka.uid else '' }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
+                <a href="/{{pitaka_menu.pitaka.uid}}"><h1>{{ pitaka_menu.pitaka.name }}</h1></a>
+            </nav>
         {% endfor %}
-    </ul>
-</nav>
-{%- endfor %}
 </div><!-- page-header-menu -->
 
 {% if not offline %}
+
 <form id="page-header-search" action="/search">
-    <input type="text" name="query" tabindex="1" size="25"
-        placeholder="Search" autocomplete="off" value="{{ search_query }}">
-    <button title="Search">
-        <img src="/img/search-icon-16.png">
-    </button>
-</form><!-- page-header-search -->
+    <input type="text" name="query" tabindex="1" 
+        placeholder="" autocomplete="off" value="">
+    <button type="button" title="Search"></button>
+</form>
 {% endif %}
 
-<div id="page-header-search-results" style="display: none;"></div>
-
+<div class="#panel-screen-wrap"><div id="page-header-search-results" style="display: none;"></div></div>
 </header>
-</div><!-- page-header -->

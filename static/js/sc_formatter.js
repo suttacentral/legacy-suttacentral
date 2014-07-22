@@ -17,16 +17,11 @@ sc.formatter = {
         });
         $(document).on('keydown', sc.formatter.deathToTheBeast);
         setTimeout(this.navMenuFixer, 1000);
-        this.tocAmmender();
         this.apply();
-        this.menuGenerator();
         this.operaFix();
         this.highlightBookmark();
         this.toolsMagic();
         this.overlapperFixer();
-        if ($('#home').length){
-            this.fixHome();
-        }
         setTimeout(this.acro_expander, 500);
         $(window).resize(this.overlapperFixer);
     },
@@ -40,34 +35,14 @@ sc.formatter = {
         $("q").each(function(){sc.formatter.rePosition($(this))});
         //console.log("Resize took: ", (new Date()).getTime() - start, " milliseconds");
     },
-    fixHome: function(){
-        /* This function is responsible for tweaking the column widths and alignment on the
-         * home page creating a very fluid experience
-         */
-        $(window).on('ready resize', function(){
-            var bodyWidth = $('#home-main').innerWidth(),
-                ruler = $('<span>m</span>').appendTo('.column li:last'),
-                t = $('.column:first'),
-                extraWidth = t.outerWidth(true) - t.width(),
-                minWidth = ruler.innerWidth() * 12.5 + extraWidth,
-                columnWidth = Math.max(minWidth, bodyWidth / 5.25) + extraWidth,
-                columnCount = Math.floor(bodyWidth / columnWidth);
-            ruler.remove();
-            // Remove this line to make the columns only ever shrink.
-            columnWidth = bodyWidth / columnCount;
-            $('.column').css({'width': columnWidth, 'min-width': minWidth});
-            //$('.column').width(Math.max(columnWidth, minWidth)).each(function(){$(this).css('style', $(this).css('style'
-            ['.columns-3', '.columns-4', '.columns-5'].forEach(function(sel){
-                var num = Number(sel.slice(-1));
-                $(sel).innerWidth(Math.min(bodyWidth, Math.min(num, columnCount) * columnWidth * 1.01));
-            });
-        });
-    },
-    headerMenuFix: function(){
-        $(window).on('ready resize', function(){
-
-
-        });
+    operaFix: function(){
+        if ('opera' in window) {
+            if ('version' in window.opera && window.opera.version > 12.2)
+            {
+                return;
+            }
+            $(document.body).addClass('badfonts');
+        }
     },
     rePosition: function($element){
         return $element;
@@ -86,15 +61,6 @@ sc.formatter = {
             $element.offset(offset).innerWidth(width+1);
         }
         return $element;
-    },
-    operaFix: function(){
-        if ('opera' in window) {
-            if ('version' in window.opera && window.opera.version > 12.2)
-            {
-                return;
-            }
-            $(document.body).addClass('badfonts');
-        }
     },
     quoteHanger: function(){
         $('p').each(function(){
@@ -306,127 +272,6 @@ sc.formatter = {
             tidy.init();
         if ($('#decruft').length)
             decruft.init();
-    },
-    menuGenerator: function(headings){
-        var self = this;
-        if ($('#menu ul').length) return; //Keep existing menu.
-        
-        var start = Date.now()
-        if (!headings) {
-            headings = $('#text').find('h2,h3,h4,h5,h6');
-            /*
-            headings = $('h2,h3,h4,h5,h6')
-                .filter('#text h2, ')
-            
-            if (headings.filter('.hgroup > *').length <= 1)
-                headings = headings.not('.hgroup > *')
-            else 
-                headings = headings.not('.hgroup > *:not(h1)')*/
-        }
-        var patimokkhaUid = ($('section.sutta[id*=-pm]').attr('id'))
-        if (patimokkhaUid) {
-            // Use alternative heading regex which
-            // displays numbered component.
-            headrex = /(.*)/;
-        } else {
-            headrex = /[ivx0-9]{1,5}[.:] \(?([^(]+)/i;
-        }
-        
-        adjustment = 6
-        headings.each(function(){
-            adjustment = Math.min(this.tagName.replace('H', '') - 1, adjustment)
-        })
-        menu = ['<ul>']
-        currentDepth = 1
-        seen = {null:1}
-        headings.each(function(){
-            depth = this.tagName.replace('H', '') - adjustment;
-            while (depth > currentDepth) {
-                menu.push('<li><ul>');
-                currentDepth++;
-            }
-            while (depth < currentDepth) {
-                menu.push('</ul></li>')
-                currentDepth--;
-            }
-            headtext = $(this).text();
-            m = headtext.match(headrex);
-            if (m){
-                menutext = m[0].trim();
-            } else {
-                menutext = headtext;
-            }
-            menutext = menutext.toTitleCase();
-            
-            var ref,
-                existingAnchor = $(this).find('[id]').first();
-            
-            if (existingAnchor.length && existingAnchor.text()) {
-                ref = existingAnchor.attr('id');
-            } else {
-                ref = $(this).attr('id');
-                if (!ref){
-                    var asciified = (sc.util.asciify(menutext.toLowerCase()) || menutext).replace(/ /g, '-'),
-                        oref = ref = asciified;
-                    while (ref in seen) {
-                        ref = oref + ++i;
-                    }
-                }
-            }
-            
-            menu.push('<li><a href="#{}">{}</a></li>'.format(ref, menutext));
-            
-            if (existingAnchor.length) {
-                existingAnchor.attr({href: "#menu"});
-            } else {
-                $(this).wrapInner('<a id="{}" href="#menu" />'.format(ref))
-            }
-
-        });
-        if (menu.length > 1) {
-            menu.push('</ul>');
-            tocMenu = $('#menu');
-            if (tocMenu.length == 0) {
-                tocMenu = $('<div id="menu">').appendTo('#toc');
-            }
-            $('#menu').append(menu.join(''));
-        }
-        
-        if (patimokkhaUid) {
-            var isRule = /(?:pj|ss|an|np|pc|pd|sk|as)\d+/;
-            $('h4').each(function(){
-                var h4 = $(this),
-                    id = h4.find('[id]').attr('id');
-                if (!isRule.test(id)) return;
-                href = '/{}_{}'.format(patimokkhaUid, id);
-                h4.append('<a href="{}" class="details" title="Go to parallels page">▶</a>'.format(href))
-            });
-        }
-        self.menuGenTime = Date.now() - start;
-    },
-    tocAmmender: function(){
-        var textInfo = $('#sc_text_info').text();
-        if (!textInfo) return;
-        var data = JSON.parse(textInfo),
-            details = $('<div id="links">'),
-            dothtml = location.href.search(/\.html\b/) == -1 ? '' : '.html';
-        
-        /*if (data.subdivision_uid && data.subdivision_uid != data.division_uid) {
-            details.append('<a title="Goto Subdivision Page" href="../../{}">▲</a>'.format(data.subdivision_uid));
-        } else*/
-        if (data.division_uid) {
-            details.append('<a title="Go to Division Page" class="division" href="../{}{}">▲</a>'.format(data.division_uid, dothtml));
-        }
-        
-        if (data.sutta_uid) {
-            details.append('<a title="Go to Details Page" class="details" href="../{}{}">▶</a>'.format(data.sutta_uid, dothtml));
-        }
-        data.all_lang_codes.sort().forEach(function(lang_code){
-                if (lang_code == data.lang_code) return;
-                details.append('<a href="../{}/{}{}">{}</a>'.format(lang_code, data.uid, dothtml, lang_code));
-            });
-        
-        $('#toc').prepend(details);
     },
     acro_expander: function(){
         /*$('#vinaya_parallels td')

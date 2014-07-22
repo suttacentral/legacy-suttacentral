@@ -7,7 +7,7 @@ $body-font-size: 1em;
 body {
     @include serif;
     font-size: $body-font-size;
-    line-height: 1.5em;
+    line-height: 1.5;
     color: $body-text-color;
     background: $body-background-color;
 
@@ -31,8 +31,24 @@ body {
     }
     
     overflow-x: hidden;
+    @media #{$mobile} {
+      line-height:1.4;
+}
 }
 
+::selection {
+background:#F7E63E;
+color:$dark-saturated-purple;
+}
+::-webkit-selection {
+background:#F7E63E;
+color:$dark-saturated-purple;
+}
+
+::-moz-selection {
+background:#F7E63E;
+color:$dark-saturated-purple;
+}
 //
 // Headings, paragraphs and lists
 //
@@ -48,7 +64,11 @@ ul, ol {
 }
 
 p, ul {
+
     margin-bottom: 1.5em;
+    @media #{$mobile} {
+      margin-bottom: 0.7em;
+}
 }
 
 h1 {
@@ -97,4 +117,14 @@ blockquote {
 
 .noborder {
     border: none !important;
+}
+
+img{
+    padding:1em;
+    box-shadow:.0 0 1em rgba(0,0,0,0.1) inset,
+              0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2);
+               background:#fff;
+               float:left;
 }

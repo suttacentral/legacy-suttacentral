@@ -1,91 +1,80 @@
 {% extends "base.html" -%}
 {% block content %}
 
-<div id="home">
 
-<div id="home-tabs">
-    <ul class="tabs">
-        <li class="active"><a href="#home-main">Home</a></li>
-        <li><a href="#home-start">Start</a></li>
-        <li><a href="#home-read">Read</a></li>
-        <li><a href="#home-methodology">Methodology</a></li>
-    </ul>
+<section id="home">
+
+<div class="hgroup">
+<h1>SuttaCentral</h1>
+<p class="subtitle">Early Buddhist texts, translations, and parallels</p>
+</div>
+{% set epigraph = imm.get_random_epigraph() %}
+
+<div class="epigraph">
+<div class="epigraph-text">
+    {{ epigraph.content }}
 </div>
 
-<div id="home-content">
+<p class="epigraph-reference"><span class="reference">{{epigraph.sutta.name}}, {{imm.uid_to_name(epigraph.sutta.uid)}} {% if epigraph.href %}</span></p><p class="read-this"><a href="{{ epigraph.href }}">Read this sutta ▶</a>{% endif %}</p>
 
-<div id="home-main" style="display: block;">
+</div>
+</section> {# id=home #}
 
-{% for pitaka_menu in menu %}
-<section class="pitaka columns-{{ pitaka_menu|length }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
-    <h1>{{ pitaka_menu.pitaka.name }}</h1>
-    {% for lang_menu in pitaka_menu %}
-    <div class="column">
-        <div class="language">
-            <h2>{{ lang_menu.lang.name }}</h2>
-            {% for sect_menu in lang_menu %}
-            <ul class="sect">
-                {% if sect_menu.sect %}
-                <li><h3>{{ sect_menu.sect.name }}</h3></li>
-                {% endif %}
-                {% for division in sect_menu %}
-                {% if division.menu_gwn_ind %}
-                <li class="group-with-next">
-                {% else %}
-                <li>
-                {% endif %}
-                {% if division.has_suttas or division.text_ref %}
-                    <a href="/{{ division.uid }}">{{ division.name }}</a>
-                {% else %}
-                    <a title="/{{ division.uid }}" class="no-suttas">{{division.name}}</a>
-                {% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-            {% endfor %}
-        </div>
-    </div>
-    {% endfor %}
+
+<div id="introduction-push"></div>
+<div id="intro">
+<details><summary>Introduction to SuttaCentral</summary>
+		<section class="introduction">
+<div class="wheel1">☸</div>
+<div class="wheel2">☸</div>
+<div class="wheel3">☸</div>
+		<p>For 2,500 years, Buddhist communities have preserved the wisdom of the Buddha in thousands of texts, passing them down in Pali, Chinese, Tibetan, and other languages.</p>
+		<p>What would it be like if we were to bring these together and present them using the best technologies and design that the modern web can offer?</p>
+		<p>What if we removed the boundaries of language and tradition, so that the Dhamma came into focus like never before?</p>
+		<p>This is SuttaCentral.</p>
 </section>
-{% endfor %}
-
-</div><!-- home-main -->
-
-<div id="home-start" style="display: none;">
-		<h3>What is SuttaCentral?</h3>
-<p><strong>SuttaCentral</strong> is a treasury of early Buddhist texts. There are several traditions of Buddhism, each of which has preserved texts from the earliest canonical collections. Until now, these texts have been kept in separate collections in Pali, Chinese, Tibetan, and various other Indic languages. <strong>SuttaCentral</strong> gathers these texts and makes them accessible for all.</p>
-		<h3>Who is SuttaCentral for?</h3>
-		<p><strong>SuttaCentral</strong> is for anyone who has an interest in Buddhism and wants to delve deeper into the canonical scriptures of the <a href="http://en.wikipedia.org/wiki/Pre-sectarian_Buddhism" title="Wikipedia article on pre-sectarian Buddhism" target="_blank">earliest period</a>.</p>
-		<h3>What does it have?</h3>
-		<p><strong>SuttaCentral</strong> includes detailed references, shows relationships between texts in diverse collections, and, where possible, provides original text and translations. Texts include the <a href="http://en.wikipedia.org/wiki/Pali_Canon" title="Wikipedia article on the Pali Canon" target="_blank">Pali canon</a> of the <a href="http://en.wikipedia.org/wiki/Theravada" title="Wikipedia article on Theravāda" target="_blank">Theravāda</a> school, which we have in both modern translations and the original <a href="http://en.wikipedia.org/wiki/P%C4%81li" title="Wikipedia article on Pali" target="_blank">Pali</a>. <strong>SuttaCentral</strong> also provides the early <a href="http://en.wikipedia.org/wiki/%C4%80gama_(Buddhism)" title="Wikipedia article on Āgamas" target="_blank">Āgama</a> texts in the <a href="http://en.wikipedia.org/wiki/Taisho_Tripitaka" title="Wikipedia article on Taishō Tripiṭaka" target="_blank">Taishō edition</a> of the <a href="http://en.wikipedia.org/wiki/Chinese_Buddhist_canon"
- title="Wikipedia article on Chinese Canon" target="_blank">Chinese canon</a>, as well as references for the <a href="http://en.wikipedia.org/wiki/Kangyur" title="Wikipedia article on Tibetan Kangyur" target="_blank">Tibetan Kangyur</a>, <a href="http://www.ancient-buddhist-texts.net/Buddhist-Texts/XX-Early-Buddhist-Texts/index.htm" title="Introduction to the Early Buddhist Texts in Sanskritised Prākrit" target="_blank">Sanskrit</a>, and <a href="http://en.wikipedia.org/wiki/G%C4%81ndh%C4%81r%C4%AB_language" title="Wikipedia article on Gandhāri" target="_blank">other languages</a>, which are much smaller in number than the Pali and Chinese collections.</p>
-<h3>How do I find things?</h3>
-<p>The main navigation is through the tables of parallels on the “Home” tab, which you can also access through the navigation menu bar in the top header. If you’re looking for a particular Sutta, try searching the title. If you want to read some translations, click the “Read” tab. Still lost? Try our <a href="/help" title="SuttaCentral help">help page</a>.</p>
-</div><!-- home-start -->
-
-<div id="home-read" style="display: none;">
-		<h3>Does SuttaCentral have translations?</h3>
-		<p><strong>SuttaCentral</strong> aims to gather the best translations for early Buddhist texts in various world languages. The Buddha told his followers to learn the Dhamma in their own language, so students should not have to undergo a lengthy course in arcane languages before studying the Dhamma. We are, however, limted by the availability of translations, so this is a work in progress.</p>
-
-<h3>What are the translations?</h3>
-<p>These include classic works by <a href="http://en.wikipedia.org/wiki/Bhikkhu_Bodhi" target="_blank">Bhikkhu Bodhi</a>, new English translations of Chinese <a href="/sa1-100">Saṁyukta Āgama</a> texts by <a href="http://www.buddhismuskunde.uni-hamburg.de/fileadmin/pdf/analayo/publications.htm" title="Publications by Anālayo" target="_blank">Bhikkhu Anālayo</a>, fresh translations from the Tibetan <a href="/up">Upāyikā</a> by Sāmaṇerī Dhammadinnā, and others from a variety of sources.</p>
-		<h3>How do I find translations?</h3>
-		<p>In the lists of texts on the “Home” tab, you’ll see that some of the items have English titles. These are the collections for which we have translations. Click through to the next page, and the list of translated texts is on the right.</p>	
-		<h3>Where should I start?</h3>
-		<p>SuttaCentral include three of the most important discourses of the Dīgha Nikāya, translated by the eminent Pali translator, Bhikkhu Bodhi: the <a href="/en/dn2">Sāmaññaphala Sutta</a> on the fruits of the spiritual path, the <a href="/en/dn1">Brahmajāla Sutta</a> on the net of misleading views, and the <a href="/en/dn15">Mahānidāna Sutta</a> on causation.</p>
-		<p>&nbsp;</p>
-</div><!-- home-read -->
-
-<div id="home-methodology" style="display: none;">
-		<h3>Where is the data from?</h3>
-		<p>In 1929 Chizen Akanuma, a Japanese scholar, published <cite>Comparative Catalogue of Chinese Agamas & Pali Nikayas</cite>. This was the first comprehensive list of parallels between the Pali and Chinese texts. His work has been corrected and expanded by a succession of scholars, and revised for <strong>SuttaCentral</strong> by Rod Bucknell and Bhikkhu Anālayo.</p>
-		<h3>What exactly is a parallel?</h3>
-		<p>We use “parallel” for variant texts that appear to be descended from a common ancestor. Often, the texts are so close that this identification is simple. Sometimes, however, there is a less close relationship between a two given texts. In such cases we indicate a “partial parallel” with an asterisk*. This doesn’t imply any particular kind of relationship between the partial parallel and the basic text. It simply suggests that if you are studying the basic text, you might want to look at the partial parallel, too. For a detailed discussion, see <a href="/methodology">here</a>.</p>
-<h3>How are parallels identified?</h3>
-<p>There are thousands of texts in the corpus of early Buddhist literature, and it is no trivial matter to discern what texts should be regarded as parallel. Texts often agree in many details, and disagree in others. When does a text stop being a full parallel and start being a partial parallel? And when does it become merely a text that bears certain similar features? There are no black and white answers to such questions. Rather, making these identifications draws on the accumulated learning and experience of a succession of scholars. Inevitably there will be disagreements in detail; yet in the main, there is a broad consensus as to what constitutes a parallel. Ultimately, the important point is that these identifications help the student to study and learn from related texts in diverse collections.</p>
-</div><!-- home-methdology -->
-
-</div><!-- home-content -->
-</div><!-- home -->
+<section  class="feel">
+	
+	<h1>“<a href="http://suttacentral.net/en/an3.61" target="_blank">For one who feels</a>”</h1>
+	<p><img data-src="/img/15.jpg" class="image-home" title="Earth from space.">The Buddha’s words are one of humanity’s great spiritual literatures. And for those who follow his path, they are nothing less than the key to liberation itself. With nearly half the world’s people using the internet, these teachings are now available to more people than ever before.</p>
+	<p>SuttaCentral is for anyone who has an interest in Buddhism and wants to delve deeper into the scriptures of the <a href="http://en.wikipedia.org/wiki/Pre-sectarian_Buddhism" title="Wikipedia article on pre-sectarian Buddhism" target="_blank">earliest period</a>. We provide textual information for scholars, and translations for general readers.</p>
+	<p>If you’re not sure where to get started with SuttaCentral, there’s <a href="http://dhammawheel.com/viewtopic.php?f=25&t=14640#p279487" title="Go to Dhamma Wheel forum sutta reading list." target="_blank">an excellent structured online reading course over at Dhamma Wheel forum</a>, based on the book <cite class="book">In the Buddha’s Words</cite> by <span class="author">Bhikkhu Bodhi</span>.</p>
+</section>
+<section class="content">
+	<h1>Content</h1>
+	<p><img data-src="/img/11.jpg" class="image-home" title="Buddhist manuscript from Gandhara.">SuttaCentral includes detailed references, shows relationships between texts in diverse collections, and, where possible, provides original text and translations.</p>
+	<p>Texts include the <a href="http://en.wikipedia.org/wiki/Pali_Canon" title="Wikipedia article on the Pali Canon" target="_blank">Pali canon</a> of the <a href="http://en.wikipedia.org/wiki/Theravada" title="Wikipedia article on Theravāda" target="_blank">Theravāda</a> school, which we have in both modern translations and the original <a href="http://en.wikipedia.org/wiki/P%C4%81li" title="Wikipedia article on Pali" target="_blank">Pali</a>. SuttaCentral also provides the early <a href="http://en.wikipedia.org/wiki/%C4%80gama_(Buddhism)" title="Wikipedia article on Āgamas" target="_blank">Āgama</a> texts from the <a href="http://en.wikipedia.org/wiki/Taisho_Tripitaka" title="Wikipedia article on Taishō Tripiṭaka" target="_blank">Taishō edition</a> of the <a href="http://en.wikipedia.org/wiki/Chinese_Buddhist_canon" title="Wikipedia article on Chinese Canon" target="_blank">Chinese canon</a>, as well as references for the <a href="http://en.wikipedia.org/wiki/Kangyur" title="Wikipedia article on Tibetan Kangyur" target="_blank">Tibetan Kangyur</a>, <a href="http://www.ancient-buddhist-texts.net/Buddhist-Texts/XX-Early-Buddhist-Texts/index.htm" title="Introduction to the Early Buddhist Texts in Sanskritised Prākrit" target="_blank">Sanskrit</a>, and <a href="http://www.ebmp.org/" title="Early Buddhist Manuscript Project" target="_blank">other languages</a>, which are much smaller in number than the Pali and Chinese collections.</p>
+	<p>SuttaCentral offers extensive resources on the Buddhist monastic code (<a href="http://en.wikipedia.org/wiki/Vinaya_Pitaka" target="_blank" title="Wikipedia article on Vinaya">Vinaya</a>), with texts, translations, and some 14,000 parallels. We also cover the canonical <a href="http://en.wikipedia.org/wiki/Abhidhamma_Pitaka" target="_blank" title="Wikipedia article on Abhidhamma">Abhidhamma</a> texts, which provide a detailed analytical treatment of the central doctrines.</p>
+</section>
+<section class="suttas"><h1>Suttas and divisions</h1>
+	<p><img data-src="/img/1.jpg" class="image-home" title="Screenshot of SuttaCentral showing suttas and divisions">Most of the early Buddhist texts are known in Pali as <a href="https://en.wikipedia.org/wiki/Buddhist_texts#Sutra" target="_blank" title="Wikipedia article on sutta"><i>suttas</i></a> (or <i>sūtras</i> in Sanskrit). It is believed that each sutta is a record of a teaching given by the Buddha at a particular time and place. The suttas are organized into larger groupings, the most important of which is the <a href="https://en.wikipedia.org/wiki/Nikaya" target="_blank" title="Wikipedia article on nikāya"><i>nikāya</i></a>, which we call a “division”. The division and the sutta are the main elements in SuttaCentral’s navigation.</p>
+</section>
+<section class="ids">
+	<h1>Identifiers (IDs)</h1>
+	<p><img data-src="/img/2.jpg" class="image-home" title="Screenshot of SuttaCentral showing IDs">Each sutta has a unique ID. This is an abbreviated form of the divison (or <i>nikāya</i>), and sutta number within the division. You’ll find these unique IDs in many places, such as the tables of parallels, and most importantly, in the site URLs. If you get familiar with them, you’ll find your way around much more easily.</p>
+</section>
+<section class="navigation">
+<h1>Navigation</h1>
+<p><img data-src="/img/5.jpg" class="image-home-big" title="Screenshot of SuttaCentral showing division table.">The main navigation is through the menu bar in the top header. This will take you directly to a division page, where you will find links for texts, translations, and parallels. We also have a powerful search engine, so you can search for a topic or a name. If you’re looking for a particular sutta, try searching the title, or use the reference details. Still lost? See our <a href="/help" title="SuttaCentral help" target="_blank">help page</a>.</p>
+</section>
+<section class="translations">
+<h1>Translations</h1>
+	<p><img data-src="/img/3.jpg" class="image-home" title="Screenshot of SuttaCentral showing translation in English.">Many of the <i>suttas</i> have been translated into modern languages. Wherever possible, we’ll supply translations in addition to the original text. These have the same ID as the original text. This is because, in Buddhism, the essential thing is the meaning of the words, so translated texts are regarded as the Word of the Buddha.</p>
+	<p>The quantity of texts is vast, so the work of translation is far from complete. We try to source the best available translations from third parties, and we are also developing our own translations, to be made freely available for everyone.</p>
+	<p>English translations include classic works by <a href="http://en.wikipedia.org/wiki/Bhikkhu_Bodhi" target="_blank" title="Wikipedia article on Bhikkhu Bodhi">Bhikkhu Bodhi</a>, new English translations of Chinese <a href="/sa1-100">Saṁyukta Āgama</a> texts by <a href="http://www.buddhismuskunde.uni-hamburg.de/fileadmin/pdf/analayo/publications.htm" title="Publications by Anālayo" target="_blank">Bhikkhu Anālayo</a>, fresh translations from the Tibetan <a href="/up">Upāyikā</a> by Sāmaṇerī Dhammadinnā, and others from a variety of sources.</p>
+	</section>
+<section class="tools">
+<h1>Tools</h1>
+	<p><img data-src="/img/4.jpg" class="image-home" title="Screenshot of SuttaCentral showing sidebar.">At the left of the text pages, you’ll see a little dongle. That activates the sidebar, which contains lots of tools and information. You can try our dictionary lookup tools, which cleverly convert Pali to English or Spanish, and Chinese to English. You can also convert the script, display various kinds of textual information, navigate to see parallels, and much more.</p>
+</section>
+<section class="parallels">
+<h1>Parallels</h1>
+<p><img data-src="/img/14.jpg" class="image-home" title="The connections of the internet, visualized by the Opte project." href="http://www.opte.org/" target="_blank">Suttas aren’t independent entities. They form a vast interconnected web of teachings. Often the key to understanding one passage lies in a different text. In this way, the Buddhist canons are a little like the internet, with individual pages connected by a web of hidden links.</p>
+<p>Most suttas appear in very similar form in more than one collection. We use “parallel” for variant texts that appear to be descended from a common ancestor. Often the texts are so close that this identification is simple. Sometimes, however, there is a less close relationship between a two given texts. In such cases we indicate a “partial parallel” with an asterisk*. This doesn’t imply any particular kind of relationship between the partial parallel and the basic text. It simply suggests that if you are studying the basic text, you might want to look at the partial parallel, too. For a detailed discussion, see <a href="/methodology" target="_blank">our page on Methodology</a>.</p>
+<p>In 1929 <span class="author">Chizen Akanuma</span>, a Japanese scholar, published his <cite class="book">Comparative Catalogue of Chinese Agamas & Pali Nikayas</cite>. This was the first comprehensive list of parallels between the Pali and Chinese texts. His work has been corrected and expanded by a succession of scholars, and revised for SuttaCentral by Rod Bucknell and Bhikkhu Anālayo.</p>
+<p>It is no trivial matter to discern what texts should be regarded as parallel. Texts often agree in many details, and disagree in others. When does a text stop being a full parallel and start being a partial parallel? And when does it become merely a text that bears certain similar features? There are no black and white answers to such questions. Rather, making these identifications draws on the accumulated learning and experience of a succession of scholars. Inevitably there will be disagreements in detail; yet in the main, there is a broad consensus as to what constitutes a parallel. Ultimately, the important point is that these identifications help the student to study and learn from related texts in diverse collections.</p>
+</section>
+</details>
+</div> {# id=intro #}
 
 {%- endblock %}

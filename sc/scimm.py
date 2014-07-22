@@ -85,6 +85,7 @@ class _Imm:
         self.build_parallel_sutta_group('vinaya_pm')
         self.build_parallel_sutta_group('vinaya_kd')
         self.build_search_data()
+        self.load_epigraphs()
         self.timestamp = timestamp
         self.build_time = datetime.now()
     
@@ -97,14 +98,17 @@ class _Imm:
             return self.subdivisions[uid]
         elif uid in self.suttas:
             return self.suttas[uid]
+    def _expand_uid(self, uid, mapping):
+        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)?(?:-\d+)?', uid)
+        out = ' '.join(mapping.get(c) or c.upper() for c in components)
+        out = regex.sub(r'(?<=\d+)-(?=\d+)', r'–', out)
+        return out
     
     def uid_to_acro(self, uid):
-        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)*', uid)
-        return ' '.join(self._uid_to_acro_map.get(c) or c.upper() for c in components)
+        return self._expand_uid(uid, self._uid_to_acro_map)
         
     def uid_to_name(self, uid):
-        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)*', uid)
-        return ' '.join(self._uid_to_name_map.get(c) or c.upper() for c in components)
+        return self._expand_uid(uid, self._uid_to_name_map)
     
     def build(self):
         """ Build the sutta central In Memory Model
@@ -607,43 +611,10 @@ class _Imm:
     def text_exists(self, uid, lang_uid):
         return self.tim.exists(uid, lang_uid)
     
-    def get_text_nextprev(self, uid, language_code):
-        try:
-            uids = self._uidlangcache[language_code]
-        except KeyError:
-            uids = sorted((k for k in self.tim.get(lang_uid=language_code) if '#' not in k),
-                key=sc.util.humansortkey)
-            self._uidlangcache[language_code] = uids
-            # The cache is eliminated upon imm regeneration.
-        
-        # This is a horrible way to find an index but can still run 
-        # 4000 times a second on the largest collections :).
-        try:
-            i = uids.index(uid)
-        except ValueError:
-            return (None, None)
+    def get_text_data(self, uid, language_code=None):
+        return self.tim.get(uid, language_code)
         
         
-        prev_uid = uids[i - 1] if i > 0 else None
-        next_uid = uids[i + 1] if i < len(uids) - 1 else None
-            
-        if not self.uids_are_related(uid, prev_uid):
-            prev_uid = None
-        if not self.uids_are_related(uid, next_uid):
-            next_uid = None
-        return (prev_uid, next_uid)
-        
-    def uids_are_related(self, uid1, uid2):
-        # We will perform a simple uid comparison
-        # We could be more sophisticated! For example we could
-        # inspect whether they belong to the same division
-        if uid1 is None or uid2 is None:
-            return False
-        
-        m1 = regex.match(r'\p{alpha}*(?:-\d+)?', uid1)[0]
-        m2 = regex.match(r'\p{alpha}*(?:-\d+)?', uid2)[0]
-        if m1 and m2 and m1 == m2:
-            return True
     
     @staticmethod
     def get_text_author(filepath):
@@ -668,6 +639,43 @@ class _Imm:
                 if m:
                     return m[1]
         return None
+
+    def load_epigraphs(self):
+        import lxml.etree
+        file = sc.data_dir / 'table' / 'epigraphs.xml'
+        self.epigraphs = []
+        
+        doc = lxml.etree.parse(str(file))
+        valid = 0
+        for count, element in enumerate(doc.findall('//epigraph')):
+            id = element.get('id')
+            uid = element.find('uid').text
+            content = regex.match(r'(?s)<content>\n?(.*)</content>',
+                lxml.etree.tostring(element.find('content'),
+                encoding='unicode'))[1]
+            
+            if uid not in self.suttas:
+                logger.warning('{}:{} - "{}" does not match any known sutta uid'.format(file.name, element.sourceline, uid))
+            else:
+                sutta = self.suttas[uid]
+                href = None
+                if element.find('href').text:
+                    href = element.find('href').text
+                else:
+                    for tr in sutta.translations:
+                        if tr.url.startswith('/en'):
+                            href = tr.url
+                if href is None:
+                    logger.warning('{}:{} - Sutta "{}" has no english translation. Using details page instead.'.format(file.name, element.sourceline, uid))
+                    href = '/{}'.format(uid)
+                else:
+                    self.epigraphs.append({'sutta': self.suttas[uid], 'content': content, 'href': href})
+                    valid += 1
+        logger.info('Loaded {} epigraphs, {} are valid, {} are invalid'.format(count + 1, valid, count - valid))
+
+    def get_random_epigraph(self):
+        import random
+        return random.choice(self.epigraphs)
 
     def _deep_md5(self, ids=False):
         """ Calculate a md5 for the data. Takes ~0.5s on a fast cpu.

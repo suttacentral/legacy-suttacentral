@@ -3,17 +3,17 @@
 {%- block content -%}
 <div id='onecol'>
 <table class="divtable">
-<caption>Collection: <strong>{{subdivision.division.collection.name}}</strong> — Division: <strong>
-{{subdivision.division.name}} ({{subdivision.division.acronym}}) </strong> — Sub-Division: <strong>
-{{subdivision.name}}</strong>
+<caption>Collection: <strong>{{subdivision.division.collection.name}}</strong> <br>
+Division: <strong>{{subdivision.division.name}} ({{subdivision.division.acronym}})</strong>  <br>
+Sub-Division: <strong>{{subdivision.name}}</strong>
 </caption>
 <thead>
 <tr>
-<th>Identifier</th>
+<th>ID</th>
 <th>Title</th>
 <th>Vol/Page</th>
 <th>Parallels</th>
-<th class='transcol'>Translations</th>
+<th class='transcol'></th>
 </tr>
 </thead>
 {% for vagga in subdivision.vaggas %}
