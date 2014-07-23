@@ -546,8 +546,8 @@ class _Imm:
         if textinfo:
             return TextRef.from_textinfo(textinfo, self.languages[lang_uid])
         
-        for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
-            if lang_uid_k == lang_uid:
+        for textref in self._external_text_refs.get(uid, []):
+            if textref.lang.uid == lang_uid:
                 return textref
 
         m = regex.match(r'(.*?)(\d+)-(\d+)', uid)
@@ -580,7 +580,7 @@ class _Imm:
 
     def get_text_refs(self, uid):
         out = []
-        for lang_uid_k, textref in self._external_text_refs.get(uid, {}).items():
+        for textref in self._external_text_refs.get(uid, []):
             out.append(textref)
         def fuzzy_attempts(uid):
             yield uid
@@ -595,7 +595,7 @@ class _Imm:
         for fuid in fuzzy_attempts(uid):
             textinfos = self.tim.get(uid=fuid)
             if textinfos:
-                for lang_uid, textinfo in textinfos.items():
+                for lang_uid, textinfo in textinfos:
                     out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
                 break
         
