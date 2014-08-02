@@ -1,0 +1,46 @@
+{
+    "settings": {
+        "number_of_shards": 1,
+        "number_of_replicas": 0,
+        "analysis": {
+            "filter": {
+                "sanskrit_pali_synonym": {
+                    "type": "synonym",
+                    "synonyms": [
+                        "bhikkhu,bhiksu,bhiksu,bhikksu,biksu,monk => bhikkhu",
+                        "bhikkhuni,bhiksuni,bhiksuni,bhikksuni,biksuni,nun => bhikkhuni",
+                        "dhamma,dharma => dhamma",
+                        "kamma,karma => kamma",
+                        "nibbana,nirvana => nibbana"
+                    ]
+                }
+            },  
+            "analyzer": {
+                "html_minimal": {
+                    "tokenizer": "icu_tokenizer",
+                    "char_filter": ["html_strip"],
+                    "filter": ["icu_normalizer", "lowercase"]
+                }
+            }
+        }
+    },
+    "mappings": {
+        "text": {
+            "properties": {
+                "uid": {
+                    "type": "string",
+                    "anaylzer": "keyword"
+                },
+                "lang": {
+                    "type": "string",
+                    "analyzer": "keyword"
+                },
+                "content": {
+                    "type": "string",
+                    "term_vector": "with_positions_offsets",
+                    "analyzer": "html_minimal"
+                }
+            }
+        }
+    }
+}

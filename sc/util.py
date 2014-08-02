@@ -7,6 +7,7 @@ import textwrap
 import time
 import regex
 from collections import deque
+import itertools
 from contextlib import contextmanager
 from datetime import datetime
 
@@ -210,7 +211,7 @@ def recursive_merge(dict1, dict2):
 
     dict1 provides the default values
     """
-
+    
     for key in set(dict1.keys()) | set(dict2.keys()):
         if key in dict1 and key in dict2:
             val1, val2 = dict1[key], dict2[key]
@@ -229,5 +230,11 @@ def recursive_merge(dict1, dict2):
             pass
         elif key in dict2:
             dict1[key] = dict2[key]
+
+    return dict1
     
-    
+def grouper(n, iterable, fillvalue=None):
+    "Collect data into fixed-length chunks or blocks"
+    # grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
+    args = [iter(iterable)] * n
+    return itertools.zip_longest(*args, fillvalue=fillvalue)

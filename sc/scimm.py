@@ -541,6 +541,41 @@ class _Imm:
 
         self.searchstrings = list(zip(self.suttas.values(), suttastrings, suttastringsU, suttanamesimplified))
 
+    def generate_search_data(self):
+        seen = set()
+        out = []
+        for sutta in self.suttas.values():
+            if isinstance(sutta, GroupedSutta):
+                if sutta.name in seen:
+                    continue
+                seen.add(sutta.name)
+            name = sutta.name
+            plain_name = textfunctions.codely(name)
+            coded_name = textfunctions.plainly(name)
+            simple_name = textfunctions.simplify(sutta.name, sutta.lang.iso_code)
+
+            searchdata = {'uid': sutta.uid,
+                'lang_code': sutta.lang.iso_code,
+                'acronym': sutta.acronym,
+                'name': name,
+                'plain_name': plain_name,
+                'coded_name': coded_name,
+                'simple_name': simple_name,
+                'volpage': sutta.volpage,
+                'languages': " ".join(t.lang.iso_code for t in sutta.translations)}
+
+            if sutta.alt_volpage_info:
+                searchdata['volpage'] += '  ' + sutta.alt_volpage_info
+
+            if sutta.alt_acronym:
+                searchdata['acronym'] += '  ' + sutta.alt_acronym
+
+            for k in list(searchdata.keys()):
+                if searchdata[k] is None:
+                    del searchdata[k]
+            searchdata['md5'] = hashlib.md5(str(searchdata).encode()).hexdigest()[0:5]
+            yield searchdata
+    
     def get_text_ref(self, uid, lang_uid):
         textinfo = self.tim.get(uid=uid, lang_uid=lang_uid)
         if textinfo:
