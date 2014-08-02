@@ -36,6 +36,11 @@ body {
 }
 }
 
+:lang(zh){
+    font-family:Noto Sans S Chinese;
+
+}
+
 ::selection {
 background:#F7E63E;
 color:$dark-saturated-purple;
