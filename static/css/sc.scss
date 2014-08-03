@@ -194,7 +194,16 @@ q:after {
     display: table;
     width: auto;
     margin: 0 auto;
-    font-style:italic !important;color:#767676;
+    font-style:italic !important;
+    color:#767676;
+}
+
+.vag­guddana­gatha{
+    display: table;
+    width: auto;
+    margin: 0 auto;
+    font-style:italic !important;
+    color:#767676;
 }
 
 .endh2, .endh3, .endh4, .endh5, .endh6, .endsutta, .endvagga, .endsubdivision, .endsection, .enddivision, .bhanavara, .enduddesa, .end
@@ -213,7 +222,9 @@ q:after {
 .endbook {
     text-align:center;
     @include serif(!important);
-    font-weight:bold;color:#767676;
+    font-weight:bold;
+    color:#767676;
+    text-transform:uppercase;
 }
 
 .dquo {margin-left: -0.9ex;position:absolute;}

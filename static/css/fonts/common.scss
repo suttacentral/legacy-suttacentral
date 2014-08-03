@@ -38,11 +38,14 @@ $base_font_url: '/fonts';
 // Source: https://www.google.com/fonts/specimen/Source+Sans+Pro
 $source-sans-pro: 'Source Sans Pro';
 
-// Source: ?
+// Source: sujato made adaptation of source sans
 $hetu-schetu-sc: 'hetu_schetu_sc';
 
 // Source: https://code.google.com/p/tharlon-font/
 $tharlon: 'TharLon';
+
+// Source: http://www.google.com/get/noto/#/family/noto-sans-hant
+$noto-sans-han-t-regular: 'NotoSansHant-Regular';
 
 @mixin font-face-src($font-path, $svg-id) {
     $url = '#{$base_font_url}/#{$font-path}';
@@ -51,6 +54,13 @@ $tharlon: 'TharLon';
          url('#{$url}.woff') format('woff'),
          url('#{$url}.ttf') format('truetype'),
          url('#{$url}.svg##{$svg-id}') format('svg');
+}
+
+@font-face {
+    font-family: $noto-sans-han-t-regular, "Noto Sans Han T";
+    @include font-face-src('NotoSansHant-Regular');
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
