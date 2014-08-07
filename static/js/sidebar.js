@@ -76,8 +76,7 @@ sc.sidebar = {
 
     },
     initChineseLookup: function() {
-        // Has the dictionary javascript been loaded?
-        if (!sc.zh2enLookup) return;
+        if ($('#zh2en').length == 0) return;
         //Where to attach the chinese lookup control button.
         sc.zh2enLookup.init('#zh2en', '#text');
     },
