@@ -167,7 +167,19 @@ $sidebar-dongle-width = 1em;
         font-style: italic;
         padding: 0.5em;
         border-radius: 0.5em;
-        background-color: $bright-pastel-red;
+        background-color: $light-light-gray;
+    }
+    .remove {
+        width: 1em;
+        height: 1em;
+        background: $light-gray;
+        border-radius: 25%;
+        border: gray;
+        line-height: 1em;
+        text-align: center;
+        padding: 0.1em;
+        float: right;
+        cursor: pointer;     
     }
 }
 

@@ -190,13 +190,6 @@ sc.init = function(reset)
     {
         toggleTextualInfo(true);
     }
-
-    if (sc.userPrefs.getPref("sidebar") === false)
-    {
-        sc.sidebar.hide();
-    } else {
-        sc.sidebar.show();        
-    }
     
     var selectedTab = sc.userPrefs.getPref('sidebar-selected-tab');
     if (selectedTab && selectedTab != "undefined") {
