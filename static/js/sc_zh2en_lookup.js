@@ -122,7 +122,6 @@ sc.zh2enLookup = {
         },
         andfinally: function(){
             self = sc.zh2enLookup;
-            console.log('Done');
             if (self.button)
                 self.button.removeAttr('disabled');
             

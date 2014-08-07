@@ -52,7 +52,6 @@ function sortByColumn(e, td){
     });
     
     table.find('tbody').append(rows);
-    console.log(Date.now() - start)
 }
 
 registerSortableTable('table');

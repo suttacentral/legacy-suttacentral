@@ -128,7 +128,6 @@ function togglePaliLookup(){
 
 function transliterateHandler()
 {
-    console.log('hi');
     sc.userPrefs.setPref("script", this.id, true);
 }
 
@@ -731,7 +730,6 @@ timeprecision.andfinally = function(){
         if (diff in freq) {freq[diff]++}
         else freq[diff] = 1;
     }
-    //console.log(freq);
 }
 
 function _IterPermissions(permissables){

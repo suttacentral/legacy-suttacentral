@@ -111,7 +111,6 @@ sc.jsBaseUrl = $('script[src*="js/"]').last().attr('src').match(/(.*\/js\/)/)[0]
 
 $(document).ready(function() {
     var images = $("img");
-    console.log("Unveiling", images);
     images.unveil(50);
     //polyfill details if needed
     $("details").details()
@@ -142,14 +141,11 @@ $(document).ready(function() {
         clip.on('load', function(client) {
             parallelCitationLabel.hide();
             parallelCitationButton.show();
-            // console.log('ZeroClipboard loaded');
             client.on('complete', function(client, args) {
-                // console.log('Copied text: ' + text);
             });
         });
         clip.on('dataRequested', function(client, args) {
             var text = parallelCitationTextField.val();
-            // console.log('Text set to: ' + text);
             client.setText(text);
         });
     }
@@ -289,7 +285,6 @@ function ohInternetExplorerLetMeCountTheWaysILoveYou(){
             count += 1;
         }
     }
-    //if (count > 0) console.log("Oh Internet Explorer, I love you in " + count + " ways.");
 };
 
 ohInternetExplorerLetMeCountTheWaysILoveYou();

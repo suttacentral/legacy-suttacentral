@@ -11,7 +11,6 @@ sc.headerMenu = {
         $('header nav').not(this).removeClass('active')
     },
     update: function(element, mode) {
-        console.log('Hi There!');
         var self = sc.headerMenu,
             target = $(element.find('[href]').attr('href'));
         
@@ -22,8 +21,6 @@ sc.headerMenu = {
             mode = "show";
         }
 
-        console.log(mode);
-        console.log(target);
 
         if (mode == "hide") {
             self.hideAll();
@@ -47,7 +44,6 @@ sc.headerMenu = {
          * home page creating a very fluid experience
          */
         
-        console.log('Adjusting column widths');
 
         var contents = $('.contents.active'),
             contentsWidth = contents.width(),
@@ -96,7 +92,6 @@ setTimeout(function(){
     });
     $('header nav').on('click', function(){sc.headerMenu.update($(this)); return false});
     $('#panel-screen-wrap').on('click', function(e) {
-        console.log(e.target);
         if ($(e.target).is('a'))
             return true;
         sc.headerMenu.hideAll();
