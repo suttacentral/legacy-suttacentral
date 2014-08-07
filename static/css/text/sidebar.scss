@@ -162,7 +162,8 @@ $sidebar-dongle-width = 1em;
 #message-box {
     float: left;
     clear: both;
-    margin: 1em;
+    margin: 1em 5%;
+    width: 90%;
     > div {
         font-style: italic;
         padding: 0.5em;
