@@ -2,12 +2,12 @@
 
 from collections import defaultdict
 
-def toUni(input):
+def toUni(input, overdot=False):
     if not input:
         return input
-    nigahita = (("ṁ" if DPR_prefs.get("nigahita") else "ṃ"))
-    Nigahita = (("Ṁ" if DPR_prefs.get("nigahita") else "Ṃ"))
-    input = input.replace("aa", "ā").replace("ii", "ī").replace("uu", "ū").replace(".t", "ṭ").replace(".d", "ḍ").replace("\"n", "ṅ").replace(".n", "ṇ").replace(".m", nigahita).replace("ṁ", nigahita).replace("\~n", "ñ").replace(".l", "ḷ").replace("AA", "Ā").replace("II", "Ī").replace("UU", "Ū").replace(".T", "Ṭ").replace(".D", "Ḍ").replace("\"N", "Ṅ").replace(".N", "Ṇ").replace(".M", Nigahita).replace("\~N", "Ñ").replace(".L", "Ḷ").replace(".ll", "ḹ").replace(".r", "ṛ").replace(".rr", "ṝ").replace(".s", "ṣ").replace("\"s", "ś").replace(".h", "ḥ")
+    nigahita = (("ṁ" if overdot else "ṃ"))
+    Nigahita = (("Ṁ" if overdot else "Ṃ"))
+    input = input.replace("aa", "ā").replace("ii", "ī").replace("uu", "ū").replace(".t", "ṭ").replace(".d", "ḍ").replace("\"n", "ṅ").replace(".n", "ṇ").replace(".m", nigahita).replace("ṁ", nigahita).replace("~n", "ñ").replace(".l", "ḷ").replace("AA", "Ā").replace("II", "Ī").replace("UU", "Ū").replace(".T", "Ṭ").replace(".D", "Ḍ").replace("\"N", "Ṅ").replace(".N", "Ṇ").replace(".M", Nigahita).replace("~N", "Ñ").replace(".L", "Ḷ").replace(".ll", "ḹ").replace(".r", "ṛ").replace(".rr", "ṝ").replace(".s", "ṣ").replace("\"s", "ś").replace(".h", "ḥ")
     return input
 
 def toUniRegEx(input):
@@ -15,7 +15,7 @@ def toUniRegEx(input):
         return input
     nigahita = (("ṁ" if DPR_prefs.get("nigahita") else "ṃ"))
     Nigahita = (("Ṁ" if DPR_prefs.get("nigahita") else "Ṃ"))
-    input = input.replace("aa", "ā").replace("ii", "ī").replace("uu", "ū").replace("\.t", "ṭ").replace("\.d", "ḍ").replace("\"n", "ṅ").replace("\.n", "ṇ").replace("\.m", nigahita).replace("ṁ", nigahita).replace("\~n", "ñ").replace("\.l", "ḷ").replace("AA", "Ā").replace("II", "Ī").replace("UU", "Ū").replace("\.T", "Ṭ").replace("\.D", "Ḍ").replace("\"N", "Ṅ").replace("\.N", "Ṇ").replace("\.M", Nigahita).replace("\~N", "Ñ").replace("\.L", "Ḷ")
+    input = input.replace("aa", "ā").replace("ii", "ī").replace("uu", "ū").replace(".t", "ṭ").replace(".d", "ḍ").replace("\"n", "ṅ").replace(".n", "ṇ").replace(".m", nigahita).replace("ṁ", nigahita).replace("~n", "ñ").replace(".l", "ḷ").replace("AA", "Ā").replace("II", "Ī").replace("UU", "Ū").replace(".T", "Ṭ").replace(".D", "Ḍ").replace("\"N", "Ṅ").replace(".N", "Ṇ").replace(".M", Nigahita).replace("~N", "Ñ").replace(".L", "Ḷ")
     return input
 
 def toVel(input):
@@ -27,7 +27,7 @@ def toVel(input):
 def toVelRegEx(input):
     if not input:
         return input
-    input = input.replace("ā", "aa").replace("ī", "ii").replace("ū", "uu").replace("ṭ", "\\.t").replace("ḍ", "\\.d").replace("ṅ", "\"n").replace("ṇ", "\\.n").replace("ṃ", "\\.m").replace("ṁ", "\\.m").replace("ñ", "~n").replace("ḷ", "\\.l").replace("Ā", "AA").replace("Ī", "II").replace("Ū", "UU").replace("Ṭ", "\\.T").replace("Ḍ", "\\.D").replace("Ṅ", "\"N").replace("Ṇ", "\\.N").replace("Ṃ", "\\.M").replace("Ñ", "~N").replace("Ḷ", "\\.L")
+    input = input.replace("ā", "aa").replace("ī", "ii").replace("ū", "uu").replace("ṭ", ".t").replace("ḍ", ".d").replace("ṅ", "\"n").replace("ṇ", ".n").replace("ṃ", ".m").replace("ṁ", ".m").replace("ñ", "~n").replace("ḷ", ".l").replace("Ā", "AA").replace("Ī", "II").replace("Ū", "UU").replace("Ṭ", ".T").replace("Ḍ", ".D").replace("Ṅ", "\"N").replace("Ṇ", ".N").replace("Ṃ", ".M").replace("Ñ", "~N").replace("Ḷ", ".L")
     return input
 
 def toFuzzy(input):
