@@ -114,7 +114,7 @@ sc.zh2enLookup = {
                     this.andfinally();
                     return;
                 }
-                var nextNode = nextInOrder(this.node, document.TEXT_NODE)
+                var nextNode = nextInOrderByType(this.node, document.TEXT_NODE)
                 this.textNodeToMarkup(this.node);
                 this.node = nextNode;
             }
