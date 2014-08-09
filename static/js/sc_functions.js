@@ -698,40 +698,6 @@ function fuzzyMatch(word){
     return null;
 }
 
-function timeit(command, times){
-    if (!times) times = 10000;
-    var start = (new Date()).getTime();
-    for (var i = 0; i < times; i++)
-        command();
-    return ((new Date()).getTime() - start)
-}
-
-function timeprecision(delay, times){
-    if (!times) times = 1000;
-    timeprecision.times = times;
-    timeprecision.results = [];
-    timeprecision.delay = delay;
-    timeprecision.callback();
-}
-timeprecision.callback = function(){
-    timeprecision.results.push(Date.now());
-    if (timeprecision.times-- <= 0) {
-        timeprecision.andfinally();
-        return;
-    }
-    setTimeout(timeprecision.callback, timeprecision.delay);
-}
-timeprecision.andfinally = function(){
-    var freq = {};
-    var results = timeprecision.results;
-    for (var i = results.length; i > 0; i--)
-    {
-        var diff = results[i] - results[i - 1]
-        if (diff in freq) {freq[diff]++}
-        else freq[diff] = 1;
-    }
-}
-
 function _IterPermissions(permissables){
     if (!permissables)
         return undefined;
@@ -792,64 +758,25 @@ Iter.prototype = {
     }
 }
 
-function FreeIter(node, permissables) {
-    //FreeIter is an ultra lightweight iterator that traverses the entire
-    //document, starting (not including) 'node', in forward or reverse.
-    //next/previous ALWAYS use the live state of the node.
-    this.permissables = _IterPermissions(permissables);
-    this.current = node;
-}
-
-FreeIter.prototype = {
-    current: undefined,
-    next: function(node){
-        var node = this.current;
-        if (node.firstChild) {
-            node = node.firstChild;
+function nextInOrderByType(node, nodeType) {
+    while (true) {
+        var node = nextInOrder(node);
+        if (node === undefined) return
+        if (node.nodeType == nodeType) {
+                return node
         }
-        else if (node.nextSibling) {
-            node = node.nextSibling;
-        }
-        else {
-            while (true){
-                node = node.parentNode;
-                if (!node) {
-                    return undefined;
-                }
-                if (node.nextSibling) {
-                    node = node.nextSibling;
-                    break;
-                }
-            }
-        }
-        this.current = node;
-        if (!this.permissables)
-            return node;
-        if (this.permissables.indexOf(node.nodeType) != -1)
-            return node;
-        return this.next();
-    },
-    previous: function(node){
-        var node = this.current;
-        if (node.previousSibling) {
-            node = node.previousSibling;
-            while (node.lastChild)
-                node = node.lastChild;
-        } else if (node.parentNode) {
-            node = node.parentNode;
-        } else {
-            return undefined;
-        }
-        this.current = node;
-        if (!this.permissables)
-            return node;
-        if (this.permissables.indexOf(current.nodeType) != -1)
-            return node;
-        return this.previous();
     }
 }
 
-function nextInOrder(node, permissables) {
+function nextInOrderBySelector(node, selector) {
+    while (true) {
+        var node = nextInOrder(node);
+        if (node === undefined) return
+        if ($(node).is(selector)) return node;
+    }
+}
+
+function nextInOrder(node) {
     //Get the next node in 'natural order'
     if (node.firstChild) {
         node = node.firstChild;
@@ -868,13 +795,6 @@ function nextInOrder(node, permissables) {
                 break;
             }
         }
-    }
-    if (typeof permissables == 'number') {
-        if (node.nodeType == permissables)
-            return node;
-    }
-    else if (typeof permissables == 'string') {
-        if ($(node).is(permissables)) return node;
     }
     return node
 }
