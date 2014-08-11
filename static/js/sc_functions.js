@@ -470,7 +470,7 @@ function enablePaliLookup(){
     if (!sc.data[dictObjectName])
     {
         sc.sidebar.messageBox.clear();
-        sc.sidebar.messageBox.show("Requesting Pali Dictionary...", {id: "msg-request-dict", timeout: null});
+        sc.sidebar.messageBox.show("Requesting Pali Dictionary…", {id: "msg-request-dict", timeout: null});
     
         jQuery.ajax({
             url: sc.jsBaseUrl + scriptUrl,
@@ -487,7 +487,7 @@ function enablePaliLookup(){
         });
     } else
         generateLookupMarkup();
-        sc.sidebar.messageBox.show("Dictionary Enabled. Hover with the mouse to display meaning.", {id: "msg-lookup-success"});
+        sc.sidebar.messageBox.show("The dictionary is enabled. Hover with the mouse to display the meaning.", {id: "msg-lookup-success"});
 }
 
 function lookupWordHandler(event){

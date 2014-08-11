@@ -167,21 +167,25 @@ $sidebar-dongle-width = 1em;
     > div {
         font-style: italic;
         padding: 0.5em;
-        border-radius: 0.5em;
+        border-radius: 3px;
         background-color: $light-light-gray;
     }
     .remove {
         width: 1em;
         height: 1em;
-        background: $light-gray;
-        border-radius: 25%;
-        border: gray;
+        border-radius: 50%;
         line-height: 1em;
         text-align: center;
         padding: 0.1em;
         float: right;
-        cursor: pointer;     
+        cursor: pointer; 
+        font-style:normal;
+        font-weight:bold;    
+       
     }
+     a:hover.remove{
+        background:white
+        }
 }
 
 
