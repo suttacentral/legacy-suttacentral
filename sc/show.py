@@ -122,27 +122,31 @@ def search(query, target=None, limit=0, offset=0, ajax=0, **kwargs):
         limit = 10 if ajax else 25
     qdict = {'query':query, 'target':target, 'limit':limit, 'offset':offset, 'ajax':ajax}
     qdict.update(kwargs)
-
+    
     search_result = classes.SearchResults(query=qdict)
+    
     if not query:
         return search_view(query, search_result)
 
-    if target=='all' or 'terms' in target or 'entries' in target:
-        dict_results = dictsearch.search(query=query, target=target, limit=limit, offset=offset, ajax=ajax, **kwargs)
-        if dict_results:
-            search_result.add(dict_results)
+    try:
+        if target=='all' or 'terms' in target or 'entries' in target:
+            dict_results = dictsearch.search(query=query, target=target, limit=limit, offset=offset, ajax=ajax, **kwargs)
+            if dict_results:
+                search_result.add(dict_results)
 
-    if target == 'all' or 'texts' in target:
-        text_results = textsearch.search(query=query, target=target, limit=limit, offset=offset, **kwargs)
-        if text_results:
-            search_result.add(text_results)
+        if target == 'all' or 'texts' in target:
+            text_results = textsearch.search(query=query, target=target, limit=limit, offset=offset, **kwargs)
+            if text_results:
+                search_result.add(text_results)
 
-    if target in ('all', 'suttas'):
-        slimit = limit
-        if slimit == -1:
-            slimit = 10 if ajax else 25
-        search_result.add(suttasearch.search(query=query, limit=slimit, offset=offset))
-
+        if target in ('all', 'suttas'):
+            slimit = limit
+            if slimit == -1:
+                slimit = 10 if ajax else 25
+            search_result.add(suttasearch.search(query=query, limit=slimit, offset=offset))
+    except:
+        search_result.error = True
+        pass
     return search_view(query, search_result)
 
 def search_view(search_query, search_result):
