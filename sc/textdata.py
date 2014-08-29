@@ -6,7 +6,7 @@ import sqlite3
 import threading
 from itertools import chain
 
-import sc
+import sc, sc.util
 from sc.tools import html
 import logging
 logger = logging.getLogger(__name__)
@@ -34,12 +34,18 @@ def text_dir_md5(extra_files=[__file__]):
     return md5(array('Q', mtimes)).hexdigest()
 
 class TextInfo:
-    __slots__ = ('uid', 'lang', 'path', 'bookmark', 'name', 'author', 'volpage', 'prev_uid', 'next_uid')
+    __slots__ = ('uid', 'lang', 'path', 'bookmark', 'name', 'author', 'volpage', 'prev_uid', 'next_uid', 'mtime')
     def __init__(self, **kwargs):
         for key in self.__slots__:
-            setattr(self, key, kwargs.get(key, None))
+            if key == 'path':
+                setattr(self, key, pathlib.Path(kwargs.get(key, None)))
+            else:
+                setattr(self, key, kwargs.get(key, None))
     def __repr__(self):
         return 'TextInfo({})'.format(', '.join('{}={}'.format(attr, getattr(self, attr)) for attr in self.__slots__))
+
+    def as_dict(self):
+        return {key: getattr(self, key) for key in self.__slots__}
 
     @property
     def url(self):
@@ -166,6 +172,8 @@ class TextInfoModel:
                 name = self._get_name(root, lang_uid, uid)
                 volpage = self._get_volpage(root, lang_uid, uid)
                 embedded = self._get_embedded_uids(root, lang_uid, uid)
+
+                mtime = htmlfile.stat().st_mtime
 
                 textinfo = TextInfo(uid=uid, lang=lang_uid, path=path, name=name, author=author, volpage=volpage, prev_uid=prev_uid, next_uid=next_uid)
                 self.add_text_info(lang_uid, uid, textinfo)
@@ -327,6 +335,126 @@ class TextInfoModel:
             finally:
                 TextInfoModel._build_lock.release()
 
+class ElasticTIM(TextInfoModel):
+    """ TIM backed by Elastic Search
+
+    ElasticSearch provides a feature-complete search engine
+
+    import sc.textdata; tim = sc.textdata.ElasticBasedTIM(); tim.build(False)
+
+    """
+
+    index_name = 'tim'
+    doc_type = 'text'
+
+    defaults = {
+        "type": "string",
+        "index": "not_analyzed"
+    }
+
+    _buffer = []
+
+    text_mapping = {
+        doc_type: {
+            "properties": {
+                "lang": defaults,
+                "uid": defaults,
+                "path": defaults,
+                "bookmark": defaults,
+                "name": defaults,
+                "author": defaults,
+                "volpage": defaults,
+                "prev_uid": defaults,
+                "next_uid": defaults,
+                "mtime": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+
+    def __init__(self):
+        from elasticsearch import Elasticsearch
+        self.es = Elasticsearch()
+
+    def _init_index(self, force=False):
+        if self.es.indices.exists(self.index_name):
+            if force == False:
+                return
+            else:
+                self.es.indices.delete(self.index_name)
+        self.es.indices.create(self.index_name, self.text_mapping)
+
+    def build(self, force=False):
+        self._init_index(force)
+        super().build(force)
+        self._flush()
+        
+    def exists(self, uid, lang_uid):
+        return self.es.exists(self.index_name, '{}/{}'.format(lang_uid, uid), 'text')
+
+    def get(self, uid=None, lang_uid=None):
+        if uid and lang_uid:
+            try:
+                res = self.es.get(self.index_name, '{}/{}'.format(lang_uid, uid))
+                if res["found"]:
+                    return TextInfo(**res["_source"])
+                else:
+                    return None
+            except:
+                return None
+        else:
+            body = {
+                "from": 0,
+                "size": 10000000,
+                "query": {
+                    "term": {
+                    
+                    }
+                }
+            }
+            if uid:
+                body["query"]["term"]["uid"] = uid
+                res = self.es.search(self.index_name, self.doc_type, body)
+                return {hit["_source"]["lang"]: TextInfo(**hit["_source"])
+                        for hit in res["hits"]["hits"]}
+            elif lang_uid:
+                body["query"]["term"]["lang_uid"] = lang_uid
+                res = self.es.search(self.index_name, self.doc_type, body)
+                return {hit["_source"]["uid"]: TextInfo(**hit["_source"])
+                        for hit in res["hits"]["hits"]}
+            else:
+                raise ValueError('At least one of uid or lang_uid must be set')
+    
+    def add_text_info(self, lang_uid, uid, textinfo):
+        doc = textinfo.as_dict()
+        doc["path"] = str(doc["path"])
+        self._buffer.append({
+            '_index': self.index_name,
+            '_type': self.doc_type,
+            '_id': '{}/{}'.format(lang_uid, uid),
+            '_source': doc
+        })
+        if len(self._buffer) > 1000:
+            self._flush()
+
+    def _flush(self):
+        from elasticsearch.helpers import bulk
+        if self._buffer:
+            bulk(self.es, self._buffer)
+        self._buffer.clear()
+
+    @classmethod
+    def build_once(cls, force_build):
+        if cls._build_lock.acquire(blocking=False):
+            try:
+                newtim = cls()
+                # newtim.build()
+                TextInfoModel._instance = newtim
+                TextInfoModel._build_ready.set()
+            finally:
+                TextInfoModel._build_lock.release()
+        
 class SqliteBackedTIM(TextInfoModel):
     """ A memory-saving version of the TIM
 
@@ -508,10 +636,9 @@ class SqliteBackedTIM(TextInfoModel):
         os.replace(timfile, cls.filename)
         return True
         
-        
-        
 
-def tim(force_build=False, Model=SqliteBackedTIM):
+
+def tim(force_build=False, Model=ElasticTIM):
     """ Returns an instance of the TIM
 
     When this is called for the first time, it will check if the cached
@@ -527,7 +654,7 @@ def tim(force_build=False, Model=SqliteBackedTIM):
     sc.textdata.tim()
     
      """
-
+    
     if not force_build and Model._build_ready.set():
         return Model._instance
     Model.build_once(force_build)
@@ -623,3 +750,10 @@ class PaliPageNumbinator:
                 }.get(book, book)
         return '{} {} {}'.format(ptsbook, book, num)
 
+def deathmatch():
+    estim = ElasticTIM()
+
+    sqltim = sc.textdata.SqliteBackedTIM()
+
+    start = time.time(); foo = [sqltim.get(uid=uid) for uid in s]; print(time.time() - start)
+    

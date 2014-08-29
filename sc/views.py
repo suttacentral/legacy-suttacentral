@@ -193,6 +193,8 @@ class DownloadsView(InfoView):
 
     formats = ['zip', '7z']
 
+    file_prefixes = ['sc-offline']
+
     def __init__(self):
         super().__init__('downloads')
 
@@ -202,7 +204,7 @@ class DownloadsView(InfoView):
 
     def __file_data(self, basename, exports_path):
         data = []
-        
+
         for latest_path in sorted(exports_path.glob('*-latest.*')):
             if latest_path.suffix.lstrip('.') not in self.formats:
                 continue

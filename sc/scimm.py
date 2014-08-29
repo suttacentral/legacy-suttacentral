@@ -84,7 +84,7 @@ class _Imm:
         self.build_grouped_suttas()
         self.build_parallel_sutta_group('vinaya_pm')
         self.build_parallel_sutta_group('vinaya_kd')
-        self.build_search_data()
+        # self.build_search_data()
         self.load_epigraphs()
         self.timestamp = timestamp
         self.build_time = datetime.now()
