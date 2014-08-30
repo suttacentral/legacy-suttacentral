@@ -22,7 +22,8 @@
         }
         
         & > ul {
-            border: 1px solid $light-gray;
+            border-top: 1px solid $light-gray;
+            border-bottom: 1px solid $light-gray;
             
             & > li {
                 padding: 0.5em 0.5em 0.5em 1em;
@@ -30,7 +31,7 @@
                 
                 &:first-child {
                     border-top: none;
-                    background: $pastel-purple;
+                    
                 }
             }
         }
