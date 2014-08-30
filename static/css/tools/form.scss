@@ -22,15 +22,15 @@
         }
         
         & > ul {
-            border: 2px solid black;
+            border: 1px solid $light-gray;
             
             & > li {
                 padding: 0.5em 0.5em 0.5em 1em;
-                border-top: 2px solid black;
+                border-top: 1px solid $light-gray;
                 
                 &:first-child {
                     border-top: none;
-                    background: palegoldenrod;
+                    background: $pastel-purple;
                 }
             }
         }
