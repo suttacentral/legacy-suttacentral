@@ -134,7 +134,6 @@ def process(host, url, omit_codes=None, omit_rex=None, timeout=30):
         if omit_rex and omit_rex.search(href) or omit_rex.search(a.text_content()):
             a.set(attr, 'http://suttacentral.net/' + a.get(attr))
             continue
-        
         if not href or not href.startswith('/'):
             continue
         addtotaskqueue(href)
@@ -172,12 +171,12 @@ if __name__ == '__main__':
     addtotaskqueue('/')
     # Add js files which are requested via AJAX thus lacking
     # href or src references.
-    tomatch = ['zh2en', 'pi2en']
+    tomatch = ['zh', 'pi']
     for file in sc.static_dir.glob('js/**/*.js'):
         filename = file.name
         for string in tomatch:
             if string in filename:
-                addtotaskqueue('/js/{}'.format(filename))
+                addtotaskqueue('/' + str(file.relative_to(sc.static_dir)))
                 break
 
     start = time.time()

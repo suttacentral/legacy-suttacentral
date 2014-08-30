@@ -107,7 +107,7 @@ sc.classes = {
 
 sc.mode = {}
 sc.data = {}
-sc.jsBaseUrl = $('script[src*="js/"]').last().attr('src').match(/(.*\/js\/)/)[0];
+sc.jsBaseUrl = $('script[src*="js/"]').last().attr('src').match(/((.*\/|^)js\/)/)[0];
 
 $(document).ready(function() {
     var images = $("img");

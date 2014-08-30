@@ -88,7 +88,7 @@ sc.headerMenu = {
 
 setTimeout(function(){
     $('header nav a').each(function(){
-        $(this).attr('href', $(this).attr('href').replace('/', '#'));
+        $(this).attr('href', '#' + $(this).attr('href').replace(/^\.*\//, '').replace('.html', ''));
     });
     $('header nav').on('click', function(){sc.headerMenu.update($(this)); return false});
     $('#panel-screen-wrap').on('click', function(e) {
