@@ -128,6 +128,7 @@ def get_env():
         'js/sidebar.js',
         'js/sc_formatter.js',
         'js/sc_popupnotes.js',
+        'js/sc_zh2en_lookup.js',
         sc_data_scripts_file,
         sc_uid_expansion_data_file,
         filters='rjsmin',

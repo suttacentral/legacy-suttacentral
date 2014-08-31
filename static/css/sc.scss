@@ -85,12 +85,12 @@ table.divtable td:nth-of-type(1) > a {white-space:nowrap;}
 
 
 .infomode {
-	.insertion:before {
-		content:'[';
-	}
-	.insertion:after {
-		content:']';
-	}
+    .insertion:before {
+        content:'[';
+    }
+    .insertion:after {
+        content:']';
+    }
 }
 
 
@@ -194,7 +194,16 @@ q:after {
     display: table;
     width: auto;
     margin: 0 auto;
-    font-style:italic !important;color:#767676;
+    font-style:italic !important;
+    color:#767676;
+}
+
+.vagguddanagatha{
+    display: table;
+    width: auto;
+    margin: 0 auto;
+    font-style:italic !important;
+    color:#767676;
 }
 
 .endh2, .endh3, .endh4, .endh5, .endh6, .endsutta, .endvagga, .endsubdivision, .endsection, .enddivision, .bhanavara, .enduddesa, .end
@@ -213,7 +222,10 @@ q:after {
 .endbook {
     text-align:center;
     @include serif(!important);
-    font-weight:bold;color:#767676;
+    font-weight:bold;
+    color:#767676;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
 }
 
 .dquo {margin-left: -0.9ex;position:absolute;}
@@ -233,12 +245,7 @@ q:after {
 
 /*CHINESE*/
 
-section:lang(zh) {
-    letter-spacing:0.4em;
-}
-section:lang(zh) q {
-    letter-spacing: normal;
-}
+
 
 .tlineheadnote {color:red;}
 
@@ -251,12 +258,12 @@ section:lang(zh) q {
 //.cr
 /*cross-reference, i.e. internal references. Used in IBH.*/
 .surplus {
-	display:none;
-	color:#4805A2;
-	.infomode & {
-		display:inline;
-	}
-		
+    display:none;
+    color:#4805A2;
+    .infomode & {
+        display:inline;
+    }
+        
 }
 
 /*For Mahaparinirvana text, marks apparently random phrases that are marked in bold in GRETIL. 
@@ -265,9 +272,9 @@ Surplus text.
 */
 
 .supplied {
-	.infomode & {
-		color:#B3A72D
-	}
+    .infomode & {
+        color:#B3A72D
+    }
 }
 /*In almost all Sanskrit texts, there is reconstruction by the editor. These are marked <span class="supplied"></span>. In CSS this should by default display normally, and optionally, use 
 
@@ -276,9 +283,9 @@ Text hypothetically reconstructed by the editor or translator.
 */
 
 .supplied2 {
-	.infomode & {
-		color:#9B8D00;
-	}
+    .infomode & {
+        color:#9B8D00;
+    }
 }
 /*In some cases there are two forms of supplied text, usually differentiated in the original by () and []. This difference is retained by using supplied2 for the []. Actually these should be marked more clearly to differentiate them, but this will differ according to the various publications, which I don't have. So for now let them behave as for .supplied, except use 
 
@@ -287,13 +294,13 @@ Text hypothetically reconstructed by the editor or translator.
 
  p .add{
                                 border:1px solid rgb(215, 215, 215);
-		display:inline;
-		padding: 0 0.3em;
-		@include sans-serif;
-		color:#767676;
-		font-size: 100%;
-	background:#fefefe;
-	box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);
+        display:inline;
+        padding: 0 0.3em;
+        @include sans-serif;
+        color:#767676;
+        font-size: 100%;
+    background:#fefefe;
+    box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);
 }
 p .add .author {
         @include sans-serif-small-caps;
@@ -313,16 +320,16 @@ Text added by the editor or translator for clarification.
 Metre reconstructed by the editor.
 */
 
-.gap	{color:#B2AF8C}
+.gap    {color:#B2AF8C}
 /*For marking gaps in the text, which are filled in with + or the like.  In IB Horner's translation, deliberate gaps were marked by the translator with an *. Accidental omissions are marked with +.
 
 Gap in the manuscript.
 */
 
 .corr {
-	.infomode & {
-		color:#00751A
-	}	
+    .infomode & {
+        color:#00751A
+    }   
 }
 
 /*A corrected reading that has been adopted in the text (usually by the latest editor mentioned in the meta). By default display normally.
@@ -332,11 +339,11 @@ Reading corrected by the editor.
 */
 
 .sic {
-	display:none;
-	.infomode & {
-		display:inline;
-		color:#9B0F00;
-	}
+    display:none;
+    .infomode & {
+        display:inline;
+        color:#9B0F00;
+    }
 }
 
 /*
@@ -344,9 +351,9 @@ Apparently incorrect reading determined by the editor.
 */
 
 .lem {
-	.infomode &	{
-		color:#432769;
-	}
+    .infomode & {
+        color:#432769;
+    }
 }
 /*The adopted main reading in a text. Display normally.
 
@@ -361,20 +368,20 @@ Accepted reading in this text.
 Variant reading.
 */
 
-cite.book	{font-style:italic;}
+cite.book   {font-style:italic;}
 /*A book title.*/
 
-cite.article	{font-style:normal}
+cite.article    {font-style:normal}
 /*An article title.*/
 
 .gatha-number {}
 /*As it says. Style as for other refs.*/
 
 .del {
-	display:none;
-	.infomode & {
-		color:#EE1700;
-	}
+    display:none;
+    .infomode & {
+        color:#EE1700;
+    }
 }
 
 /*(deletion) contains a letter, word, or passage deleted, marked as deleted, or otherwise indicated as superfluous or spurious in the copy text by an author, scribe, annotator, or corrector.
@@ -382,22 +389,22 @@ cite.article	{font-style:normal}
 Text deleted by the editor as superfluous.
 */
 
-.unclear	{color:#767676}
+.unclear    {color:#767676}
 /*Text marked as uncertain, usually with a "?", in the transcribed text.
 
 Unclear reading.
 */
-.namo		{font-style:italic;text-align:center;}
+.namo       {font-style:italic;text-align:center;}
 /*dedication at the start of texts*/
 
-.scribe	{
+.scribe {
     font-style:italic;
     text-align: right;
 }
 
 /*note in the text recording who copied the text*/
-hr		{width:33%;color:#767676;margin:0 auto 2em}
-.rule	{font-weight:bold}
+hr      {width:33%;color:#767676;margin:0 auto 2em}
+.rule   {font-weight:bold}
 /*text in vibhanga, etc., of the rule itself.*/
 
 
@@ -444,8 +451,8 @@ hr		{width:33%;color:#767676;margin:0 auto 2em}
 
 Generally, eliminate inline styles, and retain semantic markup. Transform all classes inherited from CBETA by prefixing with t-. This is to avoid clashing with SC classes, and also to clarify the source of the markup.. NEED TO CHANGE PREVIOUS HANDLING OF CBETA TAGS*/
 
-.t-note	{}
+.t-note {}
 /*= .note in CBETA text. Changed to avoid confusion with SC's .note. Indicates usually bracketed note or comment in the text. No need to indicate.*/
 
-.t-gaiji	{color:darkcyan}
+.t-gaiji    {color:darkcyan}
 

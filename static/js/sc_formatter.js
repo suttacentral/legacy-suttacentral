@@ -33,7 +33,6 @@ sc.formatter = {
     shove: function(){
         var start = (new Date()).getTime();
         $("q").each(function(){sc.formatter.rePosition($(this))});
-        //console.log("Resize took: ", (new Date()).getTime() - start, " milliseconds");
     },
     operaFix: function(){
         if ('opera' in window) {
@@ -239,7 +238,6 @@ sc.formatter = {
 
         $('[name=tidy-file]').on('change', function(e){
             var self=e.target;
-            console.log(e.target.value);
             if (e.target.value.search(/\.zip$/i) == -1){
                 self.value = null;
                 alert('Only zip files are acceptable.', 'Go away');
@@ -332,7 +330,6 @@ sc.formatter = {
             self = sc.formatter;
         function checkOkay(ul){
             var ul = $(this);
-            //console.log(ul);
             var width = ul.width(),
                 offset = ul.offset(),
                 leftExtent = offset.left + width;

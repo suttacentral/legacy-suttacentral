@@ -53,3 +53,6 @@
 </table>
 {% endif %}
 {%- endfor %}
+{% if result.error %}
+<p><em>The search could not be completed as <b>{{ result.query.query }}</b> is not a well-formed query. Certain characters such as <b>"</b> have special meaning and cannot be searched for directly.</em></p>
+{% endif %}

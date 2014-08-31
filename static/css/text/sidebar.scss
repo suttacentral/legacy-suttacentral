@@ -162,13 +162,30 @@ $sidebar-dongle-width = 1em;
 #message-box {
     float: left;
     clear: both;
-    margin: 1em;
+    margin: 1em 5%;
+    width: 90%;
     > div {
         font-style: italic;
         padding: 0.5em;
-        border-radius: 0.5em;
-        background-color: $bright-pastel-red;
+        border-radius: 3px;
+        background-color: $light-light-gray;
     }
+    .remove {
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        line-height: 1em;
+        text-align: center;
+        padding: 0.1em;
+        float: right;
+        cursor: pointer; 
+        font-style:normal;
+        font-weight:bold;    
+       
+    }
+     a:hover.remove{
+        background:white
+        }
 }
 
 
@@ -176,14 +193,14 @@ $sidebar-dongle-width = 1em;
     position: absolute;
     top:50%;
     bottom:50%;
-    font-size:2rem;
+    font-size:1.5rem;
     color:white;
     left: $sidebar-width;
     height: 40px;
     width: 40px;
     background: $dirty-pastel-green;
     z-index: -1;
-    line-height:1.1;
+    line-height:1.7;
     box-shadow: 0.03em 0.02em 0.15em rgba(0,0,0,0.15);
     text-align:center;
     cursor: pointer;

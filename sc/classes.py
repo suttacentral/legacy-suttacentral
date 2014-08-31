@@ -355,6 +355,7 @@ class SearchResults:
         self.categories = categories or []
     def add(self, category):
         self.categories.append(category)
+    error = False
 
 ResultSection = namedtuple('ResultSection', 'title results')
 class ResultsCategory:

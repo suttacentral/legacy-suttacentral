@@ -66,6 +66,7 @@ def ensure_not_exists(path, force=False, quiet=False):
 
 def update_latest_symlink(path, basestem):
     symlink_path = path.parent / (basestem + '-latest' + path.suffix)
-    if symlink_path.exists():
+    # Note: Path.exists() returns False for a broken symlink
+    if symlink_path.exists() or symlink_path.is_symlink():
         symlink_path.unlink()
     symlink_path.symlink_to(path)

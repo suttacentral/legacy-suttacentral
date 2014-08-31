@@ -14,36 +14,30 @@ sc.zh2enLookup = {
     mouseIn: 0,
     currentLookup: null,
     lastCurrentLookup: null,
-    init: function(insert_button_where, markup_target){
+    init: function(button, markup_target){
         this.markupTarget = $(markup_target).addClass('zh2enLookup')[0];
-        this.markupTarget
-        this.insertButton(insert_button_where);
-    },
-    insertButton: function(insert_where){
-        this.button = $('<button id="'+this.buttonId+'">Chinese→English Dictionary</button>')
-        $(insert_where).append(this.button);
-        $(document).on('click', '#' + this.buttonId, sc.zh2enLookup.toggle);
+        this.button = $(button).on('click', sc.zh2enLookup.toggle);
     },
     before: function(){
         self = sc.zh2enLookup;
-        var popup = '<div>Loading zh to en dictionary data, this may take some time (~1MB)</div>'
-        scMessage.show(popup, 8000);
+        sc.sidebar.messageBox.clear();        
+        var message = '<p>Loading zh to en dictionary data, this may take some time (~1MB)</p>'
+        sc.sidebar.messageBox.show(message, {id: 'zh_msg_loading'});
     },
     done: function(){
-        self = sc.zh2enLookup;
-        var popup = '<div>Chinese to english lookup activated.</div>\
-            <div>Use the mouse or left, right arrow keys to navigate the text (shift-right to advance more).</div>\
-            <div>A red border indicates modern usage, possibly unrelated to early Buddhist usage.</div>'
-        scMessage.show(popup, 8000);
-        console.log('Successfully loaded dictionary data')
+        var self = sc.zh2enLookup;
+        sc.sidebar.messageBox.remove('zh_msg_loading');
+        var message = '<p>Chinese to english lookup activated.</p>\
+            <p>Use the mouse or left, right arrow keys to navigate the text (shift-right to advance more).</p>\
+            <p>A red border indicates modern usage, possibly unrelated to early Buddhist usage.</p>'
+        sc.sidebar.messageBox.show(message);
         self.currentLookup = $('span.lookup:first')[0];
         self.lastCurrentLookup = self.currentLookup;
-            
-        console.log('Ready')
     },
     fail: function(jqXHR, textStatus, errorThrown){
-        var popup = '<div>Failed to download dictionary data because of <em>{}</em></div>'.format(textStatus);
-        scMessage.show(popup, 8000);
+        sc.sidebar.messageBox.remove('zh_msg_loading');
+        var msg = '<div>Failed to download dictionary data because of <em>{}</em></div>'.format(textStatus);
+        sc.sidebar.messageBox.show(msg, {timeout: 10000});
     },
     activate: function(){
         var self = this;
@@ -98,6 +92,8 @@ sc.zh2enLookup = {
     },
     deactivate: function(){
         this.markupTarget.innerHTML = this.originalHTML;
+        sc.sidebar.messageBox.clear();
+        sc.sidebar.messageBox.show('<p>Lookup disabled.</p>', {'timeout': 5000});
     },
     generateMarkup: function() {
         if (this.button)
@@ -118,7 +114,7 @@ sc.zh2enLookup = {
                     this.andfinally();
                     return;
                 }
-                var nextNode = nextInOrder(this.node, document.TEXT_NODE)
+                var nextNode = nextInOrderByType(this.node, document.TEXT_NODE)
                 this.textNodeToMarkup(this.node);
                 this.node = nextNode;
             }
@@ -126,7 +122,6 @@ sc.zh2enLookup = {
         },
         andfinally: function(){
             self = sc.zh2enLookup;
-            console.log('Done');
             if (self.button)
                 self.button.removeAttr('disabled');
             

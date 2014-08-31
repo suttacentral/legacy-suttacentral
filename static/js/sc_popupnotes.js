@@ -80,7 +80,6 @@ sc.notes = {
     markupXRefNote: function(comment){
         var self=this,
             note;
-        console.log(comment)
         rows = comment.split(self.rowRex).map(function(row){
             var markedRow = row.replace(self.xrefRex, self.xRefToHTML);
             if (markedRow == row) {
@@ -94,9 +93,7 @@ sc.notes = {
     },
     markupComment: function(comment){
         var self = this;
-        console.log(comment);
         comment = comment.replace(self.robrContentsRex, function(m, contents, leftovers){
-            console.log(m, contents, leftovers);
             if (contents) {
                 contents = '<ul>' + contents.split(/,\s*/g).map(function(part){
                     part = part.replace(self.edsRex, function(ed){
@@ -120,7 +117,6 @@ sc.notes = {
          * bm   - Bookmark on the page
          * desc - A description of the page (normally the heading)
          */
-        console.log(m)
         var parts = urlComp.split('#'),
             uid = parts[0],
             bm = (parts.length > 1) ? parts[1] : null,
