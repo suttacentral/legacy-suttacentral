@@ -51,14 +51,14 @@
 }
 
 .choice {
-    .sic {
+    .corr {
         display: none;
     }
 }
 
 .infomode {
     .choice {
-        .sic {
+        .corr {
             display: inline-block;
             position: absolute;
             background: $light-pastel-red;
@@ -75,7 +75,7 @@
             @include sans-serif;
         }
     }
-    .choice:hover .sic {
+    .choice:hover .corr {
         visibility: visible;
         opacity: 1;
         transition: opacity 0.3s ease;
