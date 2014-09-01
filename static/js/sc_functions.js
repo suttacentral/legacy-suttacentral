@@ -187,6 +187,10 @@ function buildTextualInformation() {
         });
     }
 
+    $('a[id]:not([href])').each(function(){
+        $(this).attr('href', '#' + $(this).attr('id'));
+    });
+
     for (var contentClass in sc.classes.content) {
         $('.' + contentClass).attr('title', sc.classes.content[contentClass]);
     }
