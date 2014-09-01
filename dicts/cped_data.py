@@ -14821,7 +14821,7 @@ entries = [
 ['mekhalaa', 1, "f.", "a girdle for women.", "oo", "N", "f.ā", "", 0, "mekhal", True],
 ['megha', 1, "m.", "rain; a cloud.", "oo", "N", "m.a", "", 0, "megh", True],
 ['meghanaada', 1, "m.", "a thunder.", "oo", "N", "m.a", "", 0, "meghanād", True],
-['meghanibha', 1, "adj.", "cloude-like.", "oo", "N", "adj.a", "", 0, "meghanibh", True],
+['meghanibha', 1, "adj.", "cloud-like.", "oo", "N", "adj.a", "", 0, "meghanibh", True],
 ['meghava.n.na', 1, "adj.", "cloud-coloured, i.e. black.", "oo", "N", "adj.a", "", 0, "meghavaṇṇ", True],
 ['mecaka', 1, "adj.", "black; dark blue.", "oo", "N", "adj.a", "", 0, "mecak", True],
 ['mejjha', 1, "adj.", "pure.", "oo", "N", "adj.a", "", 0, "mejjh", True],
