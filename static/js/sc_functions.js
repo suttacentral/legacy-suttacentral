@@ -187,7 +187,7 @@ function buildTextualInformation() {
         });
     }
 
-    $('a[id]:not([href])').each(function(){
+    $('#text a[id]:not([href])').each(function(){
         $(this).attr('href', '#' + $(this).attr('id'));
     });
 
