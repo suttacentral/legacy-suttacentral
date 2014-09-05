@@ -1,4 +1,5 @@
 {
+    "inherits": ["default"],
     "index": {
         "settings": {
             "analysis": {
@@ -37,7 +38,7 @@
                 "properties": {
                     "content": {
                         "fields": {
-                            "lang": {
+                            "stemmed": {
                                 "type": "string",
                                 "term_vector": "with_positions_offsets",
                                 "analyzer": "html_lang"

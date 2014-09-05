@@ -1,5 +1,4 @@
 {
-    "inherits": ["default"],
     "index": {
         "settings": {
             "analysis": {
