@@ -43,11 +43,11 @@
                     }
                 }
             },
-            "filedata": {
+            "meta": {
                 "properties": {
                     "mtimes": {
-                        "type": "string",
-                        "analyzer": "not_analyzed"
+                        "type": "object",
+                        "enabled": false
                     }
                 }
             }

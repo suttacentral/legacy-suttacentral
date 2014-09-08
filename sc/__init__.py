@@ -29,6 +29,7 @@ def set_constants():
     tmp_dir = base_dir / 'tmp'
     webassets_manifest_path = db_dir / 'webassets' / 'manifest'
     webassets_cache_dir = db_dir / 'webassets' / 'cache'
+    indexer_dir = base_dir / 'elasticsearch' / 'indexers'
 
     # Assign all constants to the module.
     globals().update(locals())
