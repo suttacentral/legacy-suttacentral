@@ -21,9 +21,9 @@
                     }
                 },
                 "analyzer": {
-                    "html_lang": {
+                    "pi": {
                         "tokenizer": "standard",
-                        "char_filter": ["html_strip", "sanskrit_to_pali"],
+                        "char_filter": ["sanskrit_to_pali"],
                         "filter": [
                             "lowercase",
                             "pali_stop",
@@ -41,7 +41,7 @@
                             "stemmed": {
                                 "type": "string",
                                 "term_vector": "with_positions_offsets",
-                                "analyzer": "html_lang"
+                                "analyzer": "pi"
                             }
                         }
                     }
