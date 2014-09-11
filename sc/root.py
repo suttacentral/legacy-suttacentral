@@ -77,6 +77,7 @@ class Root(object):
 
     @cherrypy.expose
     def define(self, term, **kwargs):
+        term = term.encode(encoding='latin-1').decode(encoding='utf8')
         return show.define(term)    
 
 class Admin(object):

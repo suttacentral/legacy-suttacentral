@@ -181,7 +181,17 @@ class ViewBase:
         context = self.get_global_context()
         self.setup_context(context)
         return self.massage_whitespace(template.render(dict(context)))
+"""
+['__cause__', '__class__', '__context__', '__delattr__', '__dict__',
+'__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__',
+'__gt__', '__hash__', '__init__', '__le__', '__lt__', '__module__', '__ne__',
+'__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__',
+'__setstate__', '__sizeof__', '__str__', '__subclasshook__',
+'__suppress_context__', '__traceback__', '__weakref__',
+'args', 'filename', 'lineno', 'message', 'name', 'source',
+'translated', 'with_traceback']
 
+"""
 class InfoView(ViewBase):
     """A simple view that renders the template page_name; mostly used for
     static pages."""
@@ -494,9 +504,18 @@ class DefinitionView(ViewBase):
 
     def __init__(self, term):
         self.term = term
+        print("term looks like: {}".format(term))
 
     def setup_context(self, context):
+        from sc.search import dicts
+        context.term = term = self.term
         context.title = "define: {}".format(self.term)
+        entry = context.entry = dicts.get_entry(self.term)
+        if entry:
+            context.near_terms = dicts.get_nearby_terms(entry['number'])
+        else:
+            context.near_terms = []
+        context.fuzzy_terms = dicts.get_fuzzy_terms(term)
 
 class SearchResultView(ViewBase):
     """The view for the search page."""

@@ -12,7 +12,7 @@ html_template = '''<html><head>
 <title>500 Internal Server Error</title>
 <style>
 body {{
-  max-width: 40em;
+  max-width: 60em;
   margin: auto;
 }}
 #traceback {{
@@ -42,7 +42,7 @@ def error_page_404(status, message, traceback, version):
     return (sc.static_dir / '404.html').open('r', encoding='utf-8').read()
 
 def error_page_500(status, message, traceback, version):
-    return html_template.format(message=message, traceback=traceback)
+    return html_template.format(message=message, traceback=traceback.replace('\n', '<br>'))
 
 def custom_500(message, traceback):
     template = '''<html><head>

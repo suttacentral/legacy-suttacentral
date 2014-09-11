@@ -8,37 +8,35 @@ import elasticsearch
 
 es = elasticsearch.Elasticsearch()
 
-def get_entry(lang, term):
+def get_entry(term, lang='en'):
     out = {}
     try:
         resp = es.get(index=lang, doc_type='definition', id=term)
     except:
         return None
     source = resp['_source']
+    source['entries'].sort(key=lambda d: d['priority'])
+    return source
 
-    out['entry'] = source
-    out['entry']['entries'].sort(key=lambda d: d['priority'])
-
-    number = source['number']
-
-    resp = es.search('en', doc_type='definition', _source=['term', 'gloss'], body={
+def get_nearby_terms(number, lang='en'):
+    resp = es.search(index=lang, doc_type='definition', _source=['term', 'gloss'], body={
       "query":{
          "constant_score": {
            "filter": {
              "range": {
                "number": {
-                 "gte": number - 10,
-                 "lte": number + 10
+                 "gte": number - 5,
+                 "lte": number + 5
                }
              }
            }
          }
       }
-    })
+    }, size=12)
+    return [d['_source'] for d in resp['hits']['hits']]
 
-    out['near'] = [d['_source'] for d in resp['hits']['hits']]
-
-    resp = es.search('en', doc_type='definition', _source=['term', 'gloss'], body={
+def get_fuzzy_terms(term, lang='en'):
+    resp = es.search(index=lang, doc_type='definition', _source=['term', 'gloss'], body={
         "query": {
             "fuzzy_like_this": {
                 "fields": ["term", "term.folded"],
@@ -46,7 +44,5 @@ def get_entry(lang, term):
             }
         }
     })
-
-    out['fuzzy'] = [d['_source'] for d in resp['hits']['hits']]
-    return out
+    return [d['_source'] for d in resp['hits']['hits'] if d['_source']['term'] != term]
     

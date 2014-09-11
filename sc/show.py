@@ -161,6 +161,9 @@ def downloads():
 def sht_lookup(query):
     return ShtLookupView(query).render()
 
+def define(term):
+    return DefinitionView(term).render()
+
 def admin_index():
     return AdminIndexView().render()
 

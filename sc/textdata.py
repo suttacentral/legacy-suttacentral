@@ -638,7 +638,7 @@ class SqliteBackedTIM(TextInfoModel):
         
 
 
-def tim(force_build=False, Model=ElasticTIM):
+def tim(force_build=False, Model=SqliteBackedTIM):
     """ Returns an instance of the TIM
 
     When this is called for the first time, it will check if the cached

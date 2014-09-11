@@ -1,0 +1,59 @@
+{% extends "base.html" -%}
+{%- block content -%}
+
+{% set books = {"cped": "Concise Pali English Dictionary",
+                "pts_ped": "PTS Pali English Dictionary",
+                "dhammika_ff": "Nature and the Environment in Early Buddhism by S. Dhammika",
+                "sc_dppn": "Pali Proper Names"} %}
+
+
+<div id="onecol" class="define">
+
+{% if entry %}
+<h1>Definitions for <strong>{{ term }}</strong></h1>
+
+<div class="entries">
+{% for sub_entry in entry.entries %}
+<div class="book_entry">
+
+{% if sub_entry.source in books %}
+<small class="source">{{ books[sub_entry.source] }}</small>
+{% else %}
+<small class="source">{{ sub_entry.source }}</small>
+{% endif %}
+
+{{ sub_entry.html_content }}
+
+</div> {# .book_entry #}
+{% endfor %}
+
+</div> {# .entries #}
+
+{% elif not entry %}
+<p>No definitions found for <em>{{ term }}</em></p>
+{% endif %}
+
+<div class="related_terms">
+{% if near_terms %}
+<h3>Adjacent Terms</h3>
+<ul class="near_terms">
+{% for hit in near_terms %}
+<li{% if hit.term == term %} class="this"{% endif %}>
+<a href="./{{ hit.term|urlencode }}">{{ hit.term }}</a>{% if hit.gloss %} <em>({{ hit.gloss }})</em>{% endif %}
+</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if fuzzy_terms %}
+<h3>Similiar Spelling</h3>
+<ul class="fuzzy_terms">
+{% for hit in fuzzy_terms %}
+<li><a href="./{{ hit.term|urlencode }}">{{ hit.term }}</a>{% if hit.gloss %} <em>({{ hit.gloss }})</em>{% endif %}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+</div>
+</div>
+{%- endblock -%}
