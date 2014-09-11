@@ -8,6 +8,7 @@ import socket
 import time
 import json
 import urllib.parse
+
 from webassets.ext.jinja2 import AssetsExtension
 
 import sc
@@ -15,6 +16,7 @@ from sc import assets, config, data_repo, scimm, util
 from sc.menu import get_menu
 from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
+from sc import error_pages
 
 import logging
 logger = logging.getLogger(__name__)
@@ -165,7 +167,17 @@ class ViewBase:
 
     def render(self):
         """Return the HTML for this view."""
-        template = self.get_template()
+        try:
+            template = self.get_template()
+        except jinja2.exceptions.TemplateSyntaxError as e:
+            cherrypy.response.status = 500
+            message = type(e).__name__ + ' : line {e.lineno} in {e.name}'.format(e=e)
+            sourcelines = ["{:4} {}".format(i + 1, l) for i, l in
+                            enumerate(sc.tools.html.escape(e.source).split('\n'))]
+            sourcelines[e.lineno - 1] = '<strong>{}</strong>'.format(sourcelines[e.lineno - 1])
+            traceback = ("<pre>{trace}</pre>" +
+                "<p>{message}</p>").format(message=e.message, trace='<br>'.join(sourcelines[max(0, e.lineno-3):e.lineno+2]))
+            return error_pages.custom_500(message, traceback)
         context = self.get_global_context()
         self.setup_context(context)
         return self.massage_whitespace(template.render(dict(context)))

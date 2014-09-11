@@ -3,11 +3,10 @@ import cherrypy
 import sc
 from sc import show
 from sc.tools import webtools
+from sc.error_pages import error_page_404, error_page_500
 
 # We expose everything we need to here.
-
-def error_page_404(status, message, traceback, version):
-    return (sc.static_dir / '404.html').open('r', encoding='utf-8').read()
+    
 
 def get_cookie_or_param(name):
     if name in cherrypy.request.cookie:
@@ -40,6 +39,7 @@ class Root(object):
 
     _cp_config = {
         'error_page.404': error_page_404,
+        'error_page.500': error_page_500,
         'tools.trailing_slash.on': False,
         'tools.remove_trailing_slash.on': True,
         'tools.set_offline.on': True,
@@ -74,7 +74,10 @@ class Root(object):
     @cherrypy.expose
     def sht_lookup(self, query, **kwargs):
         return show.sht_lookup(query)
-    
+
+    @cherrypy.expose
+    def define(self, term, **kwargs):
+        return show.define(term)    
 
 class Admin(object):
     """Requests to /admin/*"""
