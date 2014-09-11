@@ -38,6 +38,7 @@ sc.classes = {
         "pts-vp-en": "Vol/page of the Pali Text Society translation.",
         "pts-vp-pi": "Vol/page of the Pali Text Society Pali edition.",
         "pts_pn": "Pali Text Society vol/page number.",
+         "pts-p-pi": "Pali Text Society page number for the Pali text."
         "roth": "Paragraph numbers in Roth, 1970.",
         "san87": "Paragraph numbers in Sander, 1987.",
         "san89": "Paragraph numbers in Sander, 1987.",
