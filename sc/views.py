@@ -475,6 +475,17 @@ class SubdivisionHeadingsView(ViewBase):
             self.division.name)
         context.division = self.division
 
+class DefinitionView(ViewBase):
+    """ The view used for dictionary definition pages """
+
+    template_name = 'define'
+
+    def __init__(self, term):
+        self.term = term
+
+    def setup_context(self, context):
+        context.title = "define: {}".format(self.term)
+
 class SearchResultView(ViewBase):
     """The view for the search page."""
 

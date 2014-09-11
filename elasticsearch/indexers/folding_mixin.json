@@ -1,16 +1,5 @@
 {
     "index": {
-        "settings": {
-            "analysis": {
-                "analyzer": {
-                    "html_folding": {
-                        "char_filter": ["html_strip"],
-                        "tokenizer": "icu_tokenizer",
-                        "filter": ["icu_folding"]
-                    }
-                }
-            }
-        },
         "mappings": {
             "text": {
                 "properties": {
@@ -19,7 +8,7 @@
                             "folded": {
                                 "type": "string",
                                 "term_vector": "with_positions_offsets",
-                                "analyzer": "html_folding"
+                                "analyzer": "folding"
                             }
                         }
                     }
