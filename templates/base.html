@@ -36,9 +36,11 @@
 {% include 'header.html' %}
 
 {% include 'outdated_browser.html' %}
-
-<div id="page-main">
 {% endif %} {# not ajax #}
+<div id="page-main">
+{% if ajax %}
+<meta name="title" content="{{title}}">
+{% endif %}
 {% block content %}{% endblock %}
 </div><!-- page-main -->
 {% if not ajax %}
