@@ -46,7 +46,7 @@
 {% endif %}
 
 {% if fuzzy_terms %}
-<h3>Similiar Spelling</h3>
+<h3>Similar Spelling</h3>
 <ul class="fuzzy_terms">
 {% for hit in fuzzy_terms %}
 <li><a href="./{{ hit.term|urlencode }}">{{ hit.term }}</a>{% if hit.gloss %} <em>({{ hit.gloss }})</em>{% endif %}</li>
