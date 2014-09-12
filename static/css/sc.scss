@@ -167,6 +167,10 @@ q:after {
     list-style-type: none;
 }
 
+.sutta ul li{
+    margin-bottom:1.5em;
+}
+
 .sutta ol   {
      padding:0 0 1.5em 0;
      margin:0 0 0 3em;
@@ -326,23 +330,49 @@ Metre reconstructed by the editor.
 Gap in the manuscript.
 */
 
-.corr {
-    .infomode & {
-        color:#00751A
-    }   
+.choice {
+    .corr {
+        display: none;
+    }
 }
 
-/*A corrected reading that has been adopted in the text (usually by the latest editor mentioned in the meta). By default display normally.
+.infomode {
+    .choice {
+        .corr {
+            display: inline-block;
+            position: absolute;
+            background: $light-pastel-red;
+            padding: 0.5em;
+            border-radius: 3px;
+            margin-top: -2.5em;
+            margin-left: -0.5em;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 3px;
+            border:1px solid #ccc;
+            box-shadow:6px 4px 10px rgba(136, 136, 136, 0.3);
+            @include sans-serif;
+        }
+    }
+    .choice:hover .corr {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+}
+
+/*A corrected reading that has been adopted in the text (usually by the latest editor mentioned in the meta). Hide by default.
 
 
 Reading corrected by the editor.
 */
 
 .sic {
-    display:none;
+    
     .infomode & {
-        display:inline;
-        color:#9B0F00;
+        
+        color:$bright-saturated-red;
     }
 }
 

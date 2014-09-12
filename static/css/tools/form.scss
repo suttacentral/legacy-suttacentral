@@ -82,16 +82,19 @@
         h2#menu { margin: 0; padding: 0.2em;}
         
         a {
-            width: 19.0%;
+            width: 18.8%;
             min-width: 6em;
             display:inline-block;
-            padding: 0.5em 0 0.5em 0;
+            padding: 0.5em 0.2em;
             margin: 0em;
             font-size: 1em;
             margin-bottom:1em;
             background: $light-light-gray;
-            
+            border-right:1px solid $light-medium-gray;
 
+            &:last-child {
+                    border-right: none;
+}
             &.current {
                 background: $light-off-white;
                 
