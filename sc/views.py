@@ -158,6 +158,7 @@ class ViewBase:
             'scm': scm,
             'search_query': '',
             'imm': sc.scimm.imm(),
+            'ajax': 'ajax' in cherrypy.request.params
         })
 
     def massage_whitespace(self, text):

@@ -1,3 +1,4 @@
+{% if not ajax %}
 <!DOCTYPE html>
 <html lang="{{page_lang}}">
 <head>
@@ -37,9 +38,10 @@
 {% include 'outdated_browser.html' %}
 
 <div id="page-main">
+{% endif %} {# not ajax #}
 {% block content %}{% endblock %}
 </div><!-- page-main -->
-
+{% if not ajax %}
 {% include 'panel.html' %}
 
 <div id="page-footer-push"></div>
@@ -78,3 +80,4 @@
      Date:     {{ scm.last_commit_time | datetime('long') }}
      Branch:   {{ scm.branch }}
      Tag:      {{ scm.tag }} -->
+{% endif %}
