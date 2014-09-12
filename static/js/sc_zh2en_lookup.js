@@ -21,13 +21,13 @@ sc.zh2enLookup = {
     before: function(){
         self = sc.zh2enLookup;
         sc.sidebar.messageBox.clear();        
-        var message = '<p>Loading zh to en dictionary data, this may take some time (~1MB)</p>'
+        var message = '<p>Loading Chinese to English dictionary data, this may take some time (~1MB)</p>'
         sc.sidebar.messageBox.show(message, {id: 'zh_msg_loading'});
     },
     done: function(){
         var self = sc.zh2enLookup;
         sc.sidebar.messageBox.remove('zh_msg_loading');
-        var message = '<p>Chinese to english lookup activated.</p>\
+        var message = '<p>Chinese to English lookup activated.</p>\
             <p>Use the mouse or left, right arrow keys to navigate the text (shift-right to advance more).</p>\
             <p>A red border indicates modern usage, possibly unrelated to early Buddhist usage.</p>'
         sc.sidebar.messageBox.show(message);
