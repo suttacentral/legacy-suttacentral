@@ -1,0 +1,53 @@
+.define {
+    padding-top: 2em;
+
+    h1, h2 {
+        text-align: center;
+    }
+
+    .source {
+        float: right;
+        margin-right: 1em;
+    }
+
+    .this {
+        font-weight: bold;
+
+        &:before {
+            content: "▸ "
+        }
+    }
+
+    .grammar, .grammar + dd {
+        display: inline-block;
+    }
+
+    dd {
+        margin: 1em;
+    }
+
+
+    .book_entry + .book_entry {
+        border-top: 1px solid #ccc;
+    }
+
+    .eti {
+        color: grey;
+    }
+
+    .entries {
+        width: 80%;
+        float: right;
+    }
+
+    .related_terms {
+        width: 20%;
+        float: left;
+        margin-top: -1em;
+    }
+
+    ul {
+        list-style: none;
+    }
+}
+
