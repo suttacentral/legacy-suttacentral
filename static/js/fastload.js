@@ -70,6 +70,8 @@ sc.fastload = {
                 ga('send', 'pageview', {'page': href});
             }
             self.update_cache();
+            self.preload();
+            window.scroll(0, 0);
         }
         console.log('Loading page');
         if (self.cache.has(href)) {
@@ -100,8 +102,8 @@ sc.fastload = {
         console.log(e);
         self.loadpage(location.pathname)
     },
-    
-    preload: function(e) {
+    preload_timeout_id: null,
+    preload: function(toLoad) {
         var self = this;
         self.toLoad = $('[data-preload=1] a, a[data-preload=1]').toArray().reverse();
 
@@ -116,11 +118,12 @@ sc.fastload = {
             self.do_ajax(href).done(function(data, status, xhr)
             {
                 self.cache.add(href, data);
+                $(data).preload
             })
-            setTimeout(doload, 1);
+            self.preload_timeout_id = setTimeout(doload, 1);
         }
-
-        setTimeout(doload, 500);
+        clearTimeout(self.preload_timeout_id)
+        self.preload_timeout_id = setTimeout(doload, 500);
 
     } 
 }
