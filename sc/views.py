@@ -505,7 +505,6 @@ class DefinitionView(ViewBase):
 
     def __init__(self, term):
         self.term = term
-        print("term looks like: {}".format(term))
 
     def setup_context(self, context):
         from sc.search import dicts
