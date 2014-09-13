@@ -43,7 +43,6 @@ sc.fastload = {
         self.preload();
     },
     hrefclick: function(e){
-        console.log('Link clicked');
         e.preventDefault();
         sc.fastload.loadpage($(this).attr('href'), true);        
     },
@@ -56,8 +55,6 @@ sc.fastload = {
         var self = this;
         // For closure
         function update_page(data) {
-            console.log('Updating page');
-            
             $('#page-main').replaceWith(data);
             $('title').text($('meta[name=title]').attr('content'));
             if (change_state) {
@@ -73,7 +70,6 @@ sc.fastload = {
             self.preload();
             window.scroll(0, 0);
         }
-        console.log('Loading page');
         if (self.cache.has(href)) {
             // Already in cache, don't bother with ajax request
             update_page(self.cache.retrive(href));
@@ -97,15 +93,12 @@ sc.fastload = {
     },
     goback: function(e) {
         var self = sc.fastload;
-        console.log('Going back to ' + location.pathname);
-        console.log('Location in cache? ' + (location.pathname in self._state_cache))
-        console.log(e);
         self.loadpage(location.pathname)
     },
     preload_timeout_id: null,
     preload: function(toLoad) {
         var self = this;
-        self.toLoad = $('[data-preload=1] a, a[data-preload=1]').toArray().reverse();
+        self.toLoad = $('[data-preload] a, a[data-preload]').toArray().reverse();
 
         function doload(){
             while (true) {
