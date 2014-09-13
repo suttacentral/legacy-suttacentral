@@ -106,13 +106,9 @@ class TextIndexer:
         raise StopIteration    
 
     def load(self, force=False):
-        timings = []
         for lang_dir in sc.text_dir.glob('*'):
             if lang_dir.is_dir():
-                start = time.time()
                 self.index_folder(lang_dir, force)
-                timings.append('Loading "{}" took {}s'.format(lang_dir.stem, time.time() - start))
-        print(timings)
 
     def index_name_from_uid(self, lang_uid):
         return lang_uid
