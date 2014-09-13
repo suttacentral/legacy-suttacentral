@@ -1,16 +1,32 @@
 sc.fastload = {
-    cache: (window.sessionStorage !== undefined) ? sessionStorage : {
-        store = {},
-        getItem: function(key) {
-            return key in this.store
+    cache: {
+        store: (window.sessionStorage !== undefined) ? sessionStorage : {
+            object: {},
+            setItem: function(key, value) {
+                this.object[key] = value;
+            },
+            getItem: function(key, value) {
+                return this.object[key];
+            }
         },
-        setItem: function(key, value) {
-            this.store[key] = value
+        has: function(key) {
+            try {
+                return 'sc:' + key in this.store;
+            } catch (err) {
+                return !!this.object.getItem('sc:' + key);
+            }
+        },
+        add: function(key, data) {
+            this.store.setItem('sc:' + key, data);
+        },            
+        retrive: function(key) {
+            return this.store.getItem('sc:' + key);
         }
-    }
+    },
     supports_history_api: function() {
         return !!(window.history && history.pushState);
     },
+    valid_link: 'a[href]:not([href^="http://"]):not([href^="#"])',
     init: function init() {
         var self = this;
         if (!this.supports_history_api())
@@ -20,10 +36,11 @@ sc.fastload = {
             return
         
         $(document.body).on('click',
-            'a[href]:not([href^="http://"]):not([href^="#"])',
+            self.valid_link,
             this.hrefclick);
         window.addEventListener("popstate", self.goback);
         self.update_cache();
+        self.preload();
     },
     hrefclick: function(e){
         console.log('Link clicked');
@@ -31,8 +48,8 @@ sc.fastload = {
         sc.fastload.loadpage($(this).attr('href'), true);        
     },
     update_cache: function() {
-        if (!this.store.has(location.pathname)) {
-            this.store.add(location.pathname, $('#page-main')[0].outerHTML);
+        if (!this.cache.has(location.pathname)) {
+            this.cache.add(location.pathname, $('#page-main')[0].outerHTML);
         }
     },
     loadpage: function(href, change_state) {
@@ -55,18 +72,21 @@ sc.fastload = {
             self.update_cache();
         }
         console.log('Loading page');
-        if ('sc:' + href in self._state_cache) {
+        if (self.cache.has(href)) {
             // Already in cache, don't bother with ajax request
-            update_page(self._state_cache['sc:' + href]);
+            update_page(self.cache.retrive(href));
         } else {
-            var qs = '?ajax=';
-            if (href.search(/\?/) != -1) {
-                qs = '&ajax=';
-            }
-            $.ajax(href + qs, {dataType: 'html'})
+            self.do_ajax(href)
                 .done(function(data, status, xhr){update_page(data)})
                 .fail(function(xhr, status, errorThrown){self.redirect(href)});
         }
+    },
+    do_ajax: function(href) {
+        var qs = '?ajax=';
+        if (href.search(/\?/) != -1) {
+            qs = '&ajax=';
+        }
+        return $.ajax(href + qs, {dataType: 'html'})
     },
     redirect: function redirect(href) {
         alert('Redirecting!')
@@ -79,7 +99,30 @@ sc.fastload = {
         console.log('Location in cache? ' + (location.pathname in self._state_cache))
         console.log(e);
         self.loadpage(location.pathname)
-    }
+    },
+    
+    preload: function(e) {
+        var self = this;
+        self.toLoad = $('[data-preload=1] a, a[data-preload=1]').toArray().reverse();
+
+        function doload(){
+            while (true) {
+                var e = self.toLoad.pop();
+                if (e == undefined) return;
+                var href = $(e).attr('href')
+                if (!self.cache.has(href))
+                    break
+            }
+            self.do_ajax(href).done(function(data, status, xhr)
+            {
+                self.cache.add(href, data);
+            })
+            setTimeout(doload, 1);
+        }
+
+        setTimeout(doload, 500);
+
+    } 
 }
 
 sc.fastload.init();

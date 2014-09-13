@@ -36,7 +36,7 @@
 <div class="related_terms">
 {% if near_terms %}
 <h3>Adjacent Terms</h3>
-<ul class="near_terms">
+<ul class="near_terms" data-preload="1">
 {% for hit in near_terms %}
 <li{% if hit.term == term %} class="this"{% endif %}>
 <a href="./{{ hit.term|urlencode }}">{{ hit.term }}</a>{% if hit.gloss %} <em>({{ hit.gloss }})</em>{% endif %}
