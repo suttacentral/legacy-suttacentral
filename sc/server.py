@@ -10,4 +10,3 @@ from sc import app, scimm
 
 app.setup()
 app.mount()
-scimm.start_updater()

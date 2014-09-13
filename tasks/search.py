@@ -1,7 +1,5 @@
 """Search tasks."""
 
-from sc import textsearch
-
 from tasks.helpers import *
 
 
@@ -16,4 +14,5 @@ def clean():
 def index():
     """Create the search index SQLite databases."""
     blurb(index)
+    import sc.search.texts
     textsearch.build()
