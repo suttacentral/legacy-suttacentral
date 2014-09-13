@@ -44,9 +44,9 @@ class DictIndexer:
         if not es.indices.exists(index_name):
             config = sc.search.load_index_config(index_name)
             es.indices.create(index_name, config)
-        if not force:
-            current_mtimes = [int(file.stat().st_mtime) for file in sorted(lang_dir.iterdir()) if file.suffix in {'.html', '.json'}]
-            
+
+        current_mtimes = [int(file.stat().st_mtime) for file in sorted(lang_dir.iterdir()) if file.suffix in {'.html', '.json'}]
+        if not force:            
             try:
                 resp = es.get(index_name, doc_type='meta', id="dicts")
                 stored_mtimes = resp['_source']['mtimes']
@@ -60,14 +60,14 @@ class DictIndexer:
 
         if glossfile.exists():
             with glossfile.open('r', encoding='utf8') as f:
-                gloss = {t[0]: t[1] for t in json.load(f)}
+                glosses = {t[0]: t[1] for t in json.load(f)}
         else:
-            gloss = {}
+            glosses = {}
         
         all_entries = {}
         
         for source_file in lang_dir.glob('*.html'):
-            self.add_file(source_file, all_entries)
+            self.add_file(source_file, all_entries, glosses)
 
         # Sort entries internally by source
         for entry in all_entries.values():
@@ -93,7 +93,7 @@ class DictIndexer:
     def fix_term(self, term):
         return regex.sub(r'[^\p{alpha}\s]', '', term).strip().casefold()
 
-    def add_file(self, file, all_entries):
+    def add_file(self, file, all_entries, glosses):
         root = sc.tools.html.parse(str(file)).getroot()
         source = root.head.select('[name=source]')[0].get("content")
         priority = int(root.head.select('[name=priority]')[0].get("content"))
@@ -112,6 +112,7 @@ class DictIndexer:
             if term not in all_entries:
                 all_entries[term] = {
                     "term": term,
+                    "gloss": glosses.get(term),
                     "number": -1,
                     "alt_terms": [],
                     "entries" : []
