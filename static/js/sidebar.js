@@ -11,7 +11,7 @@ sc.sidebar = {
             $('#toc').remove();
         } else {
             return
-        } 
+        }
         /* TEMPORARY */
         $('#text').find('.next, .previous, .top').remove();
         /* END TEMPORARY */
@@ -24,8 +24,13 @@ sc.sidebar = {
             updateHash: false
         });
 
+        var m = /sidebar\.tab=([\w-.]+)/.exec(document.cookie)
+        if (m) {
+            self.selectTab(m[1])
+        }
+
         this.node.on('easytabs:before', function(e, $clicked, $target){
-            sc.userPrefs.setPref('sidebar-selected-tab', $target.attr('id'));
+            document.cookie = 'sidebar.tab=' + $target.attr('id') + '; path=/';
         });
         
         $('#sidebar-dongle').on('click',
@@ -44,21 +49,33 @@ sc.sidebar = {
         });
         self.bindButtons();
         scState.save("clean");
+        self.setupTracking();
         
+    },
+    setupTracking: function() {
+        // use google analytics to track sidebar events
+        this.node.on('click', 'button, .button, .tabs a', function(e){
+            console.log('User clicked a ' + ($(this).attr('id') || $(this).text()));
+            console.log(e.isDefaultPrevented());
+            console.log(e);
+
+        });
+
+
     },
     isVisible: function() {
         return this.node.hasClass('active');
     },
     show: function() {
         this.node.addClass('active');
-        sc.userPrefs.setPref('sidebar', true);
+        document.cookie = 'sidebar.active=1; path=/'
     },
     hide: function() {
         this.node.removeClass('active');
-        sc.userPrefs.setPref('sidebar', false);
+        document.cookie = 'sidebar.active=0; path=/'
     },
     selectTab: function(tab) {
-        this.node.easytabs('select', '#' + tab);
+        this.node.easytabs('select', tab);
     },
     bindButtons: function(){
         $('#text-info').click(toggleTextualInfo);

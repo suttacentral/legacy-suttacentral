@@ -158,6 +158,7 @@ class ViewBase:
             'scm': scm,
             'search_query': '',
             'imm': sc.scimm.imm(),
+            'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()}
         })
 
     def massage_whitespace(self, text):

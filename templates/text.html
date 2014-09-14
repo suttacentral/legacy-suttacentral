@@ -1,8 +1,7 @@
 {% extends "base.html" -%}
 {%- block content -%}
 
-<div id="sidebar">
-<div id="darkness"></div>
+<div id="sidebar"{% if cookies.get('sidebar.active') == "1" %} class="active"{% endif %}>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
         <li><a href="#navigation-tab">Navigation</a></li>
@@ -42,7 +41,6 @@
       </div>
       <div class="tab" id="navigation-tab">
         <div class="inner-wrap">
-            
             {% if imm(uid) %}
             <div class="x1 button-row">
                 <a class="button" href="/{{ uid }}" id="text-details-button" title="Go to parallels and references">Textual Details ▶</a>

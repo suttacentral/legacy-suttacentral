@@ -8,7 +8,7 @@ $sidebar-dongle-width = 1em;
     position: fixed;
     top: 0;
     bottom: 0;
-    left: 0;
+    //left: 0;
     width:$sidebar-width;
     @include sans-serif;
     color:$dark-medium-gray;
