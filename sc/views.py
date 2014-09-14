@@ -374,7 +374,7 @@ class TextView(ViewBase):
         def deline(string):
             return string.replace('\n', '').replace('<p', '\n<p')
         
-        m = regex.match(r'(?s)(.*?)(<div[^>]+id="metaarea".*?</div>)(.*)', text)
+        m = regex.match(r'(?s)(.*?)(<aside[^>]+id="metaarea".*?</aside>)(.*)', text)
         if m or not m:
             pre, meta, post = m[1:]
             return ''.join([deline(pre), meta, deline(post)])
