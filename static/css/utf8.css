@@ -9,7 +9,7 @@ a.bps:before {content:"BPS "}
 a.eno89:before {content:"Eno "}
 a.fuk03:before {content:"Fuk "}
 a.fol:before {content:"Fol "}
-/*a.gatha-number:before {content:" "}*/
+a.gatha-number:before {content:"Verse "}
 /*a.gatn:before {content:" "}*/
 a.gbm:before {content:"GBM "}
 a.gno78:before {content:"Gno "}
@@ -87,6 +87,9 @@ CSS Class	HTML Title
 .snp-vagga-section-verse	"Chapter, section, and verse number within the section."
 
 .verse-num-pts		"Verse number in the Pali Text Society edition."
+
+.verse-num		"Verse number."
+
 
 .eno89		"Paragraph numbers in Enomoto, 1989."
 .uv			"Chapter and verse numbers for the Udānavarga."

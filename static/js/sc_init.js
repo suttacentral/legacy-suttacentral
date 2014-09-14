@@ -14,7 +14,7 @@ sc.classes = {
         "eno89": "Paragraph numbers in Enomoto, 1989.",
         "fuk03": "Page numbers in Fukita, 2003",
         "fol": "Folio number in the manuscript.",
-        "gatha-number": "",
+        "gatha-number": "Verse number.",
         "gatn": "",
         "gbm": "Section numbers in Gilgit Buddhist Manscripts.",
         "gno78": "Paragraph numbers in Gnoli, 1978.",

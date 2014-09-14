@@ -50,4 +50,12 @@
     font-weight: bold;
 }
 
-
+.suttainfo{
+    color:$dark-medium-gray;
+    background:$off-white;
+    padding:1em;
+    border-radius:3px;
+    border:1px solid $light-light-gray;
+    font-size:0.8em;
+    display:inline-block;
+}
