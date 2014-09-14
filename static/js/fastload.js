@@ -48,14 +48,14 @@ sc.fastload = {
     },
     update_cache: function() {
         if (!this.cache.has(location.pathname)) {
-            this.cache.add(location.pathname, $('#page-main')[0].outerHTML);
+            this.cache.add(location.pathname, $('main')[0].outerHTML);
         }
     },
     loadpage: function(href, change_state) {
         var self = this;
         // For closure
         function update_page(data) {
-            $('#page-main').replaceWith(data);
+            $('main').replaceWith(data);
             $('title').text($('meta[name=title]').attr('content'));
             if (change_state) {
                 history.pushState(null, null, href);
