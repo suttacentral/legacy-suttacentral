@@ -116,7 +116,7 @@ sc.fastload = {
             self.preload_timeout_id = setTimeout(doload, 1);
         }
         clearTimeout(self.preload_timeout_id)
-        self.preload_timeout_id = setTimeout(doload, 500);
+        self.preload_timeout_id = setTimeout(doload, 100);
 
     } 
 }

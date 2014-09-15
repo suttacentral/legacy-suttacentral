@@ -21,6 +21,7 @@ sc.sidebar = {
         $('#sidebar').show().easytabs({
             animate: false,
             tabs: '.tabs > li',
+            'defaultTab': '.tabs > li:nth-child(2)',
             updateHash: false
         });
 
