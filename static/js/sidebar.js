@@ -44,6 +44,10 @@ sc.sidebar = {
         });
         self.bindButtons();
         scState.save("clean");
+
+        if ($.cookie('t-line-by-line')) {
+            self.toggleLineByLine();
+        }
         
     },
     isVisible: function() {
@@ -72,8 +76,23 @@ sc.sidebar = {
                 sc.init(true);
             }            
         });
+        $('#t-line-by-line').click(this.toggleLineByLine);
         this.initChineseLookup();
 
+    },
+    toggleLineByLine: function(e) {
+        var brs = $('br.t-br');
+        if (brs.length) {
+            brs.remove();
+            $('#text').removeClass('line-by-line');
+            $.removeCookie('t-line-by-line');
+        } else {
+            $('.t').before('<br class="t-br">');
+            $('br + br.t-br').remove();
+            $('#text').addClass('line-by-line');
+            $.cookie('t-line-by-line', 1)
+        }
+        
     },
     initChineseLookup: function() {
         if ($('#zh2en').length == 0) return;
