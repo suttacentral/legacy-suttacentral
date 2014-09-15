@@ -734,7 +734,7 @@ def imm():
         _Imm._ready.wait()
     return _Imm._instance
 
-def perioidc_update():
+def periodic_update(i):
     timestamp = max(int(file.stat().st_mtime) for file in sc.table_dir.glob('**/*'))
     if not _Imm._instance or _Imm._instance.timestamp != timestamp:
         logger.info('Building IMM')

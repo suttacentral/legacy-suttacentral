@@ -170,8 +170,11 @@ def get_fuzzy_terms(term, lang='en'):
         }
     })
     return [d['_source'] for d in resp['hits']['hits'] if d['_source']['term'] != term]
-    
+
 indexer = DictIndexer()
 
-def periodic_update():
-    indexer.load()
+def periodic_update(i):
+    try:
+        indexer.load()
+    except:
+        logger.error('Elasticsearch failure')
