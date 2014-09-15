@@ -71,7 +71,7 @@
                 {% endif %}
                 
                 {% if textdata.next_uid %}
-                    <a class="button" class="next" href="/{{ lang_code }}/{{ textdata.next_uid }}" title="Go to next sutta">{{imm.uid_to_acro(textdata.next_uid)}} ▶</a>
+                    <a class="button" class="next" data-prefetch="1" href="/{{ lang_code }}/{{ textdata.next_uid }}" title="Go to next sutta">{{imm.uid_to_acro(textdata.next_uid)}} ▶</a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}

@@ -98,7 +98,7 @@ sc.fastload = {
     preload_timeout_id: null,
     preload: function(toLoad) {
         var self = this;
-        self.toLoad = $('[data-preload] a, a[data-preload]').toArray().reverse();
+        self.toLoad = $('[data-prefetch] a, a[data-prefetch]').toArray().reverse();
 
         function doload(){
             while (true) {
