@@ -160,7 +160,7 @@ class ViewBase:
             'scm': scm,
             'search_query': '',
             'imm': sc.scimm.imm(),
-            'ajax': 'ajax' in cherrypy.request.params
+            'ajax': 'ajax' in cherrypy.request.params,
             'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()}
         })
 

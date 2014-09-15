@@ -28,6 +28,14 @@ sc.sidebar = {
             self.selectTab($.cookie('sidebar.tab'))
         }
 
+        if ($.cookie('sidebar.active')) {
+            if (!self.isVisible()) {
+                self.node.hide();
+                self.show();
+                self.node.show();
+            }
+        }
+
         this.node.on('easytabs:before', function(e, $clicked, $target) {
             $.cookie('sidebar.tab', $target.attr('id'), {'path': '/'});
         });
