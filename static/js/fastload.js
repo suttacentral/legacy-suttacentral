@@ -69,6 +69,8 @@ sc.fastload = {
             self.update_cache();
             self.preload();
             window.scroll(0, 0);
+            sc.headerMenu.deactivate();
+            onMainLoad();            
         }
         if (self.cache.has(href)) {
             // Already in cache, don't bother with ajax request

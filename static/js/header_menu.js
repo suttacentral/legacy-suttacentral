@@ -1,10 +1,11 @@
 sc.headerMenu = {
+    node: $('#panel-screen-wrap, #panel'),
     lastScreenScroll: 0,
     activate: function(e){
-        $(this).addClass('active');
+        this.node.addClass('active');
     },
     deactivate: function(e) {
-        $(this).removeClass('active');
+        this.node.removeClass('active');
     },
     toggle: function(e){
         $(this).toggleClass('active');
@@ -27,7 +28,7 @@ sc.headerMenu = {
         }
         else {
             self.hideAll();
-            $('#panel-screen-wrap, #panel').addClass('active')
+            self.node.addClass('active')
             target.addClass('active');
             element.addClass('active');
             //$(document.body).addClass('overflow-hidden');
@@ -37,7 +38,6 @@ sc.headerMenu = {
     hideAll: function(e){
         $('#panel  .active, header  .active').removeClass('active');
         $('#panel-screen-wrap, #panel').removeClass('active');
-        //$(document.body).removeClass('overflow-hidden');
     },
     adjustColumns: function(){
         /* This function is responsible for tweaking the column widths and alignment on the

@@ -3,9 +3,9 @@
  * side bar.
  */
 sc.sidebar = {
-    node: $('#sidebar'),
     init: function() {
         var self=this;
+        self.node = $('#sidebar');
         $('#toc').remove();
         if ($('#text').length > 0) {
             $('#toc').remove();
@@ -18,27 +18,27 @@ sc.sidebar = {
         
         this.doMenu('#navigation-tab > .inner-wrap');
         this.doMetadata('#metadata-tab > .inner-wrap');
-        this.node.show().easytabs({
+        $('#sidebar').show().easytabs({
             animate: false,
             tabs: '.tabs > li',
             updateHash: false
         });
 
-        this.node.on('easytabs:before', function(e, $clicked, $target){
+        $('#sidebar').on('easytabs:before', function(e, $clicked, $target){
             sc.userPrefs.setPref('sidebar-selected-tab', $target.attr('id'));
         });
         
         $('#sidebar-dongle').on('click',
-                function(){
-                    if (self.isVisible()) {
-                        self.hide();                        
-                    } else {
-                        self.show();
-                    }
-                    return false
+            function(){
+                if (self.isVisible()) {
+                    self.hide();                        
+                } else {
+                    self.show();
                 }
-            );
-        self.node.on('click', function(e){
+                return false
+            }
+        );
+        $('#sidebar').on('click', function(e){
             if (!$(e.target).is('div')) return true;
             self.hide();
         });
