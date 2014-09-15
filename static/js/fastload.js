@@ -55,8 +55,9 @@ sc.fastload = {
         var self = this;
         // For closure
         function update_page(data) {
+            var title = $('meta[name=title]').attr('content');
             $('main').replaceWith(data);
-            $('title').text($('meta[name=title]').attr('content'));
+            $('title').text(title);
             if (change_state) {
                 history.pushState(null, null, href);
             }
@@ -64,13 +65,13 @@ sc.fastload = {
             // If Google Universal Analytics is activated, we better
             // send a pageview
             if ('ga' in window) {
-                ga('send', 'pageview', {'page': href});
+                ga('send', 'pageview', {'page': href, 'title': title + ' -- ajax load'});
             }
             self.update_cache();
             self.preload();
             window.scroll(0, 0);
             sc.headerMenu.deactivate();
-            onMainLoad();            
+            onMainLoad();
         }
         if (self.cache.has(href)) {
             // Already in cache, don't bother with ajax request

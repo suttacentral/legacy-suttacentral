@@ -21,7 +21,7 @@ sc.sidebar = {
         $('#sidebar').show().easytabs({
             animate: false,
             tabs: '.tabs > li',
-            'defaultTab': '.tabs > li:nth-child(2)',
+            'defaultTab': 'li:nth-child(2)',
             updateHash: false
         });
 
@@ -39,14 +39,17 @@ sc.sidebar = {
 
         this.node.on('easytabs:before', function(e, $clicked, $target) {
             $.cookie('sidebar.tab', $target.attr('id'), {'path': '/'});
+            self.trackEvent($clicked.text());
         });
         
         $('#sidebar-dongle').on('click',
             function(){
                 if (self.isVisible()) {
-                    self.hide();                        
+                    self.hide();
+                    self.trackEvent('sidebar-hide')                  
                 } else {
                     self.show();
+                    self.trackEvent('sidebar-show')
                 }
                 return false
             }
@@ -54,13 +57,15 @@ sc.sidebar = {
         $('#sidebar').on('click', function(e){
             if (!$(e.target).is('div')) return true;
             self.hide();
+            self.trackEvent('sidebar-hide')
         });
         self.bindButtons();
+        self.tracking();
         scState.save("clean");
-
         if ($.cookie('t-line-by-line')) {
             self.toggleLineByLine();
         }
+
         
     },
     isVisible: function() {
@@ -92,6 +97,25 @@ sc.sidebar = {
         $('#t-line-by-line').click(this.toggleLineByLine);
         this.initChineseLookup();
 
+    },
+    tracking: function(e) {
+        // Track usage of sidebar controls
+        var self=this;
+        $('#controls-tab').on('click', '.button', function(e){
+            self.trackEvent($(e.target).attr('id') || $(e.target).text())
+        });
+    },
+    trackEvent: function(label) {
+        if ('ga' in window) {
+            ga('send', {
+                hitType: 'event',
+                eventCategory: 'button',
+                eventAction: 'click',
+                eventLabel: label
+            })
+        } else {
+            console.log('Event: ' + label);
+        }
     },
     toggleLineByLine: function(e) {
         var brs = $('br.t-br');
