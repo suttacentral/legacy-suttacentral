@@ -89,8 +89,6 @@ sc.fastload = {
         return $.ajax(href + qs, {dataType: 'html'})
     },
     redirect: function redirect(href) {
-        alert('Redirecting!')
-        return
         window.location.replace(href);
     },
     goback: function(e) {
