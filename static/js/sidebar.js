@@ -11,7 +11,7 @@ sc.sidebar = {
             $('#toc').remove();
         } else {
             return
-        } 
+        }
         /* TEMPORARY */
         $('#text').find('.next, .previous, .top').remove();
         /* END TEMPORARY */
@@ -24,8 +24,12 @@ sc.sidebar = {
             updateHash: false
         });
 
-        $('#sidebar').on('easytabs:before', function(e, $clicked, $target){
-            sc.userPrefs.setPref('sidebar-selected-tab', $target.attr('id'));
+        if ($.cookie('sidebar.tab')) {
+            self.selectTab($.cookie('sidebar.tab'))
+        }
+
+        this.node.on('easytabs:before', function(e, $clicked, $target) {
+            $.cookie('sidebar.tab', $target.attr('id'), {'path': '/'});
         });
         
         $('#sidebar-dongle').on('click',
@@ -55,14 +59,14 @@ sc.sidebar = {
     },
     show: function() {
         this.node.addClass('active');
-        sc.userPrefs.setPref('sidebar', true);
+        $.cookie('sidebar.active', "1", {'path': '/'});
     },
     hide: function() {
         this.node.removeClass('active');
-        sc.userPrefs.setPref('sidebar', false);
+        $.removeCookie('sidebar.active', {'path': '/'});
     },
     selectTab: function(tab) {
-        this.node.easytabs('select', '#' + tab);
+        this.node.easytabs('select', tab);
     },
     bindButtons: function(){
         $('#text-info').click(toggleTextualInfo);
