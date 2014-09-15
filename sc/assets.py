@@ -117,6 +117,7 @@ def get_env():
         'js/vendor/ZeroClipboard-1.2.3.js',
         'js/vendor/jquery.hashchange-1.3.min.js',
         'js/vendor/jquery.easytabs-3.2.0.min.js',
+        'js/vendor/jquery.cookies.js',
         'js/lib/jquery.scrolllock.js',
         'js/lib/jquery.unveil.js',
         'js/lib/jquery.details.js',

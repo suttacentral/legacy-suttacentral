@@ -48,19 +48,11 @@ sc.sidebar = {
         });
         self.bindButtons();
         scState.save("clean");
-        self.setupTracking();
+
+        if ($.cookie('t-line-by-line')) {
+            self.toggleLineByLine();
+        }
         
-    },
-    setupTracking: function() {
-        // use google analytics to track sidebar events
-        this.node.on('click', 'button, .button, .tabs a', function(e){
-            console.log('User clicked a ' + ($(this).attr('id') || $(this).text()));
-            console.log(e.isDefaultPrevented());
-            console.log(e);
-
-        });
-
-
     },
     isVisible: function() {
         return this.node.hasClass('active');
@@ -88,8 +80,23 @@ sc.sidebar = {
                 sc.init(true);
             }            
         });
+        $('#t-line-by-line').click(this.toggleLineByLine);
         this.initChineseLookup();
 
+    },
+    toggleLineByLine: function(e) {
+        var brs = $('br.t-br');
+        if (brs.length) {
+            brs.remove();
+            $('#text').removeClass('line-by-line');
+            $.removeCookie('t-line-by-line');
+        } else {
+            $('.t').before('<br class="t-br">');
+            $('br + br.t-br').remove();
+            $('#text').addClass('line-by-line');
+            $.cookie('t-line-by-line', 1)
+        }
+        
     },
     initChineseLookup: function() {
         if ($('#zh2en').length == 0) return;
