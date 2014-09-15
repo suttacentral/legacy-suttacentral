@@ -24,13 +24,12 @@ sc.sidebar = {
             updateHash: false
         });
 
-        var m = /sidebar\.tab=([\w-.]+)/.exec(document.cookie)
-        if (m) {
-            self.selectTab(m[1])
+        if ($.cookie('sidebar.tab')) {
+            self.selectTab($.cookie('sidebar.tab'))
         }
 
-        this.node.on('easytabs:before', function(e, $clicked, $target){
-            document.cookie = 'sidebar.tab=' + $target.attr('id') + '; path=/';
+        this.node.on('easytabs:before', function(e, $clicked, $target) {
+            $.cookie('sidebar.tab', $target.attr('id'), {'path': '/'});
         });
         
         $('#sidebar-dongle').on('click',
@@ -68,11 +67,11 @@ sc.sidebar = {
     },
     show: function() {
         this.node.addClass('active');
-        document.cookie = 'sidebar.active=1; path=/'
+        $.cookie('sidebar.active', "1", {'path': '/'});
     },
     hide: function() {
         this.node.removeClass('active');
-        document.cookie = 'sidebar.active=0; path=/'
+        $.removeCookie('sidebar.active', {'path': '/'});
     },
     selectTab: function(tab) {
         this.node.easytabs('select', tab);
