@@ -38,7 +38,7 @@ def get_tag_data(_cache=sc.util.TimedCache(lifetime=15 * 60)):
     return tag_data
 
 def process_metadata(root):
-    metaarea = root.select_one('div#metaarea')
+    metaarea = root.select_one('aside#metaarea')
     if metaarea:
         return metaarea
     pes = root.select('p')
@@ -65,7 +65,7 @@ def discover_author(root, entry, num_in_file):
     if author:
         return author
     
-    metaarea = root.select_one('div#metaarea')
+    metaarea = root.select_one('aside#metaarea')
     if metaarea:
         metatext = metaarea.text_content()
         transby = None
@@ -357,7 +357,7 @@ def finalize(root, entry, language=None, metadata=None,
         metadata = root.select_one('#metaarea')
         if not metadata and num_in_file <= 0:
             entry.error('No metadata found. Metadata should either be in a \
-        <div id="metaarea"> tag, or a seperate file "meta.html".')
+        <aside id="metaarea"> tag, or a seperate file "meta.html".')
     
     if metadata:
         root.body.append(metadata)

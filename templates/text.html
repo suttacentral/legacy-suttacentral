@@ -36,8 +36,11 @@
             <div class="x1 button-row">
                 <a class="button" id="text-info" title="View reference numbers, variant readings, etc.">Textual Information</a>
             </div>
-            {# I'm using last-of-type keyed to div, so need a non-div
-                element after the buttons --- no longer the case, now we just use the IDs#}
+            {% if lang_code == 'zh' %}
+            <div class="x1 button-row">
+                <a class="button" id="t-line-by-line" title="View line-by-line as in CBETA">View line-by-line</a>
+            </div>
+            {% endif %}
             <div id="message-box"></div>
         </div>
       </div>
