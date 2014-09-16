@@ -67,20 +67,43 @@ sc.headerMenu = {
         
         $('#panel').css({'height': panelHeight})
     },
+    scrollEvents: [],
     scrollShowHide: function(e){
         var self = sc.headerMenu,
             scrollTop = $(document.body).scrollTop(),
             scrollAmount = scrollTop - self.lastScreenScroll;
+
+        
         self.lastScreenScroll = scrollTop;
+        if (scrollAmount > 0) {
+            $('header').addClass('retracted');
+            self.hideAll();
+            return
+        }
         
         if (scrollTop == 0) {
             $('header').removeClass('retracted');
+            return
         }
-        else {
-            $('header').addClass('retracted');
-            self.hideAll();
+        
+        var now = e.timeStamp;
+        if (scrollAmount < 0) {
+            for (i = self.scrollEvents.length - 1; i >= 0 ; i--) {
+                oldE = self.scrollEvents[i];
+                
+                var diff = now - oldE[1];
+                console.log(diff, oldE[0]);
+                if (diff > 500) {
+                    self.scrollEvents.pop()
+                } else if (diff > 100 && oldE[0] < 0) {
+                     $('header').removeClass('retracted');
+                     return
+                 }
+            }
         }
+        
 
+        self.scrollEvents.push([scrollAmount, e.timeStamp]);
 
     }
 }
