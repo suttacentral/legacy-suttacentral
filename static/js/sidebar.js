@@ -55,7 +55,7 @@ sc.sidebar = {
             }
         );
         $('#sidebar').on('click', function(e){
-            if (!$(e.target).is('div')) return true;
+            if (!$(e.target).is('div, ul')) return true;
             self.hide();
             self.trackEvent('sidebar-hide')
         });
