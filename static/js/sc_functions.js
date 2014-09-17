@@ -190,27 +190,36 @@ function buildTextualInformation() {
 
     var tes = $('.t, .t-linehead');
     if (tes.length) {
-        var uid = $('section').attr('id'),
+        var uid = $('section.sutta').attr('id'),
             volPrefix = null;
 
-        var m = uid.match(/^([a-z]+(?:-\d+)?)\.?(\d*)/);
-        if (m) {
-            var divUid = m[1],
-                number = m[2];
-            var volData = sc.volPrefixMap[m[1]];
-            if (typeof(volData) == 'string') {
-                volPrefix = volData;
-            } else {
-                for (i = 0; i < volData.length; i++) {
-                    var from = volData[i][0],
-                        to = volData[i][1],
-                        value = volData[i][2]
-                    if (from <= number && number <= to) {
-                        volPrefix = value;
-                        break
+        var prefixes = Object.keys(sc.volPrefixMap).sort(function(a,b){return a.length < b.length});
+        for (var i = 0; i < prefixes.length; i++) {
+            var prefix = prefixes[i];
+            // Rewrite rex
+            var m = RegExp('^' + prefix + '(?![a-z])\\.?(\\d*)').exec(uid);
+            if (m) {
+                
+                var number = m[1],
+                    volData = sc.volPrefixMap[prefix];
+                if (typeof(volData) == 'string') {
+                    volPrefix = volData;
+                } else {
+                    for (j = 0; j < volData.length; j++) {
+                        var from = volData[i][0],
+                            to = volData[i][1],
+                            value = volData[i][2]
+                        if (from <= number && number <= to) {
+                            volPrefix = value;
+                            break
+                        }
                     }
                 }
+                if (volPrefix) {
+                    break
+                }
             }
+
         }
 
         if (volPrefix !== null) {

@@ -106,6 +106,29 @@ sc.classes = {
     }
 }
 
+/*
+ * Prefix To Volume mapping used for adding volume information
+ * to paragraph/line numbers.
+ *
+ * The uid MUST be defined <section class="sutta" id="uid"> and it
+ * must be lowercase.
+ *
+ * The code uses a 'longest first match' approach, so for example
+ * sa-2.1 would match both sa and sa-2, but sa-2 will always be matched
+ * first as it is longest. This means a more specific match will always
+ * override a less specific one.
+ *
+ * It wont match parts of words, for example 't' will not match 'thag'.
+ * It is required that after the match comes a non-alphabetical
+ * character. 'zh-mg' will match 'zh-mg-bu-pm' as it is followed by
+ * a hyphen. 'zh-mg-' would not as it is followed by 'b'.
+ *
+ * If the volume is a string it is simply used. If it is arrays, then
+ * the numbers are 'to' : 'from' ranges. If the uid matches the division
+ * but fails to match any number range, it counts as failed and the code
+ * will attempt to match against other untried division codes.
+ */
+
 sc.volPrefixMap = {
     'da': 'i',
     'ma': 'i',
