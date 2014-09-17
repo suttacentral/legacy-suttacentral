@@ -185,6 +185,39 @@ function buildTextualInformation() {
                                .replace(/(\d)-(\d)/, '$1\u2060—\u2060$2'));
             }
         });
+
+    }
+
+    var tes = $('.t, .t-linehead');
+    if (tes.length) {
+        var uid = $('section').attr('id'),
+            volPrefix = null;
+
+        var m = uid.match(/^([a-z]+(?:-\d+)?)\.?(\d*)/);
+        if (m) {
+            var divUid = m[1],
+                number = m[2];
+            var volData = sc.volPrefixMap[m[1]];
+            if (typeof(volData) == 'string') {
+                volPrefix = volData;
+            } else {
+                for (i = 0; i < volData.length; i++) {
+                    var from = volData[i][0],
+                        to = volData[i][1],
+                        value = volData[i][2]
+                    if (from <= number && number <= to) {
+                        volPrefix = value;
+                        break
+                    }
+                }
+            }
+        }
+
+        if (volPrefix !== null) {
+            tes.each(function(){
+                $(this).text(volPrefix + ' ' + $(this).text());
+            });
+        }
     }
 
     $('#text a[id]:not([href])').each(function(){
