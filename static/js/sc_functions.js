@@ -185,6 +185,48 @@ function buildTextualInformation() {
                                .replace(/(\d)-(\d)/, '$1\u2060—\u2060$2'));
             }
         });
+
+    }
+
+    var tes = $('.t, .t-linehead');
+    if (tes.length) {
+        var uid = $('section.sutta').attr('id'),
+            volPrefix = null;
+
+        var prefixes = Object.keys(sc.volPrefixMap).sort(function(a,b){return a.length < b.length});
+        for (var i = 0; i < prefixes.length; i++) {
+            var prefix = prefixes[i];
+            // Rewrite rex
+            var m = RegExp('^' + prefix + '(?![a-z])\\.?(\\d*)').exec(uid);
+            if (m) {
+                
+                var number = m[1],
+                    volData = sc.volPrefixMap[prefix];
+                if (typeof(volData) == 'string') {
+                    volPrefix = volData;
+                } else {
+                    for (j = 0; j < volData.length; j++) {
+                        var from = volData[i][0],
+                            to = volData[i][1],
+                            value = volData[i][2]
+                        if (from <= number && number <= to) {
+                            volPrefix = value;
+                            break
+                        }
+                    }
+                }
+                if (volPrefix) {
+                    break
+                }
+            }
+
+        }
+
+        if (volPrefix !== null) {
+            tes.each(function(){
+                $(this).text(volPrefix + ' ' + $(this).text());
+            });
+        }
     }
 
     $('#text a[id]:not([href])').each(function(){

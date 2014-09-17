@@ -35,9 +35,9 @@ a.sc:before {content:"SC "}
 a.sen82:before {content:"Sen "}
 a.sht:before {content:"SHT "}
 a.snp-vagga-section-verse:before, a.snp-vagga-verse:before {content:"SNP "}
-a.t:before,  a.tlinehead:before {content:"T "}
+a.t:before, a.t-linehead:before {content:"T "}
 a.tri62:before, a.tri95:before {content:"Tri "}
-a.ud-sutta:before,, a.ud-vagga-sutta:before {content:"Ud "}
+a.ud-sutta:before, a.ud-vagga-sutta:before {content:"Ud "}
 /*a.tu:before {content:" "}*/
 a.uv:before {content:"Uv "}
 a.vai58:before, a.vai59:before, a.vai61:before {content:"Vai "}

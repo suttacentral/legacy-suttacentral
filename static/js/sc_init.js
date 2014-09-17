@@ -47,9 +47,9 @@ sc.classes = {
         "sht": "References for SHT fragments.",
         "snp-vagga-section-verse": "Chapter, section, and verse number within the section.",
         "snp-vagga-verse": "Chapter, and verse number within the chapter.",
-        "t": "",
+        "t": "Volume, page, column, and line number in the Taishō canon.",
         "titus": "",
-        "t-linehead": "",
+        "t-linehead": "Volume, page, column, and line number in the Taishō canon.",
         "ud-sutta": "Sutta number.",
         "ud-vagga-sutta": "Chapter/sutta number.",
         "tri62": "Sūtra and paragraph number in Tripāṭhī, 1962.",
@@ -105,6 +105,58 @@ sc.classes = {
         "unclear": "Unclear reading."
     }
 }
+
+/*
+ * Prefix To Volume mapping used for adding volume information
+ * to paragraph/line numbers.
+ *
+ * The uid MUST be defined <section class="sutta" id="uid"> and it
+ * must be lowercase.
+ *
+ * The code uses a 'longest first match' approach, so for example
+ * sa-2.1 would match both sa and sa-2, but sa-2 will always be matched
+ * first as it is longest. This means a more specific match will always
+ * override a less specific one.
+ *
+ * It wont match parts of words, for example 't' will not match 'thag'.
+ * It is required that after the match comes a non-alphabetical
+ * character. 'zh-mg' will match 'zh-mg-bu-pm' as it is followed by
+ * a hyphen. 'zh-mg-' would not as it is followed by 'b'.
+ *
+ * If the volume is a string it is simply used. If it is arrays, then
+ * the numbers are 'to' : 'from' ranges. If the uid matches the division
+ * but fails to match any number range, it counts as failed and the code
+ * will attempt to match against other untried division codes.
+ */
+
+sc.volPrefixMap = {
+    'da': 'i',
+    'ma': 'i',
+    'ea': 'ii',
+    'ea-2': 'ii',
+    'sa': 'ii',
+    'sa-2': 'ii',
+    'sa-3': 'ii',
+    't': [
+        [0, 98, 'i'],
+        [102, 151, 'ii'],
+        [152, 154, 'iii'],
+        [197, 212, 'iv'],
+        [499, 515, 'xiv'],
+        [605, 605, 'xv'],
+        [713, 715, 'xvi'],
+        [741, 802, 'xvii'],
+        [1245, 1362, 'xxi'],
+        [1421, 1428, 'xxii'],
+        [1435, 1444, 'xxii'],
+        [1448, 1451, 'xxiv'],
+        [1507, 1509, 'xxv'],
+        [1521, 1537, 'xxvi'],
+        [1545, 1545, 'xxvii'],
+        [1548, 1548, 'xxviii']
+        ]
+}
+    
 
 sc.mode = {}
 sc.data = {}
