@@ -85,4 +85,10 @@
       <div id="sidebar-dongle">▶</div>
 </div>
 {{text}}
+{% if textdata.next_uid %}
+<div>
+        <a class="button" class="next_bottom" href="/{{ lang_code }}/{{ textdata.next_uid }}" title="Go to next sutta">
+            {{imm.uid_to_acro(textdata.next_uid)}} ({{ imm.tim.get(textdata.next_uid, lang_code).name }}) ▶</a>
+</div>
+{% endif %}
 {%- endblock -%}
