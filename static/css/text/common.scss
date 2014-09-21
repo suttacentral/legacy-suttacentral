@@ -60,3 +60,23 @@ h1.mirror-row{line-height:1.5}
     font-size:0.8em;
     display:inline-block;
 }
+
+#nextprev {        
+    letter-spacing:0.02em;
+    @include sans-serif-small-caps;  
+    text-align: center;
+    .next {
+        display: inline-block;
+        width: 100%;
+        margin-right: -2em;
+    }
+    .previous {
+        display: inline-block;
+        width: 100%;
+        margin-left: -2em;
+    }
+
+    .next + .previous {
+        margin-top: 1.5em;
+    }
+}

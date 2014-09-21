@@ -1,6 +1,9 @@
 {% extends "base.html" -%}
 {%- block content -%}
 
+{% set prev_data = imm.tim.get(textdata.prev_uid, lang_code) if textdata.prev_uid else none %}
+{% set next_data = imm.tim.get(textdata.next_uid, lang_code) if textdata.next_uid else none %}
+
 <div id="sidebar">
 <div id="darkness"></div>
       <ul class='tabs'>
@@ -66,14 +69,14 @@
                 </ul>
             </details>
             <div class="x2 button-row">
-                {% if textdata.prev_uid %}
-                    <a class="button" class="previous" href="/{{ lang_code }}/{{ textdata.prev_uid }}" title="Go to previous sutta">◀ {{imm.uid_to_acro(textdata.prev_uid)}}</a>
+                {% if prev_data %}
+                    <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀ {{ prev_data.uid|uid_to_acro }}</a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}
                 
-                {% if textdata.next_uid %}
-                    <a class="button" class="next" href="/{{ lang_code }}/{{ textdata.next_uid }}" title="Go to next sutta">{{imm.uid_to_acro(textdata.next_uid)}} ▶</a>
+                {% if next_data %}
+                    <a class="button" class="next" title="{{ next_data.name_striped }}" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }} ▶</a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}
@@ -87,4 +90,17 @@
       <div id="sidebar-dongle">▶</div>
 </div>
 {{text}}
+{% if prev_data or next_data %}
+
+<div id="nextprev">
+<hr>
+{% if next_data %}
+<a class="next" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }}: {{ next_data.name_striped }} ▶</a>
+{% endif %}
+{% if prev_data %}
+<a class="previous" href="{{ prev_data.url }}">◀ {{ prev_data.uid|uid_to_acro }}: {{ prev_data.name_striped }}</a>
+{% endif %}
+</div>
+{% endif %}
+
 {%- endblock -%}

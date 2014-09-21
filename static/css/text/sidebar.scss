@@ -185,7 +185,14 @@ $sidebar-dongle-width = 1em;
     }
      a:hover.remove{
         background:white
-        }
+    }
+    .previous,
+    .top,
+    .next {
+        text-transform:lowercase;
+            letter-spacing:0.02em;
+            @include sans-serif-small-caps;  
+    }
 }
 
 
@@ -366,13 +373,4 @@ $sidebar-dongle-width = 1em;
     float: left;
     clear: both;
     width: 100%;
-}
-
-
-.previous,
-.top,
-.next {
-    text-transform:lowercase;
-        letter-spacing:0.02em;
-        @include sans-serif-small-caps;  
 }
