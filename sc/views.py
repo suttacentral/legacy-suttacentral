@@ -15,6 +15,7 @@ from sc import assets, config, data_repo, scimm, util
 from sc.menu import get_menu
 from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
+import sc.cache
 
 import logging
 logger = logging.getLogger(__name__)
