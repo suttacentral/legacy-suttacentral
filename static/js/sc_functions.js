@@ -513,6 +513,13 @@ function enablePaliLookup(){
     } else {
         throw Error('Unknown script: ' + script);
     }
+
+    function ready() {
+        sc.data.piLookup = sc.data[dictObjectName];
+        generateLookupMarkup();
+        sc.sidebar.messageBox.show("The dictionary is enabled. Hover with the mouse to display the meaning.", {id: "msg-lookup-success"});
+    }
+    
     if (!sc.data[dictObjectName])
     {
         sc.sidebar.messageBox.clear();
@@ -522,18 +529,16 @@ function enablePaliLookup(){
             url: sc.jsBaseUrl + scriptUrl,
             dataType: "script",
             success: function() {
-                sc.data.piLookup = sc.data[dictObjectName];
-                generateLookupMarkup();
+                ready();
                 sc.sidebar.messageBox.remove("msg-request-dict");                
-                
-                return
+
             },
             crossDomain: true,
             cache: true
         });
-    } else
-        generateLookupMarkup();
-        sc.sidebar.messageBox.show("The dictionary is enabled. Hover with the mouse to display the meaning.", {id: "msg-lookup-success"});
+    } else {
+        ready();
+    }
 }
 
 function lookupWordHandler(event){
