@@ -63,17 +63,27 @@ h1.mirror-row{line-height:1.5}
 
 #nextprev {        
     letter-spacing:0.02em;
+    width: 18em;
+    margin: auto;
+    
     @include sans-serif-small-caps;  
     text-align: center;
+    .next, .previous {
+        margin-bottom: 1em;
+        color: $medium-gray;
+        &:hover {
+            background: $light-light-gray;
+            border-radius: 50%;
+        }
+    }
     .next {
-        display: inline-block;
-        width: 100%;
-        margin-right: -2em;
+        padding: 1.5em 1.9em 1.5em 2.1em;
+        float: right;
+
     }
     .previous {
-        display: inline-block;
-        width: 100%;
-        margin-left: -2em;
+        padding: 1.5em 2.1em 1.5em 1.9em;
+        float: left;
     }
 
     .next + .previous {

@@ -51,8 +51,6 @@ sc.sidebar = {
         if ($.cookie('t-line-by-line')) {
             self.toggleLineByLine();
         }
-
-        $('#text article').last().append($('#nextprev'));
     },
     isVisible: function() {
         return this.node.hasClass('active');

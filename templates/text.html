@@ -93,12 +93,11 @@
 {% if prev_data or next_data %}
 
 <div id="nextprev">
-<hr>
-{% if next_data %}
-<a class="next" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }}: {{ next_data.name_striped }} ▶</a>
-{% endif %}
 {% if prev_data %}
-<a class="previous" href="{{ prev_data.url }}">◀ {{ prev_data.uid|uid_to_acro }}: {{ prev_data.name_striped }}</a>
+<a class="previous" title="{{ prev_data.uid|uid_to_acro }}: {{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀</a>
+{% endif %}
+{% if next_data %}
+<a class="next" title="{{ next_data.uid|uid_to_acro }}: {{ next_data.name_striped }} " href="{{ next_data.url }}">▶</a>
 {% endif %}
 </div>
 {% endif %}
