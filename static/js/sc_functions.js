@@ -510,6 +510,12 @@ function enablePaliLookup(){
     } else if (script == 'es') {
         scriptUrl = 'data/pi2es-maindata.js';
         dictObjectName = 'pi2esDict';
+    } else if (script == 'pt') {
+        scriptUrl = 'data/pi2pt-maindata.js';
+        dictObjectName = 'pi2ptDict';
+    } else if (script == 'id') {
+        scriptUrl = 'data/pi2id-maindata.js';
+        dictObjectName = 'pi2idDict';
     } else {
         throw Error('Unknown script: ' + script);
     }
