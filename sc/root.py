@@ -51,12 +51,6 @@ class Root(object):
         self.admin = Admin()
         self.tools = webtools.Tools()
     
-    @cherrypy.tools.caching(cache_class=sc.cache.Cache,
-                            delay=7200,
-                            maxobj_size=300000, #300kb
-                            maxsize=25000000, #25mb
-                            antistampede_timeout=0.01,
-                            expire_freq=30)
     @cherrypy.expose
     def default(self, *args, **kwargs):
         cherrypy.serving.request.cacheable = False
@@ -70,8 +64,7 @@ class Root(object):
     @cherrypy.expose
     def search(self, **kwargs):
         return show.search(**kwargs)
-
-    @cherrypy.tools.caching(delay=7200)
+    
     @cherrypy.expose
     def index(self, **kwargs):
         return show.home()
