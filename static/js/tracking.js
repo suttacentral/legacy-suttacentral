@@ -12,7 +12,7 @@
 sc.trackEvent = function(params) {
     if (typeof(params) == 'string') {
         params = {
-            category: 'buttons',
+            category: 'button',
             action: 'click',
             label: params
         }
@@ -26,7 +26,7 @@ sc.trackEvent = function(params) {
             eventValue: params.value
         })
     } else {
-        console.log('Event: Category={}, Action={}, Label={}, Value={}', params.category, params.action, params.label, params.value || 0);
+        console.log('Event: Category="{}", Action="{}", Label="{}", Value="{}"'.format(params.category, params.action, params.label, params.value || 0));
     }
 }
 
@@ -38,3 +38,13 @@ $('main').on('click contextmenu', '.file', function(){
                     action: 'click',
                     label: $(this).attr('href')});
 })
+
+
+// Track usage of sidebar controls
+$('#controls-tab').on('click', '.button', function(e){
+    var value = $(e.target).attr('id') || $(e.target).text();
+    if ($(this).is('select')) {
+        value += '-' + this.value;
+    }
+    self.trackEvent(value)
+});

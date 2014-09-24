@@ -132,6 +132,7 @@ def get_env():
         'js/sc_zh2en_lookup.js',
         sc_data_scripts_file,
         sc_uid_expansion_data_file,
+        'js/tracking.js',
         filters='rjsmin',
         output='js/compiled/core-%(version)s.js'
     )
