@@ -26,27 +26,27 @@ sc.sidebar = {
 
         this.node.on('easytabs:before', function(e, $clicked, $target){
             sc.userPrefs.setPref('sidebar-selected-tab', $target.attr('id'));
-            self.trackEvent($clicked.text());
+            sc.trackEvent($clicked.text());
         });
         
         $('#sidebar-dongle').on('click',
             function(){
                 if (self.isVisible()) {
                     self.hide();
-                    self.trackEvent('sidebar-hide')                  
+                    sc.trackEvent('sidebar-hide')                  
                 } else {
                     self.show();
-                    self.trackEvent('sidebar-show')
+                    sc.trackEvent('sidebar-show')
                 }
                 return false
             });
         self.node.on('click', function(e){
             if (!$(e.target).is('div')) return true;
             self.hide();
-            self.trackEvent('sidebar-hide')
+            sc.trackEvent('sidebar-hide')
         });
         self.bindButtons();
-        self.tracking();
+        
         scState.save("clean");
         if ($.cookie('t-line-by-line')) {
             self.toggleLineByLine();
@@ -81,29 +81,6 @@ sc.sidebar = {
         $('#t-line-by-line').click(this.toggleLineByLine);
         this.initChineseLookup();
 
-    },
-    tracking: function(e) {
-        // Track usage of sidebar controls
-        var self=this;
-        $('#controls-tab').on('click', '.button', function(e){
-            var value = $(e.target).attr('id') || $(e.target).text();
-            if ($(this).is('select')) {
-                value += '-' + this.value;
-            }
-            self.trackEvent(value)
-        });
-    },
-    trackEvent: function(label) {
-        if ('ga' in window) {
-            ga('send', {
-                hitType: 'event',
-                eventCategory: 'button',
-                eventAction: 'click',
-                eventLabel: label
-            })
-        } else {
-            console.log('Event: ' + label);
-        }
     },
     toggleLineByLine: function(e) {
         var brs = $('br.t-br');
