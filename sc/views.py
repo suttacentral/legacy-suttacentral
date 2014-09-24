@@ -210,15 +210,15 @@ class DownloadsView(InfoView):
                 continue
             #latest_filename = '{}-latest.{}'.format(basename, format)
             #latest_path = exports_path / latest_filename
-            #if latest_path.exists():
-            local_path = latest_path.resolve()
-            relative_url = local_path.relative_to(sc.static_dir)
-            data.append({
-                'filename': local_path.name,
-                'url': '/{}'.format(relative_url),
-                'time': local_path.stat().st_ctime,
-                'size': local_path.stat().st_size,
-                'format': format,
+            if latest_path.exists():
+                local_path = latest_path.resolve()
+                relative_url = local_path.relative_to(sc.static_dir)
+                data.append({
+                    'filename': local_path.name,
+                    'url': '/{}'.format(relative_url),
+                    'time': local_path.stat().st_ctime,
+                    'size': local_path.stat().st_size,
+                    'format': format,
             })
         return data
 
