@@ -159,6 +159,7 @@ class ViewBase:
             'page_lang': 'en',
             'scm': scm,
             'search_query': '',
+            'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()},
             'imm': sc.scimm.imm(),
         })
 
