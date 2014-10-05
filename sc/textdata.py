@@ -765,11 +765,3 @@ class PaliPageNumbinator:
         book = {'1':'i', '2':'ii', '3':'iii', '4':'iv', '5':'v', '6':'vi'
                 }.get(book, book)
         return '{} {} {}'.format(ptsbook, book, num)
-
-def deathmatch():
-    estim = ElasticTIM()
-
-    sqltim = sc.textdata.SqliteBackedTIM()
-
-    start = time.time(); foo = [sqltim.get(uid=uid) for uid in s]; print(time.time() - start)
-    
