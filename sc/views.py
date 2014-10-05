@@ -46,6 +46,7 @@ def jinja2_environment():
     env.filters['datetime'] = util.format_datetime
     env.filters['timedelta'] = util.format_timedelta
     env.filters['uid_to_name'] = lambda uid: scimm.imm().uid_to_name(uid)
+    env.filters['uid_to_acro'] = lambda uid: scimm.imm().uid_to_acro(uid)
 
     def sub_filter(string, pattern, repl):
         return regex.sub(pattern, repl, string)
@@ -159,6 +160,7 @@ class ViewBase:
             'page_lang': 'en',
             'scm': scm,
             'search_query': '',
+            'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()},
             'imm': sc.scimm.imm(),
             'ajax': 'ajax' in cherrypy.request.params,
             'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()}
@@ -234,15 +236,15 @@ class DownloadsView(InfoView):
                 continue
             #latest_filename = '{}-latest.{}'.format(basename, format)
             #latest_path = exports_path / latest_filename
-            #if latest_path.exists():
-            local_path = latest_path.resolve()
-            relative_url = local_path.relative_to(sc.static_dir)
-            data.append({
-                'filename': local_path.name,
-                'url': '/{}'.format(relative_url),
-                'time': local_path.stat().st_ctime,
-                'size': local_path.stat().st_size,
-                'format': format,
+            if latest_path.exists():
+                local_path = latest_path.resolve()
+                relative_url = local_path.relative_to(sc.static_dir)
+                data.append({
+                    'filename': local_path.name,
+                    'url': '/{}'.format(relative_url),
+                    'time': local_path.stat().st_ctime,
+                    'size': local_path.stat().st_size,
+                    'format': format,
             })
         return data
 

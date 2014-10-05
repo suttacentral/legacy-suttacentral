@@ -22,6 +22,9 @@ sc.nav = {
         sc.nav.lastXHR = ajax;
     },
     done: function(data, code, jqXHR) {
+        if ('ga' in window) {
+            ga('send', 'pageview', this.url);
+        }
         results = $("<div>" + data + "</div>");
         sc.nav.search_results.html(results);
         sc.truncate.apply(sc.nav.search_results, 125);

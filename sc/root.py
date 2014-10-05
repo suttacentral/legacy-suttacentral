@@ -34,6 +34,8 @@ cherrypy.tools.remove_trailing_slash = cherrypy.Tool('before_handler',
     remove_trailing_slash)
 cherrypy.tools.set_offline = cherrypy.Tool('before_handler', set_offline)
 
+
+
 class Root(object):
     """Requests to /*"""
 
@@ -48,21 +50,21 @@ class Root(object):
     def __init__(self):
         self.admin = Admin()
         self.tools = webtools.Tools()
-
+    
     @cherrypy.expose
     def default(self, *args, **kwargs):
+        cherrypy.serving.request.cacheable = False
         if 'profile' in kwargs:
             try:
                 return show.profile(locals(), globals(), *args, **kwargs)
             except ValueError:
                 pass
-        
         return show.default(*args, **kwargs)
 
     @cherrypy.expose
     def search(self, **kwargs):
         return show.search(**kwargs)
-
+    
     @cherrypy.expose
     def index(self, **kwargs):
         return show.home()

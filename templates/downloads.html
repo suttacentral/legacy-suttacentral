@@ -9,7 +9,7 @@
 <tbody>
 {% for file in file_list %}
 <tr>
-<td><a href="{{ file.url }}"><code>{{ file.filename }}</code></a></td>
+<td><a class="file" href="{{ file.url }}"><code>{{ file.filename }}</code></a></td>
 <td>{{ file.size | filesizeformat }}</td>
 </tr>
 {% endfor %}

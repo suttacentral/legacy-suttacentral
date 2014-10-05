@@ -1,7 +1,11 @@
 {% extends "base.html" -%}
 {%- block content -%}
 
+{% set prev_data = imm.tim.get(textdata.prev_uid, lang_code) if textdata.prev_uid else none %}
+{% set next_data = imm.tim.get(textdata.next_uid, lang_code) if textdata.next_uid else none %}
+
 <div id="sidebar"{% if cookies.get('sidebar.active') == "1" %} class="active"{% endif %}>
+      <div id="darkness"></div>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
         <li><a href="#navigation-tab">Navigation</a></li>
@@ -13,7 +17,9 @@
             <div class="x2 button-row" id="lookup"> 
             <select class="button" id="lookup-to-lang" title="Select a lookup language">
                 <option value="en">Pali → English</option>
-                <option value="es">Pali → Spanish</option>               
+                <option value="es">Pali → Spanish</option>
+                {#<option value="pt">Pali → Portuguese</option>#}
+                <option value="id">Pali → Indonesian</option>
             </select>
            <button class="button" id="pali-lookup" title="Activate Pali lookup">Lookup ▶</button>
             </div>
@@ -64,14 +70,14 @@
                 </ul>
             </details>
             <div class="x2 button-row">
-                {% if textdata.prev_uid %}
-                    <a class="button" class="previous" href="/{{ lang_code }}/{{ textdata.prev_uid }}" title="Go to previous sutta">◀ {{imm.uid_to_acro(textdata.prev_uid)}}</a>
+                {% if prev_data %}
+                    <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀ {{ prev_data.uid|uid_to_acro }}</a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}
                 
-                {% if textdata.next_uid %}
-                    <a class="button" class="next" data-prefetch="1" href="/{{ lang_code }}/{{ textdata.next_uid }}" title="Go to next sutta">{{imm.uid_to_acro(textdata.next_uid)}} ▶</a>
+                {% if next_data %}
+                    <a class="button" class="next" title="{{ next_data.name_striped }}" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }} ▶</a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}
@@ -85,10 +91,16 @@
       <div id="sidebar-dongle">▶</div>
 </div>
 {{text}}
-{% if textdata.next_uid %}
-<div>
-        <a class="button" class="next_bottom" href="/{{ lang_code }}/{{ textdata.next_uid }}" title="Go to next sutta">
-            {{imm.uid_to_acro(textdata.next_uid)}} ({{ imm.tim.get(textdata.next_uid, lang_code).name }}) ▶</a>
+{% if prev_data or next_data %}
+
+<div id="nextprev">
+{% if prev_data %}
+<a class="previous" title="{{ prev_data.uid|uid_to_acro }}: {{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀</a>
+{% endif %}
+{% if next_data %}
+<a class="next" title="{{ next_data.uid|uid_to_acro }}: {{ next_data.name_striped }} " href="{{ next_data.url }}">▶</a>
+{% endif %}
 </div>
 {% endif %}
+
 {%- endblock -%}

@@ -54,6 +54,10 @@ class TextInfo:
             out = out + '#{}'.format(self.bookmark)
         return out
 
+    @property
+    def name_striped(self):
+        return regex.sub(r'^\P{alpha}*', '', self.name or '')
+
 class TextInfoModel:
     """ The TextInfoModel is responsible for scanning the entire contents
     of the text folders and building a model containing information not

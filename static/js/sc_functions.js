@@ -510,9 +510,22 @@ function enablePaliLookup(){
     } else if (script == 'es') {
         scriptUrl = 'data/pi2es-maindata.js';
         dictObjectName = 'pi2esDict';
+    } else if (script == 'pt') {
+        scriptUrl = 'data/pi2pt-maindata.js';
+        dictObjectName = 'pi2ptDict';
+    } else if (script == 'id') {
+        scriptUrl = 'data/pi2id-maindata.js';
+        dictObjectName = 'pi2idDict';
     } else {
         throw Error('Unknown script: ' + script);
     }
+
+    function ready() {
+        sc.data.piLookup = sc.data[dictObjectName];
+        generateLookupMarkup();
+        sc.sidebar.messageBox.show("The dictionary is enabled. Hover with the mouse to display the meaning.", {id: "msg-lookup-success"});
+    }
+    
     if (!sc.data[dictObjectName])
     {
         sc.sidebar.messageBox.clear();
@@ -522,18 +535,16 @@ function enablePaliLookup(){
             url: sc.jsBaseUrl + scriptUrl,
             dataType: "script",
             success: function() {
-                sc.data.piLookup = sc.data[dictObjectName];
-                generateLookupMarkup();
+                ready();
                 sc.sidebar.messageBox.remove("msg-request-dict");                
-                
-                return
+
             },
             crossDomain: true,
             cache: true
         });
-    } else
-        generateLookupMarkup();
-        sc.sidebar.messageBox.show("The dictionary is enabled. Hover with the mouse to display the meaning.", {id: "msg-lookup-success"});
+    } else {
+        ready();
+    }
 }
 
 function lookupWordHandler(event){

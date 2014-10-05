@@ -39,34 +39,31 @@ sc.sidebar = {
 
         this.node.on('easytabs:before', function(e, $clicked, $target) {
             $.cookie('sidebar.tab', $target.attr('id'), {'path': '/'});
-            self.trackEvent($clicked.text());
+            sc.trackEvent($clicked.text());
         });
         
         $('#sidebar-dongle').on('click',
             function(){
                 if (self.isVisible()) {
                     self.hide();
-                    self.trackEvent('sidebar-hide')                  
+                    sc.trackEvent('sidebar-hide')                  
                 } else {
                     self.show();
-                    self.trackEvent('sidebar-show')
+                    sc.trackEvent('sidebar-show')
                 }
                 return false
-            }
-        );
-        $('#sidebar').on('click', function(e){
-            if (!$(e.target).is('div, ul')) return true;
+            });
+        self.node.on('click', function(e){
+            if (!$(e.target).is('div')) return true;
             self.hide();
-            self.trackEvent('sidebar-hide')
+            sc.trackEvent('sidebar-hide')
         });
         self.bindButtons();
-        self.tracking();
+        
         scState.save("clean");
         if ($.cookie('t-line-by-line')) {
             self.toggleLineByLine();
         }
-
-        
     },
     isVisible: function() {
         return this.node.hasClass('active');
@@ -250,4 +247,3 @@ sc.sidebar = {
         }
     }
 }
-

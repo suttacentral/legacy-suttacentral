@@ -137,6 +137,12 @@ sc.volPrefixMap = {
     'sa': 'ii',
     'sa-2': 'ii',
     'sa-3': 'ii',
+    'zh-mg': 'xxii',
+    'zh-mi': 'xxii',
+    'zh-dg': 'xxii',
+    'zh-mi': 'xxii',
+    'zh-sv': 'xxiii',
+    'zh-ka': 'xxiv',
     't': [
         [0, 98, 'i'],
         [102, 151, 'ii'],
