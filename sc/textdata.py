@@ -3,6 +3,7 @@ import regex
 import pickle
 import pathlib
 import sqlite3
+import functools
 import threading
 from itertools import chain
 
@@ -70,7 +71,7 @@ class TextInfoModel:
     def __init__(self):
         self._by_lang = {}
         self._by_uid = {}
-    
+
     def get(self, uid=None, lang_uid=None):
         """ Returns TextInfo entries which match arguments
 
@@ -429,7 +430,10 @@ class SqliteBackedTIM(TextInfoModel):
             return True
         except:
             return False
-    
+
+    # This is a significant bottleneck but the total data size
+    # is not large (~ 10mb) so we use a large cache.
+    @functools.lru_cache(maxsize=10000)
     def get(self, uid=None, lang_uid=None):
         con = self._con
         
