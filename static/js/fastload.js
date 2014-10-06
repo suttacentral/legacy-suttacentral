@@ -1,14 +1,6 @@
 sc.fastload = {
     cache: {
-        store: (window.sessionStorage !== undefined) ? sessionStorage : {
-            object: {},
-            setItem: function(key, value) {
-                this.object[key] = value;
-            },
-            getItem: function(key, value) {
-                return this.object[key];
-            }
-        },
+        store: sessionStorage,
         has: function(key) {
             try {
                 return 'sc:' + key in this.store;
@@ -24,7 +16,7 @@ sc.fastload = {
         }
     },
     supports_history_api: function() {
-        return !!(window.history && history.pushState);
+        return !!(window.sessionStorage && window.history && history.pushState);
     },
     valid_link: 'a[href]:not([href^="http://"]):not([href^="#"])',
     init: function init() {
@@ -51,15 +43,15 @@ sc.fastload = {
             this.cache.add(location.pathname, $('main')[0].outerHTML);
         }
     },
-    loadpage: function(href, change_state) {
+    loadpage: function(href, change_state, state) {
         var self = this;
         // For closure
         function update_page(data) {
             var title = $('meta[name=title]').attr('content');
-            $('main').replaceWith(data);
+            $('main')[0].outerHTML = data;
             $('title').text(title);
             if (change_state) {
-                history.pushState(null, null, href);
+                history.pushState({scrollY: document.body.scrollY, scrollX: document.body.scrollX}, null, href);
             }
             
             // If Google Universal Analytics is activated, we better
@@ -69,8 +61,10 @@ sc.fastload = {
             }
             self.update_cache();
             self.preload();
-            window.scroll(0, 0);
+            document.body.scrollX = state ? state.scrollX : 0;
+            document.body.scrollY = state ? state.scrollY : 0;
             sc.headerMenu.deactivate();
+            
             onMainLoad();
         }
         if (self.cache.has(href)) {
@@ -79,7 +73,7 @@ sc.fastload = {
         } else {
             self.do_ajax(href)
                 .done(function(data, status, xhr){update_page(data)})
-                .fail(function(xhr, status, errorThrown){self.redirect(href)});
+                .fail(function(xhr, status, errorThrown){console.log('Fail: ' + status); return;self.redirect(href)});
         }
     },
     do_ajax: function(href) {
@@ -94,7 +88,7 @@ sc.fastload = {
     },
     goback: function(e) {
         var self = sc.fastload;
-        self.loadpage(location.pathname)
+        self.loadpage(location.pathname, false, e.state)
     },
     preload_timeout_id: null,
     preload: function(toLoad) {

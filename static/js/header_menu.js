@@ -6,6 +6,7 @@ sc.headerMenu = {
     },
     deactivate: function(e) {
         this.node.removeClass('active');
+        $('header nav').removeClass('active')
     },
     toggle: function(e){
         $(this).toggleClass('active');
@@ -92,7 +93,6 @@ sc.headerMenu = {
                 oldE = self.scrollEvents[i];
                 
                 var diff = now - oldE[1];
-                console.log(diff, oldE[0]);
                 if (diff > 500) {
                     self.scrollEvents.pop()
                 } else if (diff > 100 && oldE[0] < 0) {
