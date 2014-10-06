@@ -4,7 +4,7 @@
 {% set prev_data = imm.tim.get(textdata.prev_uid, lang_code) if textdata.prev_uid else none %}
 {% set next_data = imm.tim.get(textdata.next_uid, lang_code) if textdata.next_uid else none %}
 
-<div id="sidebar"{% if cookies.get('sidebar.active') == "1" %} class="active"{% endif %}>
+<div id="sidebar">
       <div id="darkness"></div>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>

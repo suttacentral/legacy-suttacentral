@@ -29,11 +29,10 @@ sc.sidebar = {
             self.selectTab($.cookie('sidebar.tab'))
         }
 
-        if ($.cookie('sidebar.active')) {
+        if (sc.sessionState.getItem('sidebar.active')) {
             if (!self.isVisible()) {
-                self.node.hide();
                 self.show();
-                self.node.show();
+                self.node.addClass('fast')
             }
         }
 
@@ -70,11 +69,13 @@ sc.sidebar = {
     },
     show: function() {
         this.node.addClass('active');
-        $.cookie('sidebar.active', "1", {'path': '/'});
+        sc.sessionState.setItem('sidebar.active', true);
     },
     hide: function() {
         this.node.removeClass('active');
-        $.removeCookie('sidebar.active', {'path': '/'});
+        this.node.removeClass('fast');
+        sc.sessionState.setItem('sidebar.active', false);
+        
     },
     selectTab: function(tab) {
         this.node.easytabs('select', tab);
@@ -86,10 +87,10 @@ sc.sidebar = {
             $('#' + f).click(transliterateHandler);
         }
         $('#lookup-to-lang').change(function(){
-            sc.userPrefs.setPref('lookupToLang', $(this).val());
+            sc.state.setItem('lookupToLang', $(this).val());
             if (sc.userPrefs.getPref("paliLookup") === true) {
                 sc.init(true);
-            }            
+            }
         });
         $('#t-line-by-line').click(this.toggleLineByLine);
         this.initChineseLookup();
@@ -119,12 +120,12 @@ sc.sidebar = {
         if (brs.length) {
             brs.remove();
             $('#text').removeClass('line-by-line');
-            $.removeCookie('t-line-by-line');
+            sc.sessionState.setItem('t-line-by-line', false);
         } else {
             $('.t').before('<br class="t-br">');
             $('br + br.t-br').remove();
             $('#text').addClass('line-by-line');
-            $.cookie('t-line-by-line', 1)
+            sc.sessionState.setItem('t-line-by-line', true);
         }
         
     },

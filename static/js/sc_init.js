@@ -237,6 +237,7 @@ var transFuncs = {
 };
 
 
+
 var syllSpacer = '‧'; //Seperates syllables when that mode is activated. (\u2027)
 
 sc.init = function(reset)

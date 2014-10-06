@@ -61,8 +61,7 @@ sc.fastload = {
             }
             self.update_cache();
             self.preload();
-            document.body.scrollX = state ? state.scrollX : 0;
-            document.body.scrollY = state ? state.scrollY : 0;
+            window.scroll(state ? state.scrollX : 0, state ? state.scrollY : 0)
             sc.headerMenu.deactivate();
             
             onMainLoad();

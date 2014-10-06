@@ -17,6 +17,9 @@ sc.zh2enLookup = {
     init: function(button, markup_target){
         this.markupTarget = $(markup_target).addClass('zh2enLookup')[0];
         this.button = $(button).on('click', sc.zh2enLookup.toggle);
+        if (sc.sessionState.getItem('zh2en.active')) {
+            this.activate();
+        }
     },
     before: function(){
         self = sc.zh2enLookup;
@@ -89,11 +92,13 @@ sc.zh2enLookup = {
                 self.setCurrent(prev);
             }
         });
+        sc.sessionState.setItem('zh2en.active', true);
     },
     deactivate: function(){
         this.markupTarget.innerHTML = this.originalHTML;
         sc.sidebar.messageBox.clear();
         sc.sidebar.messageBox.show('<p>Lookup disabled.</p>', {'timeout': 5000});
+        sc.sessionState.setItem('zh2en.active', false);
     },
     generateMarkup: function() {
         if (this.button)
