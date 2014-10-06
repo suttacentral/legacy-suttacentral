@@ -1,0 +1,65 @@
+{
+    "inherits": ["acro_to_name_and_uid.auto", "coded_name.auto"],
+    "index": {
+        "settings": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0,
+            "analysis": {
+                "tokenizer": {
+                    "uid_tokenizer": {
+                        "type": "pattern",
+                        "pattern": "([a-z]+|[0-9.-]+)",
+                        "group": 0
+                    }
+                },
+                "analyzer": {
+                    "uid_analyzer": {
+                        "tokenizer": "uid_tokenizer",
+                        "filter": ["acro_and_name_to_uid", "icu_folding"]
+                    },
+                    "folding": {
+                        "tokenizer": "icu_tokenizer",
+                        "filter": ["icu_folding"]
+                    }
+                }
+            }
+        },
+        "mappings": {
+            "sutta": {
+                "properties": {
+                    "uid": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    },
+                    "volpage": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    },
+                    "division": {
+                        "type": "string",
+                        "analyzer": "uid_analyzer"
+                    },
+                    "lang": {
+                        "type": "string",
+                        "analyzer": "uid_analyzer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "properties": {
+                            "plain": {
+                                "type": "string"
+                            },
+                            "coded": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "content": {
+                        "type": "string",
+                        "index": "no"
+                    }
+                }
+            }
+        }
+    }
+}
