@@ -25,8 +25,10 @@ sc.sidebar = {
             updateHash: false
         });
 
-        if ($.cookie('sidebar.tab')) {
-            self.selectTab($.cookie('sidebar.tab'))
+        var sidebarTab = sc.sessionState.getItem('sidebar.tab');
+
+        if (sidebarTab) {
+            self.selectTab(sidebarTab)
         }
 
         if (sc.sessionState.getItem('sidebar.active')) {
@@ -37,7 +39,7 @@ sc.sidebar = {
         }
 
         this.node.on('easytabs:before', function(e, $clicked, $target) {
-            $.cookie('sidebar.tab', $target.attr('id'), {'path': '/'});
+            sc.sessionState.setItem('sidebar.tab', $target.attr('id'));
             sc.trackEvent($clicked.text());
         });
         
@@ -60,7 +62,7 @@ sc.sidebar = {
         self.bindButtons();
         
         scState.save("clean");
-        if ($.cookie('t-line-by-line')) {
+        if (sc.sessionState.getItem('t-line-by-line')) {
             self.toggleLineByLine();
         }
     },

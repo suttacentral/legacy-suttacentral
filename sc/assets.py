@@ -114,10 +114,10 @@ def get_env():
     sc_data_scripts_file = get_js_datascripts_filename()
     
     js_core = webassets.Bundle(
+        'js/sc_state.js',
         'js/vendor/ZeroClipboard-1.2.3.js',
         'js/vendor/jquery.hashchange-1.3.min.js',
         'js/vendor/jquery.easytabs-3.2.0.min.js',
-        'js/vendor/jquery.cookies.js',
         'js/lib/jquery.scrolllock.js',
         'js/lib/jquery.unveil.js',
         'js/lib/jquery.details.js',
