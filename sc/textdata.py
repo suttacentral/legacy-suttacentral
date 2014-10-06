@@ -50,7 +50,7 @@ class TextInfo:
 
     @property
     def url(self):
-        out = '/{}/{}'.format(self.uid, self.lang)
+        out = '/{}/{}'.format(self.lang, self.uid)
         if self.bookmark:
             out = out + '#{}'.format(self.bookmark)
         return out
