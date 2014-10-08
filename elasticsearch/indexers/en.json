@@ -48,17 +48,12 @@
             },
             "definition": {
                 "properties": {
-                    "entries": {
-                        "type": "nested",
-                        "properties": {
-                            "content": {
-                                "fields": {
-                                    "stemmed": {
-                                        "type": "string",
-                                        "term_vector": "with_positions_offsets",
-                                        "analyzer": "en"
-                                    }
-                                }
+                    "content": {
+                        "fields": {
+                            "stemmed": {
+                                "type": "string",
+                                "term_vector": "with_positions_offsets",
+                                "analyzer": "en"
                             }
                         }
                     }

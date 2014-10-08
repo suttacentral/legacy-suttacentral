@@ -1,0 +1,31 @@
+{% extends "base.html" -%}
+{%- block content -%}
+<div id='onecol'>
+<div id="main_search_results">
+<div>You searched: <strong>{{query}}</strong></div>
+{% if results.hits.hits %}
+<p>Results {{ offset + 1 }} to {{ offset + results.hits.hits|length }} of {{ results.hits.total }}</p>
+<ul class="results">
+{% for hit in results.hits.hits -%}
+{% set source = hit._source %}
+<li class="result">
+{% if hit._type == 'text' %}
+<a class="text-result" href="/{{ source.lang }}/{{ source.uid }}">{{ source.uid|uid_to_acro }} : {{ source.heading.title|title }}</a>
+{% elif hit._type == 'definition' %}
+<a class="definition-result" href="/define/{{ source.term|urlencode }}">Definition for the {{ source.lang|uid_to_name|lower }} word <em>{{ source.term|title }}</em>{% if source.gloss %} ({{ source.gloss }}){% endif %}</a>
+{% elif hit._type == 'sutta' %}
+<a class="sutta-result" href="/{{source.uid}}">Details for {{ source.uid|uid_to_acro }}: {{ source.name or '?' }}</a>
+{% set sutta = imm.suttas[source.uid] %}
+<p>{% if sutta.subdivision.division.uid != sutta.subdivision.uid %}<a href="/{{ sutta.subdivision.division.uid }}">{{ sutta.subdivision.division.name }}</a> > {% endif %}<a href="/{{ sutta.subdivision.uid }}#{{sutta.uid}}">{{ sutta.subdivision.name }}</a> > <a href="/{{ sutta.lang.uid }}/sutta.uid">{{ sutta.name }}</a></p>
+{% endif %}
+{% if hit.highlight %}
+<p>{{ hit.highlight.content|join(' … ') }} </p>
+{% endif %}
+{% endfor %}
+{% else %}
+<p>Unfortunately, there were no results</p>
+{% endif %}
+<p><small>Your query took {{ results.took }} ms.</small></p>
+</div>{# main_search_results #}
+</div>{# onecol #}
+{% endblock %}

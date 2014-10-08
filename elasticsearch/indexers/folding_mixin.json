@@ -13,6 +13,19 @@
                         }
                     }
                 }
+            },
+            "definition": {
+                "properties": {
+                    "content": {
+                        "fields": {
+                            "folded": {
+                                "type": "string",
+                                "term_vector": "with_positions_offsets",
+                                "analyzer": "folding"
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -36,12 +36,14 @@ def text_dir_md5(extra_files=[__file__]):
 
 class TextInfo:
     __slots__ = ('uid', 'lang', 'path', 'bookmark', 'name', 'author', 'volpage', 'prev_uid', 'next_uid', 'mtime')
+
     def __init__(self, **kwargs):
         for key in self.__slots__:
+            value = kwargs.get(key, None)
             if key == 'path':
-                setattr(self, key, pathlib.Path(kwargs.get(key, None)))
-            else:
-                setattr(self, key, kwargs.get(key, None))
+                value = pathlib.Path(value)
+            setattr(self, key, value)
+    
     def __repr__(self):
         return 'TextInfo({})'.format(', '.join('{}={}'.format(attr, getattr(self, attr)) for attr in self.__slots__))
 
@@ -54,10 +56,6 @@ class TextInfo:
         if self.bookmark:
             out = out + '#{}'.format(self.bookmark)
         return out
-
-    @property
-    def name_striped(self):
-        return regex.sub(r'^\P{alpha}*', '', self.name or '')
 
 class TextInfoModel:
     """ The TextInfoModel is responsible for scanning the entire contents
@@ -236,7 +234,7 @@ class TextInfoModel:
         try:
             hgroup = root.select_one('.hgroup')
             h1 = hgroup.select_one('h1')
-            return h1.text_content()
+            return regex.sub(r'^\P{alpha}*', '', h1.text_content())
         except Exception as e:
             logger.warn('Could not determine name for {}/{}'.format(lang_uid, uid))
             return ''
@@ -568,9 +566,17 @@ class SqliteBackedTIM(TextInfoModel):
         con = self._con
         
         def text_info_from_row(row):
-            return TextInfo(lang = row[0], uid=row[1],
-                            path=pathlib.Path(row[2]), bookmark=row[3],
-                            name=row[4], author=row[5], volpage=row[6], prev_uid=row[7], next_uid=row[8])
+            return TextInfo(
+                lang = row[0],
+                uid=row[1],
+                path=pathlib.Path(row[2]),
+                bookmark=row[3],
+                name=regex.sub(r'^\P{alpha}*', '',row[4] or ''),
+                author=row[5],
+                volpage=row[6],
+                prev_uid=row[7],
+                next_uid=row[8]
+            )
         
         if uid and lang_uid:
             cur = con.execute('''SELECT lang, uid, path, bookmark, name, author, volpage, prev_uid, next_uid

@@ -1,26 +1,20 @@
-import hashlib
 import json
-import sc
-from sc import scimm, textfunctions
-from sc.util import recursive_merge, numericsortkey, grouper, unique
 import time
 import regex
-
-import elasticsearch
-from elasticsearch import Elasticsearch
-es = Elasticsearch()
-
-from sc.search import load_index_config
-
-from collections import defaultdict
-from copy import deepcopy
-from elasticsearch.helpers import bulk, scan
-import lxml.html
-
+import hashlib
 import logging
+import lxml.html
+from copy import deepcopy
+from collections import defaultdict
+from elasticsearch.helpers import bulk, scan
+import sc
+from sc import scimm, textfunctions
+from sc.search import load_index_config
+from sc.util import recursive_merge, numericsortkey, grouper, unique
+
 logger = logging.getLogger(__name__)
 
-class TextIndexer:
+class TextIndexer(sc.search.BaseIndexer):
     def fix_whitespace(self, string):
         """ Removes repeated whitespace.
 
@@ -59,15 +53,17 @@ class TextIndexer:
             division = None
         others = hgroup[1:-1]
         hgroup.drop_tree()
+        content = self.fix_whitespace(text.text_content())
         
         return {
-            'content': self.fix_whitespace(text.text_content()),
+            'content': content,
             'author': author,
             'heading': {
-                'title': title.text_content().strip() if title else '',
+                'title': title.text_content().strip() if title is not None else '',
                 'division': division.text_content().strip() if division is not None else '',
                 'subhead': [e.text_content().strip() for e in others]
-            }
+            },
+            'boost': self.length_boost(len(content))
         }
 
     def yield_docs_from_dir(self, lang_dir, size, to_add=None, to_delete=None):
@@ -105,7 +101,7 @@ class TextIndexer:
             yield chunk
         raise StopIteration    
 
-    def load(self, force=False):
+    def update(self, force=False):
         for lang_dir in sc.text_dir.glob('*'):
             if lang_dir.is_dir():
                 self.index_folder(lang_dir, force)
@@ -117,9 +113,10 @@ class TextIndexer:
         lang_uid = lang_dir.stem
 
         index_name = self.index_name_from_uid(lang_uid)
+        self.register_index(index_name)
         if force:
             try:
-                es.indices.delete(index_name)
+                self.es.indices.delete(index_name)
             except:
                 pass
         try:
@@ -132,12 +129,12 @@ class TextIndexer:
                 logger.warning('default config does not exist')
                 raise
         
-        if not es.indices.exists(index_name):
+        if not self.es.indices.exists(index_name):
             logger.info('Creating index "{}"'.format(index_name))
-            es.indices.create(index_name, index_config)
-            es.index(index=index_name, id="files", doc_type="meta", body={"mtimes": {}})
+            self.es.indices.create(index_name, index_config)
+            self.es.index(index=index_name, id="files", doc_type="meta", body={"mtimes": {}})
 
-        stored_mtimes = {hit["_id"]: hit["fields"]["mtime"][0] for hit in scan(es,
+        stored_mtimes = {hit["_id"]: hit["fields"]["mtime"][0] for hit in scan(self.es,
                 index=index_name,
                 doc_type="text",
                 fields="mtime",
@@ -157,43 +154,14 @@ class TextIndexer:
                 continue
             
             try:
-                res = bulk(es, index=index_name, doc_type="text", actions=(t for t in chunk if t is not None))
+                res = bulk(self.es, index=index_name, doc_type="text", actions=(t for t in chunk if t is not None))
             except:
-                globals().update(locals())
                 raise
 
 indexer = TextIndexer()
 
-
-
-def search(query, highlight=True, **kwargs):
-    body = {
-        "query": {
-            "query_string": {
-                "default_field": "content",
-                "fields": ["content", "content.folded", "content.stemmed"],
-                "minimum_should_match": "60%",
-                "query": query
-                }
-            }
-        }
-    if highlight:
-        body["highlight"] = {
-            "pre_tags": ['<strong class="highlight">'],
-            "post_tags": ['</strong>'],
-            "order": "score",
-            "fields": {
-                "content" : {
-                    "matched_fields": ["content", "content.folded", "content.stemmed"],
-                    "type": "fvh",
-                    "fragment_size": 100,
-                    "number_of_fragments": 3
-                    }
-                }
-            }
-    return es.search(body=body, **kwargs)
-
-
-if __name__ == "__main__":
-    pass
-    #load()
+def periodic_update(i):
+    try:
+        indexer.update()
+    except Exception as e:
+        logger.error('Elasticsearch failure: {!s}'.format(e))

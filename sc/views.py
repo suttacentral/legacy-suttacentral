@@ -17,6 +17,7 @@ from sc.menu import get_menu
 from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
 from sc import error_pages
+import sc.search.query
 
 import logging
 logger = logging.getLogger(__name__)
@@ -520,28 +521,19 @@ class DefinitionView(ViewBase):
             context.near_terms = []
         context.fuzzy_terms = dicts.get_fuzzy_terms(term)
 
-class SearchResultView(ViewBase):
-    """The view for the search page."""
+class ElasticSearchResultsView(ViewBase):
+    template_name = 'elasticsearch_results'
 
-    template_name = 'search_result'
-
-    def __init__(self, search_query, search_result):
-        super().__init__()
-        self.search_query = search_query
-        self.search_result = search_result
+    def __init__(self, query, results, **kwargs):
+        self.query = query
+        self.results = results
+        self.kwargs = kwargs
 
     def setup_context(self, context):
-        context.search_query = self.search_query
-        context.title = 'Search: "{}"'.format(
-            self.search_query)
-        context.result = self.search_result
-        context.imm = scimm.imm()
-
-class AjaxSearchResultView(SearchResultView):
-    """The view for /search?ajax=1."""
-
-    template_name = 'ajax_search_result'
-
+        context.query = self.query
+        context.results = self.results
+        context.update(self.kwargs)
+        
 class ShtLookupView(ViewBase):
     """The view for the SHT lookup page."""
 

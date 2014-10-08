@@ -1,10 +1,41 @@
 import json
+import logging
+import elasticsearch
+from math import log
 import sc
 from sc.util import recursive_merge
 
-import logging
+
 logger = logging.getLogger(__name__)
 
+es = elasticsearch.Elasticsearch()
+
+indexes = []
+
+class BaseIndexer:
+    es = es    
+    def update(self, force=False):
+        raise NotImplementedError
+
+    @staticmethod
+    def register_index(index_name):
+        """ Register an index
+
+        If an index is not registered, it will not be searched.
+
+        """
+        global indexes
+        if index_name not in indexes:
+            indexes.append(index_name)
+            indexes.sort()
+    
+    def length_boost(self, length, midpoint=250):
+        if length < midpoint:
+            boost = length / midpoint
+        else:
+            boost = 0.5 + 1 / (1 + abs(log(length / (10 * midpoint), 10)))
+        return boost
+        
 def load_index_config(name, _seen=None, _first_run=[True]):
     if _first_run:
         _make_extra_filters()
@@ -37,13 +68,15 @@ def load_index_config(name, _seen=None, _first_run=[True]):
 def _make_acro_to_name_and_uid_filter():
     imm = sc.scimm.imm()
     mapping = []
-    for uid in imm._uid_to_acro_map:
+    for uid in sorted(imm._uid_to_acro_map):
+        syns = [uid]
         acro = imm._uid_to_acro_map[uid]
         name = imm._uid_to_name_map[uid]
-        if acro.lower() == uid:
-            mapping.append('{} => {}'.format(name, uid).casefold())
-        else:
-            mapping.append('{}, {} => {}'.format(acro, name, uid).casefold())
+        if acro.lower() != uid:
+            syns.append(acro)
+        syns.append(name)
+        mapping.append(','.join(syns))
+        
     return {
         "index": {
             "settings": {
@@ -220,6 +253,12 @@ def _make_coded_name_filter():
     code_map.update({'ṅ': '"n', 'ñ': '~n', 'ḷ': '.l', 'ṭ': '.t', 'ḍ': '.d',
                     'ś': "'s", 'ḥ': '.h', 'ṃ': '.m', 'ā': 'aa', 'ī': 'ii',
                     'ṛ': '.r', 'ṇ': '.n', 'ū': 'uu', 'ṣ': '.s'})
+    code_map.update({'ã': 'aa'}) # Some systems use this a for a macron
+
+    for k, v in code_map.copy().items():
+        if k.upper() != k:
+            code_map[k.upper()] = v
+
     return {
         "index": {
             "settings": {
@@ -243,8 +282,8 @@ def _make_extra_filters():
     to run this function completes very quickly.
 
     """
-    with (sc.indexer_dir / 'coded_name.auto.json').open('w', encoding='utf8') as f:
+    with (sc.indexer_dir / 'coded_name_auto.json').open('w', encoding='utf8') as f:
         json.dump(_make_coded_name_filter(), f, ensure_ascii=False)
 
-    with (sc.indexer_dir / 'acro_to_name_and_uid.auto.json').open('w', encoding='utf8') as f:
+    with (sc.indexer_dir / 'acro_to_name_and_uid_auto.json').open('w', encoding='utf8') as f:
         json.dump(_make_acro_to_name_and_uid_filter(), f, ensure_ascii=False)
