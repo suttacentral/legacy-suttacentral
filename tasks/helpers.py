@@ -6,6 +6,7 @@ import regex
 import sys
 from invoke import task
 from plumbum import local
+from http.client import HTTPConnection
 
 from sc import util
 
@@ -106,3 +107,10 @@ def run_src(statement, **kwargs):
 def warning(string):
     """Print string in red."""
     _color_print(string, colorama.Fore.RED)
+
+def http_request(domain, path, method):
+    """ Makes the http request using method """
+    conn = HTTPConnection(domain)
+    conn.request(method, path)
+    resp = conn.getresponse()
+    return resp.read()
