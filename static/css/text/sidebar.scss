@@ -242,11 +242,13 @@ $sidebar-dongle-width = 1em;
     padding: 0 1em;
 }
 #navigation-tab ul{
-    margin: 2.5em 0 2em 0;
+    margin: 2em 0 2em 0;
+    
 }
 
 #navigation-tab li ul{
     margin: 0 0 0 1em;
+    
 }
 
 .languages {
@@ -299,7 +301,7 @@ $sidebar-dongle-width = 1em;
     li a {
         display:block;
         width:100%;
-        padding:.2em 0.1em;
+        padding:.2em 0.5em;
         
     }
 
@@ -369,7 +371,7 @@ $sidebar-dongle-width = 1em;
 }
 
 #table-of-contents {
-    margin-top: 1em;
+    
     float: left;
     clear: both;
     width: 100%;
