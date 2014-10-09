@@ -1,3 +1,4 @@
+/*
 $search-terms-ref-color: $medium-gray;
 
 .text_results .details {
@@ -21,9 +22,28 @@ $search-terms-ref-color: $medium-gray;
 .terms span.precision{ color: gray}
 /*.terms span.precision:before{ content: ' (~'}
 .terms span.precision:after{ content: ') '}*/
+/*
 .terms .type {visibility: hidden}
 
 .text_results	{margin-bottom:-1em}
     
 
 .text_results table {margin-top:1em}
+*/
+
+ul.results {
+    list-style: none;
+    .crumbs{
+        :link {
+            color: $saturated-green;
+        }
+
+        :visited {
+            color: $dark-saturated-green;
+        }
+        a[href]:hover {
+            color: $dark-saturated-red * 0.7 + $dark-saturated-green * 0.3;
+        }
+    }
+    .crumbs :
+}

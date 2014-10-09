@@ -78,10 +78,9 @@ def update_data(branch=None):
 
 
 @task
-def update_search():
+def nuke_search():
     """Update dictionary and search index on the staging server."""
     blurb(update_search)
     _staging_run(
-        'invoke dictionary.build',
-        'invoke search.index'
+        'invoke search.delete'
     )

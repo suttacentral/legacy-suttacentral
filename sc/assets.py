@@ -122,7 +122,7 @@ def get_env():
         'js/lib/jquery.unveil.js',
         'js/lib/jquery.details.js',
         'js/sc_utility.js',
-        'js/nav.js',
+        'js/search.js',
         'js/sc_functions.js',
         'js/sc_init.js',
         'js/header_menu.js',

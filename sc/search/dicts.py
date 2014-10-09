@@ -188,7 +188,7 @@ def get_fuzzy_terms(term, lang='en'):
 indexer = DictIndexer()
 
 def periodic_update(i):
-    try:
-        indexer.update()
-    except:
-        logger.error('Elasticsearch failure')
+    if not sc.search.is_available():
+        logger.error('Elasticsearch Not Available')
+        return
+    indexer.update()

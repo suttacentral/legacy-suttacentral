@@ -122,7 +122,7 @@ class TextIndexer(sc.search.BaseIndexer):
         try:
             index_config = load_index_config(index_name)
         except:
-            logger.warning('No indexer settings or invalid settings for language "{}"'.format(lang_uid))
+            logger.warning('No indexer settings or invalid settings for language "{}", using "default"'.format(lang_uid))
             try:
                 index_config = load_index_config('default')
             except:
@@ -161,7 +161,7 @@ class TextIndexer(sc.search.BaseIndexer):
 indexer = TextIndexer()
 
 def periodic_update(i):
-    try:
-        indexer.update()
-    except Exception as e:
-        logger.error('Elasticsearch failure: {!s}'.format(e))
+    if not sc.search.is_available():
+        logger.error('Elasticsearch Not Available')
+        return
+    indexer.update()

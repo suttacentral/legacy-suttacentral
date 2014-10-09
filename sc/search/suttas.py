@@ -136,8 +136,8 @@ def search(query, highlight=True, **kwargs):
     return es.search(body=body, **kwargs)
 
 def periodic_update(i):
-    try:
-        indexer.update()
-    except Exception as e:
-        logger.error('Elasticsearch failure: {!s}'.format(e))
+    if not sc.search.is_available():
+        logger.error('Elasticsearch Not Available')
+        return
+    indexer.update()
             

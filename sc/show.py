@@ -117,8 +117,12 @@ def search(query, **kwargs):
         kwargs['limit'] = 10
     if not 'offset' in kwargs:
         kwargs['offset'] = 0
-    results = sc.search.query.search(query, **kwargs)
-    return ElasticSearchResultsView(query, results, **kwargs).render()
+    try:
+        results = sc.search.query.search(query, **kwargs)
+        return ElasticSearchResultsView(query, results, **kwargs).render()
+    except sc.search.ConnectionError:
+        raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
+    
 
 def downloads():
     return DownloadsView().render()

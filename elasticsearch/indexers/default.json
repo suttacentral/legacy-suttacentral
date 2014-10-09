@@ -1,5 +1,5 @@
 {
-    "inherits": ["meta"],
+    "inherits": ["meta", "acro_to_name_and_uid_auto"],
     "index": {
         "settings": {
             "number_of_shards": 1,
@@ -16,7 +16,14 @@
                             "nibbana,nirvana => nibbana"
                         ]
                     }
-                },  
+                },
+                "tokenizer": {
+                    "uid_split": {
+                        "type": "pattern",
+                        "group": 0,
+                        "pattern": "[a-z]+|[0-9-]+"
+                    }
+                },
                 "analyzer": {
                     "minimal": {
                         "tokenizer": "icu_tokenizer",
@@ -25,6 +32,10 @@
                     "folding": {
                         "tokenizer": "icu_tokenizer",
                         "filter": ["icu_folding"]
+                    },
+                    "uid_expanding": {
+                        "tokenizer": "uid_split",
+                        "filter": ["acro_and_name_to_uid", "icu_folding"]
                     }
                 }
             }
@@ -34,15 +45,21 @@
                 "properties": {
                     "uid": {
                         "type": "string",
-                        "index": "not_analyzed"
+                        "index": "not_analyzed",
+                        "fields": {
+                            "expanded": {
+                                "type": "string",
+                                "analyzer": "uid_expanding"
+                            }
+                        }
                     },
                     "lang": {
                         "type": "string",
-                        "index": "not_analyzed"
+                        "analyzer": "uid_expanding"
                     },
                     "author": {
                         "type": "string",
-                        "analyzer": "minimal"
+                        "analyzer": "folding"
                     },
                     "content": {
                         "type": "string",

@@ -1,19 +1,21 @@
 // AJAX search results.
 sc.search = {
     search_element: $('#page-header-search > input'),
-    search_results: $('#page-header-search-results'),
     lastXHR: null,
+    oldMain: null,
     init: function() {
         sc.search.search_element.keyup(sc.search.handleSearch);
-        $('body').mousedown(sc.search.hideResultsIfNotSearch);
     },
     handleSearch: function(e) {
         var input = e.target.value;
+        console.log(input);
         if (sc.search.lastXHR) {
             sc.search.lastXHR.abort();
         }
         if (input.length < 3) {
-            sc.search.hideResults();
+            if ($('main').hasClass('ajax-search-results')) {
+                sc.search.hideResults();
+            }
             return;
         }
         url = "/search?query=" + encodeURIComponent(input) + "&ajax=1";
@@ -25,25 +27,28 @@ sc.search = {
         if ('ga' in window) {
             ga('send', 'pageview', this.url);
         }
-        results = $("<div>" + data + "</div>");
-        sc.search.search_results.html(results);
-        sc.truncate.apply(sc.search.search_results, 125);
-        sc.search.search_results.find("tr").filter(":even").addClass("even");
-        $("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'});
-        sc.search.showResults();
-    },
-    hideResultsIfNotSearch: function(e) {
-        var target = $(e.target);
-        if (!target.closest('#page-header-search')[0] &&
-            !target.closest('#page-header-search-results')[0]) {
-            sc.search.hideResults();
+        var main = $('main');
+        if ((main.length > 0) && !main.hasClass('ajax-search-results')) {
+            console.log('Storing main for later');
+            sc.search.oldMain = main.detach();
         }
+            
+        results = $(data);
+        results.addClass('ajax-search-results');
+        $('header').after(results);
+        
+        //sc.search.search_results.html(results);
+        //sc.truncate.apply(sc.search.search_results, 125);
+        //sc.search.search_results.find("tr").filter(":even").addClass("even");
+        //$("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'});
+        //sc.search.showResults();
     },
     hideResults: function() {
-        sc.search.search_results.stop(true, true).slideUp();
-    },
-    showResults: function() {
-        sc.search.search_results.stop(true, true).slideDown();
+        if ($(this.oldMain)) {
+            $('main').remove();
+            $('header').after(this.oldMain);
+            this.oldMain = null;
+        }
     }
 };
 

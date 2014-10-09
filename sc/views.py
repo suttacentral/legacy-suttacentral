@@ -634,3 +634,15 @@ class UidsView(InfoView):
         context.unused = sorted(unused)
         context.used = sorted(u for u in used if u.isalpha())
         context.atoz = atoz
+
+class ErrorView(ViewBase):
+    template_name = 'error'
+    
+    def __init__(self, code, message):
+        self.code = code
+        self.message = message
+
+    def setup_content(self, context):
+        context.code = self.code
+        context.message = self.message
+        context.title = context.code

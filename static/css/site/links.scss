@@ -5,26 +5,22 @@ $link-active-color:        $bright-saturated-red;
 
 $link-offline-color:       $dark-pastel-red;
 
-a, .text_results h3 a {
+:link {
     text-decoration: none;
 
-    &:link {
-        color: $link-color;
-    }
+    color: $link-color;
 
     &:visited {
         color: $link-visited-color;
     }
 
+    &:active {
+        color: $link-active-color;
+    }
+    
     &:hover {
         color: $link-hover-color;
     }
-
-    &:active {
-        color: $link-active-color;
-        
-    }
-
     // De-emphasize offsite translations
     &[href^="http"] {
         &.tran {

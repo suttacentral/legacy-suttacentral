@@ -16,7 +16,25 @@
 {% elif hit._type == 'sutta' %}
 <a class="sutta-result" href="/{{source.uid}}">Details for {{ source.uid|uid_to_acro }}: {{ source.name or '?' }}</a>
 {% set sutta = imm.suttas[source.uid] %}
-<p>{% if sutta.subdivision.division.uid != sutta.subdivision.uid %}<a href="/{{ sutta.subdivision.division.uid }}">{{ sutta.subdivision.division.name }}</a> > {% endif %}<a href="/{{ sutta.subdivision.uid }}#{{sutta.uid}}">{{ sutta.subdivision.name }}</a> > <a href="/{{ sutta.lang.uid }}/sutta.uid">{{ sutta.name }}</a></p>
+<p class="crumbs">
+<a>{{ sutta.lang.uid|uid_to_name }}</a>
+&gt;
+{% if sutta.subdivision.division.uid != sutta.subdivision.uid %}
+<a href="/{{ sutta.subdivision.division.uid }}">{{ sutta.subdivision.division.name }}</a>
+&gt;
+{% endif %}
+<a href="/{{ sutta.subdivision.uid }}#{{sutta.uid}}">{{ sutta.subdivision.name }}</a>
+&gt;
+<a href="/{{ sutta.lang.uid }}/{{ sutta.uid }}">{{ sutta.name }}</a>
+{% if sutta.translations %}
+[
+{% for tr in sutta.translations %}
+<a class="tran" href="{{ tr.url }}">{{ tr.lang.uid }}</a>
+{% if not loop.last %}, {% endif %}
+{% endfor %}
+]
+{% endif %}
+</p>
 {% endif %}
 {% if hit.highlight %}
 <p>{{ hit.highlight.content|join(' … ') }} </p>

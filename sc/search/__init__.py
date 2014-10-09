@@ -10,6 +10,27 @@ logger = logging.getLogger(__name__)
 
 es = elasticsearch.Elasticsearch()
 
+from elasticsearch.exceptions import ConnectionError
+
+def is_available():
+    # Maybe I'm just dumb, but when I use 'es.ping()' while it
+    # does return True/False, it also generates ~250 lines of exception
+    # spam in stderr from Urllib3HttpConnection. This ain't useful
+    # so I'm using a baser connection
+    from http.client import HTTPConnection
+    conn = HTTPConnection('localhost:9200')
+    try:
+        result = conn.request('GET', '/')
+        return True
+    except ConnectionRefusedError:
+        return False
+try:
+    # Make elasticsearch STFU
+    elasticsearch.client.logger.setLevel('WARN')
+except AttributeError:
+    # I don't think this is part of public API so catch all errors
+    pass
+
 indexes = []
 
 class BaseIndexer:
@@ -283,7 +304,7 @@ def _make_extra_filters():
 
     """
     with (sc.indexer_dir / 'coded_name_auto.json').open('w', encoding='utf8') as f:
-        json.dump(_make_coded_name_filter(), f, ensure_ascii=False)
+        json.dump(_make_coded_name_filter(), f, ensure_ascii=False, indent=2)
 
     with (sc.indexer_dir / 'acro_to_name_and_uid_auto.json').open('w', encoding='utf8') as f:
-        json.dump(_make_acro_to_name_and_uid_filter(), f, ensure_ascii=False)
+        json.dump(_make_acro_to_name_and_uid_filter(), f, ensure_ascii=False, indent=2)

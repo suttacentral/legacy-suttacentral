@@ -15,20 +15,36 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                     "query_string": {
                         "fields": ["content", "content.*^0.5",
                                    "term", "term.*^0.5",
-                                   "lang",
-                                   "uid",
-                                   "acro",
+                                   "lang^0.5",
+                                   "author^0.5",
+                                   "uid", "uid.expanded^0.5",
                                    "name"],
                         "minimum_should_match": "3<90%",
                         "analyze_wildcard": True,
                         "query": query
                     }
                 },
-                "functions": [{
-                    "field_value_factor": {
-                        "field": "boost"
+                "functions": [
+                    {
+                        "field_value_factor": {
+                            "field": "boost"
+                        }
+                    }, {
+                        "boost_factor": "2",
+                        "filter": {
+                            "term": {
+                                "lang": "en"
+                            }
+                        }
+                    }, {
+                        "boost_factor": "2",
+                        "filter": {
+                            "type": {
+                                "value": "text"
+                            }
+                        }
                     }
-                }],
+                ],
                 "score_mode": "multiply"
             }
         }
