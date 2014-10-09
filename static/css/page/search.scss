@@ -45,5 +45,12 @@ ul.results {
             color: $dark-saturated-red * 0.7 + $dark-saturated-green * 0.3;
         }
     }
-    .crumbs :
+}
+li.result > a {
+    font-size: 110%;
+}
+
+#main_search_results {
+    max-width: 40rem;
+    margin: auto;
 }

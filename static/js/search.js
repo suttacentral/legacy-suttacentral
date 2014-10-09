@@ -13,8 +13,9 @@ sc.search = {
             sc.search.lastXHR.abort();
         }
         if (input.length < 3) {
-            if ($('main').hasClass('ajax-search-results')) {
-                sc.search.hideResults();
+            $('main.ajax-search-results').remove();
+            if (sc.search.oldMain) {
+                $('header').after(sc.search.oldMain);
             }
             return;
         }
@@ -36,19 +37,6 @@ sc.search = {
         results = $(data);
         results.addClass('ajax-search-results');
         $('header').after(results);
-        
-        //sc.search.search_results.html(results);
-        //sc.truncate.apply(sc.search.search_results, 125);
-        //sc.search.search_results.find("tr").filter(":even").addClass("even");
-        //$("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'});
-        //sc.search.showResults();
-    },
-    hideResults: function() {
-        if ($(this.oldMain)) {
-            $('main').remove();
-            $('header').after(this.oldMain);
-            this.oldMain = null;
-        }
     }
 };
 
