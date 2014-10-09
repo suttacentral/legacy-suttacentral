@@ -1,53 +1,53 @@
 // AJAX search results.
-sc.nav = {
+sc.search = {
     search_element: $('#page-header-search > input'),
     search_results: $('#page-header-search-results'),
     lastXHR: null,
     init: function() {
-        sc.nav.search_element.keyup(sc.nav.handleSearch);
-        $('body').mousedown(sc.nav.hideResultsIfNotSearch);
+        sc.search.search_element.keyup(sc.search.handleSearch);
+        $('body').mousedown(sc.search.hideResultsIfNotSearch);
     },
     handleSearch: function(e) {
         var input = e.target.value;
-        if (sc.nav.lastXHR) {
-            sc.nav.lastXHR.abort();
+        if (sc.search.lastXHR) {
+            sc.search.lastXHR.abort();
         }
         if (input.length < 3) {
-            sc.nav.hideResults();
+            sc.search.hideResults();
             return;
         }
         url = "/search?query=" + encodeURIComponent(input) + "&ajax=1";
         ajax = jQuery.ajax(url, { "cache": "true" });
-        ajax.done(sc.nav.done);
-        sc.nav.lastXHR = ajax;
+        ajax.done(sc.search.done);
+        sc.search.lastXHR = ajax;
     },
     done: function(data, code, jqXHR) {
         if ('ga' in window) {
             ga('send', 'pageview', this.url);
         }
         results = $("<div>" + data + "</div>");
-        sc.nav.search_results.html(results);
-        sc.truncate.apply(sc.nav.search_results, 125);
-        sc.nav.search_results.find("tr").filter(":even").addClass("even");
+        sc.search.search_results.html(results);
+        sc.truncate.apply(sc.search.search_results, 125);
+        sc.search.search_results.find("tr").filter(":even").addClass("even");
         $("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'});
-        sc.nav.showResults();
+        sc.search.showResults();
     },
     hideResultsIfNotSearch: function(e) {
         var target = $(e.target);
         if (!target.closest('#page-header-search')[0] &&
             !target.closest('#page-header-search-results')[0]) {
-            sc.nav.hideResults();
+            sc.search.hideResults();
         }
     },
     hideResults: function() {
-        sc.nav.search_results.stop(true, true).slideUp();
+        sc.search.search_results.stop(true, true).slideUp();
     },
     showResults: function() {
-        sc.nav.search_results.stop(true, true).slideDown();
+        sc.search.search_results.stop(true, true).slideDown();
     }
 };
 
-sc.nav.init();
+sc.search.init();
 
 //This code powers the 'more' and 'less' functionality. I checked out
 //jquery.truncator and jquery.expander but they didn't do what I wanted.
