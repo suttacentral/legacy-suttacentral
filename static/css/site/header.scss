@@ -224,6 +224,9 @@ header {
         visibility: visible;
         transition: opacity 400ms ease-out;
     }
+    .contents:not(.active) .column {
+        height: 0;
+    }
 }
 
 .pitaka {
