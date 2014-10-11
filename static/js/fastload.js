@@ -47,9 +47,10 @@ sc.fastload = {
         var self = this;
         // For closure
         function update_page(data) {
-            var title = $('meta[name=title]').attr('content');
-            $('main')[0].outerHTML = data;
-            $('title').text(title);
+            
+            $('main').remove()
+            $('header').after(data);
+            $('title').text($('meta[name=title]').attr('content'));
             if (change_state) {
                 history.pushState({scrollY: document.body.scrollY, scrollX: document.body.scrollX}, null, href);
             }

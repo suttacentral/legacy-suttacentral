@@ -54,3 +54,16 @@ li.result > a {
     max-width: 40rem;
     margin: auto;
 }
+
+.close-button {
+    position: absolute;
+    right: 0;
+    margin: 1em;
+    font-size: 150%;
+    line-height: 1em;
+    width: 1em;
+    height: 1em;
+    &:hover {
+        cursor: pointer;
+    }
+}

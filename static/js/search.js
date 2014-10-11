@@ -3,40 +3,67 @@ sc.search = {
     search_element: $('#page-header-search > input'),
     lastXHR: null,
     oldMain: null,
+    latestSearchTimeoutId: null,
     init: function() {
         sc.search.search_element.keyup(sc.search.handleSearch);
     },
+    restoreMain: function() {
+        $('main.ajax-search-results').remove();
+        if (sc.search.oldMain) {
+            $('header').after(sc.search.oldMain);
+        }
+    },
+    removeMain: function() {
+        var self = sc.search;
+        var main = $('main');
+        if ((main.length > 0) && !main.hasClass('ajax-search-results')) {
+            self.oldMain = main.detach();
+        } else {
+            main.remove();
+        }
+    },
     handleSearch: function(e) {
-        var input = e.target.value;
-        console.log(input);
+        var query = e.target.value;
+        console.log(query);
         if (sc.search.lastXHR) {
             sc.search.lastXHR.abort();
         }
-        if (input.length < 3) {
-            $('main.ajax-search-results').remove();
-            if (sc.search.oldMain) {
-                $('header').after(sc.search.oldMain);
-            }
-            return;
+        if (query.length < 3) {
+            sc.search.restoreMain();
+        } else {
+            url = "/search?query=" + encodeURIComponent(query) + "&ajax=1";
+            ajax = jQuery.ajax(url, { "cache": "true" });
+            ajax.done(sc.search.done);
+            sc.search.lastXHR = ajax;
         }
-        url = "/search?query=" + encodeURIComponent(input) + "&ajax=1";
-        ajax = jQuery.ajax(url, { "cache": "true" });
-        ajax.done(sc.search.done);
-        sc.search.lastXHR = ajax;
     },
     done: function(data, code, jqXHR) {
-        if ('ga' in window) {
-            ga('send', 'pageview', this.url);
-        }
-        var main = $('main');
-        if ((main.length > 0) && !main.hasClass('ajax-search-results')) {
-            console.log('Storing main for later');
-            sc.search.oldMain = main.detach();
-        }
-            
+        var self = sc.search,
+            url = this.url;
+
+        self.removeMain()
+        
         results = $(data);
         results.addClass('ajax-search-results');
+        self.addCloseButton(results);
         $('header').after(results);
+        // We will send a pageview report to Google, but to prevent
+        // spamming up the analytics with 'search as you type'
+        // urls, we will only send after an adequate delay.
+        var pageViewDelay = 4 * 1000;
+        clearTimeout(self.latestSearchTimeoutId);
+        self.latestSearchTimeoutId = setTimeout(function() {
+            if ('ga' in window) {
+                ga('send', 'pageview', url);
+            } else {
+                console.log('Pageview Event: ' + url);
+            }
+        }, pageViewDelay)
+    },
+    addCloseButton: function(e){
+        var close = $('<div class="close-button">×</div>');
+        close.click(sc.search.restoreMain);
+        e.prepend(close);
     }
 };
 
