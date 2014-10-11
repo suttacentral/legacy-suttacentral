@@ -31,17 +31,27 @@ $sutta-h2-color: $medium-gray;
     }
 
     h3 {
-        margin: -0.26em 0 1.26em 0;
+        margin: 0em 0 1em 0;
         font-size: 1.2em;
         line-height: 1.5em;
     }
 
-    h4, h5, h6 {
-        margin: 1.29em 0 1.25em 0;
+    h4{
+        margin: 1.29em 0 1em 0;
         font-size: 1em;
         line-height: 1.5em;
     }
-
+h5{
+        
+        margin: 0.7em 0 0.5em 0;
+        font-size: 1em;
+}
+h6{
+        text-align:left;
+        text-transform:lowercase;
+        margin: 0.7em 0 0.5em 0;
+        font-size: 1em;
+        }
 
     .hgroup {
         margin-top: 6em;
@@ -54,6 +64,7 @@ $sutta-h2-color: $medium-gray;
             font-size: 1em;
             text-transform: lowercase;
             letter-spacing: 0.05em;
+            padding:0;
         }
 
         h1 ~ p {

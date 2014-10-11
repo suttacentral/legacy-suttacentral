@@ -68,14 +68,11 @@ h1.mirror-row{line-height:1.5}
 }
 
 #nextprev {        
-    letter-spacing:0.02em;
-    width: 18em;
-    margin: auto;
+        width: 18em;
+    margin: -1em auto;
     
-    @include sans-serif-small-caps;  
-    text-align: center;
     .next, .previous {
-        margin-bottom: 1em;
+        margin-bottom: 1.5em;
         color: $medium-gray;
         &:hover {
             background: $light-light-gray;

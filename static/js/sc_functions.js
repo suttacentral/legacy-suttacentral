@@ -182,7 +182,7 @@ function buildTextualInformation() {
             if ($(this).text() == '') {
                 $(this).text(id.replace(/^\d+_/, '')
                                .replace(idRex, idRepl)
-                               .replace(/(\d)-(\d)/, '$1\u2060—\u2060$2'));
+                               .replace(/(\d)-(\d)/, '$1\u2060–\u2060$2'));
             }
         });
 

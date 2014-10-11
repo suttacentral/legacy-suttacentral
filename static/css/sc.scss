@@ -139,7 +139,9 @@ q:after {
 
 /* BOOKMARKED SECTION HIGHLIGHTING */
 .embeddedparallel.bookmarkeded {
-    padding: 0.5em 0.1em 0.5em 0.5em;
+    padding: 1em;
+    margin-left:-1em;
+    margin-right:-1em;
     border-radius: 1em;
     background-color: #feeae7;
     margin-bottom: 1.5em;
@@ -165,11 +167,11 @@ q:after {
 
 .sutta ul {
     list-style-type: none;
+    padding:0 0 1.5em 0;
+     margin:0 0 0 3em;
 }
 
-.sutta ul li{
-    margin-bottom:1.5em;
-}
+
 
 .sutta ol   {
      padding:0 0 1.5em 0;
@@ -317,6 +319,13 @@ p .add .author {
 
 Text added by the editor or translator for clarification.
 */
+.pe {font-style:italic;
+.infomode & {
+        color:#9B8D00;
+    }
+    }
+
+
 
 .suppliedmetre {
     color: #767676;

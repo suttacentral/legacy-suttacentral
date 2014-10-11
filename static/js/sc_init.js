@@ -96,6 +96,7 @@ sc.classes = {
         "gap": "Gap in the manuscript.",
         "gloss": "Definition of term",
         "precision": "Estimated precision of this location (1 = known, 6 = unknowable)",
+        "pe":"Instructions for expanding text supplied by the editor or translator.",
         "sic": "Apparently incorrect reading determined by the editor.",
         "skt-mg-bu-pm": "Rule numbers in the Sanskrit Mahāsaṅghika Bhikhhu Pātimokkha.",
         "supplied": "Text hypothetically reconstructed by the editor or translator.",

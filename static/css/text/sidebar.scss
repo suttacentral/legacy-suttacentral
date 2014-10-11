@@ -204,14 +204,14 @@ $sidebar-dongle-width = 1em;
     position: absolute;
     top:50%;
     bottom:50%;
-    font-size:1.5rem;
+    font-size:2rem;
     color:white;
     left: $sidebar-width;
     height: 40px;
     width: 40px;
     background: $dirty-pastel-green;
     z-index: -1;
-    line-height:1.7;
+    line-height:1.2;
     box-shadow: 0.03em 0.02em 0.15em rgba(0,0,0,0.15);
     text-align:center;
     cursor: pointer;
@@ -249,11 +249,13 @@ $sidebar-dongle-width = 1em;
     padding: 0 1em;
 }
 #navigation-tab ul{
-    margin: 2.5em 0 2em 0;
+    margin: 2em 0 2em 0;
+    
 }
 
 #navigation-tab li ul{
     margin: 0 0 0 1em;
+    
 }
 
 .languages {
@@ -306,7 +308,7 @@ $sidebar-dongle-width = 1em;
     li a {
         display:block;
         width:100%;
-        padding:.2em 0.1em;
+        padding:.2em 0.5em;
         
     }
 
@@ -376,7 +378,7 @@ $sidebar-dongle-width = 1em;
 }
 
 #table-of-contents {
-    margin-top: 1em;
+    
     float: left;
     clear: both;
     width: 100%;

@@ -26,6 +26,7 @@ a.pts:before {content:"PTS "}
 a.pts1:before {content:"PTS (1st ed.) "}
 a.pts2:before {content:"PTS (2nd ed.) "}
 a.pts-vp-pi:before {content: "Vin ";}
+a.pts-vp-en:before {content: "PTS en vp ";}
 a.pts_pn:before {content:"PTS "}
 a.pts-s:before {content:"PTS-s ";}
 a.pts-cs:before {content:"PTS-cs ";}
