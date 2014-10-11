@@ -146,6 +146,8 @@ class TextIndexer(sc.search.BaseIndexer):
         to_delete = set(stored_mtimes).difference(current_mtimes)
         to_add = current_mtimes.copy()
         for uid, mtime in stored_mtimes.items():
+            if uid in to_delete:
+                continue
             if mtime <= current_mtimes.get(uid):
                 to_add.pop(uid)
         logger.info("For index {}, {} files already indexed, {} files to be added, {} files to be deleted".format(index_name,  len(stored_mtimes), len(to_add), len(to_delete)))

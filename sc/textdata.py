@@ -41,7 +41,7 @@ class TextInfo:
         for key in self.__slots__:
             value = kwargs.get(key, None)
             if key == 'path':
-                value = pathlib.Path(value)
+                value = pathlib.Path(value) if value else None
             setattr(self, key, value)
     
     def __repr__(self):
