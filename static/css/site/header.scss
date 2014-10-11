@@ -16,8 +16,7 @@ header {
     left: 0;
     right: 0;
     z-index: 5;
-    box-shadow: 0 0 0.3em rgba(0,0,0,0.4);
-
+    box-shadow: 0 0 0.3em rgba(0, 0, 0, 0.4);
     // slide up and down
     transition: 400ms ease-out;
     &.retracted {
@@ -37,7 +36,6 @@ header {
         font-size: 2.5em;
         display: inline-block;
         margin-top: 2px;
-        
     }
     #title {
         position: relative;
@@ -160,7 +158,6 @@ header {
         button {
             background: none;
         }
-        
     }
     @media screen and (max-width: 550px) {
         #title {
@@ -175,30 +172,29 @@ header {
     left: 0;
     bottom: 0;
     right: 0;
-    background: rgba(0,0,0,0);
+    background: rgba(0, 0, 0, 0);
     z-index: -3;
-    opacity:0;
-   transition:z-index 400ms ease-out,opacity 400ms ease-out;
-   display:block;
-    
+    opacity: 0;
+    transition: z-index 400ms ease-out,opacity 400ms ease-out;
+    display: block;
 }
 
-#panel-screen-wrap.active{
-opacity:1;
-    background: rgba(0,0,0,0.2);
-       transition:z-index 400ms ease-out,opacity 400ms ease-out;
-       z-index: 3;
+#panel-screen-wrap.active {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.2);
+    transition: z-index 400ms ease-out,opacity 400ms ease-out;
+    z-index: 3;
 }
 
 #panel {
     @include sans-serif;
     background: white;
     border-bottom: 1px solid $light-gray;
-    box-shadow: 0.05em 0.15em 0.25em rgba(0,0,0,0.15);
+    box-shadow: 0.05em 0.15em 0.25em rgba(0, 0, 0, 0.15);
     margin: 0;
     left: 0;
     right: 0;
-    top:0;
+    top: 0;
     position: fixed;
     padding-left: 1.5em;
     z-index: -4;
@@ -207,31 +203,26 @@ opacity:1;
     top: $panel-offset-top;
     // It is probably best for transitions to be applied to the panel
     // and not to the contents.
-     display:block;
-     opacity:0;
-     
-     transition:height 400ms ease-out;
-     
-     
+    display: block;
+    opacity: 0;
+    transition: height 400ms ease-out;
     &.active {
-    z-index: 5;
-       opacity:1;
-       
-     transition:height 400ms ease-out;
- 
+        z-index: 5;
+        opacity: 1;
+        transition: height 400ms ease-out;
     }
     .contents {
         position: absolute;
-         display:block;
-      visibility:hidden;
-      opacity:0;
-     transition:opacity 400ms ease-out;
-     background:white;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 400ms ease-out;
+        background: white;
     }
     .contents.active {
-    opacity:1;
-      visibility:visible;
-     transition:opacity 400ms ease-out;
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 400ms ease-out;
     }
 }
 
@@ -278,11 +269,11 @@ opacity:1;
 }
 
 #page-header-search-results {
-     @include sans-serif;
+    @include sans-serif;
     background: white;
     border-bottom: 1px solid $light-gray;
-    box-shadow: .05em .15em .25em rgba(118,118,118,0.3);
-    margin: 0 ;
+    box-shadow: 0.05em 0.15em 0.25em rgba(118, 118, 118, 0.3);
+    margin: 0;
     left: 0;
     right: 0;
     position: absolute;
@@ -291,5 +282,4 @@ opacity:1;
     z-index: 40;
     overflow-y: auto;
     overflow-x: hidden;
-    
-    }
+}
