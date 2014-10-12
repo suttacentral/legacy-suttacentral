@@ -1,4 +1,4 @@
-﻿//This file is designed to be customized by users familiar with css and html.
+//This file is designed to be customized by users familiar with css and html.
 //The meat and potato functions are found in sc.functions.js, they should not be
 //edited except by someone who knows javascript, also, "use strict"
 
