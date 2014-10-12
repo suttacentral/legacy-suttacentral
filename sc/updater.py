@@ -6,9 +6,17 @@ import logging
 logger = logging.getLogger(__name__)
 
 def run_updaters():
+    """ Run update functions which apply to data such as texts
+
+    Update functions which don't apply to data should not
+    be run here
+
+    """
+    
     time.sleep(0.5)
     # Import here to delay intialization code.
     import sc
+    import sc.scm
     import sc.scimm
     import sc.textdata
     import sc.search.dicts
@@ -23,7 +31,17 @@ def run_updaters():
     ]
     time.sleep(0.5)
     i = 0
+
+    lastGitCommitTime = None
+    
     while True:
+        if not sc.config.updated_through_git_only:
+            gitCommitTime = sc.scm.scm.last_commit_time
+            if gitCommitTime == lastGitCommitTime:
+                continue
+            lastGitCommitTime = gitCommitTime
+            # Proceed to perform updates
+        
         for fn_name, fn in functions:
             if i > 0:
                 time.sleep(1)
