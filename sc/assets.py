@@ -114,6 +114,7 @@ def get_env():
     sc_data_scripts_file = get_js_datascripts_filename()
     
     js_core = webassets.Bundle(
+        'js/bom.js',
         'js/vendor/underscore.js',
         'js/sc_state.js',
         'js/vendor/ZeroClipboard-1.2.3.js',
