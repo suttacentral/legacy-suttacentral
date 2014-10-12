@@ -60,7 +60,7 @@
 {% endif %}
 
 {% assets 'js_core' %}
-<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+<script type="text/javascript" src="{{ ASSET_URL }}" charset="UTF-8"></script>
 {% endassets %}
 
 {% if not offline and config.internet_connectivity and config.google_analytics %}
