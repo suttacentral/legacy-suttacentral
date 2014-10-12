@@ -34,22 +34,26 @@ def run_updaters():
 
     lastGitCommitTime = None
     
+    skip = False
     while True:
-        if not sc.config.updated_through_git_only:
+        # We can bypass performing updates if we know that
+        # the git repository has not changed, but we should
+        # only do this if it is guaranteed that changes have
+        # come through git, otherwise never skip.
+        if sc.config.updated_through_git_only:
             gitCommitTime = sc.scm.scm.last_commit_time
-            if gitCommitTime == lastGitCommitTime:
-                continue
+            skip = gitCommitTime == lastGitCommitTime
             lastGitCommitTime = gitCommitTime
-            # Proceed to perform updates
-        
-        for fn_name, fn in functions:
-            if i > 0:
-                time.sleep(1)
-            try:
-                fn(i)
-            except Exception as e:
-                logger.error('An exception occured when running {}'.format(fn_name))
-                logger.error(e)
+                
+        if not skip:
+            for fn_name, fn in functions:
+                if i > 0:
+                    time.sleep(1)
+                try:
+                    fn(i)
+                except Exception as e:
+                    logger.error('An exception occured when running {}'.format(fn_name))
+                    logger.error(e)
         time.sleep(sc.config.db_refresh_interval)
         i += 1
 
