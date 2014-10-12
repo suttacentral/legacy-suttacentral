@@ -114,6 +114,7 @@ def get_env():
     sc_data_scripts_file = get_js_datascripts_filename()
     
     js_core = webassets.Bundle(
+        'js/vendor/underscore.js',
         'js/sc_state.js',
         'js/vendor/ZeroClipboard-1.2.3.js',
         'js/vendor/jquery.hashchange-1.3.min.js',
@@ -131,6 +132,7 @@ def get_env():
         'js/sc_popupnotes.js',
         'js/sc_zh2en_lookup.js',
         'js/fastload.js',
+        'js/discourse.js',
         sc_data_scripts_file,
         sc_uid_expansion_data_file,
         'js/tracking.js',
