@@ -611,7 +611,15 @@ class SqliteBackedTIM(TextInfoModel):
             (lang_uid, uid, str(textinfo.path), textinfo.bookmark,
             textinfo.name, textinfo.author, textinfo.volpage, textinfo.prev_uid, textinfo.next_uid))
 
-    default_filename = str(sc.db_dir / 'text_info_model.db')
+    @property
+    def default_filename(self):
+        from sc.scm import scm
+        branch = scm.branch
+        if branch == 'master':
+            branch = ''
+        else:
+            branch = '.' + branch
+        return str(sc.db_dir / 'text-info-model{}.db'.format(branch))
     
     @classmethod
     def build_once(cls, force_build):
@@ -619,7 +627,7 @@ class SqliteBackedTIM(TextInfoModel):
             try:
                 start=time.time()
                 logger.info('Acquiring SQLite Backed Text Info Model')
-                cls._instance = cls(cls.default_filename)
+                cls._instance = cls()
                 cls._instance.build(force_build)
                 cls._build_ready.set()
                 build_time = time.time()-start
