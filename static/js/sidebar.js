@@ -249,4 +249,4 @@ sc.sidebar = {
             $('#message-box > .message').fadeOut();
         }
     }
-}
+};
