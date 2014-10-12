@@ -1,13 +1,6 @@
 sc.headerMenu = {
     node: $('#panel-screen-wrap, #panel'),
     lastScreenScroll: 0,
-    activate: function(e){
-        this.node.addClass('active');
-    },
-    deactivate: function(e) {
-        this.node.removeClass('active');
-        $('header nav').removeClass('active')
-    },
     toggle: function(e){
         $(this).toggleClass('active');
         $('header nav').not(this).removeClass('active')
@@ -16,13 +9,11 @@ sc.headerMenu = {
         var self = sc.headerMenu,
             target = $(element.find('[href]').attr('href'));
         
-        
         if (mode === undefined && target.hasClass('active')) {
             mode = "hide";
         } else {
             mode = "show";
         }
-
 
         if (mode == "hide") {
             self.hideAll();
@@ -32,7 +23,6 @@ sc.headerMenu = {
             self.node.addClass('active')
             target.addClass('active');
             element.addClass('active');
-            //$(document.body).addClass('overflow-hidden');
             setTimeout(self.adjustColumns, 50);
         }
     },
