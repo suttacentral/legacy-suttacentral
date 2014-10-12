@@ -136,7 +136,7 @@ def get_env():
         sc_data_scripts_file,
         sc_uid_expansion_data_file,
         'js/tracking.js',
-        filters='rjsmin',
+        filters=None if sc.config.debug else 'rjsmin',
         output='js/compiled/core-%(version)s.js'
     )
     env.register('js_core', js_core)
