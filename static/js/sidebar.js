@@ -1,4 +1,4 @@
-/* The sidebar class is responsible for everything in the aside navigation
+﻿/* The sidebar class is responsible for everything in the aside navigation
  * menu / controls found in texts. presently this is displayed as a
  * side bar.
  */
