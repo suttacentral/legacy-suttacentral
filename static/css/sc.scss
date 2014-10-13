@@ -325,7 +325,11 @@ Text added by the editor or translator for clarification.
     }
     }
 
-
+.expanded {display:inline
+.infomode & {
+        color:$light-medium-gray;
+    }
+    }
 
 .suppliedmetre {
     color: #767676;
