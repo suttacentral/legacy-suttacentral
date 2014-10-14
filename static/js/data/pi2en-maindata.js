@@ -1,6 +1,6 @@
 
 //[Pali]=[0=Defn,1=Grammar,2=Meaning,3=Source,4=InflectGroup,5=InflectInfo,6=BaseWord,7=BaseDefn,8=FuncStem,9=Regular]
-sc.data.pi2enDict = {
+sc.piLookup.register({script: 'en': data: {
 'a':["prefix","1. prefix ā shortened before a double consonant. 2. a negative prefixed to nouns, adjectives; and participles. 3. the augment prefixed to some roots in the Past and Conditional Tenses; e.g. akāsi."],
 'ariyasacca':["nt.","an established fact; noble truth."],
 'aṃsa':["m.; nt.","1. a part; a side; 2. shoulder."],
@@ -20961,4 +20961,5 @@ sc.data.pi2enDict = {
 'horā':["f.","hour."],
 'horāpāṭhaka':["m.","an astrologer."],
 'horāyanta':["nt.","any device showing the time; a clock."],
-'horālocana':["nt.","a watch; a clock."]}
+'horālocana':["nt.","a watch; a clock."]
+}})
