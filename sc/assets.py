@@ -17,7 +17,7 @@ def clean(older=False):
     maximum_ctime = None
     try:
         maximum_ctime = sc.webassets_manifest_path.stat().st_mtime
-        maximum_ctime -= 60  # seconds
+        maximum_ctime -= 7 * 12 * 60 * 60  # seconds
     except OSError:
         older = True
 
