@@ -94,7 +94,8 @@ sc.classes = {
         "corr": "Reading corrected by the editor.",
         "dp": "Verse numbers for Dhammapada.",
         "gap": "Gap in the manuscript.",
-        "gloss": "Definition of term",
+        "gloss": "Definition of term.",
+        "jataka":"An embedded Jātaka story.",
         "precision": "Estimated precision of this location (1 = known, 6 = unknowable)",
         "pe":"Instructions for expanding text supplied by the editor or translator.",
         "expanded":"Text expanded by editor or translator although elided in original.",
@@ -103,7 +104,8 @@ sc.classes = {
         "supplied": "Text hypothetically reconstructed by the editor or translator.",
         "suppliedmetre": "Metre reconstructed by the editor.",
         "surplus": "Surplus text.",
-        "term": "Defined term",
+        "sutta":"Passage also found in the Sutta Pitaka.",
+        "term": "Defined term.",
         "unclear": "Unclear reading."
     }
 }
