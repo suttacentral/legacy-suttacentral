@@ -13,23 +13,13 @@ es = elasticsearch.Elasticsearch()
 from elasticsearch.exceptions import ConnectionError
 
 def is_available():
-    # Maybe I'm just dumb, but when I use 'es.ping()' while it
-    # does return True/False, it also generates ~250 lines of exception
-    # spam in stderr from Urllib3HttpConnection. This ain't useful
-    # so I'm using a baser connection
-    from http.client import HTTPConnection
-    conn = HTTPConnection('localhost:9200')
-    try:
-        result = conn.request('GET', '/')
-        return True
-    except ConnectionRefusedError:
-        return False
-try:
-    # Make elasticsearch STFU
-    elasticsearch.client.logger.setLevel('WARN')
-except AttributeError:
-    # I don't think this is part of public API so catch all errors
-    pass
+    return es.ping()
+
+
+# Make elasticsearch STFU
+logging.getLogger('elasticsearch').setLevel('ERROR')
+logging.getLogger('elasticsearch.trace').setLevel('ERROR')
+
 
 indexes = []
 
