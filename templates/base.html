@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{page_lang}}">
+<html lang="{{page_lang}}"  prefix="og: http://ogp.me/ns#">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="{{ ASSET_URL }}">
   {% endassets -%}
 {%- endif -%}
+<meta property="og:site_name" content="Sutta Central">
+<meta property="og:type" content="website">
+<meta property="og:img" content="http://suttacentral.net/img/SC-icon-small.png">
 {% block head %}{% endblock %}
 </head>
 
