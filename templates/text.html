@@ -1,4 +1,10 @@
 {% extends "base.html" -%}
+{% block head %}
+{% set noun = "text" if imm.languages[lang_code].isroot else "translation" %}
+<meta property="og:title" content="{{ lang_code|uid_to_name }} {{noun}} of {{uid|uid_to_acro}}, “{{textdata.name if textdata else '?'}}”">
+<meta property="og:description" content="{{ snippet }}">
+{% endblock %}
+
 {%- block content -%}
 
 {% set prev_data = imm.tim.get(textdata.prev_uid, lang_code) if textdata.prev_uid else none %}
