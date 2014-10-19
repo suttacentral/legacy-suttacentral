@@ -19,7 +19,13 @@ If we have suttas with both, we'll need to update this template. #}
 {%- elif parallels|length == 2 -%}
 "{{sutta.acronym}} has 1 known parallel: {{parallels[1].sutta.acro}}"
 {%- else -%}
-"{{sutta.acronym}} has {{parallels|length - 1}} known parallels: {{ parallels[1:]|map(attribute='sutta')|map(attribute='acronym')|join(', ') }}"
+"{{sutta.acronym}} has {{parallels|length - 1}} known parallels:{{" "}}
+{%- for parallel in parallels -%}
+{% if parallel.sutta %}
+{%- if not loop.first %}, {% endif -%}
+{{ parallel.sutta.acronym }}
+{%- endif -%}
+{% endfor %}"
 {%- endif -%}
 >
 {% endblock %}
