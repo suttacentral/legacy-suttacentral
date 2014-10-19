@@ -104,7 +104,7 @@ sc.classes = {
         "supplied": "Text hypothetically reconstructed by the editor or translator.",
         "suppliedmetre": "Metre reconstructed by the editor.",
         "surplus": "Surplus text.",
-        "sutta":"Passage also found in the Sutta Pitaka.",
+        "sutta-parallel":"Passage also found in the Sutta Pitaka.",
         "term": "Defined term.",
         "unclear": "Unclear reading."
     }
