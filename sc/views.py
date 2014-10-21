@@ -158,7 +158,7 @@ class ViewBase:
             'offline': cherrypy.request.offline,
             'page_lang': 'en',
             'scm': scm,
-            'noheadfoot': 'noheadfoot' in cherrypy.request.params,
+            'embed': 'embed' in cherrypy.request.params,
             'search_query': '',
             'imm': sc.scimm.imm(),
         })
