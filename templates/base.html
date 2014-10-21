@@ -28,9 +28,10 @@
 <meta property="og:img" content="http://suttacentral.net/img/SC-icon-small.png">
 {% block head %}{% endblock %}
 </head>
+{% set body_classes = (['offline'] if offline else []) + (['noheadfoot'] if noheadfoot else []) %}
 
-<body{{ ' class="offline"' if offline else '' }}>
-
+<body{% if body_classes %} class="{{ body_classes|join( ) }}"{% endif %}>
+{% if not noheadfoot %}
 <div id="page-wrap">
 
 {% include 'development_bar.html' %}
@@ -40,7 +41,9 @@
 {% include 'outdated_browser.html' %}
 
 <main>
+{% endif %} {# noheadfoot #}
 {% block content %}{% endblock %}
+{% if not noheadfoot %}
 </main>
 
 {% include 'panel.html' %}
@@ -74,7 +77,7 @@
 </script>
 {% endif %}
 {{ newrelic_browser_timing.footer }}
-
+{% endif %} {# noheadfoot #}
 </body>
 </html>
 <!-- Revision: {{ scm.last_commit_revision }}
