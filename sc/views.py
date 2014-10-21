@@ -297,7 +297,11 @@ class TextView(ViewBase):
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
-        context.snippet = self.get_snippet(context.text)
+        try:
+            context.snippet = self.get_snippet(context.text)
+        except Exception as e:
+            logger.error('Failed to generated snippet for {} ({})'.format(self.uid, str(e)))
+            context.snippet = ''
         # Eliminate newlines from Full-width-glyph languages like Chinese
         # because they convert into spaces when rendered.
         # TODO: This check should use 'language' table
@@ -317,7 +321,7 @@ class TextView(ViewBase):
             #context.text_refs.extend(context.division.translations)
 
     def get_snippet(self, html, target_len=500):
-        root = sc.tools.html.fromstring(html[:target_len + 500])
+        root = sc.tools.html.fromstring(html[:target_len + 2000])
         for e in root.cssselect('.hgroup'):
             e.drop_tree()
         article = root.cssselect('article')[0]
