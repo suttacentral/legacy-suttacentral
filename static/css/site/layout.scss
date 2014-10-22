@@ -127,3 +127,13 @@ main {
         margin-bottom: 2em;
     }
 }
+
+.embed {
+    #onecol > table {
+        margin: 0;
+    }
+    tfoot {
+        display: none;
+    }
+    
+}
