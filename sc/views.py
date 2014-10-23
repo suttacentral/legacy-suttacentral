@@ -367,6 +367,67 @@ class TextView(ViewBase):
             pre, meta, post = m[1:]
             return ''.join([deline(pre), meta, deline(post)])
         return deline(text)
+
+class TextSelectionView(TextView):
+    template_name = 'paragraph'
+    
+    def __init__(self, uid, lang_code, targets):
+        self.uid = uid
+        self.lang_code = lang_code
+        self.targets = targets
+
+    def setup_context(self, context):
+        context.selection = self.extract_selection()
+    
+    def extract_selection(self):
+        from sc.tools import html
+        targets = self.targets
+        root = html.fromstring(self.get_html())
+        id_map = root.id_map()
+        elements = root.cssselect('article > *:not(div), article > div.hgroup, article > div:not(.hgroup) > *');
+        results = []
+        for target in targets.split('+'):
+            
+            m = regex.match(r'(\d+)(?:\.(\d+)-(\d+))?', target)
+            
+            target_id = int(m[1])
+            char_start = None if m[2] is None else int(m[2])
+            char_end = None if m[3] is None else int(m[3])
+            
+            target_element = elements[target_id]
+            if char_start is not None:
+                pos = 0
+                char_rex = regex.compile(r'\S')
+                def inner_callback(m):
+                    nonlocal pos, char_start, char_end
+                    result = m[0]
+                    pos += 1
+                    if pos == char_end:
+                        result = result + '__HLEND__'
+                    if pos == char_start:
+                        result = '__HLSTART__' + result
+                    return result
+                    
+                def callback(text):
+                    nonlocal pos
+                    if pos > char_end:
+                        return text
+                    return char_rex.sub(inner_callback, text)
+
+                target_element.each_text(callback)
+
+            results.append(target_element)
+        result_strings = []
+        last = None
+        for i, element in enumerate(results):
+            if i > 0:
+                if results[i - 1] != last:
+                    result_strings.append('<p>…</p>')
+            result_strings.append(str(element))
+            last = element
+
+        return '\n'.join(result_strings).replace('__HLSTART__', '<span class="marked">').replace('__HLEND__', '</span>')
+        
     
 class SuttaView(TextView):
     """The view for showing the sutta text in original sutta langauge."""

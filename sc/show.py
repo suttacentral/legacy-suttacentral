@@ -79,7 +79,8 @@ def default(*args, **kwargs):
         if sutta:
             return ParallelView(sutta).render()
         
-    elif len(args) == 2:
+    elif len(args) >= 2:
+        
         if args[1] == 'citation.txt':
             # Citation
             cherrypy.response.headers['Content-Type'] = "text/plain"
@@ -97,14 +98,21 @@ def default(*args, **kwargs):
         if not imm.text_exists(uid, lang_code):        
             if imm.text_exists(lang_code, uid):
                 # This is an old-style url, redirect to new-style url.
-                # (Don't be transparent, we want to keep things canonical)
-                # (Also, use 301. This is a permament change)
-                raise cherrypy.HTTPRedirect('/{}/{}'.format(uid, lang_code), 301)
+                if len(args) == 2:
+                    new_url = '/{}/{}'.format(uid, lang_code)
+                else:
+                    new_url =  '/{}/{}/{}'.format(uid, lang_code, args[2])
+                # Don't be transparent, we want to keep things canonical
+                # and also, use 301. This is a permament change.
+                raise cherrypy.HTTPRedirect(new_url, 301)
             else:
                 raise cherrypy.NotFound()
         
         sutta = imm.suttas.get(uid)
         lang = imm.languages[lang_code]
+        if len(args) == 3 and 'embed' in cherrypy.request.params:
+            return TextSelectionView(uid, lang_code, args[2]).render()
+            
         if sutta:
             return SuttaView(sutta, lang).render()
         else:
