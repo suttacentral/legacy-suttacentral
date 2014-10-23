@@ -158,6 +158,7 @@ class ViewBase:
             'offline': cherrypy.request.offline,
             'page_lang': 'en',
             'scm': scm,
+            'embed': 'embed' in cherrypy.request.params,
             'search_query': '',
             'imm': sc.scimm.imm(),
         })
@@ -297,6 +298,11 @@ class TextView(ViewBase):
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
+        try:
+            context.snippet = self.get_snippet(context.text)
+        except Exception as e:
+            logger.error('Failed to generated snippet for {} ({})'.format(self.uid, str(e)))
+            context.snippet = ''
         # Eliminate newlines from Full-width-glyph languages like Chinese
         # because they convert into spaces when rendered.
         # TODO: This check should use 'language' table
@@ -315,7 +321,26 @@ class TextView(ViewBase):
                 context.text_refs.append(context.division.text_ref)
             #context.text_refs.extend(context.division.translations)
 
-        
+    def get_snippet(self, html, target_len=500):
+        root = sc.tools.html.fromstring(html[:target_len + 2000])
+        for e in root.cssselect('.hgroup'):
+            e.drop_tree()
+        article = root.cssselect('article')[0]
+        parts = []
+        total_len = 0
+        for e in article:
+            if e.tag not in {'p', 'blockquote'}:
+                continue
+            text = e.text_content()
+            parts.append(text)
+            total_len += len(text)
+            if total_len > target_len:
+                break
+
+        text = '  \\x0a'.join(parts)
+        if len(text) > target_len:
+            text = text[:target_len] + ' …'
+        return text
         
     @property
     def path(self):
@@ -331,45 +356,6 @@ class TextView(ViewBase):
                 return f.read()
         else:
             raise cherrypy.NotFound()
-
-    def text_json(self):
-        # Put some useful information for javascript into a script field
-        # The absolute path relative to the domain
-        imm = scimm.imm()
-        sutta = imm.suttas.get(self.uid)
-        if sutta:
-            subdivision = sutta.subdivision
-            division = subdivision.division
-            root_lang = sutta.lang.uid
-        else:
-            division = imm.divisions.get(self.uid)
-            subdivision = None
-            sutta = None
-            
-
-        if not subdivision:
-            subdiv_uid = self.uid
-            while subdiv_uid and not subdivision:
-                if subdiv_uid in imm.subdivisions:
-                    subdivision = imm.subdivisions[subdiv_uid]
-                    division = subdivision.division
-                    break
-                subdiv_uid = subdiv_uid[:-1]
-            else:
-                subdivision = None
-
-        root_lang = division.collection.lang.uid
-        
-        out = {'lang_code':self.lang_code,
-        'uid': self.uid,
-        'sutta_uid': sutta.uid if sutta else None,
-        'subdivision_uid': subdivision.uid if subdivision else None,
-        'division_uid': division.uid if division else None,
-        'all_lang_codes': list(imm.tim.get(uid=self.uid)),
-        'root_lang_code': root_lang,
-        }
-
-        return json.dumps(out, ensure_ascii=False, sort_keys=True)
     
     @staticmethod
     def massage_cjk(text):
