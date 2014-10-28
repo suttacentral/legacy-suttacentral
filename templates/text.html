@@ -43,6 +43,7 @@
                 <a class="button" id="zh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
             </div>
             {% endif %}
+
             <div class="x1 button-row">
                 <a class="button" id="text-info" title="View reference numbers, variant readings, etc.">Textual Information</a>
             </div>
@@ -51,6 +52,12 @@
                 <a class="button" id="t-line-by-line" title="View line-by-line as in CBETA">View line-by-line</a>
             </div>
             {% endif %}
+            <div class="x1 button-row">
+                <span class="button" title="Sutta Central can generate a special hyperlink that highlights selected text">
+                <button name="text-selection-button" title="Copy link to clipboard">Link to selected text</button>
+                <input type="text" name="text-selection-url" readonly>
+                </span>
+            </div>
             <div id="message-box"></div>
         </div>
       </div>

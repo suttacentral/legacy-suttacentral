@@ -1,4 +1,4 @@
-//Shims
+//  # Shims
 if (String.prototype.trimLeft === undefined)
 {
     String.prototype.trimLeft = function() {
@@ -269,16 +269,6 @@ sc.formatter = {
             tidy.init();
         if ($('#decruft').length)
             decruft.init();
-    },
-    acro_expander: function(){
-        /*$('#vinaya_parallels td')
-            .filter(':nth-of-type(1)')
-            .each(function(){
-                var acro = $(this).text().replace('&nbsp;', ' '),
-                    name = sc.util.acro_to_name(acro);
-                
-                $(this).attr('title', name)
-            });*/
     },
     alignToParentMenu: function(ul){
         var parent = ul.parent()

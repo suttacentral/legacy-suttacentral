@@ -46,5 +46,5 @@ $('#controls-tab').on('click', '.button', function(e){
     if ($(this).is('select')) {
         value += '-' + this.value;
     }
-    self.trackEvent(value)
+    sc.trackEvent(value)
 });
