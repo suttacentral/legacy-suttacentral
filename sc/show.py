@@ -112,11 +112,11 @@ def default(*args, **kwargs):
         lang = imm.languages[lang_code]
         if len(args) == 3 and 'embed' in cherrypy.request.params:
             return TextSelectionView(uid, lang_code, args[2]).render()
-            
+        canonical = False if len(args) == 3 else True
         if sutta:
-            return SuttaView(sutta, lang).render()
+            return SuttaView(sutta, lang, canonical).render()
         else:
-            return TextView(uid, lang_code).render()
+            return TextView(uid, lang_code, canonical).render()
 
     raise cherrypy.NotFound()
 

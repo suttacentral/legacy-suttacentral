@@ -281,9 +281,10 @@ class TextView(ViewBase):
     # Note: Links come after section
     links_regex = regex.compile(r'class="(?:next|previous)"')
     
-    def __init__(self, uid, lang_code):
+    def __init__(self, uid, lang_code, canonical=True):
         self.uid = uid
         self.lang_code = lang_code
+        self.canonical = canonical
 
     def setup_context(self, context):
         from sc.tools import html
@@ -294,6 +295,7 @@ class TextView(ViewBase):
         context.uid = self.uid
         context.sutta = imm.suttas.get(self.uid)
         context.division = imm.divisions.get(self.uid)
+        context.canonical = self.canonical
         
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
@@ -337,7 +339,7 @@ class TextView(ViewBase):
             if total_len > target_len:
                 break
 
-        text = '  \\x0a'.join(parts)
+        text = '   '.join(parts)
         if len(text) > target_len:
             text = text[:target_len] + ' …'
         return text
@@ -432,8 +434,8 @@ class TextSelectionView(TextView):
 class SuttaView(TextView):
     """The view for showing the sutta text in original sutta langauge."""
 
-    def __init__(self, sutta, lang):
-        super().__init__(sutta.uid, lang.uid)
+    def __init__(self, sutta, lang, canonical):
+        super().__init__(sutta.uid, lang.uid, canonical)
         self.sutta = sutta
         self.lang = lang
 
