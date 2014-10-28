@@ -246,7 +246,10 @@ sc.text_selection = (function() {
                         all_char_count += 1;
                     });
                 } else {
-                    valid_char_count += text.match(valid_char_rex).length;
+                    var m = text.match(valid_char_rex);
+                    if (m) {
+                        valid_char_count += m.length;
+                    } // else += 0
                 }
             });
             result.push({index: index,
