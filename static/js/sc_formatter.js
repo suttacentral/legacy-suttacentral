@@ -67,8 +67,10 @@ sc.formatter = {
         }
         return this.ruler;
     },
-    measure: function(toMeasure, callback, ruler) {
-        var ruler = ruler || this.getRuler(),
+    measureQueue: [],
+    queueMeasure: function(toMeasure, callback, ruler) {
+        var self=this,
+            ruler = ruler || this.getRuler(),
             args = [];
         _.each(toMeasure, function(content){
             var e = $('<span style="position: absolute; visibility: hidden">');
@@ -76,13 +78,27 @@ sc.formatter = {
             ruler.prepend(e);
             args.push([content, e]);
         });
-        _.defer(function(){
-            var results = {};
+        self.measureQueue.push([args, callback]);
+    },
+    doMeasure: function() {
+        var deferred = [];
+        this.measureQueue.forEach(function(t){
+            var args = t[0],
+                callback = t[1],
+                measurements = [];
             args.forEach(function(arg){
-                results[arg[0]] = arg[1].innerWidth();
+                measurements[arg[0]] = arg[1].innerWidth();
             });
-            _.defer(callback, results);
+            deferred.push([callback, measurements])
         });
+        deferred.forEach(function(t) {
+            var callback = t[0],
+                measurements = t[1];
+            callback(measurements);
+        });
+        this.measureQueue = [];
+        this.measureNum = null;
+        this.quoteHangerEnd = new Date().getTime();
     },
     quoteHanger: function() {
         var self = this;
@@ -94,13 +110,13 @@ sc.formatter = {
             if (m) {
                 var snip = m[2],
                     quoted = m[1] + m[2];
-                self.measure([quoted, snip], function(result){
+                self.queueMeasure([quoted, snip], function(result){
                     var diff = result[quoted] - result[snip];
                     p.css('text-indent', -diff + 'px');
-                    self.quoteHangerEnd = new Date().getTime();
                 }, p);
             }
         });
+        self.doMeasure();
     },
     markOfTheBeast: 0,
     deathToTheBeast: function(event){
