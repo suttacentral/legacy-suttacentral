@@ -109,6 +109,9 @@ sc.classes = {
         "unclear": "Unclear reading."
     }
 }
+sc.classes.marginSelector = _.map(_.keys(sc.classes.margin),
+                                  function(e){return '.' + e})
+                            .join(',')
 
 /*
  * Prefix To Volume mapping used for adding volume information

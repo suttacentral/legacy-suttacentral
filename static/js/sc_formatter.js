@@ -60,42 +60,46 @@ sc.formatter = {
         }
         return $element;
     },
-    quoteHanger: function(){
+    getRuler: function() {
+        if (!this.ruler) {
+            this.ruler = $('<p style="position:fixed; margin-left: -1000px">')
+                         .appendTo('#text article')
+        }
+        return this.ruler;
+    },
+    measure: function(toMeasure, callback, ruler) {
+        var ruler = ruler || this.getRuler(),
+            args = [];
+        _.each(toMeasure, function(content){
+            var e = $('<span style="position: absolute; visibility: hidden">');
+            e.append(content);
+            ruler.prepend(e);
+            args.push([content, e]);
+        });
+        _.defer(function(){
+            var results = {};
+            args.forEach(function(arg){
+                results[arg[0]] = arg[1].innerWidth();
+            });
+            _.defer(callback, results);
+        });
+    },
+    quoteHanger: function() {
+        var self = this;
+        this.quoteHangerStart = new Date().getTime();
         $('p').each(function(){
-            children = this.childNodes
-            node = this.childNodes[0];
-            //Find the start of the actual text.
-            if (!node) return;
-            while (node.nodeType == 1) {
-                if (node.nodeName == 'A') {
-                    node = node.nextSibling
-                }
-                else {
-                    node = nextInOrder(node);
-                }
-                if (!node) return;
+            var p = $(this),
+                text = p.text(),
+                m = text.match(/^[  \n0-9.-]*([“‘]+)(.)/);
+            if (m) {
+                var snip = m[2],
+                    quoted = m[1] + m[2];
+                self.measure([quoted, snip], function(result){
+                    var diff = result[quoted] - result[snip];
+                    p.css('text-indent', -diff + 'px');
+                    self.quoteHangerEnd = new Date().getTime();
+                }, p);
             }
-            if (node.nodeType == 3) {
-                text = node.nodeValue.trimLeft()
-                var firstChar = text[0];
-                if (firstChar == '“' || firstChar == '‘')
-                {
-                    var secondChar = text[1];
-                    if (secondChar == '“' || secondChar == '‘')
-                    {
-                        node.nodeValue = text.slice(2);
-                        $(this).prepend('<span class="dsquo">' + firstChar + secondChar + '</span>');
-                    } else {
-                        node.nodeValue = text.slice(1);
-                        if (firstChar == '‘') {
-                            $(this).prepend('<span class="squo">' + firstChar + '</span>');
-                        } else {
-                            $(this).prepend('<span class="dquo">' + firstChar + '</span>');
-                        }
-                    }
-                }
-            }
-
         });
     },
     markOfTheBeast: 0,
