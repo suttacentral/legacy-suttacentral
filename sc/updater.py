@@ -57,5 +57,6 @@ def run_updaters():
         time.sleep(sc.config.db_refresh_interval)
         i += 1
 
-updater = threading.Thread(target=run_updaters, daemon=True)
-updater.start()
+update_thread = threading.Thread(target=run_updaters, daemon=True)
+def start():
+    update_thread.start()
