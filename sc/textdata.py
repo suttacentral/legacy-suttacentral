@@ -345,6 +345,31 @@ class SqliteBackedTIM(TextInfoModel):
     for building a division view. (April 2014)
     
     """
+
+    def get_schema():
+        """ The commands required to configure the sqlite databse
+
+        The schema can be used to determine if a database rebuild
+        is required.
+
+        """
+        return {
+            'init': (
+                'CREATE TABLE data(lang, uid, path, bookmark, name,\
+                                   author, volpage, prev_uid, next_uid)',
+                'CREATE TABLE mtimes(path UNIQUE, mtime)',
+                'PRAGMA journal_mode = OFF'
+            ),
+            'finalize': (
+                'CREATE INDEX lang_x ON data(lang)',
+                'CREATE INDEX uid_x ON data(uid)',
+                'CREATE INDEX path_x ON data(path)',
+                'CREATE INDEX mtimes_path_x on mtimes(path)',
+                'PRAGMA journal_mode = wal'
+            ),
+            'buster': 1.0
+        }
+    schema = get_schema()
     def __init__(self, filename=None):
         if filename is None:
             filename = self.default_filename
@@ -364,24 +389,20 @@ class SqliteBackedTIM(TextInfoModel):
 
     def _init_table(self):
         try:
-            pathlib.Path(self._filename).unlink()
+            pathlib.Path(self.filename).unlink()
         except FileNotFoundError:
             pass
         self.reconnect()
-        self._con.execute('CREATE TABLE data(lang, uid, path, bookmark, name, author, volpage, prev_uid, next_uid)')
-        self._con.execute('CREATE TABLE mtimes(path UNIQUE, mtime)')
-        # Presently we build the whole lot in one go and disabling
-        # journaling dramatically improves bulk insert performance.
-        self._con.execute('PRAGMA journal_mode = OFF')
-
+        for string in self.schema['init']:
+            self._con.execute(string)
+        
     def _finally_table(self):
-        self._con.execute('CREATE INDEX lang_x ON data(lang)')
-        self._con.execute('CREATE INDEX uid_x ON data(uid)')
-        self._con.execute('CREATE INDEX path_x ON data(path)')
-        self._con.execute('CREATE INDEX mtimes_path_x on mtimes(path)')
-        self._con.execute('PRAGMA journal_mode = wal')
+        for string in self.schema['finalize']:
+            self._con.execute(string)
         
     def build(self, force=False):
+        if not self._build_lock.acquire(blocking=False):
+            return
         happy = self.is_happy()
         if happy:
             self._mtimes = {path:mtime for path, mtime in self._con.execute('SELECT * FROM mtimes')}
@@ -396,6 +417,7 @@ class SqliteBackedTIM(TextInfoModel):
             
         self._con.commit()
         del self._mtimes
+        self._build_lock.release()
 
     def _check_for_deleted(self):
         sc_dir = str(sc.text_dir) + '/'
@@ -479,15 +501,16 @@ class SqliteBackedTIM(TextInfoModel):
             (lang_uid, uid, str(textinfo.path), textinfo.bookmark,
             textinfo.name, textinfo.author, textinfo.volpage, textinfo.prev_uid, textinfo.next_uid))
 
+    filename_fmt = 'text-info-model-{version}.db'
+
     @property
     def default_filename(self):
-        from sc.scm import scm
-        branch = scm.branch
-        if branch == 'master':
-            branch = ''
-        else:
-            branch = '.' + branch
-        return str(sc.db_dir / 'text-info-model{}.db'.format(branch))
+        import json
+        import hashlib
+        schema_str = json.dumps(self.schema, sort_keys=1) 
+        ver = hashlib.md5(schema_str.encode('ascii')).hexdigest()[0:8]
+        
+        return str(sc.db_dir / self.filename_fmt.format(version=ver))
     
     @classmethod
     def build_once(cls, force_build):
