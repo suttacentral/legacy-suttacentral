@@ -7,7 +7,7 @@ import functools
 import threading
 from itertools import chain
 
-import sc
+import sc, sc.util
 from sc.tools import html
 import logging
 logger = logging.getLogger(__name__)
@@ -172,6 +172,8 @@ class TextInfoModel:
                 volpage = self._get_volpage(root, lang_uid, uid)
                 embedded = self._get_embedded_uids(root, lang_uid, uid)
 
+                mtime = htmlfile.stat().st_mtime
+
                 textinfo = TextInfo(uid=uid, lang=lang_uid, path=path, name=name, author=author, volpage=volpage, prev_uid=prev_uid, next_uid=next_uid)
                 self.add_text_info(lang_uid, uid, textinfo)
 
@@ -228,7 +230,7 @@ class TextInfoModel:
         try:
             hgroup = root.select_one('.hgroup')
             h1 = hgroup.select_one('h1')
-            return h1.text_content()
+            return regex.sub(r'^\P{alpha}*', '', h1.text_content())
         except Exception as e:
             logger.warn('Could not determine name for {}/{}'.format(lang_uid, uid))
             return ''
@@ -343,8 +345,10 @@ class SqliteBackedTIM(TextInfoModel):
     for building a division view. (April 2014)
     
     """
-    def __init__(self, filename):
-        self._filename = filename
+    def __init__(self, filename=None):
+        if filename is None:
+            filename = self.default_filename
+        self.filename = filename
         self._local = threading.local()
 
     @property
@@ -356,7 +360,7 @@ class SqliteBackedTIM(TextInfoModel):
             return self._local.con
 
     def reconnect(self):
-        self._local.con = sqlite3.connect(self._filename)
+        self._local.con = sqlite3.connect(self.filename)
 
     def _init_table(self):
         try:
@@ -475,7 +479,15 @@ class SqliteBackedTIM(TextInfoModel):
             (lang_uid, uid, str(textinfo.path), textinfo.bookmark,
             textinfo.name, textinfo.author, textinfo.volpage, textinfo.prev_uid, textinfo.next_uid))
 
-    filename = str(sc.db_dir / 'text_info_model.db')
+    @property
+    def default_filename(self):
+        from sc.scm import scm
+        branch = scm.branch
+        if branch == 'master':
+            branch = ''
+        else:
+            branch = '.' + branch
+        return str(sc.db_dir / 'text-info-model{}.db'.format(branch))
     
     @classmethod
     def build_once(cls, force_build):
@@ -483,7 +495,7 @@ class SqliteBackedTIM(TextInfoModel):
             try:
                 start=time.time()
                 logger.info('Acquiring SQLite Backed Text Info Model')
-                cls._instance = cls(cls.filename)
+                cls._instance = cls()
                 cls._instance.build(force_build)
                 cls._build_ready.set()
                 build_time = time.time()-start
@@ -492,7 +504,7 @@ class SqliteBackedTIM(TextInfoModel):
                 cls._build_lock.release()
 
     @classmethod
-    def parallel_rebuild(cls):
+    def parallel_rebuild(cls, filename=None):
         """ Rebuild the Model from stratch
 
         Leaves the existing database intact so that the server can
@@ -508,39 +520,44 @@ class SqliteBackedTIM(TextInfoModel):
         """
         
         import os
+
+        if filename is None:
+            filename = cls.default_filename
+            
         logger.info('Rebuilding SQLite Backed Text Info Model in background')
-        timfile = cls.filename + '.working'
+        timfile = filename + '.working'
         tim = cls(timfile)
         tim.build()
         logger.info('Rebuild complete')
-        os.replace(timfile, cls.filename)
+        os.replace(timfile, filename)
         return True
         
-        
-        
 
-def tim(force_build=False, Model=SqliteBackedTIM):
+Model = SqliteBackedTIM
+def tim():
     """ Returns an instance of the TIM
 
-    When this is called for the first time, it will check if the cached
-    TIM is up to date. If it is, the cached copy will be loaded and
-    returned. If it's not, it will rebuild.
-
-    The TIM can take some time to build, perhaps a couple of minutes.
-    For this reason, it's a reasonable idea to load it in a seperate
-    process before restarting the server, thus ensuring it is fresh.
-
-    i.e.
-    import sc.textdata
-    sc.textdata.tim()
+    This method only works when the updater thread has been
+    started.
     
      """
-
-    if not force_build and Model._build_ready.set():
-        return Model._instance
-    Model.build_once(force_build)
     Model._build_ready.wait()
     return Model._instance
+
+def periodic_update(i):
+    if Model._instance:
+        tim = Model._instance
+    else:
+        tim = Model()
+        if tim.is_happy():
+            Model._instance = tim
+            Model._build_ready.set()
+            if i == 0:
+                return
+    
+    tim.build()
+    Model._build_ready.set()
+    
 
 def rebuild_tim(Model=SqliteBackedTIM):
     Model.parallel_rebuild()
