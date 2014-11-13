@@ -19,15 +19,10 @@ def run_updaters():
     import sc.scm
     import sc.scimm
     import sc.textdata
-    import sc.search.dicts
-    import sc.search.texts
-    import sc.search.suttas
+
     functions = [
         ('sc.textdata.periodic_update', sc.textdata.periodic_update),
-        ('sc.scimm.periodic_update', sc.scimm.periodic_update),
-        ('sc.search.dicts.periodic_update', sc.search.dicts.periodic_update),
-        ('sc.search.suttas.periodic_update', sc.search.suttas.periodic_update),
-        ('sc.search.texts.periodic_update', sc.search.texts.periodic_update)
+        ('sc.scimm.periodic_update', sc.scimm.periodic_update)
     ]
     time.sleep(0.5)
     i = 0
