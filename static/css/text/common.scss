@@ -40,6 +40,11 @@ h1.mirror-row{line-height:1.5}
     .uddanagatha{font-style:normal !important}
 
 }
+#text:lang(th) {
+    @import url(http://fonts.googleapis.com/earlyaccess/notosansthai.css);
+body{font-family: 'Noto Sans Thai', serif;}
+}
+
 
 // Metaarea should not be visible while it is still inside the #text
 // element. Javascript automagically moves it into the sidebar.
