@@ -76,6 +76,16 @@ class Root(object):
     @cherrypy.expose
     def sht_lookup(self, query, **kwargs):
         return show.sht_lookup(query)
+
+    @cherrypy.expose
+    def validate(self, **kwargs):
+        if (sc.config.app['debug'] or
+            'localhost' in sc.config.app['base_url']):
+                return show.validate(**kwargs)
+        else:
+            return ("This is Sutta Central's text validation tool, "
+            "it may only be used in a development environment.")
+            
     
 
 class Admin(object):

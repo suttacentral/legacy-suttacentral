@@ -68,6 +68,8 @@ def get_env():
     env.debug = not config.compile_assets
     env.manifest = 'json:{}'.format(sc.webassets_manifest_path)
 
+    css_external = make_external_css_bundle()
+
     css_normalize = webassets.Bundle(
         'css/vendor/normalize-2.1.3.css'
     )
@@ -92,6 +94,7 @@ def get_env():
 
     css_free = webassets.Bundle(
         css_normalize,
+        css_external,
         css_main_free,
         css_utf8,
         filters='cssmin',
@@ -100,6 +103,7 @@ def get_env():
 
     css_nonfree = webassets.Bundle(
         css_normalize,
+        css_external,
         css_main_nonfree,
         css_utf8,
         filters='cssmin',
@@ -185,3 +189,26 @@ def get_js_datascripts_filename():
         tasks.jsdata.build(minify=True, quiet=True)
     return str(filepath)
     
+def make_external_css_bundle(_cache={}):
+    import pathlib, time, requests
+    target_folder = sc.static_dir / 'css' / 'external_imports'
+    href_file = target_folder / 'external_imports.txt'
+    urls = []
+    with href_file.open('r') as f:
+        urls = [line.strip() for line in f if not line.startswith('#')
+                                      and not line.isspace()]
+    files = []
+    for url in urls:
+        urlpath = pathlib.Path(url)
+        name = urlpath.name.split('?')[0]
+        target_file = target_folder / name
+        age = None
+        if target_file.exists():
+            age = time.time() - target_file.stat().st_mtime
+        if age is None or age > 86400 * 3:
+            text = requests.get(url).text
+            with target_file.open('w') as f:
+                f.write(text)
+        files.append(str(target_file))
+
+    return webassets.Bundle(*files)

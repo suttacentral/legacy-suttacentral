@@ -196,6 +196,26 @@ def admin_data_notify(json_payload):
         logger.info('Data update request ignored')
     raise cherrypy.HTTPRedirect('/admin', 303)
 
+def validate(run=None, filedata=None, filename=None, _cache={}, **kwargs):
+    if run is not None:
+        if True: #'run' not in _cache:
+            import sc.validate
+            cherrypy.response.timeout = 1200
+            v = sc.validate.Validator()
+            v.run()
+            _cache['run'] = v.as_json();
+        return _cache['run']
+
+    if filedata is not None:
+        with open(filename, 'w') as f:
+            f.write(filedata)
+        return {'status': 'okay'}
+    elif filename is not None:
+        with open(filename) as f:
+            return f.read()
+        
+    return InfoView('validate').render()
+
 def profile(locals_dict, globals_dict, *args, **kwargs):
     """ Generates a profile
 

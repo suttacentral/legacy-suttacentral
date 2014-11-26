@@ -1,0 +1,5 @@
+# Lines which don't start with a '#' will be treated as
+# urls to be downloaded and compiled into main.css
+http://fonts.googleapis.com/earlyaccess/notosansthai.css
+http://fonts.googleapis.com/earlyaccess/notosansmyanmar.css
+http://fonts.googleapis.com/earlyaccess/kopubbatang.css
