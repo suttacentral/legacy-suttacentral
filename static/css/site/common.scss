@@ -19,7 +19,7 @@ body {
 
     // Use kerning and ligatures if possible...
     // See http://blog.fontdeck.com/post/15777165734/opentype-1
-    @include font-feature-settings("kern" 1, "liga" 1, "dlig" 1);
+   
 
     // Fonts look absolutely apalling in Opera, it is a known issue
     // that Opera only works well with a certain set of fonts. Opera

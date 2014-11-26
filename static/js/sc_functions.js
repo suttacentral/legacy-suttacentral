@@ -254,7 +254,21 @@ function transliterate(func){
     if (!wordMap[func.name]) wordMap[func.name] = {};
     if (func == toMyanmar) {
         $('#text').attr('lang', 'my');
-    } else {
+    }
+if (!wordMap[func.name]) wordMap[func.name] = {};
+    if (func == toThai) {
+        $('#text').attr('lang', 'th');
+    }
+    if (!wordMap[func.name]) wordMap[func.name] = {};
+    if (func == toSinhala) {
+        $('#text').attr('lang', 'si');
+    }
+     if (!wordMap[func.name]) wordMap[func.name] = {};
+    if (func == toDevar) {
+        $('#text').attr('lang', 'hi');
+    }
+
+     else {
         // TODO other languages
         $('#text').attr('lang', 'pi');
     }

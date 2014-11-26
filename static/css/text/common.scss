@@ -1,6 +1,8 @@
-@import url(http://fonts.googleapis.com/earlyaccess/notosansthai.css);
-@import url(http://fonts.googleapis.com/earlyaccess/notosansmyanmar.css);
-@import url(http://fonts.googleapis.com/earlyaccess/kopubbatang.css);
+@import url(//fonts.googleapis.com/earlyaccess/notosansthai.css);
+@import url(//fonts.googleapis.com/earlyaccess/notosansmyanmar.css);
+@import url(//fonts.googleapis.com/earlyaccess/kopubbatang.css);
+@import url(//fonts.googleapis.com/earlyaccess/notosansdevanagari.css);
+@import url(//fonts.googleapis.com/earlyaccess/notosanssinhala.css);
 .sutta {
     max-width: 40em;
     margin: 0 auto;
@@ -43,23 +45,40 @@ h1.mirror-row{line-height:1.5}
     .uddanagatha{font-style:normal !important}
 
 }
+#text:lang(si) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: 'Noto Sans Sinhala', serif;
+                        letter-spacing: 0;
+        }
+}
+}
 #text:lang(th) {
      .sutta {
-        h1, h2, h3, h4, h5, h6, p,li,a {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: 'Noto Sans Thai', serif;
+                        letter-spacing: 0;
+        }
+}
+}
+#text:lang(hi) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: 'Noto Sans Devanagari', serif;
+                        letter-spacing: 0;
         }
 }
 }
 #text:lang(my) {
      .sutta {
-        h1, h2, h3, h4, h5, h6, p,li,a {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: 'Noto Sans Myanmar', serif;
         }
 }
 }
 #text:lang(ko) {
      .sutta {
-        h1, h2, h3, h4, h5, h6, p,li,a {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: 'KoPub Batang', serif;
 
         }
