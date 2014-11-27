@@ -113,6 +113,29 @@
        url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Bold.woff) format('woff'),
        url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Bold.ttf) format('truetype');
 }
+/*
+ * Noto Serif Thai (Thai) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'Noto Serif Thai';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Regular.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Regular.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Regular.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Noto Serif Thai';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.eot);
+  src: url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.ttf) format('truetype');
+}
 .sutta {
     max-width: 40em;
     margin: 0 auto;
@@ -166,7 +189,13 @@ h1.mirror-row{line-height:1.5}
 #text:lang(th) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
-                        font-family: 'Noto Sans Thai', serif;
+                        font-family: 'Noto Serif Thai', serif;
+                        letter-spacing: 0;
+                        font-style:normal !important
+        }
+        .sutta {
+        .hgroup p, {
+                        font-family: 'Noto Sans Thai', sans-serif;
                         letter-spacing: 0;
         }
 }
