@@ -10,7 +10,8 @@ sc.classes = {
     margin: {
         "as": "Page numbers in Yamada, 1972.",
         "bl": "(Not defined in GRETIL source.)",
-        "bps": "",
+        "bps": "Buddhist Publication Society",
+        "bjt": "Buddha Jayanthi Tipitaka",
         "eno89": "Paragraph numbers in Enomoto, 1989.",
         "fuk03": "Page numbers in Fukita, 2003",
         "fol": "Folio number in the manuscript.",
