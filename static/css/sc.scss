@@ -303,7 +303,7 @@ Text hypothetically reconstructed by the editor or translator.
 Text hypothetically reconstructed by the editor or translator.
 */
 
- p .add{
+ p .add, p.add{
                                 border:1px solid rgb(215, 215, 215);
         display:inline;
         padding: 0 0.3em;
@@ -313,7 +313,7 @@ Text hypothetically reconstructed by the editor or translator.
     background:#fefefe;
     box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);
 }
-p .add .author {
+p .add .author, p.add .author {
         @include sans-serif-small-caps;
     }
 
@@ -451,7 +451,7 @@ Unclear reading.
 }
 
 /*note in the text recording who copied the text*/
-hr      {width:33%;color:#767676;margin:0 auto 2em}
+hr      {width:33%;color:#767676;margin:2em auto}
 .rule   {font-weight:bold}
 /*text in vibhanga, etc., of the rule itself.*/
 
