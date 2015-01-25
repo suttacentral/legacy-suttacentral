@@ -5,12 +5,16 @@ separate file for now.... */
 
 /*a.bl:before {content:"bl "}*/
 a.ba:before {content:"BA "}
+a.bm:before {content:"BM "}
+a.bn:before {content:"BN "}
 a.bps:before {content:"BPS "}
 a.bjt:before {content:"BJT "}
 a.eno89:before {content:"Eno "}
+a.es:before {content:"ES "}
 a.fuk03:before {content:"Fuk "}
 a.fol:before {content:"Fol "}
 a.gatha-number:before {content:"Verse "}
+a.hh:before {content:"HH "}
 /*a.gatn:before {content:" "}*/
 a.gbm:before {content:"GBM "}
 a.gno78:before {content:"Gno "}
@@ -18,11 +22,16 @@ a.har04:before {content:"Har "}
 a.hoe16:before {content:"Hoe "}
 a.hos89a:before, a.hos89b:before, a.hos91:before {content:"Hos "}
 a.hs:before {content:"hs "}
+a.jd:before {content:"JD "}
 a.kel:before {content:"Kel "}
+a.ks:before {content:"KS "}
 a.mat85:before, a.mat88:before {content:"Mat "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
+a.nm:before {content:"NM "}
+a.np:before {content:"NP "}
 a.of:before {content:"OF "}
+a.pl:before {content:"PL "}
 a.pts:before {content:"PTS "}
 a.pts1:before {content:"PTS (1st ed.) "}
 a.pts2:before {content:"PTS (2nd ed.) "}
@@ -46,8 +55,10 @@ a.vai58:before, a.vai59:before, a.vai61:before {content:"Vai "}
 a.verse-num-pts:before {content:"PTS verse "}
 a.vn:before {content:"Vn "}
 a.wal48:before, a.wal50:before, a.wal52:before, a.wal57c:before, a.wal58:before, a.wal59a:before, a.wal60:before, a.wal61:before, a.wal68a:before, a.wal70a:before, a.wal70b:before, a.wal76:before, a.wal78:before, a.wal80c:before {content:"Wal "}
+a.wg:before {content:"WG "}
 a.wp:before {content:"WP "}
 a.yam72:before {content:"Yam "}
+
 
 
 /*Rare character indicated in Chinese text of CBETA. These are coded thus:
@@ -92,19 +103,37 @@ CSS Class	HTML Title
 
 .verse-num		"Verse number."
 
+.bm     	"Paragraph numbers in Bhikkhu Mettiko."
+
+.bn     	"Paragraph numbers in Bhikkhu Ñāṇadassana."
 
 .eno89		"Paragraph numbers in Enomoto, 1989."
-.uv			"Chapter and verse numbers for the Udānavarga."
 
-.dp			"Verse numbers for Dhammapada."
+.es    		"Paragraph numbers in Ekkehard Saß."
+
+.uv		"Chapter and verse numbers for the Udānavarga."
+
+.dp		"Verse numbers for Dhammapada."
 
 .hoe16		"Verse numbers in Hoernle, 1916."
+
+.hh     	"Paragraph numbers in Hellmuth Hecker."
+
+.jd     	"Paragraph numbers in Dr. Julius Dutoit."
+
+.ks     	"Paragraph numbers in Karl Seidenstücker."
 
 .mat85		"Paragraph numbers in Matsumura, 1985."
 
 .mat88		"Paragraph numbers in Matsumura, 1988."
 
 .mit57		"Paragraph numbers in Mittal, 1957."
+
+.nm     	"Paragraph numbers in Nyānatiloka Mahāthera."
+
+.np     	"Paragraph numbers in Nyānaponika Mahāthera."
+
+.pl     	"Paragraph numbers in Peter van Loosbroek."
 
 .san89		"Paragraph numbers in Sander, 1987."
 
@@ -143,6 +172,8 @@ CSS Class	HTML Title
 .wal78		"Paragraph numbers in Waldschmidt, 1978."
 
 .wal80c		"Paragraph numbers in Waldschmidt, 1980c, “On a Sanskrit version of the Verahaccāni Sutta.”"
+
+.wg     	"Paragraph numbers in Wilhelm Geiger."
 
 .mat88		"Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988."
 
