@@ -231,6 +231,20 @@ if (m = navigator.appVersion.match(/MSIE ([0-9]+)/))
 //The code below here is quite disorganized and messy
 //Rewriting it is on the to-do.
 
+// These are respectively, the id's of the buttons which peform transliteration,
+// and the name of the function responsible for transliterating raw text
+var transFuncs = {
+    // id       function   label, title (optional)
+    'toRoman':[toRoman, 'kā'],
+    'toSinhala':[toSinhala, 'කා'],
+    'toThai':[toThai, 'กา'],
+    'toMyanmar':[toMyanmar, 'ကာ'],
+    'toDevar':[toDevar,'का'],
+    'toSyllables':[toSyllables, 'k-ā', "Breaks words into syllables and distinguishes between short and long syllables."]
+};
+
+
+
 var syllSpacer = '‧'; //Seperates syllables when that mode is activated. (\u2027)
 
 sc.init = function(reset)
