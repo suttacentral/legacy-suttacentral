@@ -32,7 +32,7 @@
 {% set body_classes = (['offline'] if offline else []) + (['embed'] if embed else []) %}
 
 <body{% if body_classes %} class="{{ body_classes|join( ) }}"{% endif %}>
-{% if not embed %}
+
 <div id="page-wrap">
 
 {% include 'development_bar.html' %}
@@ -46,7 +46,6 @@
 <meta name="title" content="{{title}}">
 {% endif %}
 {% block content %}{% endblock %}
-{% if not embed %}
 </main>
 {% if not ajax %}
 {% include 'panel.html' %}
@@ -78,9 +77,9 @@
   ga('create', 'UA-39277629-1', 'suttacentral.net');
   ga('send', 'pageview');
 </script>
-{% endif %}
 {{ newrelic_browser_timing.footer }}
-{% endif %} {# embed #}
+{% endif %} {# not offline #}
+
 </body>
 </html>
 <!-- Revision: {{ scm.last_commit_revision }}
