@@ -1,10 +1,37 @@
 {% extends "base.html" -%}
 {% import 'macros.html' as macros with context %}
-{%- block content -%}
-<div id="onecol">
+
 {# There are two main forms of parallels, normal (uid-pair) parallels, and grouped
 parallels, at the moment only one or the other exists.
 If we have suttas with both, we'll need to update this template. #}
+
+{% if sutta.parallel_group %}
+{% set parallels = sutta.parallel_group.parallels()|list %}
+{% else %}
+{% set parallels = [origin] + sutta.parallels|list %}
+{% endif %}
+
+{%- block head -%}
+<meta property="og:title" content="Details and parallels for {{sutta.acronym}}, {{sutta.name}}">
+<meta property="og:description" content=
+{%- if parallels|length == 1 -%}
+"{{sutta.acronym}} has no known parallels."
+{%- elif parallels|length == 2 -%}
+"{{sutta.acronym}} has 1 known parallel: {{parallels[1].sutta.acro}}"
+{%- else -%}
+"{{sutta.acronym}} has {{parallels|length - 1}} known parallels:{{" "}}
+{%- for parallel in parallels -%}
+{% if parallel.sutta %}
+{%- if not loop.first %}, {% endif -%}
+{{ parallel.sutta.acronym }}
+{%- endif -%}
+{% endfor %}"
+{%- endif -%}
+>
+{% endblock %}
+
+{%- block content -%}
+<div id="onecol">
 
 {% if sutta.parallel_group %}
 <table id="vinaya_parallels">
@@ -20,10 +47,8 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.uid|uid_to_name}}</a> {{sutt
 </thead>
 <tbody>
 
-{#% set parallels = [origin] + sutta.parallel_group.parallels(sutta)|list %#}
 {% set groupees = sutta.parallel_group.groupees() %}
 {% set groupees_seen = {} %}
-{% set parallels = sutta.parallel_group.parallels()|list %}
 {% for parallel in parallels -%}
 {% if parallel.negated %}
 <tr class="negated-parallel">
@@ -96,7 +121,6 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 </tr>
 </thead>
 <tbody>
-{% set parallels = [origin] + sutta.parallels|list %}
 {% for parallel in parallels -%}
 {%- if loop.first -%}
 <tr class='origin'>

@@ -22,7 +22,7 @@ a.bib .deets {background-color:#F7F2C2;}
 
 .var .deets {background-color:#E5E0EC;}
 
-.cross .deets {background-color:#F7D1C2;}
+.cross .deets {background-color:$light-pastel-green;}
 
 a.note .deets,
     a.note:hover .deets,
@@ -136,7 +136,7 @@ body:not(.infomode) .cross {
 #message_box{
     position:fixed;
     @include sans-serif;
-    box-shadow:2px 2px 10px rgba(0,0,0,0.3);
+    box-shadow:2px 2px 6px rgba(0,0,0,0.2);
     background:$light-pastel-green;
     position:fixed;
     top:10em;
@@ -167,7 +167,7 @@ span.lookup > span.meaning {
     font-size:1rem;
     font-style:normal;
     @include sans-serif;
-    box-shadow:2px 2px 10px rgba(0,0,0,0.3);
+    box-shadow:2px 2px 6px rgba(0,0,0,0.2);
     background-color:$light-pastel-red;
     border-radius: 3px;
      border:1px solid $pastel-red;

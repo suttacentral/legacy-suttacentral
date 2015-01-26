@@ -25,12 +25,12 @@ a.of:before {content:"OF "}
 a.pts:before {content:"PTS "}
 a.pts1:before {content:"PTS (1st ed.) "}
 a.pts2:before {content:"PTS (2nd ed.) "}
-a.pts-vp-pi:before {content: "Vin ";}
-a.pts-vp-en:before {content: "PTS en vp ";}
+a.pts-vp-pi:before {content: "PTS vp pi ";}
+a.pts-vp-en:before {content: "PTS vp en ";}
 a.pts_pn:before {content:"PTS "}
-a.pts-s:before {content:"PTS-s ";}
-a.pts-cs:before {content:"PTS-cs ";}
-a.pts-p-pi:before {content: "PTS-p-pi "}
+a.pts-s:before {content:"PTS s ";}
+a.pts-cs:before {content:"PTS cs ";}
+a.pts-p-pi:before {content: "PTS p pi "}
 a.san87:before, a.san89:before {content:"San "}
 a.sc:before {content:"SC "}
 a.sen82:before {content:"Sen "}

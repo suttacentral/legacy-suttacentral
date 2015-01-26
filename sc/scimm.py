@@ -641,7 +641,11 @@ class _Imm:
         return out
 
     def text_path(self, uid, lang_uid):
-        textinfo = self.tim.get(uid, lang_uid)
+        try:
+            textinfo = self.tim.get(uid, lang_uid)
+        except TypeError:
+            logger.error('Not valid uid: "{}" or lang: "{}"'.format(uid, lang_uid))
+            raise
         if not textinfo:
             return None
         return textinfo.path

@@ -93,3 +93,19 @@ h1.mirror-row{line-height:1.5}
         margin-top: 1.5em;
     }
 }
+
+
+
+.marked {
+    background: $bright-pastel-red;
+    padding: 2px 0px;
+    margin: -2px 0px;
+    &.first-marked {
+        border-top-left-radius: 5px;
+    }
+    &.last-marked {
+        border-bottom-right-radius: 5px;
+    }
+}
+
+    

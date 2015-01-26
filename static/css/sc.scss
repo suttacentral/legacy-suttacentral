@@ -212,7 +212,7 @@ q:after {
     color:#767676;
 }
 
-.endh2, .endh3, .endh4, .endh5, .endh6, .endsutta, .endvagga, .endsubdivision, .endsection, .enddivision, .bhanavara, .enduddesa, .end
+.endh2, .endh3, .endh4, .endh5, .endh6, .endsutta, .endvagga, .endsubdivision, .endsection, .enddivision, .bhanavara, .enduddesa, .end, .endsubsection
     {
     text-align:center;
     @include serif(!important);
@@ -234,12 +234,7 @@ q:after {
     letter-spacing:0.1em;
 }
 
-.dquo {margin-left: -0.9ex;position:absolute;}
-.squo {margin-left: -0.6ex;position:absolute;}
-.dsquo {margin-left: -1.6ex;position:absolute;}
-
-
-
+.name{font-style:normal}
 
 .tri {display:inline;}
 
@@ -325,7 +320,11 @@ Text added by the editor or translator for clarification.
     }
     }
 
-
+.expanded {display:inline
+.infomode & {
+        color:$light-medium-gray;
+    }
+    }
 
 .suppliedmetre {
     color: #767676;

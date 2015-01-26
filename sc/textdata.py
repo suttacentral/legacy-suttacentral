@@ -338,126 +338,6 @@ class TextInfoModel:
             finally:
                 TextInfoModel._build_lock.release()
 
-class ElasticTIM(TextInfoModel):
-    """ TIM backed by Elastic Search
-
-    ElasticSearch provides a feature-complete search engine
-
-    import sc.textdata; tim = sc.textdata.ElasticBasedTIM(); tim.build(False)
-
-    """
-
-    index_name = 'tim'
-    doc_type = 'text'
-
-    defaults = {
-        "type": "string",
-        "index": "not_analyzed"
-    }
-
-    _buffer = []
-
-    text_mapping = {
-        doc_type: {
-            "properties": {
-                "lang": defaults,
-                "uid": defaults,
-                "path": defaults,
-                "bookmark": defaults,
-                "name": defaults,
-                "author": defaults,
-                "volpage": defaults,
-                "prev_uid": defaults,
-                "next_uid": defaults,
-                "mtime": {
-                    "type": "number"
-                }
-            }
-        }
-    }
-
-    def __init__(self):
-        from elasticsearch import Elasticsearch
-        self.es = Elasticsearch()
-
-    def _init_index(self, force=False):
-        if self.es.indices.exists(self.index_name):
-            if force == False:
-                return
-            else:
-                self.es.indices.delete(self.index_name)
-        self.es.indices.create(self.index_name, self.text_mapping)
-
-    def build(self, force=False):
-        self._init_index(force)
-        super().build(force)
-        self._flush()
-        
-    def exists(self, uid, lang_uid):
-        return self.es.exists(self.index_name, '{}/{}'.format(lang_uid, uid), 'text')
-
-    def get(self, uid=None, lang_uid=None):
-        if uid and lang_uid:
-            try:
-                res = self.es.get(self.index_name, '{}/{}'.format(lang_uid, uid))
-                if res["found"]:
-                    return TextInfo(**res["_source"])
-                else:
-                    return None
-            except:
-                return None
-        else:
-            body = {
-                "from": 0,
-                "size": 10000000,
-                "query": {
-                    "term": {
-                    
-                    }
-                }
-            }
-            if uid:
-                body["query"]["term"]["uid"] = uid
-                res = self.es.search(self.index_name, self.doc_type, body)
-                return {hit["_source"]["lang"]: TextInfo(**hit["_source"])
-                        for hit in res["hits"]["hits"]}
-            elif lang_uid:
-                body["query"]["term"]["lang_uid"] = lang_uid
-                res = self.es.search(self.index_name, self.doc_type, body)
-                return {hit["_source"]["uid"]: TextInfo(**hit["_source"])
-                        for hit in res["hits"]["hits"]}
-            else:
-                raise ValueError('At least one of uid or lang_uid must be set')
-    
-    def add_text_info(self, lang_uid, uid, textinfo):
-        doc = textinfo.as_dict()
-        doc["path"] = str(doc["path"])
-        self._buffer.append({
-            '_index': self.index_name,
-            '_type': self.doc_type,
-            '_id': '{}/{}'.format(lang_uid, uid),
-            '_source': doc
-        })
-        if len(self._buffer) > 1000:
-            self._flush()
-
-    def _flush(self):
-        from elasticsearch.helpers import bulk
-        if self._buffer:
-            bulk(self.es, self._buffer)
-        self._buffer.clear()
-
-    @classmethod
-    def build_once(cls, force_build):
-        if cls._build_lock.acquire(blocking=False):
-            try:
-                newtim = cls()
-                # newtim.build()
-                TextInfoModel._instance = newtim
-                TextInfoModel._build_ready.set()
-            finally:
-                TextInfoModel._build_lock.release()
-        
 class SqliteBackedTIM(TextInfoModel):
     """ A memory-saving version of the TIM
 
@@ -469,6 +349,31 @@ class SqliteBackedTIM(TextInfoModel):
     for building a division view. (April 2014)
     
     """
+
+    def get_schema():
+        """ The commands required to configure the sqlite databse
+
+        The schema can be used to determine if a database rebuild
+        is required.
+
+        """
+        return {
+            'init': (
+                'CREATE TABLE data(lang, uid, path, bookmark, name,\
+                                   author, volpage, prev_uid, next_uid)',
+                'CREATE TABLE mtimes(path UNIQUE, mtime)',
+                'PRAGMA journal_mode = OFF'
+            ),
+            'finalize': (
+                'CREATE INDEX lang_x ON data(lang)',
+                'CREATE INDEX uid_x ON data(uid)',
+                'CREATE INDEX path_x ON data(path)',
+                'CREATE INDEX mtimes_path_x on mtimes(path)',
+                'PRAGMA journal_mode = wal'
+            ),
+            'buster': 1.0
+        }
+    schema = get_schema()
     def __init__(self, filename=None):
         if filename is None:
             filename = self.default_filename
@@ -488,24 +393,20 @@ class SqliteBackedTIM(TextInfoModel):
 
     def _init_table(self):
         try:
-            pathlib.Path(self._filename).unlink()
+            pathlib.Path(self.filename).unlink()
         except FileNotFoundError:
             pass
         self.reconnect()
-        self._con.execute('CREATE TABLE data(lang, uid, path, bookmark, name, author, volpage, prev_uid, next_uid)')
-        self._con.execute('CREATE TABLE mtimes(path UNIQUE, mtime)')
-        # Presently we build the whole lot in one go and disabling
-        # journaling dramatically improves bulk insert performance.
-        self._con.execute('PRAGMA journal_mode = OFF')
-
+        for string in self.schema['init']:
+            self._con.execute(string)
+        
     def _finally_table(self):
-        self._con.execute('CREATE INDEX lang_x ON data(lang)')
-        self._con.execute('CREATE INDEX uid_x ON data(uid)')
-        self._con.execute('CREATE INDEX path_x ON data(path)')
-        self._con.execute('CREATE INDEX mtimes_path_x on mtimes(path)')
-        self._con.execute('PRAGMA journal_mode = wal')
+        for string in self.schema['finalize']:
+            self._con.execute(string)
         
     def build(self, force=False):
+        if not self._build_lock.acquire(blocking=False):
+            return
         happy = self.is_happy()
         if happy:
             self._mtimes = {path:mtime for path, mtime in self._con.execute('SELECT * FROM mtimes')}
@@ -520,6 +421,7 @@ class SqliteBackedTIM(TextInfoModel):
             
         self._con.commit()
         del self._mtimes
+        self._build_lock.release()
 
     def _check_for_deleted(self):
         sc_dir = str(sc.text_dir) + '/'
@@ -611,15 +513,16 @@ class SqliteBackedTIM(TextInfoModel):
             (lang_uid, uid, str(textinfo.path), textinfo.bookmark,
             textinfo.name, textinfo.author, textinfo.volpage, textinfo.prev_uid, textinfo.next_uid))
 
+    filename_fmt = 'text-info-model-{version}.db'
+
     @property
     def default_filename(self):
-        from sc.scm import scm
-        branch = scm.branch
-        if branch == 'master':
-            branch = ''
-        else:
-            branch = '.' + branch
-        return str(sc.db_dir / 'text-info-model{}.db'.format(branch))
+        import json
+        import hashlib
+        schema_str = json.dumps(self.schema, sort_keys=1) 
+        ver = hashlib.md5(schema_str.encode('ascii')).hexdigest()[0:8]
+        
+        return str(sc.db_dir / self.filename_fmt.format(version=ver))
     
     @classmethod
     def build_once(cls, force_build):

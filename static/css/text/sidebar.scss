@@ -24,6 +24,14 @@ $sidebar-dongle-width = 1em;
         padding: 0;
         border: none;
         background: none;
+
+        &.hover {
+            background:#eee;
+        }
+
+        &.active {
+            background:#ddd;
+        }
     }
     
     ul {
@@ -76,6 +84,16 @@ $sidebar-dongle-width = 1em;
             display: none;
         }
         
+    }
+
+    input[name=text-selection-url] {
+    font-size: 75%;
+    width: 16em;
+    }
+    
+    button[name=text-selection-button] {
+        font-size: 75%;
+        border-radius: 50%;
     }
 
     .x1 > .button {
@@ -383,3 +401,9 @@ $sidebar-dongle-width = 1em;
     clear: both;
     width: 100%;
 }
+
+#metaarea ul{
+	padding: 0 1em 1em 2em;
+}
+
+

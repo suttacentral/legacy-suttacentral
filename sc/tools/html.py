@@ -141,6 +141,25 @@ class HtHtmlElementMixin:
         if not result:
             raise CssSelectorFailed(selector)
         return result
+
+    def each_text(self, callback):
+        """ Apply callback to each text and tail, in proper order
+
+        If the return value of the callback is not False, the text
+        will be set to the return value.
+
+        """
+        if self.text:
+            result = callback(self.text)
+            if result is not False:
+                self.text = result
+        for child in self:
+            child.each_text(callback)
+        if self.tail:
+            result = callback(self.tail)
+            if result is not False:
+                self.tail = result
+        
     
     def convert_bad_tags(self):
         """ Convert invalid html tags into div/span class="tag"
@@ -234,6 +253,13 @@ class HtHtmlElementMixin:
                     self.attrib['class'] = new_class
                 else:
                     del self.attrib['class']
+
+    def id_map(self):
+        """ Get a mapping of ids to elements """
+        return {id: e for
+                    id, e in ((e.get('id'), e) for e in self.iter())
+                    if e}
+        
     
     def __bool__(self):
         """ Objects are always truthy, as in future lxml 

@@ -160,6 +160,7 @@ class ViewBase:
             'offline': cherrypy.request.offline,
             'page_lang': 'en',
             'scm': scm,
+            'embed': 'embed' in cherrypy.request.params,
             'search_query': '',
             'imm': sc.scimm.imm(),
             'ajax': 'ajax' in cherrypy.request.params,
@@ -306,9 +307,10 @@ class TextView(ViewBase):
     # Note: Links come after section
     links_regex = regex.compile(r'class="(?:next|previous)"')
     
-    def __init__(self, uid, lang_code):
+    def __init__(self, uid, lang_code, canonical=True):
         self.uid = uid
         self.lang_code = lang_code
+        self.canonical = canonical
 
     def setup_context(self, context):
         from sc.tools import html
@@ -319,10 +321,16 @@ class TextView(ViewBase):
         context.uid = self.uid
         context.sutta = imm.suttas.get(self.uid)
         context.division = imm.divisions.get(self.uid)
+        context.canonical = self.canonical
         
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
+        try:
+            context.snippet = self.get_snippet(context.text)
+        except Exception as e:
+            logger.error('Failed to generated snippet for {} ({})'.format(self.uid, str(e)))
+            context.snippet = ''
         # Eliminate newlines from Full-width-glyph languages like Chinese
         # because they convert into spaces when rendered.
         # TODO: This check should use 'language' table
@@ -341,7 +349,26 @@ class TextView(ViewBase):
                 context.text_refs.append(context.division.text_ref)
             #context.text_refs.extend(context.division.translations)
 
-        
+    def get_snippet(self, html, target_len=500):
+        root = sc.tools.html.fromstring(html[:target_len + 2000])
+        for e in root.cssselect('.hgroup'):
+            e.drop_tree()
+        article = root.cssselect('article')[0]
+        parts = []
+        total_len = 0
+        for e in article:
+            if e.tag not in {'p', 'blockquote'}:
+                continue
+            text = e.text_content()
+            parts.append(text)
+            total_len += len(text)
+            if total_len > target_len:
+                break
+
+        text = '   '.join(parts)
+        if len(text) > target_len:
+            text = text[:target_len] + ' …'
+        return text
         
     @property
     def path(self):
@@ -357,45 +384,6 @@ class TextView(ViewBase):
                 return f.read()
         else:
             raise cherrypy.NotFound()
-
-    def text_json(self):
-        # Put some useful information for javascript into a script field
-        # The absolute path relative to the domain
-        imm = scimm.imm()
-        sutta = imm.suttas.get(self.uid)
-        if sutta:
-            subdivision = sutta.subdivision
-            division = subdivision.division
-            root_lang = sutta.lang.uid
-        else:
-            division = imm.divisions.get(self.uid)
-            subdivision = None
-            sutta = None
-            
-
-        if not subdivision:
-            subdiv_uid = self.uid
-            while subdiv_uid and not subdivision:
-                if subdiv_uid in imm.subdivisions:
-                    subdivision = imm.subdivisions[subdiv_uid]
-                    division = subdivision.division
-                    break
-                subdiv_uid = subdiv_uid[:-1]
-            else:
-                subdivision = None
-
-        root_lang = division.collection.lang.uid
-        
-        out = {'lang_code':self.lang_code,
-        'uid': self.uid,
-        'sutta_uid': sutta.uid if sutta else None,
-        'subdivision_uid': subdivision.uid if subdivision else None,
-        'division_uid': division.uid if division else None,
-        'all_lang_codes': list(imm.tim.get(uid=self.uid)),
-        'root_lang_code': root_lang,
-        }
-
-        return json.dumps(out, ensure_ascii=False, sort_keys=True)
     
     @staticmethod
     def massage_cjk(text):
@@ -407,12 +395,73 @@ class TextView(ViewBase):
             pre, meta, post = m[1:]
             return ''.join([deline(pre), meta, deline(post)])
         return deline(text)
+
+class TextSelectionView(TextView):
+    template_name = 'paragraph'
+    
+    def __init__(self, uid, lang_code, targets):
+        self.uid = uid
+        self.lang_code = lang_code
+        self.targets = targets
+
+    def setup_context(self, context):
+        context.selection = self.extract_selection()
+    
+    def extract_selection(self):
+        from sc.tools import html
+        targets = self.targets
+        root = html.fromstring(self.get_html())
+        id_map = root.id_map()
+        elements = root.cssselect('article > *:not(div), article > div.hgroup, article > div:not(.hgroup) > *');
+        results = []
+        for target in targets.split('+'):
+            
+            m = regex.match(r'(\d+)(?:\.(\d+)-(\d+))?', target)
+            
+            target_id = int(m[1])
+            char_start = None if m[2] is None else int(m[2])
+            char_end = None if m[3] is None else int(m[3])
+            
+            target_element = elements[target_id]
+            if char_start is not None:
+                pos = 0
+                char_rex = regex.compile(r'\S')
+                def inner_callback(m):
+                    nonlocal pos, char_start, char_end
+                    result = m[0]
+                    pos += 1
+                    if pos == char_end:
+                        result = result + '__HLEND__'
+                    if pos == char_start:
+                        result = '__HLSTART__' + result
+                    return result
+                    
+                def callback(text):
+                    nonlocal pos
+                    if pos > char_end:
+                        return text
+                    return char_rex.sub(inner_callback, text)
+
+                target_element.each_text(callback)
+
+            results.append(target_element)
+        result_strings = []
+        last = None
+        for i, element in enumerate(results):
+            if i > 0:
+                if results[i - 1] != last:
+                    result_strings.append('<p>…</p>')
+            result_strings.append(str(element))
+            last = element
+
+        return '\n'.join(result_strings).replace('__HLSTART__', '<span class="marked">').replace('__HLEND__', '</span>')
+        
     
 class SuttaView(TextView):
     """The view for showing the sutta text in original sutta langauge."""
 
-    def __init__(self, sutta, lang):
-        super().__init__(sutta.uid, lang.uid)
+    def __init__(self, sutta, lang, canonical):
+        super().__init__(sutta.uid, lang.uid, canonical)
         self.sutta = sutta
         self.lang = lang
 
