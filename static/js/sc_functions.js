@@ -120,6 +120,14 @@ var scPersistantStorage = {
 
 //Rewriting it is on the to-do.
 
+sc.piLookup = {
+    dataByName: {},
+    data: null,
+    register: function(json) {
+        this.dataByName[json.script] = json.data;
+    }
+}
+
 function togglePaliLookup(){
     toggleLookupOn = !sc.userPrefs.getPref("paliLookup");
     sc.sidebar.messageBox.clear();
@@ -505,23 +513,19 @@ function enablePaliLookup(){
         scriptUrl,
         dictObjectName;
     if (script == 'en') {
-        scriptUrl = 'data/pi2en-maindata.js';
-        dictObjectName = 'pi2enDict';
+        scriptUrl = 'data/pi2en-maindata-v1.js';
     } else if (script == 'es') {
-        scriptUrl = 'data/pi2es-maindata.js';
-        dictObjectName = 'pi2esDict';
+        scriptUrl = 'data/pi2es-maindata-v1.js';
     } else if (script == 'pt') {
-        scriptUrl = 'data/pi2pt-maindata.js';
-        dictObjectName = 'pi2ptDict';
+        scriptUrl = 'data/pi2pt-maindata-v1.js';
     } else if (script == 'id') {
-        scriptUrl = 'data/pi2id-maindata.js';
-        dictObjectName = 'pi2idDict';
+        scriptUrl = 'data/pi2id-maindata-v1.js';
     } else {
         throw Error('Unknown script: ' + script);
     }
 
     function ready() {
-        sc.data.piLookup = sc.data[dictObjectName];
+        sc.piLookup.data = sc.piLookup.dataByName[script];
         generateLookupMarkup();
         sc.sidebar.messageBox.show("The dictionary is enabled. Hover with the mouse to display the meaning.", {id: "msg-lookup-success"});
     }
@@ -719,8 +723,8 @@ function matchPartial(word, maxlength){
         for (var i = 0; i < word.length; i++){
             var part = word.substring(0, word.length - i);
             if (part.length < maxlength) break;
-            if(typeof(sc.data.piLookup[part]) == 'object') {
-                var meaning = sc.data.piLookup[part][1];
+            if(typeof(sc.piLookup.data[part]) == 'object') {
+                var meaning = sc.piLookup.data[part][1];
                 return {"base":part, "meaning": meaning, "leftover": word.substring(word.length - i, word.length)}
             }
         }
@@ -734,8 +738,8 @@ function matchPartial(word, maxlength){
 
 function exactMatch(word)
 {
-    if(typeof(sc.data.piLookup[word]) == 'object') {
-        var meaning = sc.data.piLookup[word][1]+' ('+sc.data.piLookup[word][0]+')';
+    if(typeof(sc.piLookup.data[word]) == 'object') {
+        var meaning = sc.piLookup.data[word][1]+' ('+sc.piLookup.data[word][0]+')';
         return {"base": word, "meaning": meaning};
     }
     return null;
@@ -746,8 +750,8 @@ function fuzzyMatch(word){
     for(var i = 0; i < end.length; i++) {
         if(word.length > end[i][2] && word.substring(word.length - end[i][0].length, word.length) === end[i][0]) {
             var orig = word.substring(0,word.length - end[i][0].length + end[i][1]) + end[i][3];
-            if(typeof(sc.data.piLookup[orig]) == 'object') {
-                var meaning = sc.data.piLookup[orig][1] + ' ('+sc.data.piLookup[orig][0]+')';
+            if(typeof(sc.piLookup.data[orig]) == 'object') {
+                var meaning = sc.piLookup.data[orig][1] + ' ('+sc.piLookup.data[orig][0]+')';
                 return {"base": orig, "meaning": meaning};
             }
         }

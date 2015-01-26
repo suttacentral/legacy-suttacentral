@@ -53,7 +53,7 @@ def run_updaters():
                     fn(i)
                 except Exception as e:
                     logger.error('An exception occured when running {}'.format(fn_name))
-                    logger.error(e)
+                    raise
         time.sleep(sc.config.db_refresh_interval)
         i += 1
 

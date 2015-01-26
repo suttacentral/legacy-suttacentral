@@ -30,7 +30,8 @@ class TextIndexer(sc.search.BaseIndexer):
     def extract_fields_from_html(self, data):
         root = lxml.html.fromstring(data)
         text = root.find('body/div')
-        assert(text is not None)
+        if text is None:
+            raise ValueError("Structure of html is not body > div")
         metaarea = root.cssselect('#metaarea')
         author = []
         if metaarea:
@@ -89,7 +90,11 @@ class TextIndexer(sc.search.BaseIndexer):
                     'lang': lang_uid,
                     'mtime': int(file.stat().st_mtime)
                 })
-                action.update(self.extract_fields_from_html(htmlbytes))
+                try:
+                    action.update(self.extract_fields_from_html(htmlbytes))
+                except ValueError:
+                    logger.error("An error while processing {!s}".format(file))
+                    raise
             else:
                 continue
             chunk.append(action)
