@@ -168,6 +168,9 @@ def admin_data_notify(json_payload):
         logger.info('Data update request ignored')
     raise cherrypy.HTTPRedirect('/admin', 303)
 
+def error(status, message, traceback, version):
+    return ErrorView(status=status, message=message, traceback=traceback, version=version).render()
+
 def profile(locals_dict, globals_dict, *args, **kwargs):
     """ Generates a profile
 

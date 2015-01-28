@@ -40,8 +40,7 @@ class Root(object):
     """Requests to /*"""
 
     _cp_config = {
-        'error_page.404': error_page_404,
-        'error_page.500': error_page_500,
+        'error_page.default': show.error,
         'tools.trailing_slash.on': False,
         'tools.remove_trailing_slash.on': True,
         'tools.set_offline.on': True,

@@ -13,8 +13,15 @@ from sc.search import load_index_config
 from sc.util import recursive_merge, numericsortkey, grouper, unique
 
 logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
+
+handler = logging.StreamHandler()
+handler.setLevel('DEBUG')
+logger.addHandler(handler)
+
 
 class TextIndexer(sc.search.BaseIndexer):
+    htmlparser = lxml.html.HTMLParser(encoding='utf8')
     def fix_whitespace(self, string):
         """ Removes repeated whitespace.
 
@@ -28,7 +35,7 @@ class TextIndexer(sc.search.BaseIndexer):
         return string.strip()
         
     def extract_fields_from_html(self, data):
-        root = lxml.html.fromstring(data)
+        root = lxml.html.fromstring(data, parser=self.htmlparser)
         text = root.find('body/div')
         if text is None:
             raise ValueError("Structure of html is not body > div")
@@ -68,6 +75,7 @@ class TextIndexer(sc.search.BaseIndexer):
         }
 
     def yield_docs_from_dir(self, lang_dir, size, to_add=None, to_delete=None):
+        imm = sc.scimm.imm()
         lang_uid = lang_dir.stem
         files = sorted(lang_dir.glob('**/*.html'), key=lambda s: numericsortkey(s.stem))
         chunk = []
@@ -77,31 +85,35 @@ class TextIndexer(sc.search.BaseIndexer):
                 for uid in to_delete)
 
         for i, file in enumerate(files):
-            uid = file.stem
-            action = {
-                '_id' : uid,
-                }
-            if uid in to_add:
-                with file.open('rb') as f:
-                    htmlbytes = f.read()
-                chunk_size += len(htmlbytes) + 512
-                action.update({
-                    'uid': uid,
-                    'lang': lang_uid,
-                    'mtime': int(file.stat().st_mtime)
-                })
-                try:
+            try:
+                uid = file.stem
+                root_lang = imm.get_root_lang_from_uid(uid)
+                action = {
+                    '_id' : uid,
+                    }
+                if uid in to_add:
+                    with file.open('rb') as f:
+                        htmlbytes = f.read()
+                    chunk_size += len(htmlbytes) + 512
+                    action.update({
+                        'uid': uid,
+                        'lang': lang_uid,
+                        'root_lang': root_lang,
+                        'is_root': lang_uid == root_lang,
+                        'mtime': int(file.stat().st_mtime)
+                    })
+                    
                     action.update(self.extract_fields_from_html(htmlbytes))
-                except ValueError:
-                    logger.error("An error while processing {!s}".format(file))
-                    raise
-            else:
+            except (ValueError, IndexError) as e:
+                logger.error("An error while processing {!s} ({!s})".format(file, e))
                 continue
+
             chunk.append(action)
             if chunk_size > size:
                 yield chunk
                 chunk = []
                 chunk_size = 0
+                time.sleep(0.25)
         if chunk:
             yield chunk
         raise StopIteration    
@@ -161,7 +173,9 @@ class TextIndexer(sc.search.BaseIndexer):
                 continue
             
             try:
+                logger.debug('Sending {} actions to es'.format(len(chunk)))
                 res = bulk(self.es, index=index_name, doc_type="text", actions=(t for t in chunk if t is not None))
+                print(res)
             except:
                 raise
 

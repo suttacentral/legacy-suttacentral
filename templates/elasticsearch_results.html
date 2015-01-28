@@ -1,4 +1,5 @@
 {% extends "base.html" -%}
+{% import 'macros.html' as macros with context %}
 {%- block content -%}
 <div id='onecol'>
 <div id="main_search_results">
@@ -8,33 +9,26 @@
 <ul class="results">
 {% for hit in results.hits.hits -%}
 {% set source = hit._source %}
-<li class="result">
 {% if hit._type == 'text' %}
+<li class="result-text">
+{% if source.lang == imm.suttas[source.uid].lang.uid %}
+<span class="type">Root Text ({{source.lang}})</span>
+{% else %}
+<span class="type">Translation ({{source.lang}})</span>
+{% endif %}
 <a class="text-result" href="/{{ source.lang }}/{{ source.uid }}">{{ source.uid|uid_to_acro }} : {{ source.heading.title|title }}</a>
 {% elif hit._type == 'definition' %}
+<li class="result-definition">
+<span class="type">Dictionary</span>
 <a class="definition-result" href="/define/{{ source.term|urlencode }}">Definition for the {{ source.lang|uid_to_name|lower }} word <em>{{ source.term|title }}</em>{% if source.gloss %} ({{ source.gloss }}){% endif %}</a>
 {% elif hit._type == 'sutta' %}
-<a class="sutta-result" href="/{{source.uid}}">Details for {{ source.uid|uid_to_acro }}: {{ source.name or '?' }}</a>
 {% set sutta = imm.suttas[source.uid] %}
-<p class="crumbs">
-<a>{{ sutta.lang.uid|uid_to_name }}</a>
-&gt;
-{% if sutta.subdivision.division.uid != sutta.subdivision.uid %}
-<a href="/{{ sutta.subdivision.division.uid }}">{{ sutta.subdivision.division.name }}</a>
-&gt;
-{% endif %}
-<a href="/{{ sutta.subdivision.uid }}#{{sutta.uid}}">{{ sutta.subdivision.name }}</a>
-&gt;
-<a href="/{{ sutta.lang.uid }}/{{ sutta.uid }}">{{ sutta.name }}</a>
-{% if sutta.translations %}
-[
-{% for tr in sutta.translations %}
-<a class="tran" href="{{ tr.url }}">{{ tr.lang.uid }}</a>
-{% if not loop.last %}, {% endif %}
-{% endfor %}
-]
-{% endif %}
-</p>
+<li class="result-sutta">
+<span class="type">Sutta</span>
+<a class="sutta-result" href="/{{source.uid}}">Parallels and details for {{ source.uid|uid_to_acro }}: {{ source.name or '?' }}</a>
+<table>
+{{macros.sutta_row(sutta)}}
+</table>
 {% endif %}
 {% if hit.highlight %}
 <p>{{ hit.highlight.content|join(' … ') }} </p>

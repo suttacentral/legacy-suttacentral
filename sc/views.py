@@ -684,13 +684,20 @@ class UidsView(InfoView):
         context.atoz = atoz
 
 class ErrorView(ViewBase):
-    template_name = 'error'
+    template_name = 'errors/error'
     
-    def __init__(self, code, message):
-        self.code = code
-        self.message = message
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+        self.code = kwargs['status'][0:3]
+        if self.code == '404':
+            self.template_name = 'errors/404'
+        if kwargs['message'] == 'Elasticsearch Not Available':
+            self.template_name = 'errors/search_error'
 
-    def setup_content(self, context):
-        context.code = self.code
-        context.message = self.message
-        context.title = context.code
+    def setup_context(self, context):
+        context.update(self.kwargs)
+        context.request = cherrypy.request
+        context.response = cherrypy.response
+        context.production_environment = (
+            config.newrelic_environment == 'production'
+            and 'traceback' not in cherrypy.request.params)

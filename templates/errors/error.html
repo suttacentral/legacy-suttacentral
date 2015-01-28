@@ -1,0 +1,36 @@
+{% extends "base.html" -%}
+{% block content %}
+<style>
+    #status {color: black}
+    #message {font-weight: bold}
+    #traceback {font-size: 70%; color: red;}
+    #version {text-align: right;}
+    #dev-box {padding: 0.5em; margin: 0.5em; border: 1px solid grey; border-radius: 4px}
+    #onecol {max-width: 40em}
+</style>
+<div id='onecol' class='error_page'>
+{% block details %}
+<h1>An Error Occured</h1>
+<em lang="pi">sabbe sankhara anicca…</em>
+<p>Oops, an error occurred while attempting to procress your request.
+<p>This condition should be temporary. Please try again a few times
+and if the problem persists an error report will be sent to the
+Sutta Central develepors.
+{% endblock %}
+{% if not production_environment %}
+<div id="dev-box">
+<small>Details (only available in development environment, add query argument 'traceback' to url to get in production)</small>
+<h2 id="status">{{status}}</h2>
+<div id="message">{{message}}</div>
+<pre id="traceback">{{traceback}}</pre>
+<div id="request"><details><summary>Nitty gritty details</summary>
+Request Headers
+<pre>{{request.headers}}</pre>
+Cherrypy Config
+<pre>{{request.config}}</pre>
+</div>
+<div id="version">Server: CherryPy {{version}} </div>
+</div>
+{% endif %}
+</div>
+{% endblock %}

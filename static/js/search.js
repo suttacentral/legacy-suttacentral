@@ -34,6 +34,7 @@ sc.search = {
             url = "/search?query=" + encodeURIComponent(query) + "&ajax=1";
             ajax = jQuery.ajax(url, { "cache": "true" });
             ajax.done(sc.search.done);
+            ajax.error(sc.search.done);
             sc.search.lastXHR = ajax;
         }
     },
@@ -59,6 +60,10 @@ sc.search = {
                 console.log('Pageview Event: ' + url);
             }
         }, pageViewDelay)
+    },
+    error: function(query, data, code, jqXHR) {
+        results = "<main><div id=onecol><h1>Error</h1>"
+
     },
     addCloseButton: function(e){
         var close = $('<div class="close-button">×</div>');

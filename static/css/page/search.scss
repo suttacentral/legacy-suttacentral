@@ -33,6 +33,18 @@ $search-terms-ref-color: $medium-gray;
 
 ul.results {
     list-style: none;
+    li {
+        position: relative;
+        .type {
+            position: absolute;
+            width: 10em;
+            text-align:right;
+            right: 1em;
+            color: grey;
+            font-size: 75%;
+        }            
+    }
+    
     .crumbs{
         :link {
             color: $saturated-green;

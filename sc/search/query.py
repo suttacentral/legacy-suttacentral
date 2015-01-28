@@ -1,10 +1,13 @@
-import logging
+import logging, json
 
 from sc.search import es
 logger = logging.getLogger(__name__)
 
 
 def search(query, highlight=True, offset=0, limit=10, **kwargs):
+    # For some reason seems to require extra escaping to
+    # resolve things like 'sati"'
+    query = query.replace('"', '\\"')
     body = {
         "from": offset,
         "size": limit,
@@ -26,21 +29,18 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                 },
                 "functions": [
                     {
-                        "field_value_factor": {
-                            "field": "boost"
-                        }
-                    }, {
-                        "boost_factor": "2",
+                        "boost_factor": "1.1",
                         "filter": {
                             "term": {
                                 "lang": "en"
                             }
                         }
-                    }, {
-                        "boost_factor": "2",
+                    },
+                    {
+                        "boost_factor": "1.1",
                         "filter": {
-                            "type": {
-                                "value": "text"
+                            "term": {
+                                "is_root": True
                             }
                         }
                     }
@@ -60,7 +60,8 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                     "matched_fields": ["content", "content.folded", "content.stemmed"],
                     "type": "fvh",
                     "fragment_size": 100,
-                    "number_of_fragments": 3
+                    "number_of_fragments": 3,
+                    "no_match_size": 250
                     }
                 }
             }

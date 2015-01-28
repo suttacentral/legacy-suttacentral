@@ -57,6 +57,14 @@
                         "type": "string",
                         "analyzer": "uid_expanding"
                     },
+                    "root_lang": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    },
+                    "is_root": {
+                        "type": "boolean",
+                        "index": "not_analyzed"
+                    },
                     "author": {
                         "type": "string",
                         "analyzer": "folding"

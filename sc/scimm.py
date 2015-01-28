@@ -594,6 +594,23 @@ class _Imm:
             if textinfo:
                 return TextRef.from_textinfo(textinfo, self.languages[lang_uid])
 
+    def get_root_lang_from_uid(self, uid):
+        if uid in self.suttas:
+            return self.suttas[uid].lang.uid
+        else:
+            div_uid = uid
+            while div_uid:
+                if div_uid in self.divisions:
+                    return self.divisions[div_uid].collection.lang.uid
+                if div_uid in self.subdivisions:
+                    return self.subdivisions[div_uid].division.collection.lang.uid
+                div_uid = div_uid[:-1]
+        if uid[0] == 't':
+            return 'zh'
+        if uid[:3] == 'skt':
+            return 'skt'
+        raise ValueError("No root lang could be determined for uid: {}".format(uid))
+            
     def get_translations(self, uid, root_lang_uid):
         out = []
         for textref in self._external_text_refs.get(uid, []):
