@@ -54,6 +54,9 @@ class TextIndexer(sc.search.BaseIndexer):
         for p in root.iter('p'):
             p.tail = '\n\n' + (p.tail or '')
 
+        for e in root.cssselect('.add'):
+            e.drop_tree()
+        
         hgroup = text.cssselect('.hgroup')[0]
         division = hgroup[0]
         title = hgroup[-1]
@@ -150,13 +153,16 @@ class TextIndexer(sc.search.BaseIndexer):
             logger.info('Creating index "{}"'.format(index_name))
             self.es.indices.create(index_name, index_config)
             self.es.index(index=index_name, id="files", doc_type="meta", body={"mtimes": {}})
-
-        stored_mtimes = {hit["_id"]: hit["fields"]["mtime"][0] for hit in scan(self.es,
+        try:
+            stored_mtimes = {hit["_id"]: hit["fields"]["mtime"][0] for hit in scan(self.es,
                 index=index_name,
                 doc_type="text",
                 fields="mtime",
                 query=None,
-                size=500)}
+                size=500) if 'fields' in hit}
+        except Exception as e:
+            logger.error('A problem occured with index {}'.format(lang_uid))
+            raise
         
         current_mtimes = {file.stem: int(file.stat().st_mtime) for file in lang_dir.glob('**/*.html')}
         

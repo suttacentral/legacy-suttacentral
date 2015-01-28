@@ -44,6 +44,8 @@ def jinja2_environment():
 
     env.filters['date'] = util.format_date
     env.filters['time'] = util.format_time
+    env.filters['max'] = max
+    env.filters['min'] = min
     env.filters['datetime'] = util.format_datetime
     env.filters['timedelta'] = util.format_timedelta
     env.filters['uid_to_name'] = lambda uid: scimm.imm().uid_to_name(uid)
@@ -580,7 +582,9 @@ class ElasticSearchResultsView(ViewBase):
     def setup_context(self, context):
         context.query = self.query
         context.results = self.results
-        context.update(self.kwargs)
+        context.limit = int(self.kwargs['limit'])
+        context.total = self.results['hits']['total']
+        context.offset = int(self.kwargs['offset'])
         
 class ShtLookupView(ViewBase):
     """The view for the SHT lookup page."""

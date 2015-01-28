@@ -76,6 +76,10 @@
                     },
                     "boost": {
                         "type": "float"
+                    },
+                    "mtime": {
+                        "type": "integer",
+                        "index": "not_analyzed"
                     }
                 }
             },

@@ -1,5 +1,7 @@
-import logging, json
+import json
+import logging
 
+import elasticsearch
 from sc.search import es
 logger = logging.getLogger(__name__)
 
@@ -7,15 +9,16 @@ logger = logging.getLogger(__name__)
 def search(query, highlight=True, offset=0, limit=10, **kwargs):
     # For some reason seems to require extra escaping to
     # resolve things like 'sati"'
-    query = query.replace('"', '\\"')
     body = {
         "from": offset,
         "size": limit,
         "_source": ["uid", "lang", "name", "volpage", "gloss", "term", "heading"],
+        "min_score": 0.33,
         "query": {
             "function_score": {
                 "query": {
                     "query_string": {
+                        "lenient": True,
                         "fields": ["content", "content.*^0.5",
                                    "term", "term.*^0.5",
                                    "lang^0.5",
@@ -65,4 +68,8 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                     }
                 }
             }
-    return es.search(body=body)
+    try:
+        return es.search(body=body)
+    except elasticsearch.exceptions.RequestError as e:
+        body['query']['function_score']['query']['query_string']['query'] = query.replace('"', ' ')
+        return es.search(body=body)

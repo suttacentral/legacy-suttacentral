@@ -58,6 +58,7 @@ ul.results {
         }
     }
 }
+
 li.result > a {
     font-size: 110%;
 }
@@ -78,4 +79,24 @@ li.result > a {
     &:hover {
         cursor: pointer;
     }
+}
+
+#search-nav {
+    margin: auto;
+    
+    td {
+        border-top: none;
+        border-bottom: none;
+    }
+}
+
+.search-nextprev {
+    text-align: center;
+    width: 4em;
+    display: inline-block;
+}
+.search-page {
+    text-align: center;
+    width: 1em;
+    display: inline-block;
 }
