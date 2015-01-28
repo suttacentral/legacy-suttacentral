@@ -2,3 +2,19 @@
     font-style: italic;
     font-weight: bold;
 }
+
+.static-toc{
+	list-style-type:none;
+	background:$light-light-gray;
+	border:1px solid $light-medium-gray;
+	border-radius:3px;
+	padding:1em;
+	display:inline-block;
+	margin-left:0;
+}
+
+.listhead{
+font-weight:bold;
+text-align:center;
+margin: 0.5em 0
+}

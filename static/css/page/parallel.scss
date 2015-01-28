@@ -3,16 +3,17 @@ $citation-border-color: $medium-gray;
 #parallel-citation {
     margin-top:0.5em;
 
-    
-    & > input {
-       display:none;
+       & > input {
+       
+       color:#565656;
+     
     }
 
     & > button {
     padding: .25em 0.5em;
        border: 0;
         box-shadow:0 0 1px rgba(0,0,0,0.8)inset;
-        border-radius: 50%;
+        
         background:0;
         color:#565656;
         @include sans-serif;

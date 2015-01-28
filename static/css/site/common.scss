@@ -11,15 +11,21 @@ body {
     color: $body-text-color;
     background: $body-background-color;
 
-    // "text-rendering: optimizeLegibility" is not needed
+    // "text-rendering: optimizeLegibility" is not needed. But it is still cool.
     // See http://aestheticallyloyal.com/public/optimize-legibility/
-
+text-rendering: optimizeLegibility;
     // "-webkit-font-smoothing: antialiased" is not needed either
     // See http://stackoverflow.com/questions/11459746/css3-webfont-smoothing-and-antialiasing-in-firefox-and-opera
 
     // Use kerning and ligatures if possible...
-    // See http://blog.fontdeck.com/post/15777165734/opentype-1
-    @include font-feature-settings("kern" 1, "liga" 1, "dlig" 1);
+        // See http://blog.fontdeck.com/post/15777165734/opentype-1
+
+    -moz-font-feature-settings: "kern" 1,"liga" 1;
+-webkit-font-feature-settings: "kern" 1,"liga" 1;
+font-feature-settings: "kern" 1,"liga" 1;
+
+
+   
 
     // Fonts look absolutely apalling in Opera, it is a known issue
     // that Opera only works well with a certain set of fonts. Opera
@@ -65,7 +71,7 @@ ul, ol {
 
 p, ul {
 
-    margin-bottom: 1.5em;
+    margin-bottom: 1em;
     @media #{$mobile} {
       margin-bottom: 0.7em;
 }

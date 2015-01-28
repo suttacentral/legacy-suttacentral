@@ -60,9 +60,9 @@ h6{
 
         & > p {
             margin: 0;
-            @include sans-serif-small-caps;
-            font-size: 1em;
-            text-transform: lowercase;
+            @include sans-serif;
+            font-size: 0.8em;
+            text-transform: uppercase;
             letter-spacing: 0.05em;
             padding:0;
         }

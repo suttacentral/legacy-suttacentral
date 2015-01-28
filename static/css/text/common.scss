@@ -1,3 +1,141 @@
+/*
+ * Noto Sans Devanagari (Hindi) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'Noto Sans Devanagari';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/notosansdevanagari/v3/NotoSansDevanagari-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/notosansdevanagari/v3/NotoSansDevanagari-Regular.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosansdevanagari/v3/NotoSansDevanagari-Regular.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosansdevanagari/v3/NotoSansDevanagari-Regular.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosansdevanagari/v3/NotoSansDevanagari-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Devanagari';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/notosansdevanagari/v3/NotoSansDevanagari-Bold.eot);
+  src: url(//fonts.gstatic.com/ea/notosansdevanagari/v3/NotoSansDevanagari-Bold.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosansdevanagari/v3/NotoSansDevanagari-Bold.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosansdevanagari/v3/NotoSansDevanagari-Bold.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosansdevanagari/v3/NotoSansDevanagari-Bold.ttf) format('truetype');
+}
+/*
+ * Myanmar Sans Pro (Myanmar) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'Myanmar Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/myanmarsanspro/v4/MyanmarSansPro-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/myanmarsanspro/v4/MyanmarSansPro-Regular.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/myanmarsanspro/v4/MyanmarSansPro-Regular.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/myanmarsanspro/v4/MyanmarSansPro-Regular.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/myanmarsanspro/v4/MyanmarSansPro-Regular.ttf) format('truetype');
+}
+/*
+ * Noto Sans Sinhala (Sinhala) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'Noto Sans Sinhala';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Sinhala';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.eot);
+  src: url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.ttf) format('truetype');
+}
+/*
+ * Noto Sans Thai (Thai) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'Noto Sans Thai';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/notosansthai/v3/NotoSansThai-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/notosansthai/v3/NotoSansThai-Regular.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosansthai/v3/NotoSansThai-Regular.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosansthai/v3/NotoSansThai-Regular.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosansthai/v3/NotoSansThai-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Thai';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/notosansthai/v3/NotoSansThai-Bold.eot);
+  src: url(//fonts.gstatic.com/ea/notosansthai/v3/NotoSansThai-Bold.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosansthai/v3/NotoSansThai-Bold.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosansthai/v3/NotoSansThai-Bold.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosansthai/v3/NotoSansThai-Bold.ttf) format('truetype');
+}
+/*
+ * KoPub Batang (Korean) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'KoPub Batang';
+  font-style: normal;
+  font-weight: 300;
+  src: url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Light.eot);
+  src: url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Light.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Light.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Light.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'KoPub Batang';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Regular.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Regular.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Regular.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'KoPub Batang';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Bold.eot);
+  src: url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Bold.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Bold.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Bold.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/kopubbatang/v3/KoPubBatang-Bold.ttf) format('truetype');
+}
+/*
+ * Noto Serif Thai (Thai) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'Noto Serif Thai';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Regular.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Regular.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Regular.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Noto Serif Thai';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.eot);
+  src: url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.ttf) format('truetype');
+}
 .sutta {
     max-width: 40em;
     margin: 0 auto;
@@ -22,14 +160,14 @@ h1.mirror-row{line-height:1.5}
         h1, h2, h3, h4, h5, h6, p,
         hgroup > h2, hgroup > h3,
         .evam {
-            font-family: $tharlon !important;
+            
             letter-spacing: 0;
             line-height: 2em;
         }
     }
 
     #metaarea p {
-        font-family: $tharlon;
+        
         letter-spacing: 0;
         line-height: 2em;
     }
@@ -37,7 +175,55 @@ h1.mirror-row{line-height:1.5}
 
 #text:lang(zh) {
     .sc {display: none}
+    .uddanagatha{font-style:normal !important}
 
+}
+#text:lang(si) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: 'Noto Sans Sinhala', serif;
+                        letter-spacing: 0;
+        }
+}
+}
+#text:lang(th) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: 'Noto Serif Thai', serif;
+                        letter-spacing: 0;
+                        font-style:normal !important
+        }
+        .hgroup > p {
+         
+                        font-family: 'Noto Sans Thai', sans-serif;
+                        letter-spacing: 0;
+        
+}
+}
+}
+#text:lang(hi) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: 'Noto Sans Devanagari', serif;
+                        letter-spacing: 0;
+        }
+}
+}
+#text:lang(my) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: 'Myanmar Sans Pro', serif;
+        }
+}
+}
+#text:lang(ko) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: 'KoPub Batang', serif;
+
+        }
+        .hgroup p {font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;}
+}
 }
 
 // Metaarea should not be visible while it is still inside the #text
