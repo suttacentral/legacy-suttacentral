@@ -88,8 +88,10 @@ class TextIndexer(sc.search.BaseIndexer):
                 for uid in to_delete)
 
         for i, file in enumerate(files):
+            uid = file.stem
+            if uid not in to_add and uid not in to_delete:
+                continue
             try:
-                uid = file.stem
                 root_lang = imm.get_root_lang_from_uid(uid)
                 action = {
                     '_id' : uid,
@@ -159,7 +161,7 @@ class TextIndexer(sc.search.BaseIndexer):
                 doc_type="text",
                 fields="mtime",
                 query=None,
-                size=500) if 'fields' in hit}
+                size=500)}
         except Exception as e:
             logger.error('A problem occured with index {}'.format(lang_uid))
             raise
@@ -179,7 +181,6 @@ class TextIndexer(sc.search.BaseIndexer):
                 continue
             
             try:
-                logger.debug('Sending {} actions to es'.format(len(chunk)))
                 res = bulk(self.es, index=index_name, doc_type="text", actions=(t for t in chunk if t is not None))
                 print(res)
             except:
