@@ -22,10 +22,15 @@ Sutta Central develepors.
 <small>Details (only available in development environment, add query argument 'traceback' to url to get in production)</small>
 <h2 id="status">{{status}}</h2>
 <div id="message">{{message}}</div>
+{% if response.headers.Traceback %}
+{{response.headers.Traceback}}
+{% endif %}
 <pre id="traceback">{{traceback}}</pre>
 <div id="request"><details><summary>Nitty gritty details</summary>
 Request Headers
 <pre>{{request.headers}}</pre>
+Response Headers
+<pre>{{response.headers}}</pre>
 Cherrypy Config
 <pre>{{request.config}}</pre>
 </div>

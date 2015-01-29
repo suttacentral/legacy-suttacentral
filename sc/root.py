@@ -3,7 +3,6 @@ import cherrypy
 import sc
 from sc import show
 from sc.tools import webtools
-from sc.error_pages import error_page_404, error_page_500
 
 # We expose everything we need to here.
     

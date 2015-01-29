@@ -16,7 +16,6 @@ from sc import assets, config, data_repo, scimm, util
 from sc.menu import get_menu
 from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
-from sc import error_pages
 import sc.search.query
 
 import logging
@@ -184,7 +183,8 @@ class ViewBase:
             sourcelines[e.lineno - 1] = '<strong>{}</strong>'.format(sourcelines[e.lineno - 1])
             traceback = ("<pre>{trace}</pre>" +
                 "<p>{message}</p>").format(message=e.message, trace='<br>'.join(sourcelines[max(0, e.lineno-3):e.lineno+2]))
-            return error_pages.custom_500(message, traceback)
+            cherrypy.response.headers['Traceback'] = traceback
+            raise cherrypy.HTTPError(500, message)
         context = self.get_global_context()
         self.setup_context(context)
         return self.massage_whitespace(template.render(dict(context)))
