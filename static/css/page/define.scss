@@ -16,6 +16,10 @@
         &:before {
             content: "▸ "
         }
+
+        em {
+            font-weight: normal;
+        }
     }
 
     .grammar, .grammar + dd {

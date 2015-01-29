@@ -6,15 +6,15 @@
             "number_of_replicas": 0,
             "analysis": {
                 "tokenizer": {
-                    "uid_tokenizer": {
+                    "uid_split": {
                         "type": "pattern",
-                        "pattern": "([a-z]+|[0-9.-]+)",
-                        "group": 0
+                        "group": 0,
+                        "pattern": "[a-z]+|[0-9-]+"
                     }
                 },
                 "analyzer": {
-                    "uid_analyzer": {
-                        "tokenizer": "uid_tokenizer",
+                    "uid_expanding": {
+                        "tokenizer": "uid_split",
                         "filter": ["acro_and_name_to_uid", "icu_folding"]
                     },
                     "folding_analyzer": {
@@ -36,9 +36,9 @@
                         "type": "string",
                         "index": "not_analyzed",
                         "fields": {
-                            "acro": {
+                            "expanded": {
                                 "type": "string",
-                                "analyzer": "uid_analyzer"
+                                "analyzer": "uid_expanding"
                             }
                         }
                     },
@@ -48,11 +48,11 @@
                     },
                     "division": {
                         "type": "string",
-                        "analyzer": "uid_analyzer"
+                        "analyzer": "uid_expanding"
                     },
                     "lang": {
                         "type": "string",
-                        "analyzer": "uid_analyzer"
+                        "analyzer": "uid_expanding"
                     },
                     "name": {
                         "type": "string",

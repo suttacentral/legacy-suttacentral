@@ -45,7 +45,7 @@
 {% set range_start = offset // limit - 5 %}
 {% endif %}
 
-{% for i in range(range_start, (total // limit) | min(range_start + 10)) %}
+{% for i in range(range_start, (1 + total // limit) | min(range_start + 10)) %}
 {% if offset >= (i * limit) and offset < (i + 1) * limit %}
 <td><span class="search-page">{{i + 1}}</span>
 {% else %}

@@ -40,6 +40,14 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                         }
                     },
                     {
+                        "boost_factor": "2",
+                        "filter": {
+                            "term": {
+                                "uid": query.replace(' ', '').lower()
+                            }
+                        }
+                    },
+                    {
                         "boost_factor": "1.1",
                         "filter": {
                             "term": {
