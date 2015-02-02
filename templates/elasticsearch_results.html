@@ -11,7 +11,7 @@
 {% set source = hit._source %}
 {% if hit._type == 'text' %}
 <li class="result-text">
-{% if source.lang == imm.suttas[source.uid].lang.uid %}
+{% if source.lang == imm.get_root_lang_from_uid[source.uid] %}
 <span class="type" title="{{source.lang}}">Root Text</span>
 {% else %}
 <span class="type" title="{{source.lang}}">Translation</span>

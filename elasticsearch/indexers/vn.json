@@ -1,3 +1,18 @@
 {
-    "inherits": ["default", "folding_mixin"]
+    "inherits": ["default"],
+    "mappings": {
+        "text": {
+            "properties": {
+                "content": {
+                    "fields": {
+                        "stemmed": {
+                            "type": "string",
+                            "term_vector": "with_positions_offsets",
+                            "analyzer": "vi_analyzer"
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

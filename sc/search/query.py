@@ -20,12 +20,13 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                     "query_string": {
                         "lenient": True,
                         "fields": ["content", "content.*^0.5",
-                                   "term", "term.*^0.5",
+                                   "term^1.5", "term.*^0.5",
+                                   "gloss^1.5",
                                    "lang^0.5",
                                    "author^0.5",
                                    "uid", "uid.expanded^0.5",
                                    "name"],
-                        "minimum_should_match": "3<90%",
+                        "minimum_should_match": "100%",
                         "analyze_wildcard": True,
                         "query": query
                     }
@@ -37,6 +38,14 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                             "term": {
                                 "lang": "en"
                             }
+                        }
+                    },
+                    {
+                        "boost_factor": "0.25",
+                        "filter": {
+                          "type": {
+                              "value": "definition"
+                          }
                         }
                     },
                     {
