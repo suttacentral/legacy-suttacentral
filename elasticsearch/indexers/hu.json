@@ -19,7 +19,7 @@
                         "lowercase",
                         "sanskrit_pali_synonym",
                         "hungarian_stop",
-                        "hungarian_stemmer",
+                        "hungarian_stemmer"
                     ]
                 }
             }

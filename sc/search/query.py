@@ -13,7 +13,6 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
         "from": offset,
         "size": limit,
         "_source": ["uid", "lang", "name", "volpage", "gloss", "term", "heading"],
-        "min_score": 0.33,
         "query": {
             "function_score": {
                 "query": {

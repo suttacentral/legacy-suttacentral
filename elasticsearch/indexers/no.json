@@ -19,7 +19,7 @@
                         "lowercase",
                         "sanskrit_pali_synonym",
                         "norwegian_stop",
-                        "norwegian_stemmer",
+                        "norwegian_stemmer"
                     ]
                 }
             }
