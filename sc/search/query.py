@@ -1,4 +1,5 @@
 import json
+import regex
 import logging
 
 import elasticsearch
@@ -87,5 +88,8 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
     try:
         return es.search(body=body)
     except elasticsearch.exceptions.RequestError as e:
-        body['query']['function_score']['query']['query_string']['query'] = query.replace('"', ' ')
+        # In case of an error, we'll repeat the query but with any
+        # punctuation removed.
+        new_query = regex.sub(r'\p{punct}', ' ', query)
+        body['query']['function_score']['query']['query_string']['query'] = new_query
         return es.search(body=body)
