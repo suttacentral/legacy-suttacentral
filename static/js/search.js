@@ -23,6 +23,7 @@ sc.search = {
         }
     },
     handleSearch: function(e) {
+        return //disabled
         var query = e.target.value;
         console.log(query);
         if (sc.search.lastXHR) {
