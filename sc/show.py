@@ -95,13 +95,20 @@ def default(*args, **kwargs):
         lang_code = args[0]
         uid = args[1]
 
-        if not imm.text_exists(uid, lang_code):        
+        if not imm.text_exists(uid, lang_code):
+            redirect = False
             if imm.text_exists(lang_code, uid):
+                redirect = True
+                uid, lang_code = lang_code, uid
+            elif lang_code == 'zh' and imm.text_exists(uid, 'och'):
+                redirect = True
+                lang_code = 'och'
+            if redirect:
                 # This is an old-style url, redirect to new-style url.
                 if len(args) == 2:
-                    new_url = '/{}/{}'.format(uid, lang_code)
+                    new_url = '/{}/{}'.format(lang_code, uid)
                 else:
-                    new_url =  '/{}/{}/{}'.format(uid, lang_code, args[2])
+                    new_url =  '/{}/{}/{}'.format(lang_code, uid, args[2])
                 # Don't be transparent, we want to keep things canonical
                 # and also, use 301. This is a permament change.
                 raise cherrypy.HTTPRedirect(new_url, 301)
