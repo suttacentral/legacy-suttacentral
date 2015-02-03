@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 def search(query, highlight=True, offset=0, limit=10, **kwargs):
     # For some reason seems to require extra escaping to
     # resolve things like 'sati"'
+    query = query.replace('define:', 'term:')
     body = {
         "from": offset,
         "size": limit,
@@ -25,7 +26,7 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                                    "lang^0.5",
                                    "author^0.5",
                                    "uid", "uid.expanded^0.5",
-                                   "name"],
+                                   "name", "name.*^0.75"],
                         "minimum_should_match": "100%",
                         "analyze_wildcard": True,
                         "query": query
@@ -33,7 +34,7 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                 },
                 "functions": [
                     {
-                        "boost_factor": "1.15",
+                        "boost_factor": "1.1",
                         "filter": {
                             "term": {
                                 "lang": "en"
@@ -57,7 +58,7 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                         }
                     },
                     {
-                        "boost_factor": "1.15",
+                        "boost_factor": "1.1",
                         "filter": {
                             "term": {
                                 "is_root": True

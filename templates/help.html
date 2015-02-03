@@ -129,11 +129,39 @@
     <li>Translations of MN 115</li>
 </ul>
 
+<h3>Searching for translations in your language
+<p>At present the search is language neutral, meaning all matching results
+will be returned with no effort made to guess the user's language. However
+as Sutta Central's user base is predominately english-speaking, there
+is a slight bias towards english translations. So when words are common
+across langauges, such as pali terms and proper names, english results
+will be higher in the list.
+<p>Note that you may include a language code or name in your query,
+<code>en ananda</code> or <code>english ananda</code> are both equivilant, and you can also use the more advanced system <code>lang:en ananda</code> which would exclude matching the <em>word</em> ‘en’ specifying you only want texts with the language ‘en’. You may use any language code on Sutta Central.
+<p>When searching for non-english texts, the search will respect diacriticals if you use them, but they are not required. A search for <code>ananda</code> will match ‘<strong>ānanda</strong>’.
+
 <h3>Advanced search features</h3>
-SuttaCentral uses an advanced search engine which supports making extremely precise queries, this can be done with prefixes and other control characters. A non-exhaustive list of possibilities include:
+SuttaCentral uses an advanced search engine which supports making extremely precise queries, this can be done with prefixes and other control characters. Natural language queries will normally work well, but there is also an advanced syntax for a higher degree of control over results. A non-exhaustive list of possibilities include:
 <ul>
-    <li>To perform a phrase search enclose the phrase in double quotes, for example <code>"one thing"</code>. Only texts containing exactly that phrase will be returned.</li>
-    <li>You can use an asterisk to stand in for zero or more characters
+<li>To perform a phrase search enclose the phrase in double quotes, for example <code>"one thing"</code>. Only texts containing exactly that phrase will be returned.</li>
+<li>You can also perform a phrase search where the terms simply need to be in close proximity by using a ~num, for example <code>"kassapa buddha"~2</code> will return results containing kassapa and buddha seperated by not more than 2 words, such as “in the days when <strong>Kassapa</strong> was Supreme <strong>Buddha</strong>”.
+<li>You can use an asterisk to stand in for zero or more characters, or a ? to stand in for exactly one character. This can be useful when searching for compound words in pali.
+<li><p>You can restrict the search to results with a <em>field</em> of a particular value by using field:value. For example <code>lang:pi</code> would only return results with the pali language. <code>root_lang:pi lang:en</code> would only return english translations of pali suttas. <code>term:sati</code> or <code>define:sati</code> would only return dictionary definitions of sati.
+<p><code>content:Buddha</code> would return only texts which content contains the exact word 'Buddha' (in the normal search there is a little fuzziness, and variantions such as ‘Buddhas’ or ‘Buddhā’ would be considered an acceptable match).
+</li>
+<li>You can use AND, OR and NOT to perform boolean operations in which case they must be capitalized. AND/OR are almost never useful as the relevancy calculation tends to put the most relevant AND results at the top and less relevant OR reslts lower down. NOT is ocasionally useful, and you can also use a hyphen to exclude a term. For example <code>Sariputta NOT Moggallana</code> or <code>Sariputta -Moggallana</code> would return texts which feature only Sariputta with not mention of Moggallana. You can even use brackets to change the order in which AND, OR and NOT are applied, a feature which will almost certainly never be useful.
+</ul>
+
+<h3>Things you can't search for</h3>
+<p>Due to the advanced query syntax, and due to other constraints with search engines there are some things which as a rule you cannot search for, which includes:
+<ul>
+<li>Any form of punctuation.
+<li>Specific capitalization of words. Search is normally capitalization neutral.
+<li>The specific words AND, OR and NOT but only when captitalized.
+</ul>
+
+<p>Note that as an exception to the rule you may be able to search for punctuation when it occurs in indentifiers.
+{#
 
 <p>Suppose now that you are searching for MN 11. In this case you get a long list of results: the required result for MN 11 is followed by those for MN 110, MN 111, and more. In such lists, the result you need is the first one. Clicking the green triangle will select it and delete the others.</p>
 <p>If a sutta has an alternative identifier, then searching for either of them will yield the required result. A simple example is this: “AN 1.71 [AN 1.8.1] Kalyāṇamitta AN i 14”. In this case, typing either AN 1.71 or AN 1.8.1 will bring up the entry for the Kalyāṇamitta Sutta.</p>
@@ -148,7 +176,7 @@ SuttaCentral uses an advanced search engine which supports making extremely prec
 <h3>Searching by vol/page reference</h3>
 <p>This method of searching could be the appropriate one if you are following up a reference given in a footnote to a published article. (Many authors cite just the vol/page reference, leaving the reader wondering where the sutta fits within the division in question.) Suppose the reference is AN iii 126. Typing this in the Search box yields “Results: Not found”. If you now delete the final “6” from the page number, then the result is a list of ten suttas, two of which come close to having the relevant vol/page reference: AN 5.100 Kakudha at AN iii 122 and AN 5.101 Sekhavesārajja at AN iii 127. Clearly, then, the cited text is Kakudha, sutta no. 100 in the Fives of AN. Knowing this, you can then view the sutta by clicking on its identifier.</p>
 <h3>Searching for sūtras in Chinese</h3>
-<p>For Chinese sūtras comment is needed only in the case of searching by title. The title can be typed either in traditional characters (not simplified) or in Hanyu pinyin with the syllables separated. Optionally, tones can be indicated with the number 1, 2, 3, or 4 immediately following the last letter of each syllable. For example, you can search for the Chinese parallel to the Pali Satipaṭṭhāna by typing 念處 or <i>nian chu</i> or <i>nian4 chu4</i>. This will bring up three different sūtras having this title, only the first of which (MA 98) is actually the required parallel. Typing <i>nian</i> will bring up the 45 sūtras whose titles contain either 念 or 年. Typing <i>nian4</i> or 念 will bring up just the 40 whose titles contain 念 .</p>
+<p>For Chinese sūtras comment is needed only in the case of searching by title. The title can be typed either in traditional characters (not simplified) or in Hanyu pinyin with the syllables separated. Optionally, tones can be indicated with the number 1, 2, 3, or 4 immediately following the last letter of each syllable. For example, you can search for the Chinese parallel to the Pali Satipaṭṭhāna by typing 念處 or <i>nian chu</i> or <i>nian4 chu4</i>. This will bring up three different sūtras having this title, only the first of which (MA 98) is actually the required parallel. Typing <i>nian</i> will bring up the 45 sūtras whose titles contain either 念 or 年. Typing <i>nian4</i> or 念 will bring up just the 40 whose titles contain 念 .</p> #}
 <h2><a id="ms7" href="#toc">Vinaya</a></h2>
 <p>Vinaya texts in SuttaCentral are organized in a manner similar to the Sutta texts. However, the Vinaya texts have a much greater degree of parallelism: we include some 45 versions of the <i>bhikkhu pātimokkha</i>, for example. For this reason the manner of handling the texts is somewhat different.</p>
 <p>Let’s assume you want to check the parallels for a certain Vinaya rule, say the Pali bhikkhu <i>pācittiya</i> 1, about lying. Start on the home page with the Theravāda Bhikkhu Vibhaṅga or Bhikkhu Pātimokkha. Scroll down to the first <i>pācittiya</i>. As with the suttas, you can access the original text in the left column, the translation, if any, at the right, and the Volume/Page information for the PTS edition is given. Unlike the Suttas, we don't give the brief list of parallels in the Parallels column, as there are simply too many. So we just note that there are 41 parallels in this case and you can click the triangle to see the full list of details.</p>
