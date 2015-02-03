@@ -132,7 +132,7 @@ def get_env():
         'js/header_menu.js',
         'js/sc_formatter.js',
         'js/sc_popupnotes.js',
-        'js/sc_zh2en_lookup.js',
+        'js/sc_lzh2en_lookup.js',
         #'js/discourse.js',
         sc_data_scripts_file,
         sc_uid_expansion_data_file,
@@ -181,7 +181,7 @@ def compress_static():
         
 def get_js_datascripts_filename():
     import pathlib
-    filepath = sc.static_dir / 'js/data/zh2en-data-scripts-names.js'
+    filepath = sc.static_dir / 'js/data/lzh2en-data-scripts-names.js'
     if not filepath.exists():        
         import tasks.jsdata
         tasks.jsdata.build(minify=True, quiet=True)

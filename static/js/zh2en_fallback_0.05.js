@@ -1,4 +1,4 @@
-zh2en_fallback = {'㐀': ['qiū', '(same as 丘) hillock or mound'],
+lzh2en_fallback = {'㐀': ['qiū', '(same as 丘) hillock or mound'],
 '㐁': ['tiàn', 'to lick; to taste, a mat, bamboo bark'],
 '㐄': ['kuà', ''],
 '㐅': ['wǔ', '(an ancient form of 五) five'],

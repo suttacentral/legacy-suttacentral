@@ -132,9 +132,9 @@ sc.sidebar = {
         
     },
     initChineseLookup: function() {
-        if ($('#zh2en').length == 0) return;
+        if ($('#lzh2en').length == 0) return;
         //Where to attach the chinese lookup control button.
-        sc.zh2enLookup.init('#zh2en', '#text');
+        sc.lzh2enLookup.init('#lzh2en', '#text');
     },
     disableControls: function(){
         $('#textual-controls button').attr('disabled', 'disabled');

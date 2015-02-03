@@ -30,9 +30,9 @@ from zipfile import ZipFile
 # Paths and urls, these are quite close to being static.
 js_script_data_dir = sc.static_dir / 'js' / 'data'
 
-zh2en_data_script_names_file = js_script_data_dir / 'zh2en-data-scripts-names.js'
-fallback_stem = 'zh2en-fallback'
-maindata_stem = 'zh2en-maindata'
+lzh2en_data_script_names_file = js_script_data_dir / 'lzh2en-data-scripts-names.js'
+fallback_stem = 'lzh2en-fallback'
+maindata_stem = 'lzh2en-maindata'
 
 buddhdic_file = sc.tmp_dir / 'buddhdic.txt.gz'
 buddhdic_url = 'http://www.acmuller.net/download/buddhdic.txt.gz'
@@ -104,7 +104,7 @@ class BuddhdicBuilder:
             if self.args.verbose:
                 logging.info('Entries which do not appear: ')
                 logging.info(', '.join('{}: {}'.format(head, meaning) for head, meaning in skipped))
-        return 'sc.zh2enData = {\n' + ',\n'.join(entries) + '\n}'
+        return 'sc.lzh2enData = {\n' + ',\n'.join(entries) + '\n}'
 
 class FallbackBuilder:
     def __init__(self, existing, seen=None):
@@ -151,7 +151,7 @@ class FallbackBuilder:
 
         outfo = tempfile.TemporaryFile('w+')
         
-        outfo.write('sc.zh2enFallbackData = {')
+        outfo.write('sc.lzh2enFallbackData = {')
         
         for lineno, line in enumerate(srcfo):
             if line.startswith('#') or line.isspace():
@@ -205,7 +205,7 @@ def writeout_js(stem, js_string, js_process_fn):
 
 def discover_existing_charcodes():
     seen = set()
-    for file in sc.text_dir.glob('zh/**/*.html'):
+    for file in sc.text_dir.glob('lzh/**/*.html'):
         with file.open(encoding='utf8') as f:
             for line in f:
                 seen.update(line)
@@ -277,9 +277,9 @@ with ZipFile(str(unihanzip_file)) as zipf:
 
 fallback_file = writeout_js(fallback_stem, fbstr, js_process_fn)
 
-with zh2en_data_script_names_file.open('w', encoding='utf8') as f:
+with lzh2en_data_script_names_file.open('w', encoding='utf8') as f:
     f.write('// This file was created automatically and should not be modified manually.\n')
-    f.write('sc.zh2enDataScripts = {};'.format(
+    f.write('sc.lzh2enDataScripts = {};'.format(
         ['data/' + maindata_file.name, 'data/' + fallback_file.name]))
 
 clean(maindata_stem, maindata_file)
