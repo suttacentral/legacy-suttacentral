@@ -33,7 +33,7 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                 },
                 "functions": [
                     {
-                        "boost_factor": "1.1",
+                        "boost_factor": "1.15",
                         "filter": {
                             "term": {
                                 "lang": "en"
@@ -57,7 +57,7 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                         }
                     },
                     {
-                        "boost_factor": "1.1",
+                        "boost_factor": "1.15",
                         "filter": {
                             "term": {
                                 "is_root": True

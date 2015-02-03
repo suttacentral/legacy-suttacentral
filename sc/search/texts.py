@@ -13,17 +13,18 @@ from sc.search import load_index_config
 from sc.util import recursive_merge, numericsortkey, grouper, unique
 
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+logger.setLevel('INFO')
 
 handler = logging.StreamHandler()
-handler.setLevel('DEBUG')
+handler.setLevel('INFO')
 logger.addHandler(handler)
 
 
 class TextIndexer(sc.search.BaseIndexer):
     htmlparser = lxml.html.HTMLParser(encoding='utf8')
-    def fix_whitespace(self, string):
-        """ Removes repeated whitespace.
+    numstriprex = regex.compile(r'(?=\S*\d)\S+')
+    def fix_text(self, string):
+        """ Removes repeated whitespace and numbers.
 
         A newline  in the output indicates a paragraph break.
 
@@ -32,6 +33,7 @@ class TextIndexer(sc.search.BaseIndexer):
         string = regex.sub(r'(?<!\n)\n(?!\n)', ' ', string)
         string = regex.sub(r'  +', ' ', string)
         string = regex.sub(r'\n\n+', r'\n', string)
+        string = regex.sub('\S*?\d\S*', '', string)
         return string.strip()
         
     def extract_fields_from_html(self, data):
@@ -64,14 +66,24 @@ class TextIndexer(sc.search.BaseIndexer):
             division = None
         others = hgroup[1:-1]
         hgroup.drop_tree()
-        content = self.fix_whitespace(text.text_content())
+        content = self.fix_text(text.text_content())
+
+        if title is not None:
+            title = self.fix_text(title.text_content())
+        else:
+            title = ''
+
+        if division is not None:
+            division = self.fix_text(division.text_content())
+        else:
+            division = ''
         
         return {
             'content': content,
             'author': author,
             'heading': {
-                'title': title.text_content().strip() if title is not None else '',
-                'division': division.text_content().strip() if division is not None else '',
+                'title': title,
+                'division': division,
                 'subhead': [e.text_content().strip() for e in others]
             },
             'boost': self.length_boost(len(content))
@@ -182,7 +194,6 @@ class TextIndexer(sc.search.BaseIndexer):
             
             try:
                 res = bulk(self.es, index=index_name, doc_type="text", actions=(t for t in chunk if t is not None))
-                print(res)
             except:
                 raise
 
