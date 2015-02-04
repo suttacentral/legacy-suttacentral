@@ -100,9 +100,9 @@ def default(*args, **kwargs):
             if imm.text_exists(lang_code, uid):
                 redirect = True
                 uid, lang_code = lang_code, uid
-            elif lang_code == 'zh' and imm.text_exists(uid, 'och'):
+            elif lang_code == 'zh' and imm.text_exists(uid, 'lzh'):
                 redirect = True
-                lang_code = 'och'
+                lang_code = 'lzh'
             if redirect:
                 # This is an old-style url, redirect to new-style url.
                 if len(args) == 2:
