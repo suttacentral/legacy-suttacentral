@@ -586,6 +586,12 @@ class ElasticSearchResultsView(ViewBase):
         context.total = self.results['hits']['total']
         context.offset = int(self.kwargs['offset'])
         
+        context.search_languages = [lang for lang in
+                                        sorted(context.imm.languages.values(),
+                                            key=lambda l: int(l.search_priority))
+                                        if context.imm.tim.exists(lang_uid=lang.uid)]
+        context.query_lang = self.kwargs.get('lang')
+        
 class ShtLookupView(ViewBase):
     """The view for the SHT lookup page."""
 

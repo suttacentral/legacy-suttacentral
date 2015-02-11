@@ -3,7 +3,7 @@ from collections import namedtuple, Counter
 from sc.util import ConciseRepr
 
 Language = namedtuple('Language', 
-    'uid name isroot iso_code priority collections')
+    'uid name isroot iso_code priority search_priority collections')
 
 
 Sect = namedtuple('Sect', 'uid name')

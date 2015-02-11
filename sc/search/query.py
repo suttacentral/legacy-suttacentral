@@ -6,15 +6,28 @@ import elasticsearch
 from sc.search import es
 logger = logging.getLogger(__name__)
 
-
-def search(query, highlight=True, offset=0, limit=10, **kwargs):
+def search(query, highlight=True, offset=0, limit=10,
+            lang=None, define=None, details=None, **kwargs):
     # For some reason seems to require extra escaping to
     # resolve things like 'sati"'
     query = query.replace('define:', 'term:')
+    index = "_all"
+    doc_type = None
+    if details is not None:
+        doc_type = 'sutta'
+    elif define is not None:
+        doc_type = 'definition'
+    elif 'lang':
+        index = lang
+        doc_type = 'text'
+    
+
+        
+    
     body = {
         "from": offset,
         "size": limit,
-        "_source": ["uid", "lang", "name", "volpage", "gloss", "term", "heading"],
+        "_source": ["uid", "lang", "name", "volpage", "gloss", "term", "heading", "is_root"],
         "query": {
             "function_score": {
                 "query": {
@@ -70,6 +83,7 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
             }
         }
     }
+    
     if highlight:
         body["highlight"] = {
             "pre_tags": ["<strong class=\"highlight\">"],
@@ -87,10 +101,10 @@ def search(query, highlight=True, offset=0, limit=10, **kwargs):
                 }
             }
     try:
-        return es.search(body=body)
+        return es.search(index=index, doc_type=doc_type, body=body)
     except elasticsearch.exceptions.RequestError as e:
         # In case of an error, we'll repeat the query but with any
         # punctuation removed.
         new_query = regex.sub(r'\p{punct}', ' ', query)
         body['query']['function_score']['query']['query_string']['query'] = new_query
-        return es.search(body=body)
+        return es.search(index=index, doc_type=doc_type, body=body)
