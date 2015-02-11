@@ -3,7 +3,32 @@
 {%- block content -%}
 <div id='onecol'>
 <div id="main_search_results">
-<div>You searched: <strong>{{query}}</strong></div>
+
+<form id="page-main-search" action="/search">
+<span class="input-wrap">
+<input type="text" name="query" tabindex="1" autocomplete="off" value="{{query|e}}">
+<button type="submit" class="search-submit"></button>
+</span>
+<select name="lang" onchange="this.form.submit()" title="Restrict search to texts of selected language">
+<option value="">All Languages</option>
+<option disabled>Root Languages</option>
+{% for lang in search_languages %}
+    {% if lang.isroot %}
+    <option value="{{lang.uid}}"{{' selected="selected"' if query_lang == lang.iso_code else ''}}>{{lang.name}}</option>
+    {% endif %}
+{% endfor %}
+<option disabled>Translations</option>
+{% for lang in search_languages %}
+    {% if not lang.isroot %}
+    <option value="{{lang.uid}}"{{' selected="selected"' if query_lang == lang.iso_code else ''}}>{{lang.name}}</option>
+    {% endif %}
+{% endfor %}
+</select>
+|
+<button type="submit" name="define" title="Restrict search to dictionaries">Dictionaries</button>
+|
+<button type="submit" name="details" title="Restrict search to sutta/rule details">Details</button>
+</form>
 {% if results.hits.hits %}
 <p>Results {{ offset + 1 }} to {{ offset + results.hits.hits|length }} of {{ results.hits.total }}</p>
 <ul class="results">

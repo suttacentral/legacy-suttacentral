@@ -107,44 +107,7 @@ header {
     #page-header-search input:focus {
         background: white;
     }
-    button {
-        display: inline-block;
-        font-size: 1em;
-        width: 10px;
-        height: 10px;
-        border: 2px solid $medium-gray;
-        position: absolute;
-        border-radius: 50%;
-        right: 2.2%;
-        top: 12px;
-        background: 0;
-        padding: 0;
-    }
-    button::before {
-        content: "";
-        position: absolute;
-        right: -6px;
-        bottom: -4px;
-        background: $medium-gray;
-        width: 7px;
-        height: 3px;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        transform: rotate(45deg);
-    }
-    button::after {
-        content: "";
-        position: absolute;
-        border: 2px solid transparent;
-        border-radius: 50%;
-        height: 18px;
-        width: 18px;
-        left: -7px;
-        top: -7px;
-    }
-    button:hover::after {
-        border: 2px solid $medium-gray;
-    }
+    
     @media screen and (max-width: 760px) {
         nav {
             width: initial;
@@ -164,6 +127,45 @@ header {
             display: none;
         }
     }
+}
+
+.search-submit {
+    display: inline-block;
+    font-size: 1em;
+    width: 10px;
+    height: 10px;
+    border: 2px solid $medium-gray;
+    position: absolute;
+    border-radius: 50%;
+    right: 2.2%;
+    top: 12px;
+    background: 0;
+    padding: 0;
+}
+.search-submit::before {
+    content: "";
+    position: absolute;
+    right: -6px;
+    bottom: -4px;
+    background: $medium-gray;
+    width: 7px;
+    height: 3px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.search-submit::after {
+    content: "";
+    position: absolute;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    height: 18px;
+    width: 18px;
+    left: -7px;
+    top: -7px;
+}
+.search-submit:hover::after {
+    border: 2px solid $medium-gray;
 }
 
 #panel-screen-wrap {

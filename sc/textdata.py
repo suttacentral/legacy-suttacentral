@@ -503,9 +503,18 @@ class SqliteBackedTIM(TextInfoModel):
             else:
                 raise ValueError('At least one of uid or lang_uid must be set')
 
-    def exists(self, uid, lang_uid):
-        cur = self._con.execute('SELECT 1 FROM data WHERE lang=? and uid=?',
+    def exists(self, uid=None, lang_uid=None):
+        fields = []
+        if uid and lang_uid:
+            cur = self._con.execute('SELECT 1 FROM data WHERE lang=? and uid=?',
                         (lang_uid, uid))
+        elif uid and not lang_uid:
+            cur = self._con.execute('SELECT 1 FROM data WHERE uid=?', (uid,))
+        elif lang_uid and not uid:
+            cur = self._con.execute('SELECT 1 FROM data WHERE lang=?', (lang_uid,))
+        else:
+            raise ValueError('uid and lang_uid cannot both be None')
+            
         return cur.fetchone() != None
 
     def add_text_info(self, lang_uid, uid, textinfo):

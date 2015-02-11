@@ -169,7 +169,8 @@ class _Imm:
                 name=row.name,
                 iso_code=row.iso_code,
                 isroot=row.isroot,
-                priority=row.priority,
+                priority=int(row.priority),
+                search_priority=float(row.search_priority),
                 collections=[],
                 )
         
