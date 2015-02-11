@@ -13,13 +13,15 @@ def search(query, highlight=True, offset=0, limit=10,
     query = query.replace('define:', 'term:')
     index = "_all"
     doc_type = None
-    if 'lang':
-        index = lang
-        doc_type = 'text'
-    if define is not None:
-        doc_type = 'definition'
     if details is not None:
         doc_type = 'sutta'
+    elif define is not None:
+        doc_type = 'definition'
+    elif 'lang':
+        index = lang
+        doc_type = 'text'
+    
+
         
     
     body = {
