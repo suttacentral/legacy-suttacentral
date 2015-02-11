@@ -8,6 +8,7 @@
     .source {
         float: right;
         margin-right: 1em;
+        padding: 0.3em 0 0 0;
     }
 
     .this {
@@ -40,14 +41,14 @@
     }
 
     .entries {
-        width: 80%;
+        width: 70%;
         float: right;
     }
 
     .related_terms {
         width: 20%;
         float: left;
-        margin-top: -1em;
+        margin: 0 1em;
     }
 
     ul {
