@@ -27,7 +27,8 @@
                         "filter": [
                             "lowercase",
                             "pali_stop",
-                            "pali_stemmer"
+                            "pali_stemmer",
+                            "icu_folding"
                         ]
                     }
                 }

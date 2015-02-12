@@ -1,22 +1,11 @@
 {
-    "inherits": ["acro_to_name_and_uid_auto", "coded_name_auto", "meta"],
+    "inherits": ["acro_to_name_and_uid_auto", "coded_name_auto", "meta", "uid_expansion"],
     "index": {
         "settings": {
             "number_of_shards": 1,
             "number_of_replicas": 0,
             "analysis": {
-                "tokenizer": {
-                    "uid_split": {
-                        "type": "pattern",
-                        "group": 0,
-                        "pattern": "[a-z]+|[0-9-]+"
-                    }
-                },
                 "analyzer": {
-                    "uid_expanding": {
-                        "tokenizer": "uid_split",
-                        "filter": ["acro_and_name_to_uid", "icu_folding"]
-                    },
                     "folding_analyzer": {
                         "tokenizer": "icu_tokenizer",
                         "filter": ["icu_folding"]
@@ -34,13 +23,7 @@
                 "properties": {
                     "uid": {
                         "type": "string",
-                        "index": "not_analyzed",
-                        "fields": {
-                            "expanded": {
-                                "type": "string",
-                                "analyzer": "uid_expanding"
-                            }
-                        }
+                        "analyzer": "uid_expansion"
                     },
                     "volpage": {
                         "type": "string",
@@ -48,11 +31,11 @@
                     },
                     "division": {
                         "type": "string",
-                        "analyzer": "uid_expanding"
+                        "analyzer": "uid_expansion"
                     },
                     "lang": {
                         "type": "string",
-                        "analyzer": "uid_expanding"
+                        "analyzer": "uid_expansion"
                     },
                     "name": {
                         "type": "string",

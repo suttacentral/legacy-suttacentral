@@ -28,6 +28,7 @@ def search(query, highlight=True, offset=0, limit=10,
         "from": offset,
         "size": limit,
         "_source": ["uid", "lang", "name", "volpage", "gloss", "term", "heading", "is_root"],
+        "timeout": "1s",
         "query": {
             "function_score": {
                 "query": {
@@ -38,7 +39,7 @@ def search(query, highlight=True, offset=0, limit=10,
                                    "gloss^1.5",
                                    "lang^0.5",
                                    "author^0.5",
-                                   "uid", "uid.expanded^0.5",
+                                   "uid",
                                    "name", "name.*^0.75"],
                         "minimum_should_match": "100%",
                         "analyze_wildcard": True,
@@ -47,7 +48,7 @@ def search(query, highlight=True, offset=0, limit=10,
                 },
                 "functions": [
                     {
-                        "boost_factor": "1.1",
+                        "boost_factor": "1.2",
                         "filter": {
                             "term": {
                                 "lang": "en"
@@ -71,7 +72,7 @@ def search(query, highlight=True, offset=0, limit=10,
                         }
                     },
                     {
-                        "boost_factor": "1.1",
+                        "boost_factor": "1.2",
                         "filter": {
                             "term": {
                                 "is_root": True

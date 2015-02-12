@@ -1,0 +1,28 @@
+{
+    "index": {
+        "settings": {
+            "analysis": {
+                "filter": {
+                    "uid_expanding": {
+                        "type": "pattern_replace",
+                        "pattern": "(?<=[a-z])([0-9]+[0-9.-]*)",
+                        "replacement": " $1"
+                    },
+                    "unique_stem": {
+                        "type": "unique",
+                        "only_on_same_position": true
+                    }
+                },
+                "analyzer": {
+                    "uid_expansion": {
+                        "tokenizer": "standard",
+                        "filter": ["lowercase",
+                                    "keyword_repeat",
+                                    "uid_expanding",
+                                    "unique_stem"]
+                    }
+                }
+            }
+        }
+    }
+}
