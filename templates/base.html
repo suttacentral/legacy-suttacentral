@@ -4,6 +4,9 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+{% if no_index %}
+<meta name="robots" content="noindex, nofollow">
+{% endif %}
 <title>
   {%- if title -%}
     {{ title }} - SuttaCentral

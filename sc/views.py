@@ -163,6 +163,7 @@ class ViewBase:
             'scm': scm,
             'embed': 'embed' in cherrypy.request.params,
             'search_query': '',
+            'no_index': False,
             'imm': sc.scimm.imm(),
             'ajax': 'ajax' in cherrypy.request.params,
             'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()}
@@ -591,6 +592,7 @@ class ElasticSearchResultsView(ViewBase):
                                             key=lambda l: int(l.search_priority))
                                         if context.imm.tim.exists(lang_uid=lang.uid)]
         context.query_lang = self.kwargs.get('lang')
+        context.no_index = True
         
 class ShtLookupView(ViewBase):
     """The view for the SHT lookup page."""
