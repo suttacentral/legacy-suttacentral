@@ -2,6 +2,7 @@ import time
 import json
 import regex
 import logging
+import sqlite3
 import elasticsearch.helpers
 import sc
 import sc.tools.html
@@ -185,6 +186,64 @@ def get_fuzzy_terms(term, lang='en'):
     })
     return [d['_source'] for d in resp['hits']['hits'] if d['_source']['term'] != term]
 
+
+class FuzzyCache:
+    def __init__(self):
+        self.filename = sc.db_dir / 'search_fuzzy_cache.sqlite'
+
+    def is_valid(self):
+        return self.filename.exists()
+
+    def connect(self):
+        return sqlite3.connect(str(self.filename))
+    
+    def build(self):
+        if self.filename.exists():
+            self.filename.unlink()
+        con = self.connect()
+        con.execute('CREATE TABLE terms (term, lang, payload)')
+        con.execute('CREATE UNIQUE INDEX term_index ON terms(term, lang)')
+        data = self.build_fuzzy_cache()
+        self.add_data(data)
+
+    def add_data(self, data):
+        con = sqlite3.connect(str(self.filename))
+        con.executemany('INSERT INTO terms VALUES (?, ?, ?)', ((
+            term, lang, json.dumps(fuzzies, ensure_ascii=False))
+            for (term, lang), fuzzies
+            in data))
+        con.commit()
+        
+    def retrieve(self, term, lang):
+        con = self.connect()
+        r = con.execute('SELECT payload FROM terms WHERE term = ? AND lang=?',
+            (term, lang))
+        try:
+            payload = r.fetchone()[0]
+            return json.loads(payload)
+        except IndexError:
+            return []
+    
+    def build_fuzzy_cache(self):
+        start=time.time()
+        terms = elasticsearch.helpers.scan(es, doc_type='definition', fields='term')
+        terms = [(t['fields']['term'], t['_index']) for t in terms]
+        results = []
+        for i, (term, lang) in enumerate(terms):
+            pc_done = int(100 * (i / len(terms)))
+            for term in term:
+                results.append(((term, lang), get_fuzzy_terms(term, lang)))
+            print(r'{}% done'.format(pc_done), end='\r')
+        print('\n')
+        print(time.time() - start)
+        return results
+
+fc = FuzzyCache()
+
+if fc.is_valid():
+    def get_fuzzy_terms(term, lang='en'):
+        return fc.retrieve(term, lang)
+    
 indexer = DictIndexer()
 
 def periodic_update(i):
