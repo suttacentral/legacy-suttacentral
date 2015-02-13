@@ -563,6 +563,7 @@ class DefinitionView(ViewBase):
 
     def setup_context(self, context):
         from sc.search import dicts
+        context.no_index = True
         context.term = term = self.term
         context.title = "define: {}".format(self.term)
         entry = context.entry = dicts.get_entry(self.term)

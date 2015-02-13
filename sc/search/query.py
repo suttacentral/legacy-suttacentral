@@ -32,17 +32,16 @@ def search(query, highlight=True, offset=0, limit=10,
         "query": {
             "function_score": {
                 "query": {
-                    "query_string": {
-                        "lenient": True,
+                    "multi_match": {
+                        "type": "cross_fields",
                         "fields": ["content", "content.*^0.5",
                                    "term^1.5", "term.*^0.5",
                                    "gloss^1.5",
                                    "lang^0.5",
                                    "author^0.5",
-                                   "uid",
+                                   "uid", "uid.division^0.7",
                                    "name", "name.*^0.75"],
-                        "minimum_should_match": "100%",
-                        "analyze_wildcard": True,
+                        "minimum_should_match": "99%",
                         "query": query
                     }
                 },
