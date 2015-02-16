@@ -9,8 +9,9 @@
 <input type="text" name="query" tabindex="1" autocomplete="off" value="{{query|e}}">
 <button type="submit" class="search-submit"></button>
 </span>
+<label>Search In</label>
 <select name="lang" onchange="this.form.submit()" title="Restrict search to texts of selected language">
-<option value="">All Languages</option>
+<option value="">English and Pali</option>
 <option disabled>Root Languages</option>
 {% for lang in search_languages %}
     {% if lang.isroot %}

@@ -11,7 +11,7 @@ def search(query, highlight=True, offset=0, limit=10,
     # For some reason seems to require extra escaping to
     # resolve things like 'sati"'
     query = query.replace('define:', 'term:')
-    index = "_all"
+    index = "en,pi"
     doc_type = None
     if details is not None:
         doc_type = 'sutta'
@@ -20,15 +20,13 @@ def search(query, highlight=True, offset=0, limit=10,
     elif 'lang':
         index = lang
         doc_type = 'text'
-    
 
-        
     
     body = {
         "from": offset,
         "size": limit,
         "_source": ["uid", "lang", "name", "volpage", "gloss", "term", "heading", "is_root"],
-        "timeout": "1s",
+        "timeout": "15s",
         "query": {
             "function_score": {
                 "query": {
