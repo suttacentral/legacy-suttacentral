@@ -15,12 +15,14 @@ def search(query, highlight=True, offset=0, limit=10,
     doc_type = None
     if details is not None:
         doc_type = 'sutta'
+        index = 'suttas'
     elif define is not None:
         doc_type = 'definition'
-    elif 'lang':
+        index = 'en'
+    elif lang:
         index = lang
         doc_type = 'text'
-
+    print('Index = {}, lang = {}'.format(index, lang))
     
     body = {
         "from": offset,
@@ -99,6 +101,7 @@ def search(query, highlight=True, offset=0, limit=10,
                 }
             }
     try:
+        print('Performing search on index: {}'.format(index))
         return es.search(index=index, doc_type=doc_type, body=body)
     except elasticsearch.exceptions.RequestError as e:
         # In case of an error, we'll repeat the query but with any
