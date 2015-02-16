@@ -136,12 +136,15 @@ class TextIndexer(sc.search.BaseIndexer):
         raise StopIteration    
 
     def update(self, force=False):
-        lang_dirs = sorted(sc.text_dir.glob('*'))
-        lang_dirs.remove('pi')
-        lang_dirs.remove('en')
-        lang_dirs.insert(0, en)
-        lang_dirs.insert(1, pi)
-        for lang_dir in sc.text_dir.glob('*'):
+        def sort_key(d):
+            if d.stem == 'en':
+                return 0
+            if d.stem == 'pi':
+                return 1
+            return 10
+        lang_dirs = sorted(sorted(sc.text_dir.glob('*')), key=sort_key)
+
+        for lang_dir in lang_dirs:
             if lang_dir.is_dir():
                 self.index_folder(lang_dir, force)
 
