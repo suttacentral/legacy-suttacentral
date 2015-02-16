@@ -101,7 +101,6 @@ def search(query, highlight=True, offset=0, limit=10,
                 }
             }
     try:
-        print('Performing search on index: {}'.format(index))
         return es.search(index=index, doc_type=doc_type, body=body)
     except elasticsearch.exceptions.RequestError as e:
         # In case of an error, we'll repeat the query but with any
