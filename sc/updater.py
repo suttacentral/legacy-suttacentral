@@ -5,6 +5,8 @@ import threading
 import logging
 logger = logging.getLogger(__name__)
 
+halt = False
+
 def run_updaters():
     """ Run update functions which apply to data such as texts
 
@@ -38,6 +40,8 @@ def run_updaters():
     
     skip = False
     while True:
+        if halt:
+            return
         # We can bypass performing updates if we know that
         # the git repository has not changed, but we should
         # only do this if it is guaranteed that changes have
