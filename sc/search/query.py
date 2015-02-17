@@ -11,7 +11,7 @@ def search(query, highlight=True, offset=0, limit=10,
     # For some reason seems to require extra escaping to
     # resolve things like 'sati"'
     query = query.replace('define:', 'term:')
-    index = "en,pi"
+    index = "en,pi,suttas"
     doc_type = None
     if details is not None:
         doc_type = 'sutta'
