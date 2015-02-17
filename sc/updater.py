@@ -22,12 +22,14 @@ def run_updaters():
     import sc.search.dicts
     import sc.search.texts
     import sc.search.suttas
+    from sc.util import filelock
+    # name, function, lock needed?
     functions = [
-        ('sc.textdata.periodic_update', sc.textdata.periodic_update),
-        ('sc.scimm.periodic_update', sc.scimm.periodic_update),
-        ('sc.search.dicts.periodic_update', sc.search.dicts.periodic_update),
-        ('sc.search.suttas.periodic_update', sc.search.suttas.periodic_update),
-        ('sc.search.texts.periodic_update', sc.search.texts.periodic_update)
+        ('sc.textdata.periodic_update', sc.textdata.periodic_update, False),
+        ('sc.scimm.periodic_update', sc.scimm.periodic_update, False),
+        ('sc.search.dicts.periodic_update', sc.search.dicts.periodic_update, True),
+        ('sc.search.suttas.periodic_update', sc.search.suttas.periodic_update, True),
+        ('sc.search.texts.periodic_update', sc.search.texts.periodic_update, True)
     ]
     time.sleep(0.5)
     i = 0
@@ -46,11 +48,20 @@ def run_updaters():
             lastGitCommitTime = gitCommitTime
                 
         if not skip:
-            for fn_name, fn in functions:
+            for fn_name, fn, global_lock in functions:
                 if i > 0:
                     time.sleep(1)
                 try:
-                    fn(i)
+                    if global_lock:
+                        with filelock('/tmp/suttacentral_updater_global.lock', block=False) as acquired:
+                            if acquired:
+                                fn(i)
+                            else:
+                                logger.warn('Search index update lock not acquired.')
+                                time.sleep(10)
+                                continue
+                    else:
+                        fn(i)
                 except Exception as e:
                     logger.error('An exception occured when running {}'.format(fn_name))
                     raise

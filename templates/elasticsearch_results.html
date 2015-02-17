@@ -60,27 +60,29 @@
 <p>{{ hit.highlight.content|join(' … ') }} </p>
 {% endif %}
 {% endfor %}
+
+{% macro page_url(offset, limit) %}
+/search?query={{query|urlencode}}{% if query_lang %}&lang={{query_lang}}{% endif %}&offset={{offset}}&limit={{limit}}
+{% endmacro %}
 <table id="search-nav">
 <tr>
 {% if offset > 0 %}
-<td><a class="search-nextprev" href="/search?query={{query|urlencode}}&offset={{ (offset - limit) | max(0) }}&limit={{limit}}">Prev</a>
+<td><a class="search-nextprev" href="{{ page_url((offset - limit) | max(0), limit) }}">Prev</a>
 {% endif %}
 {% if (offset / limit <= 5) %}
 {% set range_start = 0 %}
 {% else %}
 {% set range_start = offset // limit - 5 %}
 {% endif %}
-
 {% for i in range(range_start, (1 + total // limit) | min(range_start + 10)) %}
 {% if offset >= (i * limit) and offset < (i + 1) * limit %}
 <td><span class="search-page">{{i + 1}}</span>
 {% else %}
-<td><a class="search-page" href="/search?query={{query|urlencode}}&offset={{i * limit}}&limit={{limit}}">{{i + 1}}</a>
+<td><a class="search-page" href="{{ page_url(i * limit, limit) }}">{{i + 1}}</a>
 {% endif %}
 {% endfor %}
-
 {% if offset + limit < total %}
-<td><a class="search-nextprev" href="/search?query={{query|urlencode}}&offset={{ offset + limit }}&limit={{limit}}">Next</a>
+<td><a class="search-nextprev" href="{{ page_url(offset + limit, limit) }}">Next</a>
 {% endif %}
 </tr>
 </table>

@@ -15,7 +15,22 @@ from elasticsearch.exceptions import ConnectionError
 def is_available():
     return es.ping()
 
+def obtain_lock():
+    """ Returns True if a lock is obtained, otherwise False """
+    try:
+        r = es.create('fs', 'lock', id='global', body={})
+        return True
+    except elasticsearch.exceptions.ConflictError:
+        return False
 
+def release_lock():
+    """ Returns True if the lock was released, otherwise False """
+    try:
+        r = es.delete('fs', 'lock', id='global', body={})
+        return True
+    except elasticsearch.exceptions.NotFoundError:
+        return False
+    
 # Make elasticsearch STFU
 logging.getLogger('elasticsearch').setLevel('ERROR')
 logging.getLogger('elasticsearch.trace').setLevel('ERROR')

@@ -86,9 +86,16 @@ class TextIndexer(sc.search.BaseIndexer):
                 'division': division,
                 'subhead': [e.text_content().strip() for e in others]
             },
-            'boost': self.length_boost(len(content))
+            'boost': self.boost_factor(content)
         }
-
+    def boost_factor(self, content):
+        boost = self.length_boost(len(content))
+        if len(content) < 500:
+            content = content.casefold()
+            if 'preceding' in content or 'identical' in content:
+                boost = boost * 0.4
+        return boost
+        
     def yield_docs_from_dir(self, lang_dir, size, to_add=None, to_delete=None):
         imm = sc.scimm.imm()
         lang_uid = lang_dir.stem

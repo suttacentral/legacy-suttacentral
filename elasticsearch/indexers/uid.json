@@ -12,7 +12,6 @@
                         "preserve_original": false,
                         "patterns": ["^([a-z]+(?:-[1-9])?)"]
                     }
-                        
                 },
                 "analyzer": {
                     "uid_globbing": {

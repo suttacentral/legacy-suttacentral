@@ -22,7 +22,6 @@ def search(query, highlight=True, offset=0, limit=10,
     elif lang:
         index = lang
         doc_type = 'text'
-    print('Index = {}, lang = {}'.format(index, lang))
     
     body = {
         "from": offset,
@@ -33,15 +32,18 @@ def search(query, highlight=True, offset=0, limit=10,
             "function_score": {
                 "query": {
                     "multi_match": {
-                        "type": "cross_fields",
+                        "type": "best_fields",
+                        "tie_breaker": 0.3,
                         "fields": ["content", "content.*^0.5",
                                    "term^1.5", "term.*^0.5",
                                    "gloss^1.5",
                                    "lang^0.5",
                                    "author^0.5",
                                    "uid", "uid.division^0.7",
-                                   "name", "name.*^0.75"],
-                        "minimum_should_match": "99%",
+                                   "name^1.25", "name.*^0.75",
+                                   "heading.title^0.5",
+                                   "heading.title.plain^0.5",
+                                   "heading.title.shingle^0.5"],
                         "query": query
                     }
                 },
@@ -54,6 +56,12 @@ def search(query, highlight=True, offset=0, limit=10,
                             }
                         }
                     },
+                    {
+                        "field_value_factor": {
+                            "field": "boost",
+                            "factor": 1
+                        }
+                    },                            
                     {
                         "boost_factor": "0.25",
                         "filter": {

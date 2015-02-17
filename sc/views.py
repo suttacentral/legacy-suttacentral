@@ -8,6 +8,7 @@ import socket
 import time
 import json
 import urllib.parse
+import furl
 
 from webassets.ext.jinja2 import AssetsExtension
 

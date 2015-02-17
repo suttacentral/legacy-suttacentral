@@ -8,7 +8,7 @@
                             "folded": {
                                 "type": "string",
                                 "term_vector": "with_positions_offsets",
-                                "analyzer": "folding"
+                                "analyzer": "folding_analyzer"
                             }
                         }
                     }
@@ -21,7 +21,7 @@
                             "folded": {
                                 "type": "string",
                                 "term_vector": "with_positions_offsets",
-                                "analyzer": "folding"
+                                "analyzer": "folding_analyzer"
                             }
                         }
                     }

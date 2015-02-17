@@ -26,6 +26,7 @@
                         "char_filter": ["sanskrit_to_pali"],
                         "filter": [
                             "lowercase",
+                            "denumber",
                             "pali_stop",
                             "pali_stemmer",
                             "icu_folding"
