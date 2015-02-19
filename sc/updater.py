@@ -28,11 +28,14 @@ def run_updaters():
     # name, function, lock needed?
     functions = [
         ('sc.textdata.periodic_update', sc.textdata.periodic_update, False),
-        ('sc.scimm.periodic_update', sc.scimm.periodic_update, False),
-        ('sc.search.dicts.periodic_update', sc.search.dicts.periodic_update, True),
-        ('sc.search.suttas.periodic_update', sc.search.suttas.periodic_update, True),
-        ('sc.search.texts.periodic_update', sc.search.texts.periodic_update, True)
+        ('sc.scimm.periodic_update', sc.scimm.periodic_update, False)
     ]
+    if sc.config.app['update_search']:
+        functions.extend([
+            ('sc.search.dicts.periodic_update', sc.search.dicts.periodic_update, True),
+            ('sc.search.suttas.periodic_update', sc.search.suttas.periodic_update, True),
+            ('sc.search.texts.periodic_update', sc.search.texts.periodic_update, True)
+        ])
     time.sleep(0.5)
     i = 0
 
@@ -40,8 +43,7 @@ def run_updaters():
     
     skip = False
     while True:
-        if halt:
-            return
+        
         # We can bypass performing updates if we know that
         # the git repository has not changed, but we should
         # only do this if it is guaranteed that changes have
@@ -53,6 +55,8 @@ def run_updaters():
                 
         if not skip:
             for fn_name, fn, global_lock in functions:
+                if halt:
+                    return
                 if i > 0:
                     time.sleep(1)
                 try:

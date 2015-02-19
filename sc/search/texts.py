@@ -6,11 +6,12 @@ import logging
 import lxml.html
 from copy import deepcopy
 from collections import defaultdict
-from elasticsearch.helpers import bulk, scan
+from elasticsearch.helpers import scan
 import sc
 from sc import scimm, textfunctions
-from sc.search import load_index_config
-from sc.util import recursive_merge, numericsortkey, grouper, unique
+from sc.util import unique, numericsortkey
+
+from sc.search.indexer import ElasticIndexer
 
 logger = logging.getLogger(__name__)
 logger.setLevel('INFO')
@@ -20,9 +21,16 @@ handler.setLevel('INFO')
 logger.addHandler(handler)
 
 
-class TextIndexer(sc.search.BaseIndexer):
+class TextIndexer(ElasticIndexer):
+    doc_type = 'text'
+    
     htmlparser = lxml.html.HTMLParser(encoding='utf8')
     numstriprex = regex.compile(r'(?=\S*\d)\S+')
+
+    def __init__(self, config_name, lang_dir):
+        self.lang_dir = lang_dir
+        super().__init__(config_name)
+        
     def fix_text(self, string):
         """ Removes repeated whitespace and numbers.
 
@@ -141,60 +149,34 @@ class TextIndexer(sc.search.BaseIndexer):
         if chunk:
             yield chunk
         raise StopIteration    
-
-    def update(self, force=False):
-        def sort_key(d):
-            if d.stem == 'en':
-                return 0
-            if d.stem == 'pi':
-                return 1
-            return 10
-        lang_dirs = sorted(sorted(sc.text_dir.glob('*')), key=sort_key)
-
-        for lang_dir in lang_dirs:
-            if lang_dir.is_dir():
-                self.index_folder(lang_dir, force)
-
+    
     def index_name_from_uid(self, lang_uid):
         return lang_uid
 
-    def index_folder(self, lang_dir, force=False):
-        lang_uid = lang_dir.stem
-
-        index_name = self.index_name_from_uid(lang_uid)
-        self.register_index(index_name)
-        if force:
-            try:
-                self.es.indices.delete(index_name)
-            except:
-                pass
+    @staticmethod
+    def load_index_config(config_name):
         try:
-            index_config = load_index_config(index_name)
-        except:
-            logger.warning('No indexer settings or invalid settings for language "{}", using "default"'.format(lang_uid))
-            try:
-                index_config = load_index_config('default')
-            except:
-                logger.warning('default config does not exist')
-                raise
-        
-        if not self.es.indices.exists(index_name):
-            logger.info('Creating index "{}"'.format(index_name))
-            self.es.indices.create(index_name, index_config)
-            self.es.index(index=index_name, id="files", doc_type="meta", body={"mtimes": {}})
-        try:
-            stored_mtimes = {hit["_id"]: hit["fields"]["mtime"][0] for hit in scan(self.es,
-                index=index_name,
-                doc_type="text",
-                fields="mtime",
-                query=None,
-                size=500)}
+            return ElasticIndexer.load_index_config(config_name)
         except Exception as e:
-            logger.error('A problem occured with index {}'.format(lang_uid))
-            raise
-        
-        current_mtimes = {file.stem: int(file.stat().st_mtime) for file in lang_dir.glob('**/*.html')}
-        
+            logger.warning('No indexer settings or invalid settings for language "{}" ({}), using "default"'.format(
+                config_name, type(e)))
+            try:
+                return ElasticIndexer.load_index_config('default')
+            except:
+                logger.error('could not find default config')
+                raise
+
+    def update_data(self):
+        lang_uid = self.lang_dir.stem
+        stored_mtimes = {hit["_id"]: hit["fields"]["mtime"][0] for hit in scan(self.es,
+            index=self.index_name,
+            doc_type="text",
+            fields="mtime",
+            query=None,
+            size=500)}
+        print('{} stored mtimes'.format(len(stored_mtimes)))
+        current_mtimes = {file.stem: int(file.stat().st_mtime) for file in self.lang_dir.glob('**/*.html')}
+        print('{} current mtimes'.format(len(current_mtimes)))
         to_delete = set(stored_mtimes).difference(current_mtimes)
         to_add = current_mtimes.copy()
         for uid, mtime in stored_mtimes.items():
@@ -202,20 +184,27 @@ class TextIndexer(sc.search.BaseIndexer):
                 continue
             if mtime <= current_mtimes.get(uid):
                 to_add.pop(uid)
-        logger.info("For index {}, {} files already indexed, {} files to be added, {} files to be deleted".format(index_name,  len(stored_mtimes), len(to_add), len(to_delete)))
-        for chunk in self.yield_docs_from_dir(lang_dir,  size=500000, to_add=to_add, to_delete=to_delete):
-            if not chunk:
-                continue
-            
-            try:
-                res = bulk(self.es, index=index_name, doc_type="text", actions=(t for t in chunk if t is not None))
-            except:
-                raise
+        logger.info("For index {} ({}), {} files already indexed, {} files to be added, {} files to be deleted".format(
+                     self.index_name, self.index_alias, len(stored_mtimes), len(to_add), len(to_delete)))
+        chunks = self.yield_docs_from_dir(self.lang_dir,  size=500000, to_add=to_add, to_delete=to_delete)
+        self.process_chunks(chunks)
 
-indexer = TextIndexer()
+def update(force=False):
+    def sort_key(d):
+        if d.stem == 'en':
+            return 0
+        if d.stem == 'pi':
+            return 1
+        return 10
+    lang_dirs = sorted(sorted(sc.text_dir.glob('*')), key=sort_key)
+
+    for lang_dir in lang_dirs:
+        if lang_dir.is_dir():
+            indexer = TextIndexer(lang_dir.stem, lang_dir)
+            indexer.update()
 
 def periodic_update(i):
     if not sc.search.is_available():
         logger.error('Elasticsearch Not Available')
         return
-    indexer.update()
+    update()

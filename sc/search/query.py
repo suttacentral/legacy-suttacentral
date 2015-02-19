@@ -11,18 +11,21 @@ def search(query, highlight=True, offset=0, limit=10,
     # For some reason seems to require extra escaping to
     # resolve things like 'sati"'
     query = query.replace('define:', 'term:')
-    index = "en,pi,suttas"
+    indexes = ['en', 'en-dict', 'pi', 'suttas']
     doc_type = None
     if details is not None:
         doc_type = 'sutta'
-        index = 'suttas'
+        indexes = ['suttas']
     elif define is not None:
         doc_type = 'definition'
-        index = 'en'
+        indexes = ['en-dict']
     elif lang:
-        index = lang
+        indexes = [lang]
         doc_type = 'text'
-    
+    index_string = ','.join(index
+                            for index in indexes
+                            if es.cluster.health(index, timeout='0.01s')['status']
+                            in {'green', 'yellow'})
     body = {
         "from": offset,
         "size": limit,
@@ -109,10 +112,10 @@ def search(query, highlight=True, offset=0, limit=10,
                 }
             }
     try:
-        return es.search(index=index, doc_type=doc_type, body=body)
+        return es.search(index=index_string, doc_type=doc_type, body=body)
     except elasticsearch.exceptions.RequestError as e:
         # In case of an error, we'll repeat the query but with any
         # punctuation removed.
         new_query = regex.sub(r'\p{punct}', ' ', query)
         body['query']['function_score']['query']['query_string']['query'] = new_query
-        return es.search(index=index, doc_type=doc_type, body=body)
+        return es.search(index=index_string, doc_type=doc_type, body=body)

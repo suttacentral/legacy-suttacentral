@@ -3,22 +3,24 @@ import json
 import regex
 import logging
 import sqlite3
-import elasticsearch.helpers
 import sc
 import sc.tools.html
 import sc.textfunctions
+from sc.search.indexer import ElasticIndexer
 
 es = sc.search.es
 
 logger = logging.getLogger(__name__)
 
-class DictIndexer(sc.search.BaseIndexer):
-    source_dir = sc.data_dir / 'dicts'
+class DictIndexer(ElasticIndexer):
     doc_type = 'definition'
-    def update(self, force=False):
-        for lang_dir in self.source_dir.glob('*'):
-            if lang_dir.is_dir():
-                self.index_folder(lang_dir, force)
+    lang_dir = None
+
+    def __init__(self, config_name, lang_dir):
+        self.lang_dir = lang_dir
+        super().__init__(config_name=config_name,
+                         index_alias=config_name + '-dict')
+        
 
     def yield_chunks(self, entries, size=100000):
         chunk = []
@@ -36,28 +38,24 @@ class DictIndexer(sc.search.BaseIndexer):
         if chunk:
             yield chunk
         raise StopIteration
+
+    def get_extra_state(self):
+        current_mtimes = [int(file.stat().st_mtime)
+                          for file
+                          in sorted(self.lang_dir.iterdir())
+                          if file.suffix in {'.html', '.json'}]
+        return {'mtimes': current_mtimes,
+                'version': 1}
+
+    def is_update_needed(self):
+        if not self.index_exists():
+            return True
+        if not self.alias_exists():
+            return True
+        return False
     
-    def index_folder(self, lang_dir, force):
-        index_name = lang_dir.stem
-        self.register_index(index_name)
-        if force:
-            self.es.delete_by_query(index_name, doc_type=self.doc_type, body={'query': {'match_all': {}}})
-            
-        if not self.es.indices.exists(index_name):
-            config = sc.search.load_index_config(index_name)
-            self.es.indices.create(index_name, config)
-
-        current_mtimes = [int(file.stat().st_mtime) for file in sorted(lang_dir.iterdir()) if file.suffix in {'.html', '.json'}]
-        if not force:            
-            try:
-                resp = self.es.get(index_name, doc_type='meta', id="dicts")
-                stored_mtimes = resp['_source']['mtimes']
-            except elasticsearch.exceptions.NotFoundError:
-                stored_mtimes = []
-
-            if current_mtimes == stored_mtimes:
-                return
-        
+    def index_folder(self):
+        lang_dir = self.lang_dir
         glossfile = lang_dir / 'gloss.json'
 
         if glossfile.exists():
@@ -83,15 +81,7 @@ class DictIndexer(sc.search.BaseIndexer):
         for i, entry in enumerate(sorted_entries):
             entry["number"] = i + 1
 
-        for chunk in self.yield_chunks(sorted_entries):
-            res = elasticsearch.helpers.bulk(self.es,
-                        index=index_name,
-                        doc_type=self.doc_type,
-                        actions=chunk)
-
-        # Success! (Or atleast we got this far)
-
-        self.es.index(index_name, doc_type='meta', id="dicts", body={"mtimes": current_mtimes})
+        self.process_chunks(self.yield_chunks(sorted_entries))
 
     def fix_term(self, term):
         return regex.sub(r'[^\p{alpha}\s]', '', term).strip().casefold()
@@ -146,7 +136,16 @@ class DictIndexer(sc.search.BaseIndexer):
             
         logger.info('Added {} entries from {}'.format(i + 1, source))
 
+    def update_data(self):
+        self.index_folder()
     
+def update():
+    source_dir = sc.data_dir / 'dicts'
+    for lang_dir in source_dir.glob('*'):
+        if lang_dir.is_dir():
+            config_name = lang_dir.stem
+            indexer = DictIndexer(config_name, lang_dir)
+            indexer.update()
 
 def get_entry(term, lang='en'):
     out = {}
@@ -244,10 +243,10 @@ if fc.is_valid():
     def get_fuzzy_terms(term, lang='en'):
         return fc.retrieve(term, lang)
     
-indexer = DictIndexer()
+
 
 def periodic_update(i):
     if not sc.search.is_available():
         logger.error('Elasticsearch Not Available')
         return
-    indexer.update()
+    update()
