@@ -1,6 +1,7 @@
 import json
 import hashlib
 import logging
+import itertools
 import elasticsearch
 from elasticsearch.helpers import bulk
 from math import log
@@ -72,6 +73,11 @@ class ElasticIndexer:
         An example would be indexing extra fields in the python, which
         is relying on Elasticsearch's automatic mapping generation.
 
+        The return value should be an object which can be consistently
+        serialized by json.dumps with sort_keys=True (i.e. dictionaries
+        are okay, but a list where the contents appear in a randomized
+        order should be pre-sorted before returning).
+
         """
         return {'version': 1}
 
@@ -140,6 +146,21 @@ class ElasticIndexer:
         if alias_actions:
             self.es.indices.update_aliases({"actions": alias_actions})
 
+    def get_alias_to_index_mapping(self):
+        mapping = {}
+        r = self.es.indices.get_aliases('_all')
+        for k, v in r.items():
+            if k.startswith('.'):
+                continue
+            # alias names are returned as keys in a dictionary
+            # (i.e. a JSON 'set')
+            try:
+                index_name = next(iter(v['aliases']))
+            except StopIteration:
+                logger.error('Oops {}, {}'.format(k, v))
+            mapping[index_name] = k
+        return mapping
+
     def delete_obsolete_indices(self):
         for index in self.es.indices.status()['indices']:
             if not index.startswith(self.index_prefix):
@@ -187,6 +208,16 @@ class ElasticIndexer:
 
         self.update_aliases()
         self.delete_obsolete_indices()
+
+    def process_actions(self, actions, size=500):
+        def chunk_actions():
+            while True:
+                chunk = list(itertools.islice(actions, size))
+                if not chunk:
+                    raise StopIteration
+                yield chunk
+
+        self.process_chunks(chunk_actions())
 
     def process_chunks(self, chunks):
         for chunk in chunks:

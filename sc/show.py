@@ -133,11 +133,14 @@ def search(query, **kwargs):
     if not 'offset' in kwargs:
         kwargs['offset'] = 0
     try:
-        results = sc.search.query.search(query, **kwargs)
-        return ElasticSearchResultsView(query, results, **kwargs).render()
+        if 'autocomplete' in kwargs:
+            results = sc.search.autocomplete.search(query, **kwargs)
+            return json.dumps(results, ensure_ascii=False, sort_keys=True)
+        else:
+            results = sc.search.query.search(query, **kwargs)
+            return ElasticSearchResultsView(query, results, **kwargs).render()
     except sc.search.ConnectionError:
         raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
-    
 
 def downloads():
     return DownloadsView().render()

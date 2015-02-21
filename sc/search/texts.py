@@ -42,6 +42,7 @@ class TextIndexer(ElasticIndexer):
         string = regex.sub(r'  +', ' ', string)
         string = regex.sub(r'\n\n+', r'\n', string)
         string = regex.sub('\S*?\d\S*', '', string)
+        string = string.replace('\xad', '')
         return string.strip()
         
     def extract_fields_from_html(self, data):
@@ -188,6 +189,8 @@ class TextIndexer(ElasticIndexer):
                      self.index_name, self.index_alias, len(stored_mtimes), len(to_add), len(to_delete)))
         chunks = self.yield_docs_from_dir(self.lang_dir,  size=500000, to_add=to_add, to_delete=to_delete)
         self.process_chunks(chunks)
+            
+        
 
 def update(force=False):
     def sort_key(d):

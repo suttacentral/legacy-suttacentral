@@ -288,3 +288,18 @@ header {
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+#autocomplete-dropdown {
+    position: absolute;
+    right: 0;
+    top: $panel-offset-top;
+    background: white;
+    > ul {
+        list-style: none;
+        > li {
+        
+        }
+    }
+}
+            
+    
