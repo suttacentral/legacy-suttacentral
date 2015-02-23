@@ -415,6 +415,7 @@ class SqliteBackedTIM(TextInfoModel):
             self._init_table()
             self.set_happy()
             self._mtimes = {}
+        self.repair()
         super().build(force)
         if not happy:
             self._finally_table()
@@ -422,6 +423,27 @@ class SqliteBackedTIM(TextInfoModel):
         self._con.commit()
         del self._mtimes
         self._build_lock.release()
+
+    def repair(self):
+        con = self._con
+        
+        exists_in_data_table = {(t[0], t[1]) for t in
+                    con.execute('SELECT uid, lang FROM data')}
+        bad = set()
+        for (path_str, ) in con.execute('SELECT path FROM mtimes'):
+            path = pathlib.Path(path_str)
+            lang = path.parts[0]
+            uid = path.stem
+            if (uid, lang) not in exists_in_data_table:
+                logger.warn('entry ({}, {}) in mtimes does not exist in data'.format(uid, lang))
+                bad.add((path_str,))
+
+        if bad:
+            logger.warn('Removing {} bad entries'.format(len(bad)))
+            con.executemany('DELETE FROM mtimes WHERE path = ?', bad)
+            con.commit()
+            return True
+        return False
 
     def _check_for_deleted(self):
         sc_dir = str(sc.text_dir) + '/'
@@ -595,6 +617,9 @@ def periodic_update(i):
         tim = Model()
         if tim.is_happy():
             Model._instance = tim
+            repaired = tim.repair()
+            if repaired:
+                tim.build()
             Model._build_ready.set()
             if i == 0:
                 return
