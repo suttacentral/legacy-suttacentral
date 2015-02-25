@@ -146,19 +146,22 @@ class ElasticIndexer:
         if alias_actions:
             self.es.indices.update_aliases({"actions": alias_actions})
 
-    def get_alias_to_index_mapping(self):
+    def get_alias_to_index_mapping(self, exclude_prefix=''):
         mapping = {}
         r = self.es.indices.get_aliases('_all')
         for k, v in r.items():
             if k.startswith('.'):
                 continue
+            if exclude_prefix and k.startswith(exclude_prefix):
+                continue
             # alias names are returned as keys in a dictionary
             # (i.e. a JSON 'set')
             try:
                 index_name = next(iter(v['aliases']))
+                mapping[index_name] = k
             except StopIteration:
                 logger.error('Oops {}, {}'.format(k, v))
-            mapping[index_name] = k
+            
         return mapping
 
     def delete_obsolete_indices(self):
@@ -193,7 +196,7 @@ class ElasticIndexer:
         if force:
             self.delete_index()
         if not self.index_exists():
-            logger.info('Creating index {}'.format(self.index_name))
+            logger.info('Creating index {} because index does not exists'.format(self.index_name))
             self.create_index()
             # Update is always needed when index is freshly created.
             update_needed = True

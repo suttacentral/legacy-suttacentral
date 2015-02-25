@@ -1,3 +1,4 @@
+import logging
 from collections import defaultdict
 
 from elasticsearch import Elasticsearch
@@ -7,9 +8,7 @@ import sc.search
 
 from sc.search.indexer import ElasticIndexer
 
-es = Elasticsearch()
-if es.indices.exists('autocomplete'):
-    es.indices.delete('autocomplete')
+logger = logging.getLogger(__name__)
 
 class AutocompleteIndexer(ElasticIndexer):
     doc_type = 'autocomplete'
@@ -32,7 +31,7 @@ class AutocompleteIndexer(ElasticIndexer):
                     "analyzer": {
                         "autocomplete_analyzer": {
                             "type": "custom",
-                            "tokenizer": "keyword",
+                            "tokenizer": "standard",
                             "filter": [
                                 "lowercase",
                                 "autocomplete_filter"
@@ -40,10 +39,23 @@ class AutocompleteIndexer(ElasticIndexer):
                         },
                         "autocomplete_query_analyzer": {
                             "type": "custom",
-                            "tokenizer": "keyword",
+                            "tokenizer": "standard",
                             "filter": [
                                 "lowercase"
                             ]
+                        },
+                        "folding_analyzer": {
+                            "tokenizer": "icu_tokenizer",
+                            "filter": ["icu_folding"]
+                        },
+                        "autocomplete_folding_analyzer": {
+                            "tokenizer": "icu_tokenizer",
+                            "filter": ["icu_folding",
+                                        "autocomplete_filter"]
+                        },
+                        "lowercase_keyword": {
+                            "tokenizer": "keyword",
+                            "filter": ["lowercase"]
                         }
                     }
                 }
@@ -57,27 +69,50 @@ class AutocompleteIndexer(ElasticIndexer):
                        "title": {
                           "type": "string",
                             "index_analyzer": "autocomplete_analyzer",
-                            "search_analyzer": "autocomplete_query_analyzer"
+                            "search_analyzer": "autocomplete_query_analyzer",
+                            "fields": {
+                                "lowercase": {
+                                    "type": "string",
+                                    "analyzer": "lowercase_keyword"
+                                },
+                                "plain": {
+                                    "type": "string",
+                                    "analyzer": "folding_analyzer"
+                                },
+                                "folded": {
+                                    "type": "string",
+                                    "analyzer": "autocomplete_folding_analyzer"
+                                }
+                            }
                        },
                        "boost": {
-                        "type": "float"
+                            "type": "float"
+                        },
+                        "length": {
+                            "type": "integer"
+                        }
                     }
                 }
-             }
-          }
+            } 
         }
 
     def get_extra_state(self):
         # We want to rebuild this index whenever another index changes.
-        aliases = self.get_alias_to_index_mapping()
-        # Don't include own index in state as that would result in a loop
-        if self.index_alias in aliases:
-            aliases.pop(self.index_alias)
+        aliases = self.get_alias_to_index_mapping(exclude_prefix=self.index_prefix)
         return aliases
     
+    def is_updated_needed(self):
+        # Always completely rebuild index if data changes
+        if not self.index_exists():
+            return True
+        if not self.alias_exists():
+            return True
+        return False
+    
     def update_data(self):
+        es = self.es
         # Extract text titles
-        text_titles = [{k:v[0] for k,v in hit['fields'].items()} for hit in scan(es,
+        text_titles = [{k.replace('\xad', ''):v[0] for k,v in hit['fields'].items()} for hit in scan(es,
             index='_all',
             doc_type="text",
             fields=["uid", "lang", "boost", "heading.title"],
@@ -85,7 +120,7 @@ class AutocompleteIndexer(ElasticIndexer):
             size=500)]
 
         # Extract sutta titles
-        sutta_titles = [{k:v[0] for k,v in hit['fields'].items()} for hit in scan(es,
+        sutta_titles = [{k.replace('\xad', ''):v[0] for k,v in hit['fields'].items()} for hit in scan(es,
             index='suttas',
             doc_type='sutta',
             fields=['uid', 'lang', "boost", 'name'],
@@ -100,8 +135,9 @@ class AutocompleteIndexer(ElasticIndexer):
         for entry in sutta_titles:
             key = (entry['name'], entry['lang'])
             entries[key].append(entry['boost'])
-            
-        actions = ({"title": k[0].replace('\xad', ''),
+        actions = ({"_id": '{}_{}'.format(k[0], k[1]),
+                    "length": len(k[0]),
+                    "title": k[0],
                     "lang": k[1],
                     "boost": 0.33 * (2 * max(v) + sum(v) / len(v))} for k,v in entries.items())
 
@@ -113,20 +149,63 @@ def search(query, limit, **params):
         "query": {
             "function_score": {
                 "query": {
-                    "match": {
-                        "title": query
+                    "multi_match": {
+                        "fields": ["title", "title.folded^0.5"],
+                        "query": query
                     }
                 },
-                "functions": [{
-                    "field_value_factor": {
-                        "field": "boost"
+                "functions": [
+                    {
+                        "field_value_factor": {
+                            "field": "boost"
                         }
-                }],
+                    },
+                    {
+                        "filter": {
+                            "prefix": {
+                                "title.plain": query
+                            }
+                        },
+                        "weight": 2
+                    },
+                    {
+                        "filter": {
+                            "prefix": {
+                                "title.lowercase": query
+                            }
+                        },
+                        "weight": 2
+                    },
+                    {
+                        "filter": {
+                            "terms": {
+                                "lang": ["pi"]
+                            }
+                        },
+                        "weight": 1.8
+                    },
+                    {
+                        "filter": {
+                            "terms": {
+                                "lang": ["en"]
+                            }
+                        },
+                        "weight": 1.4
+                    },
+                    {
+                    "exp": {
+                        "length": {
+                                "origin": 6,
+                                "scale": 7
+                            }
+                        }
+                    }
+                ],
                 "score_mode": "multiply"
             }
         }
     }
-    res = es.search('autocomplete', body=body)
+    res = sc.search.es.search('autocomplete', body=body)
     return {
         'took': res['took'],
         'total': res['hits']['total'],
