@@ -1,0 +1,6 @@
+PWD /home/sujato/suttacentral/static/css/page
+INPUT /usr/local/texlive/2012/texmf.cnf
+INPUT /usr/local/texlive/2012/texmf/web2c/texmf.cnf
+INPUT /usr/local/texlive/2012/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT /home/sujato/suttacentral/static/css/page/search.scss
+OUTPUT /home/sujato/suttacentral/static/css/page/search.log
