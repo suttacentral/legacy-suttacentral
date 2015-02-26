@@ -33,10 +33,10 @@ def run_updaters():
     ]
     if sc.config.app['update_search']:
         functions.extend([
-            ('sc.search.autocomplete.periodic_update', sc.search.autocomplete.periodic_update, True),
             ('sc.search.dicts.periodic_update', sc.search.dicts.periodic_update, True),
             ('sc.search.suttas.periodic_update', sc.search.suttas.periodic_update, True),
             ('sc.search.texts.periodic_update', sc.search.texts.periodic_update, True)
+            ('sc.search.autocomplete.periodic_update', sc.search.autocomplete.periodic_update, True),
         ])
     time.sleep(0.5)
     i = 0
