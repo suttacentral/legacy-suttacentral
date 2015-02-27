@@ -1,0 +1,23 @@
+.translations {
+    display: inline-block;
+    border: 1px solid $light-light-gray;
+    border-radius: 5px;
+    a[data-dropdown] {
+        text-align: center;
+        color: $dark-gray;
+        width: 2em;
+        display: inline-block;
+        
+    }
+
+    > .tran {
+        width: 2em;
+        border-right: 1px solid $light-light-gray;
+    }
+}
+
+.tran {
+    display: inline-block;
+    padding: 0.1em 0.2em;
+    text-align: center;
+}
