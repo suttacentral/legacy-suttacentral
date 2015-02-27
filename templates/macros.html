@@ -16,7 +16,7 @@
 {% endmacro %}
 
 {# sutta_row: A macro to display a sutta row #}
-{% macro sutta_row(sutta) -%}
+{% macro sutta_row(sutta, row_num) -%}
 <tr>
 <td>
 {{sutta_acronym(sutta, show_alt=True)}}
@@ -44,9 +44,14 @@
 </td>
 <td>
 <div class="translations">
+<a href="#" data-dropdown="#dropdown-{{row_num}}">{{ sutta.translations|length}}▾</a>
+<div id="dropdown-{{row_num}}" class="dropdown dropdown-tip dropdown-anchor-right">
+<div class="dropdown-panel" style="width: 10em">
 {% for translation in sutta.translations -%}
 <a href='{{translation.url}}' class='tran' {% if translation.abstract -%} title='{{translation.abstract}}'{% endif %}>{{translation.lang.iso_code}}</a>
 {% endfor -%}
+</div>
+</div>
 </div>
 </td>
 </tr>
