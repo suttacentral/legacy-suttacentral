@@ -43,9 +43,11 @@
 {%- endif -%}
 </td>
 <td>
+<div class="translations">
 {% for translation in sutta.translations -%}
-<a href='{{translation.url}}' class='tran' {% if translation.abstract -%} title='{{translation.abstract}}'{% endif %}>{{translation.lang.iso_code}}</a>{% if not loop.last %} | {% endif %} 
+<a href='{{translation.url}}' class='tran' {% if translation.abstract -%} title='{{translation.abstract}}'{% endif %}>{{translation.lang.iso_code}}</a>
 {% endfor -%}
+</div>
 </td>
 </tr>
 {%- endmacro -%}

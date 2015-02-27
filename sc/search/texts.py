@@ -23,6 +23,7 @@ logger.addHandler(handler)
 
 class TextIndexer(ElasticIndexer):
     doc_type = 'text'
+    version = '1'
     
     htmlparser = lxml.html.HTMLParser(encoding='utf8')
     numstriprex = regex.compile(r'(?=\S*\d)\S+')
@@ -128,8 +129,29 @@ class TextIndexer(ElasticIndexer):
                     with file.open('rb') as f:
                         htmlbytes = f.read()
                     chunk_size += len(htmlbytes) + 512
+                    subdivision = division = None
+                    if uid in imm.subdivisions:
+                        subdivision = uid
+                    elif uid in imm.divisions:
+                        division = uid
+                        subdivision = None
+                    elif uid in imm.suttas:
+                        subdivision = imm.suttas[uid].subdivision.uid
+                    else:
+                        subdivision = imm.guess_subdiv_uid(uid)
+
+                    if division is None:
+                        if subdivision is not None:
+                            division = imm.subdivisions[subdivision].division.uid
+                        else:
+                            division = imm.guess_div_uid(uid)
+                            if division is None:
+                                logger.error('Could not guess division for uid {}, file {!s}'.format(uid, file))
+                            
                     action.update({
                         'uid': uid,
+                        'division': division,
+                        'subdivision': subdivision,
                         'lang': lang_uid,
                         'root_lang': root_lang,
                         'is_root': lang_uid == root_lang,

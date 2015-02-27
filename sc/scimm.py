@@ -674,7 +674,19 @@ class _Imm:
     def get_text_data(self, uid, language_code=None):
         return self.tim.get(uid, language_code)
         
-        
+    def guess_subdiv_uid(self, uid):
+        # Just keep slicing it until we find something that
+        # matches. It's good enough.
+        while len(uid) > 0:
+            if uid in self.subdivisions:
+                return uid
+            uid = uid[:-1]
+
+    def guess_div_uid(self, uid):
+        while len(uid) > 0:
+            if uid in self.divisions:
+                return uid
+            uid = uid[:-1]
     
     @staticmethod
     def get_text_author(filepath):

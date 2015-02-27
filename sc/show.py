@@ -3,6 +3,7 @@ import json
 import logging
 
 from sc import classes, data_repo, dictsearch, scimm, suttasearch, textsearch
+import sc.data
 from sc.scm import data_scm
 from sc.util import filelock
 from sc.views import *
@@ -141,6 +142,17 @@ def search(query, **kwargs):
             return ElasticSearchResultsView(query, results, **kwargs).render()
     except sc.search.ConnectionError:
         raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
+
+def data(name, **kwargs):
+    if name == 'translation_count':
+        lang = kwargs['lang']
+        return {
+            'translation_count': {
+                lang: sc.data.translation_count(lang)
+            }
+        }
+    return {'error': 'Name "{}" not recognized'.format(name)}
+        
 
 def downloads():
     return DownloadsView().render()

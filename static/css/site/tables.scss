@@ -46,17 +46,13 @@ td > a:hover:not(.bib):not(.note) {
 .tdindent {
     padding-left: 3em;
 }
-.transcol::after{ 
-content:"Translations";
-}
+
 
 @media #{$tablet} {
        td, th {
     padding: 0.25em 0.5em;
     }
-    .transcol::after{ 
-content:"Trans­­lations";
-}
+
   
 
         }
@@ -71,9 +67,6 @@ content:"Trans­­lations";
  
 td:nth-child(3), th:nth-child(3) {
     display:none;
-}
-   .transcol::after{ 
-content:"Trans­­lations";
 }
 
 td:nth-child(2){

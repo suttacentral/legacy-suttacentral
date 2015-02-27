@@ -123,6 +123,7 @@ def get_env():
         'js/lib/jquery.scrolllock.js',
         'js/lib/jquery.unveil.js',
         'js/lib/jquery.details.js',
+        'js/intr.js',
         'js/sc_utility.js',
         'js/text_selections.js',
         'js/search.js',

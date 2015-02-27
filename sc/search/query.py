@@ -6,6 +6,36 @@ import elasticsearch
 from sc.search import es
 logger = logging.getLogger(__name__)
 
+def div_translation_count(lang):
+    " Returns the count of translations per subdivision "
+    body = {
+        'aggregations': {
+            'div_uids': {
+                'terms': {
+                    'field': 'division',
+                    'size': 0 # Unlimited
+                }
+            },
+            'subdiv_uids': {
+                'terms': {
+                    'field': 'subdivision',
+                    'size': 0 # Unlimited
+                }
+            }
+        }
+    }
+
+    result = es.search(index=lang, doc_type='text', search_type='count', body=body)
+    mapping = {d['key']: d['doc_count']
+            for d
+            in result['aggregations']['subdiv_uids']['buckets']}
+
+    # If division and subdiv is shared, clobber with div value.
+    mapping.update({d['key']: d['doc_count']
+            for d
+            in result['aggregations']['div_uids']['buckets']})
+    return mapping
+
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, define=None, details=None, **kwargs):
     # For some reason seems to require extra escaping to
