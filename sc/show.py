@@ -143,16 +143,16 @@ def search(query, **kwargs):
     except sc.search.ConnectionError:
         raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
 
-def data(name, **kwargs):
-    if name == 'translation_count':
-        lang = kwargs['lang']
-        return {
-            'translation_count': {
-                lang: sc.data.translation_count(lang)
-            }
-        }
-    return {'error': 'Name "{}" not recognized'.format(name)}
-        
+def data(names, **kwargs):
+    valid_names = {'langs', 'translation_count'}
+
+    out = {}
+    for name in names.split(','):
+        if name in valid_names:
+            out[name] = getattr(sc.data.data, name)(**kwargs)
+        else:
+            return {'error': 'Name "{}" not recognized'.format(name)}
+    return out
 
 def downloads():
     return DownloadsView().render()
