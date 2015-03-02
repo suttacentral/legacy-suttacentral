@@ -115,8 +115,7 @@ sc.intr = {
     addLangNames: function(){
         $('.translations .tran:not(.special)').each(function(i, tran) {
             var uid = $(tran).text();
-            $(tran).wrapInner('<span class="iso_code">')
-                 .append(' ' + sc.intr.langs[uid].name);
+            $(tran).attr('data-name', sc.intr.langs[uid].name);
         });
     }
 }

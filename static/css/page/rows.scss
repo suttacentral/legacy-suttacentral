@@ -9,9 +9,15 @@ html.js .translations.ready {
 .dropdown-panel > .tran:not(.special) {
     display: block;
     text-align: left;
-    > .iso_code {
-        display: inline-block;
-        width: 1.5em;
+    
+}
+
+.tran[data-name] {
+    display: block;
+    &::after {
+        left: 3em;
+        content: attr(data-name);
+        position: absolute;
     }
 }
 
@@ -39,9 +45,6 @@ html.js .translations.ready {
     text-align: center;
 }
 
-.dropdown-panel {
-    width: 10em;
-}
 
 /*
 [data-translation-count="0"] {
