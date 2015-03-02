@@ -1,13 +1,31 @@
+#page-main-search   {
+    background:$light-light-gray;
+    padding: 1em 2%;
+    margin-bottom:1em;
+    border: 1px solid $light-gray;
+}
 #page-main-search {
     > input, > button, > select {
         background: white;
         cursor: pointer;
         border: 1px solid $light-gray;
-        
+        margin:0em 0.5em;
+        padding:0.2em 0.5em;
     }
-    
+        > input:hover, > button:hover, > select:hover {
+        background: $light-gray;
+          }
     select {
         cursor: pointer;
+    }
+    .search-submit  {
+    right:1em!important;
+    top:0.25em!important;
+    }
+    input{
+     margin-bottom:1em;
+     padding:0.2em 0.5em;
+     width:95%;
     }
     .input-wrap {
         position: relative;
@@ -18,6 +36,8 @@
         }
     }
 }
+
+        
 
 ul.results {
     list-style: none;
@@ -53,7 +73,7 @@ li.result > a {
 
 #main_search_results {
     max-width: 40rem;
-    margin: auto;
+    margin: 4em auto;
 }
 
 .close-button {
