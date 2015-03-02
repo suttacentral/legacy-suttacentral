@@ -6,6 +6,15 @@ html.js .translations.ready {
 }
     
 
+.dropdown-panel > .tran:not(.special) {
+    display: block;
+    text-align: left;
+    > .iso_code {
+        display: inline-block;
+        width: 1.5em;
+    }
+}
+
 .translations.ready {
     display: inline-block;
     border: 1px solid $light-light-gray;
@@ -18,7 +27,7 @@ html.js .translations.ready {
         
     }
 
-    > .tran.special + div {
+    > .tran.special {
         width: 2em;
         border-right: 1px solid $light-light-gray;
     }

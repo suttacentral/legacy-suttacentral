@@ -9,7 +9,8 @@ class Data:
 
     def langs(self, **kwargs):
         imm = sc.scimm.imm()
-        result = {lang.uid: {'root': 1 if lang.isroot else 0}
+        result = {lang.uid: {'root': 1 if lang.isroot else 0,
+                             'name': lang.name}
                     for lang
                     in imm.languages.values()}
         

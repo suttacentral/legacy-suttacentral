@@ -24,8 +24,10 @@ def div_translation_count(lang):
             }
         }
     }
-
-    result = es.search(index=lang, doc_type='text', search_type='count', body=body)
+    try:
+        result = es.search(index=lang, doc_type='text', search_type='count', body=body)
+    except elasticsearch.exceptions.NotFoundError:
+        return None
     mapping = {d['key']: d['doc_count']
             for d
             in result['aggregations']['subdiv_uids']['buckets']}
