@@ -60,43 +60,63 @@ sc.formatter = {
         }
         return $element;
     },
-    quoteHanger: function(){
-        $('p').each(function(){
-            children = this.childNodes
-            node = this.childNodes[0];
-            //Find the start of the actual text.
-            if (!node) return;
-            while (node.nodeType == 1) {
-                if (node.nodeName == 'A') {
-                    node = node.nextSibling
-                }
-                else {
-                    node = nextInOrder(node);
-                }
-                if (!node) return;
-            }
-            if (node.nodeType == 3) {
-                text = node.nodeValue.trimLeft()
-                var firstChar = text[0];
-                if (firstChar == '“' || firstChar == '‘')
-                {
-                    var secondChar = text[1];
-                    if (secondChar == '“' || secondChar == '‘')
-                    {
-                        node.nodeValue = text.slice(2);
-                        $(this).prepend('<span class="dsquo">' + firstChar + secondChar + '</span>');
-                    } else {
-                        node.nodeValue = text.slice(1);
-                        if (firstChar == '‘') {
-                            $(this).prepend('<span class="squo">' + firstChar + '</span>');
-                        } else {
-                            $(this).prepend('<span class="dquo">' + firstChar + '</span>');
-                        }
-                    }
-                }
-            }
-
+    getRuler: function() {
+        if (!this.ruler) {
+            this.ruler = $('<p style="position:fixed; margin-left: -1000px">')
+                         .appendTo('#text article')
+        }
+        return this.ruler;
+    },
+    measureQueue: [],
+    queueMeasure: function(toMeasure, callback, ruler) {
+        var self=this,
+            ruler = ruler || this.getRuler(),
+            args = [];
+        _.each(toMeasure, function(content){
+            var e = $('<span style="position: absolute; visibility: hidden">');
+            e.append(content);
+            ruler.prepend(e);
+            args.push([content, e]);
         });
+        self.measureQueue.push([args, callback]);
+    },
+    doMeasure: function() {
+        var deferred = [];
+        this.measureQueue.forEach(function(t){
+            var args = t[0],
+                callback = t[1],
+                measurements = [];
+            args.forEach(function(arg){
+                measurements[arg[0]] = arg[1].innerWidth();
+            });
+            deferred.push([callback, measurements])
+        });
+        deferred.forEach(function(t) {
+            var callback = t[0],
+                measurements = t[1];
+            callback(measurements);
+        });
+        this.measureQueue = [];
+        this.measureNum = null;
+        this.quoteHangerEnd = new Date().getTime();
+    },
+    quoteHanger: function() {
+        var self = this;
+        this.quoteHangerStart = new Date().getTime();
+        $('p').each(function(){
+            var p = $(this),
+                text = p.text(),
+                m = text.match(/^[  \n0-9.-]*([“‘]+)(.)/);
+            if (m) {
+                var snip = m[2],
+                    quoted = m[1] + m[2];
+                self.queueMeasure([quoted, snip], function(result){
+                    var diff = result[quoted] - result[snip];
+                    p.css('text-indent', -diff + 'px');
+                }, p);
+            }
+        });
+        self.doMeasure();
     },
     markOfTheBeast: 0,
     deathToTheBeast: function(event){

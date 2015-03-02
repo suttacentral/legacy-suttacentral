@@ -8,6 +8,7 @@ import socket
 import time
 import json
 import urllib.parse
+
 from webassets.ext.jinja2 import AssetsExtension
 
 import sc
@@ -15,7 +16,7 @@ from sc import assets, config, data_repo, scimm, util
 from sc.menu import get_menu
 from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
-import sc.cache
+import sc.search.query
 
 import logging
 logger = logging.getLogger(__name__)
@@ -42,6 +43,8 @@ def jinja2_environment():
 
     env.filters['date'] = util.format_date
     env.filters['time'] = util.format_time
+    env.filters['max'] = max
+    env.filters['min'] = min
     env.filters['datetime'] = util.format_datetime
     env.filters['timedelta'] = util.format_timedelta
     env.filters['uid_to_name'] = lambda uid: scimm.imm().uid_to_name(uid)
@@ -160,7 +163,10 @@ class ViewBase:
             'scm': scm,
             'embed': 'embed' in cherrypy.request.params,
             'search_query': '',
+            'no_index': False,
             'imm': sc.scimm.imm(),
+            'ajax': 'ajax' in cherrypy.request.params,
+            'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()}
         })
 
     def massage_whitespace(self, text):
@@ -168,11 +174,32 @@ class ViewBase:
 
     def render(self):
         """Return the HTML for this view."""
-        template = self.get_template()
+        try:
+            template = self.get_template()
+        except jinja2.exceptions.TemplateSyntaxError as e:
+            cherrypy.response.status = 500
+            message = type(e).__name__ + ' : line {e.lineno} in {e.name}'.format(e=e)
+            sourcelines = ["{:4} {}".format(i + 1, l) for i, l in
+                            enumerate(sc.tools.html.escape(e.source).split('\n'))]
+            sourcelines[e.lineno - 1] = '<strong>{}</strong>'.format(sourcelines[e.lineno - 1])
+            traceback = ("<pre>{trace}</pre>" +
+                "<p>{message}</p>").format(message=e.message, trace='<br>'.join(sourcelines[max(0, e.lineno-3):e.lineno+2]))
+            cherrypy.response.headers['Traceback'] = traceback
+            raise cherrypy.HTTPError(500, message)
         context = self.get_global_context()
         self.setup_context(context)
         return self.massage_whitespace(template.render(dict(context)))
+"""
+['__cause__', '__class__', '__context__', '__delattr__', '__dict__',
+'__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__',
+'__gt__', '__hash__', '__init__', '__le__', '__lt__', '__module__', '__ne__',
+'__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__',
+'__setstate__', '__sizeof__', '__str__', '__subclasshook__',
+'__suppress_context__', '__traceback__', '__weakref__',
+'args', 'filename', 'lineno', 'message', 'name', 'source',
+'translated', 'with_traceback']
 
+"""
 class InfoView(ViewBase):
     """A simple view that renders the template page_name; mostly used for
     static pages."""
@@ -196,6 +223,8 @@ class DownloadsView(InfoView):
 
     formats = ['zip', '7z']
 
+    file_prefixes = ['sc-offline']
+
     def __init__(self):
         super().__init__('downloads')
 
@@ -205,7 +234,7 @@ class DownloadsView(InfoView):
 
     def __file_data(self, basename, exports_path):
         data = []
-        
+
         for latest_path in sorted(exports_path.glob('*-latest.*')):
             if latest_path.suffix.lstrip('.') not in self.formats:
                 continue
@@ -524,28 +553,48 @@ class SubdivisionHeadingsView(ViewBase):
             self.division.name)
         context.division = self.division
 
-class SearchResultView(ViewBase):
-    """The view for the search page."""
+class DefinitionView(ViewBase):
+    """ The view used for dictionary definition pages """
 
-    template_name = 'search_result'
+    template_name = 'define'
 
-    def __init__(self, search_query, search_result):
-        super().__init__()
-        self.search_query = search_query
-        self.search_result = search_result
+    def __init__(self, term):
+        self.term = term
 
     def setup_context(self, context):
-        context.search_query = self.search_query
-        context.title = 'Search: "{}"'.format(
-            self.search_query)
-        context.result = self.search_result
-        context.imm = scimm.imm()
+        from sc.search import dicts
+        context.no_index = True
+        context.term = term = self.term
+        context.title = "define: {}".format(self.term)
+        entry = context.entry = dicts.get_entry(self.term)
+        if entry:
+            context.near_terms = dicts.get_nearby_terms(entry['number'])
+        else:
+            context.near_terms = []
+        context.fuzzy_terms = dicts.get_fuzzy_terms(term)
 
-class AjaxSearchResultView(SearchResultView):
-    """The view for /search?ajax=1."""
+class ElasticSearchResultsView(ViewBase):
+    template_name = 'elasticsearch_results'
 
-    template_name = 'ajax_search_result'
+    def __init__(self, query, results, **kwargs):
+        self.query = query
+        self.results = results
+        self.kwargs = kwargs
 
+    def setup_context(self, context):
+        context.query = self.query
+        context.results = self.results
+        context.limit = int(self.kwargs['limit'])
+        context.total = self.results['hits']['total']
+        context.offset = int(self.kwargs['offset'])
+        
+        context.search_languages = [lang for lang in
+                                        sorted(context.imm.languages.values(),
+                                            key=lambda l: int(l.search_priority))
+                                        if context.imm.tim.exists(lang_uid=lang.uid)]
+        context.query_lang = self.kwargs.get('lang')
+        context.no_index = True
+        
 class ShtLookupView(ViewBase):
     """The view for the SHT lookup page."""
 
@@ -646,3 +695,22 @@ class UidsView(InfoView):
         context.unused = sorted(unused)
         context.used = sorted(u for u in used if u.isalpha())
         context.atoz = atoz
+
+class ErrorView(ViewBase):
+    template_name = 'errors/error'
+    
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+        self.code = kwargs['status'][0:3]
+        if self.code == '404':
+            self.template_name = 'errors/404'
+        if kwargs['message'] == 'Elasticsearch Not Available':
+            self.template_name = 'errors/search_error'
+
+    def setup_context(self, context):
+        context.update(self.kwargs)
+        context.request = cherrypy.request
+        context.response = cherrypy.response
+        context.production_environment = (
+            config.newrelic_environment == 'production'
+            and 'traceback' not in cherrypy.request.params)

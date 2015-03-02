@@ -1,5 +1,5 @@
 /* This file was generated Manually */
-sc.data.pi2idDict = {
+sc.piLookup.register({script: 'id', data: {
 'aṃsa': ['', 'm.  bahu (<i>aṃse karoti</i>  meletakkan di bahu, menyandang, memanggul, memikul); bagian, hal berbagi; sudut, penjuru, ujung, tepi; <b>~kūṭa</b> m. nt. pundak, bahu.'],
 'akallaka': ['', 'a.  sakit, tak sehat.'],
 'akāmaka': ['', 'a.  tak ingin, tak mau, tak sudi.'],
@@ -3615,4 +3615,4 @@ sc.data.pi2idDict = {
 'hemanta': ['', 'm.  musim dingin.'],
 'heraññika': ['', 'm.  tukang emas, pakar emas, pandai emas, penukar mata uang; <b>~phalaka</b> m. nt. bilah/papan/meja sang penukar mata uang.'],
 'hemanta': ['', 'm.  musim dingin.']
-}
+}})

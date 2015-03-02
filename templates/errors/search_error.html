@@ -1,0 +1,16 @@
+{% extends "errors/error.html" %}
+{% block details %}
+<h1>Search Failed</h1>
+<em lang="pi">sabbe sankhara anicca…</em>
+<p>Unfortunately while attempting to perform your search the server
+encountered an error, 
+this condition should be temporary so please try again a few times.
+<p>If the problem persists then an error report will be automatically
+sent to the Sutta Central developers who will fix the problem promptly.
+{% if not production_environment %}
+<p style="color: olive; font-weight: bold">As you are a developer,
+then it is probable that elasticsearch is not setup on your machine
+and this error is to be expected. Search will not function at all
+without elasticsearch.
+{% endif %}
+{% endblock %}

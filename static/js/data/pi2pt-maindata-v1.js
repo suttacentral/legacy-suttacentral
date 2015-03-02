@@ -1,5 +1,5 @@
 /* This file was generated Manually */
-sc.data.pi2ptDict = {
+sc.piLookup.register({script: 'pt', data: {
 'a': ['prefixo', 'o prefixo ā reduzido, antes de uma consoante dupla (ex: a + kosati = akkosati); prefixo de negação para substantivos, adjetivos e particípios; ex.: ā + kusala = akusala; afixo anteposto (aumento) à raiz verbal na flexão de certas formas do passado e condicionais; ex.: akāsi'],
 'aṃsa': ['masc.; neutro', '1. uma parte, de um lado; 2. ombro.'],
 'aṃsakūṭa': ['neutro', 'ombro.'],
@@ -20199,4 +20199,4 @@ sc.data.pi2ptDict = {
 'horālocana': ['neutro', 'um relógio; um relógio.'],
 'ḷaṅghāpeti': ['caus. de laṅghati', 'faz saltar; faz com que a hop.'],
 'ḷāpukaṭāha': ['adj.', 'a crosta externa de uma cabaça usada como um vaso.']
-}
+}})

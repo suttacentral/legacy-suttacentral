@@ -65,3 +65,55 @@ class UnitsTest(unittest.TestCase):
         
         data2 = self.sortdata2
         self.assertEqual(data2, sorted(data2, key=util.humansortkey))
+
+    def test_recursive_merge(self):
+        from copy import deepcopy
+        
+        a = {1: 2, 2: 4}
+        b = {3: 9, 4: 16}
+
+        c = {'z': deepcopy(a)}
+        d = {'z': deepcopy(b)}
+
+        util.recursive_merge(a, b)
+        self.assertEqual(a, {1: 2, 2:4, 3:9, 4:16})
+
+        util.recursive_merge(c, d)
+        self.assertEqual(c, {'z': {1: 2, 2:4, 3:9, 4:16}})
+
+        e = {
+            'animals': {
+                'pets': {
+                    'friendly': ['dogs'],
+                    'snobby': ['cats']
+                }
+            },
+            'ready': 0
+        }
+        
+        f = {
+            'animals': {
+                'pets': {
+                    'friendly': ['dogs', 'rats', 'hamsters'],
+                    'wet': ['goldfish', 'eels']
+                },
+                'herbivores': {
+                    'plains': ['elephants']
+                }
+            },
+            'ready': True
+        }
+        util.recursive_merge(e, f)
+        self.assertEqual(e, {
+            'animals': {
+                'pets': {
+                    'friendly': ['dogs', 'rats', 'hamsters'],
+                    'snobby': ['cats'],
+                    'wet': ['goldfish', 'eels']
+                },
+                'herbivores': {
+                    'plains': ['elephants']
+                }
+            },
+            'ready': True
+        })

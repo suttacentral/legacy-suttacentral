@@ -1,8 +1,12 @@
+{% if not ajax %}
 <!DOCTYPE html>
 <html lang="{{page_lang}}"  prefix="og: http://ogp.me/ns#">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+{% if no_index %}
+<meta name="robots" content="noindex, nofollow">
+{% endif %}
 <title>
   {%- if title -%}
     {{ title }} - SuttaCentral
@@ -31,7 +35,7 @@
 {% set body_classes = (['offline'] if offline else []) + (['embed'] if embed else []) %}
 
 <body{% if body_classes %} class="{{ body_classes|join( ) }}"{% endif %}>
-{% if not embed %}
+
 <div id="page-wrap">
 
 {% include 'development_bar.html' %}
@@ -39,18 +43,19 @@
 {% include 'header.html' %}
 
 {% include 'outdated_browser.html' %}
-
+{% endif %} {# not ajax #}
 <main>
-{% endif %} {# embed #}
+{% if ajax %}
+<meta name="title" content="{{title}}">
+{% endif %}
 {% block content %}{% endblock %}
-{% if not embed %}
 </main>
-
+{% if not ajax %}
 {% include 'panel.html' %}
 
 <div id="page-footer-push"></div>
 
-</div><!-- page-wrap -->
+</div>{# page-wrap #}
 
 {% include 'footer.html' %}
 
@@ -75,12 +80,13 @@
   ga('create', 'UA-39277629-1', 'suttacentral.net');
   ga('send', 'pageview');
 </script>
-{% endif %}
 {{ newrelic_browser_timing.footer }}
-{% endif %} {# embed #}
+{% endif %} {# not offline #}
+
 </body>
 </html>
 <!-- Revision: {{ scm.last_commit_revision }}
      Date:     {{ scm.last_commit_time | datetime('long') }}
      Branch:   {{ scm.branch }}
      Tag:      {{ scm.tag }} -->
+{% endif %}

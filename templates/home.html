@@ -1,15 +1,8 @@
 {% extends "base.html" -%}
 {% block content %}
 
-
-<section id="home">
-
-<div class="hgroup">
-<h1>SuttaCentral</h1>
-<p class="subtitle">Early Buddhist texts, translations, and parallels</p>
-</div>
-{% set epigraph = imm.get_random_epigraph() %}
-
+<div id="epigraph-store" type="text/html" style="display:none">
+{% for epigraph in imm.epigraphs %}
 <div class="epigraph">
 <div class="epigraph-text">
     {{ epigraph.content }}
@@ -18,6 +11,35 @@
 <p class="epigraph-reference"><span class="reference">{{epigraph.sutta.name}}, {{imm.uid_to_name(epigraph.sutta.uid)}} {% if epigraph.href %}</span></p><p class="read-this"><a href="{{ epigraph.href }}">Read this sutta ▶</a>{% endif %}</p>
 
 </div>
+
+{% endfor %}
+</div>
+
+<section id="home">
+
+<div class="hgroup">
+<h1>SuttaCentral</h1>
+<p class="subtitle">Early Buddhist texts, translations, and parallels</p>
+</div>
+
+<div id="epigraph"></div>
+<script>
+(function(){
+    var store = document.getElementById('epigraph-store').childNodes,
+        epigraphs = [],
+        i = store.length,
+        el,
+        sel;
+    while (i--) {
+        if (store[i].nodeType == 1)
+            epigraphs.push(store[i])
+    }
+    el = epigraphs.length;
+    sel = Math.floor(Math.random() * epigraphs.length);
+    document.getElementById('epigraph').appendChild(epigraphs[sel]);
+})();
+
+</script>
 </section> {# id=home #}
 
 

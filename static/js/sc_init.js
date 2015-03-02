@@ -120,6 +120,9 @@ sc.classes = {
         "unclear": "Unclear reading."
     }
 }
+sc.classes.marginSelector = _.map(_.keys(sc.classes.margin),
+                                  function(e){return '.' + e})
+                            .join(',')
 
 /*
  * Prefix To Volume mapping used for adding volume information
@@ -183,7 +186,8 @@ sc.mode = {}
 sc.data = {}
 sc.jsBaseUrl = $('script[src*="js/"]').last().attr('src').match(/((.*\/|^)js\/)/)[0];
 
-$(document).ready(function() {
+function onMainLoad() {
+    sc.mode = {}
     var images = $("img");
     images.unveil(50);
     //polyfill details if needed
@@ -223,7 +227,9 @@ $(document).ready(function() {
             client.setText(text);
         });
     }
-});
+}
+
+$(document).ready(onMainLoad);
 
 function kindAdviceToIEusers(version){
     if (version > 8) return; //Works well enough on IE 9/10
@@ -249,6 +255,7 @@ var transFuncs = {
 };
 
 
+
 var syllSpacer = '‧'; //Seperates syllables when that mode is activated. (\u2027)
 
 sc.init = function(reset)
@@ -256,14 +263,8 @@ sc.init = function(reset)
     if (reset) scState.restore("clean");
     
     buildTextualInformation();
-    if (sc.userPrefs.getPref("textInfo") === true)
-    {
+    if (sc.userPrefs.getPref("textInfo") === true) {
         toggleTextualInfo(true);
-    }
-    
-    var selectedTab = sc.userPrefs.getPref('sidebar-selected-tab');
-    if (selectedTab && selectedTab != "undefined") {
-        sc.sidebar.selectTab(selectedTab);
     }
     
     if (sc.mode.pali === true) {
@@ -299,7 +300,6 @@ sc.init = function(reset)
 }
 
 //"use strict"//
-
 
 //Note: These preferences are not shared with the server. If session storage is available,
 //it will be used. Otherwise settings will be forgotten on page refresh.

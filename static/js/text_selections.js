@@ -17,6 +17,7 @@ $.fn.eachText = function(callback) {
     this.each(function(){iterNodes(this)});
     return this
 }
+
 // Returns a flattened array of descendent textNodes
 // optionally filtered by *filter*, which should return
 // true to include an element.
@@ -63,7 +64,7 @@ sc.text_selection = (function() {
     }
 
     function onReady() {
-        var a = [];
+        var a = ['.deets'];
         for (var k in (sc.classes.margin))  {
             a.push('.' + k);
         }

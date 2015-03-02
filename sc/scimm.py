@@ -23,6 +23,7 @@ from collections import OrderedDict, defaultdict, namedtuple
 import sc
 from sc import config, textfunctions, textdata
 from sc.classes import *
+import sc.updater
 
 logger = logging.getLogger(__name__)
 
@@ -76,6 +77,8 @@ def table_reader(tablename):
 
 class _Imm:
     _uidlangcache = {}
+    _instance = None
+    _ready = threading.Event()
     def __init__(self, timestamp):
         self.tim = textdata.tim()
         self.build()
@@ -84,7 +87,7 @@ class _Imm:
         self.build_grouped_suttas()
         self.build_parallel_sutta_group('vinaya_pm')
         self.build_parallel_sutta_group('vinaya_kd')
-        self.build_search_data()
+        # self.build_search_data()
         self.load_epigraphs()
         self.timestamp = timestamp
         self.build_time = datetime.now()
@@ -166,7 +169,8 @@ class _Imm:
                 name=row.name,
                 iso_code=row.iso_code,
                 isroot=row.isroot,
-                priority=row.priority,
+                priority=int(row.priority),
+                search_priority=float(row.search_priority),
                 collections=[],
                 )
         
@@ -541,6 +545,41 @@ class _Imm:
 
         self.searchstrings = list(zip(self.suttas.values(), suttastrings, suttastringsU, suttanamesimplified))
 
+    def generate_search_data(self):
+        seen = set()
+        out = []
+        for sutta in self.suttas.values():
+            if isinstance(sutta, GroupedSutta):
+                if sutta.name in seen:
+                    continue
+                seen.add(sutta.name)
+            name = sutta.name
+            plain_name = textfunctions.codely(name)
+            coded_name = textfunctions.plainly(name)
+            simple_name = textfunctions.simplify(sutta.name, sutta.lang.iso_code)
+
+            searchdata = {'uid': sutta.uid,
+                'lang_code': sutta.lang.iso_code,
+                'acronym': sutta.acronym,
+                'name': name,
+                'plain_name': plain_name,
+                'coded_name': coded_name,
+                'simple_name': simple_name,
+                'volpage': sutta.volpage,
+                'languages': " ".join(t.lang.iso_code for t in sutta.translations)}
+
+            if sutta.alt_volpage_info:
+                searchdata['volpage'] += '  ' + sutta.alt_volpage_info
+
+            if sutta.alt_acronym:
+                searchdata['acronym'] += '  ' + sutta.alt_acronym
+
+            for k in list(searchdata.keys()):
+                if searchdata[k] is None:
+                    del searchdata[k]
+            searchdata['md5'] = hashlib.md5(str(searchdata).encode()).hexdigest()[0:5]
+            yield searchdata
+    
     def get_text_ref(self, uid, lang_uid):
         textinfo = self.tim.get(uid=uid, lang_uid=lang_uid)
         if textinfo:
@@ -556,6 +595,23 @@ class _Imm:
             if textinfo:
                 return TextRef.from_textinfo(textinfo, self.languages[lang_uid])
 
+    def get_root_lang_from_uid(self, uid):
+        if uid in self.suttas:
+            return self.suttas[uid].lang.uid
+        else:
+            div_uid = uid
+            while div_uid:
+                if div_uid in self.divisions:
+                    return self.divisions[div_uid].collection.lang.uid
+                if div_uid in self.subdivisions:
+                    return self.subdivisions[div_uid].division.collection.lang.uid
+                div_uid = div_uid[:-1]
+        if uid[0] == 't':
+            return 'zh'
+        if uid[:3] == 'skt':
+            return 'skt'
+        raise ValueError("No root lang could be determined for uid: {}".format(uid))
+            
     def get_translations(self, uid, root_lang_uid):
         out = []
         for textref in self._external_text_refs.get(uid, []):
@@ -681,133 +737,6 @@ class _Imm:
         import random
         return random.choice(self.epigraphs)
 
-    def _deep_md5(self, ids=False):
-        """ Calculate a md5 for the data. Takes ~0.5s on a fast cpu.
-
-        This will detect most inconsistencies in the contents of strings,
-        ints, tuples, dicts and so on. As is always the case, carefully
-        crafted different inputs could produce identical md5s, but this
-        is highly unlikely to occur by chance.
-
-        If ids is True, it additionally generates a md5 checksum on the
-        id of every object encountered. The return value will be a tuple,
-        (data_md5, id_md5). The data_md5 should be identical across
-        different invocations of the program but the id_md5 will change.
-        The id_md5 can detect some corruptions which the data_md5 won't,
-        particularly when circular references are involved. For example
-        data_md5 might not notice when the order of a list of parallels
-        changes (if it has already seen each invidivudal parallel before),
-        but id_md5 certainly will. On the other hand, at least in principle
-        a change to an objects id need not invalidate the data - altough
-        such things should not need to happen.
-        
-        """
-        stack = []
-        #md5 = hashlib.md5()
-        #for b in atomicfy(self.collections, stack=stack):
-            #md5.update(b)
-        md5 = hashlib.md5(b"".join(atomicfy(self.collections, stack=stack)))
-        if ids:
-            md5ids = hashlib.md5(b"".join([str(id(a)).encode() for a in stack]))
-            return (md5.hexdigest(), md5ids.hexdigest())
-        return md5.hexdigest()
-
-    def _check_md5(self, exception=None):
-        new_md5 = self._deep_md5(ids=True)
-        if not hasattr(self, 'imm_md5'):
-            self.imm_md5 = new_md5
-            logger.info('Generating md5 {}.'.format(new_md5))
-        else:
-            if self.imm_md5 == new_md5:
-                logger.debug('md5s match')
-            else:
-                logger.error('md5 mismatch')
-                if exception:
-                    raise exception
-
-def atomicfy(start, stack=None):
-    """ Slice a unit into 'atomic' units (strs, bytes and ints)
-
-    The individuals 'atoms' are yielded as bytes objects, suitable for
-    consumption by a hashlib md5, sha or other function.
-
-    If called with the stack attribute, stack must be a list. After the
-    function as run, it will be populated with every object the function
-    has seen. This has two purposes, first a stack of starting points
-    can be entered, secondly you can perform further manupulations on the
-    contents of the passed in stack.
-
-    """
-
-    if stack is None:
-        stack = [start]
-    elif start is not None and start not in stack:
-        stack.append(start)
-    touched = set()
-
-    # Iterating over an object which is getting longer is fine in python.
-    for obj in stack:
-        oid = id(obj)
-        try:
-            if oid in touched:
-                continue
-            touched.add(oid)
-        except TypeError:
-            touched = set([oid])
-
-        try:
-            length = len(obj)
-            # Object has length
-            if length == 0:
-                #For empty container, yield the type
-                yield b't' + str(type(obj)).encode()
-                continue
-            
-            try:
-                yield obj.encode() # String?
-                continue
-            except AttributeError:
-                try:
-                    yield b'b' + obj # Bytes or btye-like?
-                    continue
-                except TypeError:
-                    pass
-            
-            # Yield the length as an additional check
-            yield b'l' + str(length).encode()
-            
-            try:
-                for pair in obj.items(): # Dict-like?
-                    stack.extend(pair)
-                continue
-            except AttributeError:
-                pass
-
-            try:
-                stack.extend(obj) # List-like?
-                continue
-            except AttributeError:
-                pass
-
-        except TypeError:
-            # Atomic (length-less) object.
-            pass
-
-        try:
-            test = int(obj)
-            yield b'n' + str(obj).encode()
-            #intobj = abs(int(obj))
-            #yield 'n' + intobj.tobytes(math.ceil(math.log(intobj+1, 2) / 8), 'big')
-            continue
-        except TypeError:
-            pass
-
-        # Yield the type. Useful for user classes.
-        yield b't' + str(type(obj)).encode()
-
-_imm = None
-_updater = None
-
 def imm():
     """ Get an instance of the DBR.
 
@@ -823,77 +752,19 @@ def imm():
 
     """
 
-    global _imm
+    if not _Imm._instance:
+        _Imm._ready.wait()
+    return _Imm._instance
 
-    if not _imm:
-        if _updater:
-            _updater.ready.wait()
-        else:
-            _imm = _Imm(42)
-    return _imm
-
-def _mtime_recurse(path, timestamp=0):
-    "Fast function for finding the latest mtime in a folder structure"
-
-    timestamp = max(timestamp, path.stat().st_mtime_ns)
-    for path1 in path.iterdir():
-        if not path1.is_dir():
-            continue
-        timestamp = max(timestamp, _mtime_recurse(path1, timestamp))
-    return timestamp
-    
-class Updater(threading.Thread):
-    """ Ensures the imm is available and up to date.
-
-    Checks the filesystem for changes which should be reflected
-    in the imm.
-
-    """
-    
-    
-    ready = threading.Event() # Signal that the imm is ready.
-    
-    def get_change_timestamp(self):
-        timestamp = str(sc.table_dir.stat().st_mtime_ns)
-
-        if config.runtime_tests:
-            timestamp += str(_mtime_recurse(sc.text_dir))
-        else:
-            # Detecting changes to git repository should be enough
-            # for server environment.
-            timestamp += str((sc.data_dir / '.git').stat().st_mtime_ns)
-        return timestamp
-
-    def run(self):
-        global _imm
-        # Give a few moments for the main thread to get started.
-        time.sleep(1)
-        while True:
-            timestamp = self.get_change_timestamp()
-            refresh_interval = config.db_refresh_interval
-            
-            # Check if imm is up to date
-            if not _imm or _imm.timestamp != timestamp:
-                logger.info('building imm')
-                start = time.time();
-                try:
-                    _imm = _Imm(timestamp)
-                    self.ready.set()
-                    logger.info('imm build took {} seconds'.format(time.time() - start))
-                    if config.runtime_tests:
-                        # Do consistency checking.
-                        _imm._check_md5()
-                except Exception as e:
-                    logger.error("Critical Error: DBR buid failed.", e)
-                    # retry in case problem is fixed.
-                    refresh_interval = min(20, refresh_interval)
-
-            time.sleep(refresh_interval)
-
-def start_updater():
-    """Start the background updater."""
-
-    global _updater
-    if not _updater:
-        _updater = Updater(name='imm_updater', daemon=True)
-        _updater.start()
+def periodic_update(i):
+    timestamp = max(int(file.stat().st_mtime) for file in sc.table_dir.glob('**/*'))
+    if not _Imm._instance or _Imm._instance.timestamp != timestamp:
+        logger.info('Building IMM')
+        try:
+            start = time.time()
+            _Imm._instance = _Imm(timestamp)
+            logger.info('imm build took {} seconds'.format(time.time() - start))
+            _Imm._ready.set()
+        except Exception as e:
+            logger.error("Critical Error: IMM buid failed.", e)
+            exit(2)

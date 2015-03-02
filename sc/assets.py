@@ -17,7 +17,7 @@ def clean(older=False):
     maximum_ctime = None
     try:
         maximum_ctime = sc.webassets_manifest_path.stat().st_mtime
-        maximum_ctime -= 7 * 12 * 60 * 60  # seconds
+        maximum_ctime -= 60  # seconds
     except OSError:
         older = True
 
@@ -114,6 +114,8 @@ def get_env():
     sc_data_scripts_file = get_js_datascripts_filename()
     
     js_core = webassets.Bundle(
+        'js/vendor/underscore-1.7.0.js',
+        'js/sc_state.js',
         'js/vendor/ZeroClipboard-1.2.3.js',
         'js/vendor/jquery.hashchange-1.3.min.js',
         'js/vendor/jquery.easytabs-3.2.0.min.js',
@@ -123,18 +125,19 @@ def get_env():
         'js/lib/jquery.details.js',
         'js/sc_utility.js',
         'js/text_selections.js',
-        'js/nav.js',
+        'js/search.js',
+        'js/sidebar.js',
         'js/sc_functions.js',
         'js/sc_init.js',
         'js/header_menu.js',
-        'js/sidebar.js',
         'js/sc_formatter.js',
         'js/sc_popupnotes.js',
-        'js/sc_zh2en_lookup.js',
+        'js/sc_lzh2en_lookup.js',
+        #'js/discourse.js',
         sc_data_scripts_file,
         sc_uid_expansion_data_file,
         'js/tracking.js',
-        filters='rjsmin',
+        filters=None if sc.config.debug else 'rjsmin',
         output='js/compiled/core-%(version)s.js'
     )
     env.register('js_core', js_core)
@@ -178,7 +181,7 @@ def compress_static():
         
 def get_js_datascripts_filename():
     import pathlib
-    filepath = sc.static_dir / 'js/data/zh2en-data-scripts-names.js'
+    filepath = sc.static_dir / 'js/data/lzh2en-data-scripts-names.js'
     if not filepath.exists():        
         import tasks.jsdata
         tasks.jsdata.build(minify=True, quiet=True)

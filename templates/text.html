@@ -15,7 +15,7 @@
 {% set next_data = imm.tim.get(textdata.next_uid, lang_code) if textdata.next_uid else none %}
 
 <div id="sidebar">
-<div id="darkness"></div>
+      <div id="darkness"></div>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
         <li><a href="#navigation-tab">Navigation</a></li>
@@ -30,6 +30,7 @@
                 <option value="es">Pali → Spanish</option>
                 {#<option value="pt">Pali → Portuguese</option>#}
                 <option value="id">Pali → Indonesian</option>
+                <option value="de">Pali → German</option>
             </select>
            <button class="button" id="pali-lookup" title="Activate Pali lookup">Lookup ▶</button>
             </div>
@@ -42,7 +43,7 @@
                 <a class="button" id="toSyllables" title="Read Pali text in Roman script, broken into syllables, with long syllables underlined">k-ā</a>
             </div>
             {% endif %}
-            {% if lang_code == 'zh' %}
+            {% if lang_code == 'lzh' %}
             <div class="x1 button-row">
                 <a class="button" id="zh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
             </div>
@@ -67,7 +68,6 @@
       </div>
       <div class="tab" id="navigation-tab">
         <div class="inner-wrap">
-            
             {% if imm(uid) %}
             <div class="x1 button-row">
                 <a class="button" href="/{{ uid }}" id="text-details-button" title="Go to parallels and references">Textual Details ▶</a>
@@ -100,6 +100,7 @@
                     <a class="button empty"></a>
                 {% endif %}
                 </div>
+                <div id="discourse"></div>
             </div>
       </div>
       <div class="tab" id="metadata-tab">
@@ -116,7 +117,7 @@
 <a class="previous" title="{{ prev_data.uid|uid_to_acro }}: {{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀</a>
 {% endif %}
 {% if next_data %}
-<a class="next" title="{{ next_data.uid|uid_to_acro }}: {{ next_data.name_striped }} " href="{{ next_data.url }}">▶</a>
+<a class="next" title="{{ next_data.uid|uid_to_acro }}: {{ next_data.name_striped }} " href="{{ next_data.url }}" data-prefetch="1">▶</a>
 {% endif %}
 </div>
 {% endif %}

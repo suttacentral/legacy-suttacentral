@@ -1,53 +1,79 @@
 // AJAX search results.
-sc.nav = {
+sc.search = {
     search_element: $('#page-header-search > input'),
-    search_results: $('#page-header-search-results'),
     lastXHR: null,
+    oldMain: null,
+    latestSearchTimeoutId: null,
     init: function() {
-        sc.nav.search_element.keyup(sc.nav.handleSearch);
-        $('body').mousedown(sc.nav.hideResultsIfNotSearch);
+        sc.search.search_element.keyup(sc.search.handleSearch);
+    },
+    restoreMain: function() {
+        $('main.ajax-search-results').remove();
+        if (sc.search.oldMain) {
+            $('header').after(sc.search.oldMain);
+        }
+    },
+    removeMain: function() {
+        var self = sc.search;
+        var main = $('main');
+        if ((main.length > 0) && !main.hasClass('ajax-search-results')) {
+            self.oldMain = main.detach();
+        } else {
+            main.remove();
+        }
     },
     handleSearch: function(e) {
-        var input = e.target.value;
-        if (sc.nav.lastXHR) {
-            sc.nav.lastXHR.abort();
+        return //disabled
+        var query = e.target.value;
+        console.log(query);
+        if (sc.search.lastXHR) {
+            sc.search.lastXHR.abort();
         }
-        if (input.length < 3) {
-            sc.nav.hideResults();
-            return;
+        if (query.length < 3) {
+            sc.search.restoreMain();
+        } else {
+            url = "/search?query=" + encodeURIComponent(query) + "&ajax=1";
+            ajax = jQuery.ajax(url, { "cache": "true" });
+            ajax.done(sc.search.done);
+            ajax.error(sc.search.done);
+            sc.search.lastXHR = ajax;
         }
-        url = "/search?query=" + encodeURIComponent(input) + "&ajax=1";
-        ajax = jQuery.ajax(url, { "cache": "true" });
-        ajax.done(sc.nav.done);
-        sc.nav.lastXHR = ajax;
     },
     done: function(data, code, jqXHR) {
-        if ('ga' in window) {
-            ga('send', 'pageview', this.url);
-        }
-        results = $("<div>" + data + "</div>");
-        sc.nav.search_results.html(results);
-        sc.truncate.apply(sc.nav.search_results, 125);
-        sc.nav.search_results.find("tr").filter(":even").addClass("even");
-        $("span.precision").attr({'title': 'Estimated precision of location, 1 = very certain.'});
-        sc.nav.showResults();
+        var self = sc.search,
+            url = this.url;
+
+        self.removeMain()
+        
+        results = $(data);
+        results.addClass('ajax-search-results');
+        self.addCloseButton(results);
+        $('header').after(results);
+        // We will send a pageview report to Google, but to prevent
+        // spamming up the analytics with 'search as you type'
+        // urls, we will only send after an adequate delay.
+        var pageViewDelay = 4 * 1000;
+        clearTimeout(self.latestSearchTimeoutId);
+        self.latestSearchTimeoutId = setTimeout(function() {
+            if ('ga' in window) {
+                ga('send', 'pageview', url);
+            } else {
+                console.log('Pageview Event: ' + url);
+            }
+        }, pageViewDelay)
     },
-    hideResultsIfNotSearch: function(e) {
-        var target = $(e.target);
-        if (!target.closest('#page-header-search')[0] &&
-            !target.closest('#page-header-search-results')[0]) {
-            sc.nav.hideResults();
-        }
+    error: function(query, data, code, jqXHR) {
+        results = "<main><div id=onecol><h1>Error</h1>"
+
     },
-    hideResults: function() {
-        sc.nav.search_results.stop(true, true).slideUp();
-    },
-    showResults: function() {
-        sc.nav.search_results.stop(true, true).slideDown();
+    addCloseButton: function(e){
+        var close = $('<div class="close-button">×</div>');
+        close.click(sc.search.restoreMain);
+        e.prepend(close);
     }
 };
 
-sc.nav.init();
+sc.search.init();
 
 //This code powers the 'more' and 'less' functionality. I checked out
 //jquery.truncator and jquery.expander but they didn't do what I wanted.

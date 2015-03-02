@@ -1,0 +1,152 @@
+{
+    "inherits": ["meta", "acro_to_name_and_uid_auto", "uid", "folding_analyzers"],
+    "index": {
+        "settings": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0,
+            "analysis": {
+                "char_filter": {
+                    "denumber": {
+                        "type": "pattern_replace",
+                        "pattern": "[0-9][0-9.-]*",
+                        "replacement": " "
+                    }
+                },
+                "filter": {
+                    "sanskrit_pali_synonym": {
+                        "type": "synonym",
+                        "synonyms": [
+                            "bhikkhu,bhiksu,bhiksu,bhikksu,biksu,monk => bhikkhu",
+                            "bhikkhuni,bhiksuni,bhiksuni,bhikksuni,biksuni,nun => bhikkhuni",
+                            "dhamma,dharma => dhamma",
+                            "kamma,karma => kamma",
+                            "nibbana,nirvana => nibbana"
+                        ]
+                    }
+                },
+                "analyzer": {
+                    "minimal": {
+                        "tokenizer": "icu_tokenizer",
+                        "char_filter": ["denumber"],
+                        "filter": ["icu_normalizer", "lowercase"]
+                    }
+                }
+            }
+        },
+        "mappings": {
+            "text": {
+                "properties": {
+                    "uid": {
+                        "type": "string",
+                        "index_analyzer": "uid_standard",
+                        "search_analyzer": "uid_globbing",
+                        "fields": {
+                            "division": {
+                                "type": "string",
+                                "index_analyzer": "uid_prefix",
+                                "search_analyzer": "standard"
+                            }
+                        }
+                    },
+                    "lang": {
+                        "type": "string",
+                        "analyzer": "uid_standard"
+                    },
+                    "root_lang": {
+                        "type": "string",
+                        "analyzer": "uid_standard"
+                    },
+                    "is_root": {
+                        "type": "boolean",
+                        "index": "not_analyzed"
+                    },
+                    "heading": {
+                        "properties": {
+                             "division": {
+                                "type": "string"
+                             },
+                             "subhead": {
+                                "type": "string"
+                             },
+                             "title": {
+                                "type": "string",
+                                "fields": {
+                                    "plain": {
+                                        "type": "string",
+                                        "analyzer": "folding_analyzer"
+                                    },
+                                    "shingle": {
+                                        "type": "string",
+                                        "index_analyzer": "folding_analyzer",
+                                        "search_analyzer": "folding_shingle_analyzer"
+                                    }
+                                }
+                             }
+                        }
+                   },
+                    "author": {
+                        "type": "string",
+                        "analyzer": "folding_analyzer"
+                    },
+                    "content": {
+                        "type": "string",
+                        "term_vector": "with_positions_offsets",
+                        "analyzer": "minimal"
+                    },
+                    "boost": {
+                        "type": "float"
+                    },
+                    "mtime": {
+                        "type": "integer",
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            "definition": {
+                "properties": {
+                    "content": {
+                        "type": "string",
+                        "term_vector": "with_positions_offsets",
+                        "analyzer": "minimal"
+                    },
+                    "entries": {
+                        "type": "nested",
+                        "properties": {
+                            "priority": {
+                                "type": "integer"
+                            },
+                            "source": {
+                                "type": "string",
+                                "index": "not_analyzed"
+                            },
+                            "html_content": {
+                                "type": "string",
+                                "index": "no"
+                            }
+                        }
+                    },
+                    "term": {
+                        "type": "string",
+                        "index": "not_analyzed",
+                        "fields": {
+                            "folded": {                            
+                                "type": "string",
+                                "analyzer": "folding_analyzer"
+                            }
+                        }
+                    },
+                    "gloss": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    },
+                    "number": {
+                        "type": "integer"
+                    },
+                    "boost": {
+                        "type": "float"
+                    }
+                }
+            }
+        }
+    }
+}

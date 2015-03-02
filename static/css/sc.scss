@@ -236,13 +236,6 @@ q:after {
 
 .name{font-style:normal}
 
-.dquo {margin-left: -0.9ex;position:absolute;}
-.squo {margin-left: -0.6ex;position:absolute;}
-.dsquo {margin-left: -1.6ex;position:absolute;}
-
-
-
-
 .tri {display:inline;}
 
 /* KOREAN */
@@ -252,9 +245,11 @@ q:after {
 
 
 /*CHINESE*/
-.endsutta:lang(zh), .endvagga:lang(zh),  .endsection:lang(zh), .enddivision:lang(zh), .end:lang(zh){
-font-weight:normal !important;
-font-style:normal !important;
+:lang(zh), :lang(lzh) {
+    .endsutta, .endvagga,  .endsection, .enddivision, .end {
+        font-weight:normal !important;
+        font-style:normal !important;
+    }
 }
 h1 .t-note{display:none}
 

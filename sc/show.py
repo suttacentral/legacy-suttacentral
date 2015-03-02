@@ -95,13 +95,20 @@ def default(*args, **kwargs):
         lang_code = args[0]
         uid = args[1]
 
-        if not imm.text_exists(uid, lang_code):        
+        if not imm.text_exists(uid, lang_code):
+            redirect = False
             if imm.text_exists(lang_code, uid):
+                redirect = True
+                uid, lang_code = lang_code, uid
+            elif lang_code == 'zh' and imm.text_exists(uid, 'lzh'):
+                redirect = True
+                lang_code = 'lzh'
+            if redirect:
                 # This is an old-style url, redirect to new-style url.
                 if len(args) == 2:
-                    new_url = '/{}/{}'.format(uid, lang_code)
+                    new_url = '/{}/{}'.format(lang_code, uid)
                 else:
-                    new_url =  '/{}/{}/{}'.format(uid, lang_code, args[2])
+                    new_url =  '/{}/{}/{}'.format(lang_code, uid, args[2])
                 # Don't be transparent, we want to keep things canonical
                 # and also, use 301. This is a permament change.
                 raise cherrypy.HTTPRedirect(new_url, 301)
@@ -120,54 +127,29 @@ def default(*args, **kwargs):
 
     raise cherrypy.NotFound()
 
-def search(query, target=None, limit=0, offset=0, ajax=0, **kwargs):
-    limit = int(limit)
-    offset = int(offset)
-    if not target:
-        target = 'all'
-    ajax = not ajax in (None, 0, '0')
-    if not limit:
-        limit = 10 if ajax else 25
-    qdict = {'query':query, 'target':target, 'limit':limit, 'offset':offset, 'ajax':ajax}
-    qdict.update(kwargs)
-    
-    search_result = classes.SearchResults(query=qdict)
-    
-    if not query:
-        return search_view(query, search_result)
-
+def search(query, **kwargs):
+    if not 'limit' in kwargs:
+        kwargs['limit'] = 10
+    if not 'offset' in kwargs:
+        kwargs['offset'] = 0
     try:
-        if target=='all' or 'terms' in target or 'entries' in target:
-            dict_results = dictsearch.search(query=query, target=target, limit=limit, offset=offset, ajax=ajax, **kwargs)
-            if dict_results:
-                search_result.add(dict_results)
-
-        if target == 'all' or 'texts' in target:
-            text_results = textsearch.search(query=query, target=target, limit=limit, offset=offset, **kwargs)
-            if text_results:
-                search_result.add(text_results)
-
-        if target in ('all', 'suttas'):
-            slimit = limit
-            if slimit == -1:
-                slimit = 10 if ajax else 25
-            search_result.add(suttasearch.search(query=query, limit=slimit, offset=offset))
-    except:
-        search_result.error = True
-        pass
-    return search_view(query, search_result)
-
-def search_view(search_query, search_result):
-    if not search_result.query['ajax']:
-        return SearchResultView(search_query, search_result).render()
-    else:
-        return AjaxSearchResultView(search_query, search_result).render()
+        if 'autocomplete' in kwargs:
+            results = sc.search.autocomplete.search(query, **kwargs)
+            return json.dumps(results, ensure_ascii=False, sort_keys=True)
+        else:
+            results = sc.search.query.search(query, **kwargs)
+            return ElasticSearchResultsView(query, results, **kwargs).render()
+    except sc.search.ConnectionError:
+        raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
 
 def downloads():
     return DownloadsView().render()
 
 def sht_lookup(query):
     return ShtLookupView(query).render()
+
+def define(term):
+    return DefinitionView(term).render()
 
 def admin_index():
     return AdminIndexView().render()
@@ -195,6 +177,9 @@ def admin_data_notify(json_payload):
     else:
         logger.info('Data update request ignored')
     raise cherrypy.HTTPRedirect('/admin', 303)
+
+def error(status, message, traceback, version):
+    return ErrorView(status=status, message=message, traceback=traceback, version=version).render()
 
 def profile(locals_dict, globals_dict, *args, **kwargs):
     """ Generates a profile

@@ -3,29 +3,43 @@
  * side bar.
  */
 sc.sidebar = {
-    node: $('#sidebar'),
     init: function() {
         var self=this;
+        self.node = $('#sidebar');
         $('#toc').remove();
         if ($('#text').length > 0) {
             $('#toc').remove();
         } else {
             return
-        } 
+        }
         /* TEMPORARY */
         $('#text').find('.next, .previous, .top').remove();
         /* END TEMPORARY */
         
         this.doMenu('#navigation-tab > .inner-wrap');
         this.doMetadata('#metadata-tab > .inner-wrap');
-        this.node.show().easytabs({
+        $('#sidebar').show().easytabs({
             animate: false,
             tabs: '.tabs > li',
+            'defaultTab': 'li:nth-child(2)',
             updateHash: false
         });
 
-        this.node.on('easytabs:before', function(e, $clicked, $target){
-            sc.userPrefs.setPref('sidebar-selected-tab', $target.attr('id'));
+        var sidebarTab = sc.sessionState.getItem('sidebar.tab');
+
+        if (sidebarTab) {
+            self.selectTab(sidebarTab)
+        }
+
+        if (sc.sessionState.getItem('sidebar.active')) {
+            if (!self.isVisible()) {
+                self.show();
+                self.node.addClass('fast')
+            }
+        }
+
+        this.node.on('easytabs:before', function(e, $clicked, $target) {
+            sc.sessionState.setItem('sidebar.tab', $target.attr('id'));
             sc.trackEvent($clicked.text());
         });
         
@@ -48,7 +62,7 @@ sc.sidebar = {
         self.bindButtons();
         
         scState.save("clean");
-        if ($.cookie('t-line-by-line')) {
+        if (sc.sessionState.getItem('t-line-by-line')) {
             self.toggleLineByLine();
         }
     },
@@ -57,14 +71,16 @@ sc.sidebar = {
     },
     show: function() {
         this.node.addClass('active');
-        sc.userPrefs.setPref('sidebar', true);
+        sc.sessionState.setItem('sidebar.active', true);
     },
     hide: function() {
         this.node.removeClass('active');
-        sc.userPrefs.setPref('sidebar', false);
+        this.node.removeClass('fast');
+        sc.sessionState.setItem('sidebar.active', false);
+        
     },
     selectTab: function(tab) {
-        this.node.easytabs('select', '#' + tab);
+        this.node.easytabs('select', tab);
     },
     bindButtons: function(){
         $('#text-info').click(toggleTextualInfo);
@@ -73,33 +89,52 @@ sc.sidebar = {
             $('#' + f).click(transliterateHandler);
         }
         $('#lookup-to-lang').change(function(){
-            sc.userPrefs.setPref('lookupToLang', $(this).val());
+            sc.state.setItem('lookupToLang', $(this).val());
             if (sc.userPrefs.getPref("paliLookup") === true) {
                 sc.init(true);
-            }            
+            }
         });
         $('#t-line-by-line').click(this.toggleLineByLine);
         this.initChineseLookup();
 
+    },
+    tracking: function(e) {
+        // Track usage of sidebar controls
+        var self=this;
+        $('#controls-tab').on('click', '.button', function(e){
+            self.trackEvent($(e.target).attr('id') || $(e.target).text())
+        });
+    },
+    trackEvent: function(label) {
+        if ('ga' in window) {
+            ga('send', {
+                hitType: 'event',
+                eventCategory: 'button',
+                eventAction: 'click',
+                eventLabel: label
+            })
+        } else {
+            console.log('Event: ' + label);
+        }
     },
     toggleLineByLine: function(e) {
         var brs = $('br.t-br');
         if (brs.length) {
             brs.remove();
             $('#text').removeClass('line-by-line');
-            $.removeCookie('t-line-by-line');
+            sc.sessionState.setItem('t-line-by-line', false);
         } else {
             $('.t').before('<br class="t-br">');
             $('br + br.t-br').remove();
             $('#text').addClass('line-by-line');
-            $.cookie('t-line-by-line', 1)
+            sc.sessionState.setItem('t-line-by-line', true);
         }
         
     },
     initChineseLookup: function() {
-        if ($('#zh2en').length == 0) return;
+        if ($('#lzh2en').length == 0) return;
         //Where to attach the chinese lookup control button.
-        sc.zh2enLookup.init('#zh2en', '#text');
+        sc.lzh2enLookup.init('#lzh2en', '#text');
     },
     disableControls: function(){
         $('#textual-controls button').attr('disabled', 'disabled');
@@ -214,4 +249,4 @@ sc.sidebar = {
             $('#message-box > .message').fadeOut();
         }
     }
-}
+};

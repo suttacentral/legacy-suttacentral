@@ -1,24 +1,4 @@
-"""Tasks related to the TextDataModel (TIM).
-
-Both refresh(force=True) and rebuild() will re-index every single file,
-the difference between them is that rebuild will start with a fresh
-database, and refresh will use the existing database. Because of how
-SQLite connections work rebuild() requires the server to be restarted
-and refresh does not.
-
-Use refresh unless there have been schema changes or database corruption.
-
-"""
-
 from tasks.helpers import *
-
-@task
-def refresh(force=False):
-    """Ensure TIM is up-to-date."""
-    blurb(refresh)
-    from sc import textdata
-    tim = textdata.tim()
-
 
 @task
 def rebuild():
@@ -28,3 +8,17 @@ def rebuild():
     blurb(rebuild)
     from sc import textdata
     tim = textdata.rebuild_tim()
+
+@task
+def deletelang(lang):
+    from sc import textdata
+    tim = textdata.SqliteBackedTIM()
+    con = tim._con
+    count = con.execute('SELECT COUNT(lang) FROM data WHERE lang = ?', (lang,)).fetchone()[0]
+    notice('Removing {} enties from database'.format(count))
+    con.execute('DELETE FROM data WHERE lang = ?', (lang,))
+    con.execute('DELETE FROM mtimes WHERE path LIKE ?', ('{}%'.format(lang), ))
+    con.commit()
+    notice('Done')
+    
+    

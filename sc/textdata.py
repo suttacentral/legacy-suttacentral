@@ -7,7 +7,7 @@ import functools
 import threading
 from itertools import chain
 
-import sc
+import sc, sc.util
 from sc.tools import html
 import logging
 logger = logging.getLogger(__name__)
@@ -35,12 +35,20 @@ def text_dir_md5(extra_files=[__file__]):
     return md5(array('Q', mtimes)).hexdigest()
 
 class TextInfo:
-    __slots__ = ('uid', 'lang', 'path', 'bookmark', 'name', 'author', 'volpage', 'prev_uid', 'next_uid')
+    __slots__ = ('uid', 'lang', 'path', 'bookmark', 'name', 'author', 'volpage', 'prev_uid', 'next_uid', 'mtime')
+
     def __init__(self, **kwargs):
         for key in self.__slots__:
-            setattr(self, key, kwargs.get(key, None))
+            value = kwargs.get(key, None)
+            if key == 'path':
+                value = pathlib.Path(value) if value else None
+            setattr(self, key, value)
+    
     def __repr__(self):
         return 'TextInfo({})'.format(', '.join('{}={}'.format(attr, getattr(self, attr)) for attr in self.__slots__))
+
+    def as_dict(self):
+        return {key: getattr(self, key) for key in self.__slots__}
 
     @property
     def url(self):
@@ -48,10 +56,6 @@ class TextInfo:
         if self.bookmark:
             out = out + '#{}'.format(self.bookmark)
         return out
-
-    @property
-    def name_striped(self):
-        return regex.sub(r'^\P{alpha}*', '', self.name or '')
 
 class TextInfoModel:
     """ The TextInfoModel is responsible for scanning the entire contents
@@ -172,6 +176,8 @@ class TextInfoModel:
                 volpage = self._get_volpage(root, lang_uid, uid)
                 embedded = self._get_embedded_uids(root, lang_uid, uid)
 
+                mtime = htmlfile.stat().st_mtime
+
                 textinfo = TextInfo(uid=uid, lang=lang_uid, path=path, name=name, author=author, volpage=volpage, prev_uid=prev_uid, next_uid=next_uid)
                 self.add_text_info(lang_uid, uid, textinfo)
 
@@ -228,7 +234,7 @@ class TextInfoModel:
         try:
             hgroup = root.select_one('.hgroup')
             h1 = hgroup.select_one('h1')
-            return h1.text_content()
+            return regex.sub(r'^\P{alpha}*', '', h1.text_content())
         except Exception as e:
             logger.warn('Could not determine name for {}/{}'.format(lang_uid, uid))
             return ''
@@ -343,8 +349,35 @@ class SqliteBackedTIM(TextInfoModel):
     for building a division view. (April 2014)
     
     """
-    def __init__(self, filename):
-        self._filename = filename
+
+    def get_schema():
+        """ The commands required to configure the sqlite databse
+
+        The schema can be used to determine if a database rebuild
+        is required.
+
+        """
+        return {
+            'init': (
+                'CREATE TABLE data(lang, uid, path, bookmark, name,\
+                                   author, volpage, prev_uid, next_uid)',
+                'CREATE TABLE mtimes(path UNIQUE, mtime)',
+                'PRAGMA journal_mode = OFF'
+            ),
+            'finalize': (
+                'CREATE INDEX lang_x ON data(lang)',
+                'CREATE INDEX uid_x ON data(uid)',
+                'CREATE INDEX path_x ON data(path)',
+                'CREATE INDEX mtimes_path_x on mtimes(path)',
+                'PRAGMA journal_mode = wal'
+            ),
+            'buster': 1.0
+        }
+    schema = get_schema()
+    def __init__(self, filename=None):
+        if filename is None:
+            filename = self.default_filename
+        self.filename = filename
         self._local = threading.local()
 
     @property
@@ -356,28 +389,24 @@ class SqliteBackedTIM(TextInfoModel):
             return self._local.con
 
     def reconnect(self):
-        self._local.con = sqlite3.connect(self._filename)
+        self._local.con = sqlite3.connect(self.filename)
 
     def _init_table(self):
         try:
-            pathlib.Path(self._filename).unlink()
+            pathlib.Path(self.filename).unlink()
         except FileNotFoundError:
             pass
         self.reconnect()
-        self._con.execute('CREATE TABLE data(lang, uid, path, bookmark, name, author, volpage, prev_uid, next_uid)')
-        self._con.execute('CREATE TABLE mtimes(path UNIQUE, mtime)')
-        # Presently we build the whole lot in one go and disabling
-        # journaling dramatically improves bulk insert performance.
-        self._con.execute('PRAGMA journal_mode = OFF')
-
+        for string in self.schema['init']:
+            self._con.execute(string)
+        
     def _finally_table(self):
-        self._con.execute('CREATE INDEX lang_x ON data(lang)')
-        self._con.execute('CREATE INDEX uid_x ON data(uid)')
-        self._con.execute('CREATE INDEX path_x ON data(path)')
-        self._con.execute('CREATE INDEX mtimes_path_x on mtimes(path)')
-        self._con.execute('PRAGMA journal_mode = wal')
+        for string in self.schema['finalize']:
+            self._con.execute(string)
         
     def build(self, force=False):
+        if not self._build_lock.acquire(blocking=False):
+            return
         happy = self.is_happy()
         if happy:
             self._mtimes = {path:mtime for path, mtime in self._con.execute('SELECT * FROM mtimes')}
@@ -386,12 +415,35 @@ class SqliteBackedTIM(TextInfoModel):
             self._init_table()
             self.set_happy()
             self._mtimes = {}
+        self.repair()
         super().build(force)
         if not happy:
             self._finally_table()
             
         self._con.commit()
         del self._mtimes
+        self._build_lock.release()
+
+    def repair(self):
+        con = self._con
+        
+        exists_in_data_table = {(t[0], t[1]) for t in
+                    con.execute('SELECT uid, lang FROM data')}
+        bad = set()
+        for (path_str, ) in con.execute('SELECT path FROM mtimes'):
+            path = pathlib.Path(path_str)
+            lang = path.parts[0]
+            uid = path.stem
+            if (uid, lang) not in exists_in_data_table:
+                logger.warn('entry ({}, {}) in mtimes does not exist in data'.format(uid, lang))
+                bad.add((path_str,))
+
+        if bad:
+            logger.warn('Removing {} bad entries'.format(len(bad)))
+            con.executemany('DELETE FROM mtimes WHERE path = ?', bad)
+            con.commit()
+            return True
+        return False
 
     def _check_for_deleted(self):
         sc_dir = str(sc.text_dir) + '/'
@@ -438,9 +490,17 @@ class SqliteBackedTIM(TextInfoModel):
         con = self._con
         
         def text_info_from_row(row):
-            return TextInfo(lang = row[0], uid=row[1],
-                            path=pathlib.Path(row[2]), bookmark=row[3],
-                            name=row[4], author=row[5], volpage=row[6], prev_uid=row[7], next_uid=row[8])
+            return TextInfo(
+                lang = row[0],
+                uid=row[1],
+                path=pathlib.Path(row[2]),
+                bookmark=row[3],
+                name=regex.sub(r'^\P{alpha}*', '',row[4] or ''),
+                author=row[5],
+                volpage=row[6],
+                prev_uid=row[7],
+                next_uid=row[8]
+            )
         
         if uid and lang_uid:
             cur = con.execute('''SELECT lang, uid, path, bookmark, name, author, volpage, prev_uid, next_uid
@@ -465,9 +525,18 @@ class SqliteBackedTIM(TextInfoModel):
             else:
                 raise ValueError('At least one of uid or lang_uid must be set')
 
-    def exists(self, uid, lang_uid):
-        cur = self._con.execute('SELECT 1 FROM data WHERE lang=? and uid=?',
+    def exists(self, uid=None, lang_uid=None):
+        fields = []
+        if uid and lang_uid:
+            cur = self._con.execute('SELECT 1 FROM data WHERE lang=? and uid=?',
                         (lang_uid, uid))
+        elif uid and not lang_uid:
+            cur = self._con.execute('SELECT 1 FROM data WHERE uid=?', (uid,))
+        elif lang_uid and not uid:
+            cur = self._con.execute('SELECT 1 FROM data WHERE lang=?', (lang_uid,))
+        else:
+            raise ValueError('uid and lang_uid cannot both be None')
+            
         return cur.fetchone() != None
 
     def add_text_info(self, lang_uid, uid, textinfo):
@@ -475,7 +544,16 @@ class SqliteBackedTIM(TextInfoModel):
             (lang_uid, uid, str(textinfo.path), textinfo.bookmark,
             textinfo.name, textinfo.author, textinfo.volpage, textinfo.prev_uid, textinfo.next_uid))
 
-    filename = str(sc.db_dir / 'text_info_model.db')
+    filename_fmt = 'text-info-model-{version}.db'
+
+    @property
+    def default_filename(self):
+        import json
+        import hashlib
+        schema_str = json.dumps(self.schema, sort_keys=1) 
+        ver = hashlib.md5(schema_str.encode('ascii')).hexdigest()[0:8]
+        
+        return str(sc.db_dir / self.filename_fmt.format(version=ver))
     
     @classmethod
     def build_once(cls, force_build):
@@ -483,7 +561,7 @@ class SqliteBackedTIM(TextInfoModel):
             try:
                 start=time.time()
                 logger.info('Acquiring SQLite Backed Text Info Model')
-                cls._instance = cls(cls.filename)
+                cls._instance = cls()
                 cls._instance.build(force_build)
                 cls._build_ready.set()
                 build_time = time.time()-start
@@ -492,7 +570,7 @@ class SqliteBackedTIM(TextInfoModel):
                 cls._build_lock.release()
 
     @classmethod
-    def parallel_rebuild(cls):
+    def parallel_rebuild(cls, filename=None):
         """ Rebuild the Model from stratch
 
         Leaves the existing database intact so that the server can
@@ -508,39 +586,47 @@ class SqliteBackedTIM(TextInfoModel):
         """
         
         import os
+
+        if filename is None:
+            filename = cls.default_filename
+            
         logger.info('Rebuilding SQLite Backed Text Info Model in background')
-        timfile = cls.filename + '.working'
+        timfile = filename + '.working'
         tim = cls(timfile)
         tim.build()
         logger.info('Rebuild complete')
-        os.replace(timfile, cls.filename)
+        os.replace(timfile, filename)
         return True
         
-        
-        
 
-def tim(force_build=False, Model=SqliteBackedTIM):
+Model = SqliteBackedTIM
+def tim():
     """ Returns an instance of the TIM
 
-    When this is called for the first time, it will check if the cached
-    TIM is up to date. If it is, the cached copy will be loaded and
-    returned. If it's not, it will rebuild.
-
-    The TIM can take some time to build, perhaps a couple of minutes.
-    For this reason, it's a reasonable idea to load it in a seperate
-    process before restarting the server, thus ensuring it is fresh.
-
-    i.e.
-    import sc.textdata
-    sc.textdata.tim()
+    This method only works when the updater thread has been
+    started.
     
      """
-
-    if not force_build and Model._build_ready.set():
-        return Model._instance
-    Model.build_once(force_build)
     Model._build_ready.wait()
     return Model._instance
+
+def periodic_update(i):
+    if Model._instance:
+        tim = Model._instance
+    else:
+        tim = Model()
+        if tim.is_happy():
+            Model._instance = tim
+            repaired = tim.repair()
+            if repaired:
+                tim.build()
+            Model._build_ready.set()
+            if i == 0:
+                return
+    
+    tim.build()
+    Model._build_ready.set()
+    
 
 def rebuild_tim(Model=SqliteBackedTIM):
     Model.parallel_rebuild()
@@ -630,4 +716,3 @@ class PaliPageNumbinator:
         book = {'1':'i', '2':'ii', '3':'iii', '4':'iv', '5':'v', '6':'vi'
                 }.get(book, book)
         return '{} {} {}'.format(ptsbook, book, num)
-

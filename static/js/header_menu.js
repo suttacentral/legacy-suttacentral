@@ -1,11 +1,6 @@
 sc.headerMenu = {
+    node: $('#panel-screen-wrap, #panel'),
     lastScreenScroll: 0,
-    activate: function(e){
-        $(this).addClass('active');
-    },
-    deactivate: function(e) {
-        $(this).removeClass('active');
-    },
     toggle: function(e){
         $(this).toggleClass('active');
         $('header nav').not(this).removeClass('active')
@@ -14,30 +9,26 @@ sc.headerMenu = {
         var self = sc.headerMenu,
             target = $(element.find('[href]').attr('href'));
         
-        
         if (mode === undefined && target.hasClass('active')) {
             mode = "hide";
         } else {
             mode = "show";
         }
 
-
         if (mode == "hide") {
             self.hideAll();
         }
         else {
             self.hideAll();
-            $('#panel-screen-wrap, #panel').addClass('active')
+            self.node.addClass('active')
             target.addClass('active');
             element.addClass('active');
-            //$(document.body).addClass('overflow-hidden');
             setTimeout(self.adjustColumns, 50);
         }
     },
     hideAll: function(e){
         $('#panel  .active, header  .active').removeClass('active');
         $('#panel-screen-wrap, #panel').removeClass('active');
-        //$(document.body).removeClass('overflow-hidden');
     },
     adjustColumns: function(){
         /* This function is responsible for tweaking the column widths and alignment on the
@@ -67,20 +58,42 @@ sc.headerMenu = {
         
         $('#panel').css({'height': panelHeight})
     },
+    scrollEvents: [],
     scrollShowHide: function(e){
         var self = sc.headerMenu,
             scrollTop = $(document.body).scrollTop(),
             scrollAmount = scrollTop - self.lastScreenScroll;
+
+        
         self.lastScreenScroll = scrollTop;
+        if (scrollAmount > 0) {
+            $('header').addClass('retracted');
+            self.hideAll();
+            return
+        }
         
         if (scrollTop == 0) {
             $('header').removeClass('retracted');
+            return
         }
-        else {
-            $('header').addClass('retracted');
-            self.hideAll();
+        
+        var now = e.timeStamp;
+        if (scrollAmount < 0) {
+            for (i = self.scrollEvents.length - 1; i >= 0 ; i--) {
+                oldE = self.scrollEvents[i];
+                
+                var diff = now - oldE[1];
+                if (diff > 500) {
+                    self.scrollEvents.pop()
+                } else if (diff > 100 && oldE[0] < 0) {
+                     $('header').removeClass('retracted');
+                     return
+                 }
+            }
         }
+        
 
+        self.scrollEvents.push([scrollAmount, e.timeStamp]);
 
     }
 }

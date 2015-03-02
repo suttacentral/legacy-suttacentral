@@ -13,7 +13,7 @@ def _branch_or_pull(branch):
 
 
 def _staging_run(*commands):
-    remote_run('sc-staging@vps.suttacentral.net', [
+    remote_run('sc-staging@linode.suttacentral.net', [
         'source $HOME/.pyenv/versions/suttacentral/bin/activate',
         'cd $HOME/suttacentral',
     ] + list(commands))
@@ -34,7 +34,6 @@ def full(branch=None):
         'invoke clean --aggressive',
         'invoke jsdata.build',
         'invoke assets.compile --precompress',
-        'invoke textdata.refresh',
         'sudo supervisorctl start sc-staging',
         'rm -f tmp/maintenance',
         'invoke dictionary.build',
@@ -63,7 +62,6 @@ def quick(branch=None):
         'cd ..',
         'pip install -q -r requirements.txt',
         'invoke assets.compile --precompress',
-        'invoke textdata.refresh',
         'sudo supervisorctl restart sc-staging',
         'invoke assets.clean --older'
     )
@@ -80,10 +78,9 @@ def update_data(branch=None):
 
 
 @task
-def update_search():
+def nuke_search():
     """Update dictionary and search index on the staging server."""
     blurb(update_search)
     _staging_run(
-        'invoke dictionary.build',
-        'invoke search.index'
+        'invoke search.delete'
     )

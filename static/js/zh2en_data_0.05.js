@@ -1,5 +1,5 @@
 //Compact format for improved cacheability and reduce transmit time.
-var zh2en_dict = {};
+var lzh2en_dict = {};
 (function(){
     var lines = '一^yī^one|一一^yīyī^one by one|一一各^yīyī gè^each [individual] one|一一各有^yīyī gè yǒu^each single one has...|一一如法^yīyī rúfǎ^each one according to the rules|一一毛生^yīyī maó shēng^every hair is alive|一一界中^yīyī jiè zhōng^in each realm|一一罪^yīyī zuì^each and every crime|一七日^yīqīrì^one set of seven days|一三千^yī sānqiān^one trichiliocosm|\
 |一三昧^yī sānmèi^one pointed concentration|一下^yīxià^(to) strike once|一世^yīshì^one life|一世界^yīshìjiè^one realm|一中^yīzhōng^one middle way|一中一切中^yī zhōng yīqiè zhōng^one being recognized mean then all is of the mean|一中劫^yīzhōngjié^one medium-length kalpa|一九^yījiǔ^Amitâbha|一九之生^yījiǔ zhī shēng^rebirth in the Pure Land|一事^yīshì^a single entity|\
@@ -2008,6 +2008,6 @@ var zh2en_dict = {};
 |黠學^xiá xué^to learn smartly|黠師^xiá shī^adept master|黠慧^xiáhuì^worldly wisdom|黠慧者^xiáhuì zhě^wise one|黠目^xiá mù^the eye of wisdom|黠者^xiá zhě^clever person|鼠^shǔ^mouse|齎^jī^to bring|齎持^jīchí^to carry'.split('|');
     for (var i in lines) {
         var pieces = lines[i].split('^');
-        zh2en_dict[pieces[0]] = pieces.slice(1);
+        lzh2en_dict[pieces[0]] = pieces.slice(1);
     }
 })();

@@ -1,5 +1,5 @@
 /* This file was generated Manually */
-sc.data.pi2esDict = {
+sc.piLookup.register({script:'es', data: {
 'a':["prefijo","el prefijo ā acortado antes de una consonante doble; p.ej. ā + kosati = akkosati; part. negativa prefijada a los sustantivos, adjetivos y participios; p.ej. na + kusala = akusala; el aumento que se prefija a algunas raices en los tiempos Pasados y Condicional; p.ej. akāsi."],
 'aṃsa':["m.; nt.","1. una parte, un lado; 2. hombro."],
 'aṃsakūṭa':["nt.","hombro."],
@@ -20199,4 +20199,4 @@ sc.data.pi2esDict = {
 'horālocana':["nt.","reloj."],
 'ḷaṅghāpeti':["caus. de laṅghati","hace o causa saltar; hace o causa brincar."],
 'ḷāpukaṭāha':["adj.","la corteza exterior de una calabaza utilizada como una vasija o recipiente."]
-}
+}})

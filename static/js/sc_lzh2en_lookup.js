@@ -1,7 +1,7 @@
 sc = sc || {};
 
-sc.zh2enLookup = {
-    buttonId: "zh2en",
+sc.lzh2enLookup = {
+    buttonId: "lzh2en",
     chineseClasses: "P, H1, H2, H3",
     active: false,
     dictRequested: false,
@@ -15,18 +15,21 @@ sc.zh2enLookup = {
     currentLookup: null,
     lastCurrentLookup: null,
     init: function(button, markup_target){
-        this.markupTarget = $(markup_target).addClass('zh2enLookup')[0];
-        this.button = $(button).on('click', sc.zh2enLookup.toggle);
+        this.markupTarget = $(markup_target).addClass('lzh2enLookup')[0];
+        this.button = $(button).on('click', sc.lzh2enLookup.toggle);
+        if (sc.sessionState.getItem('lzh2en.active')) {
+            this.activate();
+        }
     },
     before: function(){
-        self = sc.zh2enLookup;
+        self = sc.lzh2enLookup;
         sc.sidebar.messageBox.clear();        
         var message = '<p>Loading Chinese to English dictionary data, this may take some time (~1MB)</p>'
-        sc.sidebar.messageBox.show(message, {id: 'zh_msg_loading'});
+        sc.sidebar.messageBox.show(message, {id: 'lzh_msg_loading'});
     },
     done: function(){
-        var self = sc.zh2enLookup;
-        sc.sidebar.messageBox.remove('zh_msg_loading');
+        var self = sc.lzh2enLookup;
+        sc.sidebar.messageBox.remove('lzh_msg_loading');
         var message = '<p>Chinese to English lookup activated.</p>\
             <p>Use the mouse or left, right arrow keys to navigate the text (shift-right to advance more).</p>\
             <p>A red border indicates modern usage, possibly unrelated to early Buddhist usage.</p>'
@@ -35,7 +38,7 @@ sc.zh2enLookup = {
         self.lastCurrentLookup = self.currentLookup;
     },
     fail: function(jqXHR, textStatus, errorThrown){
-        sc.sidebar.messageBox.remove('zh_msg_loading');
+        sc.sidebar.messageBox.remove('lzh_msg_loading');
         var msg = '<div>Failed to download dictionary data because of <em>{}</em></div>'.format(textStatus);
         sc.sidebar.messageBox.show(msg, {timeout: 10000});
     },
@@ -44,11 +47,11 @@ sc.zh2enLookup = {
         if (!this.originalHTML)
             this.originalHTML = this.markupTarget.innerHTML;
         
-        if (!this.dictRequested && !window.sc.zh2enData)
+        if (!this.dictRequested && !window.sc.lzh2enData)
         {
             self.before();
             this.dictRequested = true;
-            sc.zh2enDataScripts.forEach(function(url, i){
+            sc.lzh2enDataScripts.forEach(function(url, i){
                 var jqXHR = jQuery.ajax({
                     url: sc.jsBaseUrl+url,
                     dataType: "script",                    
@@ -89,22 +92,24 @@ sc.zh2enLookup = {
                 self.setCurrent(prev);
             }
         });
+        sc.sessionState.setItem('lzh2en.active', true);
     },
     deactivate: function(){
         this.markupTarget.innerHTML = this.originalHTML;
         sc.sidebar.messageBox.clear();
         sc.sidebar.messageBox.show('<p>Lookup disabled.</p>', {'timeout': 5000});
+        sc.sessionState.setItem('lzh2en.active', false);
     },
     generateMarkup: function() {
         if (this.button)
             this.button.attr('disabled', 'disabled');
         this.markupGenerator.start();
-        $(document).on('mouseenter', 'span.lookup', sc.zh2enLookup.lookupHandler);
+        $(document).on('mouseenter', 'span.lookup', sc.lzh2enLookup.lookupHandler);
     },
     markupGenerator: {
         //Applies markup incrementally to avoid a 'browser stall'
         start: function(){
-            this.node = sc.zh2enLookup.markupTarget;
+            this.node = sc.lzh2enLookup.markupTarget;
             this.startTime = Date.now();
             this.step();
         },
@@ -118,10 +123,10 @@ sc.zh2enLookup = {
                 this.textNodeToMarkup(this.node);
                 this.node = nextNode;
             }
-            setTimeout('sc.zh2enLookup.markupGenerator.step.call(sc.zh2enLookup.markupGenerator)', 5);
+            setTimeout('sc.lzh2enLookup.markupGenerator.step.call(sc.lzh2enLookup.markupGenerator)', 5);
         },
         andfinally: function(){
-            self = sc.zh2enLookup;
+            self = sc.lzh2enLookup;
             if (self.button)
                 self.button.removeAttr('disabled');
             
@@ -129,7 +134,7 @@ sc.zh2enLookup = {
         textNodeToMarkup: function(node) {
             if (node === undefined) return;
             var text = node.nodeValue;
-            if (!text || text.search(sc.zh2enLookup.chineseIdeographs) == -1){
+            if (!text || text.search(sc.lzh2enLookup.chineseIdeographs) == -1){
                 return
             }
             var proxy = document.createElement("span");
@@ -138,7 +143,7 @@ sc.zh2enLookup = {
         },
         toLookupMarkup: function(input)
         {
-            var self = sc.zh2enLookup,
+            var self = sc.lzh2enLookup,
                 chinesePunctuation = self.chinesePunctuation;
             
             return input.replace(self.chineseIdeographs, function(ideograph){
@@ -150,7 +155,7 @@ sc.zh2enLookup = {
         }
     },
     toggle: function(){
-        self = sc.zh2enLookup;
+        self = sc.lzh2enLookup;
         self.active = !self.active;
         if (self.active) self.activate()
         else self.deactivate();
@@ -183,14 +188,14 @@ sc.zh2enLookup = {
             fallback = false;
         for (i = graphs.length; i > 0; i--) {
             var snip = graphs.slice(0, i)
-            if (snip in sc.zh2enData) {
+            if (snip in sc.lzh2enData) {
                 popup.push(self.lookupWord(snip))
                 if (first) {
                     first = false;
                     nodes.slice(0, i).addClass('current_lookup')
                     this.lastCurrentLookup = nodes[i-1];
                 }
-            } else if (i == 1 && snip in sc.zh2enFallbackData) {
+            } else if (i == 1 && snip in sc.lzh2enFallbackData) {
                 popup.push(self.lookupWord(snip))
                 popup[0] = '<table class="popup fallback">'
                 fallback = true
@@ -211,18 +216,18 @@ sc.zh2enLookup = {
         popup = self.popup(nodes[0], popup.join('\n'))
     },
     lookupHandler: function(e){
-        sc.zh2enLookup.setCurrent(e.target);
+        sc.lzh2enLookup.setCurrent(e.target);
     },
     lookupWord: function(graph){
         //Check if word exists and return HTML which represents the meaning.
         var out = "";
         graph = graph.replace(/\u2060/, '');
-        if (sc.zh2enData[graph])
+        if (sc.lzh2enData[graph])
         {
             var href = "http://www.buddhism-dict.net/cgi-bin/xpr-ddb.pl?q=" + encodeURI(graph);
-            return ('<tr><td class="ideograph"><a href="' + href + '">' + graph + '</a></td> <td class="meaning"> ' + sc.zh2enData[graph][0] + ': ' + sc.zh2enData[graph][1] + '</td></tr>');
-        } else if (sc.zh2enFallbackData[graph]) {
-            return ('<tr class="fallback"><td class="ideograph"><a>' + graph + '</a></td> <td class="meaning"> ' + sc.zh2enFallbackData[graph][0] + ': ' + sc.zh2enFallbackData[graph][1] + '</td></tr>')
+            return ('<tr><td class="ideograph"><a href="' + href + '">' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enData[graph][0] + ': ' + sc.lzh2enData[graph][1] + '</td></tr>');
+        } else if (sc.lzh2enFallbackData[graph]) {
+            return ('<tr class="fallback"><td class="ideograph"><a>' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enFallbackData[graph][0] + ': ' + sc.lzh2enFallbackData[graph][1] + '</td></tr>')
         }
         return "";
     },
