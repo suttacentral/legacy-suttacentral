@@ -9,7 +9,6 @@ Example:
         ... >
 """
 
-import csv
 import time
 import math
 import regex
@@ -25,17 +24,9 @@ from sc import config, textfunctions, textdata
 from sc.classes import *
 import sc.updater
 
-logger = logging.getLogger(__name__)
+from sc.csv_loader import table_reader
 
-class ScCsvDialect(csv.Dialect):
-    """ Make it explicit. This happens to be exactly what LibreOffice calc
-    outputs on my Ubuntu machine. """
-    quoting = csv.QUOTE_MINIMAL
-    delimiter = ','
-    quotechar = '"'
-    doublequote = True
-    lineterminator = '\n'
-    strict=True
+logger = logging.getLogger(__name__)
 
 def numsortkey(input, index=0):
     """ Numerical sort. Handles identifiers well.
@@ -52,28 +43,6 @@ def numsortkey(input, index=0):
             return []
     return ( [int(a) if a.isnumeric() else a
                    for a in regex.split(r'(\d+)', string)] )
-
-
-
-def table_reader(tablename):
-    """ Like csv.DictReader but returns named tuples (2x faster also) """
-    with (sc.table_dir / (tablename + '.csv')).open('r',
-              encoding='utf-8', newline='') as f:
-        reader = csv.reader(f, dialect=ScCsvDialect)
-        field_names = next(reader)
-        NtName = '_' + tablename.title()
-        NT = namedtuple(NtName, field_names)
-        globals()[NtName] = NT
-        for lineno, row in enumerate(reader):
-            if not any(row): # Drop entirely blank lines
-                continue
-            if row[0].startswith('#'):
-                continue
-            try:
-                yield NT._make(row)
-            except TypeError as e:
-                raise TypeError('Error on line {} in table {}, ({})'.format(
-                    lineno, tablename, e))
 
 class _Imm:
     _uidlangcache = {}
