@@ -26,4 +26,4 @@ def update_cmdate():
     "Updating creation and modification dates database"
     from sc import textdata
     tim = textdata.tim_no_update()
-    tim.update_cmdate()
+    tim.update_cmdates()
