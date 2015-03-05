@@ -25,5 +25,5 @@ def deletelang(lang):
 def update_cmdate():
     "Updating creation and modification dates database"
     from sc import textdata
-    tim = textdate.tim_no_update()
+    tim = textdata.tim_no_update()
     tim.update_cmdate()
