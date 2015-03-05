@@ -20,24 +20,6 @@ class DictIndexer(ElasticIndexer):
         self.lang_dir = lang_dir
         super().__init__(config_name=config_name,
                          index_alias=config_name + '-dict')
-        
-
-    def yield_chunks(self, entries, size=100000):
-        chunk = []
-        chunk_size = 0
-        for i, entry in enumerate(entries):
-            chunk_size += len(str(entry))
-            chunk.append({
-                "_id": entry["term"],
-                "_source": entry
-                })
-            if chunk_size > size:
-                yield chunk
-                chunk = []
-                chunk_size = 0
-        if chunk:
-            yield chunk
-        raise StopIteration
 
     def get_extra_state(self):
         current_mtimes = [int(file.stat().st_mtime)
@@ -45,7 +27,7 @@ class DictIndexer(ElasticIndexer):
                           in sorted(self.lang_dir.iterdir())
                           if file.suffix in {'.html', '.json'}]
         return {'mtimes': current_mtimes,
-                'version': 1}
+                'version': 3}
 
     def is_update_needed(self):
         if not self.index_exists():
@@ -80,9 +62,26 @@ class DictIndexer(ElasticIndexer):
         # Correctly number entries
         for i, entry in enumerate(sorted_entries):
             entry["number"] = i + 1
+        print('##### {} entries'.format(len(sorted_entries)))
 
-        self.process_chunks(self.yield_chunks(sorted_entries))
-
+        self.process_actions({'_id': entry['term'], '_source': entry}
+                              for entry in sorted_entries)
+   #def yield_chunks(self, entries, size=100000):
+        #chunk = []
+        #chunk_size = 0
+        #for i, entry in enumerate(entries):
+            #chunk_size += len(str(entry))
+            #chunk.append({
+                #"_id": entry["term"],
+                #"_source": entry
+                #})
+            #if chunk_size > size:
+                #yield chunk
+                #chunk = []
+                #chunk_size = 0
+        #if chunk:
+            #yield chunk
+        #raise StopIteration
     def fix_term(self, term):
         return regex.sub(r'[^\p{alpha}\s]', '', term).strip().casefold()
 
@@ -150,7 +149,7 @@ def update():
 def get_entry(term, lang='en'):
     out = {}
     try:
-        resp = es.get(index=lang, doc_type='definition', id=term)
+        resp = es.get(index=lang+'-dict', doc_type='definition', id=term)
     except:
         return None
     source = resp['_source']
@@ -158,7 +157,7 @@ def get_entry(term, lang='en'):
     return source
 
 def get_nearby_terms(number, lang='en'):
-    resp = es.search(index=lang, doc_type='definition', _source=['term', 'gloss'], body={
+    resp = es.search(index=lang+'-dict', doc_type='definition', _source=['term', 'gloss'], body={
       "query":{
          "constant_score": {
            "filter": {
@@ -175,7 +174,7 @@ def get_nearby_terms(number, lang='en'):
     return [d['_source'] for d in resp['hits']['hits']]
 
 def get_fuzzy_terms(term, lang='en'):
-    resp = es.search(index=lang, doc_type='definition', _source=['term', 'gloss'], body={
+    resp = es.search(index=lang+'-dict', doc_type='definition', _source=['term', 'gloss'], body={
         "query": {
             "fuzzy_like_this": {
                 "fields": ["term", "term.folded"],
