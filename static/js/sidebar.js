@@ -227,6 +227,13 @@ sc.sidebar = {
     },
     doMetadata: function(target){
         $(target).append($('#metaarea'));
+        var cdate = $('meta[name=cdate]').attr('content'),
+            mdate = $('meta[name=mdate]').attr('content');
+        if (cdate) {
+            $('#metaarea').append(('<p><em class="date-added">First Added: {}</em>' + 
+                                  '<em class="date-modified">Last Modified: {}</em>')
+                                  .format(cdate, mdate))
+        }
     },
     messageBox: {
         show: function(message, args) {

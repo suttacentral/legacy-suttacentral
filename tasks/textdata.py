@@ -21,4 +21,9 @@ def deletelang(lang):
     con.commit()
     notice('Done')
     
-    
+@task
+def update_cmdate():
+    "Updating creation and modification dates database"
+    from sc import textdata
+    tim = textdata.tim_no_update()
+    tim.update_cmdates()
