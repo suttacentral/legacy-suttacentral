@@ -329,6 +329,10 @@ class TextView(ViewBase):
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
+
+        cmdate = imm.tim.get_cmdate(uid=self.uid, lang=self.lang_code)
+        if cmdate:
+            context.update(cmdate)
         try:
             context.snippet = self.get_snippet(context.text)
         except Exception as e:
