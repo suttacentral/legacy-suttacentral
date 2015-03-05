@@ -96,18 +96,17 @@ sc.intr = {
                         if (firstNum == 0) {
                             firstNum = self.trCounts[uid]
                         }
-                    } else {
-                        $a.attr('data-translation-count', 0);
+                        $a.attr('title', self.trCounts[uid] +' ' + self.langs[self.lang].name.toLowerCase() + ' translations');
                     }
                 });
-                if (firstNum > 0) {
-                    var $note = $('<div class="panel-note"/>');
-                    $note.append('<a data-translation-count="' + firstNum + '"> </a> ');
-                    $note.append(self.lang + ' translations</div>');
-                    //$note.append(' — ' + langSwitcher.html());
-                    //console.log(langSwitcher);
-                    $(this).append($note);
-                }
+                //if (firstNum > 0) {
+                    //var $note = $('<div class="panel-note"/>');
+                    //$note.append('<a data-translation-count="' + firstNum + '"> </a> ');
+                    //$note.append(self.lang + ' translations</div>');
+                    ////$note.append(' — ' + langSwitcher.html());
+                    ////console.log(langSwitcher);
+                    //$(this).append($note);
+                //}
             });
         });
         $('#panel').on('click', '.lang-switch', self.switchLang);
