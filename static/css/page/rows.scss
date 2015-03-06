@@ -14,10 +14,14 @@ html.js .translations.ready {
 
 .tran[data-name] {
     display: block;
-    &::after {
+    padding: 0.2em 0.4em;
+    &:after {
         left: 3em;
         content: attr(data-name);
         position: absolute;
+    }
+    &:hover {
+        background: $light-light-gray;
     }
 }
 
@@ -27,7 +31,7 @@ html.js .translations.ready {
     border-radius: 5px;
     a[data-dropdown] {
         text-align: center;
-        color: $dark-gray;
+        color: $dark-pastel-red;
         width: 2em;
         display: inline-block;
         

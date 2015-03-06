@@ -121,6 +121,7 @@ def get_env():
         'js/vendor/jquery.easytabs-3.2.0.min.js',
         'js/vendor/jquery.cookies.js',
         'js/vendor/jquery.dropdown.js',
+        'js/vendor/polyglot.js',
         'js/lib/jquery.scrolllock.js',
         'js/lib/jquery.unveil.js',
         'js/lib/jquery.details.js',

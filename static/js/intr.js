@@ -81,6 +81,10 @@ sc.intr = {
             self.langs = data.langs;
             self.addLangNames();
             if (!self.lang) return
+
+            var polyglot = new Polyglot({phrases: self.data[self.lang],
+                                        locale: self.lang}),
+                        t = polyglot.t.bind(polyglot);
         
             var langSwitcher = self.makeLangSwitcher(self.langs);
             $('#panel .contents').each(function(){
@@ -96,17 +100,9 @@ sc.intr = {
                         if (firstNum == 0) {
                             firstNum = self.trCounts[uid]
                         }
-                        $a.attr('title', self.trCounts[uid] +' ' + self.langs[self.lang].name.toLowerCase() + ' translations');
+                        $a.attr('title', t("n_translations", self.trCounts[uid]));
                     }
                 });
-                //if (firstNum > 0) {
-                    //var $note = $('<div class="panel-note"/>');
-                    //$note.append('<a data-translation-count="' + firstNum + '"> </a> ');
-                    //$note.append(self.lang + ' translations</div>');
-                    ////$note.append(' — ' + langSwitcher.html());
-                    ////console.log(langSwitcher);
-                    //$(this).append($note);
-                //}
             });
         });
         $('#panel').on('click', '.lang-switch', self.switchLang);

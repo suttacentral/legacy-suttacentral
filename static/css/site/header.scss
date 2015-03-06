@@ -253,15 +253,18 @@ header {
         padding: 0.25em;
         display: inline-block;
         height: 100%;
-        min-width: 75%;
+        width: 75%;
         
     }
 
     li > a[data-translation-count] {
+        font-weight: bold;
+/*
         border: 2px solid $light-saturated-yellow;
         border-radius: 0 1.2em 0 0;
         margin-top: -1px;
         margin-bottom: -1px;
+*/
 
 /*
         &:after {
