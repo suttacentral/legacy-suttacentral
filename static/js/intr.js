@@ -129,7 +129,7 @@ sc.intr = {
         },
         // Pluralization Group 'German' (two)
         en: {
-            n_translations: "%{smart_count} translation in English||||%{smart_count} translations in English"
+            n_translations: "%{smart_count} translation in english||||%{smart_count} translations in english"
         },
         no: {
             n_translations: "%{smart_count} En oversettelse i norsk||||%{smart_count} oversettelser i norske"
