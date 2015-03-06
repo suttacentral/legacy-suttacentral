@@ -116,6 +116,80 @@ sc.intr = {
             var uid = $(tran).text();
             $(tran).attr('data-name', sc.intr.langs[uid].name);
         });
+    },
+    data: {
+        // Pluralization Group 'Chinese' (one) 1/plural
+        id: {
+            n_translations: "%{smart_count} terjemahan dalam bahasa Indonesia"
+        },
+        zh: {
+            n_translations: "%{smart_count}翻譯在汉语"
+        },
+        th: {
+            n_translations: "%{smart_count} การแปล เป็นภาษาไทย"
+        },
+        vi: {
+            n_translations: "%{smart_count} bản dịch bằng tiếng Việt"
+        },
+        // Pluralization Group 'German' (two)
+        en: {
+            n_translations: "%{smart_count} translation in English||||%{smart_count} translations in English"
+        },
+        no: {
+            n_translations: "%{smart_count} En oversettelse i norsk||||%{smart_count} oversettelser i norske"
+        },
+        sv: {
+            n_translations: "%{smart_count} översättningen på svenska||||%{smart_count} översättningar i svenska"
+        },
+        ca: {
+            n_translations: "%{smart_count}  traducció en català||||%{smart_count} traduccions en català"
+        },
+        nl: {
+            n_translations: "%{smart_count} 1 vertaling in het Nederlands||||%{smart_count} vertalingen in het Nederlands"
+        },
+        de: {
+            n_translations: "%{smart_count} Übersetzung in Deutsch||||%{smart_count} Übersetzungen in Deutsch"
+        },
+        hi: {
+            n_translations: "हिन्दी में एक अनुवाद||||हिन्दी में %{smart_count} में अनुवाद"
+        },
+        hu: {
+            n_translations: "%{smart_count} fordítását magyarul||||%{smart_count} fordításokat Magyar"
+        },
+        it: {
+            n_translations: "%{smart_count} traduzione in italiano||||%{smart_count} traduzioni in italiano"
+        },
+        pt: {
+            n_translations: "%{smart_count} tradução em Português||||%{smart_count} traduções em português"
+        },
+        es: {
+            n_translations: "%{smart_count} traducción en español||||%{smart_count} traducciones en español"
+        },
+        si: {
+            n_translations: "සිංහල %{smart_count} පරිවර්තනය||||සිංහල %{smart_count} පරිවර්තන"
+        },
+        //Pluralization Group 'French' (three) 0/plural
+        fr: {
+            n_translations: "%{smart_count} traductions en français||||%{smart_count} traductions en français"
+        },
+        my: {
+            n_translations: "ဗမာထဲတွင် 0 င် ဘာသာပြန်||ဗမာထဲတွင် 23 ဘာသာပြန်ချက်များကို"
+        },
+        ko: {
+            n_translations: "%{smart_count} 한국어 0 번역||||한국어 %{smart_count} 번역"
+        },
+        //Pluralization Group 'Russian' (four)
+        ru: {
+            n_translations: "%{smart_count} переводом на русский язык||||%{smart_count} переводах на русский||||%{smart_count} Перевод на русском языке"
+        },
+        //Pluralization Group 'Czech' (five)
+        cs: {
+            n_translations: "%{smart_count} překlad do češtiny||||%{smart_count} překlady v češtině||||%{smart_count} překlady v češtině"
+        },
+        //Pluralization Group 'Polish' (six)
+        pl: {
+            n_translations: "%{smart_count} Tłumaczenie w języku polskim||||%{smart_count} tłumaczenia w języku polskim||||%{smart_count} tłumaczeń w języku polskim"
+        }
     }
 }
 
