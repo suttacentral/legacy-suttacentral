@@ -20,7 +20,8 @@ def _staging_run(*commands):
 
 
 @task
-def checkout(code=None, data=None):
+def checkout_branch(code=None, data=None):
+    "Check out specified branch"
     blurb(checkout_branch)
     commands = []
     if code:
