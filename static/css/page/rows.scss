@@ -1,0 +1,52 @@
+html.js .translations:not(.ready) {
+    display: none;
+}
+html.js .translations.ready {
+    display: inline-block;
+}
+    
+
+.dropdown-panel > .tran:not(.special) {
+    display: block;
+    text-align: left;
+    
+}
+
+.tran[data-name] {
+    display: block;
+    padding: 0.2em 0.4em;
+    &:after {
+        left: 3em;
+        content: attr(data-name);
+        position: absolute;
+    }
+    &:hover {
+        background: $light-light-gray;
+    }
+}
+
+.translations.ready {
+    display: inline-block;
+    border: 1px solid $light-light-gray;
+    border-radius: 5px;
+    a[data-dropdown] {
+        text-align: center;
+        color: $dark-pastel-red;
+        width: 2em;
+        display: inline-block;
+        
+    }
+
+    > .tran.special {
+        width: 2em;
+        border-right: 1px solid $light-light-gray;
+    }
+}
+
+.tran {
+    display: inline-block;
+    padding: 0.1em 0.2em;
+    text-align: center;
+}
+
+
