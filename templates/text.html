@@ -7,6 +7,10 @@
 {% else %}
 <link rel="canonical" href="http://suttacentral.net/{{lang_code}}/{{uid}}">
 {% endif %}
+{% if cdate and mdate %}
+<meta name="cdate" content="{{cdate}}">
+<meta name="mdate" content="{{mdate}}">
+{% endif %}
 {% endblock %}
 
 {%- block content -%}
@@ -30,6 +34,7 @@
                 <option value="es">Pali → Spanish</option>
                 {#<option value="pt">Pali → Portuguese</option>#}
                 <option value="id">Pali → Indonesian</option>
+                <option value="de">Pali → German</option>
             </select>
            <button class="button" id="pali-lookup" title="Activate Pali lookup">Lookup ▶</button>
             </div>
@@ -44,7 +49,7 @@
             {% endif %}
             {% if lang_code == 'lzh' %}
             <div class="x1 button-row">
-                <a class="button" id="zh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
+                <a class="button" id="lzh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
             </div>
             {% endif %}
 

@@ -1,26 +1,19 @@
 {
-    "inherits": ["acro_to_name_and_uid_auto", "coded_name_auto", "meta"],
+    "inherits": ["acro_to_name_and_uid_auto", "coded_name_auto", "meta", "uid",
+        "folding_analyzers"],
     "index": {
         "settings": {
             "number_of_shards": 1,
             "number_of_replicas": 0,
             "analysis": {
-                "tokenizer": {
-                    "uid_split": {
-                        "type": "pattern",
-                        "group": 0,
-                        "pattern": "[a-z]+|[0-9-]+"
+                "char_filter": {
+                    "denumber": {
+                        "type": "pattern_replace",
+                        "pattern": "[0-9][0-9.-]*",
+                        "replacement": " "
                     }
                 },
                 "analyzer": {
-                    "uid_expanding": {
-                        "tokenizer": "uid_split",
-                        "filter": ["acro_and_name_to_uid", "icu_folding"]
-                    },
-                    "folding_analyzer": {
-                        "tokenizer": "icu_tokenizer",
-                        "filter": ["icu_folding"]
-                    },
                     "coded_analyzer": {
                         "tokenizer": "icu_tokenizer",
                         "char_filter": "coded_name_char_filter",
@@ -34,32 +27,31 @@
                 "properties": {
                     "uid": {
                         "type": "string",
-                        "index": "not_analyzed",
+                        "index_analyzer": "uid_standard",
+                        "search_analyzer": "uid_globbing",
                         "fields": {
-                            "expanded": {
+                            "division": {
                                 "type": "string",
-                                "analyzer": "uid_expanding"
+                                "index_analyzer": "uid_prefix",
+                                "search_analyzer": "standard"
                             }
                         }
                     },
                     "volpage": {
                         "type": "string",
-                        "index": "not_analyzed"
-                    },
-                    "division": {
-                        "type": "string",
-                        "analyzer": "uid_expanding"
+                        "analyzer": "uid_standard"
                     },
                     "lang": {
                         "type": "string",
-                        "analyzer": "uid_expanding"
+                        "analyzer": "uid_standard"
                     },
                     "name": {
                         "type": "string",
                         "fields": {
                             "plain": {
                                 "type": "string",
-                                "analyzer": "folding_analyzer"
+                                "index_analyzer": "folding_analyzer",
+                                "search_analyzer": "folding_shingle_analyzer"
                             },
                             "coded": {
                                 "type": "string",

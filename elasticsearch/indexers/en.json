@@ -20,6 +20,7 @@
                 "analyzer": {
                     "en": {
                         "tokenizer": "standard",
+                        "char_filter": ["denumber"],
                         "filter": [
                             "english_possessive_stemmer",
                             "lowercase",

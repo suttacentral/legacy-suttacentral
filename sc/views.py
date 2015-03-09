@@ -163,6 +163,7 @@ class ViewBase:
             'scm': scm,
             'embed': 'embed' in cherrypy.request.params,
             'search_query': '',
+            'no_index': False,
             'imm': sc.scimm.imm(),
             'ajax': 'ajax' in cherrypy.request.params,
             'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()}
@@ -328,6 +329,10 @@ class TextView(ViewBase):
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
+
+        cmdate = imm.tim.get_cmdate(uid=self.uid, lang=self.lang_code)
+        if cmdate:
+            context.update(cmdate)
         try:
             context.snippet = self.get_snippet(context.text)
         except Exception as e:
@@ -562,6 +567,7 @@ class DefinitionView(ViewBase):
 
     def setup_context(self, context):
         from sc.search import dicts
+        context.no_index = True
         context.term = term = self.term
         context.title = "define: {}".format(self.term)
         entry = context.entry = dicts.get_entry(self.term)
@@ -591,6 +597,7 @@ class ElasticSearchResultsView(ViewBase):
                                             key=lambda l: int(l.search_priority))
                                         if context.imm.tim.exists(lang_uid=lang.uid)]
         context.query_lang = self.kwargs.get('lang')
+        context.no_index = True
         
 class ShtLookupView(ViewBase):
     """The view for the SHT lookup page."""

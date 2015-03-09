@@ -29,6 +29,7 @@
 @import 'page/parallel';
 @import 'page/search';
 @import 'page/define';
+@import 'page/rows';
 
 // Sutta styles
 @import 'text/common';
@@ -48,3 +49,6 @@
 
 // Add print at the end to override any screen styles
 @import 'print';
+
+//Vendor
+@import 'vendor/jquery.dropdown.css'

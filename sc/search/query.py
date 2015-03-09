@@ -6,54 +6,96 @@ import elasticsearch
 from sc.search import es
 logger = logging.getLogger(__name__)
 
+def div_translation_count(lang):
+    " Returns the count of translations per subdivision "
+    body = {
+        'aggregations': {
+            'div_uids': {
+                'terms': {
+                    'field': 'division',
+                    'size': 0 # Unlimited
+                }
+            },
+            'subdiv_uids': {
+                'terms': {
+                    'field': 'subdivision',
+                    'size': 0 # Unlimited
+                }
+            }
+        }
+    }
+    try:
+        result = es.search(index=lang, doc_type='text', search_type='count', body=body)
+    except elasticsearch.exceptions.NotFoundError:
+        return None
+    mapping = {d['key']: d['doc_count']
+            for d
+            in result['aggregations']['subdiv_uids']['buckets']}
+
+    # If division and subdiv is shared, clobber with div value.
+    mapping.update({d['key']: d['doc_count']
+            for d
+            in result['aggregations']['div_uids']['buckets']})
+    return mapping
+
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, define=None, details=None, **kwargs):
-    # For some reason seems to require extra escaping to
-    # resolve things like 'sati"'
-    query = query.replace('define:', 'term:')
-    index = "_all"
+    query = regex.sub(r'[\p{punct}]+', ' ', query)
+    query.strip()
+    indexes = ['en', 'en-dict', 'pi', 'suttas']
     doc_type = None
     if details is not None:
         doc_type = 'sutta'
+        indexes = ['suttas']
     elif define is not None:
         doc_type = 'definition'
-    elif 'lang':
-        index = lang
+        indexes = ['en-dict']
+    elif lang:
+        indexes = [lang]
         doc_type = 'text'
-    
-
-        
-    
+    index_string = ','.join(index
+                            for index in indexes
+                            if es.cluster.health(index, timeout='0.01s')['status']
+                            in {'green', 'yellow'})
     body = {
         "from": offset,
         "size": limit,
         "_source": ["uid", "lang", "name", "volpage", "gloss", "term", "heading", "is_root"],
+        "timeout": "15s",
         "query": {
             "function_score": {
                 "query": {
-                    "query_string": {
-                        "lenient": True,
+                    "multi_match": {
+                        "type": "best_fields",
+                        "tie_breaker": 0.3,
                         "fields": ["content", "content.*^0.5",
                                    "term^1.5", "term.*^0.5",
                                    "gloss^1.5",
                                    "lang^0.5",
                                    "author^0.5",
-                                   "uid", "uid.expanded^0.5",
-                                   "name", "name.*^0.75"],
-                        "minimum_should_match": "100%",
-                        "analyze_wildcard": True,
+                                   "uid", "uid.division^0.7",
+                                   "name^1.25", "name.*^0.75",
+                                   "heading.title^0.5",
+                                   "heading.title.plain^0.5",
+                                   "heading.title.shingle^0.5"],
                         "query": query
                     }
                 },
                 "functions": [
                     {
-                        "boost_factor": "1.1",
+                        "boost_factor": "1.2",
                         "filter": {
                             "term": {
                                 "lang": "en"
                             }
                         }
                     },
+                    {
+                        "field_value_factor": {
+                            "field": "boost",
+                            "factor": 1
+                        }
+                    },                            
                     {
                         "boost_factor": "0.25",
                         "filter": {
@@ -71,7 +113,7 @@ def search(query, highlight=True, offset=0, limit=10,
                         }
                     },
                     {
-                        "boost_factor": "1.1",
+                        "boost_factor": "1.2",
                         "filter": {
                             "term": {
                                 "is_root": True
@@ -101,10 +143,10 @@ def search(query, highlight=True, offset=0, limit=10,
                 }
             }
     try:
-        return es.search(index=index, doc_type=doc_type, body=body)
+        return es.search(index=index_string, doc_type=doc_type, body=body)
     except elasticsearch.exceptions.RequestError as e:
         # In case of an error, we'll repeat the query but with any
         # punctuation removed.
         new_query = regex.sub(r'\p{punct}', ' ', query)
         body['query']['function_score']['query']['query_string']['query'] = new_query
-        return es.search(index=index, doc_type=doc_type, body=body)
+        return es.search(index=index_string, doc_type=doc_type, body=body)

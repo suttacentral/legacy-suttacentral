@@ -402,8 +402,14 @@ $sidebar-dongle-width = 1em;
     width: 100%;
 }
 
-#metaarea ul{
-	padding: 0 1em 1em 2em;
+#metaarea {
+    > ul {
+        padding: 0 1em 1em 2em;
+    }
+    .date-added, .date-modified {
+        font-size: 75%;
+        display: block;
+    }
 }
 
 

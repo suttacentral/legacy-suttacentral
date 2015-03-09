@@ -47,7 +47,8 @@ class Root(object):
 
     def __init__(self):
         self.admin = Admin()
-        self.tools = webtools.Tools()
+        if not sc.config.disable_tools:
+            self.tools = webtools.Tools()
     
     @cherrypy.expose
     def default(self, *args, **kwargs):
@@ -62,6 +63,12 @@ class Root(object):
     @cherrypy.expose
     def search(self, **kwargs):
         return show.search(**kwargs)
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def data(self, name, **kwargs):
+        " Endpoint which return JSON data "
+        return show.data(name, **kwargs)
     
     @cherrypy.expose
     def index(self, **kwargs):

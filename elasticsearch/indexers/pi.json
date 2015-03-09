@@ -23,11 +23,12 @@
                 "analyzer": {
                     "pi": {
                         "tokenizer": "standard",
-                        "char_filter": ["sanskrit_to_pali"],
+                        "char_filter": ["denumber", "sanskrit_to_pali"],
                         "filter": [
                             "lowercase",
                             "pali_stop",
-                            "pali_stemmer"
+                            "pali_stemmer",
+                            "icu_folding"
                         ]
                     }
                 }

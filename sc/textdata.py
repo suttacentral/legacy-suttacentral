@@ -415,6 +415,7 @@ class SqliteBackedTIM(TextInfoModel):
             self._init_table()
             self.set_happy()
             self._mtimes = {}
+        self.repair()
         super().build(force)
         if not happy:
             self._finally_table()
@@ -422,6 +423,27 @@ class SqliteBackedTIM(TextInfoModel):
         self._con.commit()
         del self._mtimes
         self._build_lock.release()
+
+    def repair(self):
+        con = self._con
+        
+        exists_in_data_table = {(t[0], t[1]) for t in
+                    con.execute('SELECT uid, lang FROM data')}
+        bad = set()
+        for (path_str, ) in con.execute('SELECT path FROM mtimes'):
+            path = pathlib.Path(path_str)
+            lang = path.parts[0]
+            uid = path.stem
+            if (uid, lang) not in exists_in_data_table:
+                logger.warn('entry ({}, {}) in mtimes does not exist in data'.format(uid, lang))
+                bad.add((path_str,))
+
+        if bad:
+            logger.warn('Removing {} bad entries'.format(len(bad)))
+            con.executemany('DELETE FROM mtimes WHERE path = ?', bad)
+            con.commit()
+            return True
+        return False
 
     def _check_for_deleted(self):
         sc_dir = str(sc.text_dir) + '/'
@@ -575,8 +597,85 @@ class SqliteBackedTIM(TextInfoModel):
         logger.info('Rebuild complete')
         os.replace(timfile, filename)
         return True
-        
 
+    def update_cmdates(self, force=False):
+        import pathlib
+        import plumbum
+        con = self._con
+        self._con.execute('CREATE TABLE IF NOT EXISTS cmdate(lang, uid, cdate, mdate)')
+        self._con.execute('CREATE INDEX IF NOT EXISTS cmdate_x ON cmdate(lang, uid)')
+        def git(*args):
+            with plumbum.local.cwd(str(sc.data_dir)):
+                return plumbum.local['git'](*args).strip()
+
+        last_commit = git('log', '-1', '--format=%H').strip()
+        stored_last_commit = self._con.execute('SELECT cdate FROM cmdate WHERE uid=?',
+                                                ('__last_commit',)).fetchone()
+                                                
+        if stored_last_commit and last_commit == stored_last_commit[0]:
+            if not force:
+                return
+
+        r = git('log', '--pretty=format:"%H %cd"', '--date=short')
+        lines = list(reversed(r.split('\n')))
+        
+        cdate = {}
+        mdate = {}
+
+        for line in lines:
+            line = line[1:-1]
+            commit_id, date = line.split(' ')
+            r = git('diff-tree', '--no-commit-id', "--name-only", "-r", commit_id)
+            for path_str in r.split():
+                path = pathlib.Path(path_str)
+                parts = path.parts
+                uid = None
+                if parts[0] == 'text':
+                    lang = parts[1]
+                    uid = path.stem
+                elif parts[0] in {'en', 'pi', 'zh', 'de', 'vn'}:
+                    lang = parts[0]
+                    uid = path.stem
+                if uid:
+                    key = (lang, uid)
+                    if key not in cdate:
+                        cdate[key] = date
+                    mdate[key] = date
+
+        
+        self._con.executemany('INSERT OR REPLACE INTO cmdate VALUES(?, ?, ?, ?)',
+                ((key[0], key[1], cdate[key], mdate[key])
+                for key in sorted(cdate)))
+
+        self._con.execute('INSERT OR REPLACE INTO cmdate(uid, cdate) VALUES(?, ?)',
+                ('__last_commit', last_commit))
+        self._con.commit()
+
+    def get_cmdate(self, lang, uid, _recursion_barrier=[]):
+        try:
+            r = self._con.execute('SELECT cdate, mdate FROM cmdate WHERE lang=? AND uid=?',
+                            (lang, uid)).fetchone()
+        except sqlite3.OperationalError as e:
+            if str(e).startswith('no such table'):
+                if not _recursion_barrier:
+                    _recursion_barrier.append(1)
+                    self.update_cmdates()
+                    return self.get_cmdate(lang, uid)
+            raise
+        if r is not None:
+            return {'cdate': r[0], 'mdate': r[1]}
+        # Because r is None, files have been added since update_cmdate
+        # was last called or for some other reason it isn't in the database.
+        # We will use stat as a less reliable fallback.
+        r = self._con.execute('SELECT path FROM data WHERE lang=? AND uid=?', (lang, uid)).fetchone()
+        if r is None:
+            return None
+        path = sc.text_dir / r[0]
+        stats = path.stat()
+        cdate = time.strftime('%Y-%m-%d', time.localtime(stats.st_ctime))
+        mdate = time.strftime('%Y-%m-%d', time.localtime(stats.st_mtime))
+        return {'cdate': cdate, 'mdate': mdate}
+        
 Model = SqliteBackedTIM
 def tim():
     """ Returns an instance of the TIM
@@ -588,6 +687,18 @@ def tim():
     Model._build_ready.wait()
     return Model._instance
 
+def tim_no_update():
+    """ Returns an instance of the TIM
+
+    Updating function is not called. Instance is not guaranteed to
+    be in any particular state.
+
+    """
+    
+    if not Model._instance:
+        Model._instance = Model()
+    return Model._instance
+
 def periodic_update(i):
     if Model._instance:
         tim = Model._instance
@@ -595,6 +706,9 @@ def periodic_update(i):
         tim = Model()
         if tim.is_happy():
             Model._instance = tim
+            repaired = tim.repair()
+            if repaired:
+                tim.build()
             Model._build_ready.set()
             if i == 0:
                 return
