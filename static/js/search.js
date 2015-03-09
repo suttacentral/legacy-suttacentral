@@ -22,7 +22,10 @@ sc.search = {
         if (query.length < 3) {
             self.clear();
         } else {
-            var url = "/search?query=" + encodeURIComponent(query) + "&autocomplete=",
+            var params = {'query': query,
+                          'lang': sc.intr.lang,
+                          'autocomplete': 1 }
+            var url = "/search?" + $.param(params),
                 ajax = jQuery.ajax(url, { "cache": false});
             ajax.done(self.done);
             ajax.error(self.error);
@@ -40,22 +43,33 @@ sc.search = {
         if (self.dropDown.length == 0) {
             self.dropDown = $('<div id="autocomplete-dropdown"></div>')
                             .appendTo('header')
-                            .hide();
+                            .hide()
+                            .on('click', 'span', function(){
+                                self.search_element.val($(this).text().toLowerCase())
+                                                   .focus();
+                                self.dropDown.hide()
+                            });
         }
-        self.clear();
+        self.dropDown.empty();
         
         if (results.total == 0) {
-            
+            self.dropDown.hide()
             return
         }
         var ul = $('<ul></ul>').appendTo(self.dropDown);
         $(results.hits).each(function(i, hit) {
-            var li = $('<li/>').appendTo(ul);
-            $('<span/>').text(hit.value).appendTo(li);
-            $('<span/>').text(hit.lang).appendTo(li);
-            $('<span/>').text(hit.score).appendTo(li);
+            var langs = ['en', 'pi', 'en-dict', 'suttas'];
+            if (hit.lang != 'en' && hit.lang != 'pi') {
+                langs.push(hit.lang);
+            }
+            
+            $('<a class="suggestion"/>')
+                .appendTo($('<li/>').appendTo(ul))
+                .text(hit.value)
+                .attr('title', hit.lang)
+                .attr('href', '/search?' + $.param({query: hit.value,
+                                                     lang: langs.join(',')}))
         });
-        $('<li>').text(results.took).appendTo(ul);
         self.dropDown.show();
     },
     error: function(query, data, code, jqXHR) {

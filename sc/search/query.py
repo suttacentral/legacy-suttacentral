@@ -40,9 +40,8 @@ def div_translation_count(lang):
 
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, define=None, details=None, **kwargs):
-    # For some reason seems to require extra escaping to
-    # resolve things like 'sati"'
-    query = query.replace('define:', 'term:')
+    query = regex.sub(r'[\p{punct}]+', ' ', query)
+    query.strip()
     indexes = ['en', 'en-dict', 'pi', 'suttas']
     doc_type = None
     if details is not None:

@@ -322,12 +322,26 @@ header {
 
 #autocomplete-dropdown {
     position: absolute;
-    right: 0;
+    right: 1%;
+    width: 20%;
+    padding: 0.5em;
     top: $panel-offset-top;
     background: white;
+    border: 1px solid $light-light-gray; 
     > ul {
+        margin: 0;
+        padding: 0.5;
         list-style: none;
+        line-height: 1.6em;
         > li {
+            > .suggestion {
+                display: inline-block;
+                width: 100%;
+                color: $body-text-color;
+                &:hover {
+                    background: $light-gray;
+                }
+            }
         
         }
     }
