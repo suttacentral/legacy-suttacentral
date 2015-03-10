@@ -7,7 +7,7 @@ sc.search = {
     dropDown: $(),
     latestSearchTimeoutId: null,
     init: function() {
-        sc.search.search_element.keyup(sc.search.handleSearch);
+        sc.search.search_element.on('keyup focus', sc.search.handleSearch);
     },
     clear: function() {
         this.dropDown.empty();
@@ -44,21 +44,21 @@ sc.search = {
             self.dropDown = $('<div id="autocomplete-dropdown"></div>')
                             .appendTo('header')
                             .hide()
-                            .on('click', 'span', function(){
-                                self.search_element.val($(this).text().toLowerCase())
+                            .on('click', '.suggestion', function(e){
+                                self.search_element.val($(e.target).text().toLowerCase())
                                                    .focus();
-                                self.dropDown.hide()
                             });
+            self.search_element.on('blur', function(){self.dropDown.delay(50).slideUp(); return false});
         }
         self.dropDown.empty();
         
         if (results.total == 0) {
-            self.dropDown.hide()
+            self.dropDown.slideUp()
             return
         }
         var ul = $('<ul></ul>').appendTo(self.dropDown);
         $(results.hits).each(function(i, hit) {
-            var langs = ['en', 'pi', 'en-dict', 'suttas'];
+            var langs = ['en', 'pi'];
             if (hit.lang != 'en' && hit.lang != 'pi') {
                 langs.push(hit.lang);
             }
@@ -67,8 +67,10 @@ sc.search = {
                 .appendTo($('<li/>').appendTo(ul))
                 .text(hit.value)
                 .attr('title', hit.lang)
-                .attr('href', '/search?' + $.param({query: hit.value,
-                                                     lang: langs.join(',')}))
+                .attr('href', '/search?' + $.param({query: hit.value.toLowerCase(),
+                                                    lang: langs.join(','),
+                                                    define: 1,
+                                                    details: 1}))
         });
         self.dropDown.show();
     },

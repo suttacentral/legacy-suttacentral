@@ -42,17 +42,17 @@ def search(query, highlight=True, offset=0, limit=10,
             lang=None, define=None, details=None, **kwargs):
     query = regex.sub(r'[\p{punct}]+', ' ', query)
     query.strip()
-    indexes = ['en', 'en-dict', 'pi', 'suttas']
-    doc_type = None
+    indexes = []
     if details is not None:
-        doc_type = 'sutta'
         indexes = ['suttas']
-    elif define is not None:
-        doc_type = 'definition'
-        indexes = ['en-dict']
-    elif lang:
-        indexes = [lang]
-        doc_type = 'text'
+    if define is not None:
+        indexes.append('en-dict')
+    if lang:
+        indexes.append(lang)
+
+    if not indexes:
+        indexes = ['en', 'pi', 'suttas', 'en-dict']
+
     index_string = ','.join(index
                             for index in indexes
                             if es.cluster.health(index, timeout='0.01s')['status']
@@ -142,11 +142,6 @@ def search(query, highlight=True, offset=0, limit=10,
                     }
                 }
             }
-    try:
-        return es.search(index=index_string, doc_type=doc_type, body=body)
-    except elasticsearch.exceptions.RequestError as e:
-        # In case of an error, we'll repeat the query but with any
-        # punctuation removed.
-        new_query = regex.sub(r'\p{punct}', ' ', query)
-        body['query']['function_score']['query']['query_string']['query'] = new_query
-        return es.search(index=index_string, doc_type=doc_type, body=body)
+    
+    return es.search(index=index_string, body=body)
+    
