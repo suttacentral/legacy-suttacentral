@@ -308,7 +308,6 @@ header {
     @include sans-serif;
     background: white;
     border-bottom: 1px solid $light-gray;
-    box-shadow: 0.05em 0.15em 0.25em rgba(118, 118, 118, 0.3);
     margin: 0;
     left: 0;
     right: 0;
@@ -322,10 +321,12 @@ header {
 
 #autocomplete-dropdown {
     position: absolute;
-    right: 1%;
-    width: 20%;
-    padding: 0.5em;
-    top: $panel-offset-top;
+    z-index:-20;
+    right: 0.5%;
+    box-shadow: 0.05em 2px 5px rgba(0,0,0,0.1);
+    width: 21%;
+    padding: 3em 0.5em 0.5em 0.5em;
+    top: 2px;
     background: white;
     border: 1px solid $light-light-gray; 
     > ul {
@@ -338,6 +339,7 @@ header {
                 display: inline-block;
                 width: 100%;
                 color: $body-text-color;
+                @include sans-serif;
                 &:hover {
                     background: $light-gray;
                 }
