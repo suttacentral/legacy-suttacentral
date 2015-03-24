@@ -26,20 +26,16 @@
         overflow-y: scroll;
     }
 }
-
-
-.text-image-button {
-    position: absolute;
-    padding: 0.2em 0.2em;
-    font-size: 125%;
-    
-    &:before {
-        content: "📖";
-    }
-    &:hover {
-        text-shadow: 2px 2px 2px rgba(0,0,0, 0.25);
-    }
-    cursor: pointer;
+.text-info-button:after {
+    content: "📖";
+    font-size: 1.2em;
+    padding: 0.2em;
 }
 
-.text-image
+/* There are some issues relating to the button being inside the 
+anchor element 
+.text-image-button:after {
+    content: "📖";
+    
+    cursor: pointer;
+}*/

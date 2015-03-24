@@ -23,17 +23,11 @@ sc.text_image = {
             console.log(id, url);
             // getElementById doesn't require escaping. unlike $('#...')
             var e = $(document.getElementById(id)),
-                link = $('<span/>'),
-                offset = e.offset();
-            e.after(link);
-            link.attr({'data-src': url,
-                       'class': 'text-image-button',
-                       'title': 'View Page Image'})
-                .on('click', sc.text_image.showImage)
-            offset.left += e.outerWidth();
-            link.offset(offset);
-            link.css({'margin-top': '-0.5em',
-                      'margin-left': '0.5em'});
+                link = $('<span/>');
+            e.attr({'data-src': url,
+                    'title': 'View Page Image'})
+                .addClass('text-info-button')
+                .on('click', sc.text_image.showImage);
         });
     },
     showImage: function(e) {
