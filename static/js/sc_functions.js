@@ -153,6 +153,7 @@ function toggleTextualInfo(force) {
         $(document.body).removeClass("infomode");
     }
     sc.userPrefs.setPref("textInfo", showTextInfo, false);
+    sc.text_image.init();
 }
 
 function buildTextualInformation() {

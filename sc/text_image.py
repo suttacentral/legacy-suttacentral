@@ -30,7 +30,7 @@ def make_text_image_index():
 			page = m['page'].lstrip('0')
 			tpi = TextPageImage(ed, vol, page)
 			out[tpi] = {'file' : file.absolute(),
-						'url': '{}/{}/{}{}'.format(ed,
+						'url': '{}-{}-{}{}'.format(ed,
 												   vol,
 												   page,
 												   file.suffix)}
@@ -45,10 +45,10 @@ def make_text_image_index():
 
 # The index key is a TextPageImage, value is a Path
 index = make_text_image_index()
-	
 
-def update_symlinks():
+def update_symlinks(n):
 	""" Symlinks are used mainly for the ease of serving with Nginx """
+	if n > 0: return
 	symlink_dir = sc.text_image_symlink_dir.absolute()
 	for tpi, info in sorted(index.items(), key=lambda t: t[0]):
 		symlink = symlink_dir / info['url']

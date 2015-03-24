@@ -17,12 +17,19 @@
 
 {% set prev_data = imm.tim.get(textdata.prev_uid, lang_code) if textdata.prev_uid else none %}
 {% set next_data = imm.tim.get(textdata.next_uid, lang_code) if textdata.next_uid else none %}
-{# This is inlined as we want it to run right here #}
+
 
 
 
 <div id="sidebar">
     <script>
+    {# This is inlined as we want it to run right here #}
+    setTimeout(function(){
+        document.getElementById('sidebar').style.visibility = 'visible';
+        {% if has_quotes %}
+        document.getElementsByTagName('main')[0].style.visibility = 'visible';
+        {% endif %}
+        }, 500);
     document.getElementById('sidebar').style.visibility = 'hidden';
     {% if has_quotes %}
     document.getElementsByTagName('main')[0].style.visibility = 'hidden';
@@ -134,14 +141,5 @@
 {% endif %}
 </div>
 {% endif %}
-
-<script>
-setTimeout(function(){
-    document.getElementById('sidebar').style.visibility = 'visible';
-    {% if has_quotes %}
-    document.getElementsByTagName('main')[0].style.visibility = 'visible';
-    {% endif %}
-}, 500);
-</script>
 
 {%- endblock -%}

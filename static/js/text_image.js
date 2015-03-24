@@ -1,5 +1,8 @@
 sc.text_image = {
+    isInit: false,
     init: function(){
+        if (this.isInit) return
+        this.isInit = true;
         if ($('#text').length == 0) {
             return
         }
@@ -19,12 +22,18 @@ sc.text_image = {
         _.each(data.text_images, function(url, id, _data) {
             console.log(id, url);
             // getElementById doesn't require escaping. unlike $('#...')
-            var e = $(document.getElementById(id));
-            e.append($('<span>📖</span>')
-                        .attr({'data-src': url,
-                               'class': 'text-image-button',
-                               'title': 'View Page Image'})
-                        .on('click', sc.text_image.showImage));
+            var e = $(document.getElementById(id)),
+                link = $('<span/>'),
+                offset = e.offset();
+            e.after(link);
+            link.attr({'data-src': url,
+                       'class': 'text-image-button',
+                       'title': 'View Page Image'})
+                .on('click', sc.text_image.showImage)
+            offset.left += e.outerWidth();
+            link.offset(offset);
+            link.css({'margin-top': '-0.5em',
+                      'margin-left': '0.5em'});
         });
     },
     showImage: function(e) {
@@ -63,4 +72,6 @@ sc.text_image = {
     }
 }
 
-$(document).on('ready', sc.text_image.init);
+if (sc.userPrefs.getPref("textInfo") === true) {
+    sc.text_image.init();
+}
