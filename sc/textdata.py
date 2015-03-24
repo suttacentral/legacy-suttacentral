@@ -191,7 +191,7 @@ class TextInfoModel:
                     range_textinfo = TextInfo(uid=uid+'#', lang=lang_uid, path=path, name=name, author=author, volpage=volpage)
                     start = int(m[2])
                     end = int(m[3]) + 1
-                    for i in (range(start, end) if end - start < 20 else [0]):
+                    for i in range(start, end):
                         iuid = m[1] + str(i)
                         if self.exists(iuid, lang_uid):
                             continue

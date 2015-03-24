@@ -662,6 +662,31 @@ class SuttaCitationView(ViewBase):
     def setup_context(self, context):
         context.sutta = self.sutta
 
+class SuttaInfoView(ViewBase):
+    template_name = 'sutta_info'
+    def __init__(self, uid, lang):
+        self.uid = uid
+        self.lang = lang
+
+    def setup_context(self, context):
+        imm = sc.scimm.imm()
+        context.sutta = imm.suttas[self.uid]
+        context.translation = None
+        for tr in context.sutta.translations:
+            if tr.url.startswith('http'):
+                continue
+            if tr.lang.uid == self.lang:
+                context.translation = tr
+                break
+        
+        context.lang = imm.languages[self.lang]
+        parallels = [ll
+                    for ll in context.sutta.parallels
+                    if ll.sutta.get_translation(lang=context.lang)]
+        context.full_parallels = [ll for ll in parallels if not ll.partial]
+        context.partial_parallels = [ll for ll in parallels if ll.partial]
+        context.base_url = sc.config.app['base_url']
+
 class AdminIndexView(InfoView):
     """The view for the admin index page."""
 

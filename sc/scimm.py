@@ -154,7 +154,7 @@ class _Imm:
         # From external_text table
         text_refs = defaultdict(list)
         for row in table_reader('external_text'):
-            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url, priority=row.priority) )
+            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], name=None, abstract=row.abstract, url=row.url, priority=row.priority) )
 
         self._external_text_refs = text_refs.copy()
         
@@ -589,17 +589,25 @@ class _Imm:
             out.append(textref)
         
         textinfos = self.tim.get(uid=uid)
-        if not textinfos:
-            m = regex.match(r'(.*?)(\d+)-(\d+)', uid)
-            if m:
-                textinfos = self.tim.get(uid=m[1]+m[2])
-
+        seen = set()
         for lang_uid, textinfo in textinfos.items():
             if lang_uid == root_lang_uid:
                 continue
             out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
-            
+            seen.add(lang_uid)
+        
+        m = regex.match(r'(.*?)(\d+)-(\d+)', uid)
+        if m:
+            textinfos = self.tim.get(uid=m[1]+m[2])
+            for lang_uid, textinfo in textinfos.items():
+                if lang_uid == root_lang_uid:
+                    continue
+                if lang_uid in seen:
+                    continue
+                out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
+                
         out.sort(key=TextRef.sort_key)
+        
         
         return out
 
