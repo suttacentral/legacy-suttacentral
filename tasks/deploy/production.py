@@ -65,7 +65,7 @@ def rebuild_tim():
     """ Rebuild TIM on the production server """
     blurb(rebuild_tim)
     _production_run(
-        'invoke textdata.rebuild()',
+        'invoke textdata.rebuild',
     )
     
 

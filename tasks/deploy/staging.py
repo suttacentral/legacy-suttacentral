@@ -87,7 +87,7 @@ def quick(branch=None):
 def rebuild_tim():
     """ Rebuild TIM on the staging server """
     _staging_run(
-        'invoke textdata.rebuild()',
+        'invoke textdata.rebuild',
     )
     
 
