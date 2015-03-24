@@ -60,6 +60,14 @@ def quick():
         'invoke assets.clean --older'
     )
 
+@task
+def rebuild_tim():
+    """ Rebuild TIM on the production server """
+    blurb(rebuild_tim)
+    _production_run(
+        'invoke textdata.rebuild()',
+    )
+    
 
 @task
 def update_data():
