@@ -20,7 +20,6 @@ sc.text_image = {
     processData: function(data, status, jqXHR) {
         console.log(data);
         _.each(data.text_images, function(url, id, _data) {
-            console.log(id, url);
             // getElementById doesn't require escaping. unlike $('#...')
             var e = $(document.getElementById(id)),
                 link = $('<span/>');

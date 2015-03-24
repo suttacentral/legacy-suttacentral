@@ -28,14 +28,6 @@
 }
 .text-info-button:after {
     content: "📖";
-    font-size: 1.2em;
+    font-size: 1.6em;
     padding: 0.2em;
 }
-
-/* There are some issues relating to the button being inside the 
-anchor element 
-.text-image-button:after {
-    content: "📖";
-    
-    cursor: pointer;
-}*/
