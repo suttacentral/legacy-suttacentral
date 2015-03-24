@@ -21,7 +21,7 @@ sc.intr = {
                     return
                 }
             }
-            $trigger.text($links.length + ' ▾')
+            $trigger.text($links.length - 1 + ' ▾')
 
             var $dropdown = $('<div class="dropdown dropdown-relative dropdown-tip dropdown-anchor-right"/>'),
                 $dropdownPanel = $('<div class="dropdown-panel"/>');
@@ -45,8 +45,6 @@ sc.intr = {
                 self.setLang($(e.target).text())
             });
         self.addHasTrans();
-
-        //anchors.parents('table').find('tr').not('.has-tran').addClass('not-has-tran');
     },
     setLang: function(lang) {
         this.lang = lang;
