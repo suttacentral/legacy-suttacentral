@@ -329,6 +329,7 @@ class TextView(ViewBase):
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
+        context.has_quotes = '‘' in context.text or '“' in context.text
 
         cmdate = imm.tim.get_cmdate(uid=self.uid, lang=self.lang_code)
         if cmdate:

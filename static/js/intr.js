@@ -59,7 +59,7 @@ sc.intr = {
         self.run();
     },
     getTransCounts: function(callback) {
-        $.ajax('/data/translation_count,langs?lang=' + sc.intr.lang)
+        $.ajax('/data?translation_count=&langs=&lang=' + sc.intr.lang)
         .done(callback);
     },
     makeLangSwitcher: function(langs){
