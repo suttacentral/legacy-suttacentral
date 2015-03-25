@@ -1,3 +1,5 @@
+.error_page{padding-top:5em}
+
 .bibliography {text-indent: -1em;}
 
 .abbreviations table {margin: 0 0 1.3em 0}
@@ -216,13 +218,15 @@ q:after {
     {
     text-align:center;
     @include serif(!important);
-    font-style:italic !important;color:#767676;
+    font-style:italic !important;
+    color:#767676;
 }
 
 .uddana {
     margin-bottom:2em;
     @include serif(!important);
-    font-style:italic !important;color:#767676;
+    font-style:italic !important;
+    color:#767676;
 }
 
 .endbook {
