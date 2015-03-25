@@ -1,0 +1,33 @@
+#text-image-overlay {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 100;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+#text-image {
+    position: relative;
+    width: 40em;
+    max-width: 92%;
+    margin: auto;
+    height: 80em;
+    max-height: 90%;
+    margin-top: 5%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: $off-white;
+    
+    > img {
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+}
+.text-info-button:after {
+    content: "📖";
+    font-size: 1.6em;
+    padding: 0.2em;
+}

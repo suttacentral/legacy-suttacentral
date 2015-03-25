@@ -248,15 +248,46 @@ header {
         list-style: none;
         margin: 0;
     }
-    li {
+    li > a{
         line-height: 1.3;
         padding: 0.25em;
+        display: inline-block;
+        height: 100%;
+        width: 75%;
+        
     }
+
+    li > a[data-translation-count] {
+        font-weight: bold;
+/*
+        border: 2px solid $light-saturated-yellow;
+        border-radius: 0 1.2em 0 0;
+        margin-top: -1px;
+        margin-bottom: -1px;
+*/
+
+/*
+        &:after {
+            content: attr(data-translation-count);
+            vertical-align: super;
+            font-size: 70%;
+            color: $medium-gray;
+            
+        }
+*/
+    }
+
+/*
+    .panel-note {
+        float:left;
+        clear:both;
+        font-size: 80%;
+        color: $medium-gray;
+    }
+*/
+    
     li:hover a {
         background: #eee;
-        display: block;
-        padding: 0.25em;
-        margin: -0.25em;
     }
     h2 {
         margin: 1em 0 0.5em 0.25rem;
@@ -277,7 +308,6 @@ header {
     @include sans-serif;
     background: white;
     border-bottom: 1px solid $light-gray;
-    box-shadow: 0.05em 0.15em 0.25em rgba(118, 118, 118, 0.3);
     margin: 0;
     left: 0;
     right: 0;
@@ -291,12 +321,29 @@ header {
 
 #autocomplete-dropdown {
     position: absolute;
-    right: 0;
-    top: $panel-offset-top;
+    z-index:-20;
+    right: 0.5%;
+    box-shadow: 0.05em 2px 5px rgba(0,0,0,0.1);
+    width: 21%;
+    padding: 3em 0.5em 0.5em 0.5em;
+    top: 2px;
     background: white;
+    border: 1px solid $light-light-gray; 
     > ul {
+        margin: 0;
+        padding: 0.5;
         list-style: none;
+        line-height: 1.6em;
         > li {
+            > .suggestion {
+                display: inline-block;
+                width: 100%;
+                color: $body-text-color;
+                @include sans-serif;
+                &:hover {
+                    background: $light-gray;
+                }
+            }
         
         }
     }

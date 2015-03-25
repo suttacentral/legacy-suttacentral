@@ -23,6 +23,7 @@ sc.formatter = {
         this.toolsMagic();
         setTimeout(this.acro_expander, 500);
         $(window).resize(this.overlapperFixer);
+        this.setReady();
     },
     apply: function(){
         $("tr").filter(":even").addClass("even"); //Add the .even class to every second tr element
@@ -32,6 +33,9 @@ sc.formatter = {
     shove: function(){
         var start = (new Date()).getTime();
         $("q").each(function(){sc.formatter.rePosition($(this))});
+    },
+    setReady: function() {
+        $('main').css('visibility', 'visible');
     },
     operaFix: function(){
         if ('opera' in window) {

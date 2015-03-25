@@ -29,6 +29,7 @@
 @import 'page/parallel';
 @import 'page/search';
 @import 'page/define';
+@import 'page/rows';
 
 // Sutta styles
 @import 'text/common';
@@ -38,6 +39,7 @@
 @import 'text/popupnotes';
 @import 'text/sidebar';
 @import 'text/zh2en';
+@import 'text/text_image';
 
 // Tool styles
 @import 'tools/form';
@@ -48,3 +50,6 @@
 
 // Add print at the end to override any screen styles
 @import 'print';
+
+//Vendor
+@import 'vendor/jquery.dropdown.css'

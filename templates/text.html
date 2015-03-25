@@ -7,6 +7,10 @@
 {% else %}
 <link rel="canonical" href="http://suttacentral.net/{{lang_code}}/{{uid}}">
 {% endif %}
+{% if cdate and mdate %}
+<meta name="cdate" content="{{cdate}}">
+<meta name="mdate" content="{{mdate}}">
+{% endif %}
 {% endblock %}
 
 {%- block content -%}
@@ -14,7 +18,23 @@
 {% set prev_data = imm.tim.get(textdata.prev_uid, lang_code) if textdata.prev_uid else none %}
 {% set next_data = imm.tim.get(textdata.next_uid, lang_code) if textdata.next_uid else none %}
 
+
+
+
 <div id="sidebar">
+    <script>
+    {# This is inlined as we want it to run right here #}
+    setTimeout(function(){
+        document.getElementById('sidebar').style.visibility = 'visible';
+        {% if has_quotes %}
+        document.getElementsByTagName('main')[0].style.visibility = 'visible';
+        {% endif %}
+        }, 500);
+    document.getElementById('sidebar').style.visibility = 'hidden';
+    {% if has_quotes %}
+    document.getElementsByTagName('main')[0].style.visibility = 'hidden';
+    {% endif %}
+    </script>
       <div id="darkness"></div>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
@@ -45,7 +65,7 @@
             {% endif %}
             {% if lang_code == 'lzh' %}
             <div class="x1 button-row">
-                <a class="button" id="zh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
+                <a class="button" id="lzh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
             </div>
             {% endif %}
 

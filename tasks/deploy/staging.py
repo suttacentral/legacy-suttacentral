@@ -20,13 +20,28 @@ def _staging_run(*commands):
 
 
 @task
+def checkout_branch(code=None, data=None):
+    "Check out specified branch"
+    blurb(checkout_branch)
+    commands = []
+    if code:
+        commands.append('git fetch && ' +
+            'git checkout {0} || git checkout -t origin/{0}'.format(code))
+    if data:
+        commands.append('cd data')
+        commands.append('git fetch && ' +
+            'git checkout {0} || git checkout -t origin/{0}'.format(data))
+    _staging_run(*commands)
+        
+
+@task
 def full(branch=None):
     """Deploy to the staging server."""
     blurb(full)
     _staging_run(
         'touch tmp/maintenance',
         'sudo supervisorctl stop sc-staging',
-        _branch_or_pull(branch),
+        'git pull',
         'cd data',
         'git pull',
         'cd ..',
@@ -34,6 +49,7 @@ def full(branch=None):
         'invoke clean --aggressive',
         'invoke jsdata.build',
         'invoke assets.compile --precompress',
+        'invoke textdata.update_cmdate',
         'sudo supervisorctl start sc-staging',
         'rm -f tmp/maintenance',
         'invoke dictionary.build',
@@ -56,16 +72,24 @@ def quick(branch=None):
     """Deploy simple changes to the staging server."""
     blurb(quick)
     _staging_run(
-        _branch_or_pull(branch),
+        'git pull',
         'cd data',
-        _branch_or_pull(branch),
+        'git pull',
         'cd ..',
         'pip install -q -r requirements.txt',
         'invoke assets.compile --precompress',
+        'invoke textdata.update_cmdate',
         'sudo supervisorctl restart sc-staging',
         'invoke assets.clean --older'
     )
 
+@task
+def rebuild_tim():
+    """ Rebuild TIM on the staging server """
+    _staging_run(
+        'invoke textdata.rebuild',
+    )
+    
 
 @task
 def update_data(branch=None):

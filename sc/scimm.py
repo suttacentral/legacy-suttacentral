@@ -9,7 +9,6 @@ Example:
         ... >
 """
 
-import csv
 import time
 import math
 import regex
@@ -25,17 +24,9 @@ from sc import config, textfunctions, textdata
 from sc.classes import *
 import sc.updater
 
-logger = logging.getLogger(__name__)
+from sc.csv_loader import table_reader
 
-class ScCsvDialect(csv.Dialect):
-    """ Make it explicit. This happens to be exactly what LibreOffice calc
-    outputs on my Ubuntu machine. """
-    quoting = csv.QUOTE_MINIMAL
-    delimiter = ','
-    quotechar = '"'
-    doublequote = True
-    lineterminator = '\n'
-    strict=True
+logger = logging.getLogger(__name__)
 
 def numsortkey(input, index=0):
     """ Numerical sort. Handles identifiers well.
@@ -52,28 +43,6 @@ def numsortkey(input, index=0):
             return []
     return ( [int(a) if a.isnumeric() else a
                    for a in regex.split(r'(\d+)', string)] )
-
-
-
-def table_reader(tablename):
-    """ Like csv.DictReader but returns named tuples (2x faster also) """
-    with (sc.table_dir / (tablename + '.csv')).open('r',
-              encoding='utf-8', newline='') as f:
-        reader = csv.reader(f, dialect=ScCsvDialect)
-        field_names = next(reader)
-        NtName = '_' + tablename.title()
-        NT = namedtuple(NtName, field_names)
-        globals()[NtName] = NT
-        for lineno, row in enumerate(reader):
-            if not any(row): # Drop entirely blank lines
-                continue
-            if row[0].startswith('#'):
-                continue
-            try:
-                yield NT._make(row)
-            except TypeError as e:
-                raise TypeError('Error on line {} in table {}, ({})'.format(
-                    lineno, tablename, e))
 
 class _Imm:
     _uidlangcache = {}
@@ -185,7 +154,7 @@ class _Imm:
         # From external_text table
         text_refs = defaultdict(list)
         for row in table_reader('external_text'):
-            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], abstract=row.abstract, url=row.url, priority=row.priority) )
+            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], name=None, abstract=row.abstract, url=row.url, priority=row.priority) )
 
         self._external_text_refs = text_refs.copy()
         
@@ -620,17 +589,25 @@ class _Imm:
             out.append(textref)
         
         textinfos = self.tim.get(uid=uid)
-        if not textinfos:
-            m = regex.match(r'(.*?)(\d+)-(\d+)', uid)
-            if m:
-                textinfos = self.tim.get(uid=m[1]+m[2])
-
+        seen = set()
         for lang_uid, textinfo in textinfos.items():
             if lang_uid == root_lang_uid:
                 continue
             out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
-            
+            seen.add(lang_uid)
+        
+        m = regex.match(r'(.*?)(\d+)-(\d+)', uid)
+        if m:
+            textinfos = self.tim.get(uid=m[1]+m[2])
+            for lang_uid, textinfo in textinfos.items():
+                if lang_uid == root_lang_uid:
+                    continue
+                if lang_uid in seen:
+                    continue
+                out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
+                
         out.sort(key=TextRef.sort_key)
+        
         
         return out
 
@@ -674,7 +651,19 @@ class _Imm:
     def get_text_data(self, uid, language_code=None):
         return self.tim.get(uid, language_code)
         
-        
+    def guess_subdiv_uid(self, uid):
+        # Just keep slicing it until we find something that
+        # matches. It's good enough.
+        while len(uid) > 0:
+            if uid in self.subdivisions:
+                return uid
+            uid = uid[:-1]
+
+    def guess_div_uid(self, uid):
+        while len(uid) > 0:
+            if uid in self.divisions:
+                return uid
+            uid = uid[:-1]
     
     @staticmethod
     def get_text_author(filepath):

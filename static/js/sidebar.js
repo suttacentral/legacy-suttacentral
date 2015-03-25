@@ -66,6 +66,9 @@ sc.sidebar = {
             self.toggleLineByLine();
         }
     },
+    setReady: function() {
+        this.node[0].style.visibility = 'visible';        
+    },
     isVisible: function() {
         return this.node.hasClass('active');
     },
@@ -227,6 +230,14 @@ sc.sidebar = {
     },
     doMetadata: function(target){
         $(target).append($('#metaarea'));
+        var cdate = $('meta[name=cdate]').attr('content'),
+            mdate = $('meta[name=mdate]').attr('content');
+        if (cdate) {
+            $('#metaarea').append(('<p><em class="date-added">First Added: {}</em>' + 
+                                  '<em class="date-modified">Last Modified: {}</em>')
+                                  .format(cdate, mdate))
+        }
+        this.setReady();        
     },
     messageBox: {
         show: function(message, args) {

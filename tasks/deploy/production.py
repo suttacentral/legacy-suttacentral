@@ -24,8 +24,8 @@ def full():
         'pip install -q -r requirements.txt',
         'invoke jsdata.build --minify',
         'invoke assets.compile --precompress',
+        'invoke textdata.update_cmdate',
         'sudo supervisorctl start sc-production',
-        'sudo service apache2 reload',
         'rm -f tmp/maintenance',
         'invoke dictionary.build',
         'invoke search.index',
@@ -55,10 +55,19 @@ def quick():
         'git pull',
         'pip install -q -r requirements.txt',
         'invoke assets.compile --precompress',
+        'invoke textdata.update_cmdate',
         'sudo supervisorctl restart sc-production',
         'invoke assets.clean --older'
     )
 
+@task
+def rebuild_tim():
+    """ Rebuild TIM on the production server """
+    blurb(rebuild_tim)
+    _production_run(
+        'invoke textdata.rebuild',
+    )
+    
 
 @task
 def update_data():

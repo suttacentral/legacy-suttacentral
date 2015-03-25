@@ -14,7 +14,7 @@
     # db_refresh_interval: 900
     # debug: True
     # default_locale: 'en_AU'
-    # development_bar: None
+    # development_bar: False
     # internet_connectivity: True
     # log_level: 'DEBUG'
     # log_path: 'log/app.log'

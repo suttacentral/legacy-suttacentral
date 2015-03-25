@@ -16,7 +16,7 @@
 {% endmacro %}
 
 {# sutta_row: A macro to display a sutta row #}
-{% macro sutta_row(sutta) -%}
+{% macro sutta_row(sutta, row_num) -%}
 <tr>
 <td>
 {{sutta_acronym(sutta, show_alt=True)}}
@@ -43,9 +43,13 @@
 {%- endif -%}
 </td>
 <td>
+{% if sutta.translations %}
+<div class="translations">
 {% for translation in sutta.translations -%}
-<a href='{{translation.url}}' class='tran' {% if translation.abstract -%} title='{{translation.abstract}}'{% endif %}>{{translation.lang.iso_code}}</a>{% if not loop.last %} | {% endif %} 
+<a href='{{translation.url}}' class='tran' {% if translation.abstract -%} title='{{translation.abstract}}'{% endif %}>{{translation.lang.iso_code}}</a>
 {% endfor -%}
+</div>
+{% endif %}
 </td>
 </tr>
 {%- endmacro -%}

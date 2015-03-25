@@ -42,6 +42,7 @@ class ElasticIndexer:
     """
     
     es = es
+    version = 1
 
     @property
     def doc_type(self):
@@ -79,7 +80,7 @@ class ElasticIndexer:
         order should be pre-sorted before returning).
 
         """
-        return {'version': 1}
+        return None
 
     def get_index_name(self):
         """ The index name consists of the index prefix plus a hash
@@ -98,8 +99,8 @@ class ElasticIndexer:
         # A subclass may define extra state which determines
         # when a new index needs to be generated.
         extra_state = self.get_extra_state()
-        if extra_state:
-            md5.update(json.dumps(extra_state, sort_keys=True).encode())
+        md5.update(json.dumps(extra_state, sort_keys=True).encode())
+        md5.update(str(self.version).encode())
         index_hash = md5.hexdigest()[:10]
         
         return self.index_prefix + index_hash

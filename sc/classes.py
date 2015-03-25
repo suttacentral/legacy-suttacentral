@@ -2,17 +2,54 @@ import regex
 from collections import namedtuple, Counter
 from sc.util import ConciseRepr
 
-Language = namedtuple('Language', 
-    'uid name isroot iso_code priority search_priority collections')
+class Serializable:
+    """ Serialize the class to JSON
+
+    A subclass should either define _serialize_attrs or override
+    _to_json.
+
+    """
+    
+    __slots__ = ()
+    _serialize_attrs = ('uid', 'name')
+    def _to_json(self, depth=0):
+        def smart_convert(obj, depth=depth):
+            if type(obj) in {str, int, float, bool} or obj is None:
+                return obj
+            
+            if depth == 0:
+                if hasattr(obj, 'uid'):
+                    return obj.uid
+                else:
+                    return str(obj)
+            else:
+                if isinstance(obj, Serializable):
+                    return obj._to_json(depth - 1)
+                else:
+                    return str(obj)
+        
+        result = {}
+        for attr in self._serialize_attrs:
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                value = [smart_convert(e) for e in value]
+            else:
+                value = smart_convert(value)
+            result[attr] = value
+        return result
+
+class Language(Serializable, namedtuple('Language', 
+        'uid name isroot iso_code priority search_priority collections')):
+    __slots__ = ()
 
 
-Sect = namedtuple('Sect', 'uid name')
+class Sect(Serializable, namedtuple('Sect', 'uid name')):
+    __slots__ = ()
 
+class Pitaka(Serializable, namedtuple('Pitaka', 'uid name always_full')):
+    __slots__ = ()
 
-Pitaka = namedtuple('Pitaka', 'uid name always_full')
-
-
-class Collection(ConciseRepr, namedtuple('Collection',
+class Collection(ConciseRepr, Serializable, namedtuple('Collection',
         'uid name abbrev_name lang sect pitaka menu_seq divisions')):
     __slots__ = ()
     
@@ -21,8 +58,7 @@ class Collection(ConciseRepr, namedtuple('Collection',
         """Return the canonical sort key."""
         return collection.menu_seq
 
-
-class Division(ConciseRepr, namedtuple('Division', 
+class Division(ConciseRepr, Serializable, namedtuple('Division', 
         'uid collection name alt_name acronym subdiv_ind '
         'menu_seq menu_gwn_ind text_ref subdivisions')):
     __slots__ = ()
@@ -40,18 +76,21 @@ class Division(ConciseRepr, namedtuple('Division',
         return len(self.subdivisions[0].suttas)
 
 
-class Subdivision(ConciseRepr, namedtuple('Subdivision',
+class Subdivision(ConciseRepr, Serializable, namedtuple('Subdivision',
         'uid division name acronym vagga_numbering_ind vaggas suttas order')):
     __slots__ = ()
 
 
-class Vagga(ConciseRepr, namedtuple('Vagga', 
+class Vagga(ConciseRepr, Serializable, namedtuple('Vagga', 
         'subdivision number name suttas')):
     __slots__ = ()
+    _serialize_attrs = ('name', )
 
 
-class SuttaCommon:
+class SuttaCommon(Serializable):
     __slots__ = ()
+    _serialize_attrs = ['uid', 'acronym', 'name', 'vagga', 'volpage',
+                'parallels', 'translations', 'text_ref', 'subdivision']
     
     @property
     def details_uid(self):
@@ -105,6 +144,13 @@ class SuttaCommon:
             url += '#' + bookmark
         return url
 
+    def get_translation(self, lang):
+        for tr in self.translations:
+            if tr.url.startswith('http'):
+                continue
+            if tr.lang == lang:
+                return tr
+
     @property
     def _textinfo(self):
         return self.imm.tim.get(self.uid, self.lang.uid)
@@ -118,7 +164,7 @@ class SuttaCommon:
                 return m[1]
         else:
             return ''
-    
+
 class Sutta(ConciseRepr, namedtuple('Sutta',
         'uid acronym alt_acronym name vagga_number '
         'number_in_vagga number lang subdivision vagga '
@@ -282,10 +328,11 @@ class MultiParallelSuttaGroup(ParallelSuttaGroup):
                     else:
                         yield entry
 
-class Parallel(ConciseRepr, namedtuple('Parallel',
+class Parallel(ConciseRepr, Serializable, namedtuple('Parallel',
         'sutta partial indirect footnote')):
     __slots__ = ()
-
+    _serialize_attrs = ()
+    
     @staticmethod
     def sort_key(p):
         """The canonical ordering as follows:
@@ -302,6 +349,14 @@ class Parallel(ConciseRepr, namedtuple('Parallel',
     
     negated = False
 
+    def _to_json(self, depth):
+        if depth == 0:
+            return self.sutta.uid
+        else:
+            return {"uid": self.sutta.uid,
+                    "partial": self.partial,
+                    "footnote": self.footnote}
+
 class NegatedParallel:
     __slots__ = ('division')
     negated = '---'
@@ -316,9 +371,10 @@ class MaybeParallel:
     def __init__(self, division):
         self.division = division
 
-class TextRef(ConciseRepr, namedtuple('TextRef', 
-        'lang abstract url priority')):
+class TextRef(ConciseRepr, Serializable, namedtuple('TextRef', 
+        'lang name abstract url priority')):
     __slots__ = ()
+    _serialize_attrs = ['lang', 'name', 'abstract', 'url']
 
     @staticmethod
     def sort_key(t):
@@ -331,6 +387,7 @@ class TextRef(ConciseRepr, namedtuple('TextRef',
     @classmethod
     def from_textinfo(cls, textinfo, lang):
         return cls(lang=lang,
+                        name=textinfo.name,
                         abstract=textinfo.author or lang.name,
                         url=Sutta.canon_url(uid=textinfo.path.stem,
                                             lang_code=lang.uid,

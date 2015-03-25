@@ -6,22 +6,53 @@ import elasticsearch
 from sc.search import es
 logger = logging.getLogger(__name__)
 
+def div_translation_count(lang):
+    " Returns the count of translations per subdivision "
+    body = {
+        'aggregations': {
+            'div_uids': {
+                'terms': {
+                    'field': 'division',
+                    'size': 0 # Unlimited
+                }
+            },
+            'subdiv_uids': {
+                'terms': {
+                    'field': 'subdivision',
+                    'size': 0 # Unlimited
+                }
+            }
+        }
+    }
+    try:
+        result = es.search(index=lang, doc_type='text', search_type='count', body=body)
+    except elasticsearch.exceptions.NotFoundError:
+        return None
+    mapping = {d['key']: d['doc_count']
+            for d
+            in result['aggregations']['subdiv_uids']['buckets']}
+
+    # If division and subdiv is shared, clobber with div value.
+    mapping.update({d['key']: d['doc_count']
+            for d
+            in result['aggregations']['div_uids']['buckets']})
+    return mapping
+
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, define=None, details=None, **kwargs):
-    # For some reason seems to require extra escaping to
-    # resolve things like 'sati"'
-    query = query.replace('define:', 'term:')
-    indexes = ['en', 'en-dict', 'pi', 'suttas']
-    doc_type = None
+    query = regex.sub(r'[\p{punct}]+', ' ', query)
+    query.strip()
+    indexes = []
     if details is not None:
-        doc_type = 'sutta'
         indexes = ['suttas']
-    elif define is not None:
-        doc_type = 'definition'
-        indexes = ['en-dict']
-    elif lang:
-        indexes = [lang]
-        doc_type = 'text'
+    if define is not None:
+        indexes.append('en-dict')
+    if lang:
+        indexes.append(lang)
+
+    if not indexes:
+        indexes = ['en', 'pi', 'suttas', 'en-dict']
+
     index_string = ','.join(index
                             for index in indexes
                             if es.cluster.health(index, timeout='0.01s')['status']
@@ -111,11 +142,6 @@ def search(query, highlight=True, offset=0, limit=10,
                     }
                 }
             }
-    try:
-        return es.search(index=index_string, doc_type=doc_type, body=body)
-    except elasticsearch.exceptions.RequestError as e:
-        # In case of an error, we'll repeat the query but with any
-        # punctuation removed.
-        new_query = regex.sub(r'\p{punct}', ' ', query)
-        body['query']['function_score']['query']['query_string']['query'] = new_query
-        return es.search(index=index_string, doc_type=doc_type, body=body)
+    
+    return es.search(index=index_string, body=body)
+    

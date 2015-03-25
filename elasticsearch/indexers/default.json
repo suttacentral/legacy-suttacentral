@@ -39,14 +39,15 @@
                     "uid": {
                         "type": "string",
                         "index_analyzer": "uid_standard",
-                        "search_analyzer": "uid_globbing",
-                        "fields": {
-                            "division": {
-                                "type": "string",
-                                "index_analyzer": "uid_prefix",
-                                "search_analyzer": "standard"
-                            }
-                        }
+                        "search_analyzer": "uid_globbing"
+                    },
+                    "division": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    },
+                    "subdivision": {
+                        "type": "string",
+                        "index": "not_analyzed"
                     },
                     "lang": {
                         "type": "string",

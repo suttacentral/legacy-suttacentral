@@ -17,7 +17,7 @@ Division: <strong>{{division.name}} (
 <th>Title</th>
 <th>Vol/Page</th>
 <th>Parallels</th>
-<th class='transcol'></th>
+<th class='transcol'>Translations</th>
 </tr>
 </thead>
 {% for subdivision in division.subdivisions -%}
@@ -25,11 +25,12 @@ Division: <strong>{{division.name}} (
 <tr><td colspan='5' class='subdivision'>{{subdivision.name}}</td></tr>
 {%- endif %}
 {% for vagga in subdivision.vaggas %}
+{% set vaggaloop = loop %}
 {% if vagga.name -%}
 <tr><td colspan='5' class='vagga'>{{vagga.name}}</td></tr>
 {%- endif %}
 {% for sutta in vagga.suttas -%}
-{{macros.sutta_row(sutta)}}
+{{macros.sutta_row(sutta, '{}-{}'.format(vaggaloop.index, loop.index))}}
 {%- endfor %}
 {%- endfor %}
 {%- endfor %}
