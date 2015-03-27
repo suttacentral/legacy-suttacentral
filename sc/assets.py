@@ -137,7 +137,7 @@ def get_env():
         'js/sc_popupnotes.js',
         'js/sc_lzh2en_lookup.js',
         'js/text_image.js',
-        #'js/discourse.js',
+        'js/fonts.js',
         sc_data_scripts_file,
         sc_uid_expansion_data_file,
         'js/tracking.js',
