@@ -31,8 +31,18 @@ sc.fonts = {
         
         return results
     },
+    diffResults: function(a, b) {
+        out = {}
+        for (key in a) {
+            var diff = _.difference(a[key] || [], b[key] || []);
+            if (diff.length) {
+                out[key] = diff
+                
+            }
+        }
+        return out        
+    },
     getHtmlDump: function(results) {
-        var results = this.analyzeFontsRecursive(document.body);
         this.massageResults(results)
         
         out = '<table style="margin:0; padding: 0">'
@@ -47,14 +57,24 @@ sc.fonts = {
 }
 
 $(document).on('ready', function() {
-    if (window.location.search == '?fonts') {
-        var html = sc.fonts.getHtmlDump();
+    if (window.location.href.indexOf('?fonts') != -1) {
+        var results = sc.fonts.analyzeFontsRecursive(document.body);
+        if ($('#intro').length) {
+            localStorage.setItem('sc.fonts.results.home', JSON.stringify(results));
+        }
+        if (window.location.href.indexOf('fonts=diff') != -1) {
+            results = sc.fonts.diffResults(results,
+                JSON.parse(localStorage.getItem('sc.fonts.results.home')))
+            console.log(results);
+        }
+        
+        var html = sc.fonts.getHtmlDump(results);
         var e = $('<div id="fonts-dump"/>').css(
             {position: "fixed",
              right: 0, 
-             'z-index': 9001,
+             'z-index': 50,
              bottom: 0,
-             top: 0,
+             top: '42px',
              width: "50em",
              background: "white",
              border: "1px solid black",
@@ -66,7 +86,6 @@ $(document).on('ready', function() {
             });
              
         e.html(html).appendTo(document.body);
-        console.log(html);
         
     }
 });
