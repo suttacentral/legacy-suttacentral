@@ -14,6 +14,7 @@ sc.classes = {
 	"bn": "Paragraph numbers in Bhikkhu Ñāṇadassana.",
         "bps": "Buddhist Publication Society",
         "bjt": "Buddha Jayanthi Tipitaka",
+        "d-vp": "Vol/page of the Derge edition",
         "eno89": "Paragraph numbers in Enomoto, 1989.",
 	"es": "Paragraph numbers in Ekkehard Saß.",
         "fuk03": "Page numbers in Fukita, 2003",
