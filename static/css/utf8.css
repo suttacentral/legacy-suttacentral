@@ -41,6 +41,7 @@ a.pts_pn:before {content:"PTS "}
 a.pts-s:before {content:"PTS s ";}
 a.pts-cs:before {content:"PTS cs ";}
 a.pts-p-pi:before {content: "PTS p pi "}
+a.rs-vp:before {content: "RS vp "}
 a.san87:before, a.san89:before {content:"San "}
 a.sc:before {content:"SC "}
 a.sen82:before {content:"Sen "}
