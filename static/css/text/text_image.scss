@@ -27,5 +27,8 @@
     }
 }
 .text-info-button:after {
-    content: url('/img/book.svg');
+    background-image: url('/img/book.svg');
+    background-size: 1em 1em;
+    content:"";
 }
+
