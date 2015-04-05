@@ -27,7 +27,6 @@
     }
 }
 .text-info-button:after {
-    content: "📖";
-    font-size: 1.6em;
-    padding: 0.2em;
+    content: url('../img/book.svg');
+    background: url('../img/book.svg');
 }
