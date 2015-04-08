@@ -269,18 +269,19 @@ h1.mirror-row{line-height:1.5}
     .next, .previous {
         margin-bottom: 1.5em;
         color: $medium-gray;
+        font-size:2em;
         &:hover {
             background: $light-light-gray;
             border-radius: 50%;
         }
     }
     .next {
-        padding: 1.5em 1.9em 1.5em 2.1em;
+        padding: 1.5rem 2.3rem 1.5rem 2.5rem;
         float: right;
 
     }
     .previous {
-        padding: 1.5em 2.1em 1.5em 1.9em;
+        padding: 1.5rem 2.5rem 1.5rem 2.3rem;
         float: left;
     }
 
