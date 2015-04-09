@@ -1,6 +1,3 @@
-$sutta-h1-color: $medium-gray;
-$sutta-h2-color: $medium-gray;
-
 .sutta {
     h1, h2, h3, h4, h5, h6, .hgroup p {
         @include serif-small-caps;
@@ -10,11 +7,11 @@ $sutta-h2-color: $medium-gray;
     }
 
     h1, h1 a {
-        color: $sutta-h1-color;
+        color: get-color(sutta-h1-color);
     }
 
     h2, h2 a, h3, h3 a, h4, h4 a, h5, h5 a, h6, h6 a, .hgroup p, .hgroup p a {
-        color: $sutta-h2-color;
+        color: get-color(sutta-h2-color);
     }
 
     h1 {

@@ -1,25 +1,18 @@
-$link-color:               $bright-cool-blue;
-$link-visited-color:       $cool-blue;
-$link-hover-color:         $dark-saturated-red;
-$link-active-color:        $bright-saturated-red;
-
-$link-offline-color:       $dark-pastel-red;
-
 :link {
     text-decoration: none;
 
-    color: $link-color;
+    color: get-color(link-color);
 
     &:visited {
-        color: $link-visited-color;
+        color: get-color(link-visited-color);
     }
 
     &:active {
-        color: $link-active-color;
+        color: get-color(link-active-color);
     }
     
     &:hover {
-        color: $link-hover-color;
+        color: get-color(link-hover-color);
     }
     // De-emphasize offsite translations
     &[href^="http"] {
@@ -27,7 +20,7 @@ $link-offline-color:       $dark-pastel-red;
             font-style: italic;
         }
         body.offline & {
-            color: $link-offline-color;
+            color: get-color(link-offline-color);
         }
     }
 }

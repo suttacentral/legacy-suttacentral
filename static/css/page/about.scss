@@ -5,8 +5,8 @@
 
 .static-toc{
 	list-style-type:none;
-	background:$light-light-gray;
-	border:1px solid $light-medium-gray;
+	background: get-other-color(light-light-gray);
+	border:1px solid get-other-color(light-medium-gray);
 	border-radius:3px;
 	padding:1em;
 	display:inline-block;

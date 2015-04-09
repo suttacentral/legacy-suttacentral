@@ -1,6 +1,3 @@
-$table-row-even-background-color: white;
-$table-cell-border-color: $light-gray;
-$table-link-hover-background-color: $off-white;
 
 table {
     border-collapse: collapse;
@@ -18,13 +15,13 @@ caption {
 }
 
 tr:nth-child(even) {
-    background-color: $table-row-even-background-color;
+    background-color: get-color(table-row-even-background-color);
 }
 
 td, th {
     padding: 0.75em 1em;
-    border-top: 1px solid $table-cell-border-color;
-    border-bottom: 1px solid $table-cell-border-color;
+    border-top: 1px solid get-color(table-cell-border-color);
+    border-bottom: 1px solid get-color(table-cell-border-color);
     text-align: left;
     position:static;
 }
@@ -40,7 +37,7 @@ tfoot > tr > td {
 
 
 td > a:hover:not(.bib):not(.note) {
-    background-color: $table-link-hover-background-color;
+    background-color: get-color(table-link-hover-background-color);
 }
 
 .tdindent {

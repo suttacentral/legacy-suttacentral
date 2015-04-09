@@ -235,7 +235,7 @@ h1.mirror-row{line-height:1.5}
 
 .infomode {
     .term, .gloss {
-        color: $dirty-pastel-green;
+        color: get-pastel-color(dirty-green);
     }
 }
 
@@ -244,11 +244,11 @@ h1.mirror-row{line-height:1.5}
 }
 
 .suttainfo, .xu, .w{
-    color:$dark-medium-gray;
-    background:$off-white;
+    color: get-other-color(dark-medium-gray);
+    background: get-other-color(off-white);
     padding:1em;
     border-radius:3px;
-    border:1px solid $light-light-gray;
+    border:1px solid get-other-color(light-light-gray);
     font-size:0.8em;
     display:inline-block;
 }
@@ -259,9 +259,12 @@ h1.mirror-row{line-height:1.5}
     
     .next, .previous {
         margin-bottom: 1.5em;
-        color: $medium-gray;
+        color: get-other-color(medium-gray);
+        border-radius: 50%;
+        background-color: rgba(230,230,230,0.2);
+        border: none;
         &:hover {
-            background: $light-light-gray;
+            background: get-other-color(light-light-gray);
             border-radius: 50%;
         }
     }
@@ -283,7 +286,7 @@ h1.mirror-row{line-height:1.5}
 
 
 .marked {
-    background: $bright-pastel-red;
+    background: get-pastel-color(bright-red);
     padding: 2px 0px;
     margin: -2px 0px;
     &.first-marked {

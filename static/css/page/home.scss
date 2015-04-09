@@ -19,21 +19,21 @@
     }
     h1 {
         @include serif-small-caps;
-        color: $medium-gray;
+        color: get-other-color(medium-gray);
         text-align: center;
         letter-spacing: 0.02em;
         margin: 0;
         font-size: 3em;
     }
     .subtitle {
-        color: $medium-gray;
+        color: get-other-color(medium-gray);
         text-align: center;
         font-style: italic;
         font-size: 1.5em;
     }
     .epigraph {
         margin: 0 5% 4em;
-        border: 1px solid $light-gray;
+        border: 1px solid get-other-color(light-gray);
         padding: 1.5em 1.5em 0 1.5em;
         .read-this {
             text-align: right;
@@ -44,7 +44,7 @@
             padding: 0.2em 0.4em;
         }
         .read-this a:hover {
-            background: $light-light-gray;
+            background: get-other-color(light-light-gray);
         }
     }
     .epigraph-text {
@@ -128,13 +128,13 @@
         padding: 1em;
         text-align: center;
         font-size: 1.2em;
-        color: $dirty-pastel-green;
+        color: get-pastel-color(dirty-green);
         font-weight: bold;
         border: 0;
     }
 
     details[open] summary {
-        background: $dirty-pastel-green;
+        background: get-pastel-color(dirty-green);
         color: white;
     }
 

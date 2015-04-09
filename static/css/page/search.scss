@@ -1,19 +1,19 @@
 #page-main-search   {
-    background:$light-light-gray;
+    background: get-other-color(light-light-gray);
     padding: 1em 2%;
     margin-bottom:1em;
-    border: 1px solid $light-gray;
+    border: 1px solid  get-other-color(light-gray);
 }
 #page-main-search {
     > input, > button, > select {
         background: white;
         cursor: pointer;
-        border: 1px solid $light-gray;
+        border: 1px solid  get-other-color(light-gray);
         margin:0em 0.5em;
         padding:0.2em 0.5em;
     }
         > input:hover, > button:hover, > select:hover {
-        background: $light-gray;
+        background:  get-other-color(light-gray);
           }
     select {
         cursor: pointer;
@@ -26,7 +26,7 @@
      margin-bottom:1em;
      padding:0.2em 0.5em;
      width:95%;
-     border:1px solid $light-gray;
+     border:1px solid  get-other-color(light-gray);
     border-radius: 1.5em;
     }
     .input-wrap {
@@ -57,14 +57,14 @@ ul.results {
     
     .crumbs{
         :link {
-            color: $saturated-green;
+            color:  get-saturated-color(plain-green);
         }
 
         :visited {
-            color: $dark-saturated-green;
+            color:  get-saturated-color(dark-green);
         }
         a[href]:hover {
-            color: $dark-saturated-red * 0.7 + $dark-saturated-green * 0.3;
+            color:  get-saturated-color(dark-red) * 0.7 +  get-saturated-color(dark-green) * 0.3;
         }
     }
 }
@@ -75,11 +75,7 @@ li.result > a {
 
 #main_search_results {
     max-width: 40rem;
-<<<<<<< HEAD
-    margin: 6em auto;
-=======
     margin: 4em auto;
->>>>>>> 566c0ceb92fe0aa2822bf74a8c255d8a7e4903a7
 }
 
 .close-button {

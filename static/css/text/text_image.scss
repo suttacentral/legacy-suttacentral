@@ -18,7 +18,7 @@
     margin-top: 5%;
     overflow-x: hidden;
     overflow-y: auto;
-    background: $off-white;
+    background: get-other-color(off-white);
     
     > img {
         width: 100%;

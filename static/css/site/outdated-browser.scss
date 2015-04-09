@@ -1,6 +1,6 @@
 #outdated-browser {
     height: 4em;
-    background-color: $saturated-red;
+    background-color: get-saturated-color(plain-red);
     font-size: 1.25em;
     line-height: 4em;
     text-align: center;

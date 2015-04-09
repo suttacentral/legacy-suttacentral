@@ -1,16 +1,13 @@
-$header-background-color: $pastel-yellow;
-$header-border-color: $dark-saturated-red;
-
 $header-height: 36px;
 $header-padding: 6px;
 $header-border-width: 4px;
 $panel-offset-top: $header-height + $header-padding - 2px;
 
 header {
-    background: $header-background-color;
+    background: get-color(header-background-color);
     height: $header-height;
     line-height: 2.2em;
-    border-bottom: $header-border-width solid $header-border-color;
+    border-bottom: $header-border-width solid get-color(header-border-color);
     position: fixed;
     top: 0;
     left: 0;
@@ -57,14 +54,14 @@ header {
         width: 30%;
         text-align: center;
         float: left;
-        border-left: 1px solid $medium-gray;
-        border-right: 1px solid $medium-gray;
+        border-left: 1px solid get-other-color(medium-gray);
+        border-right: 1px solid get-other-color(medium-gray);
         margin-right: -1px;
         height: $header-height;
         line-height: $header-height;
     }
     nav:last-child {
-        border-right: 1px solid $medium-gray;
+        border-right: 1px solid get-other-color(medium-gray);
     }
     nav:hover {
         background: white;
@@ -85,7 +82,7 @@ header {
                 display: inline;
                 font-weight: normal;
                 font-size: 1em;
-                color: $dark-medium-gray;
+                color: get-other-color(dark-medium-gray);
                 text-transform: lowercase;
                 letter-spacing: 0.02em;
             }
@@ -100,9 +97,9 @@ header {
         height: 24px;
         right: 1%;
         border: none;
-        border-radius: 15px;
+        border-radius: 5px;
         box-shadow: 0 0 1px black inset;
-        background: $light-off-white;
+        background: get-other-color(light-off-white);
     }
     #page-header-search input:focus {
         background: white;
@@ -134,7 +131,7 @@ header {
     font-size: 1em;
     width: 10px;
     height: 10px;
-    border: 2px solid $medium-gray;
+    border: 2px solid get-other-color(medium-gray);
     position: absolute;
     border-radius: 50%;
     right: 2.2%;
@@ -147,7 +144,7 @@ header {
     position: absolute;
     right: -6px;
     bottom: -4px;
-    background: $medium-gray;
+    background: get-other-color(medium-gray);
     width: 7px;
     height: 3px;
     -webkit-transform: rotate(45deg);
@@ -165,7 +162,7 @@ header {
     top: -7px;
 }
 .search-submit:hover::after {
-    border: 2px solid $medium-gray;
+    border: 2px solid get-other-color(medium-gray);
 }
 
 #panel-screen-wrap {
@@ -191,7 +188,7 @@ header {
 #panel {
     @include sans-serif;
     background: white;
-    border-bottom: 1px solid $light-gray;
+    border-bottom: 1px solid get-other-color(light-gray);
     box-shadow: 0.05em 0.15em 0.25em rgba(0, 0, 0, 0.15);
     margin: 0;
     left: 0;
@@ -307,7 +304,7 @@ header {
 #page-header-search-results {
     @include sans-serif;
     background: white;
-    border-bottom: 1px solid $light-gray;
+    border-bottom: 1px solid get-other-color(light-gray);
     margin: 0;
     left: 0;
     right: 0;
@@ -328,7 +325,7 @@ header {
     padding: 3em 0.5em 0.5em 0.5em;
     top: 2px;
     background: white;
-    border: 1px solid $light-light-gray; 
+    border: 1px solid get-other-color(light-light-gray); 
     > ul {
         margin: 0;
         padding: 0.5;
@@ -338,10 +335,10 @@ header {
             > .suggestion {
                 display: inline-block;
                 width: 100%;
-                color: $body-text-color;
+                color: get-other-color(dark-gray);
                 @include sans-serif;
                 &:hover {
-                    background: $light-gray;
+                    background: get-other-color(light-gray);
                 }
             }
         

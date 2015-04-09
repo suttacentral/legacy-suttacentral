@@ -45,7 +45,7 @@
 	}
 
     td:nth-child(odd) td {
-        background: $light-pastel-yellow;
+        background: get-pastel-color(light-yellow);
     }
 
 	tr:not(:first-child) td {
@@ -64,7 +64,7 @@
 	}
 
 	span.current_lookup:not(.punctuation){
-        color: $dark-saturated-purple;
+        color: get-saturated-color(dark-purple);
 	    background: yellow;
 	}
 }
