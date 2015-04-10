@@ -31,7 +31,7 @@
         margin-top:1.5em;
         margin-left:-22em;
         max-width:20em;
-        color:get-other-color(dark-gray);
+        color: misc-color(dark-gray);
         padding:0.3em 0.6em;
         font-size:1rem;
         -webkit-border-radius: 3px;
@@ -141,7 +141,7 @@ a {
 .cross {
     .deets {
         @extend %deets-ease;
-        background-color: get-pastel-color(light-green);
+        background-color: pastel-color(light-green);
     }
     table.deets {
         @extend %table-deets;
@@ -162,7 +162,7 @@ body:not(.infomode) .cross {
     position:fixed;
     @include sans-serif;
     box-shadow:2px 2px 6px rgba(0,0,0,0.2);
-    background:get-pastel-color(light-green);
+    background: pastel-color(light-green);
     position:fixed;
     top:10em;
     left:0;
@@ -173,7 +173,7 @@ body:not(.infomode) .cross {
 }
 
 div#text:lang(pi) span.lookup:hover {
-    color: get-saturated-color(bright-red);
+    color: saturated-color(bright-red);
 }
 
 span.lookup {
@@ -188,23 +188,48 @@ span.lookup {
         content: none;
     }
     > span.meaning {
+        // position: absolute;
+        // display: block;
+        // left: 130%;
+        // top: 3px;
+        // z-index: 20;
+        // margin-bottom: 1.1em;
+        // min-width: 10em;
+        // max-width: 20em;
+        // color: misc-color(dark-gray);
+        // padding: 0.3em 0.6em;
+        // font-size: 1rem;
+        // font-style: normal;
+        // @include sans-serif;
+        // box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+        // background-color: pastel-color(light-red);
+        // border-radius: 3px;
+        // border:1px solid pastel-color(plain-red);
+        // line-height: 1.3;
+        // visibility: hidden;
+        // opacity: 0;
+        // letter-spacing: 0;
+        // word-spacing: 0;
+        // text-transform: none;
+
         position: absolute;
         display: block;
-        left: 130%;
-        top: 3px;
         z-index: 20;
+        bottom: .2em;
         margin-bottom: 1.1em;
+        right: -50%;
+        left: -50%;
         min-width: 10em;
         max-width: 20em;
-        color: get-other-color(dark-gray);
-        padding: 0.3em 0.6em;
+        color: #2b2b2b;
+        padding: .3em .6em;
         font-size: 1rem;
         font-style: normal;
-        @include sans-serif;
-        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
-        background-color:get-pastel-color(light-red);
+        font-family: 'Source Sans Pro',sans-serif;
+        box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+        background-color: #F7DBD0;
         border-radius: 3px;
-        border:1px solid get-pastel-color(plain-red);
+        border: 1px solid #EEBDAA;
         line-height: 1.3;
         visibility: hidden;
         opacity: 0;
@@ -212,20 +237,20 @@ span.lookup {
         word-spacing: 0;
         text-transform: none;
         > a {
-            color: get-other-color(dark-gray);
+            color: misc-color(dark-gray);
             font-weight: bold;
             &:hover {
-                color: get-pastel-color(bright-purple);
-
+                color: saturated-color(bright-purple);
+                text-decoration: underline;
             }
         }
     }
     &.punctuation:hover {
-        color: get-other-color(dark-medium-gray);
+        color: misc-color(dark-medium-gray);
 
     }
     > span.meaning:hover {
-        color: get-other-color(dark-gray);
+        color: misc-color(dark-gray);
 
     }
     &:hover > span.meaning {

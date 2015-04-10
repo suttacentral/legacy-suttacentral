@@ -1,18 +1,18 @@
 :link {
     text-decoration: none;
 
-    color: get-color(link-color);
+    color: ns-color(link-color);
 
     &:visited {
-        color: get-color(link-visited-color);
+        color: ns-color(link-visited-color);
     }
 
     &:active {
-        color: get-color(link-active-color);
+        color: ns-color(link-active-color);
     }
     
     &:hover {
-        color: get-color(link-hover-color);
+        color: ns-color(link-hover-color);
     }
     // De-emphasize offsite translations
     &[href^="http"] {
@@ -20,7 +20,7 @@
             font-style: italic;
         }
         body.offline & {
-            color: get-color(link-offline-color);
+            color: ns-color(link-offline-color);
         }
     }
 }

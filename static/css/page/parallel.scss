@@ -37,7 +37,7 @@ td {
         visibility: hidden;
         position: absolute;
         margin-top:-3em;
-        background: get-other-color(light-light-gray);
+        background: misc-color(light-light-gray);
         border-radius: 0.5em;
         
         transition: 2s;
@@ -61,13 +61,13 @@ tr.group-with-next td {
     border-bottom: none;
     border-top-width: 2px;
     padding: 0.6em 1em;
-    background-color:get-other-color(off-white);
+    background-color: misc-color(off-white);
 }
 
 tr.group-with-next + tr td {
     border-top: none;
     border-bottom-width: 2px;
     padding: 0.6em 1em;
-    background-color:get-other-color(off-white);
+    background-color: misc-color(off-white);
 }
 

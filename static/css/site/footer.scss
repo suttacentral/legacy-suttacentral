@@ -3,7 +3,7 @@
     width: 100%;
     height: $footer-height;
     overflow: hidden;
-    background-color: get-color(footer-background-color);
+    background-color: ns-color(footer-background-color);
 white-space:nowrap;
     @media #{$mobile} {
         height: $mobile-footer-height;
@@ -40,19 +40,19 @@ white-space:nowrap;
 
 
 	& > a {
-                    color: get-other-color(dark-medium-gray);
+                    color: misc-color(dark-medium-gray);
                 }
                 & > a:visited {
-                    color: get-other-color(dark-medium-gray);
+                    color: misc-color(dark-medium-gray);
                 }
 
                 & > a:hover {
-                    color: get-color(link-hover-color);
+                    color: ns-color(link-hover-color);
                     
                 }
 
                 & > a:active {
-                    color: get-color(link-active-color);
+                    color: ns-color(link-active-color);
                 }
             }
         }

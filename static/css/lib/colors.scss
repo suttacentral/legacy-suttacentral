@@ -1,5 +1,6 @@
+
 // Palette functions for getting colors
-@function get-color($color-name){
+@function ns-color($color-name){
 	$c: map-get($palette-name-space-colors, $color-name);
 	@if $c {
 		@return $c;
@@ -7,7 +8,7 @@
 		@debug "ERROR:  Cound not find the 'name space' color: "+$color-name;
 	}
 }
-@function get-pastel-color($color-name){
+@function pastel-color($color-name){
 	$c: map-get($palette-pastel, $color-name);
 	@if $c {
 		@return $c;
@@ -15,7 +16,7 @@
 		@debug "ERROR:  Cound not find the 'pastel' color: "+$color-name;
 	}
 }
-@function get-saturated-color($color-name){
+@function saturated-color($color-name){
 	$c: map-get($palette-saturated, $color-name);
 	@if $c {
 		@return $c;
@@ -23,8 +24,8 @@
 		@debug "ERROR:  Cound not find the 'saturated' color: "+$color-name;
 	}
 }
-@function get-other-color($color-name){
-	$c: map-get($palette-other, $color-name);
+@function misc-color($color-name){
+	$c: map-get($palette-misc, $color-name);
 	@if $c {
 		@return $c;
 	} @else {
@@ -89,7 +90,7 @@ $palette-saturated: (
 
 // "Other" colors (blues, grays, etc)  
 //	Note:  Do not put 'namespace' colors here, those go below in 'palette-name-space-colors'
-$palette-other: (
+$palette-misc: (
 	// Other colors (e.g., blues, grays, etc.)
 	cool-blue:         #005179,
 	bright-cool-blue:  #007AFE,
@@ -106,29 +107,29 @@ $palette-other: (
 // Colors that offer descriptive names for other palette colors that can be used throughout
 $palette-name-space-colors: (
 	// link colors...
-	link-color:               	get-other-color(bright-cool-blue),
-	link-visited-color:       	get-other-color(cool-blue),
-	link-hover-color:         	get-saturated-color(dark-red),
-	link-active-color:        	get-saturated-color(bright-red),
-	link-offline-color:       	get-pastel-color(dark-red),
+	link-color:               	misc-color(bright-cool-blue),
+	link-visited-color:       	misc-color(cool-blue),
+	link-hover-color:         	saturated-color(dark-red),
+	link-active-color:        	saturated-color(bright-red),
+	link-offline-color:       	pastel-color(dark-red),
 
 	// header colors...
-	header-background-color:	get-pastel-color(plain-yellow),
-	header-border-color:		get-saturated-color(dark-red),
+	header-background-color:	pastel-color(plain-yellow),
+	header-border-color:		saturated-color(dark-red),
 
 	// headings colors...
-	sutta-h1-color:				get-other-color(medium-gray),
-	sutta-h2-color:				get-other-color(medium-gray),
+	sutta-h1-color:				misc-color(medium-gray),
+	sutta-h2-color:				misc-color(medium-gray),
 
 	// footer colors...
-	footer-background-color:	get-pastel-color(light-green),
+	footer-background-color:	pastel-color(light-green),
 
 	//	table colors...
 	table-row-even-background-color:	white,
-	table-cell-border-color:			get-other-color(light-gray),
-	table-link-hover-background-color:	get-other-color(off-white),
+	table-cell-border-color:			misc-color(light-gray),
+	table-link-hover-background-color:	misc-color(off-white),
 
 	//	parallel colors...
-	citation-border-color:		get-other-color(medium-gray)
+	citation-border-color:		misc-color(medium-gray)
 );
 

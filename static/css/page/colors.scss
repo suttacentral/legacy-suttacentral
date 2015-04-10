@@ -55,6 +55,6 @@
              "medium-gray", "dark-medium-gray", "dark-gray";
 
     @each $name in $others {
-        @include color-page-block($palette-other, $name);
+        @include color-page-block($palette-misc, $name);
     }
 }

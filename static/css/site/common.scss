@@ -1,6 +1,6 @@
-$body-text-color: get-other-color(dark-gray);
-$body-background-color: get-other-color(light-off-white);
-$body-subheading-color: get-other-color(medium-gray);
+$body-text-color: misc-color(dark-gray);
+$body-background-color: misc-color(light-off-white);
+$body-subheading-color: misc-color(medium-gray);
 
 $body-font-size: 1em;
 
@@ -44,16 +44,16 @@ font-feature-settings: "kern" 1,"liga" 1;
 
 ::selection {
 background:#F7E63E;
-color: get-saturated-color(dark-purple);
+color: saturated-color(dark-purple);
 }
 ::-webkit-selection {
 background:#F7E63E;
-color: get-saturated-color(dark-purple);
+color: saturated-color(dark-purple);
 }
 
 ::-moz-selection {
 background:#F7E63E;
-color: get-saturated-color(dark-purple);
+color: saturated-color(dark-purple);
 }
 //
 // Headings, paragraphs and lists

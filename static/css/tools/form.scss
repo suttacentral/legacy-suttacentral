@@ -22,12 +22,12 @@
         }
         
         & > ul {
-            border-top: 1px solid get-other-color(light-gray);
-            border-bottom: 1px solid get-other-color(light-gray);
+            border-top: 1px solid misc-color(light-gray);
+            border-bottom: 1px solid misc-color(light-gray);
             
             & > li {
                 padding: 0.5em 0.5em 0.5em 1em;
-                border-top: 1px solid get-other-color(light-gray);
+                border-top: 1px solid misc-color(light-gray);
                 
                 &:first-child {
                     border-top: none;
@@ -89,18 +89,18 @@
             margin: 0em;
             font-size: 1em;
             margin-bottom:1em;
-            background: get-other-color(light-light-gray);
-            border-right:1px solid get-other-color(light-medium-gray);
+            background: misc-color(light-light-gray);
+            border-right:1px solid misc-color(light-medium-gray);
 
             &:last-child {
                     border-right: none;
 }
             &.current {
-                background: get-other-color(light-off-white);
+                background: misc-color(light-off-white);
                 
             }
             &:hover {
-                background: get-other-color(light-gray);
+                background: misc-color(light-gray);
             }
         }
     }
@@ -110,13 +110,13 @@
         li, p {margin:0.5em;}
         code {
             font-size: 90%;
-            background: get-other-color(light-light-gray);
+            background: misc-color(light-light-gray);
             border-radius: 3px;
-            border: get-other-color(light-gray);
+            border: misc-color(light-gray);
             padding: 2px;
         }
         .filelist  {
-            border: 1px solid get-other-color(light-gray);
+            border: 1px solid misc-color(light-gray);
             list-style: none;
             max-width: 80%;
             li {
@@ -124,7 +124,7 @@
                 margin: 3px 2em;
             }
             li + li {
-                border-top: 1px solid get-other-color(light-gray);
+                border-top: 1px solid misc-color(light-gray);
             }
         }
     }

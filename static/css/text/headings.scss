@@ -7,11 +7,11 @@
     }
 
     h1, h1 a {
-        color: get-color(sutta-h1-color);
+        color: ns-color(sutta-h1-color);
     }
 
     h2, h2 a, h3, h3 a, h4, h4 a, h5, h5 a, h6, h6 a, .hgroup p, .hgroup p a {
-        color: get-color(sutta-h2-color);
+        color: ns-color(sutta-h2-color);
     }
 
     h1 {
