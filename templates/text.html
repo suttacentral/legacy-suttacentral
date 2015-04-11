@@ -18,7 +18,23 @@
 {% set prev_data = imm.tim.get(textdata.prev_uid, lang_code) if textdata.prev_uid else none %}
 {% set next_data = imm.tim.get(textdata.next_uid, lang_code) if textdata.next_uid else none %}
 
+
+
+{% if not embed %}
 <div id="sidebar">
+    <script>
+    {# This is inlined as we want it to run right here #}
+    setTimeout(function(){
+        document.getElementById('sidebar').style.visibility = 'visible';
+        {% if has_quotes %}
+        document.getElementsByTagName('main')[0].style.visibility = 'visible';
+        {% endif %}
+        }, 500);
+    document.getElementById('sidebar').style.visibility = 'hidden';
+    {% if has_quotes %}
+    document.getElementsByTagName('main')[0].style.visibility = 'hidden';
+    {% endif %}
+    </script>
       <div id="darkness"></div>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
@@ -113,9 +129,10 @@
       </div>
       <div id="sidebar-dongle">≡</div>
 </div>
+{% endif %} {# /not embed #}
 {{text}}
 {% if prev_data or next_data %}
-
+{% if not embed %}
 <div id="nextprev">
 {% if prev_data %}
 <a class="previous" title="{{ prev_data.uid|uid_to_acro }}: {{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀</a>
@@ -124,6 +141,7 @@
 <a class="next" title="{{ next_data.uid|uid_to_acro }}: {{ next_data.name_striped }} " href="{{ next_data.url }}" data-prefetch="1">▶</a>
 {% endif %}
 </div>
+{% endif %}
 {% endif %}
 
 {%- endblock -%}

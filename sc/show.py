@@ -143,15 +143,17 @@ def search(query, **kwargs):
     except sc.search.ConnectionError:
         raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
 
-def data(names, **kwargs):
-    valid_names = {'langs', 'translation_count'}
+def sutta_info(uid, lang='en'):
+    return SuttaInfoView(uid, lang).render()
+
+def data(**kwargs):
+    valid_names = {'langs', 'translation_count', 'suttas', 'parallels',
+					'text_images'}
 
     out = {}
-    for name in names.split(','):
+    for name in kwargs:
         if name in valid_names:
             out[name] = getattr(sc.data.data, name)(**kwargs)
-        else:
-            return {'error': 'Name "{}" not recognized'.format(name)}
     return out
 
 def downloads():

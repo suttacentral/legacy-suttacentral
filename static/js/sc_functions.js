@@ -153,6 +153,7 @@ function toggleTextualInfo(force) {
         $(document.body).removeClass("infomode");
     }
     sc.userPrefs.setPref("textInfo", showTextInfo, false);
+    sc.text_image.init();
 }
 
 function buildTextualInformation() {
@@ -675,7 +676,7 @@ function lookupWord(word){
     }
     if (isTi) allMatches.push({"base":"iti", "meaning":"endquote"});
     for (var i in allMatches) {
-        var href = "http://dsal.uchicago.edu/cgi-bin/philologic/search3advanced?dbname=pali&searchdomain=headwords&matchtype=start&display=utf8&query=" + allMatches[i].base;
+        var href = "http://suttacentral.net/search?lang=&define=&query=" + allMatches[i].base;
         
         out += '<a href="'+href+'">' + allMatches[i].base + '</a>: ' + allMatches[i].meaning;
         if (i != allMatches.length - 1)

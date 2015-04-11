@@ -66,6 +66,9 @@ sc.sidebar = {
             self.toggleLineByLine();
         }
     },
+    setReady: function() {
+        this.node[0].style.visibility = 'visible';        
+    },
     isVisible: function() {
         return this.node.hasClass('active');
     },
@@ -234,6 +237,7 @@ sc.sidebar = {
                                   '<em class="date-modified">Last Modified: {}</em>')
                                   .format(cdate, mdate))
         }
+        this.setReady();        
     },
     messageBox: {
         show: function(message, args) {
