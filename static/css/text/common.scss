@@ -136,6 +136,21 @@
        url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.woff) format('woff'),
        url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.ttf) format('truetype');
 }
+@import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+
+@font-face {
+  font-family: 'Noto Sans Japanese';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSansJapanese.eot);
+  src: url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSansJapanese.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSansJapanese.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSansJapanese.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSansJapanese.ttf) format('truetype');
+}
+
+
+
 .sutta {
     max-width: 40em;
     margin: 0 auto;
@@ -223,6 +238,15 @@ h1.mirror-row{line-height:1.5}
 
         }
         .hgroup p {font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;}
+}
+}
+
+#text:lang(jp) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: 'Noto Sans Japanese', serif;
+
+        }
 }
 }
 
