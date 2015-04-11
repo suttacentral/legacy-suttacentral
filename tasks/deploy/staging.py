@@ -83,13 +83,6 @@ def quick(branch=None):
         'invoke assets.clean --older'
     )
 
-@task
-def rebuild_tim():
-    """ Rebuild TIM on the staging server """
-    _staging_run(
-        'invoke textdata.rebuild',
-    )
-    
 
 @task
 def update_data(branch=None):

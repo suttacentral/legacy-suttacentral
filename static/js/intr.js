@@ -21,7 +21,7 @@ sc.intr = {
                     return
                 }
             }
-            $trigger.text($links.length - 1 + ' ▾')
+            $trigger.text($links.length + ' ▾')
 
             var $dropdown = $('<div class="dropdown dropdown-relative dropdown-tip dropdown-anchor-right"/>'),
                 $dropdownPanel = $('<div class="dropdown-panel"/>');
@@ -45,6 +45,8 @@ sc.intr = {
                 self.setLang($(e.target).text())
             });
         self.addHasTrans();
+
+        //anchors.parents('table').find('tr').not('.has-tran').addClass('not-has-tran');
     },
     setLang: function(lang) {
         this.lang = lang;
@@ -57,7 +59,7 @@ sc.intr = {
         self.run();
     },
     getTransCounts: function(callback) {
-        $.ajax('/data?translation_count=&langs=&lang=' + sc.intr.lang)
+        $.ajax('/data/translation_count,langs?lang=' + sc.intr.lang)
         .done(callback);
     },
     makeLangSwitcher: function(langs){

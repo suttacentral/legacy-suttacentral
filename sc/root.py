@@ -1,4 +1,3 @@
-import json
 import cherrypy
 
 import sc
@@ -34,6 +33,8 @@ cherrypy.tools.remove_trailing_slash = cherrypy.Tool('before_handler',
     remove_trailing_slash)
 cherrypy.tools.set_offline = cherrypy.Tool('before_handler', set_offline)
 
+
+
 class Root(object):
     """Requests to /*"""
 
@@ -64,14 +65,10 @@ class Root(object):
         return show.search(**kwargs)
 
     @cherrypy.expose
-    def sutta_info(self, uid, lang='en', **kwargs):
-        return show.sutta_info(uid, lang)
-    
-    @cherrypy.expose
     @cherrypy.tools.json_out()
-    def data(self, **kwargs):
+    def data(self, name, **kwargs):
         " Endpoint which return JSON data "
-        return show.data(**kwargs)
+        return show.data(name, **kwargs)
     
     @cherrypy.expose
     def index(self, **kwargs):

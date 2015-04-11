@@ -1,5 +1,8 @@
 @media print {
 
+    @page {
+        margin: 2cm 1cm;
+    }
 
     * {
         background: transparent !important;
@@ -9,16 +12,48 @@
     body {
         font-size: 11pt;
     }
+    //    body, td, th, caption
+    //    {
+    //        font-size: 11pt;
+    //    }
 
     p, h2, h3, h4, h5, h6 {
         orphans: 3;
         widows: 3;
+//        color:black;
     }
 
     h2, h3 {
         page-break-after: avoid;
     }
-}
-@page {
-    margin: 2cm 1cm;
+
+//
+//    a, a:visited, .vagga { color: black !important; }
+    .deets, .tri,  .previous, .next, .top, .details, .transcol ,header,#sidebar-dongle,#sidebar{display:none !important;}
+//
+//    tr {position: relative;page-break-before: auto;}
+//
+//    td {border: 1px solid #aaa;}
+//
+//    th {border: 1px solid #000;}
+//
+//table {position: relative;}
+//
+//#onecol, #text {position: relative;}
+//
+//    th, td {
+//        border-left: none;
+//        border-right: none;
+//        padding: 0.2em;
+//    }
+//
+//    tfoot tr{border: none;}
+//
+//    body, td, th, caption
+//    {
+//        font-size: 11pt;
+//    }
+//
+//
+//    #onecol, #text {margin-top:-3cm;}
 }

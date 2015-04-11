@@ -21,7 +21,6 @@ def run_updaters():
     import sc.scm
     import sc.scimm
     import sc.textdata
-    import sc.text_image
     import sc.search.dicts
     import sc.search.texts
     import sc.search.suttas
@@ -30,8 +29,7 @@ def run_updaters():
     # name, function, lock needed?
     functions = [
         ('sc.textdata.periodic_update', sc.textdata.periodic_update, False),
-        ('sc.scimm.periodic_update', sc.scimm.periodic_update, False),
-        ('sc.text_image.update_symlinks', sc.text_image.update_symlinks, False)
+        ('sc.scimm.periodic_update', sc.scimm.periodic_update, False)
     ]
     if sc.config.app['update_search']:
         functions.extend([
@@ -40,7 +38,6 @@ def run_updaters():
             ('sc.search.texts.periodic_update', sc.search.texts.periodic_update, True),
             ('sc.search.autocomplete.periodic_update', sc.search.autocomplete.periodic_update, True)
         ])
-    
     time.sleep(0.5)
     i = 0
 
