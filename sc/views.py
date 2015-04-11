@@ -329,6 +329,9 @@ class TextView(ViewBase):
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
+        if context.embed:
+            context.text = self.shorter_text(context.text)
+        context.has_quotes = '‘' in context.text or '“' in context.text
 
         cmdate = imm.tim.get_cmdate(uid=self.uid, lang=self.lang_code)
         if cmdate:
@@ -355,7 +358,33 @@ class TextView(ViewBase):
             if context.division.text_ref:
                 context.text_refs.append(context.division.text_ref)
             #context.text_refs.extend(context.division.translations)
-
+    
+    def shorter_text(self, html, target_len=2500):
+        # Don't bother cutting off excessively short amount of text
+        if len(html) < target_len * 1.5:
+            return html
+        root = sc.tools.html.fromstring(html[:target_len])
+        pees = root.select('article > *')
+        if len(pees) > 1:
+            to_drop = pees[-1]
+            if to_drop.getparent().tag == 'blockquote':
+                to_drop = to_drop.getparent()
+            bookmark = to_drop.get('id')
+            if not bookmark and len(to_drop) > 0:
+                bookmark = to_drop[0].get('id')
+            else:
+                for e in root.iter():
+                    if e.get('id'):
+                        bookmark = e.get('id')
+                    if e == to_drop or e.getnext() == to_drop:
+                        break
+            to_drop.drop_tree()
+        root.select('article')[-1].append(sc.tools.html.fromstring(
+            '<p><a href="{href}">…continue reading…</a>'.format(
+                href='http://suttacentral.net/{}/{}#{}'.format(
+                    self.lang_code, self.uid, bookmark))))
+        return sc.tools.html.tostring(root, encoding='unicode')
+    
     def get_snippet(self, html, target_len=500):
         root = sc.tools.html.fromstring(html[:target_len + 2000])
         for e in root.cssselect('.hgroup'):
@@ -661,6 +690,31 @@ class SuttaCitationView(ViewBase):
 
     def setup_context(self, context):
         context.sutta = self.sutta
+
+class SuttaInfoView(ViewBase):
+    template_name = 'sutta_info'
+    def __init__(self, uid, lang):
+        self.uid = uid
+        self.lang = lang
+
+    def setup_context(self, context):
+        imm = sc.scimm.imm()
+        context.sutta = imm.suttas[self.uid]
+        context.translation = None
+        for tr in context.sutta.translations:
+            if tr.url.startswith('http'):
+                continue
+            if tr.lang.uid == self.lang:
+                context.translation = tr
+                break
+        
+        context.lang = imm.languages[self.lang]
+        parallels = [ll
+                    for ll in context.sutta.parallels
+                    if ll.sutta.get_translation(lang=context.lang)]
+        context.full_parallels = [ll for ll in parallels if not ll.partial]
+        context.partial_parallels = [ll for ll in parallels if ll.partial]
+        context.base_url = sc.config.app['base_url']
 
 class AdminIndexView(InfoView):
     """The view for the admin index page."""

@@ -2,12 +2,13 @@ from tasks.helpers import *
 
 @task
 def rebuild():
-    """ Perform complete rebuild """
+    """ Rebuild Text Info Model without causing downtime """
     # This is useful after changes to TextData that require every
     # entry be updated.
     blurb(rebuild)
-    from sc import textdata
-    tim = textdata.rebuild_tim()
+    import sc.textdata
+    tim = sc.textdata.tim_no_update()
+    tim.build(force=True)
 
 @task
 def deletelang(lang):
