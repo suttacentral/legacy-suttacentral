@@ -204,23 +204,20 @@ h1.mirror-row{line-height:1.5}
 #text:lang(th) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
-                        font-family: 'Noto Serif Thai', serif;
+                        font-family: $lumen-thai, serif;
                         letter-spacing: 0;
-                        font-style:normal !important
+                        font-style:normal !important;
+                        line-height:1.8;
         }
-        .hgroup > p {
-         
-                        font-family: 'Noto Sans Thai', sans-serif;
-                        letter-spacing: 0;
-        
-}
+
 }
 }
 #text:lang(hi) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
-                        font-family: 'Noto Sans Devanagari', serif;
+                        font-family: $skolar-devanagari, serif;
                         letter-spacing: 0;
+                        line-height:1.7;
         }
 }
 }
@@ -245,7 +242,7 @@ h1.mirror-row{line-height:1.5}
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: 'Noto Sans Japanese', serif;
-
+                        line-height:1.8;
         }
 }
 }
