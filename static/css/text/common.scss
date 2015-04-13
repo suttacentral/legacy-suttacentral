@@ -252,7 +252,7 @@ h1.mirror-row{line-height:1.5}
     .uddanagatha{font-style:normal !important}
 
 }
-#text:lang(si) {
+#text:lang(si), #text:lang(pi-Sinh) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: 'Noto Sans Sinhala', serif;
@@ -260,7 +260,7 @@ h1.mirror-row{line-height:1.5}
         }
 }
 }
-#text:lang(th) {
+#text:lang(th), #text:lang(pi-Thai) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: "Lumen Thai", serif;
@@ -273,7 +273,7 @@ h1, h2, h3, h4, h5, h6 {
         }
 }
 }
-#text:lang(hi) {
+#text:lang(hi), #text:lang(pi-Deva) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family:"Skolar Devanagari", serif;
@@ -285,7 +285,7 @@ h1, h2, h3, h4, h5, h6 {
         }
 }
 }
-#text:lang(my) {
+#text:lang(my), #text:lang(pi-Mymr) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: 'Myanmar Sans Pro', serif;
