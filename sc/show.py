@@ -10,7 +10,7 @@ from sc.views import *
 
 logger = logging.getLogger(__name__)
 
-STATIC_PAGES = ['about', 'abbreviations', 'bibliography', 'contacts', 'help',
+STATIC_PAGES = ['about', 'abbreviations', 'bibliography', 'contacts', 'donations', 'help',
                 'methodology', 'sutta_numbering', 'copyright', 'colors',
                 'fonts']
 
