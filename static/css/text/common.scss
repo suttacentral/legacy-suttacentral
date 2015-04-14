@@ -23,6 +23,8 @@
 }
 /*
  * Myanmar Sans Pro (Myanmar) http://www.google.com/fonts/earlyaccess
+/*
+ * Myanmar Sans Pro (Myanmar) http://www.google.com/fonts/earlyaccess
  */
 @font-face {
   font-family: 'Myanmar Sans Pro';
@@ -33,6 +35,16 @@
        url(//fonts.gstatic.com/ea/myanmarsanspro/v4/MyanmarSansPro-Regular.woff2) format('woff2'),
        url(//fonts.gstatic.com/ea/myanmarsanspro/v4/MyanmarSansPro-Regular.woff) format('woff'),
        url(//fonts.gstatic.com/ea/myanmarsanspro/v4/MyanmarSansPro-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Sinhala';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.eot);
+  src: url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.ttf) format('truetype');
 }
 /*
  * Noto Sans Sinhala (Sinhala) http://www.google.com/fonts/earlyaccess
@@ -47,17 +59,7 @@
        url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.woff) format('woff'),
        url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.ttf) format('truetype');
 }
-@font-face {
-  font-family: 'Noto Sans Sinhala';
-  font-style: normal;
-  font-weight: 700;
-  src: url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.eot);
-  src: url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.eot?#iefix) format('embedded-opentype'),
-       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.woff2) format('woff2'),
-       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.woff) format('woff'),
-       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.ttf) format('truetype');
-}
-/*
+
  * Noto Sans Thai (Thai) http://www.google.com/fonts/earlyaccess
  */
 @font-face {
@@ -136,6 +138,68 @@
        url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.woff) format('woff'),
        url(//fonts.gstatic.com/ea/notoserifthai/v4/NotoSerifThai-Bold.ttf) format('truetype');
 }
+/*
+* Noto Sans Japanese (japanese) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'Noto Sans Japanese';
+  font-style: normal;
+  font-weight: 100;
+  src: url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Thin.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Thin.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Thin.otf) format('opentype');
+}
+@font-face {
+  font-family: 'Noto Sans Japanese';
+  font-style: normal;
+  font-weight: 200;
+  src: url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Light.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Light.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Light.otf) format('opentype');
+}
+@font-face {
+   font-family: 'Noto Sans Japanese';
+   font-style: normal;
+   font-weight: 300;
+   src: url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-DemiLight.woff2) format('woff2'),
+        url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-DemiLight.woff) format('woff'),
+        url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-DemiLight.otf) format('opentype');
+}
+@font-face {
+   font-family: 'Noto Sans Japanese';
+   font-style: normal;
+   font-weight: 400;
+   src: url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Regular.woff2) format('woff2'),
+        url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Regular.woff) format('woff'),
+        url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Regular.otf) format('opentype');
+ }
+@font-face {
+   font-family: 'Noto Sans Japanese';
+   font-style: normal;
+   font-weight: 500;
+   src: url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Medium.woff2) format('woff2'),
+        url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Medium.woff) format('woff'),
+        url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Medium.otf) format('opentype');
+ }
+@font-face {
+   font-family: 'Noto Sans Japanese';
+   font-style: normal;
+   font-weight: 700;
+   src: url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Bold.woff2) format('woff2'),
+        url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Bold.woff) format('woff'),
+        url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Bold.otf) format('opentype');
+ }
+@font-face {
+   font-family: 'Noto Sans Japanese';
+   font-style: normal;
+   font-weight: 900;
+   src: url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Black.woff2) format('woff2'),
+        url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Black.woff) format('woff'),
+        url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Black.otf) format('opentype');
+ }
+
+
+
 .sutta {
     max-width: 40em;
     margin: 0 auto;
@@ -178,38 +242,44 @@ h1.mirror-row{line-height:1.5}
     .uddanagatha{font-style:normal !important}
 
 }
-#text:lang(si) {
+#text:lang(si), #text:lang(pi-Sinh) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: 'Noto Sans Sinhala', serif;
                         letter-spacing: 0;
         }
-}
-}
-#text:lang(th) {
-     .sutta {
-        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
-                        font-family: 'Noto Serif Thai', serif;
-                        letter-spacing: 0;
-                        font-style:normal !important
-        }
-        .hgroup > p {
-         
-                        font-family: 'Noto Sans Thai', sans-serif;
-                        letter-spacing: 0;
-        
-}
-}
-}
-#text:lang(hi) {
-     .sutta {
-        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
-                        font-family: 'Noto Sans Devanagari', serif;
-                        letter-spacing: 0;
+        h1, h2, h3, h4, h5, h6{
+                        font-weight: 700;
+                     
         }
 }
 }
-#text:lang(my) {
+#text:lang(th), #text:lang(pi-Thai) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: "Lumen Thai", serif;
+                        letter-spacing: 0;
+                        font-style:normal !important;
+                        line-height:1.8;
+        }
+h1, h2, h3, h4, h5, h6 {
+                        font-weight: bold;
+        }
+}
+}
+#text:lang(hi), #text:lang(pi-Deva) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family:"Skolar Devanagari", serif;
+                        letter-spacing: 0;
+                        line-height:1.7;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                        font-weight: bold;
+        }
+}
+}
+#text:lang(my), #text:lang(pi-Mymr) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: 'Myanmar Sans Pro', serif;
@@ -223,6 +293,26 @@ h1.mirror-row{line-height:1.5}
 
         }
         .hgroup p {font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;}
+        h1, h2, h3, h4, h5, h6 {
+                        font-weight: 700;
+
+        }
+}
+}
+
+#text:lang(jp) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: 'Noto Sans Japanese', serif;
+                        line-height:1.8;
+        }
+             p,li,.evam {
+                        font-weight: 300;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                        font-weight: 700;
+        }
+  
 }
 }
 
@@ -269,18 +359,19 @@ h1.mirror-row{line-height:1.5}
     .next, .previous {
         margin-bottom: 1.5em;
         color: $medium-gray;
+        font-size:2em;
         &:hover {
             background: $light-light-gray;
             border-radius: 50%;
         }
     }
     .next {
-        padding: 1.5em 1.9em 1.5em 2.1em;
+        padding: 1.5rem 2.3rem 1.5rem 2.5rem;
         float: right;
 
     }
     .previous {
-        padding: 1.5em 2.1em 1.5em 1.9em;
+        padding: 1.5rem 2.5rem 1.5rem 2.3rem;
         float: left;
     }
 

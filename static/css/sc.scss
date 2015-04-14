@@ -202,7 +202,7 @@ q:after {
     display: table;
     width: auto;
     margin: 0 auto;
-    font-style:italic !important;
+    font-style:italic;
     color:#767676;
 }
 
@@ -210,28 +210,28 @@ q:after {
     display: table;
     width: auto;
     margin: 0 auto;
-    font-style:italic !important;
+    font-style:italic;
     color:#767676;
 }
 
 .endh2, .endh3, .endh4, .endh5, .endh6, .endsutta, .endvagga, .endsubdivision, .endsection, .enddivision, .bhanavara, .enduddesa, .end, .endsubsection
     {
     text-align:center;
-    @include serif(!important);
-    font-style:italic !important;
+    @include serif;
+    font-style:italic;
     color:#767676;
 }
 
 .uddana {
     margin-bottom:2em;
-    @include serif(!important);
-    font-style:italic !important;
+    @include serif;
+    font-style:italic;
     color:#767676;
 }
 
 .endbook {
     text-align:center;
-    @include serif(!important);
+    @include serif;
     font-weight:bold;
     color:#767676;
     text-transform:uppercase;
@@ -249,8 +249,8 @@ q:after {
 
 
 /*CHINESE*/
-:lang(zh), :lang(lzh) {
-    .endsutta, .endvagga,  .endsection, .enddivision, .end {
+:lang(zh), :lang(lzh),  :lang(ko), :lang(jp), :lang(my), :lang(si), :lang(hi), :lang(th){
+    .endsutta, .endvagga,  .endsection, .enddivision, .end, .namo {
         font-weight:normal !important;
         font-style:normal !important;
     }
@@ -502,4 +502,3 @@ Generally, eliminate inline styles, and retain semantic markup. Transform all cl
 /*= .note in CBETA text. Changed to avoid confusion with SC's .note. Indicates usually bracketed note or comment in the text. No need to indicate.*/
 
 .t-gaiji    {color:darkcyan}
-

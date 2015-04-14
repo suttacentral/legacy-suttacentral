@@ -31,6 +31,7 @@ sc.classes = {
         "hos91": "Paragraph numbers in Hosoda, 1991.",
         "hs": "(Not defined in GRETIL source.)",
 	"jd": "Paragraph numbers in Dr. Julius Dutoit.",
+	"jsk": "Paragraph numbers in J.S. Krüger.",
         "kel": "Paragraph numbers in Kelly, Sawyer, and Yareham.",
 	"ks": "Paragraph numbers in Karl Seidenstücker.",
         "mat85": "Paragraph numbers in Matsumura, 1985.",

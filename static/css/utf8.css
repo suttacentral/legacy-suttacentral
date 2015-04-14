@@ -24,6 +24,7 @@ a.hoe16:before {content:"Hoe "}
 a.hos89a:before, a.hos89b:before, a.hos91:before {content:"Hos "}
 a.hs:before {content:"hs "}
 a.jd:before {content:"JD "}
+a.jsk:before {content:"JSK "}
 a.kel:before {content:"Kel "}
 a.ks:before {content:"KS "}
 a.mat85:before, a.mat88:before {content:"Mat "}
@@ -122,6 +123,8 @@ CSS Class	HTML Title
 .hh     	"Paragraph numbers in Hellmuth Hecker."
 
 .jd     	"Paragraph numbers in Dr. Julius Dutoit."
+
+.jsk     	"Paragraph numbers in Prof. J.S. Krüger."
 
 .ks     	"Paragraph numbers in Karl Seidenstücker."
 

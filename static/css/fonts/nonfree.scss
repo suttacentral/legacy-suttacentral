@@ -48,3 +48,70 @@ $skolar-sutta-web-sc: 'Skolar Sutta Web SC';
 @mixin serif-small-caps($extra:'') {
     font-family: $skolar-sutta-web-sc, $skolar-sutta-web, serif unquote($extra);
 }
+
+
+$lumen-thai: 'Lumen Thai';
+
+@font-face {
+    font-family: $lumen-thai;
+    @include font-face-src('nonfree/LumenThai-Bold',
+                           'lumen-thai-bold');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: $lumen-thai;
+    @include font-face-src('nonfree/LumenThai-Regular',
+                           'lumen-thai-regular');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@mixin lumen-thai($extra:'') {
+    font-family: $lumen-thai, lumen-thai unquote($extra);
+}
+
+$lumen-burmese: 'Lumen Burmese';
+
+@font-face {
+    font-family: $lumen-burmese;
+    @include font-face-src('nonfree/LumenBurmese-Bold',
+                           'lumen-burmese-bold');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: $lumen-burmese;
+    @include font-face-src('nonfree/LumenBurmese-Regular',
+                           'lumen-burmese-regular');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@mixin lumen-burmese($extra:'') {
+    font-family: $lumen-burmese, lumen-burmese unquote($extra);
+}
+
+$skolar-devanagari: 'Skolar Devanagari';
+
+@font-face {
+    font-family: $skolar-devanagari;
+    @include font-face-src('nonfree/SkolarDevanagari-Bold',
+                           'skolar-devanagari-bold');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: $skolar-devanagari;
+    @include font-face-src('nonfree/SkolarDevanagari-Regular',
+                           'skolar-devanagari-regular');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@mixin skolar-devanagari($extra:'') {
+    font-family: $skolar-devanagari, skolar-devanagari unquote($extra);
+}
