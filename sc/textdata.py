@@ -192,7 +192,7 @@ class TextInfoModel:
     
     def build_process(self, percent):
         if percent % 10 == 0:
-            print('TIM rebuild {}% done'.format(percent))
+            build_logger.info('TIM build {}% done'.format(percent))
     
     def is_happy(self):
         return True
@@ -366,9 +366,15 @@ class TextInfoModel:
             e = root.select_one('meta[author]')
             if e:
                 return e.attrib['author']
-            else:
-                e = root.select_one('meta[data-author]')
+            
+            e = root.select_one('meta[data-author]')
+            if e:
                 return e.attrib['data-author']
+                
+            e = root.select_one('#metaarea > .author')
+            if e:
+                return e.text
+            raise ValueError('No author found')
         except Exception as e:
             logger.warn('Could not determine author for {}/{}'.format(lang_uid, uid))
             return ''
