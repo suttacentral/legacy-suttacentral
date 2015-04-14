@@ -8,12 +8,18 @@ import functools
 import threading
 from itertools import chain
 
-import sc, sc.util
+import sc, sc.util, sc.logger
 from sc.tools import html
 import logging
 logger = logging.getLogger(__name__)
 
-manager_logger = logging.getLogger(__name__ + '.manager')
+build_logger = logging.getLogger(__name__ + '.build')
+
+build_logger_handler = logging.StreamHandler()
+build_logger_handler.setFormatter(sc.logger.SCLogFormatter(colorize=True))
+build_logger.addHandler(build_logger_handler)
+build_logger_handler.setLevel('INFO')
+build_logger.setLevel('INFO')
 
 """ A tool responsible for collating information from the texts
 
@@ -71,19 +77,10 @@ class TIMManager:
         # up_to_date is False if stale, True if fresh, None if undetermined.
         self.up_to_date = None
     
-    def timestampstr(self, timestamp):
-        return str(timestamp).split('.')[0]
-        #return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d_%H:%M:%S')
-    
-    def get_most_recent_mtime(self):
+    def get_db_name(self):
         files = sc.text_dir.glob('**/*.html')
-        most_recent_mtime = -1
-        
-        for file in files:
-            mtime = max(file.stat().st_mtime, most_recent_mtime)
-        
-        return self.timestampstr(mtime)
-        
+        mtime = int(max(file.stat().st_mtime for file in files))
+        return self.db_name_tmpl.format(mtime)
     
     def load(self):
         """ Load an instance of the TextInfoModel 
@@ -99,24 +96,24 @@ class TIMManager:
         
         best_mtime = ''
         best_file = None
-        mtime_rex = regex.compile(self.db_name_tmpl.format('([0-9_:-]+)'))
+        name_rex = regex.compile(self.db_name_tmpl.format('([0-9a-f]+)', '([0-9]+)'))
         db_files = list(sc.db_dir.glob(self.db_name_tmpl.format('*')))
         for file in db_files:
-            m = mtime_rex.match(file.name)
-            manager_logger.debug('{!s} appears to be saved TIM'.format(file))
+            m = name_rex.match(file.name)
+            build_logger.info('{.name} appears to be saved TIM'.format(file))
             if not m:
-                manager_logger.debug('{!s} name format not recognized, skipping'.format(file));
+                build_logger.info('{.name} name format not recognized, skipping'.format(file));
                 continue
             mtime = m[1]
             if mtime > best_mtime:
                 best_mtime = mtime
                 best_file = file
         if best_file:
-            manager_logger.debug('{!s} is most recent saved TIM'.format(best_file))
+            build_logger.info('{.name} looks like most recent saved TIM'.format(best_file))
             for file in db_files:
                 if file != best_file:
                     file.unlink()
-            manager_logger.debug('Loading {!s}'.format(best_file))
+            build_logger.info('Loading {.name}'.format(best_file))
             try:
                 with file.open('rb') as f:
                     instance = pickle.load(f)
@@ -126,23 +123,23 @@ class TIMManager:
                 best_file = None
                 best_mtime = ''
         
+        db_file_name = self.get_db_name()
+        self.up_to_date = (best_file.name == db_file_name) if best_file else False
         
-        most_recent_mtime = self.get_most_recent_mtime()
-        
-        
-        self.up_to_date = (most_recent_mtime == best_mtime)
-        
-        manager_logger.debug('Most recent mtime = {}, up_to_date = {}'.format(most_recent_mtime, self.up_to_date))
+        build_logger.info('TIM DB name = {}, up_to_date = {}'.format(db_file_name, self.up_to_date))
         
         if not self.up_to_date:
-            db_file = sc.db_dir / self.db_name_tmpl.format(most_recent_mtime)
+            db_file = sc.db_dir / db_file_name
             db_file.touch()
-            manager_logger.debug('Building new instance, filename = {!s}'.format(db_file))
+            build_logger.info('Building new instance, filename = {.name}'.format(db_file))
             instance = self.build()
             self._set_instance(instance)
-            manager_logger.debug('Saving TIM to disk as {!s}'.format(db_file))
+            build_logger.info('Saving TIM to disk as {.name}'.format(db_file))
             with db_file.open('wb') as f:
                 pickle.dump(instance, f)
+            for file in db_files:
+                if file != db_file:
+                    file.unlink()
     
     def build(self):
         tim = TextInfoModel()
@@ -186,6 +183,10 @@ class TextInfoModel:
     def __init__(self):
         self._by_lang = {}
         self._by_uid = {}
+    
+    def build_process(self, percent):
+        if percent % 10 == 0:
+            print('TIM rebuild {}% done'.format(percent))
     
     def is_happy(self):
         return True
@@ -263,6 +264,9 @@ class TextInfoModel:
         # So we use a getter, and delete it when we are done.
         self._ppn = None
         file_i = 0
+        file_of_total_i = 0
+        percent = 0
+        file_count = sum(1 for _ in sc.text_dir.glob('**/*.html'))
         for lang_dir in sc.text_dir.glob('*'):
             lang_uid = lang_dir.stem
             files = sorted(lang_dir.glob('**/*.html'), key=lambda f: sc.util.numericsortkey(f.stem))
@@ -328,6 +332,11 @@ class TextInfoModel:
                 file_i += 1
                 if (file_i % self.FILES_N) == 0:
                     self._on_n_files()
+                file_of_total_i += 1
+                new_percent = int(0.5 + 100 * file_of_total_i / file_count)
+                if new_percent > percent:
+                    percent = new_percent
+                    self.build_process(percent)
              except Exception as e:
                  print('An exception occured: {!s}'.format(htmlfile))
                  raise
