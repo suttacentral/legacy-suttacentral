@@ -59,17 +59,7 @@
        url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.woff) format('woff'),
        url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.ttf) format('truetype');
 }
-@font-face {
-  font-family: 'Noto Sans Sinhala';
-  font-style: normal;
-  font-weight: 700;
-  src: url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.eot);
-  src: url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.eot?#iefix) format('embedded-opentype'),
-       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.woff2) format('woff2'),
-       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.woff) format('woff'),
-       url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Bold.ttf) format('truetype');
-}
-/*
+
  * Noto Sans Thai (Thai) http://www.google.com/fonts/earlyaccess
  */
 @font-face {
@@ -258,6 +248,10 @@ h1.mirror-row{line-height:1.5}
                         font-family: 'Noto Sans Sinhala', serif;
                         letter-spacing: 0;
         }
+        h1, h2, h3, h4, h5, h6{
+                        font-weight: 700;
+                     
+        }
 }
 }
 #text:lang(th), #text:lang(pi-Thai) {
@@ -299,6 +293,10 @@ h1, h2, h3, h4, h5, h6 {
 
         }
         .hgroup p {font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;}
+        h1, h2, h3, h4, h5, h6 {
+                        font-weight: 700;
+
+        }
 }
 }
 
