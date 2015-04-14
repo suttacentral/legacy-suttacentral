@@ -144,7 +144,10 @@ def search(query, **kwargs):
         raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
 
 def sutta_info(uid, lang='en'):
-    return SuttaInfoView(uid, lang).render()
+    try:
+        return SuttaInfoView(uid, lang).render()
+    except KeyError:
+        raise cherrypy.HTTPError(404, 'Sutta does not exist')
 
 def data(**kwargs):
     valid_names = {'langs', 'translation_count', 'suttas', 'parallels',

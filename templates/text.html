@@ -7,9 +7,9 @@
 {% else %}
 <link rel="canonical" href="http://suttacentral.net/{{lang_code}}/{{uid}}">
 {% endif %}
-{% if cdate and mdate %}
-<meta name="cdate" content="{{cdate}}">
-<meta name="mdate" content="{{mdate}}">
+{% if textdata.cdate %}
+<meta name="cdate" content="{{textdata.cdate}}">
+<meta name="mdate" content="{{textdata.mdate}}">
 {% endif %}
 {% endblock %}
 

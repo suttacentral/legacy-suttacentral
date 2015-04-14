@@ -23,8 +23,7 @@ def deletelang(lang):
     notice('Done')
     
 @task
-def update_cmdate():
+def ensure_loads():
     "Updating creation and modification dates database"
     from sc import textdata
-    tim = textdata.tim_no_update()
-    tim.update_cmdates()
+    textdata.tim_manager.load(obsolete_okay=True)
