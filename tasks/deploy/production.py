@@ -24,7 +24,7 @@ def full():
         'pip install -q -r requirements.txt',
         'invoke jsdata.build --minify',
         'invoke assets.compile --precompress',
-        'invoke textdata.update_cmdate',
+        'invoke textdata.ensure_loads',
         'sudo supervisorctl start sc-production',
         'rm -f tmp/maintenance',
         'invoke dictionary.build',
@@ -55,7 +55,7 @@ def quick():
         'git pull',
         'pip install -q -r requirements.txt',
         'invoke assets.compile --precompress',
-        'invoke textdata.update_cmdate',
+        'invoke textdata.ensure_loads',
         'sudo supervisorctl restart sc-production',
         'invoke assets.clean --older'
     )

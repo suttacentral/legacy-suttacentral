@@ -82,7 +82,7 @@ class TIMManager:
         mtime = int(max(file.stat().st_mtime for file in files))
         return self.db_name_tmpl.format(mtime)
     
-    def load(self):
+    def load(self, obsolete_okay=False):
         """ Load an instance of the TextInfoModel 
         
         If a saved copy is present, it will be made available nearly
@@ -118,17 +118,23 @@ class TIMManager:
                 with file.open('rb') as f:
                     instance = pickle.load(f)
                 self._set_instance(instance)
-            except EOFError:
+            except (EOFError, ValueError):
+                build_logger.info('{.name} is corrupt, removing'.format(best_file))
                 best_file.unlink()
                 best_file = None
                 best_mtime = ''
         
         db_file_name = self.get_db_name()
-        self.up_to_date = (best_file.name == db_file_name) if best_file else False
-        
-        build_logger.info('TIM DB name = {}, up_to_date = {}'.format(db_file_name, self.up_to_date))
+        if best_file:
+            self.up_to_date = (best_file.name == db_file_name)
+            build_logger.info('TIM DB name = {}, up_to_date = {}'.format(db_file_name, self.up_to_date))
+        else:
+            build_logger.info('No TIM DB exists')
         
         if not self.up_to_date:
+            if obsolete_okay:
+                if self.ready.is_set():
+                    return
             db_file = sc.db_dir / db_file_name
             db_file.touch()
             build_logger.info('Building new instance, filename = {.name}'.format(db_file))
