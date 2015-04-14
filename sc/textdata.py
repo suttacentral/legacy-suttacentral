@@ -144,7 +144,7 @@ class TIMManager:
             with db_file.open('wb') as f:
                 pickle.dump(instance, f)
             for file in db_files:
-                if file != db_file:
+                if file != db_file and file.exists():
                     file.unlink()
     
     def build(self):
