@@ -141,7 +141,7 @@
     margin: 0 auto;
     padding: 0 5% !important;
 
-    @media #{$mobile} {
+    @include if-screen-narrower($small-width) {
         padding: 0 !important;
     }
     /*bilingual headings*/

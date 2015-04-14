@@ -38,20 +38,17 @@ header {
         position: relative;
         top: -4px;
         font-weight: normal;
-        display: inline;
         font-size: 1.5em;
         @include serif-small-caps;
         color: #005179;
     }
     #menu {
         position: absolute;
-        width: 50%;
         display: inline-block;
         float: left;
     }
     nav {
         display: inline-block;
-        width: 30%;
         text-align: center;
         float: left;
         border-left: 1px solid misc-color(medium-gray);
@@ -104,8 +101,8 @@ header {
     #page-header-search input:focus {
         background: white;
     }
-    
-    @media screen and (max-width: 760px) {
+
+    @include if-screen-narrower($header-nav-menu-width) {
         nav {
             width: initial;
             padding: 0 0.3em;
@@ -114,14 +111,34 @@ header {
             width: initial;
         }
     }
-    @media screen and (max-width: 610px) {
+    @include if-screen-wider($header-nav-menu-width) {
+        nav {
+            width: 30%;
+        }
+        #menu {
+            width: 50%;
+        }
+    }
+
+    @include if-screen-narrower($header-button-width) {
         button {
             background: none;
         }
     }
-    @media screen and (max-width: 550px) {
+    @include if-screen-wider($header-button-width) {
+        button {
+            background: initial;
+        }
+    }
+
+    @include if-screen-narrower($header-title-width) {
         #title {
             display: none;
+        }
+    }
+    @include if-screen-wider($header-title-width) {
+        #title {
+            display: inline;
         }
     }
 }

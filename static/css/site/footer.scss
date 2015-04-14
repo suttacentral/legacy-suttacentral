@@ -1,45 +1,37 @@
 
 #page-footer {
     width: 100%;
-    height: $footer-height;
+    height: $mobile-footer-height;
     overflow: hidden;
     background-color: ns-color(footer-background-color);
-white-space:nowrap;
-    @media #{$mobile} {
-        height: $mobile-footer-height;
-    }
+    white-space:nowrap;
 
+    @include if-screen-wider($small-width) {
+        height: $footer-height;
+    }
     @media print {
         display: none;
     }
 
     & > footer {
-       
         margin: 0 auto;
-      max-width:18em;
-       padding: 2em 0 0 0;
-       clear: both;
+        max-width:18em;
+        padding: 2em 0 0 0;
+        clear: both;
         @include sans-serif-small-caps;
-       text-transform: lowercase;
+        text-transform: lowercase;
         letter-spacing: 0.03em;
         text-align: left;
-        
-
 
         & > ul {
-                        margin:0 0 0 2em;
+            margin:0 0 0 2em;
             list-style: none;
             float:left;
             
-
             & > li {
               
                 padding: 0 0 0.5em 0;
-                
-               
-
-
-	& > a {
+                & > a {
                     color: misc-color(dark-medium-gray);
                 }
                 & > a:visited {
@@ -58,4 +50,6 @@ white-space:nowrap;
         }
     }
 }
-.footer-left{text-align:right}
+.footer-left{
+    text-align:right
+}

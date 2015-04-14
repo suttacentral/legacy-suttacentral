@@ -27,7 +27,7 @@ body {
     height: 100%;
     margin: 0 auto -$footer-height;
 
-    @media #{$mobile} {
+    @include if-screen-narrower($small-width) {
         margin-bottom: -$mobile-footer-height;
     }
 
@@ -41,7 +41,7 @@ body {
     width: 100%;
     height: $footer-height;
 
-    @media #{$mobile} {
+    @include if-screen-narrower($small-width) {
         height: $mobile-footer-height;
     }
 
@@ -55,7 +55,7 @@ body {
     max-width: $page-max-width;
     clear: both;
 
-    @media #{$mobile-and-tablet} {
+    @include if-screen-narrower($med-width) {
         max-width: inherit;
     }
 }
@@ -71,13 +71,12 @@ main {
 #home-methodology {
     margin: $main-top-margin auto;
     max-width: 640px;
-
-    @media #{$tablet} {
+    @include if-screen-between($small-width, $med-width) {
         margin: $tablet-main-top-margin 10%;
         max-width: inherit;
     }
 
-    @media #{$mobile} {
+    @include if-screen-narrower($small-width) {
         margin: $mobile-main-top-margin $mobile-main-side-margin;
     }
 }
@@ -93,12 +92,12 @@ main {
         margin: $main-top-margin 2em;
         margin-left: 0;
 
-        @media #{$tablet} {
+        @include if-screen-between($small-width, $med-width) {
             margin: $tablet-main-top-margin 1em;
             margin-left: 0;
         }
 
-        @media #{$mobile} {
+        @include if-screen-narrower($small-width) {
             float: inherit;
             max-width: inherit;
             margin: $mobile-main-top-margin $mobile-main-side-margin;
@@ -110,11 +109,11 @@ main {
         max-width: 25%;
         margin: $main-top-margin 2em;
 
-        @media #{$tablet} {
+        @include if-screen-between($small-width, $med-width) {
             margin: $tablet-main-top-margin 1em;
         }
 
-        @media #{$mobile} {
+        @include if-screen-narrower($small-width) {
             float: inherit;
             max-width: inherit;
             margin: $mobile-main-top-margin $mobile-main-side-margin;
@@ -123,7 +122,7 @@ main {
 }
 
 #text {
-    @media #{$mobile} {
+    @include if-screen-narrower($small-width) {
         margin-bottom: 2em;
     }
 }
