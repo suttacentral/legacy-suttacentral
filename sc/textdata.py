@@ -3,6 +3,7 @@ import regex
 import pickle
 import pathlib
 import sqlite3
+import datetime
 import functools
 import threading
 from itertools import chain
@@ -11,6 +12,8 @@ import sc, sc.util
 from sc.tools import html
 import logging
 logger = logging.getLogger(__name__)
+
+manager_logger = logging.getLogger(__name__ + '.manager')
 
 """ A tool responsible for collating information from the texts
 
@@ -35,7 +38,9 @@ def text_dir_md5(extra_files=[__file__]):
     return md5(array('Q', mtimes)).hexdigest()
 
 class TextInfo:
-    __slots__ = ('uid', 'lang', 'path', 'bookmark', 'name', 'author', 'volpage', 'prev_uid', 'next_uid', 'mtime')
+    __slots__ = ('uid', 'lang', 'path', 'bookmark', 'name',
+                 'author', 'volpage', 'prev_uid', 'next_uid', 
+                 'cdate', 'mdate')
 
     def __init__(self, **kwargs):
         for key in self.__slots__:
@@ -57,6 +62,112 @@ class TextInfo:
             out = out + '#{}'.format(self.bookmark)
         return out
 
+class TIMManager:
+    instance = None
+    db_name_tmpl = 'text-info-model_{}.pickle'
+    def __init__(self):
+        self.instance = None
+        self.ready = threading.Event()
+        # up_to_date is False if stale, True if fresh, None if undetermined.
+        self.up_to_date = None
+    
+    def timestampstr(self, timestamp):
+        return str(timestamp).split('.')[0]
+        #return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d_%H:%M:%S')
+    
+    def get_most_recent_mtime(self):
+        files = sc.text_dir.glob('**/*.html')
+        most_recent_mtime = -1
+        
+        for file in files:
+            mtime = max(file.stat().st_mtime, most_recent_mtime)
+        
+        return self.timestampstr(mtime)
+        
+    
+    def load(self):
+        """ Load an instance of the TextInfoModel 
+        
+        If a saved copy is present, it will be made available nearly
+        instantly. Whether or not a saved copy is available, it will
+        then check if it is up to date, and set the up_to_date flag (takes a few seconds),
+        if it is not up_to_date, it will then proceed to generate
+        a fresh version of the database (takes a few minutes), the fresh
+        version will then be made ready.
+        
+        """
+        
+        best_mtime = ''
+        best_file = None
+        mtime_rex = regex.compile(self.db_name_tmpl.format('([0-9_:-]+)'))
+        db_files = list(sc.db_dir.glob(self.db_name_tmpl.format('*')))
+        for file in db_files:
+            m = mtime_rex.match(file.name)
+            manager_logger.debug('{!s} appears to be saved TIM'.format(file))
+            if not m:
+                manager_logger.debug('{!s} name format not recognized, skipping'.format(file));
+                continue
+            mtime = m[1]
+            if mtime > best_mtime:
+                best_mtime = mtime
+                best_file = file
+        if best_file:
+            manager_logger.debug('{!s} is most recent saved TIM'.format(best_file))
+            for file in db_files:
+                if file != best_file:
+                    file.unlink()
+            manager_logger.debug('Loading {!s}'.format(best_file))
+            try:
+                with file.open('rb') as f:
+                    instance = pickle.load(f)
+                self._set_instance(instance)
+            except EOFError:
+                best_file.unlink()
+                best_file = None
+                best_mtime = ''
+        
+        
+        most_recent_mtime = self.get_most_recent_mtime()
+        
+        
+        self.up_to_date = (most_recent_mtime == best_mtime)
+        
+        manager_logger.debug('Most recent mtime = {}, up_to_date = {}'.format(most_recent_mtime, self.up_to_date))
+        
+        if not self.up_to_date:
+            db_file = sc.db_dir / self.db_name_tmpl.format(most_recent_mtime)
+            db_file.touch()
+            manager_logger.debug('Building new instance, filename = {!s}'.format(db_file))
+            instance = self.build()
+            self._set_instance(instance)
+            manager_logger.debug('Saving TIM to disk as {!s}'.format(db_file))
+            with db_file.open('wb') as f:
+                pickle.dump(instance, f)
+    
+    def build(self):
+        tim = TextInfoModel()
+        tim.build()
+        return tim
+    
+    def get(self):
+        self.ready.wait()
+        return self.instance
+        
+    def _set_instance(self, instance):
+        self.instance = instance
+        # Other threads can now use it.
+        self.ready.set()
+        
+        try:
+            sc.scimm
+            import sc.scimm
+            imm = sc.scimm.imm(wait=False)
+            if imm:
+                imm.tim = instance
+        except NameError:
+            pass
+
+
 class TextInfoModel:
     """ The TextInfoModel is responsible for scanning the entire contents
     of the text folders and building a model containing information not
@@ -75,6 +186,16 @@ class TextInfoModel:
     def __init__(self):
         self._by_lang = {}
         self._by_uid = {}
+    
+    def is_happy(self):
+        return True
+        
+    def repair(self):
+        return
+        
+    def datestr(self, timestamp):
+        return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d')
+    
 
     def get(self, uid=None, lang_uid=None):
         """ Returns TextInfo entries which match arguments
@@ -175,10 +296,17 @@ class TextInfoModel:
                 name = self._get_name(root, lang_uid, uid)
                 volpage = self._get_volpage(root, lang_uid, uid)
                 embedded = self._get_embedded_uids(root, lang_uid, uid)
+                
+                fstat = htmlfile.stat()
+                cdate = self.datestr(fstat.st_ctime)
+                mdate = self.datestr(fstat.st_mtime)
 
-                mtime = htmlfile.stat().st_mtime
-
-                textinfo = TextInfo(uid=uid, lang=lang_uid, path=path, name=name, author=author, volpage=volpage, prev_uid=prev_uid, next_uid=next_uid)
+                textinfo = TextInfo(uid=uid, lang=lang_uid, path=path, 
+                                    name=name, author=author,
+                                    volpage=volpage, prev_uid=prev_uid,
+                                    next_uid=next_uid,
+                                    cdate=cdate,
+                                    mdate=mdate)
                 self.add_text_info(lang_uid, uid, textinfo)
 
                 for child in embedded:
@@ -338,387 +466,17 @@ class TextInfoModel:
             finally:
                 TextInfoModel._build_lock.release()
 
-class SqliteBackedTIM(TextInfoModel):
-    """ A memory-saving version of the TIM
+tim_manager = TIMManager()
 
-    Sqlite is generally very, very fast and this is not noticably
-    slower than the python dict based TextInfoModel, not more than
-    5% slower to build, and while requests are about
-    20x slower it's still about 30,000 'gets' per second, and the SQL
-    overhead accounts for no more than 20% of the total process time
-    for building a division view. (April 2014)
-    
-    """
-
-    def get_schema():
-        """ The commands required to configure the sqlite databse
-
-        The schema can be used to determine if a database rebuild
-        is required.
-
-        """
-        return {
-            'init': (
-                'CREATE TABLE data(lang, uid, path, bookmark, name,\
-                                   author, volpage, prev_uid, next_uid)',
-                'CREATE TABLE mtimes(path UNIQUE, mtime)',
-                'PRAGMA journal_mode = OFF'
-            ),
-            'finalize': (
-                'CREATE INDEX lang_x ON data(lang)',
-                'CREATE INDEX uid_x ON data(uid)',
-                'CREATE INDEX path_x ON data(path)',
-                'CREATE INDEX mtimes_path_x on mtimes(path)',
-                'PRAGMA journal_mode = wal'
-            ),
-            'buster': 1.0
-        }
-    schema = get_schema()
-    def __init__(self, filename=None):
-        if filename is None:
-            filename = self.default_filename
-        self.filename = filename
-        self._local = threading.local()
-
-    @property
-    def _con(self):
-        try:
-            return self._local.con
-        except AttributeError:
-            self.reconnect()
-            return self._local.con
-
-    def reconnect(self):
-        self._local.con = sqlite3.connect(self.filename)
-
-    def _init_table(self):
-        try:
-            pathlib.Path(self.filename).unlink()
-        except FileNotFoundError:
-            pass
-        self.reconnect()
-        for string in self.schema['init']:
-            self._con.execute(string)
-        
-    def _finally_table(self):
-        for string in self.schema['finalize']:
-            self._con.execute(string)
-        
-    def build(self, force=False):
-        if not self._build_lock.acquire(blocking=False):
-            return
-        happy = self.is_happy()
-        if happy:
-            self._mtimes = {path:mtime for path, mtime in self._con.execute('SELECT * FROM mtimes')}
-            self._check_for_deleted()
-        else:
-            self._init_table()
-            self.set_happy()
-            self._mtimes = {}
-        self.repair()
-        super().build(force)
-        if not happy:
-            self._finally_table()
-            
-        self._con.commit()
-        del self._mtimes
-        self._build_lock.release()
-
-    def repair(self):
-        con = self._con
-        
-        exists_in_data_table = {(t[0], t[1]) for t in
-                    con.execute('SELECT uid, lang FROM data')}
-        bad = set()
-        for (path_str, ) in con.execute('SELECT path FROM mtimes'):
-            path = pathlib.Path(path_str)
-            lang = path.parts[0]
-            uid = path.stem
-            if (uid, lang) not in exists_in_data_table:
-                logger.warn('entry ({}, {}) in mtimes does not exist in data'.format(uid, lang))
-                bad.add((path_str,))
-
-        if bad:
-            logger.warn('Removing {} bad entries'.format(len(bad)))
-            con.executemany('DELETE FROM mtimes WHERE path = ?', bad)
-            con.commit()
-            return True
-        return False
-
-    def _check_for_deleted(self):
-        sc_dir = str(sc.text_dir) + '/'
-        existing = {str(file).replace(sc_dir, '') for file in sc.text_dir.glob('**/*.html')}
-        for path in self._mtimes.keys():
-            if path not in existing:
-                logger.info('File removed: {!s}.'.format(path))
-                self._delete_entries(pathlib.Path(path))
-        
-    def _should_process_file(self, file, force):
-        
-        mtime = file.stat().st_mtime_ns
-        path = file.relative_to(sc.text_dir)
-        
-        if not force and self._mtimes.get(str(path)) == mtime:
-            return False
-
-        self._delete_entries(path)
-        self._con.execute('INSERT INTO mtimes VALUES(?, ?)', (str(path), mtime))
-        return True
-
-    def _delete_entries(self, path):
-        con = self._con
-        con.execute('DELETE FROM data WHERE path=?', (str(path),))
-        con.execute('DELETE FROM mtimes WHERE path=?', (str(path),))
-
-    def _on_n_files(self):
-        self._con.commit()
-    
-    def set_happy(self):
-        self._con.execute('CREATE TABLE happy(yes)')
-
-    def is_happy(self):
-        try:
-            self._con.execute('SELECT 1 FROM happy')
-            return True
-        except:
-            return False
-
-    # This is a significant bottleneck but the total data size
-    # is not large (~ 10mb) so we use a large cache.
-    @functools.lru_cache(maxsize=10000)
-    def get(self, uid=None, lang_uid=None):
-        con = self._con
-        
-        def text_info_from_row(row):
-            return TextInfo(
-                lang = row[0],
-                uid=row[1],
-                path=pathlib.Path(row[2]),
-                bookmark=row[3],
-                name=regex.sub(r'^\P{alpha}*', '',row[4] or ''),
-                author=row[5],
-                volpage=row[6],
-                prev_uid=row[7],
-                next_uid=row[8]
-            )
-        
-        if uid and lang_uid:
-            cur = con.execute('''SELECT lang, uid, path, bookmark, name, author, volpage, prev_uid, next_uid
-                                FROM data
-                                WHERE lang=?
-                                AND uid=?''',
-                                (lang_uid, uid))
-            result = cur.fetchone()
-            if not result:
-                return None
-            return text_info_from_row(result)
-        else:
-            sql_fmtstr = '''SELECT lang, uid, path, bookmark, name, author, volpage, prev_uid, next_uid
-                                FROM data
-                                WHERE {field}=?'''
-            if uid:
-                cur = con.execute(sql_fmtstr.format(field='uid'), (uid,))
-                return {row[0]: text_info_from_row(row) for row in cur}
-            elif lang_uid:
-                cur = con.execute(sql_fmtstr.format(field='lang'), (lang_uid,))
-                return {row[1]: text_info_from_row(row) for row in cur}
-            else:
-                raise ValueError('At least one of uid or lang_uid must be set')
-
-    def exists(self, uid=None, lang_uid=None):
-        fields = []
-        if uid and lang_uid:
-            cur = self._con.execute('SELECT 1 FROM data WHERE lang=? and uid=?',
-                        (lang_uid, uid))
-        elif uid and not lang_uid:
-            cur = self._con.execute('SELECT 1 FROM data WHERE uid=?', (uid,))
-        elif lang_uid and not uid:
-            cur = self._con.execute('SELECT 1 FROM data WHERE lang=?', (lang_uid,))
-        else:
-            raise ValueError('uid and lang_uid cannot both be None')
-            
-        return cur.fetchone() != None
-
-    def add_text_info(self, lang_uid, uid, textinfo):
-        self._con.execute('INSERT INTO data VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            (lang_uid, uid, str(textinfo.path), textinfo.bookmark,
-            textinfo.name, textinfo.author, textinfo.volpage, textinfo.prev_uid, textinfo.next_uid))
-
-    filename_fmt = 'text-info-model-{version}.db'
-
-    @property
-    def default_filename(self):
-        import json
-        import hashlib
-        schema_str = json.dumps(self.schema, sort_keys=1) 
-        ver = hashlib.md5(schema_str.encode('ascii')).hexdigest()[0:8]
-        
-        return str(sc.db_dir / self.filename_fmt.format(version=ver))
-    
-    @classmethod
-    def build_once(cls, force_build):
-        if cls._build_lock.acquire(blocking=False):
-            try:
-                start=time.time()
-                logger.info('Acquiring SQLite Backed Text Info Model')
-                cls._instance = cls()
-                cls._instance.build(force_build)
-                cls._build_ready.set()
-                build_time = time.time()-start
-                logger.info('Text Info Model ready in {:.4f}s'.format(build_time))
-            finally:
-                cls._build_lock.release()
-
-    @classmethod
-    def parallel_rebuild(cls, filename=None):
-        """ Rebuild the Model from stratch
-
-        Leaves the existing database intact so that the server can
-        continue to use it while the build is in progress. Once the build
-        is finished, the database file is overwitten, existing connections
-        will continue to use the old (now unlinked) database, the server
-        will need to be restarted to re-create the connections.
-
-        This method is useful because a complete rebuild can take upwards
-        of 10 minutes, hence it is better that such a task be delegated
-        to a background thread or process.
-
-        """
-        
-        import os
-
-        if filename is None:
-            filename = cls.default_filename
-            
-        logger.info('Rebuilding SQLite Backed Text Info Model in background')
-        timfile = filename + '.working'
-        tim = cls(timfile)
-        tim.build()
-        logger.info('Rebuild complete')
-        os.replace(timfile, filename)
-        return True
-
-    def update_cmdates(self, force=False):
-        import pathlib
-        import plumbum
-        con = self._con
-        self._con.execute('CREATE TABLE IF NOT EXISTS cmdate(lang, uid, cdate, mdate)')
-        self._con.execute('CREATE INDEX IF NOT EXISTS cmdate_x ON cmdate(lang, uid)')
-        def git(*args):
-            with plumbum.local.cwd(str(sc.data_dir)):
-                return plumbum.local['git'](*args).strip()
-
-        last_commit = git('log', '-1', '--format=%H').strip()
-        stored_last_commit = self._con.execute('SELECT cdate FROM cmdate WHERE uid=?',
-                                                ('__last_commit',)).fetchone()
-                                                
-        if stored_last_commit and last_commit == stored_last_commit[0]:
-            if not force:
-                return
-
-        r = git('log', '--pretty=format:"%H %cd"', '--date=short')
-        lines = list(reversed(r.split('\n')))
-        
-        cdate = {}
-        mdate = {}
-
-        for line in lines:
-            line = line[1:-1]
-            commit_id, date = line.split(' ')
-            r = git('diff-tree', '--no-commit-id', "--name-only", "-r", commit_id)
-            for path_str in r.split():
-                path = pathlib.Path(path_str)
-                parts = path.parts
-                uid = None
-                if parts[0] == 'text':
-                    lang = parts[1]
-                    uid = path.stem
-                elif parts[0] in {'en', 'pi', 'zh', 'de', 'vn'}:
-                    lang = parts[0]
-                    uid = path.stem
-                if uid:
-                    key = (lang, uid)
-                    if key not in cdate:
-                        cdate[key] = date
-                    mdate[key] = date
-
-        
-        self._con.executemany('INSERT OR REPLACE INTO cmdate VALUES(?, ?, ?, ?)',
-                ((key[0], key[1], cdate[key], mdate[key])
-                for key in sorted(cdate)))
-
-        self._con.execute('INSERT OR REPLACE INTO cmdate(uid, cdate) VALUES(?, ?)',
-                ('__last_commit', last_commit))
-        self._con.commit()
-
-    def get_cmdate(self, lang, uid, _recursion_barrier=[]):
-        try:
-            r = self._con.execute('SELECT cdate, mdate FROM cmdate WHERE lang=? AND uid=?',
-                            (lang, uid)).fetchone()
-        except sqlite3.OperationalError as e:
-            if str(e).startswith('no such table'):
-                if not _recursion_barrier:
-                    _recursion_barrier.append(1)
-                    self.update_cmdates()
-                    return self.get_cmdate(lang, uid)
-            raise
-        if r is not None:
-            return {'cdate': r[0], 'mdate': r[1]}
-        # Because r is None, files have been added since update_cmdate
-        # was last called or for some other reason it isn't in the database.
-        # We will use stat as a less reliable fallback.
-        r = self._con.execute('SELECT path FROM data WHERE lang=? AND uid=?', (lang, uid)).fetchone()
-        if r is None:
-            return None
-        path = sc.text_dir / r[0]
-        stats = path.stat()
-        cdate = time.strftime('%Y-%m-%d', time.localtime(stats.st_ctime))
-        mdate = time.strftime('%Y-%m-%d', time.localtime(stats.st_mtime))
-        return {'cdate': cdate, 'mdate': mdate}
-        
-Model = SqliteBackedTIM
 def tim():
-    """ Returns an instance of the TIM
-
-    This method only works when the updater thread has been
-    started.
+    return tim_manager.get()
     
-     """
-    Model._build_ready.wait()
-    return Model._instance
-
-def tim_no_update():
-    """ Returns an instance of the TIM
-
-    Updating function is not called. Instance is not guaranteed to
-    be in any particular state.
-
-    """
-    
-    if not Model._instance:
-        Model._instance = Model()
-    return Model._instance
-
 def periodic_update(i):
-    if Model._instance:
-        tim = Model._instance
-    else:
-        tim = Model()
-        if tim.is_happy():
-            Model._instance = tim
-            repaired = tim.repair()
-            if repaired:
-                tim.build()
-            Model._build_ready.set()
-            if i == 0:
-                return
-    
-    tim.build()
-    Model._build_ready.set()
-    
+    tim_manager.load()
+        
 
-def rebuild_tim(Model=SqliteBackedTIM):
-    Model.parallel_rebuild()
+def rebuild_tim():
+    tim_manager.load()
 
 class PaliPageNumbinator:
     msbook_to_ptsbook_mapping = {

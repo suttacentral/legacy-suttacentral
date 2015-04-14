@@ -332,10 +332,6 @@ class TextView(ViewBase):
         if context.embed:
             context.text = self.shorter_text(context.text)
         context.has_quotes = '‘' in context.text or '“' in context.text
-
-        cmdate = imm.tim.get_cmdate(uid=self.uid, lang=self.lang_code)
-        if cmdate:
-            context.update(cmdate)
         try:
             context.snippet = self.get_snippet(context.text)
         except Exception as e:

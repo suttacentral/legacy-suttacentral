@@ -726,7 +726,7 @@ class _Imm:
         import random
         return random.choice(self.epigraphs)
 
-def imm():
+def imm(wait=True):
     """ Get an instance of the DBR.
 
     Use only this function to get an instance of the DBR. For most intents
@@ -741,8 +741,9 @@ def imm():
 
     """
 
-    if not _Imm._instance:
-        _Imm._ready.wait()
+    if wait:
+        if not _Imm._instance:
+            _Imm._ready.wait()
     return _Imm._instance
 
 def periodic_update(i):
