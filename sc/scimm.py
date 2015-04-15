@@ -17,6 +17,7 @@ import logging
 import threading
 from bisect import bisect
 from datetime import datetime
+from itertools import chain
 from collections import OrderedDict, defaultdict, namedtuple
 
 import sc
@@ -726,6 +727,45 @@ class _Imm:
         import random
         return random.choice(self.epigraphs)
 
+    def get_next_prev(self, uid, lang_uid):
+        if not hasattr(self, 'sutta_order_cache'):
+            self.sutta_order_cache = soc = defaultdict(dict)
+            for division in self.divisions.values():
+                suttas = list(chain(*(sd.suttas for sd in division.subdivisions)))
+                
+                prev = None
+                for sutta in suttas:
+                    if prev:
+                        soc[sutta.uid]['prev'] = prev.uid
+                        soc[prev.uid]['next'] = sutta.uid
+                    prev = sutta
+        soc = self.sutta_order_cache
+        tim = self.tim
+        
+        nextdata = None
+        prevdata = None
+        
+        nextprev = soc.get(uid)
+        if nextprev:
+            # if the sutta data says that a sutta is the start/end of a 
+            # division, we will trust it, hence we use 'False', for there
+            # is no next/prev sutta, rather than 'None' for unknown.
+            nextdata = (tim.get(uid=nextprev.get('next'), lang_uid=lang_uid)
+                if 'next' in nextprev
+                else False)
+            prevdata = (tim.get(uid=nextprev.get('prev'), lang_uid=lang_uid)
+                        if 'prev' in nextprev
+                        else False)
+    
+        textdata = tim.get(uid=uid, lang_uid=lang_uid)
+        if textdata:
+            if nextdata is None and textdata.next_uid:
+                nextdata = tim.get(uid=textdata.next_uid, lang_uid=lang_uid)
+            if prevdata is None and textdata.prev_uid:
+                prevdata = tim.get(uid=textdata.prev_uid, lang_uid=lang_uid)
+        return {'next': nextdata,
+                'prev': prevdata}
+        
 def imm(wait=True):
     """ Get an instance of the DBR.
 

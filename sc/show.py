@@ -121,6 +121,9 @@ def default(*args, **kwargs):
         if len(args) == 3 and 'embed' in cherrypy.request.params:
             return TextSelectionView(uid, lang_code, args[2]).render()
         canonical = False if len(args) == 3 else True
+        if 'raw' in kwargs:
+            return TextRawView(uid, lang_code).render()
+            
         if sutta:
             return SuttaView(sutta, lang, canonical).render()
         else:

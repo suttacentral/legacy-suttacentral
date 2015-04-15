@@ -354,7 +354,10 @@ class TextView(ViewBase):
             if context.division.text_ref:
                 context.text_refs.append(context.division.text_ref)
             #context.text_refs.extend(context.division.translations)
-    
+        nextprev = imm.get_next_prev(uid=self.uid, lang_uid=self.lang_code)
+        context.next_data = nextprev['next']
+        context.prev_data = nextprev['prev']
+        
     def shorter_text(self, html, target_len=2500):
         # Don't bother cutting off excessively short amount of text
         if len(html) < target_len * 1.5:
@@ -427,6 +430,12 @@ class TextView(ViewBase):
             pre, meta, post = m[1:]
             return ''.join([deline(pre), meta, deline(post)])
         return deline(text)
+
+class TextRawView(TextView):
+    def setup_context(self):
+        return
+    def render(self):
+        return self.get_html()
 
 class TextSelectionView(TextView):
     template_name = 'paragraph'
