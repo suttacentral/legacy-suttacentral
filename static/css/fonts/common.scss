@@ -96,6 +96,19 @@ $ddc-uchen: 'DDC Uchen';
     src: url('#{$base_font_url}/ddc-uchen-1.0.woff') format('woff');
 }
 
+@font-face {
+    font-family: 'Noto Sans Myanmar';
+    @include font-face-src('noto-sans-myanmar.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Noto Sans Myanmar';
+    @include font-face-src('noto-sans-myanmar.woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
 @mixin sans-serif($extra:'') {
     font-family: $source-sans-pro, sans-serif unquote($extra);
 }

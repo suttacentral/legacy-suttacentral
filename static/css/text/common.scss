@@ -36,6 +36,7 @@
        url(//fonts.gstatic.com/ea/myanmarsanspro/v4/MyanmarSansPro-Regular.woff) format('woff'),
        url(//fonts.gstatic.com/ea/myanmarsanspro/v4/MyanmarSansPro-Regular.ttf) format('truetype');
 }
+
 @font-face {
   font-family: 'Noto Sans Sinhala';
   font-style: normal;
@@ -282,8 +283,11 @@ h1, h2, h3, h4, h5, h6 {
 #text:lang(my), #text:lang(pi-Mymr) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
-                        font-family: 'Myanmar Sans Pro', serif;
+                        font-family: 'Noto Sans Myanmar', serif;
         }
+        h1, h2, h3, h4, h5, h6 {
+                        font-weight: bold;
+                        }
 }
 }
 #text:lang(ko) {
