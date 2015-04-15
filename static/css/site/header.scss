@@ -88,21 +88,51 @@ header {
     #page-header-search input {
         @include sans-serif;
         position: absolute;
-        width: 20%;
         padding: 0 0.5em;
         top: 6px;
         height: 24px;
         right: 1%;
-        border: none;
+        border: solid 1px misc-color(light-medium-gray);
         border-radius: 15px;
-        box-shadow: 0 0 1px black inset;
+        // box-shadow: 0 0 1px black inset;
         background: misc-color(light-off-white);
-    }
-    #page-header-search input:focus {
-        background: white;
+
+        &:focus {
+            background: white;
+            outline: none !important;
+            border: solid 1px misc-color(dark-medium-gray);
+        }
     }
 
-    @include if-screen-narrower($header-nav-menu-width) {
+    @include if-screen-narrower($header-small-width) {
+        #title {
+            display: none;
+        }
+        #page-header-search input {
+            width: 30%;
+        }
+    }
+    @include if-screen-wider($header-small-width) {
+        #title {
+            display: inline;
+        }
+        #page-header-search input {
+            width: 20%;
+        }
+    }
+
+    @include if-screen-narrower($header-med-width) {
+        button {
+            background: none;
+        }
+    }
+    @include if-screen-wider($header-med-width) {
+        button {
+            background: initial;
+        }
+    }
+
+    @include if-screen-narrower($header-large-width) {
         nav {
             width: initial;
             padding: 0 0.3em;
@@ -111,7 +141,7 @@ header {
             width: initial;
         }
     }
-    @include if-screen-wider($header-nav-menu-width) {
+    @include if-screen-wider($header-large-width) {
         nav {
             width: 30%;
         }
@@ -120,25 +150,14 @@ header {
         }
     }
 
-    @include if-screen-narrower($header-button-width) {
-        button {
-            background: none;
-        }
-    }
-    @include if-screen-wider($header-button-width) {
-        button {
-            background: initial;
-        }
-    }
-
-    @include if-screen-narrower($header-title-width) {
-        #title {
-            display: none;
-        }
-    }
-    @include if-screen-wider($header-title-width) {
-        #title {
-            display: inline;
+    // @include if-screen-narrower($header-xlarge-width) {
+    //     #page-header-search input {
+    //         width: 20%;
+    //     }
+    // }
+    @include if-screen-wider($header-xlarge-width) {
+        #page-header-search input {
+            width: 25%;
         }
     }
 }
@@ -151,7 +170,8 @@ header {
     border: 2px solid misc-color(medium-gray);
     position: absolute;
     border-radius: 50%;
-    right: 2.2%;
+    right: 1%;
+    margin-right: 9px;
     top: 12px;
     background: 0;
     padding: 0;
@@ -176,7 +196,7 @@ header {
     height: 18px;
     width: 18px;
     left: -7px;
-    top: -7px;
+    top: -6px;
 }
 .search-submit:hover::after {
     border: 2px solid misc-color(medium-gray);
