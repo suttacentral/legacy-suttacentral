@@ -230,10 +230,15 @@ class TextInfoModel:
         except KeyError:
             return None
 
-    def exists(self, uid, lang_uid):
+    def exists(self, uid=None, lang_uid=None):
+        if uid is None and lang_uid is None:
+            raise ValueError
+        if uid is None:
+            return lang_uid in self._by_lang
+        else:
+            return uid in self._by_uid
         try:
-            self._by_uid[uid][lang_uid]
-            return True
+            return lang_uid in self._by_uid[uid]
         except KeyError:
             return False
 
