@@ -535,8 +535,8 @@ function enablePaliLookup(){
         scriptUrl = 'data/pi2pt-maindata-v1.js';
     } else if (script == 'id') {
         scriptUrl = 'data/pi2id-maindata-v1.js';
-    } else if (script == 'de') {
-        scriptUrl = 'data/pi2de-maindata-v1.js';
+    } else if (script == 'nl') {
+        scriptUrl = 'data/pi2nl-maindata-v1.js';
     } else {
         throw Error('Unknown script: ' + script);
     }
