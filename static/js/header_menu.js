@@ -3,7 +3,7 @@ sc.headerMenu = {
     lastScreenScroll: 0,
     toggle: function(e){
         $(this).toggleClass('active');
-        $('header nav').not(this).removeClass('active')
+        $('header .pitaka_menu').not(this).removeClass('active')
     },
     update: function(element, mode) {
         var self = sc.headerMenu,
@@ -100,10 +100,21 @@ sc.headerMenu = {
 
 
 setTimeout(function(){
-    $('header nav a').each(function(){
+    $('header .pitaka_menu a').each(function(){
         $(this).attr('href', '#' + $(this).attr('href').replace(/^\.*\//, '').replace('.html', ''));
     });
-    $('header nav').on('click', function(){sc.headerMenu.update($(this)); return false});
+    $('header .pitaka_menu').on('click', function(){sc.headerMenu.update($(this)); return false});
+
+    //  If click on the search-popup-btn, then add classes to configure the layout properly
+    $('.search-popup-btn').on('click', function() {
+        $('.search-popup-btn, #page-header-search input, .search-submit').addClass('search-box-popup');
+        $('#page-header-search input').focus();
+        $('#page-header-search input').one('focusout', function(event) {
+            // on focusout, lets remove the classes
+            $('.search-popup-btn, #page-header-search input, .search-submit').removeClass('search-box-popup');
+        });
+    });
+
     $('#panel-screen-wrap').on('click', function(e) {
         if ($(e.target).is('a'))
             return true;

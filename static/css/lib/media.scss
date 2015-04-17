@@ -12,9 +12,7 @@ $large-width:   1200px;
 
 //  These are breakpoints that fall between the standard breakpoints above
 $header-small-width:     550px;
-$header-med-width:       610px;
-$header-large-width:     760px;
-$header-xlarge-width:    820px;
+$header-large-width:     800px;
 
 @mixin if-screen-between($min-width, $max-width, $orientation: false) {
     @if $orientation {
