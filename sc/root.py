@@ -1,8 +1,9 @@
 import json
 import cherrypy
 
+
 import sc
-from sc import show
+from sc import show, donations
 from sc.tools import webtools
 
 # We expose everything we need to here.
@@ -88,7 +89,15 @@ class Root(object):
     @cherrypy.expose
     def define(self, term, **kwargs):
         term = term.encode(encoding='latin-1').decode(encoding='utf8')
-        return show.define(term)    
+        return show.define(term)
+    
+    @cherrypy.expose
+    def donations(self, **kwargs):
+        if cherrypy.request.method == 'GET':
+            return show.default('donations', **kwargs)
+        elif cherrypy.request.method == 'POST':
+            result = donations.process_payment(**kwargs)
+            return show.donations(result)
 
 class Admin(object):
     """Requests to /admin/*"""

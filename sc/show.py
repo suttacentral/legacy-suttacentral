@@ -146,6 +146,9 @@ def search(query, **kwargs):
     except sc.search.ConnectionError:
         raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
 
+def donations(result):
+    return DonationsResultView(result).render()
+
 def sutta_info(uid, lang='en'):
     try:
         return SuttaInfoView(uid, lang).render()

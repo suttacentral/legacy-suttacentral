@@ -17,5 +17,6 @@ pyScss==1.2.0.post3
 pytest==2.5.2
 regex==0.1.20130125
 selenium==2.37.2
+stripe==1.22.2
 webassets==0.9
 elasticsearch==1.4.0

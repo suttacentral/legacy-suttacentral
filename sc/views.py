@@ -721,6 +721,21 @@ class SuttaInfoView(ViewBase):
         context.partial_parallels = [ll for ll in parallels if ll.partial]
         context.base_url = sc.config.app['base_url']
 
+class DonationsResultView(InfoView):
+    
+    def __init__(self, result):
+        super().__init__('donations_result')
+        self.result = result
+    
+    def setup_content(self, context):
+        super().setup_context(context)
+        if self.result is None:
+            context.failed = True
+        else:
+            context.paid = self.result.paid
+            context.amount_in_dollars = int(self.result.amount / 100)
+        
+
 class AdminIndexView(InfoView):
     """The view for the admin index page."""
 
