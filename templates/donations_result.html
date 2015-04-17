@@ -1,0 +1,27 @@
+
+{% extends "base.html" -%}
+{% set stripe_key = config.app.stripe_publishable_key %}
+
+{% block content %}
+<div id="onecol">
+<section>
+<article class="donations">
+
+{% if failed %}
+<h1>A problem occurred</h1>
+
+<p>Your Credit Card was accepted, but the transaction could not be completed.</p>
+
+{% else %}
+<h1>Thankyou for your Donation</h1>
+
+<p>Your donation of ${{ amount_in_dollars }} has been processed successfully. You should
+recieve a receipt via e-mail.</p>
+
+{% endif %}
+
+<p></p>
+</article>
+</section>
+</div>
+{%- endblock %}

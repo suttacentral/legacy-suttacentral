@@ -94,6 +94,8 @@ class Root(object):
     @cherrypy.expose
     def donations(self, **kwargs):
         if cherrypy.request.method == 'GET':
+            if 'test' in kwargs:
+                return show.donations({'amount':kwargs['test'], 'paid':True})
             return show.default('donations', **kwargs)
         elif cherrypy.request.method == 'POST':
             result = donations.process_payment(**kwargs)
