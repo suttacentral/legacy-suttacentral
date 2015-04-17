@@ -10,17 +10,8 @@
 <p>Your donation is greatly appreciated, and will support the ongoing development and improvement of SuttaCentral. We want to continue bring the Buddha’s word to people all around the world.</p>
 
 <style>
-.currency-input {
-    border: 1px solid grey;
-    padding: 1px;
-    font-size: 120%;
-}
-.currency-input > input {
-    margin-left: 0.25em;
-    border: none;
-    outline: none;
-    width: 4em;
-}
+
+
 
 </style>
 {% if stripe_key %}
@@ -29,7 +20,7 @@
 $<input name="sum" value=25>
 </span>
 <script src="https://checkout.stripe.com/checkout.js"></script>
-<button id="customButton" class="stripe-button">Donate Now</button>
+<button id="customButton" class="donate-button">Give Now</button>
 </form>
 {% endif %}
 
