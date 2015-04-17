@@ -138,29 +138,6 @@ img{
 
 
 
-    .currency-input {
-
-    padding: 3px 6px;
-    font-size: 120%;
-    display:block;
-    margin:0 auto;
-    width:6em;
-    font-family:'Source Sans Pro', sans-serif;
-    background:white;
-    border-radius:3px;
-      box-shadow: 0px 0px 3px black inset;
-      background:#fff;
-      
-
-}
-.currency-input > input {
-    margin-left: 0.25em;
-    border: none;
-    outline: none;
-    width: 4em;
-
-}
-
     .donate{
     text-align:center;
     margin:2em
@@ -184,10 +161,7 @@ img{
     border-radius:3px;
     color:white;
     box-shadow:1px 1px 3px rgba(0,0,0,0.3);
-    border:1px solid $dark-pastel-red;
-    margin:1em auto 2em;
-    display:block;
-    width:8em
+    border:1px solid $dark-pastel-red
     }
 
     .donate-button:hover{
