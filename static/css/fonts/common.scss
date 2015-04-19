@@ -104,7 +104,7 @@ $noto-sans-myanmar: 'Noto Sans Myanmar';
 }
 @font-face {
     font-family: $noto-sans-myanmar;
-    @include font-face-src('noto-sans-myanmar.woff');
+    src: url('#{$base_font_url}/noto-sans-myanmar-bold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
 }

@@ -8,6 +8,8 @@
 // Source: David Březina <brezina@davi.cz>
 $skolar-sutta-web: 'Skolar Sutta Web';
 $skolar-sutta-web-sc: 'Skolar Sutta Web SC';
+$lumen-thai: 'Lumen Thai';
+$skolar-devanagari: 'Skolar Devanagari';
 
 @font-face {
     font-family: $skolar-sutta-web;
@@ -50,7 +52,7 @@ $skolar-sutta-web-sc: 'Skolar Sutta Web SC';
 }
 
 
-$lumen-thai: 'Lumen Thai';
+
 
 @font-face {
     font-family: $lumen-thai;
@@ -72,7 +74,7 @@ $lumen-thai: 'Lumen Thai';
     font-family: $lumen-thai, lumen-thai unquote($extra);
 }
 
-$skolar-devanagari: 'Skolar Devanagari';
+
 
 @font-face {
     font-family: $skolar-devanagari;
