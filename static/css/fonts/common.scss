@@ -43,8 +43,8 @@ $hetu-schetu-sc: 'hetu_schetu_sc';
 
 // Source: https://code.google.com/p/tharlon-font/
 $tharlon: 'TharLon';
-
 $ddc-uchen: 'DDC Uchen';
+$noto-sans-myanmar: 'Noto Sans Myanmar';
 
 @mixin font-face-src($font-path, $svg-id) {
     $url = '#{$base_font_url}/#{$font-path}';
@@ -97,13 +97,13 @@ $ddc-uchen: 'DDC Uchen';
 }
 
 @font-face {
-    font-family: 'Noto Sans Myanmar';
-    @include font-face-src('noto-sans-myanmar.woff');
+    font-family:$noto-sans-myanmar;
+     src: url('#{$base_font_url}/noto-sans-myanmar.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
-    font-family: 'Noto Sans Myanmar';
+    font-family: $noto-sans-myanmar;
     @include font-face-src('noto-sans-myanmar.woff');
     font-weight: bold;
     font-style: normal;
