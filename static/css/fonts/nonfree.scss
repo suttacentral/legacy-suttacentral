@@ -72,28 +72,6 @@ $lumen-thai: 'Lumen Thai';
     font-family: $lumen-thai, lumen-thai unquote($extra);
 }
 
-$lumen-burmese: 'Lumen Burmese';
-
-@font-face {
-    font-family: $lumen-burmese;
-    @include font-face-src('nonfree/LumenBurmese-Bold',
-                           'lumen-burmese-bold');
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: $lumen-burmese;
-    @include font-face-src('nonfree/LumenBurmese-Regular',
-                           'lumen-burmese-regular');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@mixin lumen-burmese($extra:'') {
-    font-family: $lumen-burmese, lumen-burmese unquote($extra);
-}
-
 $skolar-devanagari: 'Skolar Devanagari';
 
 @font-face {
