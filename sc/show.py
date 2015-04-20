@@ -7,6 +7,7 @@ import sc.data
 from sc.scm import data_scm
 from sc.util import filelock
 from sc.views import *
+import sc.donations
 
 logger = logging.getLogger(__name__)
 
@@ -146,8 +147,23 @@ def search(query, **kwargs):
     except sc.search.ConnectionError:
         raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
 
-def donations(result):
-    return DonationsResultView(result).render()
+def donate(page, **kwargs):
+    print(page, kwargs)
+    try:
+        if page == 'plan':
+            return DonationsPlanView(**kwargs).render()
+        elif page == 'payment':
+            kwargs["amount"] = sc.donations.calc_amount(kwargs["dollar_amount"])
+            return DonationsPaymentView(**kwargs).render()
+        elif page == 'confirm':
+            result = sc.donations.donate(**kwargs)
+            if result is None:
+                return DonationsErrorView().render()
+            result.update(kwargs)
+            return DonationsConfirmView(**result).render()
+        raise cherrypy.NotFound()
+    except:
+        sc.donations.stripe.error.InvalidRequestError
 
 def sutta_info(uid, lang='en'):
     try:

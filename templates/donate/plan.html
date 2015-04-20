@@ -1,0 +1,43 @@
+
+{% extends "base.html" -%}
+
+{% block content %}
+<div id="onecol">
+<section>
+<article class="donations">
+<h1>SuttaCentral Donations</h1>
+
+<p>You can make a one-time donation or a monthly donation.</p>
+
+<form action="/donate/payment" method="post">
+<input type="hidden" name="idempotent_key" value="{{idempotent_key}}">
+<div class="frequency-options">
+<p> Would you like to make a one-off donation, or a monthly donation?</p>
+<label class="frequency checked"><input type="radio" name="frequency" value="once" checked>One-time</label>
+<label class="frequency"><input type="radio" name="frequency" value="monthly">Monthly</label>
+</div>
+<span class="currency-input">
+$<input name="dollar_amount" value=25 required>
+</span>
+<button>Proceed</button>
+</form>
+
+</article>
+</section>
+</div>
+{% endblock %}
+
+{% block foot_jq %}
+<script>
+    $("[name=sum").on('change', function(){
+        if ($(this).val() < 5) {
+            $(this).val(5);
+        }
+    })
+    $('label > [type=radio]').on('change', function(){
+        $(this).parent().siblings().removeClass('checked')
+        $(this).parent().addClass('checked')
+    })
+</script>
+{% endblock %}
+
