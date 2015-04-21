@@ -1,0 +1,23 @@
+{% extends "base.html" -%}
+
+{% block content %}
+<div id="onecol">
+<section>
+<article class="donations">
+
+<h1>Thank you for your generosity.</h1>
+{% if frequency == 'once' %}
+<p>Your donation of ${{ dollar_amount }} has been processed successfully. You should
+recieve a receipt via e-mail.</p>
+{% elif frequency == 'monthly' %}
+<p>Your donation plan of ${{ dollar_amount }} per month has been processed successfully. You should
+receieve a receipt via e-mail each time your card is charged. If you ever need to cancel
+this plan, please contact SuttaCentral.</p>
+
+<p> You’ve just helped bring the Dhamma to people all over the world.</p>
+{% endif %}
+<p></p>
+</article>
+</section>
+</div>
+{%- endblock %}

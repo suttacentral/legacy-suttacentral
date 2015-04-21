@@ -9,20 +9,9 @@
 <h1>SuttaCentral Donations</h1>
 <p>Your donation is greatly appreciated, and will support the ongoing development and improvement of SuttaCentral. We want to continue bring the Buddha’s word to people all around the world.</p>
 
-<style>
-
-
-
-</style>
-{% if stripe_key %}
-<form id="stripe-form" action="/donations" method="post">
-<span class="currency-input">
-$<input name="sum" value=25>
-</span>
-<script src="https://checkout.stripe.com/checkout.js"></script>
-<button id="customButton" class="donate-button">Give Now</button>
+<form action="donate/plan" method="post">
+<button class="donate-button">Give Now</button>
 </form>
-{% endif %}
 
 <p>SuttaCentral Development Trust Account is open with Adelaide Bendigo community sector banking, which has ethical and environmentally-friendly investment policies.</p>
 
@@ -61,38 +50,3 @@ $<input name="sum" value=25>
 </section>
 </div>
 {%- endblock %}
-
-{% block foot_jq %}
-
-<script>
-    var handler = StripeCheckout.configure({
-        key: '{{stripe_key}}',
-        image: '/img/icon.png',
-        token: function(token) {
-            $('#stripe-form')
-                .append($('<input type="hidden" name="token-id">').attr('value', token.id))
-                .append($('<input type="hidden" name="token-email">').attr('value', token.email))
-                .submit();
-        }
-    });
-    
-    $("[name=sum").on('change', function(){
-        if ($(this).val() < 5) {
-            $(this).val(5);
-        }
-    })
-
-    $('#customButton').on('click', function(e) {
-        var amount = $("[name=sum]").val() * 100;
-        $('#stripe-form').append($('<input type="hidden" name="amount">').attr('value', amount));
-        handler.open({
-            name: "Sutta Central",
-            description: "Donation for Development",
-            amount: amount
-        });
-        e.preventDefault();
-        e.attr('disabled', 'disabled');        
-    });
-
-</script>
-{% endblock %}

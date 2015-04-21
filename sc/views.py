@@ -9,6 +9,8 @@ import time
 import json
 import urllib.parse
 
+from uuid import uuid4
+
 from webassets.ext.jinja2 import AssetsExtension
 
 import sc
@@ -721,6 +723,41 @@ class SuttaInfoView(ViewBase):
         context.partial_parallels = [ll for ll in parallels if ll.partial]
         context.base_url = sc.config.app['base_url']
 
+class DonationsPlanView(ViewBase):
+    template_name = 'donate/plan'
+    
+    def __init__(self, **kwargs):
+        pass
+    
+    def setup_context(self, context):
+        context.idempotent_key = uuid4()
+        context.stripe_publishable_key = sc.config.app['stripe_publishable_key']
+            
+class DonationsPaymentView(ViewBase):
+    template_name = 'donate/payment'
+    
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+    
+    def setup_context(self, context):
+        context.kwargs = self.kwargs
+        context.update(self.kwargs)
+        context.stripe_publishable_key = sc.config.app['stripe_publishable_key']
+            
+class DonationsConfirmView(ViewBase):
+    template_name = 'donate/confirm'
+    
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs   
+    
+    def setup_context(self, context):
+        context.update(self.kwargs)
+        context.kwargs = self.kwargs
+        context.stripe_publishable_key = sc.config.app['stripe_publishable_key']
+            
+class DonationsErrorView(ViewBase):
+    template_name = 'donate/error'
+
 class DonationsResultView(ViewBase):
     template_name = 'donations_result'
     
@@ -733,7 +770,7 @@ class DonationsResultView(ViewBase):
         else:
             context.paid = self.result['paid']
             context.amount_in_dollars = int(self.result['amount']) / 100
-
+            c
 class AdminIndexView(InfoView):
     """The view for the admin index page."""
 

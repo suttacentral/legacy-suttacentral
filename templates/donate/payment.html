@@ -1,0 +1,42 @@
+
+{% extends "base.html" -%}
+{% block content %}
+
+<div id="onecol">
+<section>
+<article class="donations">
+{% if frequency == "once" %}
+<p>You are making a <strong>one-off</strong> donation of <strong>${{dollar_amount}}</strong>.</p>
+{% elif frequency == "monthly" %}
+<p>You are setting up a regular donation of <strong>${{dollar_amount}}</strong> per month.</p>
+{% endif %}
+<form id="stripe-form" action="/donate/confirm" method="post">
+<input type="hidden" name="idempotent_key" value="{{idempotent_key}}">
+<input type="hidden" name="dollar_amount" value="{{dollar_amount}}">
+<input type="hidden" name="amount" value="{{amount}}">
+<input type="hidden" name="frequency" value="{{frequency}}">
+<input name="name" placeholder="Name (optional)">
+<input name="message" placeholder="Message (optional)">
+<script
+    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="pk_test_bbUdUv1oPr8ykcAY49ylnufV"
+    data-image="/img/icon.png"
+    data-name="SuttaCentral"
+    {% if frequency == 'once' %}
+    data-description="Donation"
+    {% elif frequency == 'monthly' %}
+    data-description="Monthly Donation"
+    {% endif %}
+    data-currency="aud"
+    data-amount="{{amount}}"
+    data-panel-label="Donate {{'{{amount}}'}} {% if frequency=='monthly' %} (monthly) {%endif%}"
+    data-label="Pay with Card">
+</script>
+
+</form>
+<em><small>SuttaCentral does not handle or store your Credit Card details,
+all credit card transactions are handled securely by Stripe.</small></em>
+</article>
+</section>
+</div>
+{% endblock %}
