@@ -2,6 +2,8 @@
 {% extends "base.html" -%}
 {% block content %}
 
+{% set free_gift_eligable = (dollar_amount|int >= 100) or (frequency == 'monthly' and dollar_amount|int >= 10) %}
+
 <div id="onecol">
 <section>
 <article class="donations">
@@ -12,33 +14,110 @@
 <p>You are setting up a regular donation of <strong>${{dollar_amount}} per month</strong>.</p>
 {% endif %}
 <form id="stripe-form" action="/donate/confirm" method="post">
+{% if not free_gift_eligable %}
+<input type="hidden" name="free_gift" value="not_eligable">
+{% endif %}
 <input type="hidden" name="idempotent_key" value="{{idempotent_key}}">
 <input type="hidden" name="dollar_amount" value="{{dollar_amount}}">
 <input type="hidden" name="amount" value="{{amount}}">
 <input type="hidden" name="frequency" value="{{frequency}}">
-<input name="name" placeholder="Name (optional)">
-<input name="address" placeholder="Address (optional)">
+{% if free_gift_eligable %}
+<p>You are eligable to receive a free copy of <em>The Verses of the Senior Monks</em></p>
+<div class="fancy-tick">
+<label><input data-required="Please select whether you would like to receive the free gift" type="radio" name="free_gift" value="accepted" required><span><span></span></span>Yes Please</label>
+<label><input type="radio" name="free_gift" value="declined" required><span><span></span></span>No Thanks</label>
+</div>
+{% endif %}
+<input name="name" data-required="Please enter your name" placeholder="Name (optional)">
+<input name="address" data-required="Please enter your address" placeholder="Address (optional)">
 <input name="message" placeholder="Message (optional)">
-<script
-    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="pk_test_bbUdUv1oPr8ykcAY49ylnufV"
-    data-image="/img/icon.png"
-    data-name="SuttaCentral"
-    {% if frequency == 'once' %}
-    data-description="Donation"
-    {% elif frequency == 'monthly' %}
-    data-description="Monthly Donation"
-    {% endif %}
-    data-currency="aud"
-    data-amount="{{amount}}"
-    data-panel-label="Donate {{'{{amount}}'}} {% if frequency=='monthly' %} (monthly) {%endif%}"
-    data-label="Pay with Card">
-</script>
-
+<noscript>
+<p style="color:red">Online Payment requires Javascript</p>
+</noscript>
 </form>
 <p><em><small>SuttaCentral does not handle or store your credit card details.<br>
 All credit card transactions are handled securely by <a href="https://stripe.com/au" target="_blank">Stripe</a>.</small></em></p>
 </article>
 </section>
 </div>
+{% endblock %}
+
+{% block foot_jq %}
+<script src="https://checkout.stripe.com/checkout.js"></script>
+<script>
+$('[name=free_gift]').on('change', function(){
+    var e = $(this);
+    console.log(e);
+    if (e.val() == 'accepted') {
+        $('[name=name], [name=address]').attr('required', 'required');
+        $('[name=name]').attr('placeholder', 'Name (required)');
+        $('[name=address]').attr('placeholder', 'Address (required)');
+        $('button[type=submit]').attr('disabled', 'disabled');
+    } else {
+        $('[name=name], [name=address]').removeAttr('required');
+        $('[name=name]').attr('placeholder', 'Name (optional)');
+        $('[name=address]').attr('placeholder', 'Address (optional)');
+        $('button[type=submit]').removeAttr('disabled');
+    }
+});
+
+$('label > [type=radio]').on('change', function(){
+    $(this).parent().siblings().removeClass('checked')
+    $(this).parent().addClass('checked')
+})
+
+var handler = StripeCheckout.configure({
+    key: "pk_test_bbUdUv1oPr8ykcAY49ylnufV",
+    image: "/img/icon.png",
+    token: function(token) {
+        $('#stripe-form').append('<input type="hidden" name="stripeToken" value="' + token.id + '">')
+                         .append('<input type="hidden" name="stripeEmail" value="' + token.email + '">')
+                         .submit();
+    }
+});
+
+$('#stripe-form').append('<button id="customButton" class="stripe-button-el">Pay with Card</button>');
+    
+$('#stripe-form button').on('click', function(e) {
+    e.stopPropagation();
+    
+    var required = $('[required]').not(function(){
+        var self = $(this),
+            named = $('[name=' + self.attr('name') + ']');
+        if (self.attr('type') == 'radio' || self.attr('type') == 'checkbox') {
+            if (named.filter(function(){return $(this).prop('checked')}).length) {
+                return true
+            }
+        } else {
+            if (named.val()) {
+                return true
+            }
+        }
+        return false
+    });
+    
+    if (required.length) {
+        $('#required').remove();
+        var note = $('<ul id="required"></ul>');
+        $('#stripe-form').append(note);
+        required.filter('[data-required]').each(function(){
+            note.append('<li>' + $(this).attr('data-required'));
+        })
+        return false
+    }
+        
+    handler.open({
+        name: "SuttaCentral",
+        {% if frequency == 'once' %}
+        description: "Donation",
+        {% elif frequency == 'monthly' %}
+        description: "Monthly Donation",
+        {% endif %}
+        currency: "aud",
+        amount: "{{amount}}",
+        'panel-label': "Donate {{'{{amount}}'}} {% if frequency=='monthly' %} (monthly) {%endif%}"
+    })
+    return false
+});
+</script>
 {% endblock %}

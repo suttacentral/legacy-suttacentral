@@ -130,7 +130,11 @@ class ViewBase:
     """
 
     env = jinja2_environment()
-
+    
+    @property
+    def should_fix_whitespace(self):
+        return not self.template_name.endswith('.txt')
+    
     @property
     def template_name(self):
         """Return the template name for this view."""
@@ -138,7 +142,11 @@ class ViewBase:
 
     def get_template(self):
         """Return the Jinja2 template for this view."""
-        return self.env.get_template(self.template_name + ".html")
+        template_name = self.template_name
+        if '.' not in template_name:
+            template_name += ".html"
+        
+        return self.env.get_template(template_name)
 
     def setup_context(self, context):
         """Optional method for subclasses to assign additional context
@@ -149,7 +157,13 @@ class ViewBase:
     def get_global_context(self):
         """Return a dictionary of variables accessible by all templates."""
         nonfree_fonts = config.nonfree_fonts
-        if cherrypy.request.offline:
+        offline = True
+        try:
+            offline = cherrypy.request.offline
+        except AttributeError:
+            offline = True
+
+        if offline:
             if not config.always_nonfree_fonts:
                 nonfree_fonts = False
                 
@@ -160,7 +174,7 @@ class ViewBase:
             'development_bar': config.development_bar,
             'newrelic_browser_timing': NewRelicBrowserTimingProxy(),
             'nonfree_fonts': nonfree_fonts,
-            'offline': cherrypy.request.offline,
+            'offline': offline,
             'page_lang': 'en',
             'scm': scm,
             'embed': 'embed' in cherrypy.request.params,
@@ -190,7 +204,10 @@ class ViewBase:
             raise cherrypy.HTTPError(500, message)
         context = self.get_global_context()
         self.setup_context(context)
-        return self.massage_whitespace(template.render(dict(context)))
+        string = template.render(dict(context))
+        if self.should_fix_whitespace:
+            string = self.massage_whitespace(string)
+        return string
 """
 ['__cause__', '__class__', '__context__', '__delattr__', '__dict__',
 '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__',
@@ -202,6 +219,19 @@ class ViewBase:
 'translated', 'with_traceback']
 
 """
+
+class GenericView(ViewBase):
+    def __init__(self, page_name, context):
+        self.page_name = page_name
+        self.context = context
+    
+    @property
+    def template_name(self):
+        return self.page_name
+
+    def setup_context(self, context):
+        context.update(self.context)
+
 class InfoView(ViewBase):
     """A simple view that renders the template page_name; mostly used for
     static pages."""
@@ -694,6 +724,8 @@ class ShtLookupView(ViewBase):
             raise cherrypy.HTTPRedirect(self.redir_url, 302)
 
 class SuttaCitationView(ViewBase):
+    
+    should_fix_whitespace = False
 
     def __init__(self, sutta):
         self.sutta = sutta
@@ -703,6 +735,8 @@ class SuttaCitationView(ViewBase):
 
     def setup_context(self, context):
         context.sutta = self.sutta
+        
+    
 
 class SuttaInfoView(ViewBase):
     template_name = 'sutta_info'

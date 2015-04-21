@@ -1,0 +1,11 @@
+A new donation has been received:
+Amount: {% if frequency == 'once' %}{{dollar_amount}}{% elif frequency == 'monthly' %}{{dollar_amount}} per month{% endif %}
+Email:   {{email}}
+Name:    {{name}}
+Address: {{address}}
+Message: {{message}}
+
+{% if free_gift != 'not_eligable' %}
+This donation is eligable for a complimentary copy of the Theragatha {% if free_gift == 'accepted' %} and the user has requested they be sent the copy.{% elif free_gift == 'declined' %}but the user declined the offer.{% endif %}
+{% endif %}
+

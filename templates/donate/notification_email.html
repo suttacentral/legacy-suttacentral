@@ -1,0 +1,27 @@
+<div>
+<div style="width: 100%; background: #eee8aa; border-bottom: 4px solid #9B0F00; ">
+<img style="width: 50%" src="https://raw.githubusercontent.com/suttacentral/suttacentral/master/static/img/suttacentral-site-title-icon.png" alt="SuttaCentral">
+</div>
+<p>A new donation has been received:
+<table>
+<tr><td>Amount</td> 
+{% if frequency == 'once' %}
+<td>{{dollar_amount}}</td></tr>
+{% elif frequency == 'monthly' %}
+<td><strong>{{dollar_amount}} per month</strong></td></tr>
+{% endif %}
+<tr><td>Email:</td><td><pre>{{email}}</pre></td></tr>
+<tr><td>Name:</td><td><pre>{{name}}</pre></td></tr>
+<tr><td>Address:</td><td><pre>{{address}}</pre></td></tr>
+<tr><td>Message:</td><td><pre>{{message}}</pre></td></tr>
+</table>
+{% if free_gift != 'not_eligable' %}
+<p>This donation is eligable for a complimentary copy of the Theragatha
+{% if free_gift == 'accepted' %}
+ <strong>and the user has requested they be sent the copy.</strong>
+{% elif free_gift == 'declined' %}
+ but the user declined the offer.
+{% endif %}
+</p>
+{% endif %}
+</div>
