@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 import sc
 
 def send(to, subject, from_address=None, text=None, html=None):
+    
     msg = MIMEMultipart('alternative')
     
     msg['Subject'] = subject
@@ -21,6 +22,9 @@ def send(to, subject, from_address=None, text=None, html=None):
     
     smtp_server = sc.config.email['smtp_server']
     smtp_port = sc.config.email['smtp_port']
+    
+    if smtp_server is None:
+        return
     
     s = smtplib.SMTP(smtp_server, smtp_port)
     s.login(username, password)
