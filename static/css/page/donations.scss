@@ -59,17 +59,20 @@ label.frequency.checked {
 	 display: inline-block;
 	font-size:120%;
 	font-family: 'Source Sans Pro', sans-serif;
-	background:$dark-saturated-green;
-	color:white;
-	padding: 6px 10px;
-	border-radius:3px;
+	background:$bright-pastel-green;
+	color:$dark-medium-gray;
+	border-radius:50%;
+	height:4em;
+	width:4em;
 	border:none;
 	box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-	width:6.3em;
+	
+
 }
 
 .currency-input + button:hover{
 	background:$saturated-green;
+	color:white;
 }
 .currency-input + button:active{
 	background:$bright-saturated-green;
