@@ -165,8 +165,8 @@ def donate(page, **kwargs):
             result.update(kwargs)
             return DonationsConfirmView(**result).render()
         raise cherrypy.NotFound()
-    except:
-        sc.donations.stripe.error.InvalidRequestError
+    except sc.donations.stripe.error.InvalidRequestError:
+        raise
 
 def sutta_info(uid, lang='en'):
     try:

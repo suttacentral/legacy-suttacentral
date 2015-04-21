@@ -28,7 +28,7 @@ $<input name="dollar_amount" required>
 
 {% block foot_jq %}
 <script>
-    $("[name=sum").on('change', function(){
+    $("[name=dollar_amount").on('change', function(){
         var dollarAmount = Number($(this).val());
         if (isNaN(dollarAmount)) {
             $(this).val(null);
