@@ -12,13 +12,13 @@
 <form action="/donate/payment" method="post">
 <input type="hidden" name="idempotent_key" value="{{idempotent_key}}">
 <div class="frequency-options">
-<label class="frequency checked"><input type="radio" name="frequency" value="once" checked>One-time</label>
-<label class="frequency"><input type="radio" name="frequency" value="monthly">Monthly</label>
+<label class="frequency checked"><input type="radio" name="frequency" value="once" checked><span><span></span></span>One-time</label>
+<label class="frequency"><input type="radio" name="frequency" value="monthly"><span><span></span></span>Monthly</label>
 </div>
 <span class="currency-input">
 $<input name="dollar_amount" required>
 </span>
-<button>Proceed</button>
+<button>Next →</button>
 </form>
 
 </article>
