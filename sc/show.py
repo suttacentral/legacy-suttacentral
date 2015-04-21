@@ -124,6 +124,9 @@ def default(*args, **kwargs):
         canonical = False if len(args) == 3 else True
         if 'raw' in kwargs:
             return TextRawView(uid, lang_code).render()
+        if 'edit' in kwargs:
+            if sc.config.app['editor']:
+                return EditView(sutta, lang_code, canonical).render()
             
         if sutta:
             return SuttaView(sutta, lang, canonical).render()
@@ -162,8 +165,8 @@ def donate(page, **kwargs):
             result.update(kwargs)
             return DonationsConfirmView(**result).render()
         raise cherrypy.NotFound()
-    except:
-        sc.donations.stripe.error.InvalidRequestError
+    except sc.donations.stripe.error.InvalidRequestError:
+        raise
 
 def sutta_info(uid, lang='en'):
     try:

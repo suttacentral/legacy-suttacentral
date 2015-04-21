@@ -439,6 +439,12 @@ class TextRawView(TextView):
     def render(self):
         return self.get_html()
 
+class EditView(TextView):
+    template_name = 'editor'
+    def setup_context(self, context):
+        context.filename = self.path
+        return
+
 class TextSelectionView(TextView):
     template_name = 'paragraph'
     
