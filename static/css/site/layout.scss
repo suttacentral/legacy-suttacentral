@@ -27,10 +27,6 @@ body {
     height: 100%;
     margin: 0 auto -$footer-height;
 
-    @include if-screen-narrower($small-width) {
-        margin-bottom: -$mobile-footer-height;
-    }
-
     @media print {
         min-height: inherit;
         height: inherit !important;
@@ -41,23 +37,16 @@ body {
     width: 100%;
     height: $footer-height;
 
-    @include if-screen-narrower($small-width) {
-        height: $mobile-footer-height;
-    }
-
     @media print {
         display: none;
     }
 }
 
+
 #onecol, #twocol, #main_content, #text {
     margin: 0 auto;
     max-width: $page-max-width;
     clear: both;
-
-    @include if-screen-narrower($med-width) {
-        max-width: inherit;
-    }
 }
 
 main {
@@ -71,14 +60,6 @@ main {
 #home-methodology {
     margin: $main-top-margin auto;
     max-width: 640px;
-    @include if-screen-between($small-width, $med-width) {
-        margin: $tablet-main-top-margin 10%;
-        max-width: inherit;
-    }
-
-    @include if-screen-narrower($small-width) {
-        margin: $mobile-main-top-margin $mobile-main-side-margin;
-    }
 }
 
 #onecol > table, #main_search_results {
@@ -91,39 +72,12 @@ main {
         max-width: 60%;
         margin: $main-top-margin 2em;
         margin-left: 0;
-
-        @include if-screen-between($small-width, $med-width) {
-            margin: $tablet-main-top-margin 1em;
-            margin-left: 0;
-        }
-
-        @include if-screen-narrower($small-width) {
-            float: inherit;
-            max-width: inherit;
-            margin: $mobile-main-top-margin $mobile-main-side-margin;
-        }
     }
 
     aside {
         float: left;
         max-width: 25%;
         margin: $main-top-margin 2em;
-
-        @include if-screen-between($small-width, $med-width) {
-            margin: $tablet-main-top-margin 1em;
-        }
-
-        @include if-screen-narrower($small-width) {
-            float: inherit;
-            max-width: inherit;
-            margin: $mobile-main-top-margin $mobile-main-side-margin;
-        }
-    }
-}
-
-#text {
-    @include if-screen-narrower($small-width) {
-        margin-bottom: 2em;
     }
 }
 

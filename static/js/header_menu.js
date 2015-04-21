@@ -107,11 +107,13 @@ setTimeout(function(){
 
     //  If click on the search-popup-btn, then add classes to configure the layout properly
     $('.search-popup-btn').on('click', function() {
-        $('.search-popup-btn, #page-header-search input, .search-submit').addClass('search-box-popup');
+        $('#menu').addClass('search-box-popup');
         $('#page-header-search input').focus();
         $('#page-header-search input').one('focusout', function(event) {
-            // on focusout, lets remove the classes
-            $('.search-popup-btn, #page-header-search input, .search-submit').removeClass('search-box-popup');
+            // on focusout, lets remove the classes (after .25 seconds to make sure search is triggered properly)
+            setTimeout(function() {
+                $('#menu').removeClass('search-box-popup');
+            }, 250);
         });
     });
 

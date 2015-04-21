@@ -43,7 +43,7 @@ sc.sidebar = {
             sc.trackEvent($clicked.text());
         });
         
-        $('#sidebar-dongle').on('click',
+        $('#sidebar-dongle, #sidebar-dongle-header').on('click',
             function(){
                 if (self.isVisible()) {
                     self.hide();
@@ -67,7 +67,8 @@ sc.sidebar = {
         }
     },
     setReady: function() {
-        this.node[0].style.visibility = 'visible';        
+        this.node[0].style.visibility = 'visible';
+        $('#sidebar-dongle-header').addClass("enabled");
     },
     isVisible: function() {
         return this.node.hasClass('active');

@@ -1,0 +1,306 @@
+//  IMPORTANT:  The usage of these $breakpoints should be 'mobile first', meaning that if a new page is deisgned,
+//              Make it look good on the smallest screen possible, then increase the width until the design looks
+//              bad and then add or adjust the $breakpoint variables below.  Terms like "mobile" and "tablet" are not
+//              used (but still defined for legacy purposes) since it is the screen size that matters and 
+//              devices will be changing in the future.
+
+
+/*
+    BREAKPOINTS
+*/
+//  These are the standard breakpoints used within the $breakpointNames definition below
+$small-width:   480px;
+$med-width:     908px;
+$large-width:   1200px;
+
+//  These are breakpoints that fall between the standard breakpoints above
+$header-small-width:     550px;
+$header-large-width:     800px;
+
+/*
+    MIXINS
+*/
+@mixin if-screen-between($min-width, $max-width, $orientation: false) {
+    @if $orientation {
+        @media screen and (min-width: $min-width) and (max-width: $max-width)
+        and (orientation:#{$orientation}) {
+            @content;
+        }
+    }
+    @else {
+        @media screen and (min-width: $min-width) and (max-width: $max-width) {
+            @content;
+        }
+    }
+}
+
+@mixin if-screen-wider($width) {
+    @media screen and (min-width: $width) {
+        @content;
+    }
+}
+
+@mixin if-screen-narrower($width) {
+    @media screen and (max-width: $width) {
+        @content;
+    }
+}
+
+
+
+/*
+    BETWEEN BREAKPOINTs:  $small-width and $med-width
+*/
+@include if-screen-between($small-width, $med-width) {
+    #onecol article,
+    #text article,
+    #home-start,
+    #home-read,
+    #home-methodology {
+        margin: $tablet-main-top-margin 10%;
+        max-width: inherit;
+    }
+
+    #twocol {
+        article {
+            margin: $tablet-main-top-margin 1em;
+            margin-left: 0;
+        }
+        aside {
+            margin: $tablet-main-top-margin 1em;
+        }
+    }
+
+    td, th {
+        padding: 0.25em 0.5em;
+    }
+}
+
+
+/*
+    FOR BREAKPOINT:  $small-width
+*/
+@include if-screen-wider($small-width) {        //  WIDER
+    body {
+        line-height: 1.5;
+    }
+    p, ul {
+        margin-bottom: 1em;
+    }
+    #page-footer {
+        height: $footer-height;
+    }
+    #home {
+        margin: 6em auto 0 !important;
+        padding: 0 5% !important;
+        .epigraph-reference {
+            margin-top: -1em;
+        }
+    }
+    #intro {
+        .wheel1 {
+            font-size: 18em;
+        }
+        .wheel2 {
+            font-size: 20em;
+        }
+        .wheel3 {
+            font-size: 21em;
+        }
+        .image-home {
+            width: 50%;
+            float: right;
+            margin: 0 0 2em 2em;
+        }
+        .image-home-big {
+            width: 70%;
+            float: right;
+            margin: 0 0 2em 2em;
+        }
+    }
+    .abhidhamma {
+        width: 60% !important;
+        ul {
+            width: 60% !important;
+        }
+    }
+}
+
+@include if-screen-narrower($small-width) {    //  NARROWER
+    #page-wrap {
+        margin-bottom: -$mobile-footer-height;
+    }
+    #page-footer-push {
+        height: $mobile-footer-height;
+    }
+    #onecol article,
+    #text article,
+    #home-start,
+    #home-read,
+    #home-methodology {
+        margin: $mobile-main-top-margin $mobile-main-side-margin;
+    }
+    #twocol {
+        article {
+            float: inherit;
+            max-width: inherit;
+            margin: $mobile-main-top-margin $mobile-main-side-margin;
+        }
+        aside {
+            float: inherit;
+            max-width: inherit;
+            margin: $mobile-main-top-margin $mobile-main-side-margin;
+        }
+    }
+    #text {
+        margin-bottom: 2em;
+    }
+    caption {
+        margin-left: 1em;
+        text-align: left;
+    }
+    td, th {
+        max-width:8em;
+        padding: 0.25em 0.25em;
+        overflow:hidden;
+    }
+    td:nth-child(3), th:nth-child(3) {
+        display:none;
+    }
+    td:nth-child(2){
+        -webkit-mask-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);
+    }
+    .sutta {
+        padding: 0 !important;
+    }
+    #sidebar-dongle {
+        margin-left:-30px;
+        text-align:right;
+        padding:0 0.1em 0 0;
+        width: auto;
+    }
+}
+
+
+/*
+    FOR BREAKPOINT:  $med-width
+*/
+@include if-screen-wider($med-width) {        //  WIDER
+    #intro {
+         .image-home {
+            width: 35%;
+            float: right;
+            margin: 0 0 2em 2em;
+        }
+        .image-home-big {
+            width: 50%;
+            float: right;
+            margin: 0 0 2em 2em;
+        }
+    }
+}
+
+@include if-screen-narrower($med-width) {           //  NARROWER
+    #onecol, #twocol, #main_content, #text {
+        max-width: inherit;
+    }
+}
+
+
+/*
+    FOR BREAKPOINT:  $header-large-width
+*/
+@include if-screen-narrower($header-large-width) {  //  NARROWER
+    #title {
+        display: none;
+    }
+    .header-left-home-icon {
+        width: $header-left-width-narrow;
+    }
+    .header-right-menus-search {
+        margin-left: $header-left-width-narrow;
+    }
+}
+@include if-screen-wider($header-large-width) {     //  WIDER
+    #title {
+        display: inline;
+    }
+    .header-left-home-icon {
+        width: $header-left-width;
+    }
+    .header-right-menus-search {
+        margin-left: $header-left-width;
+    }
+}
+
+/*
+    FOR BREAKPOINT:  $header-small-width
+*/
+@include if-screen-wider($header-small-width) {     //  WIDER
+    .header-menu-container ul li {
+        width: 20%;
+        &:last-child {
+            width: 40%;
+        }
+    }
+    .search-submit {
+        background-color: initial;
+    }
+}
+
+
+@include if-screen-narrower($header-small-width) {    //  NARROWER
+    #page-header-search {
+        input,
+        .search-submit {
+            display: none;
+        }
+    }
+    .search-popup-btn {
+        display: inline-block;
+    }
+    .header-menu-container ul li {
+        width: 29%;
+        &:last-child {
+            width: 13%;
+        }
+    }
+    .search-box-popup {
+        .header-left-home-icon {
+            border-right: none;
+            width: $header-left-width-very-narrow;
+            a {
+                display: none;
+            }
+        }
+        .header-right-menus-search {
+            margin-left: $header-left-width-very-narrow;
+        }
+        #page-header-search {
+            input {
+                width: 100%;
+                display: block;
+            }
+            .search-submit {
+                display: inline;
+            }
+        }
+        .search-popup-btn {
+            display: none;
+        }
+        .header-menu-container ul li {
+            width: 0px;
+            display: none;
+
+            &:last-child {
+                display: initial;
+                width: 100%;
+
+                form {
+                    padding-left: 28px; //  Compensates for padding and margin on input box
+                }
+            }
+        }
+    }
+}
+

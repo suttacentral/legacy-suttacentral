@@ -1,73 +1,37 @@
 <header>
-<!--div id="title-group">
-	<a href="/">
-	<div id="wheel">☸</div>
-		<h1 id="title">SuttaCentral</h1>
-	</a>
-</div-->
-<!--div id="menu">
-        {% for pitaka_menu in menu %}
-            <nav class="pitaka_menu{{ ' active' if pitaka and pitaka.uid == pitaka_menu.pitaka.uid else '' }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
-                <a href="/{{pitaka_menu.pitaka.uid}}"><h1>{{ pitaka_menu.pitaka.name }}</h1></a>
-            </nav>
-        {% endfor %}
-</div--><!-- page-header-menu -->
-<div id="menu">
-
-	<div class="header-right-wrapper">
-		<div class="header-right-menus-search">
-	<div class="breadcrumb">
-		<!-- <span class="left"></span> -->
-		<ul>
-<!-- 			<li>
-				<a href="/">
-					<div id="wheel">☸</div>
-					<h1 id="title">SuttaCentral</h1>
-				</a>
-			</li> -->
-				{% for pitaka_menu in menu %}
-	            <li class="pitaka_menu{{ ' active' if pitaka and pitaka.uid == pitaka_menu.pitaka.uid else '' }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
-	                <a href="/{{pitaka_menu.pitaka.uid}}">{{ pitaka_menu.pitaka.name }}</a>
-	            </li>
-				{% endfor %}
-			{% if not offline %}
-			<li>
-				<form id="page-header-search" action="/search">
-				    <input type="text" name="query" tabindex="1" 
-				        placeholder="" autocomplete="off" value="">
-				    <button class="search-submit" type="submit" title="Search"></button>
-				</form>
-				<button class="search-popup-btn" type="submit" title="Open Search Box"></button>
-			</li>
-			{% endif %}
-		</ul>
-		<!-- <span class="right"></span> -->
-	</div>	
-		</div>
-	</div>
-	<div class="header-left-home-icon">
-		<a href="/">
-			<div id="wheel">☸</div>
-			<h1 id="title">SuttaCentral</h1>
-		</a>
-	</div>
-
-<!--         {% for pitaka_menu in menu %}
-            <nav class="pitaka_menu{{ ' active' if pitaka and pitaka.uid == pitaka_menu.pitaka.uid else '' }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
-                <a href="/{{pitaka_menu.pitaka.uid}}"><h1>{{ pitaka_menu.pitaka.name }}</h1></a>
-            </nav>
-        {% endfor %} -->
-</div>
-<!-- page-header-menu -->
-<!-- 
-{% if not offline %}
-
-<form id="page-header-search" action="/search">
-    <input type="text" name="query" tabindex="1" 
-        placeholder="" autocomplete="off" value="">
-    <button class="search-submit" type="submit" title="Search"></button>
-</form>
-{% endif %}
- -->
-<div class="#panel-screen-wrap"><div id="page-header-search-results" style="display: none;"></div></div>
+    <!-- page-header-menu -->
+    <div id="menu">
+        <div class="header-right-wrapper">
+            <div class="header-right-menus-search">     <!-- RIGHT column, holds menus and search box -->
+                <div class="header-menu-container">     <!-- Menus -->
+                    <ul>
+                        {% for pitaka_menu in menu %}
+                            <li class="pitaka_menu{{ ' active' if pitaka and pitaka.uid == pitaka_menu.pitaka.uid else '' }}" id="home-{{ pitaka_menu.pitaka.name|lower }}">
+                                <a href="/{{pitaka_menu.pitaka.uid}}">{{ pitaka_menu.pitaka.name }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if not offline %}            <!-- Search -->
+                            <li>
+                                <form id="page-header-search" action="/search">
+                                    <input type="text" name="query" tabindex="1" 
+                                    placeholder="" autocomplete="off" value="">
+                                    <button class="search-submit" type="submit" title="Search"></button>
+                                </form>
+                                <button class="search-popup-btn" type="submit" title="Open Search Box"></button>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>	
+            </div>
+        </div>
+        <div class="header-left-home-icon">             <!-- LEFT column, holds home page and menu icons -->
+           <!--  <a href="#" class="hamburger">≡</a> -->         <!-- Side Panel Toggle Button -->
+            <div id="sidebar-dongle-header">≡</div>
+            <a href="/">
+                <div id="wheel">☸</div>
+                <h1 id="title">SuttaCentral</h1>
+            </a>
+        </div>
+    </div>
+    <div class="#panel-screen-wrap"><div id="page-header-search-results" style="display: none;"></div></div>
 </header>

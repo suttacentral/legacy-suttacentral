@@ -7,11 +7,6 @@ table {
 caption {
     margin: 0 0 1em 0;
     white-space: normal;
-    
-    @include if-screen-narrower($small-width) {
-        margin-left: 1em;
-        text-align: left;
-    }
 }
 
 tr:nth-child(even) {
@@ -40,24 +35,4 @@ td > a:hover:not(.bib):not(.note) {
 
 .tdindent {
     padding-left: 3em;
-}
-
-@include if-screen-between($small-width, $med-width) {
-    td, th {
-        padding: 0.25em 0.5em;
-    }
-}
-
-@include if-screen-narrower($small-width) {
-    td, th {
-        max-width:8em;
-        padding: 0.25em 0.25em;
-        overflow:hidden;
-    }
-    td:nth-child(3), th:nth-child(3) {
-        display:none;
-    }
-    td:nth-child(2){
-        -webkit-mask-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);
-    }
 }

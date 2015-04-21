@@ -221,6 +221,31 @@ $sidebar-dongle-width: 1em;
     }
 }
 
+#sidebar-dongle-header {
+    position: static;
+    font-size: 2rem;
+    color: white;
+    height: 20px;
+    width: 20px;
+    background: #607A6F;
+    z-index: -1;
+    line-height: 17px;
+    box-shadow: 0.03em 0.02em 0.15em rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: 400ms ease-out;
+    border-radius: 2px 2px 2px 2px;
+    padding-left: 1px;
+    margin: 0 5px 0 0;
+    display: inline-block;
+    vertical-align: middle;
+    opacity: 0.4;
+
+    &.enabled {
+        opacity: 1.0;
+    }
+}
+
+
 #sidebar-dongle {
     position: absolute;
     top:50%;
@@ -238,13 +263,6 @@ $sidebar-dongle-width: 1em;
     cursor: pointer;
     transition: 400ms ease-out;
     border-radius: 0px 3px 3px 0px;
-
-    @include if-screen-narrower($small-width) {
-        margin-left:-30px;
-        text-align:right;
-        padding:0 0.1em 0 0;
-        width: auto;
-    }
 }
 
 .active {

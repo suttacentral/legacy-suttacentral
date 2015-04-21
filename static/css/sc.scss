@@ -15,16 +15,8 @@
     width: 100% !important;
     margin: 0 auto;
 
-    @include if-screen-wider($small-width) {
-        width: 60% !important;
-    }
-
     ul {
         width: 29% !important;
-
-        @include if-screen-wider($small-width) {
-            width: 60% !important;
-        }
     }
 }
 

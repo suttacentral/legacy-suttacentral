@@ -6,9 +6,6 @@
     background-color: ns-color(footer-background-color);
     white-space:nowrap;
 
-    @include if-screen-wider($small-width) {
-        height: $footer-height;
-    }
     @media print {
         display: none;
     }
