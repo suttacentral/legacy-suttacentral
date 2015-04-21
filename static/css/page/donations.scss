@@ -3,20 +3,31 @@ label.frequency {
     width: 5em;
     height: 1em;
     padding: 0.5em;
-    border-radius: 4px;
+    border-radius: 3px;
+    vertical-align: top;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    margin:0 1em;
 }
 
 label.frequency.checked {
-    background: $light-pastel-purple;
+    background: $bright-saturated-purple;
 }
 
+.frequency-options{
+	font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;
+    text-transform: lowercase;
+       color: white;
+       margin:0 0 2em 0;
+       font-size:120%;
 
+
+}
 #stripe-form {
     margin: 1em auto 2em;
     text-align: center;
 }
 
-.currency-input  {
+#stripe-form input,.currency-input  {
     padding:  3px 6px;
     font-size:  120%;
     display: inline-block;
@@ -25,7 +36,16 @@ label.frequency.checked {
     border-radius: 3px;
     box-shadow:  0px 0px 3px black inset;
     background: #fff;
-    margin: 0.5em 1em 0 0;
+    margin: 0.5em 2em 0 0;
+}
+
+#stripe-form input  {
+	font-size:  100%;
+    margin:  0 0 1em 0;
+    border:  none;
+    outline:  none;
+    width:  100%;
+    display:block;
 }
 
 .currency-input > input  {
@@ -33,6 +53,92 @@ label.frequency.checked {
     border:  none;
     outline:  none;
     width:  5em;
+}
+
+.currency-input + button{
+	 display: inline-block;
+	font-size:120%;
+	font-family: 'Source Sans Pro', sans-serif;
+	background:$bright-pastel-green;
+	color:$dark-medium-gray;
+	border-radius:50%;
+	height:4em;
+	width:4em;
+	border:none;
+	box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+	
+
+}
+
+.currency-input + button:hover{
+	background:$saturated-green;
+	color:white;
+}
+.currency-input + button:active{
+	background:$bright-saturated-green;
+}
+
+form{
+	text-align:center;
+	margin:2em 0;
+}
+
+
+input[type=checkbox]:not(old),
+input[type=radio   ]:not(old){
+  width     : 2em;
+  margin    : 0;
+  padding   : 0;
+  font-size : 1em;
+  opacity   : 0;
+}
+
+input[type=radio   ]:not(old){
+  display      : inline-block;
+  margin-left  : -2em;
+  line-height  : 1.5em;
+}
+
+input[type=radio]:not(old)  + span{
+  display          : inline-block;
+  width            : 0.875em;
+  height           : 0.875em;
+  margin           : 0.25em 0.5em 0.25em 0.25em;
+  border           : 0.0625em solid rgb(192,192,192);
+  border-radius    :50%;
+  background       : rgb(224,224,224);
+  background-image :    -moz-linear-gradient(rgb(240,240,240),rgb(224,224,224));
+  background-image :     -ms-linear-gradient(rgb(240,240,240),rgb(224,224,224));
+  background-image :      -o-linear-gradient(rgb(240,240,240),rgb(224,224,224));
+  background-image : -webkit-linear-gradient(rgb(240,240,240),rgb(224,224,224));
+  background-image :         linear-gradient(rgb(240,240,240),rgb(224,224,224));
+  vertical-align   : bottom;
+}
+
+input[type=radio   ]:not(old):checked + span{
+  background-image :    -moz-linear-gradient(rgb(224,224,224),rgb(240,240,240));
+  background-image :     -ms-linear-gradient(rgb(224,224,224),rgb(240,240,240));
+  background-image :      -o-linear-gradient(rgb(224,224,224),rgb(240,240,240));
+  background-image : -webkit-linear-gradient(rgb(224,224,224),rgb(240,240,240));
+  background-image :         linear-gradient(rgb(224,224,224),rgb(240,240,240));
+}
+
+input[type=radio]:not(old):checked +  span:before{
+  content     : '✓';
+  display     : block;
+  width       : 1em;
+  font-size   : 0.875em;
+  color:$dark-saturated-green;
+  line-height : 1em;
+  text-align  : center;
+  font-weight : bold;
+}
+
+.anumodana{
+	text-align:center;
+	font-size:2em;
+	font-style:italic;
+	margin:2em;
 }
 
 
@@ -94,3 +200,4 @@ label.frequency.checked {
     background: $bright-saturated-green;
     box-shadow: 1px 1px 5px rgba(200,200,200,1);
 }
+

@@ -5,10 +5,11 @@
 <div id="onecol">
 <section>
 <article class="donations">
+<h1>SuttaCentral Donations</h1>
 {% if frequency == "once" %}
 <p>You are making a <strong>one-off</strong> donation of <strong>${{dollar_amount}}</strong>.</p>
 {% elif frequency == "monthly" %}
-<p>You are setting up a regular donation of <strong>${{dollar_amount}}</strong> per month.</p>
+<p>You are setting up a regular donation of <strong>${{dollar_amount}} per month</strong>.</p>
 {% endif %}
 <form id="stripe-form" action="/donate/confirm" method="post">
 <input type="hidden" name="idempotent_key" value="{{idempotent_key}}">
@@ -16,6 +17,7 @@
 <input type="hidden" name="amount" value="{{amount}}">
 <input type="hidden" name="frequency" value="{{frequency}}">
 <input name="name" placeholder="Name (optional)">
+<input name="name" placeholder="Address (optional)">
 <input name="message" placeholder="Message (optional)">
 <script
     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -34,8 +36,8 @@
 </script>
 
 </form>
-<em><small>SuttaCentral does not handle or store your Credit Card details,
-all credit card transactions are handled securely by Stripe.</small></em>
+<p><em><small>SuttaCentral does not handle or store your credit card details.<br>
+All credit card transactions are handled securely by <a href="https://stripe.com/au" target="_blank">Stripe</a>.</small></em></p>
 </article>
 </section>
 </div>
