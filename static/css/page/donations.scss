@@ -158,11 +158,11 @@ input[type=radio]:not(old):checked +  span:before{
     line-height: 1;
 }
 
-.donate-button: hover {
+.donate-button:hover {
     background: $saturated-green;
     box-shadow: 1px 1px 5px rgba(200,200,200,1);
 }
-.donate-button: active {
+.donate-button:active {
     background: $bright-saturated-green;
     box-shadow: 1px 1px 5px rgba(200,200,200,1);
 }
