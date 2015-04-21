@@ -7,6 +7,9 @@ label.frequency {
     vertical-align: top;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
     margin:0 1em;
+    @media #{$mobile} {
+        margin:0 0.2em;
+    }
 }
 
 label.frequency.checked {
