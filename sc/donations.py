@@ -36,7 +36,8 @@ def donate_once(stripeToken, stripeEmail, amount, name, message, **kwargs):
                     'email': stripeEmail,
                     'message': message,
                     'address': kwargs['address'],
-                    'free_gift': kwargs['free_gift']}
+                    'free_gift': kwargs['free_gift'],
+                    'test': stripe.api_key.startswith('sk_test')}
         notify(details)
         return details
     except stripe.error.CardError:
@@ -57,7 +58,8 @@ def donate_monthly(stripeToken, stripeEmail, amount, name, message, **kwargs):
                     'email': stripeEmail,
                     'message': message,
                     'address': kwargs['address'],
-                    'free_gift': kwargs['free_gift']}
+                    'free_gift': kwargs['free_gift'],
+                    'test': stripe.api_key.startswith('sk_test')}
         notify(details)
         
         return details
