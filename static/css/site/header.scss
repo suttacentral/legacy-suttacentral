@@ -4,7 +4,7 @@ $header-border-width:       4px;
 $panel-offset-top:          $header-height + $header-padding - 2px;
 
 $header-left-width:             240px;
-$header-left-width-narrow:      70px;
+$header-left-width-narrow:      68px;
 $header-left-width-very-narrow: 40px;
 $hamburger-font-size:           14px;
 
@@ -65,46 +65,47 @@ header {
         float: left;
         width: 100%;
     }
-    nav {
-        display: inline-block;
-        text-align: center;
-        float: left;
-        border-left: 1px solid misc-color(medium-gray);
-        border-right: 1px solid misc-color(medium-gray);
-        margin-right: -1px;
-        height: $header-height;
-        line-height: $header-height;
-    }
-    nav:last-child {
-        border-right: 1px solid misc-color(medium-gray);
-    }
-    nav:hover {
-        background: white;
-        height: $header-height;
-    }
-    nav.active {
-        background: white;
-        height: 40px;
-    }
-    nav {
-        > a {
-            display: inline-block;
-            width: 100%;
-            height: 100%;
-            > h1 {
-                position: relative;
-                @include sans-serif-small-caps;
-                display: inline;
-                font-weight: normal;
-                font-size: 1em;
-                color: misc-color(dark-medium-gray);
-                text-transform: lowercase;
-                letter-spacing: 0.02em;
-            }
-        }
-    }
+    // nav {
+    //     display: inline-block;
+    //     text-align: center;
+    //     float: left;
+    //     border-left: 1px solid misc-color(medium-gray);
+    //     border-right: 1px solid misc-color(medium-gray);
+    //     margin-right: -1px;
+    //     height: $header-height;
+    //     line-height: $header-height;
+    // }
+    // nav:last-child {
+    //     border-right: 1px solid misc-color(medium-gray);
+    // }
+    // nav:hover {
+    //     background: white;
+    //     height: $header-height;
+    // }
+    // nav.active {
+    //     background: white;
+    //     height: 40px;
+    // }
+    // nav {
+    //     > a {
+    //         display: inline-block;
+    //         width: 100%;
+    //         height: 100%;
+    //         > h1 {
+    //             position: relative;
+    //             @include sans-serif-small-caps;
+    //             display: inline;
+    //             font-weight: normal;
+    //             font-size: 1em;
+    //             color: misc-color(dark-medium-gray);
+    //             text-transform: lowercase;
+    //             letter-spacing: 0.02em;
+    //         }
+    //     }
+    // }
     #page-header-search input {
         @include sans-serif;
+        display: none;
         padding: 0 0.5em;
         height: 24px;
         border: solid 1px misc-color(light-medium-gray);
@@ -125,14 +126,15 @@ header {
 
 .search-submit,
 .search-popup-btn {
-    display: inline-block;
+    // display: inline-block;
+    display: none;  //  This will be adjusted based on screen width in media-repsonsive.scss
     font-size: 1em;
     width: 10px;
     height: 10px;
     border: 2px solid misc-color(medium-gray);
     position: absolute;
     border-radius: 50%;
-    right: 14px;
+    right: 16px;
     top: 10px;
     background: 0;
     padding: 0;
@@ -161,6 +163,9 @@ header {
     &:hover::after {
         border: 2px solid misc-color(medium-gray);
     }
+}
+.search-popup-btn {
+    display: inline-block;
 }
 
 #panel-screen-wrap {
@@ -321,14 +326,24 @@ header {
 
 .header-left-home-icon {
     float: left;
-    // width: $header-left-width;
+    width: $header-left-width-very-narrow;
+    height: $header-height;
     margin-left: -100%;
     text-align: center;
-    border-right: 1px solid #767676;
+
+    a {
+        position: absolute;
+        left: 5px;
+    }
 }
+
 .header-right-wrapper {
     float: left;
     width: 100%;
+
+    .header-right-menus-search {
+        margin-left: $header-left-width-very-narrow;
+    }
 }
 
 .header-menu-container {
@@ -344,13 +359,14 @@ header {
 
         li {
             padding: 0;
-            margin: 0 0 0 -1px;     //  The '-1' compensates for the width of the right border for % calculations
+            // margin: 0 0 0 -1px;     //  The '-1' compensates for the width of the right border for % calculations
             list-style: none;
             float: left;
             // width: 20%;
             height: 36px;
             display:inline;
-            border-right: 1px solid #767676;
+            margin-left: -1px;
+            // border-right: 1px solid #767676;
 
             a {
                 line-height: 36px;
@@ -364,7 +380,8 @@ header {
                 text-transform: lowercase;
                 letter-spacing: 0.02em;
                 outline: none;
-
+                border-right: 1px solid #767676;
+                border-left: 1px solid #767676;
                 a:hover {
                     color: #565656;
                 }
@@ -384,8 +401,6 @@ header {
             }
             &:hover {
                 background: white;
-                border-left: 1px solid #767676;
-                margin: 0 0 0 -2px;
             }
             &.active {
                 background: white;

@@ -222,62 +222,75 @@ $sidebar-dongle-width: 1em;
 }
 
 #sidebar-dongle-header {
-    position: static;
+    position: absolute;
+    height: $header-height;
+    width: 37px;
+    margin: 0;
+    left: -4px;
+    line-height: $header-height;
+    z-index: 1;
     font-size: 2rem;
     color: white;
-    height: 20px;
-    width: 20px;
     background: #607A6F;
-    z-index: -1;
-    line-height: 17px;
     box-shadow: 0.03em 0.02em 0.15em rgba(0, 0, 0, 0.15);
     cursor: pointer;
     transition: 400ms ease-out;
     border-radius: 2px 2px 2px 2px;
     padding-left: 1px;
-    margin: 0 5px 0 0;
-    display: inline-block;
+    display: none;
     vertical-align: middle;
-    opacity: 0.4;
-
-    &.enabled {
-        opacity: 1.0;
-    }
+    // opacity: 0.4;
 }
 
-
-#sidebar-dongle {
-    position: absolute;
-    top:50%;
-    bottom:50%;
-    font-size:2rem;
-    color:white;
-    left: $sidebar-width;
-    height: 40px;
-    width: 40px;
-    background: pastel-color(dirty-green);
-    z-index: -1;
-    line-height:1.0;
-    box-shadow: 0.03em 0.02em 0.15em rgba(0,0,0,0.15);
-    text-align:center;
-    cursor: pointer;
-    transition: 400ms ease-out;
-    border-radius: 0px 3px 3px 0px;
-}
-
-.active {
-    #sidebar-dongle {
-        margin-left: 0px;
-        transition: 400ms ease-out;
-        box-shadow: none;
-        z-index: 1;
-        width: 22px;
+.show-dongle {
+    #sidebar-dongle-header {
+        display: inline-block;
     }
-    &.fast {
-        #sidebar-dongle, #darkness {
-            transition: none;
+    .header-left-home-icon {
+        a {
+            left: 37px;
         }
     }
+    .header-left-home-icon {
+        width: $header-left-width-narrow;
+    }
+    .header-right-menus-search {
+        margin-left: $header-left-width-narrow;
+    }
+}
+
+// #sidebar-dongle {
+//     position: absolute;
+//     top:50%;
+//     bottom:50%;
+//     font-size:2rem;
+//     color:white;
+//     left: $sidebar-width;
+//     height: 40px;
+//     width: 40px;
+//     background: pastel-color(dirty-green);
+//     z-index: -1;
+//     line-height:1.0;
+//     box-shadow: 0.03em 0.02em 0.15em rgba(0,0,0,0.15);
+//     text-align:center;
+//     cursor: pointer;
+//     transition: 400ms ease-out;
+//     border-radius: 0px 3px 3px 0px;
+// }
+
+.active {
+    // #sidebar-dongle {
+    //     margin-left: 0px;
+    //     transition: 400ms ease-out;
+    //     box-shadow: none;
+    //     z-index: 1;
+    //     width: 22px;
+    // }
+    // &.fast {
+    //     #sidebar-dongle, #darkness {
+    //         transition: none;
+    //     }
+    // }
     #darkness {
         background: rgba(0, 0, 0, 0.1);
         transition: 400ms ease-out;

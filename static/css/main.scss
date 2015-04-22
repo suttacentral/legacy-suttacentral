@@ -50,11 +50,11 @@
 // Unconverted styles
 @import 'sc';
 
-// Add print at the end to override any screen styles
-@import 'print';
-
 // Add screen size and other media specific defintions and overrides
 @import 'media-responsive';
+
+// Add print at the end to override any screen styles
+@import 'print';
 
 //Vendor
 @import 'vendor/jquery.dropdown.css'

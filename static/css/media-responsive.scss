@@ -1,14 +1,13 @@
 //  IMPORTANT:  The usage of these $breakpoints should be 'mobile first', meaning that if a new page is deisgned,
 //              Make it look good on the smallest screen possible, then increase the width until the design looks
 //              bad and then add or adjust the $breakpoint variables below.  Terms like "mobile" and "tablet" are not
-//              used (but still defined for legacy purposes) since it is the screen size that matters and 
-//              devices will be changing in the future.
+//              used since it is the screen size that matters and devices will be changing in the future.
 
 
 /*
     BREAKPOINTS
 */
-//  These are the standard breakpoints used within the $breakpointNames definition below
+//  These are the standard breakpoints
 $small-width:   480px;
 $med-width:     908px;
 $large-width:   1200px;
@@ -183,6 +182,90 @@ $header-large-width:     800px;
 
 
 /*
+    FOR BREAKPOINT:  $header-small-width
+*/
+@include if-screen-wider($header-small-width) {     //  WIDER
+    header #page-header-search {
+        input,
+        .search-submit {
+            display: inline-block;
+        }
+    }
+    .search-popup-btn {
+        display: none;
+    }
+    .header-menu-container ul li {
+        width: 16%;
+        &:nth-child(3) {
+            width: 28%;
+        }
+        &:last-child {
+            width: 40%;
+        }
+    }
+    .search-submit {
+        background-color: initial;
+    }
+}
+
+
+@include if-screen-narrower($header-small-width) {    //  NARROWER
+    // #page-header-search {
+    //     input,
+    //     .search-submit {
+    //         display: none;
+    //     }
+    // }
+    // .search-popup-btn {
+    //     display: inline-block;
+    // }
+    .header-menu-container ul li {
+        width: 25%;
+        &:nth-child(3) {
+            width: 37%;
+        }
+        &:last-child {
+            width: 13%;
+        }
+        // width: 29%;
+        // &:last-child {
+        //     width: 13%;
+        // }
+    }
+    .search-box-popup {
+        #page-header-search {
+            input {
+                display: block;
+                width: 100%;
+            }
+            .search-submit {
+                display: inline;
+            }
+        }
+        .search-popup-btn {
+            display: none;
+        }
+        .header-menu-container ul li {
+            transition: 400ms ease-out;
+            width: 0px;
+            a {
+                display: none;
+            }
+
+            &:last-child {
+                display: initial;
+                width: 100%;
+
+                form {
+                    padding-left: 28px; //  Compensates for padding and margin on input box
+                }
+            }
+        }
+    }
+}
+
+
+/*
     FOR BREAKPOINT:  $med-width
 */
 @include if-screen-wider($med-width) {        //  WIDER
@@ -214,93 +297,45 @@ $header-large-width:     800px;
     #title {
         display: none;
     }
-    .header-left-home-icon {
-        width: $header-left-width-narrow;
-    }
-    .header-right-menus-search {
-        margin-left: $header-left-width-narrow;
-    }
 }
 @include if-screen-wider($header-large-width) {     //  WIDER
     #title {
         display: inline;
     }
-    .header-left-home-icon {
-        width: $header-left-width;
-    }
-    .header-right-menus-search {
-        margin-left: $header-left-width;
-    }
-}
-
-/*
-    FOR BREAKPOINT:  $header-small-width
-*/
-@include if-screen-wider($header-small-width) {     //  WIDER
     .header-menu-container ul li {
+
+
+
         width: 20%;
+        &:nth-child(3) {
+            width: 20%;
+        }
         &:last-child {
             width: 40%;
         }
-    }
-    .search-submit {
-        background-color: initial;
-    }
-}
 
 
-@include if-screen-narrower($header-small-width) {    //  NARROWER
-    #page-header-search {
-        input,
-        .search-submit {
-            display: none;
-        }
+
+
+        // width: 20%;
+        // &:last-child {
+        //     width: 40%;
+        // }
     }
-    .search-popup-btn {
-        display: inline-block;
+    .header-left-home-icon {
+        width: $header-left-width - 30;
     }
-    .header-menu-container ul li {
-        width: 29%;
-        &:last-child {
-            width: 13%;
-        }
+    .header-right-wrapper .header-right-menus-search {
+        margin-left: $header-left-width - 30;
     }
-    .search-box-popup {
+    .show-dongle {
         .header-left-home-icon {
-            border-right: none;
-            width: $header-left-width-very-narrow;
-            a {
-                display: none;
-            }
+            width: $header-left-width;
         }
-        .header-right-menus-search {
-            margin-left: $header-left-width-very-narrow;
-        }
-        #page-header-search {
-            input {
-                width: 100%;
-                display: block;
-            }
-            .search-submit {
-                display: inline;
-            }
-        }
-        .search-popup-btn {
-            display: none;
-        }
-        .header-menu-container ul li {
-            width: 0px;
-            display: none;
-
-            &:last-child {
-                display: initial;
-                width: 100%;
-
-                form {
-                    padding-left: 28px; //  Compensates for padding and margin on input box
-                }
-            }
+        .header-right-wrapper .header-right-menus-search {
+            margin-left: $header-left-width;
         }
     }
 }
+
 

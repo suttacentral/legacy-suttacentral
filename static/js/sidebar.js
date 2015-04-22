@@ -43,7 +43,8 @@ sc.sidebar = {
             sc.trackEvent($clicked.text());
         });
         
-        $('#sidebar-dongle, #sidebar-dongle-header').on('click',
+        // $('#sidebar-dongle, #sidebar-dongle-header').on('click',
+        $('#sidebar-dongle-header').on('click',
             function(){
                 if (self.isVisible()) {
                     self.hide();
@@ -67,8 +68,8 @@ sc.sidebar = {
         }
     },
     setReady: function() {
-        this.node[0].style.visibility = 'visible';
-        $('#sidebar-dongle-header').addClass("enabled");
+        // this.node[0].style.visibility = 'visible';
+        $('#menu').addClass("show-dongle");
     },
     isVisible: function() {
         return this.node.hasClass('active');
