@@ -6,6 +6,6 @@ Address: {{address}}
 Message: {{message}}
 
 {% if free_gift != 'not_eligable' %}
-This donation is eligable for a complimentary copy of the Theragatha {% if free_gift == 'accepted' %} and the user has requested they be sent the copy.{% elif free_gift == 'declined' %}but the user declined the offer.{% endif %}
+This donation is eligible for a complimentary copy of Verses of the Senior Monks {% if free_gift == 'accepted' %} and the user has requested they be sent the copy.{% elif free_gift == 'declined' %}but the user declined the offer.{% endif %}
 {% endif %}
 
