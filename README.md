@@ -7,7 +7,7 @@ Source code to [suttacentral.net](http://suttacentral.net/): early Buddhist text
 ## Setup
 
 See the [setup page on the
-Wiki](https://github.com/suttacentral/suttacentral/wiki/Setup).
+Wiki](https://github.com/suttacentral/suttacentral/wiki/06.01-SC-Developer-Setup).
 
 ## Running
 
@@ -18,4 +18,4 @@ Then visit <http://localhost:8800/>.
 ## Additional Help
 
 See the [tasks page on the
-Wiki](https://github.com/suttacentral/suttacentral/wiki/Tasks).
+Wiki](https://github.com/suttacentral/suttacentral/wiki/06.07-Tasks).
