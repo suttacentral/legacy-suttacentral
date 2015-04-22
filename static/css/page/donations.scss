@@ -16,7 +16,7 @@
 }
 
 #stripe-form > input  {
-	font-size:  100%;
+  font-size:  100%;
     margin:  0 0 1em 0;
     border:  none;
     outline:  none;
@@ -36,31 +36,31 @@
 }
 
 .currency-input + button{
-	 display: inline-block;
-	font-size:120%;
-	font-family: 'Source Sans Pro', sans-serif;
-	background:$bright-pastel-green;
-	color:$dark-medium-gray;
-	border-radius:50%;
-	height:4em;
-	width:4em;
-	border:none;
-	box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-	
+   display: inline-block;
+  font-size:120%;
+  font-family: 'Source Sans Pro', sans-serif;
+  background:$bright-pastel-green;
+  color:$dark-medium-gray;
+  border-radius:50%;
+  height:4em;
+  width:4em;
+  border:none;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  
 
 }
 
 .currency-input + button:hover{
-	background:$saturated-green;
-	color:white;
+  background:$saturated-green;
+  color:white;
 }
 .currency-input + button:active{
-	background:$bright-saturated-green;
+  background:$bright-saturated-green;
 }
 
 form{
-	text-align:center;
-	margin:2em 0;
+  text-align:center;
+  margin:2em 0;
 }
 
 
@@ -85,13 +85,19 @@ form{
         border-radius: 3px;
         vertical-align: top;
         box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+<<<<<<< HEAD
+        
+=======
         margin: 0;
+>>>>>>> 10a4e4576ba1e2dde709a814936d0bad708cb676
     }
 
     label.checked {
         background: $bright-saturated-purple;
     }
-    
+  >  label{
+    margin:0 0.7em 0 0;
+    }
     input[type=checkbox],
     input[type=radio   ]{
       width     : 2em;
@@ -144,10 +150,10 @@ form{
 }
 
 .anumodana{
-	text-align:center;
-	font-size:2em;
-	font-style:italic;
-	margin:2em;
+  text-align:center;
+  font-size:2em;
+  font-style:italic;
+  margin:2em;
 }
 
 
@@ -190,31 +196,8 @@ ul#required {
     background: $pastel-red;
     padding: 1em;
     border: 1px solid $dark-pastel-red;
+
+    >form{
+  margin:0;
 }
-
-.footer-donate {
-    text-align: center;
-    margin-bottom: 1.5em;
-    color: white;
 }
-
-.footer-donate-button {
-    background: $dark-saturated-green;
-    padding: 0.5em 1em;
-    border-radius: 3px;
-    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-    border: 1px solid $dark-pastel-red;
-    
-}
-
-.footer-donate-button: hover {
-    background: $saturated-green;
-    box-shadow: 1px 1px 5px rgba(200,200,200,1);
-}
-
-.footer-donate-button: active {
-    background: $bright-saturated-green;
-    box-shadow: 1px 1px 5px rgba(200,200,200,1);
-}
-
-
