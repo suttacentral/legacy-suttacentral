@@ -67,7 +67,7 @@ $('label > [type=radio]').on('change', function(){
 })
 
 var handler = StripeCheckout.configure({
-    key: "pk_test_bbUdUv1oPr8ykcAY49ylnufV",
+    key: "{{stripe_publishable_key}}",
     image: "/img/icon.png",
     token: function(token) {
         $('#stripe-form').append('<input type="hidden" name="stripeToken" value="' + token.id + '">')
