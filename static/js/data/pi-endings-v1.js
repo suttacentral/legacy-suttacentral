@@ -1,5 +1,5 @@
 /* This file was created manually */
-sc.data.piEndings = [
+sc.piLookup.register({script: 'endings', data: [
 ['i',1,0,''],
 ['u',1,0,''],
 ['ati',1,0,''],
@@ -311,4 +311,4 @@ sc.data.piEndings = [
 ['essaṁ',1,2,'ti'],
 ['essāma',1,2,'ti'],
 ['issanti',0,3,'ati'],
-];
+]});

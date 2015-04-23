@@ -271,13 +271,9 @@ sc.init = function(reset)
     }
     
     if (sc.mode.pali === true) {
-        var lookupToLang = sc.userPrefs.getPref('lookupToLang'),
-            translitFunc = null;
+        var translitFunc = null;
             prefscript = sc.userPrefs.getPref("script");
 
-        if (lookupToLang) {
-            $('#lookup-to-lang').val(lookupToLang);
-        }
         if (prefscript){
             sc.mode.translitFunc = transFuncs[prefscript][0];
         } else {
@@ -295,7 +291,7 @@ sc.init = function(reset)
             {
                 toSyllablesInit();
             }
-            enablePaliLookup(true);
+            sc.piLookup.enablePaliLookup(true);
         } else {
             transliterate(sc.mode.translitFunc);
         }

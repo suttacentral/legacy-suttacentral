@@ -87,7 +87,7 @@ sc.sidebar = {
     },
     bindButtons: function(){
         $('#text-info').click(toggleTextualInfo);
-        $('#pali-lookup').click(togglePaliLookup);
+        $('#pali-lookup').click(_.bind(sc.piLookup.togglePaliLookup, sc.piLookup));
         for (f in transFuncs) {
             $('#' + f).click(transliterateHandler);
         }

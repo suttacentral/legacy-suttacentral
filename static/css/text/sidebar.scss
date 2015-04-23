@@ -52,39 +52,52 @@ $sidebar-dongle-width = 1em;
         }
     }
 
-    .button {
+    .button, .dropdown-button {
         background:white;
         color:$dark-medium-gray;
         display:inline-block;
         text-align:center;
-        float:left;
         height: 2.5em;
         line-height: 2.5em;
         box-sizing: border-box;
         cursor: pointer;
+        width: 100%;
+        
+        &:active {
+            background:$light-gray;
+        }
+        
+        &:hover:not(.empty) {
+            background:$light-light-gray;
+        }
+    }
+    
+    .dropdown-button.lookup-inactive {
 
+    }
+    .dropdown-button.lookup-active {
+        box-shadow: 1px 1px 3px black inset;
+    }
+    
+    .button {
+        float:left;
+        
         // Distinguish between buttons which are hyperlinks and buttons
         // which are not hyperlinks.
         &:not(:link) {
             cursor: default;
         }
-        &:hover:not(.empty) {
-            background:$light-light-gray;
-        }
-      
-        &:active {
-            background:$light-gray;
-        }
-        
+    
         & + .button {
             border-left: 1px solid $light-gray;
         }
-
-        .options {
-            display: none;
-        }
-        
     }
+    
+    /* For dropdown */
+    .dropdown-panel {
+        min-width:inherit;
+    }
+    
 
     input[name=text-selection-url] {
     font-size: 75%;
