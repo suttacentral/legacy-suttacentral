@@ -96,26 +96,43 @@ def default(*args, **kwargs):
         # New style urls have the language code first then the uid
         lang_code = args[0]
         uid = args[1]
+        
+        redirect = False
+        bookmark = None
 
         if not imm.text_exists(uid, lang_code):
-            redirect = False
             if imm.text_exists(lang_code, uid):
                 redirect = True
                 uid, lang_code = lang_code, uid
             elif lang_code == 'zh' and imm.text_exists(uid, 'lzh'):
                 redirect = True
                 lang_code = 'lzh'
-            if redirect:
-                # This is an old-style url, redirect to new-style url.
-                if len(args) == 2:
-                    new_url = '/{}/{}'.format(lang_code, uid)
-                else:
-                    new_url =  '/{}/{}/{}'.format(lang_code, uid, args[2])
-                # Don't be transparent, we want to keep things canonical
-                # and also, use 301. This is a permament change.
-                raise cherrypy.HTTPRedirect(new_url, 301)
             else:
                 raise cherrypy.NotFound()
+
+        textinfo = imm.tim.get(uid, lang_code)
+        if textinfo.file_uid != textinfo.uid:
+            redirect = True
+            uid = textinfo.file_uid
+            if textinfo.bookmark:
+                bookmark = textinfo.bookmark
+            else:
+                bookmark = textinfo.uid
+                
+        if redirect:
+            # This is an old-style url, redirect to new-style url.
+            if len(args) == 2:
+                new_url = '/{}/{}'.format(lang_code, uid)
+            else:
+                new_url =  '/{}/{}/{}'.format(lang_code, uid, args[2])
+            
+            if bookmark:
+                new_url += '#' + bookmark
+            
+            # Don't be transparent, we want to keep things canonical
+            # and also, use 301. This is a permament change.
+            raise cherrypy.HTTPRedirect(new_url, 301)
+        
         
         sutta = imm.suttas.get(uid)
         lang = imm.languages[lang_code]

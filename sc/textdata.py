@@ -44,7 +44,7 @@ def text_dir_md5(extra_files=[__file__]):
     return md5(array('Q', mtimes)).hexdigest()
 
 class TextInfo:
-    __slots__ = ('uid', 'lang', 'path', 'bookmark', 'name',
+    __slots__ = ('uid', 'file_uid', 'lang', 'path', 'bookmark', 'name',
                  'author', 'volpage', 'prev_uid', 'next_uid', 
                  'cdate', 'mdate')
 
@@ -71,6 +71,7 @@ class TextInfo:
 class TIMManager:
     instance = None
     db_name_tmpl = 'text-info-model_{}.pickle'
+    version = 1
     def __init__(self):
         self.instance = None
         self.ready = threading.Event()
@@ -79,7 +80,7 @@ class TIMManager:
     
     def get_db_name(self):
         files = sc.text_dir.glob('**/*.html')
-        mtime = int(max(file.stat().st_mtime for file in files))
+        mtime = self.version + int(max(file.stat().st_mtime for file in files))
         return self.db_name_tmpl.format(mtime)
     
     def load(self, obsolete_okay=False):
@@ -118,9 +119,10 @@ class TIMManager:
                 with file.open('rb') as f:
                     instance = pickle.load(f)
                 self._set_instance(instance)
-            except (EOFError, ValueError):
+            except (EOFError, ValueError, FileNotFoundError):
                 build_logger.info('{.name} is corrupt, removing'.format(best_file))
-                best_file.unlink()
+                if best_file.exists():
+                    best_file.unlink()
                 best_file = None
                 best_mtime = ''
         
@@ -189,6 +191,7 @@ class TextInfoModel:
     def __init__(self):
         self._by_lang = {}
         self._by_uid = {}
+        self._metadata = {}
     
     def build_process(self, percent):
         if percent % 10 == 0:
@@ -254,7 +257,28 @@ class TextInfoModel:
         if not self._ppn:
             self._ppn = PaliPageNumbinator()
         return self._ppn
-
+        
+    def add_metadata(self, filepath, author, metadata):
+        target = self._metadata
+        for part in filepath.parent.parts:
+            if part not in target:
+                target[part] = {}
+            target = target[part]
+        target['author'] = author
+        with (sc.text_dir / filepath).open('r') as f:
+            target['string'] = f.read()
+            
+    def get_metadata(self, filepath):
+        target = self._metadata
+        for part in filepath.parent.parts:
+            if part in target:
+                target = target[part]
+            else:
+                break
+        if target == self._metadata:
+            return None
+        return target
+    
     @staticmethod
     def uids_are_related(uid1, uid2, _rex=regex.compile(r'\p{alpha}*(?:-\d+)?')):
         # We will perform a simple uid comparison
@@ -280,7 +304,8 @@ class TextInfoModel:
         file_count = sum(1 for _ in sc.text_dir.glob('**/*.html'))
         for lang_dir in sc.text_dir.glob('*'):
             lang_uid = lang_dir.stem
-            files = sorted(lang_dir.glob('**/*.html'), key=lambda f: sc.util.numericsortkey(f.stem))
+            all_files = sorted(lang_dir.glob('**/*.html'), key=lambda f: sc.util.numericsortkey(f.stem))
+            files = [f for f in all_files if f.stem == 'metadata'] + [f for f in all_files if f.stem != 'metadata']
             for i, htmlfile in enumerate(files):
              try:
                 if not self._should_process_file(htmlfile, force):
@@ -288,7 +313,7 @@ class TextInfoModel:
                 logger.info('Adding file: {!s}'.format(htmlfile))
                 uid = htmlfile.stem
                 root = html.parse(str(htmlfile)).getroot()
-
+                
                 # Set the previous and next uids, using explicit data
                 # if available, otherwise making a safe guess.
                 # The safe guess relies on comparing uids, and will not
@@ -308,6 +333,22 @@ class TextInfoModel:
                 
                 path = htmlfile.relative_to(sc.text_dir)
                 author = self._get_author(root, lang_uid, uid)
+                
+                if uid == 'metadata':
+                    if author is None:
+                        raise ValueError('Metadata file {} does not define author'.format(path))
+                    self.add_metadata(path, author, root)
+                    continue
+                
+                if author is None:
+                    metadata = self.get_metadata(path)
+                    if metadata:
+                        author = metadata['author']
+                        
+                if author is None:
+                    logger.warn('Could not determine author for {}/{}'.format(lang_uid, uid))
+                    author = ''
+                
                 name = self._get_name(root, lang_uid, uid)
                 volpage = self._get_volpage(root, lang_uid, uid)
                 embedded = self._get_embedded_uids(root, lang_uid, uid)
@@ -321,17 +362,25 @@ class TextInfoModel:
                                     volpage=volpage, prev_uid=prev_uid,
                                     next_uid=next_uid,
                                     cdate=cdate,
-                                    mdate=mdate)
+                                    mdate=mdate,
+                                    file_uid=uid)
                 self.add_text_info(lang_uid, uid, textinfo)
 
                 for child in embedded:
                     child.path = path
                     child.author = author
+                    child.file_uid = uid
                     self.add_text_info(lang_uid, child.uid, child)
 
                 m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
                 if m:
-                    range_textinfo = TextInfo(uid=uid+'#', lang=lang_uid, path=path, name=name, author=author, volpage=volpage)
+                    range_textinfo = TextInfo(uid=uid+'#', 
+                    lang=lang_uid,
+                    path=path,
+                    name=name,
+                    author=author,
+                    volpage=volpage,
+                    file_uid=uid)
                     start = int(m[2])
                     end = int(m[3]) + 1
                     for i in range(start, end):
@@ -367,22 +416,19 @@ class TextInfoModel:
     _instance = None
     
     def _get_author(self, root, lang_uid, uid):
-        try:
-            e = root.select_one('meta[author]')
-            if e:
-                return e.attrib['author']
+        e = root.select_one('meta[author]')
+        if e:
+            return e.attrib['author']
+        
+        e = root.select_one('meta[data-author]')
+        if e:
+            return e.attrib['data-author']
             
-            e = root.select_one('meta[data-author]')
-            if e:
-                return e.attrib['data-author']
-                
-            e = root.select_one('#metaarea > .author')
-            if e:
-                return e.text
-            raise ValueError('No author found')
-        except Exception as e:
-            logger.warn('Could not determine author for {}/{}'.format(lang_uid, uid))
-            return ''
+        e = root.select_one('#metaarea > .author')
+        if e:
+            return e.text
+        return None
+
     
     def _get_name(self, root, lang_uid, uid):
         try:

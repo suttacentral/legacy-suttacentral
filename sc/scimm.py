@@ -745,19 +745,27 @@ class _Imm:
         nextdata = None
         prevdata = None
         
+        textdata = tim.get(uid=uid, lang_uid=lang_uid)
+        
         nextprev = soc.get(uid)
         if nextprev:
             # if the sutta data says that a sutta is the start/end of a 
             # division, we will trust it, hence we use 'False', for there
             # is no next/prev sutta, rather than 'None' for unknown.
-            nextdata = (tim.get(uid=nextprev.get('next'), lang_uid=lang_uid)
-                if 'next' in nextprev
-                else False)
-            prevdata = (tim.get(uid=nextprev.get('prev'), lang_uid=lang_uid)
-                        if 'prev' in nextprev
-                        else False)
+            if 'next' in nextprev:
+                nextdata = tim.get(uid=nextprev.get('next'), lang_uid=lang_uid)
+                if nextdata and textdata and nextdata.path == textdata.path:
+                    nextdata = None
+            else:
+                nextdata = False
+            if 'prev' in nextprev:
+                prevdata = tim.get(uid=nextprev.get('prev'), lang_uid=lang_uid)
+                if prevdata and textdata and prevdata.path == textdata.path:
+                    prevdata = None
+            else:
+                prevdata = False
     
-        textdata = tim.get(uid=uid, lang_uid=lang_uid)
+        
         if textdata:
             if nextdata is None and textdata.next_uid:
                 nextdata = tim.get(uid=textdata.next_uid, lang_uid=lang_uid)
