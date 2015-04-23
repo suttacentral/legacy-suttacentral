@@ -51,7 +51,7 @@ sc.piLookup.register({script: 'nl', data: {
 'ahimsaya rato':["Positieve vreugde vinden in geweldloosheid, vreugde vinden in het cultiveren van liefdevolle vriendelijkheid."],
 'ahirika anottappa':["'Gebrek aan morele schaamte en ontzag', zijn twee van de 4 onheilzame factoren die samengaan met karmische onheilzame staten van bewustzijn."],
 'ahirika':["'Gebrek aan morele schaamte'."],
-'aho sukham':[""Oh, wat een geluk!""],
+'aho sukham':['"Oh, wat een geluk!"'],
 'ajara':["Zonder ouderdom (of verval), d.w.z. Nibbana."],
 'ajata':["Zonder geboorte, d.w.z. Nibbana."],
 'ajatakasa':["Eindeloze ruimte."],

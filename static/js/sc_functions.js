@@ -147,12 +147,12 @@ sc.piLookup = {
             lang: 'id',
             name: 'Bahasa Indonesia',
             scriptUrl: 'data/pi2id-maindata-v1.js'
-        }/*, 
+        }, 
         {
             lang: 'nl',
             name: 'Nederlands',
             scriptUrl: 'data/pi2nl-maindata-v1.js'
-        }*/
+        }
     ],
     dataByName: {},
     data: null,     
