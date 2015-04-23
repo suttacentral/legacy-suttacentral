@@ -17,6 +17,7 @@ sc.headerMenu = {
 
         if (mode == "hide") {
             self.hideAll();
+            $('#panel').css({'height': 0}); //  Make sure animation always starts with closed menu (from the top down)
         }
         else {
             self.hideAll();
