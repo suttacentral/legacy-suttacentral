@@ -11,9 +11,9 @@ import sc.donations
 
 logger = logging.getLogger(__name__)
 
-STATIC_PAGES = ['about', 'abbreviations', 'bibliography', 'contacts', 'donations', 'help',
-                'methodology', 'sutta_numbering', 'copyright', 'colors',
-                'fonts']
+STATIC_PAGES = {file.stem + (file.suffix if file.suffix != '.html' else '') 
+                for file 
+                in (sc.templates_dir / 'static').glob('*.html')}
 
 def home():
     return InfoView('home').render()
@@ -46,7 +46,7 @@ def default(*args, **kwargs):
 
         # Static Pages
         if uid in STATIC_PAGES:
-            return InfoView(uid).render()
+            return InfoView('static/{}'.format(uid)).render()
 
         if uid in imm.pitakas:
             return PitakaView(imm.pitakas[uid]).render()
