@@ -169,22 +169,22 @@ header {
 }
 
 #panel-screen-wrap {
+    transition: visibility 400ms ease-out, opacity 400ms ease-out;
     position: fixed;
     top: $panel-offset-top;
     left: 0;
     bottom: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0);
-    z-index: -3;
+    background: rgba(0, 0, 0, 0.2);
+    visibility: hidden; //  makes panel 'see-through' to clicks, thus no need to adjust z-index which caused 'jumpiness'
     opacity: 0;
-    transition: z-index 400ms ease-out,opacity 400ms ease-out;
     display: block;
 }
 
 #panel-screen-wrap.active {
+    transition: visibility 400ms ease-out, opacity 400ms ease-out;
+    visibility: visible;
     opacity: 1;
-    background: rgba(0, 0, 0, 0.2);
-    transition: z-index 400ms ease-out,opacity 400ms ease-out;
     z-index: 3;
 }
 
@@ -207,6 +207,7 @@ header {
     // and not to the contents.
     display: block;
     opacity: 0;
+    height: 0px;
     transition: height 400ms ease-out;
     &.active {
         z-index: 5;
@@ -268,7 +269,7 @@ header {
         margin: 1em 0 0.5em 0.25rem;
     }
     h3 {
-        margin: 0;
+        margin: 0 0 0 0.2em;
     }
     .sect {
         margin: 0 0 1em 0;
@@ -405,6 +406,9 @@ header {
             &.active {
                 background: white;
                 height: 40px;
+                a {
+                    height: 40px;
+                }
             }
         }
     }

@@ -8,7 +8,11 @@ sc.headerMenu = {
     update: function(element, mode) {
         var self = sc.headerMenu,
             target = $(element.find('[href]').attr('href'));
-        
+
+        if (target.length < 1) {
+            target = element;
+        }
+
         if (mode === undefined && target.hasClass('active')) {
             mode = "hide";
         } else {
@@ -16,8 +20,13 @@ sc.headerMenu = {
         }
 
         if (mode == "hide") {
-            self.hideAll();
-            $('#panel').css({'height': 0}); //  Make sure animation always starts with closed menu (from the top down)
+            $('#panel').one("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(e){
+                if ($(e.currentTarget).hasClass('active')) {
+                    self.hideAll();
+                }
+            });
+            $('#panel-screen-wrap').removeClass('active');
+            $('#panel').css({'height': 0});
         }
         else {
             self.hideAll();
@@ -64,7 +73,7 @@ sc.headerMenu = {
         var self = sc.headerMenu,
             scrollTop = $(document.body).scrollTop(),
             scrollAmount = scrollTop - self.lastScreenScroll;
-
+console.log(scrollAmount);
         
         self.lastScreenScroll = scrollTop;
         if (scrollAmount > 0) {
@@ -79,19 +88,23 @@ sc.headerMenu = {
         }
         
         var now = e.timeStamp;
-        if (scrollAmount < 0) {
-            for (i = self.scrollEvents.length - 1; i >= 0 ; i--) {
-                oldE = self.scrollEvents[i];
-                
-                var diff = now - oldE[1];
-                if (diff > 500) {
-                    self.scrollEvents.pop()
-                } else if (diff > 100 && oldE[0] < 0) {
-                     $('header').removeClass('retracted');
-                     return
-                 }
-            }
+        if (scrollAmount < -3) {
+             $('header').removeClass('retracted');
+             return
         }
+        // if (scrollAmount < 0) {
+        //     for (i = self.scrollEvents.length - 1; i >= 0 ; i--) {
+        //         oldE = self.scrollEvents[i];
+                
+        //         var diff = now - oldE[1];
+        //         if (diff > 500) {
+        //             self.scrollEvents.pop()
+        //         } else if (diff > 100 && oldE[0] < 0) {
+        //              $('header').removeClass('retracted');
+        //              return
+        //          }
+        //     }
+        // }
         
 
         self.scrollEvents.push([scrollAmount, e.timeStamp]);
@@ -121,11 +134,13 @@ setTimeout(function(){
     $('#panel-screen-wrap').on('click', function(e) {
         if ($(e.target).is('a'))
             return true;
-        sc.headerMenu.hideAll();
+        // sc.headerMenu.hideAll();
+        sc.headerMenu.update($(e.target));
         return false
     }).on('mousewheel', function(e){
         if (e.target == this) {
-            sc.headerMenu.hideAll();
+            // sc.headerMenu.hideAll();
+            sc.headerMenu.update($(e.target));
             return false;
         }
         return true
