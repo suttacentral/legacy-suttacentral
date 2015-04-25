@@ -73,7 +73,6 @@ sc.headerMenu = {
         var self = sc.headerMenu,
             scrollTop = $(document.body).scrollTop(),
             scrollAmount = scrollTop - self.lastScreenScroll;
-console.log(scrollAmount);
         
         self.lastScreenScroll = scrollTop;
         if (scrollAmount > 0) {
@@ -124,10 +123,16 @@ setTimeout(function(){
         $('#menu').addClass('search-box-popup');
         $('#page-header-search input').focus();
         $('#page-header-search input').one('focusout', function(event) {
-            // on focusout, lets remove the classes (after .25 seconds to make sure search is triggered properly)
-            setTimeout(function() {
-                $('#menu').removeClass('search-box-popup');
-            }, 250);
+            // on focusout, setup a handler to be called on the input box *after* the transition animations complete
+            $('#page-header-search input').one("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(e){
+                $('#page-header-search input').removeClass('collapse-effect');
+                // Lets now remove the 'searc' class (after .25 seconds to make sure search is triggered properly)
+                // setTimeout(function() {
+                    $('#menu').removeClass('search-box-popup');
+                // }, 250);
+            });
+            //  Fire off the transition animation by adding the class (see handler above)
+            $('#page-header-search input').addClass('collapse-effect');
         });
     });
 

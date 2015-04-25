@@ -65,44 +65,7 @@ header {
         float: left;
         width: 100%;
     }
-    // nav {
-    //     display: inline-block;
-    //     text-align: center;
-    //     float: left;
-    //     border-left: 1px solid misc-color(medium-gray);
-    //     border-right: 1px solid misc-color(medium-gray);
-    //     margin-right: -1px;
-    //     height: $header-height;
-    //     line-height: $header-height;
-    // }
-    // nav:last-child {
-    //     border-right: 1px solid misc-color(medium-gray);
-    // }
-    // nav:hover {
-    //     background: white;
-    //     height: $header-height;
-    // }
-    // nav.active {
-    //     background: white;
-    //     height: 40px;
-    // }
-    // nav {
-    //     > a {
-    //         display: inline-block;
-    //         width: 100%;
-    //         height: 100%;
-    //         > h1 {
-    //             position: relative;
-    //             @include sans-serif-small-caps;
-    //             display: inline;
-    //             font-weight: normal;
-    //             font-size: 1em;
-    //             color: misc-color(dark-medium-gray);
-    //             text-transform: lowercase;
-    //             letter-spacing: 0.02em;
-    //         }
-    //     }
-    // }
+
     #page-header-search input {
         @include sans-serif;
         display: none;
@@ -115,11 +78,19 @@ header {
         float: right;
         margin-right: 5px;
         margin-top: 5px;
+        opacity: 1;
 
         &:focus {
             background: white;
             outline: none !important;
             border: solid 1px misc-color(dark-medium-gray);
+        }
+        &.collapse-effect {
+            position: absolute;
+            right: 0px;
+            width: 5%;
+            opacity: 0;
+            transition: 400ms ease-out;
         }
     }
 }

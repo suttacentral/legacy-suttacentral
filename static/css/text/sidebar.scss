@@ -1,8 +1,8 @@
 $sidebar-width: 20rem;
 $sidebar-tabs-height: 2.5em;
 $sidebar-tabs-vertical-padding: 0.4em;
-$sidebar-dongle-height: 40px;
-$sidebar-dongle-width: 1em;
+// $sidebar-dongle-height: 40px;
+// $sidebar-dongle-width: 1em;
 
 // Placeholder definitions
 %internal-page-links {
@@ -259,38 +259,7 @@ $sidebar-dongle-width: 1em;
     }
 }
 
-// #sidebar-dongle {
-//     position: absolute;
-//     top:50%;
-//     bottom:50%;
-//     font-size:2rem;
-//     color:white;
-//     left: $sidebar-width;
-//     height: 40px;
-//     width: 40px;
-//     background: pastel-color(dirty-green);
-//     z-index: -1;
-//     line-height:1.0;
-//     box-shadow: 0.03em 0.02em 0.15em rgba(0,0,0,0.15);
-//     text-align:center;
-//     cursor: pointer;
-//     transition: 400ms ease-out;
-//     border-radius: 0px 3px 3px 0px;
-// }
-
 .active {
-    // #sidebar-dongle {
-    //     margin-left: 0px;
-    //     transition: 400ms ease-out;
-    //     box-shadow: none;
-    //     z-index: 1;
-    //     width: 22px;
-    // }
-    // &.fast {
-    //     #sidebar-dongle, #darkness {
-    //         transition: none;
-    //     }
-    // }
     #darkness {
         background: rgba(0, 0, 0, 0.1);
         transition: 400ms ease-out;
