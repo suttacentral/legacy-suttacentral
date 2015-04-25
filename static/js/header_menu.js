@@ -1,6 +1,7 @@
 sc.headerMenu = {
     node: $('#panel-screen-wrap, #panel'),
     lastScreenScroll: 0,
+    animationDone: true,
     toggle: function(e){
         $(this).toggleClass('active');
         $('header .pitaka_menu').not(this).removeClass('active')
@@ -21,16 +22,21 @@ sc.headerMenu = {
 
         if (mode == "hide") {
             $('#panel').one("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(e){
-                if ($(e.currentTarget).hasClass('active')) {
+                if (!animationDone && $(e.currentTarget).hasClass('active')) {
                     self.hideAll();
+                    animationDone = true;
                 }
             });
-            $('#panel-screen-wrap').removeClass('active');
-            $('#panel').css({'height': 0});
+            if (animationDone) {
+                animationDone = false;
+                $('#panel-screen-wrap').removeClass('active');
+                $('#panel').css({'height': 0});
+            }
         }
         else {
+            animationDone = true;
             self.hideAll();
-            self.node.addClass('active')
+            self.node.addClass('active');
             target.addClass('active');
             element.addClass('active');
             setTimeout(self.adjustColumns, 50);

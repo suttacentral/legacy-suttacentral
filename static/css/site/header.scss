@@ -86,7 +86,7 @@ header {
             border: solid 1px misc-color(dark-medium-gray);
         }
         &.collapse-effect {
-            position: absolute;
+            position: relative;
             right: 0px;
             width: 5%;
             opacity: 0;
