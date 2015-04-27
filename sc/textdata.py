@@ -236,14 +236,7 @@ class TextInfoModel:
     def exists(self, uid=None, lang_uid=None):
         if uid is None and lang_uid is None:
             raise ValueError
-        if uid is None:
-            return lang_uid in self._by_lang
-        else:
-            return uid in self._by_uid
-        try:
-            return lang_uid in self._by_uid[uid]
-        except KeyError:
-            return False
+        return bool(self.get(uid, lang_uid))
 
     def add_text_info(self, lang_uid, uid, textinfo):
         if lang_uid not in self._by_lang:
