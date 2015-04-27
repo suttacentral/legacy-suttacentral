@@ -9,9 +9,9 @@
 <article class="donations">
 <h1>SuttaCentral Donations</h1>
 {% if frequency == "once" %}
-<p>You are making a <strong>one-off</strong> donation of <strong>${{dollar_amount}}</strong>.</p>
+<p>You are making a <strong>one-off</strong> donation of <strong class="dollars">${{dollar_amount}} AUD</strong>.</p>
 {% elif frequency == "monthly" %}
-<p>You are setting up a regular donation of <strong>${{dollar_amount}} per month</strong>.</p>
+<p>You are setting up a regular donation of <strong class="dollars">${{dollar_amount}} AUD per month</strong>.</p>
 {% endif %}
 <form id="stripe-form" action="/donate/confirm" method="post">
 {% if not free_gift_eligable %}
@@ -116,7 +116,7 @@ $('#stripe-form button').on('click', function(e) {
         {% endif %}
         currency: "aud",
         amount: "{{amount}}",
-        'panel-label': "Donate {{'{{amount}}'}} {% if frequency=='monthly' %} (monthly) {%endif%}"
+        'panel-label': "Donate {{'{{amount}}'}} AUD {% if frequency=='monthly' %} (monthly) {%endif%}"
     })
     return false
 });
