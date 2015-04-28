@@ -1,14 +1,16 @@
-#!python
+#!/usr/bin/env python
 
-import lxml.html
-import argparse
-import hashlib
+import time
 import regex
+import hashlib
+import pathlib
+import argparse
+import lxml.html
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Convert HTML to PO')
-    parser.add_argument('infile', type=str, help="Source HTML File")
-    parser.add_argument('outfile', type=str, help="Destination PO File")
+    parser.add_argument('infiles', type=str, nargs='+', help="Source HTML Files")
+    parser.add_argument('--out', type=str, help="Destination Folder")
     parser.add_argument('--strip-tags', type=str, help="CSS selector for stripping tags but leaving text")
     parser.add_argument('--strip-trees', type=str, help="CSS selector for removing entire element trees")
     return parser.parse_args()
@@ -24,6 +26,13 @@ if args.strip_trees:
     remove = args.strip_trees
 else:
     remove = '#metaarea'
+
+if args.out:
+    outpath = pathlib.Path(args.out)
+else:
+    outpath = pathlib.Path('./po-out')
+if not outpath.exists():
+    outpath.mkdir(parents=True)
 
 def cleanup(element):
     for e in element.cssselect(strip):
@@ -60,6 +69,7 @@ from enum import Enum
 class TokenType(Enum):
     comment = 1
     text = 2
+    newline = 3
     
 
 class Token:
@@ -111,27 +121,35 @@ class Html2Po:
 
     def segment_inner(self, e):
         html_string = lxml.html.tostring(e, encoding='unicode').strip().replace('\n', ' ')
-        print('\n', html_string, '\n')
         m = regex.match(r'<[^<]+>\s*(.*)</\w+>', html_string, flags=regex.DOTALL)
         if not m:
             print(m)
             raise ValueError(html_string)
             
         html_string = m[1]
-        m = regex.match(r'((?:<a[^<]*></a>\s*)*)(.*)', html_string)
+        m = regex.match(r'(?i)((?:<a[^<]*></a>\s*)*)(.*)', html_string)
         if m[1]:
             self.add_token(TokenType.comment, m[1])
             html_string = m[2]
-            
         html_string = self.mangle(html_string)
-        
-        parts = regex.split(r'(?<!\d+)([.;:!?—]\s*)', html_string)
-        print(parts)
+        pattern = r'(?<!\d+)([.;:!?—]\s*)'
+        parts = regex.split(pattern, html_string)
         segments = [''.join(parts[i:i+2]).strip() for i in range(0, len(parts), 2)]
         for segment in segments:
-            if segment:
-                self.add_token(TokenType.text, self.demangle(segment))
-        #return [self.demangle(segment) for segment in segments]
+            if not segment:
+                continue
+            segment = self.demangle(segment)
+            lines = regex.split('(<br[^>]*>)', segment)
+            for i in range(0, len(lines), 2):
+                line = lines[i].strip()
+                if line:
+                    self.add_token(TokenType.text, line)
+                
+                if i + 1 < len(lines):
+                    br = lines[i + 1].strip()
+                    if br:
+                        self.add_token(TokenType.comment, br)
+                self.add_token(TokenType.newline)
     
     def add_token(self, type, value=None):
         self.token_stream.append(Token(type, value))
@@ -153,8 +171,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 09:11+0800\n"
-"PO-Revision-Date: 2015-04-01 09:37+0800\n"
+"POT-Creation-Date: {}\n"
 "Last-Translator: sujato <sujato@gmail.com>\n"
 "Language-Team: suttacentral\n"
 "Language: en_GB\n"
@@ -162,24 +179,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"'''
-
+"X-Generator: sc-html2po\n"'''.format(time.strftime('%Y-%m-%d %H:%M%z'))
+    
+    def pretty_string(self, string):
+        string = regex.sub(r'(?i)\n(\n#: <br[^>]*>)', r'\1', string)
+        string = regex.sub(r'\n(\n(?:#: </\w+>(?:\n|$))+)', r'\1\n', string)
+        return string
+        
+    
     def tostring(self):
         parts = [self.preamble()]
         last_token = None
         for token in self.token_stream:
             if token.type == TokenType.comment:
-                if last_token and last_token.type == TokenType.comment and not last_token.endswith('\n'):
+                if last_token and (last_token.type == TokenType.comment):
                     parts[-1] += token.value.strip()
                 else:
                     parts.append('#: {}'.format(token.value.strip()))
             elif token.type == TokenType.text:
                 parts.append('msgid "{}"'.format(token.value.strip().replace('\n', ' ')))
                 parts.append('msgstr ""')
+            elif token.type == TokenType.newline:
                 parts.append('')
             else:
                 raise ValueError('{} is not a valid type'.format(token.type))
-        return '\n'.join(parts)
+            last_token = token
+        return ('\n'.join(parts))
     
     def process(self, filename):        
         doc = lxml.html.parse(filename)
@@ -188,12 +213,12 @@ msgstr ""
         self.root = root
         self.recursive_deconstruct(root)
 
-
-html2po = Html2Po()
-
-html2po.process(args.infile)
-string = html2po.tostring()
-print(string)
-with open(args.outfile, 'w') as f:
-    f.write(string)
+for file in args.infiles:
+    html2po = Html2Po()
+    html2po.process(file)
+    string = html2po.tostring()
+    outfile = outpath / pathlib.Path(file).with_suffix('.po').name
+    print(string)
+    with outfile.open('w', encoding='utf8') as f:
+        f.write(string)
 
