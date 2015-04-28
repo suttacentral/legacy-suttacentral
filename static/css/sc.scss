@@ -1,5 +1,9 @@
 .error_page{padding-top:5em}
 
+small{
+    @include sans-serif;
+}
+
 .bibliography {text-indent: -1em;}
 
 .abbreviations table {margin: 0 0 1.3em 0}

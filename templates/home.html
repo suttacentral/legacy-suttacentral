@@ -1,13 +1,7 @@
 {% extends "base.html" -%}
 {% block content %}
 
- <section class="home-announcement">
-<h1>Announcing the SuttaCentral Development Fund</h1>
-<p>We now have online donation facilities. These are to pay for the continued development of SuttaCentral, so that we can bring the Buddha’s words to even more people.</p>
-<form action="https://suttacentral.net/donate/plan" method="post">
-<button class="donate-button">Give Now</button>
-</form>
-</section>
+
 
 <div id="epigraph-store" type="text/html" style="display:none">
 {% for epigraph in imm.epigraphs %}
@@ -29,7 +23,11 @@
 <h1>SuttaCentral</h1>
 <p class="subtitle">Early Buddhist texts, translations, and parallels</p>
 </div>
-
+ <section class="home-announcement">
+<h2>Announcing the SuttaCentral Development Fund</h2>
+<p>We now have online donation facilities. These are to pay for the continued development of SuttaCentral.</p>
+<p><a href="http://localhost:8800/donations" target="_blank">Visit our donations page</a> to learn more or to make a donation.</p>
+</section>
 <div id="epigraph"></div>
 <script>
 (function(){
