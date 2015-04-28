@@ -20,7 +20,7 @@ args = parse_args()
 if args.strip_tags:
     strip = args.strip
 else:
-    strip = '.var, .cross, .ms, q.open, q.close'
+    strip = '.var, .cross, .ms, .msdiv, q.open, q.close'
 
 if args.strip_trees:
     remove = args.strip_trees
@@ -59,10 +59,6 @@ void_tags ={'area',
             'source',
             'track',
             'wbr'}
-
-core_print = print
-def print(*args, **kwargs):
-     core_print(*args, end="")
 
 from enum import Enum
 
@@ -120,10 +116,10 @@ class Html2Po:
         return regex.sub(r'MANG[0-9]+GLE', self.demangle_repl, html_string)
 
     def segment_inner(self, e):
-        html_string = lxml.html.tostring(e, encoding='unicode').strip().replace('\n', ' ')
+        html_string = lxml.html.tostring(e, encoding='unicode').strip()
+        html_string = html_string.replace('\n', ' ').replace('\xad', '').replace('\xa0', ' ')
         m = regex.match(r'<[^<]+>\s*(.*)</\w+>', html_string, flags=regex.DOTALL)
         if not m:
-            print(m)
             raise ValueError(html_string)
             
         html_string = m[1]
@@ -132,7 +128,7 @@ class Html2Po:
             self.add_token(TokenType.comment, m[1])
             html_string = m[2]
         html_string = self.mangle(html_string)
-        pattern = r'(?<!\d+)([.;:!?—]\s*)'
+        pattern = r'(?<!\d+)([.;:!?—][\u200b\s]*)'
         parts = regex.split(pattern, html_string)
         segments = [''.join(parts[i:i+2]).strip() for i in range(0, len(parts), 2)]
         for segment in segments:
@@ -143,6 +139,12 @@ class Html2Po:
             for i in range(0, len(lines), 2):
                 line = lines[i].strip()
                 if line:
+                    m = regex.match(r'^\s*(</\w+>)(.*)', line, flags=regex.DOTALL)
+                    if m:
+                        if self.token_stream[-1].type == TokenType.newline and self.token_stream[-2].type == TokenType.text:
+                            self.token_stream[-2].value += m[1]
+                            line = m[2].strip()
+                        
                     self.add_token(TokenType.text, line)
                 
                 if i + 1 < len(lines):
@@ -218,7 +220,6 @@ for file in args.infiles:
     html2po.process(file)
     string = html2po.tostring()
     outfile = outpath / pathlib.Path(file).with_suffix('.po').name
-    print(string)
     with outfile.open('w', encoding='utf8') as f:
         f.write(string)
 
