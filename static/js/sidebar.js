@@ -53,8 +53,11 @@ sc.sidebar = {
                     self.show();
                     sc.trackEvent('sidebar-show')
                 }
-                return false
-            });
+                return false;
+        });
+        $('.show-dongle-notification button').on('click', function(){
+            $('#menu').removeClass("show-dongle-notification");
+        });
         self.node.on('click', function(e){
             if (!$(e.target).is('div')) return true;
             self.hide();
@@ -69,7 +72,8 @@ sc.sidebar = {
     },
     setReady: function() {
         // this.node[0].style.visibility = 'visible';
-        $('#menu').addClass("show-dongle");
+        $('#menu').addClass("show-dongle")
+                  .addClass("show-dongle-notification");
     },
     isVisible: function() {
         return this.node.hasClass('active');
