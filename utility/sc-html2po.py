@@ -66,6 +66,7 @@ class TokenType(Enum):
     comment = 1
     text = 2
     newline = 3
+    end = 9
     
 
 class Token:
@@ -164,8 +165,10 @@ class Html2Po:
             for child in element:
                 self.recursive_deconstruct(child)
         
-        if element not in void_tags:
+        if element.tag not in void_tags:
             self.add_token(TokenType.comment, self.make_close_tag(element))
+            if element.tag == 'html':
+                self.add_token(TokenType.end)
         
     def preamble(self):
         return r'''# sujato <sujato@gmail.com>, 2015.
@@ -203,6 +206,9 @@ msgstr ""
                 parts.append('msgstr ""')
             elif token.type == TokenType.newline:
                 parts.append('')
+            elif token.type == TokenType.end:
+                parts.append('')
+                break
             else:
                 raise ValueError('{} is not a valid type'.format(token.type))
             last_token = token
