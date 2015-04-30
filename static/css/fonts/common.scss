@@ -43,11 +43,14 @@ $hetu-schetu-sc: 'hetu_schetu_sc';
 
 // Source: https://code.google.com/p/tharlon-font/
 $tharlon: 'TharLon';
+$ddc-uchen: 'DDC Uchen';
+$noto-sans-myanmar: 'Noto Sans Myanmar';
 
 @mixin font-face-src($font-path, $svg-id) {
-    $url : '#{$base_font_url}/#{$font-path}';
+    $url = '#{$base_font_url}/#{$font-path}';
     src: url('#{$url}.eot');
     src: url('#{$url}.eot?#iefix') format('embedded-opentype'),
+        url('#{$url}.woff2') format('woff2'),
          url('#{$url}.woff') format('woff'),
          url('#{$url}.ttf') format('truetype'),
          url('#{$url}.svg##{$svg-id}') format('svg');
@@ -85,6 +88,24 @@ $tharlon: 'TharLon';
     font-family: $tharlon;
     @include font-face-src('tharlon-regular-1', 'tharlon-regular');
     font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: $ddc-uchen;
+    src: url('#{$base_font_url}/ddc-uchen-1.0.woff') format('woff');
+}
+
+@font-face {
+    font-family:$noto-sans-myanmar;
+     src: url('#{$base_font_url}/noto-sans-myanmar.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: $noto-sans-myanmar;
+    src: url('#{$base_font_url}/noto-sans-myanmar-bold.woff') format('woff');
+    font-weight: bold;
     font-style: normal;
 }
 
