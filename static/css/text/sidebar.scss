@@ -67,39 +67,45 @@ $sidebar-tabs-vertical-padding: 0.4em;
         }
     }
 
-    .button {
+    .button, .dropdown-button {
         background:white;
         color: misc-color(dark-medium-gray);
         display:inline-block;
         text-align:center;
-        float:left;
         height: 2.5em;
         line-height: 2.5em;
         box-sizing: border-box;
         cursor: pointer;
-
-        // Distinguish between buttons which are hyperlinks and buttons
-        // which are not hyperlinks.
-        &:not(:link) {
-            cursor: default;
+        width: 100%;
+        
+        &:active {
+            background:$light-gray;
         }
+        
         &:hover:not(.empty) {
             background: misc-color(light-light-gray);
         }
       
         &:active {
-            background: misc-color(light-gray);
+            background:$light-gray;
         }
-        
+    
         & + .button {
             border-left: 1px solid misc-color(light-gray);
         }
-
-        .options {
-            display: none;
-        }
-        
     }
+    .dropdown-button.lookup-inactive {
+
+    }
+    .dropdown-button.lookup-active {
+        box-shadow: 1px 1px 3px black inset;
+    }
+   
+    /* For dropdown */
+    .dropdown-panel {
+        min-width:inherit;
+    }
+    
 
     input[name=text-selection-url] {
         font-size: 75%;

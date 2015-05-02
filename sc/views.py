@@ -9,6 +9,8 @@ import time
 import json
 import urllib.parse
 
+from uuid import uuid4
+
 from webassets.ext.jinja2 import AssetsExtension
 
 import sc
@@ -128,7 +130,11 @@ class ViewBase:
     """
 
     env = jinja2_environment()
-
+    
+    @property
+    def should_fix_whitespace(self):
+        return not self.template_name.endswith('.txt')
+    
     @property
     def template_name(self):
         """Return the template name for this view."""
@@ -136,7 +142,11 @@ class ViewBase:
 
     def get_template(self):
         """Return the Jinja2 template for this view."""
-        return self.env.get_template(self.template_name + ".html")
+        template_name = self.template_name
+        if '.' not in template_name:
+            template_name += ".html"
+        
+        return self.env.get_template(template_name)
 
     def setup_context(self, context):
         """Optional method for subclasses to assign additional context
@@ -147,7 +157,13 @@ class ViewBase:
     def get_global_context(self):
         """Return a dictionary of variables accessible by all templates."""
         nonfree_fonts = config.nonfree_fonts
-        if cherrypy.request.offline:
+        offline = True
+        try:
+            offline = cherrypy.request.offline
+        except AttributeError:
+            offline = True
+
+        if offline:
             if not config.always_nonfree_fonts:
                 nonfree_fonts = False
                 
@@ -158,7 +174,7 @@ class ViewBase:
             'development_bar': config.development_bar,
             'newrelic_browser_timing': NewRelicBrowserTimingProxy(),
             'nonfree_fonts': nonfree_fonts,
-            'offline': cherrypy.request.offline,
+            'offline': offline,
             'page_lang': 'en',
             'scm': scm,
             'embed': 'embed' in cherrypy.request.params,
@@ -188,7 +204,10 @@ class ViewBase:
             raise cherrypy.HTTPError(500, message)
         context = self.get_global_context()
         self.setup_context(context)
-        return self.massage_whitespace(template.render(dict(context)))
+        string = template.render(dict(context))
+        if self.should_fix_whitespace:
+            string = self.massage_whitespace(string)
+        return string
 """
 ['__cause__', '__class__', '__context__', '__delattr__', '__dict__',
 '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__',
@@ -200,6 +219,19 @@ class ViewBase:
 'translated', 'with_traceback']
 
 """
+
+class GenericView(ViewBase):
+    def __init__(self, page_name, context):
+        self.page_name = page_name
+        self.context = context
+    
+    @property
+    def template_name(self):
+        return self.page_name
+
+    def setup_context(self, context):
+        context.update(self.context)
+
 class InfoView(ViewBase):
     """A simple view that renders the template page_name; mostly used for
     static pages."""
@@ -329,11 +361,9 @@ class TextView(ViewBase):
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
+        if context.embed:
+            context.text = self.shorter_text(context.text)
         context.has_quotes = '‘' in context.text or '“' in context.text
-
-        cmdate = imm.tim.get_cmdate(uid=self.uid, lang=self.lang_code)
-        if cmdate:
-            context.update(cmdate)
         try:
             context.snippet = self.get_snippet(context.text)
         except Exception as e:
@@ -356,7 +386,36 @@ class TextView(ViewBase):
             if context.division.text_ref:
                 context.text_refs.append(context.division.text_ref)
             #context.text_refs.extend(context.division.translations)
-
+        nextprev = imm.get_next_prev(uid=self.uid, lang_uid=self.lang_code)
+        context.next_data = nextprev['next']
+        context.prev_data = nextprev['prev']
+        
+    def shorter_text(self, html, target_len=2500):
+        # Don't bother cutting off excessively short amount of text
+        if len(html) < target_len * 1.5:
+            return html
+        root = sc.tools.html.fromstring(html[:target_len])
+        pees = root.select('article > *')
+        if len(pees) > 1:
+            to_drop = pees[-1]
+            if to_drop.getparent().tag == 'blockquote':
+                to_drop = to_drop.getparent()
+            bookmark = to_drop.get('id')
+            if not bookmark and len(to_drop) > 0:
+                bookmark = to_drop[0].get('id')
+            else:
+                for e in root.iter():
+                    if e.get('id'):
+                        bookmark = e.get('id')
+                    if e == to_drop or e.getnext() == to_drop:
+                        break
+            to_drop.drop_tree()
+        root.select('article')[-1].append(sc.tools.html.fromstring(
+            '<p><a href="{href}">…continue reading…</a>'.format(
+                href='http://suttacentral.net/{}/{}#{}'.format(
+                    self.lang_code, self.uid, bookmark))))
+        return sc.tools.html.tostring(root, encoding='unicode')
+    
     def get_snippet(self, html, target_len=500):
         root = sc.tools.html.fromstring(html[:target_len + 2000])
         for e in root.cssselect('.hgroup'):
@@ -403,6 +462,18 @@ class TextView(ViewBase):
             pre, meta, post = m[1:]
             return ''.join([deline(pre), meta, deline(post)])
         return deline(text)
+
+class TextRawView(TextView):
+    def setup_context(self):
+        return
+    def render(self):
+        return self.get_html()
+
+class EditView(TextView):
+    template_name = 'editor'
+    def setup_context(self, context):
+        context.filename = self.path
+        return
 
 class TextSelectionView(TextView):
     template_name = 'paragraph'
@@ -653,6 +724,8 @@ class ShtLookupView(ViewBase):
             raise cherrypy.HTTPRedirect(self.redir_url, 302)
 
 class SuttaCitationView(ViewBase):
+    
+    should_fix_whitespace = False
 
     def __init__(self, sutta):
         self.sutta = sutta
@@ -662,6 +735,8 @@ class SuttaCitationView(ViewBase):
 
     def setup_context(self, context):
         context.sutta = self.sutta
+        
+    
 
 class SuttaInfoView(ViewBase):
     template_name = 'sutta_info'
@@ -688,6 +763,54 @@ class SuttaInfoView(ViewBase):
         context.partial_parallels = [ll for ll in parallels if ll.partial]
         context.base_url = sc.config.app['base_url']
 
+class DonationsPlanView(ViewBase):
+    template_name = 'donate/plan'
+    
+    def __init__(self, **kwargs):
+        pass
+    
+    def setup_context(self, context):
+        context.idempotent_key = uuid4()
+        context.stripe_publishable_key = sc.config.app['stripe_publishable_key']
+            
+class DonationsPaymentView(ViewBase):
+    template_name = 'donate/payment'
+    
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+    
+    def setup_context(self, context):
+        context.kwargs = self.kwargs
+        context.update(self.kwargs)
+        context.stripe_publishable_key = sc.config.app['stripe_publishable_key']
+            
+class DonationsConfirmView(ViewBase):
+    template_name = 'donate/confirm'
+    
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs   
+    
+    def setup_context(self, context):
+        context.update(self.kwargs)
+        context.kwargs = self.kwargs
+        context.stripe_publishable_key = sc.config.app['stripe_publishable_key']
+            
+class DonationsErrorView(ViewBase):
+    template_name = 'donate/error'
+
+class DonationsResultView(ViewBase):
+    template_name = 'donations_result'
+    
+    def __init__(self, result):
+        self.result = result
+    
+    def setup_context(self, context):
+        if self.result is None:
+            context.failed = True
+        else:
+            context.paid = self.result['paid']
+            context.amount_in_dollars = int(self.result['amount']) / 100
+            c
 class AdminIndexView(InfoView):
     """The view for the admin index page."""
 

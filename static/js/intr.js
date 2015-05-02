@@ -67,8 +67,6 @@ sc.intr = {
                 out.append('<a class="lang-switch" href="#' + key + '">' + key + '</a>');
             }
         }
-        console.log(out);
-        console.log(langs);
         return out
     },
     addHasTrans: function() {

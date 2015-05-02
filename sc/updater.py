@@ -7,6 +7,11 @@ logger = logging.getLogger(__name__)
 
 halt = False
 
+def is_interactive():
+    import __main__ as main
+    #Abort updating in interactive sessions
+    return not hasattr(main, '__file__')
+
 def run_updaters():
     """ Run update functions which apply to data such as texts
 
@@ -78,6 +83,8 @@ def run_updaters():
                 except Exception as e:
                     logger.error('An exception occured when running {}'.format(fn_name))
                     raise
+        if is_interactive():
+            return            
         time.sleep(sc.config.db_refresh_interval)
         i += 1
 

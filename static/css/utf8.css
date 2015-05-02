@@ -9,6 +9,7 @@ a.bm:before {content:"BM "}
 a.bn:before {content:"BN "}
 a.bps:before {content:"BPS "}
 a.bjt:before {content:"BJT "}
+a.d-vp:before {content:"D vp "}
 a.eno89:before {content:"Eno "}
 a.es:before {content:"ES "}
 a.fuk03:before {content:"Fuk "}
@@ -23,11 +24,13 @@ a.hoe16:before {content:"Hoe "}
 a.hos89a:before, a.hos89b:before, a.hos91:before {content:"Hos "}
 a.hs:before {content:"hs "}
 a.jd:before {content:"JD "}
+a.jsk:before {content:"JSK "}
 a.kel:before {content:"Kel "}
 a.ks:before {content:"KS "}
 a.mat85:before, a.mat88:before {content:"Mat "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
+a.mt:before {content:"MT "}
 a.nm:before {content:"NM "}
 a.np:before {content:"NP "}
 a.of:before {content:"OF "}
@@ -43,6 +46,7 @@ a.pts-cs:before {content:"PTS cs ";}
 a.pts-p-pi:before {content: "PTS p pi "}
 a.rs-vp:before {content: "RS vp "}
 a.san87:before, a.san89:before {content:"San "}
+a.sb:before {content:"SB "}
 a.sc:before {content:"SC "}
 a.sen82:before {content:"Sen "}
 a.sht:before {content:"SHT "}
@@ -121,6 +125,8 @@ CSS Class	HTML Title
 .hh     	"Paragraph numbers in Hellmuth Hecker."
 
 .jd     	"Paragraph numbers in Dr. Julius Dutoit."
+
+.jsk     	"Paragraph numbers in Prof. J.S. Krüger."
 
 .ks     	"Paragraph numbers in Karl Seidenstücker."
 
@@ -215,7 +221,12 @@ The following references are secondary. They appear in the same files as some of
 .gbm		"Section numbers in Gilgit Buddhist Manscripts."
 
 .fol			"Folio number in the manuscript."
+
 .kel		"Paragraph numbers in Kelly, Sawyer, and Yareham."
+
+.mt		"Paragraph numbers in Maitrimurti / Trätow."
+
+.sb		"Paragraph numbers in Fritz Schaefer / Raimund Beyerlein."
 
 .skt-mg-bu-pm	"Rule numbers in the Sanskrit Mahāsaṅghika Bhikhhu Pātimokkha."
 In a few cases there are no paragraph numbers, these should be added as "SC" numbers. These texts are:

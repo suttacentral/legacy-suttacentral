@@ -121,18 +121,178 @@ var scPersistantStorage = {
 //Rewriting it is on the to-do.
 
 sc.piLookup = {
+    scripts: [
+        {
+            lang: 'en',
+            name: 'English',
+            scriptUrl: 'data/pi2en-maindata-v1.js'
+        }, 
+        {
+            lang: 'de',
+            name: 'Deutsch',
+            scriptUrl: 'data/pi2de-maindata-v1.js'
+        }, 
+        {
+            
+            lang: 'es',
+            name: 'Español',
+            scriptUrl: 'data/pi2es-maindata-v1.js'
+        }, 
+        /*{
+            lang: 'pt',
+            name: 'Português',
+            scriptUrl: 'data/pi2pt-maindata-v1.js'
+        }, */
+        {
+            lang: 'id',
+            name: 'Bahasa Indonesia',
+            scriptUrl: 'data/pi2id-maindata-v1.js'
+        }, 
+        {
+            lang: 'nl',
+            name: 'Nederlands',
+            scriptUrl: 'data/pi2nl-maindata-v1.js'
+        }
+    ],
     dataByName: {},
-    data: null,
+    data: null,     
     register: function(json) {
         this.dataByName[json.script] = json.data;
+    },
+    init: function(){
+        self = this;
+        var lang = self.lang || window.localStorage.getItem('sc.piLookup.lang');
+        if (!lang) {
+            lang = sc.intr.lang;
+            if (!lang || _.indexOf(_.pluck(self.scripts, 'lang')) == -1) {
+                lang = self.scripts[0].lang;
+            }
+        }
+        self.lang = lang;
+        self.makeControls();
+        
+        $('#pali-lookup-controls').on('click', '[data-lang]', _.bind(this.buttonHandler, this));
+    },
+    makeButton: function(script) {
+        return $('<a class="dropdown-button">')
+                    .attr('data-lang', script.lang)
+                    .text('Pāli → ' + script.name)
+                    .addClass('lookup-inactive');
+    },
+    makeButtons: function() {
+        self.buttons = [];
+        _.each(self.scripts, function(script) {
+            var button = self.makeButton(script);
+            script.button = button;
+            self.buttons[script.lang] = button;
+        })
+    },
+    makeControls: function() {
+        var self = this,
+            selectorId = 'pali-lookup-selector',
+            $controls = $('#pali-lookup-controls');
+        
+        $controls.addClass("x2 button-row");
+        $controls.empty();
+        
+        self.makeButtons();
+        
+        var $prime = $('<div class="button prime"/>').append(self.buttons[self.lang]),
+            $selector = $('<a class="button">Lookup Language ▼</a>'),
+            $dropdown = $('<div class="dropdown dropdown-relative"/>').attr('id', selectorId),
+            $dropdownPanel = $('<div class="dropdown-panel">').appendTo($dropdown);
+        
+        _.each(self.scripts, function(script) {
+            if (script.lang != self.lang) {
+                $dropdownPanel.append(script.button);
+            }
+        });
+        
+        $controls.append($selector);
+        $controls.append($prime);
+        $controls.append($dropdown);
+        $selector.attr('data-dropdown', '#' + selectorId)
+                 .dropdown('attach', '#' + selectorId);
+    },
+    setLang: function(lang) {
+        this.lang = lang;
+        window.localStorage.setItem('sc.piLookup.lang', lang);
+    },
+    buttonHandler: function(e) {
+        var $button = $(e.target),
+            lang = $button.attr('data-lang');
+        if (lang != self.lang) {
+            self.setLang($button.attr('data-lang'));
+            self.makeControls();
+            self.togglePaliLookup(true);
+        } else {
+            self.togglePaliLookup();
+        }
+    },
+    enablePaliLookup: function() {
+        var self = this;
+        $(document).on('mouseenter', 'span.lookup', lookupWordHandler);
+
+        /* Contains language-neutral information on declensions and
+         * conjugations */
+        if (!sc.piLookup.endings) {
+            jQuery.ajax({
+                url: sc.jsBaseUrl + 'data/pi-endings-v1.js',
+                dataType: "script",
+                success: function() {
+                    self.endings = self.dataByName['endings'];                    
+                },
+                crossDomain: true,
+                cache: true
+            });
+        }
+        
+        if (!self.dataByName[self.lang]) {
+            
+            sc.sidebar.messageBox.clear();
+            sc.sidebar.messageBox.show("Requesting Pali Dictionary…", {id: "msg-request-dict", timeout: null});
+        
+            jQuery.ajax({
+                url: sc.jsBaseUrl + self.scriptsByName[self.lang].scriptUrl,
+                dataType: "script",
+                success: function() {
+                    self.ready();
+                    sc.sidebar.messageBox.remove("msg-request-dict");
+                },
+                crossDomain: true,
+                cache: true
+            });
+        } else {
+            self.ready();
+        }
+    },
+    ready: function() {
+        this.data = self.dataByName[self.lang];
+        generateLookupMarkup();
+        sc.sidebar.messageBox.show("The lookup dictionary is now enabled. Hover with the mouse to display the meaning.", {id: "msg-lookup-success"});
+        $('.prime .dropdown-button').removeClass('lookup-inactive').addClass('lookup-active');
+    },
+    togglePaliLookup: function(force) {
+        var toggleLookupOn;
+        if (force === undefined) {
+            toggleLookupOn = !sc.userPrefs.getPref("paliLookup");
+        } else {
+            toggleLookupOn = force
+        }
+        sc.sidebar.messageBox.clear();
+        sc.userPrefs.setPref("paliLookup", toggleLookupOn, true);
+        if (toggleLookupOn == false) {
+            sc.sidebar.messageBox.show('The lookup dictionary is now disabled.', {timeout: 5000});
+            $('.prime .lookup-active').removeClass('lookup-active').addClass('lookup-inactive');
+        }
     }
 }
+sc.piLookup.scriptsByName = _.object(_.map(sc.piLookup.scripts, function(o){return [o.lang, o]}));
+$(document).ready(function(){
+    sc.piLookup.init();
+});
 
-function togglePaliLookup(){
-    toggleLookupOn = !sc.userPrefs.getPref("paliLookup");
-    sc.sidebar.messageBox.clear();
-    sc.userPrefs.setPref("paliLookup", toggleLookupOn, true);
-}
+
 
 function transliterateHandler()
 {
@@ -507,66 +667,7 @@ function toLookupMarkup(startNode)
 }
 
 var G_uniRegExpNSG = /[–   :;?!,.“‘]+/gi;
-var toggleLookupOn = false;
-var paliDictRequested = false;
 
-function enablePaliLookup(){
-    $(document).on('mouseenter', 'span.lookup', lookupWordHandler);
-
-    /* Contains language-neutral information on declensions and
-     * conjugations */
-    if (!sc.data.piEndings) {
-        jQuery.ajax({
-            url: sc.jsBaseUrl + 'data/pi-endings.js',
-            dataType: "script",
-            success: undefined,
-            crossDomain: true,
-            cache: true
-        });
-    }
-    var script = $('#lookup-to-lang').val(),
-        scriptUrl,
-        dictObjectName;
-    if (script == 'en') {
-        scriptUrl = 'data/pi2en-maindata-v1.js';
-    } else if (script == 'es') {
-        scriptUrl = 'data/pi2es-maindata-v1.js';
-    } else if (script == 'pt') {
-        scriptUrl = 'data/pi2pt-maindata-v1.js';
-    } else if (script == 'id') {
-        scriptUrl = 'data/pi2id-maindata-v1.js';
-    } else if (script == 'de') {
-        scriptUrl = 'data/pi2de-maindata-v1.js';
-    } else {
-        throw Error('Unknown script: ' + script);
-    }
-
-    function ready() {
-        sc.piLookup.data = sc.piLookup.dataByName[script];
-        generateLookupMarkup();
-        sc.sidebar.messageBox.show("The dictionary is enabled. Hover with the mouse to display the meaning.", {id: "msg-lookup-success"});
-    }
-    
-    if (!sc.data[dictObjectName])
-    {
-        sc.sidebar.messageBox.clear();
-        sc.sidebar.messageBox.show("Requesting Pali Dictionary…", {id: "msg-request-dict", timeout: null});
-    
-        jQuery.ajax({
-            url: sc.jsBaseUrl + scriptUrl,
-            dataType: "script",
-            success: function() {
-                ready();
-                sc.sidebar.messageBox.remove("msg-request-dict");                
-
-            },
-            crossDomain: true,
-            cache: true
-        });
-    } else {
-        ready();
-    }
-}
 
 function lookupWordHandler(event){
     if (!sc.userPrefs.getPref("paliLookup")) return;
@@ -662,7 +763,10 @@ function lookupWord(word){
             }
             if (!m)
             {
-                allMatches.push({"base":firstchar + leftover, "meaning":"?"});
+                var base = firstchar + leftover;
+                if (base != 'ṃ') {
+                    allMatches.push({"base": base, "meaning":"?"});
+                }
                 break;
             }
         }
@@ -676,7 +780,7 @@ function lookupWord(word){
     }
     if (isTi) allMatches.push({"base":"iti", "meaning":"endquote"});
     for (var i in allMatches) {
-        var href = "http://dsal.uchicago.edu/cgi-bin/philologic/search3advanced?dbname=pali&searchdomain=headwords&matchtype=start&display=utf8&query=" + allMatches[i].base;
+        var href = "http://suttacentral.net/search?lang=&define=&query=" + allMatches[i].base;
         
         out += '<a href="'+href+'">' + allMatches[i].base + '</a>: ' + allMatches[i].meaning;
         if (i != allMatches.length - 1)
@@ -740,8 +844,13 @@ function matchPartial(word, maxlength){
         for (var i = 0; i < word.length; i++){
             var part = word.substring(0, word.length - i);
             if (part.length < maxlength) break;
-            if(typeof(sc.piLookup.data[part]) == 'object') {
-                var meaning = sc.piLookup.data[part][1];
+            var target = sc.piLookup.data[part]
+            if (typeof(target) == 'object') {
+                var meaning = target[1];
+                if (meaning === undefined) {
+                    meaning = target[0];
+                }
+                
                 return {"base":part, "meaning": meaning, "leftover": word.substring(word.length - i, word.length)}
             }
         }
@@ -755,20 +864,30 @@ function matchPartial(word, maxlength){
 
 function exactMatch(word)
 {
-    if(typeof(sc.piLookup.data[word]) == 'object') {
-        var meaning = sc.piLookup.data[word][1]+' ('+sc.piLookup.data[word][0]+')';
+    var target = sc.piLookup.data[word];
+    if(typeof(target) == 'object') {
+        if (target[1] === undefined) {
+            var meaning = target[0];
+        } else {
+            var meaning = target[1] + ' ('+target[0]+')';
+        }
         return {"base": word, "meaning": meaning};
     }
     return null;
 }
 
 function fuzzyMatch(word){
-    var end = sc.data.piEndings;
+    var end = sc.piLookup.endings;
     for(var i = 0; i < end.length; i++) {
         if(word.length > end[i][2] && word.substring(word.length - end[i][0].length, word.length) === end[i][0]) {
             var orig = word.substring(0,word.length - end[i][0].length + end[i][1]) + end[i][3];
-            if(typeof(sc.piLookup.data[orig]) == 'object') {
-                var meaning = sc.piLookup.data[orig][1] + ' ('+sc.piLookup.data[orig][0]+')';
+            var target = sc.piLookup.data[orig];
+            if(typeof(target) == 'object') {
+                if (target[1] === undefined) {
+                    var meaning = target[0];
+                } else {
+                    var meaning = target[1] + ' ('+target[0]+')';
+                }
                 return {"base": orig, "meaning": meaning};
             }
         }

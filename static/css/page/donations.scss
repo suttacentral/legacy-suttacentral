@@ -1,0 +1,191 @@
+#stripe-form {
+    margin: 1em auto 2em;
+    text-align: center;
+}
+
+#stripe-form > input, .currency-input  {
+    padding:  3px 6px;
+    font-size:  120%;
+    display: inline-block;
+    font-family: 'Source Sans Pro', sans-serif;
+    background: white;
+    border-radius: 3px;
+    box-shadow:  0px 0px 3px black inset;
+    background: #fff;
+    margin: 0.5em 2em 0 0;
+}
+
+#stripe-form > input  {
+  font-size:  100%;
+    margin:  0 0 1em 0;
+    border:  none;
+    outline:  none;
+    width:  100%;
+    display:block;
+    
+    &[required] { 
+        box-shadow:  0px 1px 3px black inset, 0px -1px 3px black inset;
+    }
+}
+
+.currency-input > input  {
+    margin-left:  0.25em;
+    border:  none;
+    outline:  none;
+    width:  5em;
+}
+
+.currency-input + button{
+   display: inline-block;
+  font-size:120%;
+  font-family: 'Source Sans Pro', sans-serif;
+  background:$bright-pastel-green;
+  color:$dark-medium-gray;
+  border-radius:50%;
+  height:4em;
+  width:4em;
+  border:none;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  
+
+}
+
+.currency-input + button:hover{
+  background:$saturated-green;
+  color:white;
+}
+.currency-input + button:active{
+  background:$bright-saturated-green;
+}
+
+form{
+  text-align:center;
+  margin:2em 0;
+}
+
+
+.fancy-tick label + label {
+    margin-left: 1em;
+}
+
+.fancy-tick {
+    font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;
+    text-transform: lowercase;
+    color: white;
+    margin:0 auto 2em auto;
+    font-size:120%;
+    white-space: nowrap;
+    width: 16em;
+    max-width: 100%;
+    label {
+        background: $pastel-purple;
+        width: 5em;
+        height: 1em;
+        padding: 0.5em;
+        border-radius: 3px;
+        vertical-align: top;
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+<<<<<<< HEAD
+        
+=======
+        margin: 0;
+>>>>>>> 10a4e4576ba1e2dde709a814936d0bad708cb676
+    }
+
+    label.checked {
+        background: $bright-saturated-purple;
+    }
+  >  label{
+    margin:0 0.7em 0 0;
+    }
+    input[type=checkbox],
+    input[type=radio   ]{
+      width     : 2em;
+      margin    : 0;
+      padding   : 0;
+      font-size : 1em;
+      opacity   : 0;
+    }
+
+    input[type=radio   ]{
+      display      : inline-block;
+      margin-left  : -2em;
+      line-height  : 1.5em;
+    }
+
+    input[type=radio]  + span{
+      display          : inline-block;
+      width            : 0.875em;
+      height           : 0.875em;
+      margin           : 0.25em 0.5em 0.25em 0.25em;
+      border           : 0.0625em solid rgb(192,192,192);
+      border-radius    :50%;
+      background       : rgb(224,224,224);
+      background-image :    -moz-linear-gradient(rgb(240,240,240),rgb(224,224,224));
+      background-image :     -ms-linear-gradient(rgb(240,240,240),rgb(224,224,224));
+      background-image :      -o-linear-gradient(rgb(240,240,240),rgb(224,224,224));
+      background-image : -webkit-linear-gradient(rgb(240,240,240),rgb(224,224,224));
+      background-image :         linear-gradient(rgb(240,240,240),rgb(224,224,224));
+      vertical-align   : bottom;
+    }
+
+    input[type=radio   ]:checked + span{
+      background-image :    -moz-linear-gradient(rgb(224,224,224),rgb(240,240,240));
+      background-image :     -ms-linear-gradient(rgb(224,224,224),rgb(240,240,240));
+      background-image :      -o-linear-gradient(rgb(224,224,224),rgb(240,240,240));
+      background-image : -webkit-linear-gradient(rgb(224,224,224),rgb(240,240,240));
+      background-image :         linear-gradient(rgb(224,224,224),rgb(240,240,240));
+    }
+
+    input[type=radio]:checked +  span:before{
+      content     : '✓';
+      display     : block;
+      width       : 1em;
+      font-size   : 0.875em;
+      color:$dark-saturated-green;
+      line-height : 1em;
+      text-align  : center;
+      font-weight : bold;
+    }
+}
+
+.anumodana{
+  text-align:center;
+  font-size:2em;
+  font-style:italic;
+  margin:2em;
+}
+
+
+.donate-button,#customButton {
+    font-size:  120%;
+    display: inline-block;
+    background: $dark-saturated-green;
+    font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;
+    text-transform: lowercase;
+    vertical-align: middle;
+    border-radius: 50%;
+    color: white;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    border: 1px solid $dark-pastel-red;
+    width: 4em;
+    height: 4em;
+    line-height: 1;
+}
+
+.donate-button:hover,#customButton:hover {
+    background: $saturated-green;
+    box-shadow: 1px 1px 5px rgba(200,200,200,1);
+}
+.donate-button:active,#customButton:active {
+    background: $bright-saturated-green;
+    box-shadow: 1px 1px 5px rgba(200,200,200,1);
+}
+ul#required {
+  margin: 2em 0 1em 0;
+ }
+ #required li{
+  text-align:left;
+  list-style-type: none;
+}
+

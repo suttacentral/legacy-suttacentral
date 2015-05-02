@@ -7,12 +7,13 @@ import sc.data
 from sc.scm import data_scm
 from sc.util import filelock
 from sc.views import *
+import sc.donations
 
 logger = logging.getLogger(__name__)
 
-STATIC_PAGES = ['about', 'abbreviations', 'bibliography', 'contacts', 'help',
-                'methodology', 'sutta_numbering', 'copyright', 'colors',
-                'fonts']
+STATIC_PAGES = {file.stem + (file.suffix if file.suffix != '.html' else '') 
+                for file 
+                in (sc.templates_dir / 'static').glob('*.html')}
 
 def home():
     return InfoView('home').render()
@@ -45,7 +46,7 @@ def default(*args, **kwargs):
 
         # Static Pages
         if uid in STATIC_PAGES:
-            return InfoView(uid).render()
+            return InfoView('static/{}'.format(uid)).render()
 
         if uid in imm.pitakas:
             return PitakaView(imm.pitakas[uid]).render()
@@ -95,32 +96,55 @@ def default(*args, **kwargs):
         # New style urls have the language code first then the uid
         lang_code = args[0]
         uid = args[1]
+        
+        redirect = False
+        bookmark = None
 
         if not imm.text_exists(uid, lang_code):
-            redirect = False
             if imm.text_exists(lang_code, uid):
                 redirect = True
                 uid, lang_code = lang_code, uid
             elif lang_code == 'zh' and imm.text_exists(uid, 'lzh'):
                 redirect = True
                 lang_code = 'lzh'
-            if redirect:
-                # This is an old-style url, redirect to new-style url.
-                if len(args) == 2:
-                    new_url = '/{}/{}'.format(lang_code, uid)
-                else:
-                    new_url =  '/{}/{}/{}'.format(lang_code, uid, args[2])
-                # Don't be transparent, we want to keep things canonical
-                # and also, use 301. This is a permament change.
-                raise cherrypy.HTTPRedirect(new_url, 301)
             else:
                 raise cherrypy.NotFound()
+
+        textinfo = imm.tim.get(uid, lang_code)
+        if textinfo.file_uid != textinfo.uid:
+            redirect = True
+            uid = textinfo.file_uid
+            if textinfo.bookmark:
+                bookmark = textinfo.bookmark
+            else:
+                bookmark = textinfo.uid
+                
+        if redirect:
+            # This is an old-style url, redirect to new-style url.
+            if len(args) == 2:
+                new_url = '/{}/{}'.format(lang_code, uid)
+            else:
+                new_url =  '/{}/{}/{}'.format(lang_code, uid, args[2])
+            
+            if bookmark:
+                new_url += '#' + bookmark
+            
+            # Don't be transparent, we want to keep things canonical
+            # and also, use 301. This is a permament change.
+            raise cherrypy.HTTPRedirect(new_url, 301)
+        
         
         sutta = imm.suttas.get(uid)
         lang = imm.languages[lang_code]
         if len(args) == 3 and 'embed' in cherrypy.request.params:
             return TextSelectionView(uid, lang_code, args[2]).render()
         canonical = False if len(args) == 3 else True
+        if 'raw' in kwargs:
+            return TextRawView(uid, lang_code).render()
+        if 'edit' in kwargs:
+            if sc.config.app['editor']:
+                return EditView(sutta, lang_code, canonical).render()
+            
         if sutta:
             return SuttaView(sutta, lang, canonical).render()
         else:
@@ -143,8 +167,29 @@ def search(query, **kwargs):
     except sc.search.ConnectionError:
         raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
 
+def donate(page, **kwargs):
+    print(page, kwargs)
+    try:
+        if page == 'plan':
+            return DonationsPlanView(**kwargs).render()
+        elif page == 'payment':
+            kwargs["amount"] = sc.donations.calc_amount(kwargs["dollar_amount"])
+            return DonationsPaymentView(**kwargs).render()
+        elif page == 'confirm':
+            result = sc.donations.donate(**kwargs)
+            if result is None:
+                return DonationsErrorView().render()
+            result.update(kwargs)
+            return DonationsConfirmView(**result).render()
+        raise cherrypy.NotFound()
+    except sc.donations.stripe.error.InvalidRequestError:
+        raise
+
 def sutta_info(uid, lang='en'):
-    return SuttaInfoView(uid, lang).render()
+    try:
+        return SuttaInfoView(uid, lang).render()
+    except KeyError:
+        raise cherrypy.HTTPError(404, 'Sutta does not exist')
 
 def data(**kwargs):
     valid_names = {'langs', 'translation_count', 'suttas', 'parallels',

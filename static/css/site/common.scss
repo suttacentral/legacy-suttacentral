@@ -11,7 +11,14 @@ body {
     color: $body-text-color;
     background: $body-background-color;
 
-    text-rendering: optimizeLegibility;
+    /* text-rendering: optimizeLegibility is not needed. But it is still cool.
+     See http://aestheticallyloyal.com/public/optimize-legibility/ */
+text-rendering: optimizeLegibility;
+    /* "-webkit-font-smoothing: antialiased" is not needed either
+    See http://stackoverflow.com/questions/11459746/css3-webfont-smoothing-and-antialiasing-in-firefox-and-opera
+
+    Use kerning and ligatures if possible...
+    See http://blog.fontdeck.com/post/15777165734/opentype-1 */
 
     -moz-font-feature-settings: "kern" 1,"liga" 1;
     -webkit-font-feature-settings: "kern" 1,"liga" 1;
@@ -88,7 +95,7 @@ h2 {
 }
 
 h3 {
-    margin-bottom: -0.2em 0 1.3em;
+    margin: -0.2em 0 1.3em;
     font-size: 1em;
     font-weight: bold;
 }

@@ -1,0 +1,50 @@
+
+{% extends "base.html" -%}
+
+{% block content %}
+<div id="onecol">
+<section>
+<article class="donations">
+<h1>SuttaCentral Donations</h1>
+
+<p>You can make a one-time donation or a monthly donation.</p>
+
+<form action="/donate/payment" method="post">
+<input type="hidden" name="idempotent_key" value="{{idempotent_key}}">
+<div class="frequency-options fancy-tick">
+<label class="frequency checked"><input type="radio" name="frequency" value="once" checked><span><span></span></span>One-time</label>
+<label class="frequency"><input type="radio" name="frequency" value="monthly"><span><span></span></span>Monthly</label>
+</div>
+<span class="currency-input">
+$<input name="dollar_amount" required> AUD
+</span>
+<button>Next →</button>
+</form>
+<p>With donations over $100, or over $10/month, we’d like to offer you a free copy of <cite class="book">The Verses of the Senior Monks</cite>, Bhikkhu Sujato’s translation of the Theragāthā, made specially for SuttaCentral.</p>
+</article>
+</section>
+</div>
+{% endblock %}
+
+{% block foot_jq %}
+<script>
+    $("[name=dollar_amount").on('change', function(){
+        var dollarAmount = Number($(this).val());
+        if (isNaN(dollarAmount)) {
+            $(this).val(null);
+            return
+        }
+        
+        if (dollarAmount < 5) {
+            dollarAmount = 5;
+        }
+        dollarAmount = Math.round(dollarAmount * 100) / 100;
+        $(this).val(dollarAmount);
+    })
+    $('label > [type=radio]').on('change', function(){
+        $(this).parent().siblings().removeClass('checked')
+        $(this).parent().addClass('checked')
+    })
+</script>
+{% endblock %}
+

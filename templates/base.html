@@ -14,10 +14,12 @@
     SuttaCentral: Early Buddhist texts, translations, and parallels
   {%- endif -%}
 </title>
+{% if not embed %}
 <meta name="description" content="Early Buddhist texts, translations, and parallels, including ancient scriptures in Pali, Chinese, Sanskrit, and Tibetan, the relations between them, and modern translations and references.">
 <meta name="viewport" content="width=device-width">
 {{ newrelic_browser_timing.header }}
 <!--[if lt IE 10]><script src="/js/vendor/modernizr-2.6.3.min.js"></script><![endif]-->
+{% endif %} {# /embed #}
 {% if nonfree_fonts -%}
   {%- assets 'css_nonfree' -%}
     <link rel="stylesheet" href="{{ ASSET_URL }}">
@@ -27,12 +29,16 @@
     <link rel="stylesheet" href="{{ ASSET_URL }}">
   {% endassets -%}
 {%- endif -%}
+{% if not embed %}
 <meta property="og:site_name" content="Sutta Central">
 <meta property="og:type" content="website">
 <meta property="og:img" content="http://suttacentral.net/img/SC-icon-small.png">
 <script>document.documentElement.className = "js"</script>
-{% block head %}{% endblock %}
 
+{% block head %}
+{% endblock %}
+
+{% endif %} {# /embed #}
 </head>
 {% set body_classes = (['offline'] if offline else []) + (['embed'] if embed else []) %}
 
@@ -41,10 +47,11 @@
 <div id="page-wrap">
 
 {% include 'development_bar.html' %}
-
+{% if not embed %}
 {% include 'header.html' %}
 
 {% include 'outdated_browser.html' %}
+{% endif %}
 {% endif %} {# not ajax #}
 <main>
 {% if ajax %}
@@ -53,6 +60,7 @@
 {% block content %}{% endblock %}
 </main>
 {% if not ajax %}
+{% if not embed %}
 {% include 'panel.html' %}
 
 <div id="page-footer-push"></div>
@@ -60,19 +68,20 @@
 </div>{# page-wrap #}
 
 {% include 'footer.html' %}
-
+{% endif %} {# /embed #}
 {% if offline or not config.internet_connectivity -%}
 <script src="/js/vendor/jquery-1.11.1.min.js"></script>
 {% else -%}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
 {% endif %}
-
+{% block foot_jq %}
+{% endblock %}
 {% assets 'js_core' %}
 <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
 
-{% if not offline and config.internet_connectivity and config.google_analytics %}
+{% if not offline and config.internet_connectivity and config.google_analytics and not embed %}
 <script>
  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -87,8 +96,10 @@
 
 </body>
 </html>
+{% if not embed %}
 <!-- Revision: {{ scm.last_commit_revision }}
      Date:     {{ scm.last_commit_time | datetime('long') }}
      Branch:   {{ scm.branch }}
      Tag:      {{ scm.tag }} -->
+{% endif %}
 {% endif %}

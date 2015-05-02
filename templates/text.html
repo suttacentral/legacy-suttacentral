@@ -7,20 +7,16 @@
 {% else %}
 <link rel="canonical" href="http://suttacentral.net/{{lang_code}}/{{uid}}">
 {% endif %}
-{% if cdate and mdate %}
-<meta name="cdate" content="{{cdate}}">
-<meta name="mdate" content="{{mdate}}">
+{% if textdata.cdate %}
+<meta name="cdate" content="{{textdata.cdate}}">
+<meta name="mdate" content="{{textdata.mdate}}">
 {% endif %}
 {% endblock %}
 
 {%- block content -%}
 
-{% set prev_data = imm.tim.get(textdata.prev_uid, lang_code) if textdata.prev_uid else none %}
-{% set next_data = imm.tim.get(textdata.next_uid, lang_code) if textdata.next_uid else none %}
 
-
-
-
+{% if not embed %}
 <div id="sidebar">
     <script>
     {# This is inlined as we want it to run right here #}
@@ -44,15 +40,7 @@
       <div class="tab" id="controls-tab">
         <div class="inner-wrap">
             {% if lang_code == 'pi' %}
-            <div class="x2 button-row" id="lookup"> 
-            <select class="button" id="lookup-to-lang" title="Select a lookup language">
-                <option value="en">Pali → English</option>
-                <option value="es">Pali → Spanish</option>
-                {#<option value="pt">Pali → Portuguese</option>#}
-                <option value="id">Pali → Indonesian</option>
-                <option value="de">Pali → German</option>
-            </select>
-           <button class="button" id="pali-lookup" title="Activate Pali lookup">Lookup ▶</button>
+            <div id="pali-lookup-controls"> 
             </div>
             <div class="x6 button-row" id="translit-buttons">
                 <a class="button" id="toRoman" title="Read Pali text in Roman script">kā</a>
@@ -129,9 +117,10 @@
       </div>
       <!-- <div id="sidebar-dongle">≡</div> -->
 </div>
+{% endif %} {# /not embed #}
 {{text}}
 {% if prev_data or next_data %}
-
+{% if not embed %}
 <div id="nextprev">
 {% if prev_data %}
 <a class="previous" title="{{ prev_data.uid|uid_to_acro }}: {{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀</a>
@@ -140,6 +129,7 @@
 <a class="next" title="{{ next_data.uid|uid_to_acro }}: {{ next_data.name_striped }} " href="{{ next_data.url }}" data-prefetch="1">▶</a>
 {% endif %}
 </div>
+{% endif %}
 {% endif %}
 
 {%- endblock -%}

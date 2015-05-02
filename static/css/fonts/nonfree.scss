@@ -8,6 +8,8 @@
 // Source: David Březina <brezina@davi.cz>
 $skolar-sutta-web: 'Skolar Sutta Web';
 $skolar-sutta-web-sc: 'Skolar Sutta Web SC';
+$lumen-thai: 'Lumen Thai';
+$skolar-devanagari: 'Skolar Devanagari';
 
 @font-face {
     font-family: $skolar-sutta-web;
@@ -47,4 +49,47 @@ $skolar-sutta-web-sc: 'Skolar Sutta Web SC';
 
 @mixin serif-small-caps($extra:'') {
     font-family: $skolar-sutta-web-sc, $skolar-sutta-web, serif unquote($extra);
+}
+
+
+@font-face {
+    font-family: $lumen-thai;
+    @include font-face-src('nonfree/LumenThai-Bold',
+                           'lumen-thai-bold');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: $lumen-thai;
+    @include font-face-src('nonfree/LumenThai-Regular',
+                           'lumen-thai-regular');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@mixin lumen-thai($extra:'') {
+    font-family: $lumen-thai, lumen-thai unquote($extra);
+}
+
+
+
+@font-face {
+    font-family: $skolar-devanagari;
+    @include font-face-src('nonfree/SkolarDevanagari-Bold',
+                           'skolar-devanagari-bold');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: $skolar-devanagari;
+    @include font-face-src('nonfree/SkolarDevanagari-Regular',
+                           'skolar-devanagari-regular');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@mixin skolar-devanagari($extra:'') {
+    font-family: $skolar-devanagari, skolar-devanagari unquote($extra);
 }

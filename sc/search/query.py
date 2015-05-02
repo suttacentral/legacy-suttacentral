@@ -40,7 +40,11 @@ def div_translation_count(lang):
 
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, define=None, details=None, **kwargs):
-    query = regex.sub(r'[\p{punct}]+', ' ', query)
+    query.strip()
+    match_type = "best_fields"
+    if regex.match(r'^"[^"]+"$', query):
+        match_type = "phrase"
+    query = regex.sub(r'''[,'"]+''', ' ', query)
     query.strip()
     indexes = []
     if details is not None:
@@ -66,7 +70,7 @@ def search(query, highlight=True, offset=0, limit=10,
             "function_score": {
                 "query": {
                     "multi_match": {
-                        "type": "best_fields",
+                        "type": match_type,
                         "tie_breaker": 0.3,
                         "fields": ["content", "content.*^0.5",
                                    "term^1.5", "term.*^0.5",

@@ -14,6 +14,7 @@ sc.classes = {
 	"bn": "Paragraph numbers in Bhikkhu Ñāṇadassana.",
         "bps": "Buddhist Publication Society",
         "bjt": "Buddha Jayanthi Tipitaka",
+        "d-vp": "Vol/page of the Derge edition",
         "eno89": "Paragraph numbers in Enomoto, 1989.",
 	"es": "Paragraph numbers in Ekkehard Saß.",
         "fuk03": "Page numbers in Fukita, 2003",
@@ -30,12 +31,14 @@ sc.classes = {
         "hos91": "Paragraph numbers in Hosoda, 1991.",
         "hs": "(Not defined in GRETIL source.)",
 	"jd": "Paragraph numbers in Dr. Julius Dutoit.",
+	"jsk": "Paragraph numbers in J.S. Krüger.",
         "kel": "Paragraph numbers in Kelly, Sawyer, and Yareham.",
 	"ks": "Paragraph numbers in Karl Seidenstücker.",
         "mat85": "Paragraph numbers in Matsumura, 1985.",
         "mat88": "Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988.",
         "mit57": "Paragraph numbers in Mittal, 1957.",
         "ms": "Mahāsaṅgīti paragraph number.",
+        "mt": "Paragraph numbers in Maitrimurti / Trätow.",
         "ms-pa": "",
 	"nm": "Paragraph numbers in Nyānatiloka Mahāthera.",
 	"np": "Paragraph numbers in Nyānaponika Mahāthera.",
@@ -53,6 +56,7 @@ sc.classes = {
         "rs-vp": "Volume and page numbers in Rahula Sankriytayana translation.",
         "san87": "Paragraph numbers in Sander, 1987.",
         "san89": "Paragraph numbers in Sander, 1987.",
+        "sb": "Paragraph numbers in Fritz Schaefer / Raimund Beyerlein.",
         "sc": "Sutta Central paragraph number.",
         "sen82": "Section and paragraph numbers in Senart, 1882.",
         "sht": "References for SHT fragments.",
@@ -88,7 +92,7 @@ sc.classes = {
         "wal76": "Paragraph numbers in Waldschmidt, 1976.",
         "wal78": "Paragraph numbers in Waldschmidt, 1978.",
         "wal80c": "Paragraph numbers in Waldschmidt, 1980c, “On a Sanskrit version of the Verahaccāni Sutta.”",
-	"wg": "Paragrpah numbers in Wilhelm Geiger.",
+	"wg": "Paragraph numbers in Wilhelm Geiger.",
         "wp": "Wisdom Publications paragraph number.",
         "yam72": "Paragraph numbers in Yamada, 1972."
     },
@@ -269,13 +273,9 @@ sc.init = function(reset)
     }
     
     if (sc.mode.pali === true) {
-        var lookupToLang = sc.userPrefs.getPref('lookupToLang'),
-            translitFunc = null;
+        var translitFunc = null;
             prefscript = sc.userPrefs.getPref("script");
 
-        if (lookupToLang) {
-            $('#lookup-to-lang').val(lookupToLang);
-        }
         if (prefscript){
             sc.mode.translitFunc = transFuncs[prefscript][0];
         } else {
@@ -293,7 +293,7 @@ sc.init = function(reset)
             {
                 toSyllablesInit();
             }
-            enablePaliLookup(true);
+            sc.piLookup.enablePaliLookup(true);
         } else {
             transliterate(sc.mode.translitFunc);
         }
