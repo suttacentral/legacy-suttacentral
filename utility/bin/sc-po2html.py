@@ -22,6 +22,8 @@ if not outpath.exists():
     outpath.mkdir(parents=True)
 
 class Po2Html:
+    def __init__(self):
+        self.parts = []
     def process(self, file):
         with open(file, 'r', encoding='utf8') as f:
             string = f.read()
@@ -30,8 +32,12 @@ class Po2Html:
         for m in regex.finditer(r'#:\s*(?<comment>.*)|msgstr (?:"(?<msgstr>.*)"\n?)+', string):
             print(m[0], dropping)
             if dropping:
-                if m['comment'] and regex.match(r'(?i)<body', m['comment']):
-                    dropping = False
+                if m['comment']:
+                    body_m = regex.search(r'(?is)<body.*', m['comment'])
+                    if body_m:
+                        dropping = False
+                        out.append(body_m[0])
+                    
             else:
                 if m['comment']:
                     out.append(m['comment'])
