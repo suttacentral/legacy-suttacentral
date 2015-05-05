@@ -55,7 +55,7 @@ def quick():
         'git pull',
         'cd data',
         'git pull',
-        'cd ..'.
+        'cd ..',
         'pip install -q -r requirements.txt',
         'invoke assets.compile --precompress',
         'invoke textdata.ensure_loads',
