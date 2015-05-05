@@ -127,6 +127,8 @@ def get_env():
         'js/lib/jquery.details.js',
         'js/intr.js',
         'js/sc_utility.js',
+        sc_uid_expansion_data_file,
+        'js/text.js',
         'js/text_selections.js',
         'js/search.js',
         'js/sidebar.js',
@@ -137,9 +139,10 @@ def get_env():
         'js/sc_popupnotes.js',
         'js/sc_lzh2en_lookup.js',
         'js/text_image.js',
+        'js/discourse.js',
         'js/fonts.js',
         sc_data_scripts_file,
-        sc_uid_expansion_data_file,
+        
         'js/tracking.js',
         filters=None if sc.config.debug else 'rjsmin',
         output='js/compiled/core-%(version)s.js'

@@ -8,6 +8,7 @@ import socket
 import time
 import json
 import urllib.parse
+import urllib.request
 
 from uuid import uuid4
 
@@ -361,6 +362,13 @@ class TextView(ViewBase):
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
+        
+        context.discourse_link = None
+        if self.uid in imm.suttas and sc.config.discourse['forum_url']:
+            sutta = imm.suttas
+            query = '%22{}%22|{}'.format(imm.uid_to_acro(self.uid).replace(' ', ' '), self.uid)
+            context.discourse_link = '{}?search={}'.format(sc.config.discourse['forum_url'], query)
+        
         if context.embed:
             context.text = self.shorter_text(context.text)
         context.has_quotes = '‘' in context.text or '“' in context.text

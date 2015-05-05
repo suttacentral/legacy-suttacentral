@@ -1,30 +1,54 @@
-sc.discourse = (function(){
-    if ($('#text').length == 0) return
-    var baseHref = 'http://discourse.suttacentral.net'
-    var uid = location.href.match(/\w*$/)[0];
-    function init() {
-        if ($('#text').length == 0) return
+sc.discourse = {
+    init: function() {
+        var self = sc.discourse;
+        self.button = $('#discourse-link-button');
+        self.resultsDiv = $('#discourse-search-results');
+        self.button.on('click', function(e) {
+            e.preventDefault();
+            self.resultsDiv.toggleClass('visible');
+            return false
+        })
+        self.search()
+    },
+    search: function() {
+        self = sc.discourse;
+        if (self.jqXHR) return
         
-        var uid = location.href.match(/\w+$/)[0]
-        $.ajax('http://discourse.suttacentral.net/tagger/tag/{}.json'.format(uid)).done(showResults);
-        console.log('getting');
+        self.jqXHR = $.ajax('http://discourse.suttacentral.net/search/query.json', 
+                            {
+                                data: {
+                                    term: '"{}"|{}'.format(sc.text.acro, sc.text.uid),
+                                    include_blurbs: true
+                                }
+                            }).success(self.updateResults)
+                              .error(function(){self.button.off('click')});
+        
+    },
+    updateResults: function(data) {
+        
+        var self = sc.discourse,
+            ul = $('<ul class="results"/>');
+        
+        $('#discourse-search-loading').remove();
+        self.resultsDiv.append(ul);
+        
+        
+        self.data = data;
+        
+        _.zip(data.topics, data.posts).forEach(function(pair){
+            var topic = pair[0],
+                post = pair[1],
+                url = 'http://discourse.suttacentral.net/t/{}/{}/{}'.format(topic.slug, topic.id, post.id),
+                code = '<li><a href="{}"><span class="topic-title">{}</span>{}</a></li>'.format(url, topic.fancy_title, post.blurb); 
+            console.log(code)
+            ul.append(code)
+            
+            
+        })
+            
     }
+}
 
-    function showResults(data) {
-        console.log(data);
-        var results = $('#discourse'),
-            topics = data.topic_list.topics;
-
-            topics = _.sortBy(topics, 'last_posted_at');
-            _.each(topics, function(e){
-                results.append($('<p><a href="{}/t/{}">{} ({})</a></p>'.format(
-                    baseHref,
-                    e.id,
-                    e.fancy_title,
-                    e.posts_count)));
-            })
-    }
-
-    init();
-    console.log('hi');
-})();
+if (document.getElementById('text')) {
+    $(document).ready(sc.discourse.init)
+}
