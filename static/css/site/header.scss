@@ -68,31 +68,35 @@ header {
         width: 100%;
     }
 
-    #page-header-search input {
-        @include sans-serif;
-        display: none;
-        padding: 0 0.5em;
-        height: 24px;
-        border: solid 1px misc-color(light-medium-gray);
-        border-radius: 15px;
-        background: misc-color(light-off-white);
-        width: 85%;
-        float: right;
-        margin-right: 5px;
-        margin-top: 5px;
-        opacity: 1;
+    #page-header-search {
+        margin: 0;
 
-        &:focus {
-            background: white;
-            outline: none !important;
-            border: solid 1px misc-color(dark-medium-gray);
-        }
-        &.collapse-effect {
-            position: relative;
-            right: 0px;
-            width: 5%;
-            opacity: 0;
-            transition: 400ms ease-out;
+        input {
+            @include sans-serif;
+            display: none;
+            padding: 0 0.5em;
+            height: 24px;
+            border: solid 1px misc-color(light-medium-gray);
+            border-radius: 15px;
+            background: misc-color(light-off-white);
+            width: 85%;
+            float: right;
+            margin-right: 5px;
+            margin-top: 5px;
+            opacity: 1;
+
+            &:focus {
+                background: white;
+                outline: none !important;
+                border: solid 1px misc-color(dark-medium-gray);
+            }
+            &.collapse-effect {
+                position: relative;
+                right: 0px;
+                width: 5%;
+                opacity: 0;
+                transition: 400ms ease-out;
+            }
         }
     }
 }

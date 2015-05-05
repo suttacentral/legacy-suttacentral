@@ -79,7 +79,7 @@ $sidebar-tabs-vertical-padding: 0.4em;
         width: 100%;
         
         &:active {
-            background:$light-gray;
+            background: misc-color(light-gray);
         }
         
         &:hover:not(.empty) {
@@ -87,7 +87,7 @@ $sidebar-tabs-vertical-padding: 0.4em;
         }
       
         &:active {
-            background:$light-gray;
+            background: misc-color(light-gray);
         }
     
         & + .button {

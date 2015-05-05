@@ -47,7 +47,7 @@ $ddc-uchen: 'DDC Uchen';
 $noto-sans-myanmar: 'Noto Sans Myanmar';
 
 @mixin font-face-src($font-path, $svg-id) {
-    $url = '#{$base_font_url}/#{$font-path}';
+    $url: '#{$base_font_url}/#{$font-path}';
     src: url('#{$url}.eot');
     src: url('#{$url}.eot?#iefix') format('embedded-opentype'),
         url('#{$url}.woff2') format('woff2'),
