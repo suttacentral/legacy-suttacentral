@@ -53,6 +53,9 @@ def quick():
     blurb(quick)
     _production_run(
         'git pull',
+        'cd data',
+        'git pull',
+        'cd ..',
         'pip install -q -r requirements.txt',
         'invoke assets.compile --precompress',
         'invoke textdata.ensure_loads',
