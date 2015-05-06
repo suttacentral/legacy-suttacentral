@@ -126,8 +126,11 @@ setTimeout(function(){
     $('#panel-screen-wrap').on('click', function(e) {
         if ($(e.target).is('a'))
             return true;
-        // sc.headerMenu.hideAll();
-        sc.headerMenu.update($(e.target));
+        if ($("#autocomplete-dropdown").is(":visible")) {
+            $('#panel-screen-wrap').removeClass('active');    //  if search drop down is visible, remove shadow box
+        } else {
+            sc.headerMenu.update($(e.target));
+        }
         return false
     }).on('mousewheel', function(e){
         if (e.target == this) {

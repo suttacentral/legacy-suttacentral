@@ -70,6 +70,7 @@ header {
 
     #page-header-search {
         margin: 0;
+        height: 100%;
 
         input {
             @include sans-serif;
@@ -281,13 +282,33 @@ header {
     padding: 3em 0.5em 0.5em 0.5em;
     top: 2px;
     background: white;
-    border: 1px solid misc-color(light-light-gray); 
+    border: 1px solid misc-color(light-light-gray);
+
+
+// background-color: transparent;
+position: absolute;
+display: block;
+width: auto; //initial;
+// margin-right: 5px;
+top: 40px;
+right: 10px;
+padding: 0 1em 1em 1em;
+// float: right;
+max-width: 90%;
+// min-width: 25%;
+
     > ul {
         margin: 0;
-        padding: 0.5em;
+// padding: 0.5em;
         list-style: none;
         line-height: 1.6em;
+height: 100%;
+// background-color: lightblue;
+// position: absolute;
         > li {
+// background-color: lightgreen;
+width: 100%;
+height: initial;
             > .suggestion {
                 display: inline-block;
                 width: 100%;
