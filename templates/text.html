@@ -187,10 +187,14 @@
 {% if not embed %}
 <div id="nextprev">
 {% if prev_data %}
-<a class="previous" title="{{ prev_data.uid|uid_to_acro }}: {{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀</a>
+<div class="prev-btn-container">
+    <a class="previous" title="{{ prev_data.uid|uid_to_acro }}: {{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀</a>
+</div>
 {% endif %}
 {% if next_data %}
-<a class="next" title="{{ next_data.uid|uid_to_acro }}: {{ next_data.name_striped }} " href="{{ next_data.url }}" data-prefetch="1">▶</a>
+<div class="next-btn-container">
+    <a class="next" title="{{ next_data.uid|uid_to_acro }}: {{ next_data.name_striped }} " href="{{ next_data.url }}" data-prefetch="1">▶</a>
+</div>
 {% endif %}
 </div>
 {% endif %}
