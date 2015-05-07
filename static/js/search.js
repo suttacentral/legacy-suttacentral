@@ -60,10 +60,6 @@ sc.search = {
                             .appendTo('header')
                             .hide()
                             .on('click', '.suggestion', function(e){
-                                var searchWidth = $("#page-header-search input").width();
-                                alert(searchWidth);
-                                $("#autocomplete-dropdown").css('min-width', searchWidth - 16);
-                                $('#panel-screen-wrap').addClass('active');
                                 self.search_element.val($(e.target).text().toLowerCase())
                                                    .focus();
                             });
@@ -96,6 +92,11 @@ sc.search = {
                                                     define: 1,
                                                     details: 1}))
         });
+        //  adjust the width of the search results drop down to be at least as large as input box
+        var searchWidth = $("#page-header-search input").width();
+        $("#autocomplete-dropdown").css('min-width', searchWidth - 16);
+        $('#panel-screen-wrap').addClass('active');
+
         self.dropDown.show();
     },
     error: function(query, data, code, jqXHR) {
