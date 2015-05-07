@@ -61,6 +61,7 @@ sc.search = {
                             .hide()
                             .on('click', '.suggestion', function(e){
                                 var searchWidth = $("#page-header-search input").width();
+                                alert(searchWidth);
                                 $("#autocomplete-dropdown").css('min-width', searchWidth - 16);
                                 $('#panel-screen-wrap').addClass('active');
                                 self.search_element.val($(e.target).text().toLowerCase())
