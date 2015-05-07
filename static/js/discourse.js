@@ -1,14 +1,28 @@
 sc.discourse = {
+    resultsDiv: $('#discourse-search-results'),
+    button: $('#discourse-link-button'),
     init: function() {
         var self = sc.discourse;
-        self.button = $('#discourse-link-button');
-        self.resultsDiv = $('#discourse-search-results');
+        self.visible = self.resultsDiv.css('display') != 'none' ;
         self.button.on('click', function(e) {
             e.preventDefault();
-            self.resultsDiv.toggleClass('visible');
+            self.visible = !self.visible;
+            if (self.visible) {
+                self.show();
+            } else {
+                self.hide();
+            }
             return false
         })
         self.search()
+    },
+    show: function(){
+        self.resultsDiv.slideDown();
+        $('#discourse-search-results ~ *').slideUp()
+    },
+    hide: function() {
+        self.resultsDiv.slideUp()
+        $('#discourse-search-results ~ *').slideDown()
     },
     search: function() {
         self = sc.discourse;
@@ -38,12 +52,9 @@ sc.discourse = {
         _.zip(data.topics, data.posts).forEach(function(pair){
             var topic = pair[0],
                 post = pair[1],
-                url = 'http://discourse.suttacentral.net/t/{}/{}/{}'.format(topic.slug, topic.id, post.id),
-                code = '<li><a href="{}"><span class="topic-title">{}</span>{}</a></li>'.format(url, topic.fancy_title, post.blurb); 
-            console.log(code)
-            ul.append(code)
-            
-            
+                url = 'http://discourse.suttacentral.net/t/{}/{}/{}'.format(topic.slug, topic.id, post.post_number),
+                code = '<li><a href="{}"><span class="topic-title">{}</span><span class="post-blurb">{}</span></a></li>'.format(url, topic.fancy_title, post.blurb); 
+            ul.append(code)            
         })
             
     }

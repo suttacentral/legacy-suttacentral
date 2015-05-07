@@ -25,25 +25,15 @@
     #discourse-search-results {
         width: 100%;
         overflow-y: hidden;
-        max-height: 0;
         overflow-x: hidden;
         float: left;
-        transition: 250ms ease;
+        font-size: 90%;
     }
     
     #discourse-search-heading {
         color: black;
-        font-size: 90%;
         margin: 0.5em;
     }
-    
-    #discourse-search-results.visible {
-        visibility: visible;
-        overflow-y: auto;
-        max-height: 12em;
-        transition: 250ms ease;
-    }
-        
     
     #discourse-search-results li > a {
         display: block;
@@ -54,9 +44,7 @@
         background: #eee;
     }
     
-
     #discourse-search-results > ul {
-        font-size: 60%;
         padding: 0.1em;
         margin: 0;
     }
@@ -65,8 +53,7 @@
         display: block;
         font-size: 115%;
         color: blue;
-        margin: 1em 0.5em 0.5em 0.5em;
-        white-space: nowrap;
+        padding: 1em 0.5em 0.5em 0.5em;
     }
 </style>
     
@@ -138,7 +125,7 @@
                     title="Go to discourse.suttacentral.net, where you can join a discussion or find information and resources."
                 >Discuss &amp; Discover</a>
             </div>
-            <div id="discourse-search-results">
+            <div id="discourse-search-results" style="display: none">
                 <div id="discourse-search-heading">Conversations at <a href="http://suttacentral.net">discourse.suttacentral.net</a></div>
                 <div id="discourse-search-loading"><em>Loading conversations…</em></div>                
             </div>
