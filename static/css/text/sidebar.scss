@@ -70,7 +70,7 @@ $sidebar-tabs-vertical-padding: 0.4em;
     .button, .dropdown-button {
         background:white;
         color: misc-color(dark-medium-gray);
-        display:inline-block;
+        float: left;
         text-align:center;
         height: 2.5em;
         line-height: 2.5em;
@@ -101,9 +101,10 @@ $sidebar-tabs-vertical-padding: 0.4em;
         box-shadow: 1px 1px 3px black inset;
     }
    
-    /* For dropdown */
+    /* For dropdown - overrides jquery.dropdown css*/
     .dropdown-panel {
-        min-width:inherit;
+        padding: 0;
+        float: left;
     }
     
 
@@ -350,25 +351,6 @@ $sidebar-tabs-vertical-padding: 0.4em;
         li {
             font-weight: normal;
         }
-    }
-}
-
-
-#links > a {
-    float:none;
-    display: inline-block;
-    min-width: 3em;
-    text-align: center;
-    padding: 0;
-    font-size: 90%;
-    color: misc-color(dark-medium-gray);
-    &.details {
-        margin: 0;
-    }
-    &.active {
-        padding-bottom: 1em;
-        margin-bottom: -1em;
-        font-weight: bold;
     }
 }
 
