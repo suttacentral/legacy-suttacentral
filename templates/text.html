@@ -51,9 +51,20 @@
         
     #discourse-search-results .topic-title {
         display: block;
-        font-size: 115%;
         color: blue;
         padding: 1em 0.5em 0.5em 0.5em;
+    }
+    
+    #discourse-search-results .topic-category-icon {
+        float: right;
+        margin: 1em 0.25em 0.5em 0.5em;
+        padding: 0 0.25em;
+    }
+    
+    #discourse-search-results .topic-category-icon-bar {
+        display: inline-block;
+        width: 0.4em;
+        margin-right: 0.2em;
     }
 </style>
     
@@ -126,7 +137,7 @@
                 >Discuss &amp; Discover</a>
             </div>
             <div id="discourse-search-results" style="display: none">
-                <div id="discourse-search-heading">Conversations at <a href="http://suttacentral.net">discourse.suttacentral.net</a></div>
+                <div id="discourse-search-heading">Conversations at <a href="http://discourse.suttacentral.net">discourse.suttacentral.net</a></div>
                 <div id="discourse-search-loading"><em>Loading conversations…</em></div>                
             </div>
             {% endif %}
