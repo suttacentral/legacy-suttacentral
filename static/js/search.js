@@ -24,6 +24,8 @@ sc.search = {
 /* DS START Local Debug - remove when working */
 // $('#panel-screen-wrap').addClass('active');
 // dropDown.show();
+// var searchWidth = $("#page-header-search input").width();
+// $("#autocomplete-dropdown").css('min-width', searchWidth - 16);
 /* DS END Local Debug - remove when working */
 
         var self = sc.search,
@@ -58,10 +60,16 @@ sc.search = {
                             .appendTo('header')
                             .hide()
                             .on('click', '.suggestion', function(e){
+                                var searchWidth = $("#page-header-search input").width();
+                                $("#autocomplete-dropdown").css('min-width', searchWidth - 16);
+                                $('#panel-screen-wrap').addClass('active');
                                 self.search_element.val($(e.target).text().toLowerCase())
                                                    .focus();
                             });
-            self.search_element.on('blur', function(){self.dropDown.delay(50).slideUp(); return false});
+            self.search_element.on('blur', function(){
+                $('#panel-screen-wrap').removeClass('active');
+                self.dropDown.delay(50).slideUp(); return false;
+            });
         }
         self.dropDown.empty();
 /* DS END Local Debug - comment this out when testing */
