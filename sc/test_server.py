@@ -21,13 +21,22 @@ import urllib.parse
 import urllib.request
 logger = logging.getLogger(__name__)
 
+logger.setLevel('INFO')
+
 done = threading.Event()
 
-def start_server():
+def setup_logging():
+    import sc.logger
     sc.config['app']['log_level'] = 'ERROR'
+    handler = logging.StreamHandler()
+    logger.addHandler(handler)
+    
+
+def start_server():
+    setup_logging()
     app.setup()
     sc.config['global']['server.socket_port'] = sc.config['test']['port']
-    print('Now starting test server on port {}'.format(sc.config['test']['port']))
+    logger.info('Now starting test server on port {}'.format(sc.config['test']['port']))
     app.mount()
 
 def test_server():
@@ -35,7 +44,7 @@ def test_server():
     attempts = 0
     max_attempts = 2
     time.sleep(0.01)
-    print('Now loading test pages to confirm server stability')
+    logger.info('Now loading test pages to confirm server stability')
     while attempts < max_attempts:
         if attempts != 0:
             time.sleep(4)
@@ -45,7 +54,7 @@ def test_server():
             for path in sc.config['test']['paths']:
                 url = urllib.parse.urljoin(base_url, path)
                 response = urllib.request.urlopen(url)
-                print('{} [{}]'.format(url, response.code))
+                logger.info('{} [{}]'.format(url, response.code))
                 if response.code == 200:
                     continue
                 else:
@@ -54,9 +63,9 @@ def test_server():
             stop(0)
                 
         except urllib.error.URLError as e:
-            print('{} : {!s}'.format(url, e))
+            logger.info('{} : {!s}'.format(url, e))
     
-    print(_red_text('Failed to achieve a 200 response for {}'.format(url)))
+    logger.info(_red_text('Failed to achieve a 200 response for {}'.format(url)))
     stop(1, 'fails to generate HTTP 200 Responses')
 
 def save_last_good():
@@ -73,11 +82,11 @@ def roll_back():
         with open(sc.config['test']['last_good_rev_file'], 'r') as f:
             revs = json.load(f)
     except FileNotFoundError:
-        print('Unable to rollback')
+        logger.info('Unable to rollback')
         return False
     sc.scm.scm.checkout(revs['code'])
     sc.scm.data_scm.checkout(revs['data'])
-    print('Successfully rolled back to last known good state')
+    logger.info('Successfully rolled back to last known good state')
 
 def roll_forward():
     import sc.scm
@@ -88,16 +97,16 @@ def stop(exit_code, msg=None):
     try:
         cherrypy.engine.exit()
         cherrypy.server.stop()
-        print('Now shutting down test server on port {}'.format(sc.config['test']['port']))
+        logger.info('Now shutting down test server on port {}'.format(sc.config['test']['port']))
     except NameError:
         pass
     time.sleep(0.5)
     if exit_code == 0:
-        print(_green_text('''\
+        logger.info(_green_text('''\
 Test Server returns HTTP 200 Responses. Production should be good to go.'''))
         save_last_good()
     else:
-        print(_red_text('''\
+        logger.info(_red_text('''\
 CRITICAL PROBLEM! [AKA Bad Dev, Don't break the server!]
 
 A test instance of the server using the current branch code
