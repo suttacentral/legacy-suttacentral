@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 build_logger = logging.getLogger(__name__ + '.build')
 build_logger.addHandler(sc.logger.console_log)
 build_logger.addHandler(sc.logger.file_log)
+build_logger.addHandler(sc.logger.startup_log)
 build_logger.setLevel('INFO')
 
 """ A tool responsible for collating information from the texts

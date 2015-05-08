@@ -50,7 +50,6 @@ def test_server():
                 else:
                     break
             # Success!
-            print(_green_text('All tests passed'))
             stop(0)
                 
         except urllib.error.URLError as e:
@@ -91,7 +90,7 @@ def stop(exit_code):
     time.sleep(0.5)
     if exit_code == 0:
         print(_green_text('''\
-Test Server returns HTTP Responses. Production should be good to go.'''))
+Test Server returns HTTP 200 Responses. Production should be good to go.'''))
         save_last_good()
     else:
         roll_back()
