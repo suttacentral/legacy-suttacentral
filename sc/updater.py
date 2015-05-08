@@ -32,10 +32,13 @@ def run_updaters():
     import sc.search.suttas
     import sc.search.autocomplete
     from sc.util import filelock
+    
+    
     # name, function, lock needed?
     functions = [
         ('sc.textdata.periodic_update', sc.textdata.periodic_update, False),
         ('sc.scimm.periodic_update', sc.scimm.periodic_update, False),
+        ('sc.textdata.periodic_update', sc.textdata.periodic_update, False),
         ('sc.text_image.update_symlinks', sc.text_image.update_symlinks, False)
     ]
     if sc.config.app['update_search']:
@@ -48,6 +51,8 @@ def run_updaters():
     
     time.sleep(0.5)
     i = 0
+    
+    times_called = {t[0]:0 for t in functions}
 
     lastGitCommitTime = None
     
@@ -73,13 +78,15 @@ def run_updaters():
                     if global_lock:
                         with filelock('/tmp/suttacentral_updater_global.lock', block=False) as acquired:
                             if acquired:
-                                fn(i)
+                                fn(times_called[fn_name])
+                                times_called[fn_name] += 1
                             else:
                                 logger.warn('Search index update lock not acquired.')
                                 time.sleep(10)
                                 continue
                     else:
-                        fn(i)
+                        fn(times_called[fn_name])
+                        times_called[fn_name] += 1
                 except Exception as e:
                     logger.error('An exception occured when running {}'.format(fn_name))
                     raise

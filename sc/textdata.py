@@ -68,6 +68,7 @@ class TextInfo:
 
 class TIMManager:
     instance = None
+    current_file = None
     db_name_tmpl = 'text-info-model_{}.pickle'
     version = 1
     def __init__(self):
@@ -81,18 +82,9 @@ class TIMManager:
         mtime = self.version + int(max(file.stat().st_mtime for file in files))
         return self.db_name_tmpl.format(mtime)
     
-    def load(self, obsolete_okay=False):
-        """ Load an instance of the TextInfoModel 
-        
-        If a saved copy is present, it will be made available nearly
-        instantly. Whether or not a saved copy is available, it will
-        then check if it is up to date, and set the up_to_date flag (takes a few seconds),
-        if it is not up_to_date, it will then proceed to generate
-        a fresh version of the database (takes a few minutes), the fresh
-        version will then be made ready.
-        
-        """
-        
+    def load_cached(self):
+        if self.instance:
+            return
         best_mtime = ''
         best_file = None
         name_rex = regex.compile(self.db_name_tmpl.format('([0-9a-f]+)', '([0-9]+)'))
@@ -123,18 +115,31 @@ class TIMManager:
                     best_file.unlink()
                 best_file = None
                 best_mtime = ''
+        self.current_file = best_file
+    
+    def load(self, quick=False):
+        """ Load an instance of the TextInfoModel 
+        
+        If a saved copy is present, it will be made available nearly
+        instantly. Whether or not a saved copy is available, it will
+        then check if it is up to date, and set the up_to_date flag (takes a few seconds),
+        if it is not up_to_date, it will then proceed to generate
+        a fresh version of the database (takes a few minutes), the fresh
+        version will then be made ready.
+        
+        """
+        self.load_cached()
+        if quick and self.instance is not None:
+            return
         
         db_file_name = self.get_db_name()
-        if best_file:
-            self.up_to_date = (best_file.name == db_file_name)
-            build_logger.info('TIM DB name = {}, up_to_date = {}'.format(db_file_name, self.up_to_date))
+        if self.current_file:
+            self.up_to_date = (self.current_file.name == db_file_name)
+            build_logger.info('TIM DB name = {}, up_to_date = {}'.format(self.current_file, self.up_to_date))
         else:
             build_logger.info('No TIM DB exists')
         
         if not self.up_to_date:
-            if obsolete_okay:
-                if self.ready.is_set():
-                    return
             db_file = sc.db_dir / db_file_name
             db_file.touch()
             build_logger.info('Building new instance, filename = {.name}'.format(db_file))
@@ -535,7 +540,10 @@ def tim():
     return tim_manager.get()
     
 def periodic_update(i):
-    tim_manager.load()
+    if i == 0:
+        tim_manager.load(quick=True)
+    else:
+        tim_manager.load(quick=False)
         
 
 def rebuild_tim():
