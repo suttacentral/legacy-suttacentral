@@ -43,11 +43,11 @@ def test_server():
     base_url = 'http://{host}:{port}'.format(**sc.config['test'])
     attempts = 0
     max_attempts = 2
-    time.sleep(0.01)
+    time.sleep(5)
     logger.info('Now loading test pages to confirm server stability')
     while attempts < max_attempts:
         if attempts != 0:
-            time.sleep(4)
+            time.sleep(10)
         attempts += 1
         
         try:
