@@ -97,6 +97,9 @@ class Scm(object):
             'author': author,
             'subject': subject,
         }
+    
+    def checkout(self, commit_id):
+        self._git('checkout', commit_id)        
 
     def _git(self, *args):
         with plumbum.local.cwd(self.dir):

@@ -14,11 +14,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 build_logger = logging.getLogger(__name__ + '.build')
-
-build_logger_handler = logging.StreamHandler()
-build_logger_handler.setFormatter(sc.logger.SCLogFormatter(colorize=True))
-build_logger.addHandler(build_logger_handler)
-build_logger_handler.setLevel('INFO')
+build_logger.addHandler(sc.logger.console_log)
+build_logger.addHandler(sc.logger.file_log)
 build_logger.setLevel('INFO')
 
 """ A tool responsible for collating information from the texts
