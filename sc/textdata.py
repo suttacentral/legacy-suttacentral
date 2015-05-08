@@ -115,6 +115,10 @@ class TIMManager:
                     best_file.unlink()
                 best_file = None
                 best_mtime = ''
+        if best_file:
+            for file in db_files:
+                if file != best_file and file.exists():
+                    file.unlink()
         self.current_file = best_file
     
     def load(self, quick=False):
@@ -148,9 +152,6 @@ class TIMManager:
             build_logger.info('Saving TIM to disk as {.name}'.format(db_file))
             with db_file.open('wb') as f:
                 pickle.dump(instance, f)
-            for file in db_files:
-                if file != db_file and file.exists():
-                    file.unlink()
     
     def build(self):
         tim = TextInfoModel()

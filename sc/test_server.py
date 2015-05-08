@@ -27,13 +27,14 @@ def start_server():
     sc.config['app']['log_level'] = 'ERROR'
     app.setup()
     sc.config['global']['server.socket_port'] = sc.config['test']['port']
+    print('Now starting test server on port {}'.format(sc.config['test']['port']))
     app.mount()
 
 def test_server():
     base_url = 'http://{host}:{port}'.format(**sc.config['test'])
     attempts = 0
     max_attempts = 2
-    time.sleep(0.1)
+    time.sleep(0.01)
     print('Now loading test pages to confirm server stability')
     while attempts < max_attempts:
         if attempts != 0:
@@ -56,7 +57,7 @@ def test_server():
             print('{} : {!s}'.format(url, e))
     
     print(_red_text('Failed to achieve a 200 response for {}'.format(url)))
-    stop(1)
+    stop(1, 'fails to generate HTTP 200 Responses')
 
 def save_last_good():
     import sc.scm
@@ -83,34 +84,35 @@ def roll_forward():
     sc.scm.scm.checkout(sc.config['test']['branch'] or 'master')
     sc.scm.data_scm.checkout(sc.config['test']['branch'] or 'master')
 
-def stop(exit_code):
-    print('Now shutting down server')
-    cherrypy.engine.exit()
-    cherrypy.server.stop()
+def stop(exit_code, msg=None):
+    try:
+        cherrypy.engine.exit()
+        cherrypy.server.stop()
+        print('Now shutting down test server on port {}'.format(sc.config['test']['port']))
+    except NameError:
+        pass
     time.sleep(0.5)
     if exit_code == 0:
         print(_green_text('''\
 Test Server returns HTTP 200 Responses. Production should be good to go.'''))
         save_last_good()
     else:
-        roll_back()
         print(_red_text('''\
 CRITICAL PROBLEM! [AKA Bad Dev, Don't break the server!]
+
 A test instance of the server using the current branch code
-fails to generate HTTP 200 Responses. This is a critical problem causing
+{}. This is a critical problem causing
 all or much of the site to generate error pages instead of the intended
 pages.
 Please attempt to reproduce this problem on a development server
 or the staging server.
 The production server has not been restarted and is still running the
-pre-updated code. It should still be functioning correctly especially
-if the rollback succeeded.
+pre-updated code. It should still be functioning.
 However it may be in an inconsistent state or generating errors.
 If you are unable to fix the problem, please inform the primary server
 administrator that this problem has occurred.
 This warning should not be bypassed as if the production server is 
-restarted now it will almost certainly be severely broken.
-'''))
+restarted now it will almost certainly be severely broken.'''.format(msg)))
     os._exit(exit_code)
 
 def _green_text(text):
@@ -132,16 +134,13 @@ try:
     from sc import app, updater
     import cherrypy
     
-    roll_forward()
     start_server()
     
     t = threading.Thread(target=test_server)
     t.start()
 
-except ImportError as e:
+except Exception as e:
     logger.exception(e)
-    cmd = 'pip install -r requirements.txt'
-    logger.error('Missing dependency, try running: {}'.format(_green_text(cmd)))
-    exit(1)
+    stop(2, 'fails to start due to an exception')
     
     

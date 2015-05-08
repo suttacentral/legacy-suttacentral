@@ -33,7 +33,6 @@ def reset():
     tasks.dictionary.build()
     tasks.search.index()
 
-
 @task
 def server():
     """Run the server."""

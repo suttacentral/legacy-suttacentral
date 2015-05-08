@@ -57,8 +57,10 @@ def quick():
         'git pull',
         'cd ..',
         'pip install -q -r requirements.txt',
+        'invoke jsdata.build --minify',
         'invoke assets.compile --precompress',
         'invoke textdata.ensure_loads',
+        'invoke test_server',
         'sudo supervisorctl restart sc-production',
         'invoke assets.clean --older'
     )
