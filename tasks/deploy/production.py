@@ -66,6 +66,20 @@ def quick():
     )
 
 @task
+def test():
+    _production_run(
+        'git pull',
+        'cd data',
+        'git pull',
+        'cd ..',
+        'pip install -q -r requirements.txt',
+        'invoke jsdata.build --minify',
+        'invoke assets.compile --precompress',
+        'invoke textdata.ensure_loads',
+        'invoke test_server'
+    )
+
+@task
 def rebuild_tim():
     """ Rebuild TIM on the production server """
     blurb(rebuild_tim)

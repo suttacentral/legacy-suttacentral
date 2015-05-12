@@ -65,7 +65,7 @@ def test_server():
         except urllib.error.URLError as e:
             logger.info('{} : {!s}'.format(url, e))
     
-    logger.info(_red_text('Failed to achieve a 200 response for {}'.format(url)))
+    logger.error(_red_text('Failed to achieve a 200 response for {}'.format(url)))
     stop(1, 'fails to generate HTTP 200 Responses')
 
 def save_last_good():
@@ -106,7 +106,7 @@ def stop(exit_code, msg=None):
 Test Server returns HTTP 200 Responses. Production should be good to go.'''))
         save_last_good()
     else:
-        logger.info(_red_text('''\
+        logger.error(_red_text('''\
 CRITICAL PROBLEM! [AKA Bad Dev, Don't break the server!]
 
 A test instance of the server using the current branch code

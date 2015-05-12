@@ -220,7 +220,8 @@ sc.piLookup = {
     },
     buttonHandler: function(e) {
         var $button = $(e.target),
-            lang = $button.attr('data-lang');
+            lang = $button.attr('data-lang'),
+            self = sc.piLookup;
         if (lang != self.lang) {
             self.setLang($button.attr('data-lang'));
             self.makeControls();
@@ -267,9 +268,11 @@ sc.piLookup = {
         }
     },
     ready: function() {
-        this.data = self.dataByName[self.lang];
+        var self = sc.piLookup;
+        self.data = self.dataByName[self.lang];
         generateLookupMarkup();
         sc.sidebar.messageBox.show("The lookup dictionary is now enabled. Hover with the mouse to display the meaning.", {id: "msg-lookup-success"});
+        $('.lookup-active').removeClass('lookup-active').addClass('lookup-inactive');
         $('.prime .dropdown-button').removeClass('lookup-inactive').addClass('lookup-active');
     },
     togglePaliLookup: function(force) {

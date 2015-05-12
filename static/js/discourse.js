@@ -1,5 +1,5 @@
 sc.discourse = {
-    forumUrl: 'http://discourse.suttacentral.net',
+    forumUrl: 'https://discourse.suttacentral.net',
     resultsDiv: $('#discourse-search-results'),
     button: $('#discourse-link-button'),
     init: function() {
