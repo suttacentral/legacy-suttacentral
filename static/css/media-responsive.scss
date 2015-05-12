@@ -123,6 +123,13 @@ $header-large-width:     800px;
             width: 60% !important;
         }
     }
+    .infomode {
+        #text {
+            p {
+                width: 100%;
+            }
+        }
+    }
 }
 
 @include if-screen-narrower($small-width) {    //  NARROWER

@@ -213,6 +213,33 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
 }
 
+
+#text {
+    p {
+        width: 100%;
+        a {
+            display: none;
+            position: relative;
+            left: 60px;
+            margin: 3px 0 0 0;
+        }
+    }
+}
+
+.infomode {
+    #text {
+        p {
+            width: 80%;
+            a {
+                display: inline-block;
+            }
+        }
+        .hgroup p {
+            width: 100%;
+        }
+    }
+}
+
 .infomode {
     .term, .gloss {
         color: pastel-color(dirty-green);
