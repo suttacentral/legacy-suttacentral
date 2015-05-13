@@ -33,7 +33,6 @@ def reset():
     tasks.dictionary.build()
     tasks.search.index()
 
-
 @task
 def server():
     """Run the server."""
@@ -47,6 +46,11 @@ def server():
     else:
         os.execlp('cherryd', 'cherryd', '-i', 'sc.server')
 
+@task
+def test_server():
+    """Run test server to validate code."""
+    blurb(test_server)
+    os.execlp('cherryd', 'cherryd', '-i', 'sc.test_server')
 
 @task
 def update_data():

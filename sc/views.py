@@ -41,6 +41,7 @@ def jinja2_environment():
         extensions=[AssetsExtension],
         trim_blocks=True,
         lstrip_blocks=True,
+        auto_reload=not config.compile_assets
     )
     env.assets_environment = assets.get_env()
 

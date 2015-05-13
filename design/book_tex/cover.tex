@@ -1,0 +1,182 @@
+\documentclass{article}
+
+%PACKAGES%
+\usepackage[papersize={12.71in, 9.25in},margin=0in]{geometry}
+\usepackage{graphicx}
+\usepackage{fontspec}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{soulutf8}
+\usepackage{rotating}
+\usepackage{fix-cm}%font size\\
+\usepackage[code=Code39]{makebarcode}
+\setmainfont[Numbers=OldStyle,BoldFont={Skolar PE Semibold}]{Skolar PE}
+\usepackage{setspace}
+\setstretch{1.12}
+\usepackage{microtype}
+\frenchspacing
+\setlength{\parskip}{0pt}
+\setlength\parindent{0pt}%remove horizontal spacing of minipages
+\setlength{\tabcolsep}{0pt}%remove horizontal spacing of tabular
+
+%allow precise margins for quote
+\makeatletter
+\renewenvironment{quote}
+               {\list{}{\listparindent=0pt%whatever you need
+                        \itemindent    \listparindent
+                        \leftmargin=1.125in%  whatever you need
+                        \rightmargin=1in%whatever you need
+                        \topsep=0pt%%%%%  whatever you need
+                        \parsep        \z@ \@plus\p@}%
+                \item\relax}
+               {\endlist}
+\makeatother
+
+%GRID%
+%\usepackage{pagegrid}
+%\pagegridsetup{top-left, step=0.457in}
+%GRID%
+
+%use color names and definitions from SC color.scss
+
+
+\providecolor{pastel-yellow}{HTML}{EEE8AA}
+\providecolor{dirty-pastel-yellow}{HTML}{B3AF8C}
+\providecolor{dark-pastel-yellow}{HTML}{9B9237}
+\providecolor{bright-pastel-yellow}{HTML}{F7F2C2}
+\providecolor{light-pastel-yellow}{HTML}{F7F3D0}
+
+\providecolor{pastel-green}{HTML}{75A38F}
+\providecolor{dirty-pastel-green}{HTML}{607A6F}
+\providecolor{dark-pastel-green}{HTML}{266A4D}
+\providecolor{bright-pastel-green}{HTML}{A4D1BE}
+\providecolor{light-pastel-green}{HTML}{B0D1C3}
+
+\providecolor{pastel-red}{HTML}{EEBDAA}
+\providecolor{dirty-pastel-red}{HTML}{B3978C}
+\providecolor{dark-pastel-red}{HTML}{9B5437}
+\providecolor{bright-pastel-red}{HTML}{F7D1C2}
+\providecolor{light-pastel-red}{HTML}{F7DBD0}
+
+\providecolor{pastel-purple}{HTML}{8977A1}
+\providecolor{dirty-pastel-purple}{HTML}{6C6179}
+\providecolor{dark-pastel-purple}{HTML}{432769}
+\providecolor{bright-pastel-purple}{HTML}{B9A7D0}
+\providecolor{light-pastel-purple}{HTML}{BFB2D0}
+
+
+
+\providecolor{saturated-yellow}{HTML}{EED900}
+\providecolor{dirty-saturated-yellow}{HTML}{B3A72D}
+\providecolor{dark-saturated-yellow}{HTML}{9B8D00}
+\providecolor{bright-saturated-yellow}{HTML}{F7E63E}
+\providecolor{light-saturated-yellow}{HTML}{F7EA6F}
+
+\providecolor{saturated-green}{HTML}{00B428}
+\providecolor{dirty-saturated-green}{HTML}{228738}
+\providecolor{dark-saturated-green}{HTML}{00751A}
+\providecolor{bright-saturated-green}{HTML}{36DA5A}
+\providecolor{light-saturated-green}{HTML}{62DA7C}
+
+\providecolor{saturated-red}{HTML}{EE1700}
+\providecolor{dirty-saturated-red}{HTML}{B3392D}
+\providecolor{dark-saturated-red}{HTML}{9B0F00}
+\providecolor{bright-saturated-red}{HTML}{F74F3E}
+\providecolor{light-saturated-red}{HTML}{F77C6F}
+
+\providecolor{saturated-purple}{HTML}{4805A2}
+\providecolor{dirty-saturated-purple}{HTML}{472179}
+\providecolor{dark-saturated-purple}{HTML}{2E0269}
+\providecolor{bright-saturated-purple}{HTML}{7A39D0}
+\providecolor{light-saturated-purple}{HTML}{9161D0}
+
+
+
+\providecolor{cool-blue}{HTML}{005179}
+\providecolor{bright-cool-blue}{HTML}{007AFE}
+\providecolor{medium-gray}{HTML}{767676}
+\providecolor{dark-medium-gray}{HTML}{565656}
+\providecolor{dark-gray}{HTML}{2b2b2b}
+
+\begin{document}
+
+\fboxsep=0pt%
+\colorbox{pastel-yellow}{\parbox[c][1.075in][c]{1\textwidth}{%
+\tabular{l}
+\begin{minipage}[c][1.075in]{6.125in}
+\vspace{0.47in}\begin{quote}\setstretch{0.8}\textcolor{cool-blue}{\caps{SuttaCentral}}\\
+\textcolor{dark-medium-gray}{\itshape\footnotesize Early Buddhist texts, translations, and parallels}\end{quote}\hspace{0.1em}
+\end{minipage}\begin{minipage}[c][1.075in]{0.457in}\vspace{0.125in}
+\centering \textcolor{cool-blue}{SC}
+\end{minipage}\begin{minipage}[c][1.075in]{6.125in}
+\hspace{0.1em}
+\end{minipage}
+\endtabular}}%
+\textcolor{dark-saturated-red}{\hrule height 0.05in}
+\begin{minipage}[c][7in]{6.125in}
+
+\vfill
+\begin{quote}
+The Theragāthā, or “Verses of the Senior Monks”, is a collection of inspired sayings associated with monks who lived in the time of the Buddha, or occasionally a little later. It is the companion to the Therīgāthā, which contains verses of the nuns. These verses cover a wide range of topics, but most characteristically they express the joy of a life of meditation and seclusion in the forest. In these verses we hear from many monks and nuns who are otherwise unknown to us, and whose voices are preserved here alone. This new translation of the Theragāthā by Bhikkhu Sujato and Jessica Walton was prepared specially for SuttaCentral.
+\end{quote}
+\vfill
+
+\noindent\hfil\rule{0.3333333\textwidth}{.4pt}\hfil
+
+
+
+\begin{center}
+\vfill
+\begin{quote}
+\textit{SuttaCentral gathers together the early texts from all Buddhist traditions and makes them available in the original languages and modern translations.}
+\end{quote}
+\vfill
+\end{center}
+
+
+\end{minipage}
+\begin{minipage}[c][7in]{0.457in}
+\centering
+\rotatebox{270}{
+{\large Verses of the Senior Monks}
+\hspace{0.5in}
+\lowercase{\caps{\large Sujato \& Walton}}
+}
+\end{minipage}
+\begin{minipage}[c][7in]{6.125in}
+
+\begin{center}
+\vfill
+
+\huge\textbf{Verses of the Senior Monks}
+
+\vfill
+
+\large\textit{A new translation of the Theragāthā by}
+
+\bigskip
+
+\lowercase{\caps{\Large Bhikkhu Sujato \&
+
+Jessica Walton}}
+
+\vfill
+\end{center}
+
+
+\end{minipage}
+\fboxsep=0pt%
+\colorbox{dark-pastel-green}{\parbox[c][1.125in][c]{1\textwidth}{%
+\tabular{l}
+\begin{minipage}[c][1.125in]{6.125in}
+\centering \fboxrule=4pt%
+\fcolorbox{white}{white}{\barcode{9781921842177}}\vspace{0.125in}
+\end{minipage}\begin{minipage}[c][1.125in]{0.457in}
+\centering \textcolor{white}{\Huge ☸}\vspace{0.125in}
+\end{minipage}\begin{minipage}[c][1.125in]{6.125in}
+\centering \textcolor{white}{\fontsize{40}{40}\selectfont ☸}\vspace{0.125in}
+\end{minipage}
+\endtabular}}%
+
+
+
+\end{document}

@@ -24,6 +24,7 @@ import tempfile
 import logging
 import webassets
 import gzip
+import time
 from urllib.request import urlopen
 from zipfile import ZipFile
 
@@ -41,11 +42,16 @@ unihanzip_file = sc.tmp_dir / 'Unihan.zip'
 unihanzip_url = 'http://www.unicode.org/Public/zipped/6.3.0/Unihan.zip'
 unihan_readings_filename = 'Unihan_Readings.txt'
 
+if buddhdic_file.exists() and unihanzip_file.exists():
+    age = max(time.time() - buddhdic_file.stat().st_mtime, time.time() - unihanzip_file.stat().st_mtime)
+    if age < 14 * 24 * 60 * 60:
+        logging.info('Nothing to be done')
+        exit(0)
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description='Build Chinese Lookup Dictionary Data Scripts',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-d', '--download', help='download sources', action='store_true')
     parser.add_argument('-m', '--minify', help="Minify and version Javascript Output", action='store_true')
     parser.add_argument('-v', '--verbose', help="Log more information", action='store_true')
     parser.add_argument('-q', '--quiet', help="Show only error", action='store_true')
@@ -258,17 +264,15 @@ def dl_file(url, target_file):
             raise
             
 
-if not buddhdic_file.exists() or args.download:
-    dl_file(buddhdic_url, buddhdic_file)
+dl_file(buddhdic_url, buddhdic_file)
 
 with gzip.open(str(buddhdic_file), 'rt', encoding='utf8') as srcfo:
     bdstr = bdbuilder.process(srcfo)
 
 maindata_file = writeout_js(maindata_stem, bdstr, js_process_fn)
 
-if not unihanzip_file.exists():
-    dl_file(unihanzip_url, unihanzip_file)
 
+dl_file(unihanzip_url, unihanzip_file)
 with ZipFile(str(unihanzip_file)) as zipf:
     with tempfile.TemporaryDirectory() as tmpdir_name:
         filename = zipf.extract(unihan_readings_filename, tmpdir_name)

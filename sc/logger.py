@@ -92,5 +92,9 @@ file_log = RotatingFileHandler(str(config.log_path),
                 maxBytes=4*1024*1024, backupCount=1)
 file_log.setFormatter(SCLogFormatter())
 
+startup_log = RotatingFileHandler(config.app['log_startup_path'], maxBytes=1*1024*1024, backupCount=1)
+startup_log.setFormatter(SCLogFormatter())
+startup_log.setLevel('INFO')
+
 console_log = logging.StreamHandler()
 console_log.setFormatter(SCLogFormatter(colorize=True))
