@@ -123,28 +123,6 @@ $header-large-width:     800px;
             width: 60% !important;
         }
     }
-    #text p a {
-        display: none;
-        position: relative;
-        left: 60px;
-        margin: 3px 0 0 0;
-    }
-    .infomode {
-        #text {
-            p {
-                width: 100%;
-                a {
-                    background-color: initial;
-                    border-radius: none;
-                    float: none;
-                    text-indent: 0px;
-                    font-size: .7em;
-                    float: right;
-                    text-indent: inherit;
-                }
-            }
-        }
-    }
 }
 
 @include if-screen-narrower($small-width) {    //  NARROWER
@@ -199,6 +177,44 @@ $header-large-width:     800px;
         text-align:right;
         padding:0 0.1em 0 0;
         width: auto;
+    }
+    a.note .deets,
+    a.note:hover .deets,
+    a.bib .deets,
+    a.bib:hover .deets,
+    .var .deets,
+    .cross .deets,
+    {
+        margin-left: 5em;
+        left: 5%;
+    }
+    #text {
+        p {
+            width: 100%;
+            a {
+                display: none;
+            }
+        }
+    }
+    .infomode {
+        #text {
+            p {
+                width: 100%;
+                a {
+                    display: inline-block;
+                    margin: 0 3px 0 3px;
+                    padding: 0 3px 0 3px;
+                    background-color: #ddd;
+                    border-radius: 3px;
+                    float: none;
+                    text-indent: 0px;
+                    font-size: inherit;
+                }
+            }
+            .hgroup p {
+                width: 100%;
+            }
+        }
     }
 }
 

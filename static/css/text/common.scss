@@ -213,36 +213,6 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
 }
 
-#text {
-    p {
-        width: 100%;
-        a {
-            display: none;
-        }
-    }
-}
-
-.infomode {
-    #text {
-        p {
-            width: 100%;
-            a {
-                display: inline-block;
-                margin: 0 3px 0 3px;
-                padding: 0 3px 0 3px;
-                background-color: #ddd;
-                border-radius: 3px;
-                float: none;
-                text-indent: 0px;
-                font-size: inherit;
-            }
-        }
-        .hgroup p {
-            width: 100%;
-        }
-    }
-}
-
 .infomode {
     .term, .gloss {
         color: pastel-color(dirty-green);
