@@ -130,15 +130,21 @@ class TextIndexer(ElasticIndexer):
                         htmlbytes = f.read()
                     chunk_size += len(htmlbytes) + 512
                     subdivision = division = None
-                    if uid in imm.subdivisions:
-                        subdivision = uid
-                    elif uid in imm.divisions:
-                        division = uid
-                        subdivision = None
-                    elif uid in imm.suttas:
-                        subdivision = imm.suttas[uid].subdivision.uid
-                    else:
-                        subdivision = imm.guess_subdiv_uid(uid)
+                    
+                    # Try to guess by file path
+                    parts = file.relative_to(lang_dir).parts
+                    # Canonical form is lang/pitika/division/subdivision
+                    for part in parts:
+                        if part in imm.subdivisions:
+                            subdivision = part
+                        if part in imm.divisions:
+                            division = part
+                    
+                    if not subdivision:
+                        if uid in imm.suttas:
+                            subdivision = imm.suttas[uid].subdivision.uid
+                        else:
+                            subdivision = imm.guess_subdiv_uid(uid)
 
                     if division is None:
                         if subdivision is not None:

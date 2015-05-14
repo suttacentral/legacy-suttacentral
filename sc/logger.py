@@ -19,14 +19,18 @@ from logging.handlers import RotatingFileHandler
 from colorama import Fore
 from copy import copy
 
+import sc
 from sc import config
 
 
 class SCLogFormatter(logging.Formatter):
 
-    def __init__(self, colorize=False):
+    def __init__(self, colorize=False, with_name=True):
         self.colorize = colorize
-        super().__init__(fmt='[{asctime}] {levelname} {name} {message}',
+        fmt = '[{asctime}] {levelname} {name} {message}'
+        if not with_name:
+            fmt = '[{asctime}] {levelname} {message}'
+        super().__init__(fmt=fmt,
                          datefmt='%Y-%m-%d %H:%M:%S', style='{')
 
     def format(self, record):
@@ -88,9 +92,17 @@ def setup():
         console_log.setLevel(log_level)
         logging.root.addHandler(console_log)
 
-file_log = RotatingFileHandler(str(config.log_path), 
+def file_handler(name=None):
+    if name:
+        logfile = sc.config.log_dir / (name + '.log' if not name.endswith('.log') else '')
+    else:
+        logfile = config.log_path
+    handler = RotatingFileHandler(str(logfile), 
                 maxBytes=4*1024*1024, backupCount=1)
-file_log.setFormatter(SCLogFormatter())
+    handler.setFormatter(SCLogFormatter(with_name=not name))
+    return handler
+
+file_log = file_handler()
 
 startup_log = RotatingFileHandler(config.app['log_startup_path'], maxBytes=1*1024*1024, backupCount=1)
 startup_log.setFormatter(SCLogFormatter())

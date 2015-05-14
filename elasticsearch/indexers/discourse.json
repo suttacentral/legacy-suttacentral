@@ -1,0 +1,76 @@
+{
+    "inherits": ["default_settings"],
+    "index": {
+        "settings": {
+            "analysis": {
+                "filter": {
+                    "english_stop": {
+                        "type": "stop",
+                        "stopwords": "_english_"
+                    },
+                    "english_possessive_stemmer": {
+                        "type": "stemmer",
+                        "language": "possessive_english"
+                    },
+                    "english_stemmer": {
+                        "type": "stemmer",
+                        "language": "english"
+                    }
+                },
+                "analyzer": {
+                    "en": {
+                        "tokenizer": "standard",
+                        "char_filter": ["denumber"],
+                        "filter": [
+                            "english_possessive_stemmer",
+                            "lowercase",
+                            "sanskrit_pali_synonym",
+                            "english_stop",
+                            "english_stemmer",
+                            "icu_folding"
+                        ]
+                    }
+                }
+            }
+        },
+        "mappings": {
+            "post": {
+                "_id": {
+                    "path": "id"
+                },
+                "properties": {
+                    "content": {
+                        "fields": {
+                            "stemmed": {
+                                "type": "string",
+                                "term_vector": "with_positions_offsets",
+                                "analyzer": "en"
+                            }
+                        }
+                    }
+                }
+            },
+            "topic": {
+                "_id": {
+                    "path": "id"
+                },
+                "properties": {
+                    "title": {
+                        "fields": {
+                            "stemmed": {
+                                "type": "string",
+                                "term_vector": "with_positions_offsets",
+                                "analyzer": "en"
+                            }
+                        }
+                    }
+                }
+            },
+            "category": {
+                "_id": {
+                    "path": "id"
+                }
+            }
+        }
+    }
+}
