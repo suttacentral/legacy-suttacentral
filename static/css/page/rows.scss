@@ -21,17 +21,17 @@ html.js .translations.ready {
         position: absolute;
     }
     &:hover {
-        background: $light-light-gray;
+        background: misc-color(light-light-gray);
     }
 }
 
 .translations.ready {
     display: inline-block;
-    border: 1px solid $light-light-gray;
+    border: 1px solid misc-color(light-light-gray);
     border-radius: 5px;
     a[data-dropdown] {
         text-align: center;
-        color: $dark-pastel-red;
+        color: pastel-color(dark-red);
         width: 2em;
         display: inline-block;
         
@@ -39,7 +39,7 @@ html.js .translations.ready {
 
     > .tran.special {
         width: 2em;
-        border-right: 1px solid $light-light-gray;
+        border-right: 1px solid misc-color(light-light-gray);
     }
 }
 

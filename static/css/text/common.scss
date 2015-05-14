@@ -81,9 +81,6 @@
     margin: 0 auto;
     padding: 0 5% !important;
 
-    @media #{$mobile} {
-        padding: 0 !important;
-    }
     /*bilingual headings*/
 .mirror {display:table;margin-left: auto;margin-right: auto;margin-bottom:4.6em;}
 .mirror > * {display:table-row;}
@@ -218,7 +215,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .infomode {
     .term, .gloss {
-        color: $dirty-pastel-green;
+        color: pastel-color(dirty-green);
     }
 }
 
@@ -227,47 +224,55 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .suttainfo, .xu, .w{
-    color:$dark-medium-gray;
-    background:$off-white;
+    color: misc-color(dark-medium-gray);
+    background: misc-color(off-white);
     padding:1em;
     border-radius:3px;
-    border:1px solid $light-light-gray;
+    border:1px solid misc-color(light-light-gray);
     font-size:0.8em;
     display:inline-block;
 }
 
-#nextprev {        
-        width: 18em;
+#nextprev {
+    width: 18em;
     margin: -1em auto;
-    
-    .next, .previous {
-        margin-bottom: 1.5em;
-        color: $medium-gray;
-        font-size:2em;
+
+    .next-btn-container, .prev-btn-container {
+        display: inline-block;        
+        background-color: rgba(230,230,230,0.2);
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        text-align: center;
+        margin-bottom: 48px;
         &:hover {
-            background: $light-light-gray;
+            background: misc-color(light-light-gray);
             border-radius: 50%;
         }
     }
-    .next {
-        padding: 1.5rem 2.3rem 1.5rem 2.5rem;
-        float: right;
-
-    }
-    .previous {
-        padding: 1.5rem 2.5rem 1.5rem 2.3rem;
+    .prev-btn-container {
         float: left;
     }
-
-    .next + .previous {
-        margin-top: 1.5em;
+    .next-btn-container {
+        float: right;
+    }
+    .next, .previous {
+        padding: 0;
+        margin: 0;
+        height: 100px;
+        line-height: 104px;
+        vertical-align: middle;
+        font-size:2em;
+        color: misc-color(medium-gray);
+        border: none;
+    }
+    .next {
+        margin-left: 5px;
     }
 }
 
-
-
 .marked {
-    background: $bright-pastel-red;
+    background: pastel-color(bright-red);
     padding: 2px 0px;
     margin: -2px 0px;
     &.first-marked {

@@ -39,8 +39,8 @@
    display: inline-block;
   font-size:120%;
   font-family: 'Source Sans Pro', sans-serif;
-  background:$bright-pastel-green;
-  color:$dark-medium-gray;
+  background: pastel-color(bright-green);
+  color: misc-color(dark-medium-gray);
   border-radius:50%;
   height:4em;
   width:4em;
@@ -51,11 +51,11 @@
 }
 
 .currency-input + button:hover{
-  background:$saturated-green;
+  background: saturated-color(plain-green);
   color:white;
 }
 .currency-input + button:active{
-  background:$bright-saturated-green;
+  background: saturated-color(bright-green);
 }
 
 form{
@@ -78,7 +78,7 @@ form{
     width: 16em;
     max-width: 100%;
     label {
-        background: $pastel-purple;
+        background: pastel-color(plain-purple);
         width: 5em;
         height: 1em;
         padding: 0.5em;
@@ -93,7 +93,7 @@ form{
     }
 
     label.checked {
-        background: $bright-saturated-purple;
+        background: saturated-color(bright-purple);
     }
   >  label{
     margin:0 0.7em 0 0;
@@ -142,7 +142,7 @@ form{
       display     : block;
       width       : 1em;
       font-size   : 0.875em;
-      color:$dark-saturated-green;
+      color: saturated-color(dark-green);
       line-height : 1em;
       text-align  : center;
       font-weight : bold;
@@ -160,25 +160,25 @@ form{
 .donate-button,#customButton {
     font-size:  120%;
     display: inline-block;
-    background: $dark-saturated-green;
+    background: saturated-color(dark-green);
     font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;
     text-transform: lowercase;
     vertical-align: middle;
     border-radius: 50%;
     color: white;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-    border: 1px solid $dark-pastel-red;
+    border: 1px solid pastel-color(dark-red);
     width: 4em;
     height: 4em;
     line-height: 1;
 }
 
 .donate-button:hover,#customButton:hover {
-    background: $saturated-green;
+    background: saturated-color(plain-green);
     box-shadow: 1px 1px 5px rgba(200,200,200,1);
 }
 .donate-button:active,#customButton:active {
-    background: $bright-saturated-green;
+    background: saturated-color(bright-green);
     box-shadow: 1px 1px 5px rgba(200,200,200,1);
 }
 ul#required {

@@ -1,14 +1,19 @@
 sc.headerMenu = {
     node: $('#panel-screen-wrap, #panel'),
     lastScreenScroll: 0,
+    animationDone: true,
     toggle: function(e){
         $(this).toggleClass('active');
-        $('header nav').not(this).removeClass('active')
+        $('header .pitaka_menu').not(this).removeClass('active')
     },
     update: function(element, mode) {
         var self = sc.headerMenu,
             target = $(element.find('[href]').attr('href'));
-        
+
+        if (target.length < 1) {
+            target = element;
+        }
+
         if (mode === undefined && target.hasClass('active')) {
             mode = "hide";
         } else {
@@ -16,11 +21,22 @@ sc.headerMenu = {
         }
 
         if (mode == "hide") {
-            self.hideAll();
+            $('#panel').one("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(e){
+                if (!animationDone && $(e.currentTarget).hasClass('active')) {
+                    self.hideAll();
+                    animationDone = true;
+                }
+            });
+            if (animationDone) {
+                animationDone = false;
+                $('#panel-screen-wrap').removeClass('active');
+                $('#panel').css({'height': 0});
+            }
         }
         else {
+            animationDone = true;
             self.hideAll();
-            self.node.addClass('active')
+            self.node.addClass('active');
             target.addClass('active');
             element.addClass('active');
             setTimeout(self.adjustColumns, 50);
@@ -63,7 +79,6 @@ sc.headerMenu = {
         var self = sc.headerMenu,
             scrollTop = $(document.body).scrollTop(),
             scrollAmount = scrollTop - self.lastScreenScroll;
-
         
         self.lastScreenScroll = scrollTop;
         if (scrollAmount > 0) {
@@ -78,40 +93,49 @@ sc.headerMenu = {
         }
         
         var now = e.timeStamp;
-        if (scrollAmount < 0) {
-            for (i = self.scrollEvents.length - 1; i >= 0 ; i--) {
-                oldE = self.scrollEvents[i];
-                
-                var diff = now - oldE[1];
-                if (diff > 500) {
-                    self.scrollEvents.pop()
-                } else if (diff > 100 && oldE[0] < 0) {
-                     $('header').removeClass('retracted');
-                     return
-                 }
-            }
+        if (scrollAmount < -3) {
+             $('header').removeClass('retracted');
+             return
         }
-        
-
         self.scrollEvents.push([scrollAmount, e.timeStamp]);
-
     }
 }
 
 
 setTimeout(function(){
-    $('header nav a').each(function(){
+    $('header .pitaka_menu a').each(function(){
         $(this).attr('href', '#' + $(this).attr('href').replace(/^\.*\//, '').replace('.html', ''));
     });
-    $('header nav').on('click', function(){sc.headerMenu.update($(this)); return false});
+    $('header .pitaka_menu').on('click', function(){sc.headerMenu.update($(this)); return false});
+
+    //  If click on the search-popup-btn, then add classes to configure the layout properly
+    $('.search-popup-btn').on('click', function() {
+        $('#menu').addClass('search-box-popup');
+        $('#page-header-search input').focus();
+        $('#page-header-search input').one('focusout', function(event) {
+            // on focusout, setup a handler to be called on the input box *after* the transition animations complete
+            $('#page-header-search input').one("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(e){
+                $('#page-header-search input').removeClass('collapse-effect');
+                $('#menu').removeClass('search-box-popup');
+            });
+            //  Fire off the transition animation by adding the class (see handler above)
+            $('#page-header-search input').addClass('collapse-effect');
+        });
+    });
+
     $('#panel-screen-wrap').on('click', function(e) {
         if ($(e.target).is('a'))
             return true;
-        sc.headerMenu.hideAll();
+        if ($("#autocomplete-dropdown").is(":visible")) {
+            $('#panel-screen-wrap').removeClass('active');    //  if search drop down is visible, remove shadow box
+        } else {
+            sc.headerMenu.update($(e.target));
+        }
         return false
     }).on('mousewheel', function(e){
         if (e.target == this) {
-            sc.headerMenu.hideAll();
+            // sc.headerMenu.hideAll();
+            sc.headerMenu.update($(e.target));
             return false;
         }
         return true

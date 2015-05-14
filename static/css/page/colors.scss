@@ -1,8 +1,9 @@
 // Styles for the color sample page
 
-@mixin color-page-block($name) {
-    $val: $#{$name};
-    .b-#{$name} {
+@mixin color-page-block($the-pallete, $c-name) {
+// @debug $c-name;
+    $val: map-get($the-pallete, $c-name);
+    .b-#{$c-name} {
         min-height: 3em;
         border: 1px solid black;
         padding: 0.5em;
@@ -32,15 +33,18 @@
         margin-top: 1em;
     }
 
-    $types: "pastel-" "saturated-";
-    $styles: "" "dirty-" "dark-" "bright-" "light-";
+    // $types: "pastel-" "saturated-";
+    $styles: "plain-" "dirty-" "dark-" "bright-" "light-";
     $colors: "yellow" "green" "red" "purple";
 
-    @each $type in $types {
-        @each $style in $styles {
-            @each $color in $colors {
-                @include color-page-block(#{$style}#{$type}#{$color});
-            }
+    @each $style in $styles {
+        @each $color in $colors {
+            @include color-page-block($palette-pastel,#{$style}#{$color});
+        }
+    }
+    @each $style in $styles {
+        @each $color in $colors {
+            @include color-page-block($palette-saturated,#{$style}#{$color});
         }
     }
 
@@ -51,6 +55,6 @@
              "medium-gray", "dark-medium-gray", "dark-gray";
 
     @each $name in $others {
-        @include color-page-block($name);
+        @include color-page-block($palette-misc, $name);
     }
 }

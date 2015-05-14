@@ -2,8 +2,10 @@
  * menu / controls found in texts. presently this is displayed as a
  * side bar.
  */
-sc.sidebar = {
+ sc.sidebar = {
     init: function() {
+
+
         var self=this;
         self.node = $('#sidebar');
         $('#toc').remove();
@@ -43,17 +45,16 @@ sc.sidebar = {
             sc.trackEvent($clicked.text());
         });
         
-        $('#sidebar-dongle').on('click',
-            function(){
-                if (self.isVisible()) {
-                    self.hide();
-                    sc.trackEvent('sidebar-hide')                  
-                } else {
-                    self.show();
-                    sc.trackEvent('sidebar-show')
-                }
-                return false
-            });
+        $('#sidebar-dongle-header').on('click', function(){
+                self.showHide(self);
+        });
+        $('.show-dongle-notification button').on('click', function(){
+            $('#menu').removeClass("show-dongle-notification");
+            self.saveDongleHideAlertState(true);
+        });
+        self.node.on("swipeleft", function(){
+                self.showHide(self);
+        });
         self.node.on('click', function(e){
             if (!$(e.target).is('div')) return true;
             self.hide();
@@ -66,8 +67,29 @@ sc.sidebar = {
             self.toggleLineByLine();
         }
     },
+    saveDongleHideAlertState: function(val) {
+        localStorage.setItem('sc.sidebar.dongle.hideAlert', val);
+    },
+    getDongleHideAlertState: function() {
+        var hideAlert = localStorage.getItem('sc.sidebar.dongle.hideAlert');
+        return (hideAlert === 'true') ? true : false;
+    },
+    showHide: function(me) {
+        if (me.isVisible()) {
+            me.hide();
+            sc.trackEvent('sidebar-hide')                  
+        } else {
+            me.show();
+            sc.trackEvent('sidebar-show')
+        }
+        return false;
+    },
     setReady: function() {
-        this.node[0].style.visibility = 'visible';        
+        // this.node[0].style.visibility = 'visible';
+        $('#menu').addClass("show-dongle");
+        if (this.getDongleHideAlertState() == false) {
+            $('#menu').addClass("show-dongle-notification");
+        }
     },
     isVisible: function() {
         return this.node.hasClass('active');

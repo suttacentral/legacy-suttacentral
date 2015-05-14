@@ -11,7 +11,9 @@ a.bib {
 .infomode {
 	.var, .var:hover {color:#7A39D0;}
 	.cross, .cross:hover {color:#F74F3E;
-     }
+    position:absolute;
+    margin: 0 0 0 -1em;
+  }
 }
 
 a.note .deets {background-color:#F7DBD0;}
@@ -20,7 +22,7 @@ a.bib .deets {background-color:#F7F2C2;}
 
 .var .deets {background-color:#E5E0EC;}
 
-.cross .deets {background-color:$light-pastel-green;}
+.cross .deets {background-color: pastel-color(light-green);}
 
 a.note .deets,
     a.note:hover .deets,
@@ -34,7 +36,7 @@ a.note .deets,
     margin-top:1.5em;
     margin-left:-22em;
     max-width:20em;
-    color:$dark-gray;
+    color: misc-color(dark-gray);
     padding:0.3em 0.6em;
     font-size:0.8rem;
     -webkit-border-radius: 3px;
@@ -135,7 +137,7 @@ body:not(.infomode) .cross {
     position:fixed;
     @include sans-serif;
     box-shadow:2px 2px 6px rgba(0,0,0,0.2);
-    background:$light-pastel-green;
+    background: pastel-color(light-green);
     position:fixed;
     top:10em;
     left:0;
@@ -160,15 +162,15 @@ span.lookup > span.meaning {
     left: -50%;
     min-width: 10em;
     max-width: 20em;
-    color:$dark-gray;
+    color: misc-color(dark-gray);
     padding:0.3em 0.6em;
     font-size:1rem;
     font-style:normal;
     @include sans-serif;
     box-shadow:2px 2px 6px rgba(0,0,0,0.2);
-    background-color:$light-pastel-red;
+    background-color: pastel-color(light-red);
     border-radius: 3px;
-     border:1px solid $pastel-red;
+     border:1px solid pastel-color(plain-red);
    line-height:1.3;
     visibility:hidden;
     opacity:0;
@@ -178,25 +180,25 @@ span.lookup > span.meaning {
 }
 
 span.lookup > span.meaning > a {
-    color:$dark-gray;
+    color: misc-color(dark-gray);
     font-weight: bold;
 }
 
 span.lookup > span.meaning > a:hover {
-    color:$bright-saturated-purple;
+    color: saturated-color(bright-purple);
 }
 
 div#text:lang(pi) span.lookup:hover {
-    color:$bright-saturated-red;
+    color: saturated-color(bright-red);
 }
 
 span.lookup.punctuation:hover {
-	color: $dark-medium-gray;
+	color: misc-color(dark-medium-gray);
 }
 
 
 span.lookup > span.meaning:hover {
-    color:$dark-gray;
+    color: misc-color(dark-gray);
 }
 
 span.lookup:hover > span.meaning {
@@ -209,5 +211,5 @@ span.lookup:hover > span.meaning {
 }
 .syllables  u {
         text-decoration:none;
-        border-bottom:3px solid $light-gray;
+        border-bottom:3px solid misc-color(light-gray);
 }

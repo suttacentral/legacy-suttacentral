@@ -16,19 +16,11 @@ small{
 }
 
 .abhidhamma {
-    width: 60% !important;
+    width: 100% !important;
     margin: 0 auto;
-
-    @media #{$mobile} {
-        width: 100% !important;
-    }
 
     ul {
         width: 29% !important;
-
-        @media #{$mobile} {
-            width: 100% !important;
-        }
     }
 }
 
@@ -66,7 +58,7 @@ td.vagga {border:none;}
     font-size: 85%;
     
     &:not(:hover) {
-        color: $light-gray;
+        color: misc-color(light-gray);
     }
 }
 
@@ -84,7 +76,7 @@ td .altAcronym:after {content:"]";}
 td .altVolPage, td .altAcronym {font-size: 80%; color: #555}
 
 .negated-parallel {
-    color: $medium-gray;
+    color: misc-color(medium-gray);
 }
 
 table.divtable td:nth-of-type(1) > a {white-space:nowrap;}
@@ -332,7 +324,7 @@ Text added by the editor or translator for clarification.
 
 .expanded {display:inline
 .infomode & {
-        color:$light-medium-gray;
+        color: misc-color(light-medium-gray);
     }
     }
 
@@ -362,7 +354,7 @@ Gap in the manuscript.
         .corr {
             display: inline-block;
             position: absolute;
-            background: $light-pastel-red;
+            background: pastel-color(light-red);
             padding: 0.5em;
             border-radius: 3px;
             margin-top: -2.5em;
@@ -393,7 +385,7 @@ Reading corrected by the editor.
     
     .infomode & {
         
-        color:$bright-saturated-red;
+        color: pastel-color(bright-red);
     }
 }
 

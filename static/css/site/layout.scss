@@ -27,10 +27,6 @@ body {
     height: 100%;
     margin: 0 auto -$footer-height;
 
-    @media #{$mobile} {
-        margin-bottom: -$mobile-footer-height;
-    }
-
     @media print {
         min-height: inherit;
         height: inherit !important;
@@ -41,23 +37,16 @@ body {
     width: 100%;
     height: $footer-height;
 
-    @media #{$mobile} {
-        height: $mobile-footer-height;
-    }
-
     @media print {
         display: none;
     }
 }
 
+
 #onecol, #twocol, #main_content, #text {
     margin: 0 auto;
     max-width: $page-max-width;
     clear: both;
-
-    @media #{$mobile-and-tablet} {
-        max-width: inherit;
-    }
 }
 
 main {
@@ -71,15 +60,6 @@ main {
 #home-methodology {
     margin: $main-top-margin auto;
     max-width: 640px;
-
-    @media #{$tablet} {
-        margin: $tablet-main-top-margin 10%;
-        max-width: inherit;
-    }
-
-    @media #{$mobile} {
-        margin: $mobile-main-top-margin $mobile-main-side-margin;
-    }
 }
 
 #onecol > table, #main_search_results {
@@ -92,39 +72,12 @@ main {
         max-width: 60%;
         margin: $main-top-margin 2em;
         margin-left: 0;
-
-        @media #{$tablet} {
-            margin: $tablet-main-top-margin 1em;
-            margin-left: 0;
-        }
-
-        @media #{$mobile} {
-            float: inherit;
-            max-width: inherit;
-            margin: $mobile-main-top-margin $mobile-main-side-margin;
-        }
     }
 
     aside {
         float: left;
         max-width: 25%;
         margin: $main-top-margin 2em;
-
-        @media #{$tablet} {
-            margin: $tablet-main-top-margin 1em;
-        }
-
-        @media #{$mobile} {
-            float: inherit;
-            max-width: inherit;
-            margin: $mobile-main-top-margin $mobile-main-side-margin;
-        }
-    }
-}
-
-#text {
-    @media #{$mobile} {
-        margin-bottom: 2em;
     }
 }
 

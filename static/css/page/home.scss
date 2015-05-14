@@ -2,38 +2,31 @@
 
 #home {
     max-width: 40em;
-    margin: 6em auto 0;
-    padding: 0 5% !important;
+    padding: 0;
+    margin: 0 0.5em;
     &.pitaka_page {
         max-width: 65em;
-    }
-    @media #{$mobile} {
-        padding: 0 !important;
-        margin: 0 0.5em;
-        .epigraph-reference {
-            margin-top: 0 !important;
-        }
     }
     .hgroup {
         margin: 0 0 4em 0;
     }
     h1 {
         @include serif-small-caps;
-        color: $medium-gray;
+        color: misc-color(medium-gray);
         text-align: center;
         letter-spacing: 0.02em;
         margin: 0;
-        font-size: 3em;
+        font-size: 2.7em;
     }
     .subtitle {
-        color: $medium-gray;
+        color: misc-color(medium-gray);
         text-align: center;
         font-style: italic;
         font-size: 1.5em;
     }
     .epigraph {
         margin: 0 5% 4em;
-        border: 1px solid $light-gray;
+        border: 1px solid misc-color(light-gray);
         padding: 1.5em 1.5em 0 1.5em;
         .read-this {
             text-align: right;
@@ -44,14 +37,14 @@
             padding: 0.2em 0.4em;
         }
         .read-this a:hover {
-            background: $light-light-gray;
+            background: misc-color(light-light-gray);
         }
     }
     .epigraph-text {
         font-style: italic;
     }
     .epigraph-reference {
-        margin-top: -1em;
+        margin-top: 0;
         margin-bottom: 0.5em;
         letter-spacing: 0.02em;
         @include serif-small-caps;
@@ -63,20 +56,20 @@
         line-height: 1.2;
     }
     .home-announcement {
-    max-width: 40em;
-    margin: 5em auto;
-    text-align: center;
-    border-radius: 3px;
-    background: $pastel-red;
-    padding: 1em;
-    border: 1px solid $dark-pastel-red;
-    >form{
-  margin:0;
-}
-    >h2{
-    color:$dark-gray
+        max-width: 40em;
+        margin: 5em auto;
+        text-align: center;
+        border-radius: 3px;
+        background: pastel-color(plain-red);
+        padding: 1em;
+        border: 1px solid pastel-color(dark-red);
+        >form{
+          margin:0;
+        }
+        >h2{
+        color: misc-color(dark-gray);
+        }
     }
-}
 }
 
 #intro {
@@ -84,85 +77,94 @@
         max-width: 40rem;
         margin: 0 auto 1rem;
     }
-
-
-
-    .image-home {
-        width: 50%;
-        float: right;
-        margin: 0 0 2em 2em;
+    .introduction p:nth-of-type(1) {
+        margin-top: 410px;
     }
-
-    .image-home-big {
-        width: 70%;
-        float: right;
-        margin: 0 0 2em 2em;
+    .image-home, .image-home-big {
+        width: 100%;
+        float: none;
+        display: block;
+        margin: 0 auto 2em;
+        margin-left: -1em;
     }
-
     .wheel1 {
         position: relative;
+        top: 120px;
         z-index: 1;
-        font-size: 18em;
-        line-height: 1.5rem;
-        width: 1em;
+        font-size: 14em;
         color: #F77C6F;
-        margin: 7rem 40% 0;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 0px;
         text-shadow: 3px 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
     }
-
     .wheel2 {
         position: relative;
+        left: 10%;
+        top: 210px;
         z-index: 2;
-        font-size: 20em;
-        line-height: 1.5rem;
+        font-size: 16em;
         color: #62DA7C;
-        margin: 4rem 0 0 50%;
-        width: 1em;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 0px;
         text-shadow: 3px 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
     }
-
     .wheel3 {
-        z-index: 3;
         position: relative;
-        font-size: 21em;
-        line-height: 1.5rem;
+        left: -10%;
+        top: 270px;
+        z-index: 3;
+        font-size: 17em;
         color: #9161D0;
-        margin: 2rem 0 8rem 28%;
-        width: 1em;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 0px;
         text-shadow: 3px 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
     }
-
     section {
         margin: 5%;
         overflow: hidden;
         padding: 2rem;
         font-size: 1.2em;
     }
-
     summary {
         padding: 1em;
         text-align: center;
         font-size: 1.2em;
-        color: $dirty-pastel-green;
+        color: pastel-color(dirty-green);
         font-weight: bold;
         border: 0;
+        cursor: pointer;
     }
-
     details[open] summary {
-        background: $dirty-pastel-green;
+        background: pastel-color(dirty-green);
         color: white;
     }
-
-
-
-
-    @media screen and (max-width: 860px) {
-        .image-home, .image-home-big {
-            width: 100%;
-            float: none;
-            display: block;
-            margin: 0 auto 2em;
-            margin-left: -1em;
-        }
-    }
+    
+    // @include if-screen-wider($small-width) {
+    //     .image-home {
+    //         width: 50%;
+    //         float: right;
+    //         margin: 0 0 2em 2em;
+    //     }
+    //     .image-home-big {
+    //         width: 70%;
+    //         float: right;
+    //         margin: 0 0 2em 2em;
+    //     }
+    // }
+    
+    // @include if-screen-wider($med-width) {
+    //     .image-home {
+    //         width: 35%;
+    //         float: right;
+    //         margin: 0 0 2em 2em;
+    //     }
+    //     .image-home-big {
+    //         width: 50%;
+    //         float: right;
+    //         margin: 0 0 2em 2em;
+    //     }
+    // }
 }

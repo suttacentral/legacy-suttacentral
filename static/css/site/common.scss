@@ -1,13 +1,13 @@
-$body-text-color: $dark-gray;
-$body-background-color: $light-off-white;
-$body-subheading-color: $medium-gray;
+$body-text-color: misc-color(dark-gray);
+$body-background-color: misc-color(light-off-white);
+$body-subheading-color: misc-color(medium-gray);
 
 $body-font-size: 1em;
 
 body {
     @include serif;
     font-size: $body-font-size;
-    line-height: 1.5;
+    line-height: 1.4;
     color: $body-text-color;
     background: $body-background-color;
 
@@ -21,11 +21,8 @@ text-rendering: optimizeLegibility;
     See http://blog.fontdeck.com/post/15777165734/opentype-1 */
 
     -moz-font-feature-settings: "kern" 1,"liga" 1;
--webkit-font-feature-settings: "kern" 1,"liga" 1;
-font-feature-settings: "kern" 1,"liga" 1;
-
-
-
+    -webkit-font-feature-settings: "kern" 1,"liga" 1;
+    font-feature-settings: "kern" 1,"liga" 1;
    
 
     // Fonts look absolutely apalling in Opera, it is a known issue
@@ -38,23 +35,19 @@ font-feature-settings: "kern" 1,"liga" 1;
     }
     
     overflow-x: hidden;
-    @media #{$mobile} {
-      line-height:1.4;
-}
 }
 
 ::selection {
-background:#F7E63E;
-color:$dark-saturated-purple;
+    background:#F7E63E;
+    color: saturated-color(dark-purple);
 }
 ::-webkit-selection {
-background:#F7E63E;
-color:$dark-saturated-purple;
+    background:#F7E63E;
+    color: saturated-color(dark-purple);
 }
-
 ::-moz-selection {
-background:#F7E63E;
-color:$dark-saturated-purple;
+    background:#F7E63E;
+    color: saturated-color(dark-purple);
 }
 //
 // Headings, paragraphs and lists
@@ -72,10 +65,7 @@ ul, ol {
 
 p, ul {
 
-    margin-bottom: 1em;
-    @media #{$mobile} {
-      margin-bottom: 0.7em;
-}
+    margin-bottom: 0.7em;
 }
 
 h1 {
@@ -136,5 +126,6 @@ img{
                float:left;
 }
 
-
-
+.error_page h1{
+    margin-top:4em
+}

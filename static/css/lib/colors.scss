@@ -1,68 +1,135 @@
-// Color palette for use with SuttaCentral
 
+// Palette functions for getting colors
+@function ns-color($color-name){
+	$c: map-get($palette-name-space-colors, $color-name);
+	@if $c {
+		@return $c;
+	} @else {
+		@debug "ERROR:  Cound not find the 'name space' color: "+$color-name;
+	}
+}
+@function pastel-color($color-name){
+	$c: map-get($palette-pastel, $color-name);
+	@if $c {
+		@return $c;
+	} @else {
+		@debug "ERROR:  Cound not find the 'pastel' color: "+$color-name;
+	}
+}
+@function saturated-color($color-name){
+	$c: map-get($palette-saturated, $color-name);
+	@if $c {
+		@return $c;
+	} @else {
+		@debug "ERROR:  Cound not find the 'saturated' color: "+$color-name;
+	}
+}
+@function misc-color($color-name){
+	$c: map-get($palette-misc, $color-name);
+	@if $c {
+		@return $c;
+	} @else {
+		@debug "ERROR:  Cound not find the 'other' color: "+$color-name;
+	}
+}
+
+// Color palettes for use with SuttaCentral
 // Main Palette URL: http://colorschemedesigner.com/#1E42P99tSw0w0
+$palette-pastel: (
+	plain-yellow:	#EEE8AA,
+	dirty-yellow:	#B3AF8C,
+	dark-yellow:   	#9B9237,
+	bright-yellow: 	#F7F2C2,
+	light-yellow:  	#F7F3D0,
 
-$pastel-yellow:        #EEE8AA;
-$dirty-pastel-yellow:  #B3AF8C;
-$dark-pastel-yellow:   #9B9237;
-$bright-pastel-yellow: #F7F2C2;
-$light-pastel-yellow:  #F7F3D0;
+	plain-green:    #75A38F,
+	dirty-green:   	#607A6F,
+	dark-green:    	#266A4D,
+	bright-green:  	#A4D1BE,
+	light-green:   	#B0D1C3,
 
-$pastel-green:         #75A38F;
-$dirty-pastel-green:   #607A6F;
-$dark-pastel-green:    #266A4D;
-$bright-pastel-green:  #A4D1BE;
-$light-pastel-green:   #B0D1C3;
+	plain-red:      #EEBDAA,
+	dirty-red:     	#B3978C,
+	dark-red:      	#9B5437,
+	bright-red:    	#F7D1C2,
+	light-red:     	#F7DBD0,
 
-$pastel-red:           #EEBDAA;
-$dirty-pastel-red:     #B3978C;
-$dark-pastel-red:      #9B5437;
-$bright-pastel-red:    #F7D1C2;
-$light-pastel-red:     #F7DBD0;
-
-$pastel-purple:        #8977A1;
-$dirty-pastel-purple:  #6C6179;
-$dark-pastel-purple:   #432769;
-$bright-pastel-purple: #B9A7D0;
-$light-pastel-purple:  #BFB2D0;
+	plain-purple:   #8977A1,
+	dirty-purple:  	#6C6179,
+	dark-purple:   	#432769,
+	bright-purple: 	#B9A7D0,
+	light-purple:  	#BFB2D0
+);
 
 // Saturated Palette URL: http://colorschemedesigner.com/#1E42EP6tVw0w0
+$palette-saturated: (
+	plain-yellow:  #EED900,
+	dirty-yellow:  #B3A72D,
+	dark-yellow:   #9B8D00,
+	bright-yellow: #F7E63E,
+	light-yellow:  #F7EA6F,
 
-$saturated-yellow:        #EED900;
-$dirty-saturated-yellow:  #B3A72D;
-$dark-saturated-yellow:   #9B8D00;
-$bright-saturated-yellow: #F7E63E;
-$light-saturated-yellow:  #F7EA6F;
+	plain-green:   #00B428,
+	dirty-green:   #228738,
+	dark-green:    #00751A,
+	bright-green:  #36DA5A,
+	light-green:   #62DA7C,
 
-$saturated-green:         #00B428;
-$dirty-saturated-green:   #228738;
-$dark-saturated-green:    #00751A;
-$bright-saturated-green:  #36DA5A;
-$light-saturated-green:   #62DA7C;
+	plain-red:     #EE1700,
+	dirty-red:     #B3392D,
+	dark-red:      #9B0F00,
+	bright-red:    #F74F3E,
+	light-red:     #F77C6F,
 
-$saturated-red:           #EE1700;
-$dirty-saturated-red:     #B3392D;
-$dark-saturated-red:      #9B0F00;
-$bright-saturated-red:    #F74F3E;
-$light-saturated-red:     #F77C6F;
+	plain-purple:  #4805A2,
+	dirty-purple:  #472179,
+	dark-purple:   #2E0269,
+	bright-purple: #7A39D0,
+	light-purple:  #9161D0
+);
 
-$saturated-purple:        #4805A2;
-$dirty-saturated-purple:  #472179;
-$dark-saturated-purple:   #2E0269;
-$bright-saturated-purple: #7A39D0;
-$light-saturated-purple:  #9161D0;
+// "Other" colors (blues, grays, etc)  
+//	Note:  Do not put 'namespace' colors here, those go below in 'palette-name-space-colors'
+$palette-misc: (
+	// Other colors (e.g., blues, grays, etc.)
+	cool-blue:         #005179,
+	bright-cool-blue:  #007AFE,
+	light-off-white:   darken(white, 1%),
+	off-white:         darken(white, 3%),
+	light-light-gray:  rgb(235, 235, 235),
+	light-gray:        rgb(215, 215, 215),
+	light-medium-gray: rgb(190, 190, 190),
+	medium-gray:       #767676,
+	dark-medium-gray:  #565656,
+	dark-gray:         rgb( 43,  43,  43)
+);
 
-// Other colors (e.g., blues, grays, etc.)
+// Colors that offer descriptive names for other palette colors that can be used throughout
+$palette-name-space-colors: (
+	// link colors...
+	link-color:               	misc-color(bright-cool-blue),
+	link-visited-color:       	misc-color(cool-blue),
+	link-hover-color:         	saturated-color(dark-red),
+	link-active-color:        	saturated-color(bright-red),
+	link-offline-color:       	pastel-color(dark-red),
 
-$cool-blue:         #005179;
-$bright-cool-blue:  #007AFE;
+	// header colors...
+	header-background-color:	pastel-color(plain-yellow),
+	header-border-color:		saturated-color(dark-red),
 
-$light-off-white:   darken(white, 1%);
-$off-white:         darken(white, 3%);
+	// headings colors...
+	sutta-h1-color:				misc-color(medium-gray),
+	sutta-h2-color:				misc-color(medium-gray),
 
-$light-light-gray:  rgb(235, 235, 235);
-$light-gray:        rgb(215, 215, 215);
-$light-medium-gray: rgb(190, 190, 190);
-$medium-gray:       #767676;
-$dark-medium-gray:  #565656;
-$dark-gray:         rgb( 43,  43,  43);
+	// footer colors...
+	footer-background-color:	pastel-color(light-green),
+
+	//	table colors...
+	table-row-even-background-color:	white,
+	table-cell-border-color:			misc-color(light-gray),
+	table-link-hover-background-color:	misc-color(off-white),
+
+	//	parallel colors...
+	citation-border-color:		misc-color(medium-gray)
+);
+
