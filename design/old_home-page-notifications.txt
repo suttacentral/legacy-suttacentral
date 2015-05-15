@@ -1,0 +1,7 @@
+I'm just putting this in here in case we want to do any more announcements in future.
+
+<section class="home-announcement">
+<h2>Announcing the SuttaCentral Development Fund</h2>
+<p>We now have online donation facilities. These are to pay for the continued development of SuttaCentral.</p>
+<p><a href="https://suttacentral.net/donations" target="_blank">Visit our donations page</a> to learn more or to make a donation.</p>
+</section>
