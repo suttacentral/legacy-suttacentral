@@ -3,6 +3,18 @@
     "index": {
         "settings": {
             "analysis": {
+                "char_filter": {
+                    "acro_collapse": {
+                        "type": "pattern_replace",
+                        "pattern": "(?i)([a-zA-Z])\\s+([0-9])",
+                        "replacement": "$1$2"
+                    },
+                    "href_removal": {
+                        "type": "pattern_replace",
+                        "pattern": "(?i)https?://[^ \\n]+",
+                        "relpacement": " "
+                    }
+                },
                 "filter": {
                     "english_stop": {
                         "type": "stop",
@@ -29,48 +41,114 @@
                             "english_stemmer",
                             "icu_folding"
                         ]
+                    },
+                    "acro_uid_analyzer": {
+                        "tokenizer": "standard",
+                        "char_filter": [
+                            "acro_collapse",
+                            "href_removal"
+                        ],
+                        "filter": [
+                            "lowercase"
+                        ]
                     }
                 }
             }
         },
         "mappings": {
-            "post": {
-                "_id": {
-                    "path": "id"
-                },
-                "properties": {
-                    "content": {
-                        "fields": {
-                            "stemmed": {
-                                "type": "string",
-                                "term_vector": "with_positions_offsets",
-                                "analyzer": "en"
-                            }
-                        }
-                    }
-                }
-            },
-            "topic": {
-                "_id": {
-                    "path": "id"
-                },
-                "properties": {
-                    "title": {
-                        "fields": {
-                            "stemmed": {
-                                "type": "string",
-                                "term_vector": "with_positions_offsets",
-                                "analyzer": "en"
-                            }
-                        }
-                    }
-                }
-            },
-            "category": {
-                "_id": {
-                    "path": "id"
-                }
+         "post": {
+             "_parent": {
+                 "type": "topic"
+             },
+            "properties": {
+               "plain": {
+                  "type": "string",
+                  "analyzer": "acro_uid_analyzer",
+                  "term_vector": "with_positions_offsets"
+               },
+               "cooked": {
+                   "type": "string"
+               },
+               "hidden": {
+                  "type": "boolean"
+               },
+               "id": {
+                  "type": "long"
+               },
+               "post_number": {
+                  "type": "long"
+               },
+               "topic_id": {
+                  "type": "long"
+               },
+               "updated_at": {
+                  "type": "date",
+                  "format": "dateOptionalTime"
+               },
+               "user_deleted": {
+                  "type": "boolean"
+               }
             }
-        }
+         },
+         "topic": {
+            "properties": {
+               "category_id": {
+                  "type": "long"
+               },
+               "id": {
+                  "type": "long"
+               },
+               "posts_count": {
+                  "type": "long"
+               },
+               "slug": {
+                  "type": "string"
+               },
+               "tags": {
+                  "type": "string"
+               },
+               "title": {
+                  "type": "string",
+                  "analyzer": "acro_uid_analyzer"
+               },
+               "updated_at": {
+                  "type": "date",
+                  "format": "dateOptionalTime"
+               },
+               "views": {
+                  "type": "long"
+               }
+            }
+         },
+         "category": {
+            "properties": {
+               "color": {
+                  "type": "string"
+               },
+               "description": {
+                  "type": "string"
+               },
+               "id": {
+                  "type": "long"
+               },
+               "name": {
+                  "type": "string"
+               },
+               "read_restricted": {
+                  "type": "boolean"
+               },
+               "slug": {
+                  "type": "string"
+               },
+               "text_color": {
+                  "type": "string"
+               },
+               "updated_at": {
+                  "type": "date",
+                  "format": "dateOptionalTime"
+               }
+            }
+         }
+      }
     }
 }

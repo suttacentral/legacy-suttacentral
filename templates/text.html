@@ -130,17 +130,7 @@
       <div class="tab" id="navigation-tab">
         <div class="inner-wrap">
             {% if imm(uid) %}
-            {% if discourse_link %}
-            <div class="x1 button-row">
-                <a class="button" href="{{discourse_link}}" id="discourse-link-button" 
-                    title="Go to discourse.suttacentral.net, where you can join a discussion or find information and resources."
-                >Discuss &amp; Discover</a>
-            </div>
-            <div id="discourse-search-results" style="display: none">
-                <div id="discourse-search-heading">Conversations at <a href="http://discourse.suttacentral.net">discourse.suttacentral.net</a></div>
-                <div id="discourse-search-loading"><em>Loading conversations…</em></div>                
-            </div>
-            {% endif %}
+            {% include "discourse-results.html" %}
             <div class="x1 button-row">
                 <a class="button" href="/{{ uid }}" id="text-details-button" title="Go to parallels and references">Textual Details ▶</a>
             </div>

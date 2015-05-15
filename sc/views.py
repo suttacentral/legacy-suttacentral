@@ -369,7 +369,8 @@ class TextView(ViewBase):
             sutta = imm.suttas
             query = '%22{}%22|{}'.format(imm.uid_to_acro(self.uid).replace(' ', ' '), self.uid)
             context.discourse_link = '{}?search={}'.format(sc.config.discourse['forum_url'], query)
-        
+            context.discourse_url = sc.config.discourse['forum_url']
+            context.discourse_results = sc.search.discourse.search(self.uid)
         if context.embed:
             context.text = self.shorter_text(context.text)
         context.has_quotes = '‘' in context.text or '“' in context.text

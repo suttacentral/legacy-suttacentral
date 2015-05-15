@@ -27,9 +27,11 @@ def run_updaters():
     import sc.scimm
     import sc.textdata
     import sc.text_image
+    import sc.search.indexer
     import sc.search.dicts
     import sc.search.texts
     import sc.search.suttas
+    import sc.search.discourse
     import sc.search.autocomplete
     from sc.util import filelock
     

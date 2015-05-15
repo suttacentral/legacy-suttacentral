@@ -1,0 +1,24 @@
+{% if discourse_link %}
+{% set topics = discourse_results.topics %}
+{% set categories = discourse_results.categories %}
+<div class="x1 button-row">
+    <a class="button" href="{{discourse_link}}" id="discourse-link-button" 
+        title="Go to discourse.suttacentral.net, where you can join a discussion or find information and resources."
+    >Discuss &amp; Discover</a>
+</div>
+<div id="discourse-search-results" style="display: none">
+    <div id="discourse-search-heading">Conversations at <a href="http://discourse.suttacentral.net">discourse.suttacentral.net</a></div>
+    <ul class="results">
+        {% for hit in topics %}
+        {% set category = categories[hit.category_id] %}
+        <li><a href="{{discourse_url}}t/{{ hit.topic_id }}/{{ hit.post_number or '' }}" target="_blank">
+            <span class="topic-category-icon" title="{{category.description}}"><span class="topic-category-icon-bar" style="background-color: #{{ category.color }}">&nbsp;</span>{{ category.name }}</span>
+            <span class="topic-title">{{ hit.title }}</span>
+            {% if hit.snippet %}
+            <span class="post-blurb">{{ hit.snippet }}</span>
+            {%- endif -%}
+        </a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}

@@ -4,42 +4,44 @@ sc.intr = {
     lang: window.localStorage.getItem('sc.intr.lang') || 'en',
     run: function() {
         var self = this;
-        $('.translations').each(function(i, div){
+        if ($('#home').length == 0) {
+            $('.translations').each(function(i, div){
             
-            var $div = $(div),
-                id = "dropdown-" + (i + 1),
-                $links = $div.find('.tran'),
-                $trigger = $('<a href="#"/>'),
-                $specialLang = $div.find('a:contains(' + self.lang + ')').first();
-        
-            $div.addClass('ready');    
-            if ($specialLang.length) {
-                $specialLang.addClass('special');
-                $div.prepend($specialLang);
-                if ($links.length == 1) {
-                    
-                    return
+                var $div = $(div),
+                    id = "dropdown-" + (i + 1),
+                    $links = $div.find('.tran'),
+                    $trigger = $('<a href="#"/>'),
+                    $specialLang = $div.find('a:contains(' + self.lang + ')').first();
+            
+                $div.addClass('ready');    
+                if ($specialLang.length) {
+                    $specialLang.addClass('special');
+                    $div.prepend($specialLang);
+                    if ($links.length == 1) {
+                        
+                        return
+                    }
                 }
-            }
-            $trigger.text($links.length - 1 + ' ▾')
+                $trigger.text($links.length - 1 + ' ▾')
 
-            var $dropdown = $('<div class="dropdown dropdown-relative dropdown-tip dropdown-anchor-right"/>'),
-                $dropdownPanel = $('<div class="dropdown-panel"/>');
+                var $dropdown = $('<div class="dropdown dropdown-relative dropdown-tip dropdown-anchor-right"/>'),
+                    $dropdownPanel = $('<div class="dropdown-panel"/>');
 
-            $trigger.attr('data-dropdown', '#' + id);
-            $dropdown.attr('id', id);
-            $trigger.dropdown('attach', '#' + id);
+                $trigger.attr('data-dropdown', '#' + id);
+                $dropdown.attr('id', id);
+                $trigger.dropdown('attach', '#' + id);
 
-            $dropdownPanel.append($links);
-            $dropdown.append($dropdownPanel);
-            $div.append($trigger)
-            $div.append($dropdown)
-            if ($specialLang.length) {
-                $div.prepend($specialLang.addClass('special'));
-            } else {
-                $div.prepend('<span class="tran special">  </span>')
-            }
-        });
+                $dropdownPanel.append($links);
+                $dropdown.append($dropdownPanel);
+                $div.append($trigger)
+                $div.append($dropdown)
+                if ($specialLang.length) {
+                    $div.prepend($specialLang.addClass('special'));
+                } else {
+                    $div.prepend('<span class="tran special">  </span>')
+                }
+            });
+        }
 
         $('.divtable').on('click', '.tran', function(e) {
                 self.setLang($(e.target).text())
