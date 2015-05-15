@@ -247,7 +247,7 @@ class InfoView(ViewBase):
 
     def setup_context(self, context):
         if self.page_name != 'home':
-            title = self.page_name.replace('_', ' ').capitalize()
+            title = self.page_name.split('/')[-1].replace('_', ' ').capitalize()
             if title == 'Contacts':
                 title = 'People'
             context.title = title
