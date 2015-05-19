@@ -71,6 +71,14 @@
         }
     }
 }
+#first-time-intro {
+    background:white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    border-radius:3px;
+    padding:1em;
+    font-size:1.2em;
+    margin-bottom: 1em;
+}
 
 #intro {
     .introduction p {
@@ -142,29 +150,4 @@
         color: white;
     }
     
-    // @include if-screen-wider($small-width) {
-    //     .image-home {
-    //         width: 50%;
-    //         float: right;
-    //         margin: 0 0 2em 2em;
-    //     }
-    //     .image-home-big {
-    //         width: 70%;
-    //         float: right;
-    //         margin: 0 0 2em 2em;
-    //     }
-    // }
-    
-    // @include if-screen-wider($med-width) {
-    //     .image-home {
-    //         width: 35%;
-    //         float: right;
-    //         margin: 0 0 2em 2em;
-    //     }
-    //     .image-home-big {
-    //         width: 50%;
-    //         float: right;
-    //         margin: 0 0 2em 2em;
-    //     }
-    // }
 }
