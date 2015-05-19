@@ -297,6 +297,18 @@ $sidebar-tabs-vertical-padding: 0.4em;
     }
 }
 
+#discourse-search-results {
+	
+> .post-blurb{
+	
+}
+
+
+
+}
+
+
+
 .languages {
     > ul {
         width:100%;
@@ -380,6 +392,9 @@ $sidebar-tabs-vertical-padding: 0.4em;
 #metaarea {
     > ul {
         padding: 0 1em 1em 2em;
+    }
+    > p{
+    line-height:1.5;
     }
     .date-added, .date-modified {
         font-size: 75%;
