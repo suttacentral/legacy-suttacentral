@@ -1,6 +1,6 @@
 import logging
 import requests
-from elasticsearch.exceptions import NotFoundError
+from elasticsearch.exceptions import NotFoundError, ConnectionError
 import time
 import regex
 import lxml.html
@@ -14,6 +14,12 @@ logger = sc.logger.get_named_logger(__name__)
 
 discourse_index = 'discourse'
 es = ElasticIndexer.es
+
+discourse_is_available = (sc.search.is_available()
+                          and sc.config.discourse['api_key']
+                          and sc.config.discourse['username']
+                          and sc.config.discourse['forum_url'])
+        
 
 class DiscourseIndexer(ElasticIndexer):
     # Different doc types are possible.
@@ -244,10 +250,13 @@ class DiscourseUpdater(threading.Thread):
 
 def start_updater():
     global updater
+    if updater is not None:
+        return
     if sc.config.app['update_search']:
-        if not sc.search.is_available():
-            logger.error('Elasticsearch Not Available')
+        if not discourse_is_available:
+            logger.error('Elasticsearch or Discourse Not Available')
             updater = False
+            return
         updater = DiscourseUpdater()
         updater.start()
 
@@ -277,6 +286,8 @@ def get_category(category_id):
     }
 
 def search(uid):
+    if not discourse_is_available:
+        return None
     uid = uid.lower()
     body = {
       "query": {
