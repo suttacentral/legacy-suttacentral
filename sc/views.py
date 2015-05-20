@@ -370,7 +370,11 @@ class TextView(ViewBase):
             query = '%22{}%22|{}'.format(imm.uid_to_acro(self.uid).replace(' ', ' '), self.uid)
             context.discourse_link = '{}?search={}'.format(sc.config.discourse['forum_url'], query)
             context.discourse_url = sc.config.discourse['forum_url']
-            context.discourse_results = sc.search.discourse.search(self.uid)
+            try:
+                context.discourse_results = sc.search.discourse.search(self.uid)
+            except:
+                logger.exception('Failed to retrieve discourse_results')
+                context.discourse_results = None
         if context.embed:
             context.text = self.shorter_text(context.text)
         context.has_quotes = '‘' in context.text or '“' in context.text
