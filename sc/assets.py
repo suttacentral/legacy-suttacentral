@@ -14,10 +14,10 @@ from sc import config
 def clean(older=False):
     """Remove outdated compiled assets."""
 
-    maximum_ctime = None
+    maximum_ctime = 86400
     try:
         maximum_ctime = sc.webassets_manifest_path.stat().st_mtime
-        maximum_ctime -= 60  # seconds
+        maximum_ctime -= 86400  # seconds
     except OSError:
         older = True
 
