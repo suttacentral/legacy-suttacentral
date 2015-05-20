@@ -9,30 +9,6 @@ def _production_run(*commands):
         'cd $HOME/suttacentral',
     ] + list(commands))
 
-
-#@task
-#def full():
-    #"""Deploy to the production server."""
-    #blurb(full)
-    #_production_run(
-        #'touch tmp/maintenance',
-        #'sudo supervisorctl stop sc-production',
-        #'git pull',
-        #'cd data',
-        #'git pull',
-        #'cd ..',
-        #'pip install -q -r requirements.txt',
-        #'invoke jsdata.build --minify',
-        #'invoke assets.compile --precompress',
-        #'invoke textdata.ensure_loads',
-        #'sudo supervisorctl start sc-production',
-        #'rm -f tmp/maintenance',
-        #'invoke dictionary.build',
-        #'invoke search.index',
-        #'invoke assets.clean --older'
-    #)
-
-
 @task
 def nonfree_fonts(force=False):
     """Copy local nonfree fonts to the production server."""
@@ -59,7 +35,6 @@ def quick():
         'pip install -q -r requirements.txt',
         'invoke jsdata.build --minify',
         'invoke assets.compile --precompress',
-        'invoke textdata.ensure_loads',
         'invoke test_server',
         'sudo supervisorctl restart sc-production',
         'invoke assets.clean --older'
