@@ -29,7 +29,7 @@ a.note .deets,
     a.bib .deets,
     a.bib:hover .deets,
     .var .deets,
-    .cross .deets,
+    .cross .deets
     {
     position:absolute;
     z-index:20;
@@ -212,4 +212,75 @@ span.lookup:hover > span.meaning {
 .syllables  u {
         text-decoration:none;
         border-bottom:3px solid misc-color(light-gray);
+}
+
+#quote-controls {
+    margin: 0;
+    margin-top: -2em;
+    margin-left: -1em;
+    display: inline-block;
+    transition: width 250ms ease;
+    width: 18em;
+    height: 1.5em;
+    padding: 0;
+    &.closed {
+        width: 5em;
+    }
+    white-space: nowrap;
+    
+}
+#quote-inner-wrap {
+    position: absolute;
+    padding: 0.1em;
+    height: 1.5em;
+    background: white;
+    border-radius: 4px;
+}
+
+#quote-button {
+    display: none;
+    width: 4em;
+    .closed & {
+        display: block;
+    }
+}    
+
+#quote-link {
+    width: 10em;
+}
+#quote-copy-link {
+    width: 6em;
+}
+
+#quote-link, #quote-copy-link {
+    opacity: 1;
+    transition: opacity 500ms ease;
+    .closed & {
+        margin: 0;
+        padding: 0;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+}
+
+
+/*
+#quote-link, #quote-copy-link {
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+    transition: 1s ease;
+    .open & {
+        display: inline-block;
+        width: inherit;
+        visibility: visible;
+        opacity: 1;
+        transition: 1s ease;
+    }
+}
+*/
+
+#quote-controls.open {
+    
 }

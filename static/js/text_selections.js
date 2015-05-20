@@ -50,7 +50,7 @@ sc.text_selection = (function() {
         $elements = $(elementSelector),
         valid_char_rex = /[^ \n “”‘’.,?!—]/g,
         ignoreClasses,
-        $linkElement = $('[name=text-selection-url]')
+        link;
     
     function nodeFilter() {
         //return !$(this).is(ignoreClasses);
@@ -71,27 +71,8 @@ sc.text_selection = (function() {
         ignoreClasses = ','.join(a);
         highlightSelection();
 
-        $(document.body).on('mouseup', updateLink);
-        var clip = new ZeroClipboard($linkElement.parent().find('button')[0], {
-            moviePath: "/js/vendor/ZeroClipboard-1.2.3.swf",
-            hoverClass: "hover",
-            activeClass: "active"
-        });
-        clip.on('load', function(client) {
-            client.on('complete', function(client, args) {
-            });
-        });
-        clip.on('dataRequested', function(client, args) {
-            var text = $linkElement.val();
-            client.setText(text);
-            console.log('Set text');
-        });
-        
-        $linkElement.on('click', function() {
-            $linkElement.select();
-        });
-        
-        $linkElement.parent().find('button, input').attr('disabled', 'disabled');
+        $(document.body).on('mouseup', function(){_.delay(updateLink, 1)});
+
     }
     
     function highlightSelection() {
@@ -116,7 +97,7 @@ sc.text_selection = (function() {
             if (isNaN(endOffset)) { endOffset = 9001 }
 
 
-            console.log(startId, endId, startOffset, endOffset);
+            //console.log(startId, endId, startOffset, endOffset);
             
             for (var index = startId; index <= endId; ++index) {
                 var targetElement = $elements[index];
@@ -184,18 +165,19 @@ sc.text_selection = (function() {
             document.body.scrollTop = $(firstTarget).offset().top - 40;
         }
     }
+    
+    function getSelectionCoords(range) {
+        return
+    }
 
-    function createReferenceChrome() {
-        var selection = window.getSelection(),
-            range = selection.getRangeAt(),
+    function createReferenceChrome(selection) {
+        var range = selection.getRangeAt(0),
             startNode = range.startContainer,
             endNode = range.endContainer,
             startParent = $(startNode).parents(elementSelector),
             endParent = $(endNode).parents(elementSelector),
             startOffset = range.startOffset,
             endOffset = range.endOffset;
-
-        var range = selection.getRangeAt();
 
         if ($(range.commonAncestorContainer).parents('#text').length == 0) {
             return {error: 'A reference could not be created as ' +
@@ -255,136 +237,24 @@ sc.text_selection = (function() {
             });
             result.push({index: index,
                          char_start: char_start,
-                         char_end: char_end})
-        }
-        return result;
-    }
-
-    function createReference(chars) {
-        var selection = window.getSelection(),
-            startNode = selection.anchorNode,
-            endNode = selection.focusNode,
-            startParent = $(startNode).parents(elementSelector),
-            endParent = $(endNode).parents(elementSelector),
-            startOffset = selection.anchorOffset,
-            endOffset = selection.focusOffset;
-
-        var range = selection.getRangeAt();
-
-        if ($(range.commonAncestorContainer).parents('#text').length == 0) {
-            return {error: 'A reference could not be created as ' +
-                            'the selection is not a part of the text'}
-        }
-            
-        if (startParent.length == 0 || endParent.length == 0) {
-            return {'error':'A reference could not be created as ' +
-                            'the selection is not a part of the text'}
-        }
-        var result = [],
-            start_id = $elements.index(startParent),
-            end_id = $elements.index(endParent);
-
-        // A selection respects the users choice of direction (forwards
-        // or backwards), we don't care, so if the user went backwards
-        // swap all the values.
-
-        // First we swap the parents if we need to.
-        if (start_id >= end_id) {
-            var diff = null;
-            if (start_id > end_id) {
-                var tmp = end_id;
-                end_id = start_id;
-                start_id = tmp;
-
-                tmp = startParent;
-                startParent = endParent;
-                endParent = tmp;
-                diff = -1;
-            } else {
-                // If there are two parents, then the text nodes will
-                // definitely be out of order. But if there is only one
-                // parent then we need to check.
-                var nodes = $($elements.toArray()
-                                      .slice(start_id, end_id + 1)
-                              ).textNodes();
-                diff = nodes.index(endNode) - nodes.index(startNode);
-            }
-            if (diff > 0) {
-                // If the diff is > 0 we are cool, but it might
-                // still be the case that there is only one textNode
-                // involved, and the user went in reverse.
-                
-            } else if ((diff < 0) || (startOffset > endOffset)) {
-                tmp = startNode;
-                startNode = endNode
-                endNode = tmp;
-
-                tmp = startOffset;
-                startOffset = endOffset;
-                endOffset = tmp;
-            }
-        }
-        
-        for (var index = start_id; index <= end_id; ++index) {
-            if (index > start_id && index < end_id) {
-                result.append({index: index})
-                continue
-            }
-            var parent = $elements[index],
-                char_start = null,
-                char_end = null,
-                valid_char_count = 0;
-            
-            if (index > start_id) {
-                char_start = 0;
-            }
-            if (index < end_id) {
-                char_end = $(parent).text().match(valid_char_rex).length;
-            }
-
-            $(parent).textNodes().each(function(i, node){
-                var text = node.nodeValue;
-                if (node == startNode || node == endNode) {
-                    if (char_end !== null && char_start !== null) return
-                    var all_char_count = 0;
-                    
-                    Array.prototype.forEach.call(text, function(char){
-                        if (char_end !== null && char_start !== null) return
-                        if (char.search(valid_char_rex) == 0) {
-                            valid_char_count += 1;
-                            console.log(char, valid_char_count, all_char_count);
-                            if (node == startNode) {
-                                if (all_char_count == startOffset) {
-                                    char_start = valid_char_count;
-                                    console.log('Start: ', char, char_start);
-                                }
-                            }
-                            if (node == endNode) {
-                                if (all_char_count >= endOffset) {
-                                    char_end = valid_char_count - 1;
-                                    console.log('End: ', char, char_end);
-                                }
-                            }
-                        }
-                        all_char_count += 1;
-                    });
-                } else {
-                    valid_char_count += text.match(valid_char_rex).length;
-                }
-            });
-            result.push({index: index,
-                         char_start: char_start,
-                         char_end: char_end})
+                         char_end: char_end,
+                         range: range})
         }
         return result;
     }
     
     function updateLink() {
-        if (window.getSelection().type != 'Range') return
+        closeQuotePopup();
+        var selection = window.getSelection();
+        if (window.getSelection().type != 'Range') {
+            return
+        } 
+        
         var target = null;
 
-        var result = createReferenceChrome();
+        var result = createReferenceChrome(selection);
         if ('error' in result) {
+            closeQuotePopup();
             return
         }
         
@@ -409,18 +279,69 @@ sc.text_selection = (function() {
             if (end.char_end != null) {
                 targetEnd += '.' + end.char_end;
             }
-            console.log(targetStart, targetEnd)
+            //console.log(targetStart, targetEnd)
             target = '{}-{}'.format(targetStart, targetEnd);
         }
 
         var lang_uid = $('#text').attr('lang'),
             uid = $('.sutta').attr('id');
         
-        $linkElement.val('{}/{}/{}/{}'.format(window.location.origin,
+        link = '{}/{}/{}/{}'.format(window.location.origin,
                                    lang_uid,
                                    uid,
-                                   target));
-        $linkElement.parent().find('button, input').removeAttr('disabled');
+                                   target);
+        
+        var clientRects = result[0].range.getClientRects()
+        console.log(clientRects[0]);
+        var quoteControls = $('\
+<div id="quote-controls" class="closed">\
+<div id="quote-inner-wrap">\
+<button id="quote-button">Quote</button>\
+<input id="quote-link"/>\
+<button id="quote-copy-link">Copy URL</button>\
+</div>\
+</div>');
+        
+        var quoteButton = quoteControls.find('#quote-button'),
+            quoteLink = quoteControls.find('#quote-link'),
+            quoteCopyButton = quoteControls.find('#quote-copy-link');
+        
+        quoteControls.appendTo(document.body)
+                     .css({'position': 'fixed',
+                            'top': clientRects[0].top,
+                            'left': clientRects[0].left});
+        
+        quoteButton.on('click', function(e){
+            quoteControls.toggleClass('closed');
+            e.preventDefault();
+            quoteLink.select();
+            return false
+        });
+        quoteControls.on('mouseup', function(e){ return false });
+        quoteLink.val(link);
+        
+        var clip = new ZeroClipboard(quoteCopyButton[0], {
+                moviePath: "/js/vendor/ZeroClipboard-1.2.3.swf",
+                hoverClass: "hover",
+                activeClass: "active"
+            });
+
+            clip.on('load', function(client) {
+                client.on('complete', function(client, args) {
+                });
+            });
+            clip.on('dataRequested', function(client, args) {
+                var text = quoteLink.val();
+                client.setText(text);
+                console.log('Set text');
+            });
+    
+        $(window).one('scroll', closeQuotePopup);
+        
+    }
+    
+    function closeQuotePopup(){
+        $('#quote-controls').remove();
     }
     
     $(document).one('ready', onReady);
@@ -429,3 +350,14 @@ sc.text_selection = (function() {
             createReference: createReferenceChrome,
             nodeFilter: nodeFilter}
 })();
+
+function paint(){
+    var selection = window.getSelection(),
+        range = selection.getRangeAt(0),
+        startNode = range.startContainer,
+        endNode = range.endContainer,
+        startOffset = range.startOffset,
+        endOffset = range.endOffset;
+    
+
+}
