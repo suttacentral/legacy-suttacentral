@@ -145,7 +145,6 @@ class TIMManager:
         
         if not self.up_to_date:
             db_file = sc.db_dir / db_file_name
-            db_file.touch()
             build_logger.info('Building new instance, filename = {.name}'.format(db_file))
             instance = self.build()
             self._set_instance(instance)
