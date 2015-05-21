@@ -172,7 +172,7 @@
             start = Date.now()
         
         if (!headings) {
-            headings = $('#text').find('h2,h3,h4,h5,h6');
+            headings = $('#text').find('h2,h3,h4');
         }
         var patimokkhaUid = ($('section.sutta[id*=-pm]').attr('id'))
         if (patimokkhaUid) {
