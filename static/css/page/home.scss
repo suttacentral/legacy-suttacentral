@@ -24,7 +24,7 @@
         font-style: italic;
         font-size: 1.5em;
     }
-    .epigraph {
+    .epigraph,#first-time-intro {
         margin: 0 5% 4em;
         border: 1px solid misc-color(light-gray);
         padding: 1.5em 1.5em 0 1.5em;
@@ -71,14 +71,7 @@
         }
     }
 }
-#first-time-intro {
-    background:white;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
-    border-radius:3px;
-    padding:1em;
-    font-size:1.2em;
-    margin-bottom: 1em;
-}
+
 
 #intro {
     .introduction p {
