@@ -223,6 +223,7 @@ class ViewBase:
 """
 
 class GenericView(ViewBase):
+    """ GenericView can be used with simply a template name and context """
     def __init__(self, page_name, context):
         self.page_name = page_name
         self.context = context

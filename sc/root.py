@@ -49,7 +49,12 @@ class Root(object):
         self.admin = Admin()
         if not sc.config.disable_tools:
             self.tools = webtools.Tools()
-    
+        
+        if sc.config.app['yappi_profiling']:
+            from sc.profiler import profiler
+            self.profiler = profiler
+            profiler.start()
+
     @cherrypy.expose
     def default(self, *args, **kwargs):
         cherrypy.serving.request.cacheable = False
