@@ -403,3 +403,59 @@ $sidebar-tabs-vertical-padding: 0.4em;
 }
 
 
+#sidebar #discourse-link-button {
+    background: #00751A; 
+    color:white; 
+    font-weight:bold;
+}
+
+#discourse-search-results 
+    {
+        width: 100%;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        float: left;
+        font-size: 90%;
+
+        #discourse-search-heading {
+            text-align: center;
+            margin:0.5em;
+        }
+
+    li > a {
+        display: block;
+        color: black;
+        padding:0.5em;
+        
+        em {
+            font-weight: bold;
+            font-style: normal;
+        }
+    }
+    
+    a:hover {
+        background: #eee;
+    }
+    
+    & > ul {
+        padding: 0.1em;
+        margin: 0;
+    }
+        
+    .topic-title {
+        display: block;
+        font-weight: bold;
+        
+    }
+    
+    .topic-category-icon {
+        float: right;
+        padding: 0 0 0 0.25em;
+    }
+    
+    .topic-category-icon-bar {
+        display: inline-block;
+        width: 0.4em;
+        margin-right: 0.2em;
+    }
+}

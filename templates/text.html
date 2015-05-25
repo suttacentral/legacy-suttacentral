@@ -14,65 +14,6 @@
 {% endblock %}
 
 {%- block content -%}
-
-<style>
-    #sidebar #discourse-link-button {
-        background: #00751A; 
-        color:white; 
-        font-weight:bold;
-    }
-    
-    #discourse-search-results {
-        width: 100%;
-        overflow-y: hidden;
-        overflow-x: hidden;
-        float: left;
-        font-size: 90%;
-    }
-    
-    #discourse-search-heading {
-        text-align: center;
-        margin:0.5em;
-    }
-    
-    #discourse-search-results li > a {
-        display: block;
-        color: black;
-        padding:0.5em;
-    }
-    
-    #discourse-search-results a:hover {
-        background: #eee;
-    }
-    
-    #discourse-search-results > ul {
-        padding: 0.1em;
-        margin: 0;
-    }
-        
-    #discourse-search-results .topic-title {
-        display: block;
-        font-weight: bold;
-        
-    }
-    
-    #discourse-search-results .topic-category-icon {
-        float: right;
-        padding: 0 0 0 0.25em;
-    }
-    
-    #discourse-search-results .topic-category-icon-bar {
-        display: inline-block;
-        width: 0.4em;
-        margin-right: 0.2em;
-    }
-#discourse-search-results li > a em {
-  font-weight: bold;
-  font-style: normal;
-}
-
-</style>
-    
     
 {% if not embed %}
 <div id="sidebar">
