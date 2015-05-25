@@ -239,28 +239,27 @@ sc.text_selection = (function() {
         return result;
     }
     var lastString = null;
-    function updateLink() {
+    function updateLink(force) {
         
         var selection = window.getSelection();
         var thisString = selection.toString().trim();
-        if (thisString == lastString) {
+        if (!force && thisString == lastString) {
             return
         }
         lastString = thisString;
         
-        if (!thisString) {
-            closeQuotePopup();
-        }
+        closeQuotePopup();
         
-        if (window.getSelection().type != 'Range') {
+        if (!force && window.getSelection().type != 'Range') {
             return
         }
+        
+        
         
         var target = null;
 
         var result = createReferenceChrome(selection);
         if ('error' in result) {
-            closeQuotePopup();
             return
         }
         
@@ -325,6 +324,9 @@ sc.text_selection = (function() {
                 })
             })
         
+        $(window).one('scroll', function(){
+            updateLink(true);
+        });
     }
     
     function closeQuotePopup(){
