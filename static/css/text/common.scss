@@ -239,7 +239,6 @@ h1, h2, h3, h4, h5, h6 {
 
     .next-btn-container, .prev-btn-container {
         display: inline-block;        
-        background-color: rgba(230,230,230,0.2);
         height: 100px;
         width: 100px;
         border-radius: 50%;
@@ -262,7 +261,7 @@ h1, h2, h3, h4, h5, h6 {
         height: 100px;
         line-height: 104px;
         vertical-align: middle;
-        font-size:2em;
+        font-size:2rem;
         color: misc-color(medium-gray);
         border: none;
     }

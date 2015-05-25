@@ -222,9 +222,8 @@ span.lookup:hover > span.meaning {
     padding: 0.1em 0.3em;
     white-space: nowrap;
     overflow: hidden;
-    background: #ccc;
-    color: white;
-    border: 1px solid #ddd;
+    background: pastel-color(light-red);
+    box-shadow:2px 2px 6px rgba(0,0,0,0.2);
     border-radius: 4px;
     #quote-link {
         border: none;
@@ -232,7 +231,7 @@ span.lookup:hover > span.meaning {
         background: inherit;
         color: inherit;
         width: 8.5em;
-        font-size: 90%;
+        font-size: 85%;
     }
     #quote-copied {
         position: absolute;
