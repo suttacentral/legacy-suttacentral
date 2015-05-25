@@ -110,3 +110,25 @@ li.result > a {
     width: 1em;
     display: inline-block;
 }
+
+#advanced-search {
+    max-width: 40em;
+    margin: auto;
+    &> form {
+        text-align: left;
+    }
+    .controls {
+        width: 95%;
+    }
+    .field-box {
+        display: inline-block;
+        width: 48%;
+        label {
+            width: 5em;
+            display: inline-block;
+        }
+        input {
+            width: 5em;
+        }
+    }
+}

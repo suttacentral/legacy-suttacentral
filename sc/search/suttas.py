@@ -67,4 +67,33 @@ def periodic_update(i):
         return
     indexer = SuttaIndexer('suttas')
     indexer.update()
-            
+
+def filter_search(query):
+    if 'acronym' in query:
+        query['uid'] = regex.sub(r'\s+', '', query['acronym']).lower()
+        del query['acronym']
+    mode = query.pop('mode')
+    
+    queries = []
+    for key, value in query.items():
+        if not value:
+            continue
+        queries.append({
+            mode: {
+                key: {
+                 "value": value
+                }
+            }
+        })
+    if len(queries) == 0:
+        return None
+    
+    body = {
+        "query": {
+            "bool": {
+                "should": queries
+            }
+        }
+    }
+    
+    return sc.search.es.search('suttas', body=body)

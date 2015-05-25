@@ -17,7 +17,7 @@ def _green_text(text):
         return text
 try:
     
-    from sc import app, updater
+    from sc import app, updater, config
 
     app.setup()
     app.mount()

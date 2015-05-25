@@ -3,8 +3,13 @@
 {%- block content -%}
 <div id='onecol'>
 <div id="main_search_results">
-
 <form id="page-main-search" action="/search">
+
+<label>Vol/Page</label><span class="input-wrap">
+<input type="text" name="volpage" tabindex=2" autocomplete="off">
+</span>
+    
+    
 <span class="input-wrap">
 <input type="text" name="query" tabindex="1" autocomplete="off" value="{{query|e}}">
 <button type="submit" class="search-submit"></button>
