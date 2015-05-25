@@ -84,7 +84,7 @@ sc.text_selection = (function() {
         targets.split('+').forEach(function(target) {
             // Form 1
 
-            var m = /(\d+)(?:(?:\.(\d+))?-(\d+)(?:\.(\d+))?)?/.exec(target),
+            var m = /(\d+)(?:(?:\.(\d+))?-(\d+)?(?:\.(\d+))?)?/.exec(target),
                 startId = +m[1],
                 endId = +m[3],
                 startOffset = +m[2],
@@ -95,10 +95,6 @@ sc.text_selection = (function() {
             if (isNaN(endId)) { endId = startId }
             if (isNaN(startOffset) || startOffset == 0) { startOffset = 1 }
             if (isNaN(endOffset)) { endOffset = 9001 }
-
-
-            //console.log(startId, endId, startOffset, endOffset);
-            
             for (var index = startId; index <= endId; ++index) {
                 var targetElement = $elements[index];
                 firstTarget = firstTarget || targetElement;
@@ -242,13 +238,23 @@ sc.text_selection = (function() {
         }
         return result;
     }
-    
+    var lastString = null;
     function updateLink() {
-        closeQuotePopup();
+        
         var selection = window.getSelection();
+        var thisString = selection.toString().trim();
+        if (thisString == lastString) {
+            return
+        }
+        lastString = thisString;
+        
+        if (!thisString) {
+            closeQuotePopup();
+        }
+        
         if (window.getSelection().type != 'Range') {
             return
-        } 
+        }
         
         var target = null;
 
@@ -265,7 +271,7 @@ sc.text_selection = (function() {
             end.index -= 1;
             end.char_end = null;
         }
-        if (start.char_start == 1 && end.char_end == null) {
+        if (start.char_start <= 1 && end.char_end == null) {
             if (start.index == end.index) {
                 target = start.index;
             }
@@ -278,65 +284,46 @@ sc.text_selection = (function() {
             var targetEnd = end.index;
             if (end.char_end != null) {
                 targetEnd += '.' + end.char_end;
+            } else {
+                targetEnd = '';
             }
             //console.log(targetStart, targetEnd)
             target = '{}-{}'.format(targetStart, targetEnd);
         }
 
         var lang_uid = $('#text').attr('lang'),
-            uid = $('.sutta').attr('id');
-        
-        link = '{}/{}/{}/{}'.format(window.location.origin,
-                                   lang_uid,
-                                   uid,
-                                   target);
+            uid = $('.sutta').attr('id'),
+            shortLink = '{}/{}/{}'.format(lang_uid, uid, target),
+            link = '{}/{}'.format(window.location.origin,
+                                 shortLink);
+            
         
         var clientRects = result[0].range.getClientRects()
-        console.log(clientRects[0]);
-        var quoteControls = $('\
-<div id="quote-controls" class="closed">\
-<div id="quote-inner-wrap">\
-<button id="quote-button">Quote</button>\
-<input id="quote-link"/>\
-<button id="quote-copy-link">Copy URL</button>\
-</div>\
-</div>');
-        
-        var quoteButton = quoteControls.find('#quote-button'),
+        var quoteControls = $(
+            '<div id="quote-controls" data-clipboard-text="{}" title="Link to selected text">'.format(link) +
+            '<input id="quote-link" value="{}" readonly>'.format(link) +
+            '<input id="quote-copied" value="URL Copied" disabled>' +
+            '</div>'),
             quoteLink = quoteControls.find('#quote-link'),
-            quoteCopyButton = quoteControls.find('#quote-copy-link');
-        
-        quoteControls.appendTo(document.body)
+            quoteCopied = quoteControls.find('#quote-copied');
+            
+            quoteControls.appendTo(document.body)
                      .css({'position': 'fixed',
                             'top': clientRects[0].top,
                             'left': clientRects[0].left});
-        
-        quoteButton.on('click', function(e){
-            quoteControls.toggleClass('closed');
-            e.preventDefault();
-            quoteLink.select();
-            return false
-        });
-        quoteControls.on('mouseup', function(e){ return false });
-        quoteLink.val(link);
-        
-        var clip = new ZeroClipboard(quoteCopyButton[0], {
-                moviePath: "/js/vendor/ZeroClipboard-1.2.3.swf",
-                hoverClass: "hover",
-                activeClass: "active"
+            quoteLink.on('click', function(){
+                quoteLink.select();
             });
-
-            clip.on('load', function(client) {
-                client.on('complete', function(client, args) {
-                });
-            });
-            clip.on('dataRequested', function(client, args) {
-                var text = quoteLink.val();
-                client.setText(text);
-                console.log('Set text');
-            });
-    
-        $(window).one('scroll', closeQuotePopup);
+            var client = new ZeroClipboard(quoteControls);
+            
+            client.on('ready', function(readyEvent) {
+                quoteLink.val('…/' + shortLink);
+                client.on('copy', function(event) {
+                    $('#quote-controls').addClass('copied').delay(1100).removeClass('copied');
+                    $('#quote-copied').fadeIn(500).delay(100).fadeOut(500);
+                    $('#quote-link').fadeTo(0, 0.0).delay(1100).fadeTo(100, 1.0);
+                })
+            })
         
     }
     

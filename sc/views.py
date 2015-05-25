@@ -748,12 +748,13 @@ class ShtLookupView(ViewBase):
 class SuttaCitationView(ViewBase):
     
     should_fix_whitespace = False
+    template_name = 'sutta_citation.txt'
 
     def __init__(self, sutta):
         self.sutta = sutta
 
     def get_template(self):
-        return self.env.get_template('sutta_citation.txt')
+        return self.env.get_template(self.template_name)
 
     def setup_context(self, context):
         context.sutta = self.sutta

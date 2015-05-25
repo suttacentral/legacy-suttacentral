@@ -219,68 +219,29 @@ span.lookup:hover > span.meaning {
     margin-top: -2em;
     margin-left: -1em;
     display: inline-block;
-    transition: width 250ms ease;
-    width: 18em;
-    height: 1.5em;
-    padding: 0;
-    &.closed {
-        width: 5em;
-    }
+    padding: 0.1em 0.3em;
     white-space: nowrap;
-    
-}
-#quote-inner-wrap {
-    position: absolute;
-    padding: 0.1em;
-    height: 1.5em;
-    background: white;
+    overflow: hidden;
+    background: #ccc;
+    color: white;
+    border: 1px solid #ddd;
     border-radius: 4px;
-}
-
-#quote-button {
-    display: none;
-    width: 4em;
-    .closed & {
-        display: block;
+    #quote-link {
+        border: none;
+        overflow: hidden;
+        background: inherit;
+        color: inherit;
+        width: 8.5em;
+        font-size: 90%;
     }
-}    
-
-#quote-link {
-    width: 10em;
-}
-#quote-copy-link {
-    width: 6em;
-}
-
-#quote-link, #quote-copy-link {
-    opacity: 1;
-    transition: opacity 500ms ease;
-    .closed & {
-        margin: 0;
-        padding: 0;
-        width: 0;
-        height: 0;
-        opacity: 0;
+    #quote-copied {
+        position: absolute;
+        top: 0.2em;
+        left: 0.3em;
+        border: none;
+        display: none;
+        background: inherit;
+        color: inherit;
     }
-}
-
-
-/*
-#quote-link, #quote-copy-link {
-    visibility: hidden;
-    opacity: 0;
-    display: none;
-    transition: 1s ease;
-    .open & {
-        display: inline-block;
-        width: inherit;
-        visibility: visible;
-        opacity: 1;
-        transition: 1s ease;
-    }
-}
-*/
-
-#quote-controls.open {
     
 }

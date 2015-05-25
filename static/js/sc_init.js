@@ -191,6 +191,11 @@ sc.mode = {}
 sc.data = {}
 sc.jsBaseUrl = $('script[src*="js/"]').last().attr('src').match(/((.*\/|^)js\/)/)[0];
 
+function setupZeroClipboard(element) {
+    
+    return new ZeroClipboard(element);
+}
+
 function onMainLoad() {
     sc.mode = {}
     var images = $("img");
@@ -209,6 +214,14 @@ function onMainLoad() {
         sc.sidebar.init();
         sc.init();
     }
+    ZeroClipboard.config({swfPath: "/js/vendor/ZeroClipboard-2.2.0.swf", 
+                          cacheBust: false,
+                          forceHandCursor: true,
+                          forceEnhancedClipboard: true});
+    ZeroClipboard.on('error', function(e) {
+            ZeroClipboard.destroy();
+    });
+    
     var parallelCitationLabel = $('#parallel-citation .label');
     var parallelCitationTextField = $('#parallel-citation > input');
     var parallelCitationButton = $('#parallel-citation > button');
@@ -216,21 +229,18 @@ function onMainLoad() {
         parallelCitationTextField.on('click', function() {
             parallelCitationTextField.select();
         });
-        var clip = new ZeroClipboard(parallelCitationButton, {
-            moviePath: "/js/vendor/ZeroClipboard-1.2.3.swf",
-            hoverClass: "hover",
-            activeClass: "active"
-        });
-        clip.on('load', function(client) {
-            parallelCitationLabel.hide();
-            parallelCitationButton.show();
-            client.on('complete', function(client, args) {
-            });
-        });
-        clip.on('dataRequested', function(client, args) {
-            var text = parallelCitationTextField.val();
-            client.setText(text);
-        });
+        var client = setupZeroClipboard(parallelCitationButton);
+        client.on('ready', function(event) {
+            console.log('Ready');
+            client.on('copy', function(event) {
+                console.log('Copy event!');
+                event.clipboardData.setData('text/plain', parallelCitationTextField.val());
+                var table = $('main table').first().clone();
+                table.find('#parallel-citation').remove();
+                
+                event.clipboardData.setData('text/html', table[0].outerHTML);
+            })
+        });q
     }
 }
 
