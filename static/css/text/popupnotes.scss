@@ -281,6 +281,10 @@ span.lookup:hover > span.meaning {
 }
 */
 
-#quote-controls.open {
-    
+#quote-controls {
+    padding: 0.5em;
+    @include sans-serif;
+    font-size:0.8rem;
+    box-shadow:2px 2px 6px rgba(0,0,0,0.2);
+    background:pastel-color(light-red);
 }
