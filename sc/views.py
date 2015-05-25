@@ -168,8 +168,7 @@ class ViewBase:
         if offline:
             if not config.always_nonfree_fonts:
                 nonfree_fonts = False
-                
-        return ViewContext({
+        params = {
             'menu': get_menu(),
             'config': config,
             'current_datetime': datetime.datetime.now(),
@@ -185,11 +184,19 @@ class ViewBase:
             'imm': sc.scimm.imm(),
             'ajax': 'ajax' in cherrypy.request.params,
             'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()}
-        })
+        }
+        if self.template_name != 'panel':
+            params['panel_html'] = self.panel_html()
+        return ViewContext(params)
 
     def massage_whitespace(self, text):
         return regex.sub(r'\n[ \n\t]+', r'\n', text)
-
+    
+    def panel_html(self, _cache=[]):
+        if not _cache:
+            _cache.append(GenericView('panel', {}).render())
+        return _cache[0]
+    
     def render(self):
         """Return the HTML for this view."""
         try:
