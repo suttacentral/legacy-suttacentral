@@ -272,14 +272,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .marked {
     background: pastel-color(bright-red);
-    padding: 2px 0px;
-    margin: -2px 0px;
-    &.first-marked {
-        border-top-left-radius: 5px;
-    }
-    &.last-marked {
-        border-bottom-right-radius: 5px;
-    }
-}
+    padding: 2px;
+    margin: -2px;
+  }
 
     

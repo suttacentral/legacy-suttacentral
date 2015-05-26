@@ -215,6 +215,7 @@ span.lookup:hover > span.meaning {
 }
 
 #quote-controls {
+@include sans-serif;
     margin: 0;
     margin-top: -2em;
     margin-left: -1em;
@@ -224,13 +225,13 @@ span.lookup:hover > span.meaning {
     overflow: hidden;
     background: pastel-color(light-red);
     box-shadow:2px 2px 6px rgba(0,0,0,0.2);
-    border-radius: 4px;
+    border:1px solid #ccc;
     #quote-link {
         border: none;
         overflow: hidden;
         background: inherit;
         color: inherit;
-        width: 8.5em;
+        
         font-size: 85%;
     }
     #quote-copied {
