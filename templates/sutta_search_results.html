@@ -1,0 +1,26 @@
+{% import 'macros.html' as macros with context %}
+
+{% if results.hits.total > 0 %}
+<p>Results {{ offset + 1 }} to {{ offset + results.hits.hits|length }} of {{ results.hits.total }}</p>
+<table>
+<thead>
+<tr>
+<th>Identifier</th>
+<th>Title</th>
+<th>Vol/Page</th>
+<th>Parallels</th>
+<th class='transcol'>Translations</th>
+</tr>
+{% for sutta in suttas -%}
+{{macros.sutta_row(sutta)}}
+{%- endfor %}
+</thead>
+</table>
+
+{{ macros.navlinks() }}
+{% else %}
+<p>Unfortunately there were no results</p>
+{% endif %}
+<p><small>Your query took {{ results.took }} ms.</small></p>
+
+
