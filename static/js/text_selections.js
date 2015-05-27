@@ -38,9 +38,7 @@ $.fn.textNodes = function(filter) {
 
 sc.text_selection = (function() {
     "use strict";
-    
-    var assert = _.bind(console.assert, console);
-    
+
     // Module is available only for texts.
     if ($('#text').length == 0) return
 
@@ -53,17 +51,7 @@ sc.text_selection = (function() {
         valid_char_rex = /[^ \n “”‘’.,?!—]/g,
         ignoreClasses,
         link;
-        
-    var sentStartTmpl = '__SENT{}START__',
-        sentEndTmpl = '__SENT{}END__',
-        wordStartTmpl = '__WORD{}.{}START__',
-        wordEndTmpl = '__WORD{}.{}END__';
     
-    
-    var whitespaceChars = '\t\n \xa0\u200a\u2028\u2029\u202f\u3000',
-        whitespaceRex = RegExp('[{}]+'.format(whitespaceChars), 'g'),
-        notWhitespaceRex = RegExp('[^{}]+'.format(whitespaceChars), 'g');
-        
     function nodeFilter() {
         //return !$(this).is(ignoreClasses);
         if ($(this).is(ignoreClasses)) {
@@ -87,158 +75,14 @@ sc.text_selection = (function() {
 
     }
     
-    function unmarkWords(targetElement) {
-        var textNodes = $($elements[targetElement]).textNodes();
-        for (var nodeIndex = 0; nodeIndex < textNodes.length; nodeIndex += 1) {
-            var textNode = textNodes[nodeIndex];
-            if (!textNode.nodeValue) continue
-            textNode.nodeValue = textNode.nodeValue
-                                         .replace(wordStartTmpl.format('[0-9]+', '[0-9]+'), '')
-                                         .replace(wordEndTmpl.format('[0-9]+', '[0-9]+'), '')
-        }
-    }
-    
-    function markWords(targetElement) {
-        console.log();
-        var textNodes = $($elements[targetElement]).textNodes(),
-            sentenceCounter = 1,
-            wordCounter = 0,
-            mapping = [];
-        
-        for (var nodeIndex = 0; nodeIndex < textNodes.length; nodeIndex += 1) {
-
-            var textNode = textNodes[nodeIndex],
-                text = textNode.nodeValue;
-
-            if (!text) {
-                continue
-            }
-
-            // Tokenize into words
-            text = text.replace(notWhitespaceRex, function(word) {
-                // If it contains a number, pass!
-                if (word.search(/\d/) != -1) {
-                    return word
-                }
-                
-                var currentSentence = sentenceCounter;
-                
-                if (word.search(/[.?!]/) != -1) {
-                    sentenceCounter += 1;
-                    if (word.search(/^[.?!,:;”’“‘——]+$/) != -1) {
-                        console.log(word);
-                        return word
-                    }
-                }
-                wordCounter += 1;
-                if (!mapping[currentSentence]) {
-                    mapping[currentSentence] = [];
-                }
-                mapping[currentSentence].push([wordCounter, word, textNode]);
-                
-                return (wordStartTmpl.format(currentSentence, wordCounter) +
-                        word +
-                        wordEndTmpl.format(currentSentence, wordCounter))
-            })
-            textNode.nodeValue = text;
-        }
-        return mapping;
-    }
-        
     function highlightSelection() {
         var parts = window.location.pathname.split('/');
         if (parts.length < 4) return
         var targets = parts[3],
             firstTarget = null;
         
-        var refRegexp = /(\d*)(?:\.(\d+)(?:\.\(\d+))?)?/;
-        // A reference is of the form: p.s.w-p.s.w
-        
         targets.split('+').forEach(function(target) {
             // Form 1
-            var startEnd = target.split('-'),
-                start = refRegexp.exec(startEnd[0] || ''),
-                end = refRegexp.exec(startEnd[1] || 0),
-                startId = start[0],
-                startSentence = start[1] || 1,
-                startWord = start[2] || 1,
-                endId = end[0] || startId,
-                endSentence = end[1],
-                endWord = end[2];
-            
-            // Insert start marker
-            var targetElement = $elements[startId],
-                mapping = markWords(startId),
-                startMapping = mapping;
-            
-            var markers = [[startSentence, startWord]];
-            if (startWord > 1) {
-                indexes.push([startSentence, 1]);
-            }
-            if (startSentence > 1) {
-                indexes.push([1, 1])
-            }
-            var success = false;
-            for (var i = 0; i < indexes.length; i++) {
-                try {
-                    var startSentence = markers[i][0],
-                        startWord = markers[i][1],
-                        marker = startWordTmpl.format(startSentence, startWord),
-                        textNode = mapping[startSentence][startWord][2];
-                    if (!textNode) continue
-                } catch (TypeError) {
-                    continue
-                }
-                textNode.nodeValue = textNode.nodeValue.replace(marker, '__HLSTART__');
-                assert(textNode.nodeValue.search('__HLSTART__' != -1))
-                success = true
-                break
-            }
-            
-            //Insert End Marker
-            if (startId != endId) {
-                targetElement = $elements[endId];
-                mapping = markWords[endId];
-            }
-
-            var markers = [[endSentence, endWord]];
-            if (endWord) {
-                markers.push([endSentence, undefined]);
-            }
-            if (endSentence) {
-                markers.push([undefined, undefined]);
-            }
-            var success = false;
-            for (var i = 0; i < markers.length; i++) {
-                try {
-                    var endSentence = markers[i][0],
-                        endWord = markers[i][1];
-                    if (!endSentence) {
-                        endSentence = mapping.slice(-1)[0];
-                    } 
-                    if (!endWord) {
-                        endWord = endWord = mapping[endSentence].slice(-1)[0][0];
-                    }
-                    var marker = endWordTmpl.format(endSentence, endWord),
-                        textNode = mapping[startSentence][startWord][2];
-                    if (!textNode) continue
-                } catch (TypeError) {
-                    continue
-                }
-
-                textNode.nodeValue = textNode.nodeValue.replace(marker, '__HLEND__');
-                assert(textNode.nodeValue.search('__HLEND__' != -1))
-                success = true
-                break
-                if (success) break
-            }
-            
-            unmarkWords(startId);
-            if (startId != endId) {
-                unmarkWords(endId);
-            }
-            
-            return
 
             var m = /(\d+)(?:(?:\.(\d+))?-(\d+)?(?:\.(\d+))?)?/.exec(target),
                 startId = +m[1],
@@ -410,6 +254,8 @@ sc.text_selection = (function() {
             return
         }
         
+        
+        
         var target = null;
 
         var result = createReferenceChrome(selection);
@@ -491,8 +337,7 @@ sc.text_selection = (function() {
 
     return {highlightSelection: highlightSelection,
             createReference: createReferenceChrome,
-            nodeFilter: nodeFilter,
-            markWords: markWords}
+            nodeFilter: nodeFilter}
 })();
 
 function paint(){
