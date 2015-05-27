@@ -92,6 +92,7 @@ sc.formatter = {
                 measurements = [];
             args.forEach(function(arg){
                 measurements[arg[0]] = arg[1].innerWidth();
+                arg[1].remove();
             });
             deferred.push([callback, measurements])
         });
