@@ -236,7 +236,7 @@ class GroupedSutta(SuttaCommon):
     @property
     def number(self):
         try:
-            return int(regex.search(r'(\d+)(-\d+)?$', self.uid)[1])
+            return int(regex.search(r'(\d+)(-\d+)?[a-g]?$', self.uid)[1])
         except:
             print(self.uid)
             raise

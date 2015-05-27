@@ -20,6 +20,7 @@ from sc.menu import get_menu
 from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
 import sc.search.query
+import sc.search.adv_search
 
 import logging
 logger = logging.getLogger(__name__)
@@ -679,12 +680,15 @@ class ElasticSearchResultsView(ViewBase):
         self.results = results
         self.kwargs = kwargs
 
-    def setup_context(self, context):
+    def setup_common_context(self, context):
         context.query = self.query
         context.results = self.results
         context.limit = int(self.kwargs['limit'])
         context.total = self.results['hits']['total']
         context.offset = int(self.kwargs['offset'])
+        
+    def setup_context(self, context):
+        self.setup_common_context(context)
         
         context.search_languages = [lang for lang in
                                         sorted(context.imm.languages.values(),
@@ -692,6 +696,38 @@ class ElasticSearchResultsView(ViewBase):
                                         if context.imm.tim.exists(lang_uid=lang.uid)]
         context.query_lang = self.kwargs.get('lang')
         context.no_index = True
+        query_params = {
+            "query": self.query
+        }
+        if context.query_lang:
+            query_params['query_lang'] = context.query_lang
+        context.base_query_url = '/search?{}'.format(urllib.parse.urlencode(query_params))
+        
+class AdvancedSearchView(ElasticSearchResultsView):
+    template_name = "advanced_search"
+    
+    def __init__(self, results, **kwargs):
+        super().__init__(query=None, results=results, **kwargs)
+    
+    def setup_context(self, context):
+        context.kwargs = self.kwargs
+        if self.results:
+            self.setup_common_context(context)
+            imm = sc.scimm.imm()
+            context.suttas = [
+                imm.suttas[hit["_source"]["uid"]]
+                for hit
+                in self.results["hits"]["hits"]
+            ]
+            query_params = dict(cherrypy.request.params)
+            
+            if "limit" in query_params:
+                del query_params["limit"]
+            if "offset" in query_params:
+                del query_params["offset"]
+        
+            context.base_query_url = '/search?{}'.format(urllib.parse.urlencode(query_params))
+        
         
 class ShtLookupView(ViewBase):
     """The view for the SHT lookup page."""

@@ -3,13 +3,7 @@
 {%- block content -%}
 <div id='onecol'>
 <div id="main_search_results">
-<form id="page-main-search" action="/search">
-
-<label>Vol/Page</label><span class="input-wrap">
-<input type="text" name="volpage" tabindex=2" autocomplete="off">
-</span>
-    
-    
+<form id="page-main-search" class="search-box" action="/search">
 <span class="input-wrap">
 <input type="text" name="query" tabindex="1" autocomplete="off" value="{{query|e}}">
 <button type="submit" class="search-submit"></button>
@@ -35,6 +29,7 @@
 
 <button type="submit" name="details" title="Restrict search to sutta/rule details">Details</button>
 </form>
+<a class="advanced-search-link" href="/advanced_search">-> Advanced Search</a>
 {% if results.hits.hits %}
 <p>Results {{ offset + 1 }} to {{ offset + results.hits.hits|length }} of {{ results.hits.total }}</p>
 <ul class="results">
@@ -66,31 +61,7 @@
 {% endif %}
 {% endfor %}
 
-{% macro page_url(offset, limit) %}
-/search?query={{query|urlencode}}{% if query_lang %}&lang={{query_lang}}{% endif %}&offset={{offset}}&limit={{limit}}
-{% endmacro %}
-<table id="search-nav">
-<tr>
-{% if offset > 0 %}
-<td><a class="search-nextprev" href="{{ page_url((offset - limit) | max(0), limit) }}">Prev</a>
-{% endif %}
-{% if (offset / limit <= 5) %}
-{% set range_start = 0 %}
-{% else %}
-{% set range_start = offset // limit - 5 %}
-{% endif %}
-{% for i in range(range_start, (1 + total // limit) | min(range_start + 10)) %}
-{% if offset >= (i * limit) and offset < (i + 1) * limit %}
-<td><span class="search-page">{{i + 1}}</span>
-{% else %}
-<td><a class="search-page" href="{{ page_url(i * limit, limit) }}">{{i + 1}}</a>
-{% endif %}
-{% endfor %}
-{% if offset + limit < total %}
-<td><a class="search-nextprev" href="{{ page_url(offset + limit, limit) }}">Next</a>
-{% endif %}
-</tr>
-</table>
+{{ macros.navlinks() }}
 
 {% else %}
 <p>Unfortunately, there were no results</p>

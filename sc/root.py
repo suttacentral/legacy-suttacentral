@@ -68,7 +68,11 @@ class Root(object):
     @cherrypy.expose
     def search(self, **kwargs):
         return show.search(**kwargs)
-
+    
+    @cherrypy.expose
+    def advanced_search(self, **kwargs):
+        return show.advanced_search(**kwargs)
+    
     @cherrypy.expose
     def sutta_info(self, uid, lang='en', **kwargs):
         return show.sutta_info(uid, lang)
@@ -98,7 +102,6 @@ class Root(object):
     
     @cherrypy.expose
     def donate(self, page, **kwargs):
-        print(kwargs)
         if cherrypy.request.method != 'POST':
             raise cherrypy.NotFound()
         return show.donate(page, **kwargs)

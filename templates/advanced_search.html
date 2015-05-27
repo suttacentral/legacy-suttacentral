@@ -1,0 +1,96 @@
+{% extends "base.html" -%}
+{% import 'macros.html' as macros with context %}
+{%- block content -%}
+
+{% macro controls() %}
+<div class="controls">
+<label>Mode:</label>
+<span title="Use a ? to match any character, * to match any number of characters">
+<input type="radio" id="wildcard" name="mode" value="wildcard" checked>
+<label for="wildcard"  >Wildcard</label></span>
+<span title="Change mode to fuzzy to be tolerant of spelling errors">
+<input type="radio" id="fuzzy" name="mode" value="fuzzy">
+<label for="fuzzy">Fuzzy</label></span>
+</div>
+{% endmacro %}
+<div id='onecol'>
+<div id="advanced-search">
+<form class="search-box" action="/advanced_search">
+<input type="hidden" name="target" value="suttas">
+<input type="hidden" name="limit" value="50">
+<input type="hidden" name="offset" value="0">
+{% set fields = [["name", "Name", "wide"], 
+                 ["volpage", "Vol/Page", ""], 
+                 ["acronym", "Acronym", ""],
+                 ["division", "Division", ""],
+                 ["lang", "Language", ""]] %}
+<h1>Sutta Database Search</h1>
+{{ controls() }}
+{% for name, label, extra_class in fields %}
+<div class="field-box{{ ' ' + extra_class if extra_class else '' }}">
+<label for="{{name}}">{{label}}</label><span class="input-wrap">
+<input type="text" list="sutta-{{name}}-list" id="{{name}}" name="{{name}}" tabindex="{{loop.index}}" autocomplete="off"  {% if name in kwargs %}value="{{kwargs[name]}}"{% endif %}>
+</span>
+</div>
+{% endfor %}
+<datalist id="sutta-lang-list">
+{% for lang in imm.languages.values()|sort %}
+{% if lang.isroot %}
+<option value="{{lang.uid}}">
+{% endif %}
+{% endfor %}
+</datalist>
+<datalist id="sutta-division-list">
+{% for division in imm.divisions.values() %}
+<option value="{{division.uid}}">
+{% endfor %}
+</datalist>
+<button>Search</button>
+</form>
+{#
+<form class="search-box" action="/advanced_search">
+<input type="hidden" name="target" value="texts">
+{% set fields = [["title", "Title", "wide"], 
+                 ["content", "Content", "wide"], 
+                 ["acronym", "Acronym", ""],
+                 ["division", "Division", ""], 
+                 ["lang", "Language", ""]] %}
+<h1>Texts</h1>
+{{ controls() }}
+{% for name, label, extra_class in fields %}
+<div class="field-box{{ ' ' + extra_class if extra_class else '' }}">
+<label for="{{name}}">{{label}}</label><span class="input-wrap">
+<input type="text" id="{{name}}" list="text-{{name}}-list" name="{{name}}" tabindex="{{loop.index}}" autocomplete="off" {% if name in kwargs %}value="{{kwargs[name]}}"{% endif %}>
+</span>
+</div>
+{% endfor %}
+<datalist id="text-lang-list">
+{% for lang in imm.languages.values()|sort %}
+<option value="{{lang.uid}}" title="{{lang.name}}">
+{% endfor %}
+</datalist>
+<datalist id="text-division-list">
+{% for division in imm.divisions.values() %}
+<option value="{{division.uid}}">
+{% endfor %}
+</datalist>
+</form>
+
+#}
+
+{% if results %}
+{% include 'sutta_search_results.html' %}
+{% else %}
+<p>Advanced search permits precise queries to be made. When more than one
+field is entered all fields must match.
+<p>The default mode is wildcard, this means you can use ? to match any single
+character, or * to match any number of characters. If you do not use * or ?
+a literal whole word match is required.</p>
+<p>Alternatively you can use fuzzy mode. In fuzzy mode ? and * have no special
+meaning. In fuzzy mode non-exact matches will be returned.</p>
+<p>Certain fields such as the language field are always treated
+literally and wildcards and fuzzy mode have no effect.</p>
+{% endif %}
+</div>
+</div>
+{% endblock %}

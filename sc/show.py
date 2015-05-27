@@ -152,11 +152,28 @@ def default(*args, **kwargs):
 
     raise cherrypy.NotFound()
 
+def advanced_search(target=None, **kwargs):
+    if not target:
+        return AdvancedSearchView(None, **kwargs).render()
+    if not 'limit' in kwargs:
+        kwargs['limit'] = 50
+    if not 'offset' in kwargs:
+        kwargs['offset'] = 0
+    try:
+        if target == 'suttas':
+            results = sc.search.adv_search.sutta_search(**kwargs)
+            return AdvancedSearchView(results, **kwargs).render()
+        else:
+            raise cherrypy.HTTPError(502, "Invalid Search Target")
+    except sc.search.ConnectionError:
+        raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
+
 def search(query, **kwargs):
     if not 'limit' in kwargs:
         kwargs['limit'] = 10
     if not 'offset' in kwargs:
         kwargs['offset'] = 0
+        
     try:
         if 'autocomplete' in kwargs:
             results = sc.search.autocomplete.search(query, **kwargs)
@@ -168,7 +185,6 @@ def search(query, **kwargs):
         raise cherrypy.HTTPError(503, 'Elasticsearch Not Available')
 
 def donate(page, **kwargs):
-    print(page, kwargs)
     try:
         if page == 'plan':
             return DonationsPlanView(**kwargs).render()
@@ -270,7 +286,6 @@ def profile(locals_dict, globals_dict, *args, **kwargs):
         stats = Stats(tmpfile.name)
     stats.sort_stats('tottime')
     stats.stream = StringIO()
-    stats.print_stats()
     out = stats.stream.getvalue()
     splitpoint = out.find('ncalls')
     preamble = out[:splitpoint]

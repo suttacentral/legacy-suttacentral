@@ -1,4 +1,4 @@
-#page-main-search   {
+.search-box   {
     background: misc-color(light-light-gray);
     padding: 1em 2%;
     margin-bottom:1em;
@@ -112,23 +112,39 @@ li.result > a {
 }
 
 #advanced-search {
+    margin: auto;
     max-width: 40em;
     margin: auto;
+    
     &> form {
         text-align: left;
+        max-width: 30em;
+        margin: 0.5em auto;
     }
     .controls {
         width: 95%;
     }
     .field-box {
-        display: inline-block;
-        width: 48%;
+        margin: 0.5em 0em;
         label {
             width: 5em;
             display: inline-block;
         }
+        .input-wrap {
+            display: inline-block;
+            width: 4em;
+        }
         input {
-            width: 5em;
+            width: 100%;
         }
     }
+    .field-box.wide {
+        .input-wrap {
+            width: 16em;
+        }
+    }
+}
+
+.advanced-search-link {
+    float: right;
 }

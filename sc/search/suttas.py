@@ -14,16 +14,23 @@ logger = logging.getLogger(__name__)
 
 class SuttaIndexer(ElasticIndexer):
     doc_type = 'sutta'
+    version = 3
 
     def extract_fields(self, sutta):
         boost = log(3 + sum(2 - p.partial for p in sutta.parallels), 10)
+        
         return {
             "uid": sutta.uid,
             "volpage": [sutta.volpage] + ([sutta.alt_volpage_info]
                                             if sutta.alt_volpage_info else []),
-            "division": sutta.subdivision.uid,
+            "division": sutta.subdivision.division.uid,
+            "subdivision": sutta.subdivision.uid,
             "lang": sutta.lang.uid,
             "name": sutta.name,
+            "ordering": '{:04}.{:04}.{:04}'.format(
+                         sutta.subdivision.division.menu_seq,
+                         sutta.subdivision.order,
+                         sutta.number),
             "boost": boost
         }
     
