@@ -41,6 +41,10 @@
                         "type": "string",
                         "analyzer": "uid_standard"
                     },
+                    "volpage_extra": {
+                        "type": "string",
+                        "analyzer": "uid_standard"
+                    },
                     "lang": {
                         "type": "string",
                         "analyzer": "uid_standard"

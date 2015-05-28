@@ -14,8 +14,28 @@ logger = logging.getLogger(__name__)
 
 class SuttaIndexer(ElasticIndexer):
     doc_type = 'sutta'
-    version = 3
-
+    version = 4
+    
+    def calculate_sutta_volpages(self):
+        rex = regex.compile(r'^(?<vol>\D+)(?<page>\d+)$')
+        mapping = {}
+        prev_sutta = None
+        suttas = [s for s in sc.scimm.imm().suttas.values() if '-' not in s.uid]
+        
+        for sutta in suttas:
+            if prev_sutta:
+                # Calculate the volpage range for the previous sutta
+                start = rex.match(prev_sutta.volpage)
+                end = rex.match(sutta.volpage)
+                if start and end and start['vol'] == end['vol']:
+                    pages = []
+                    for i in range(int(start['page']) + 1, int(end['page'])):
+                        pages.append('{}{}'.format(start['vol'], i))
+                    if pages:
+                        mapping[prev_sutta.uid] = pages
+            prev_sutta = sutta
+        return mapping
+    
     def extract_fields(self, sutta):
         boost = log(3 + sum(2 - p.partial for p in sutta.parallels), 10)
         
@@ -23,6 +43,7 @@ class SuttaIndexer(ElasticIndexer):
             "uid": sutta.uid,
             "volpage": [sutta.volpage] + ([sutta.alt_volpage_info]
                                             if sutta.alt_volpage_info else []),
+            "volpage_extra": self.volpage_mapping.get(sutta.uid) or [sutta.volpage],
             "division": sutta.subdivision.division.uid,
             "subdivision": sutta.subdivision.uid,
             "lang": sutta.lang.uid,
@@ -66,6 +87,7 @@ class SuttaIndexer(ElasticIndexer):
     
     def update_data(self, force=False):
         index_name = self.index_name
+        self.volpage_mapping = self.calculate_sutta_volpages()
         self.process_chunks(self.yield_suttas(size=500000))
 
 def periodic_update(i):

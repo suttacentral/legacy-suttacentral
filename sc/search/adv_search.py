@@ -12,7 +12,7 @@ def sutta_search(**kwargs):
     mode = kwargs.get("mode") or "wildcard"
     fields = {
         "name": {"mode": mode},
-        "volpage": {"mode": mode},
+        "volpage": {"mode": mode, "fields": ["volpage", "volpage_extra"]},
         "acronym": {"mode": mode, "field": "uid"},
         "division": {"mode": mode, "fields": ["division", "subdivision"]},
         "lang": {"mode": "term"}
