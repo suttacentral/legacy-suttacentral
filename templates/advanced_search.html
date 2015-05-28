@@ -2,19 +2,20 @@
 {% import 'macros.html' as macros with context %}
 {%- block content -%}
 
-{% macro controls() %}
+{% macro controls(mode) %}
 <div class="controls">
 <label>Mode:</label>
 <span title="Use a ? to match any character, * to match any number of characters">
-<input type="radio" id="wildcard" name="mode" value="wildcard" checked>
+<input type="radio" id="wildcard" name="mode" value="wildcard"{% if mode == 'wildcard' %} checked{% endif %}>
 <label for="wildcard"  >Wildcard</label></span>
 <span title="Change mode to fuzzy to be tolerant of spelling errors">
-<input type="radio" id="fuzzy" name="mode" value="fuzzy">
+<input type="radio" id="fuzzy" name="mode" value="fuzzy"{% if mode == 'fuzzy' %} checked{% endif %}>
 <label for="fuzzy">Fuzzy</label></span>
 </div>
 {% endmacro %}
 <div id='onecol'>
 <div id="advanced-search">
+
 <form class="search-box" action="/advanced_search">
 <input type="hidden" name="target" value="suttas">
 <input type="hidden" name="limit" value="50">
@@ -25,7 +26,7 @@
                  ["division", "Division", ""],
                  ["lang", "Language", ""]] %}
 <h1>Sutta Database Search</h1>
-{{ controls() }}
+{{ controls(kwargs.mode or 'wildcard') }}
 {% for name, label, extra_class in fields %}
 <div class="field-box{{ ' ' + extra_class if extra_class else '' }}">
 <label for="{{name}}">{{label}}</label><span class="input-wrap">
@@ -79,7 +80,13 @@
 #}
 
 {% if results %}
+<div id="search-results">
 {% include 'sutta_search_results.html' %}
+</div>
+<script>
+document.getElementById('search-results').scrollIntoView();
+window.scrollTo(0, window.scrollY - 40);
+</script>
 {% else %}
 <p>Advanced search permits precise queries to be made. When more than one
 field is entered all fields must match.
