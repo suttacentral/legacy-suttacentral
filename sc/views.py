@@ -726,7 +726,7 @@ class AdvancedSearchView(ElasticSearchResultsView):
             if "offset" in query_params:
                 del query_params["offset"]
         
-            context.base_query_url = '/search?{}'.format(urllib.parse.urlencode(query_params))
+            context.base_query_url = '/advanced_search?{}'.format(urllib.parse.urlencode(query_params))
         
         
 class ShtLookupView(ViewBase):
