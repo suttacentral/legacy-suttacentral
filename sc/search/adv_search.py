@@ -33,7 +33,7 @@ def sutta_search(**kwargs):
                             {
                                 params["mode"]: {
                                     sub_field: {
-                                        "value": value
+                                        "value": value.lower()
                                     }
                                 }
                             }
@@ -48,7 +48,7 @@ def sutta_search(**kwargs):
                 {
                     params["mode"]: {
                         params.get("field", field): {
-                            "value": value
+                            "value": value.lower()
                         }
                     }
                 }
