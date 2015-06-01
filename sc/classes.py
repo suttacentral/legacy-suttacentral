@@ -1,6 +1,7 @@
 import regex
 from collections import namedtuple, Counter
 from sc.util import ConciseRepr
+from sc.uid_expansion import uid_to_acro, uid_to_name
 
 class Serializable:
     """ Serialize the class to JSON
@@ -219,7 +220,7 @@ class GroupedSutta(SuttaCommon):
     
     @property
     def acronym(self):
-        return self.imm.uid_to_acro(self.uid)
+        return uid_to_acro(self.uid)
     
     @property
     def _subdivision_uid(self):
@@ -268,11 +269,11 @@ class GroupedSutta(SuttaCommon):
     
     @property
     def brief_acronym(self):
-        return self.imm.uid_to_acronym(self.brief_uid)
+        return uid_to_acronym(self.brief_uid)
     
     @property
     def brief_name(self):
-        return self.imm.uid_to_name(self.brief_uid)
+        return uid_to_name(self.brief_uid)
     
 class ParallelSuttaGroup:
     """ A class which acts a lot like a list of parallels """

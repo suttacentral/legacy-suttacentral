@@ -21,6 +21,7 @@ from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
 import sc.search.query
 import sc.search.adv_search
+from sc.uid_expansion import uid_to_acro, uid_to_name
 
 import logging
 logger = logging.getLogger(__name__)
@@ -52,8 +53,8 @@ def jinja2_environment():
     env.filters['min'] = min
     env.filters['datetime'] = util.format_datetime
     env.filters['timedelta'] = util.format_timedelta
-    env.filters['uid_to_name'] = lambda uid: scimm.imm().uid_to_name(uid)
-    env.filters['uid_to_acro'] = lambda uid: scimm.imm().uid_to_acro(uid)
+    env.filters['uid_to_name'] = lambda uid: scimm.imm(uid_to_name(uid)
+    env.filters['uid_to_acro'] = lambda uid: scimm.imm(uid_to_acro(uid)
 
     def sub_filter(string, pattern, repl):
         return regex.sub(pattern, repl, string)
@@ -376,7 +377,7 @@ class TextView(ViewBase):
         context.discourse_link = None
         if self.uid in imm.suttas and sc.config.discourse['forum_url']:
             sutta = imm.suttas
-            query = '%22{}%22|{}'.format(imm.uid_to_acro(self.uid).replace(' ', ' '), self.uid)
+            query = '%22{}%22|{}'.format(uid_to_acro(self.uid).replace(' ', ' '), self.uid)
             context.discourse_link = '{}?search={}'.format(sc.config.discourse['forum_url'], query)
             context.discourse_url = sc.config.discourse['forum_url']
             try:

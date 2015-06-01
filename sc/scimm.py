@@ -24,6 +24,8 @@ import sc
 from sc import config, textfunctions, textdata
 from sc.classes import *
 import sc.updater
+from sc.uid_expansion import uid_to_acro, uid_to_name
+
 
 from sc.csv_loader import table_reader
 
@@ -44,6 +46,7 @@ def numsortkey(input, index=0):
             return []
     return ( [int(a) if a.isnumeric() else a
                    for a in regex.split(r'(\d+)', string)] )
+
 
 class _Imm:
     _uidlangcache = {}
@@ -71,18 +74,7 @@ class _Imm:
             return self.subdivisions[uid]
         elif uid in self.suttas:
             return self.suttas[uid]
-    def _expand_uid(self, uid, mapping):
-        components = regex.findall(r'\p{alpha}+|\d+(?:\.\d+)?(?:-\d+)?', uid)
-        out = ' '.join(mapping.get(c) or c.upper() for c in components)
-        out = regex.sub(r'(?<=\d+)-(?=\d+)', r'–', out)
-        return out
-    
-    def uid_to_acro(self, uid):
-        return self._expand_uid(uid, self._uid_to_acro_map)
-        
-    def uid_to_name(self, uid):
-        return self._expand_uid(uid, self._uid_to_name_map)
-    
+
     def build(self):
         """ Build the sutta central In Memory Model
 
@@ -113,13 +105,6 @@ class _Imm:
         imm.text_paths[lang][uid]
 
         """
-        
-        # Load uid to acro map
-        self._uid_to_acro_map = {}
-        self._uid_to_name_map = {}
-        for row in table_reader('uid_expansion'):
-            self._uid_to_acro_map[row.uid] = row.acro
-            self._uid_to_name_map[row.uid] = row.name
         
         # Build Pitakas
         self.pitakas = OrderedDict()
@@ -197,7 +182,7 @@ class _Imm:
                 name=row.name,
                 alt_name=row.alt_name,
                 text_ref=text_ref,
-                acronym=row.acronym or self.uid_to_acro(row.uid),
+                acronym=row.acronym or uid_to_acro(row.uid),
                 subdiv_ind=row.subdiv_ind,
                 menu_seq=i,
                 menu_gwn_ind=bool(row.menu_gwn_ind),
@@ -282,7 +267,7 @@ class _Imm:
             volpage = row.volpage.split('//')
             acro = row.acronym.split('//')
             if not acro[0]:
-                acro[0] = self.uid_to_acro(uid)
+                acro[0] = uid_to_acro(uid)
             
             lang = self.languages[row.language]
             
