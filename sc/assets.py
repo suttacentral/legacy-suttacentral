@@ -45,7 +45,7 @@ def compile():
     cmd.build()
 
 def build_sc_uid_expansion(env):
-    from sc.scimm import table_reader
+    from sc.csv_loader import table_reader
     import json, os.path
     filename = 'js/sc_uid_expansion_data.js'
     fullname = os.path.join(env.directory, filename)

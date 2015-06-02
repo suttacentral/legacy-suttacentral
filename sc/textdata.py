@@ -2,6 +2,7 @@ import time
 import regex
 import pickle
 import pathlib
+import hashlib
 import sqlite3
 import datetime
 import functools
@@ -77,49 +78,81 @@ class TIMManager:
         # up_to_date is False if stale, True if fresh, None if undetermined.
         self.up_to_date = None
     
-    def get_db_name(self):
-        files = sc.text_dir.glob('**/*.html')
-        mtime = self.version + int(max(file.stat().st_mtime for file in files))
-        return self.db_name_tmpl.format(mtime)
+    @classmethod
+    def get_db_name(cls):
+        files = sorted(sc.text_dir.glob('**/*.html'))
+        md5 = hashlib.md5()
+        for file in files:
+            md5.update(str(file.stat().st_mtime_ns).encode('ascii'))
+        md5.update(str(cls.version).encode('ascii'))
+        
+        return cls.db_name_tmpl.format(md5.hexdigest()[:10])
     
-    def load_cached(self):
+    @classmethod
+    def get_db_files(cls):
+         return list(sc.db_dir.glob(cls.db_name_tmpl.format('*')))
+    
+    @classmethod
+    def get_latest_tim(cls):
+        latest_mtime = 0
+        latest_file = None
+        db_files = cls.get_db_files()
+        for file in db_files:
+            build_logger.debug('{.name} appears to be saved TIM'.format(file))
+            mtime = file.stat().st_mtime
+            if mtime > latest_mtime:
+                latest_mtime = mtime
+                latest_file = file
+        
+        return latest_file, db_files
+    
+    def remove_old_tims(self, db_files, keep=set()):
+        db_files = self.get_db_files()
+        db_files.sort(reverse=True, key=lambda f: f.stat().st_mtime)
+        for file in db_files[5:]:
+            if file not in keep:
+                try:
+                    file.unlink()
+                except FileNotFoundError:
+                    pass
+    
+    def load_cached(self, db_name):
         if self.instance:
             return
-        best_mtime = ''
-        best_file = None
-        name_rex = regex.compile(self.db_name_tmpl.format('([0-9a-f]+)', '([0-9]+)'))
-        db_files = list(sc.db_dir.glob(self.db_name_tmpl.format('*')))
+
+        latest_file, db_files = self.get_latest_tim()
+        
         for file in db_files:
-            m = name_rex.match(file.name)
-            build_logger.info('{.name} appears to be saved TIM'.format(file))
-            if not m:
-                build_logger.info('{.name} name format not recognized, skipping'.format(file));
-                continue
-            mtime = m[1]
-            if mtime > best_mtime:
-                best_mtime = mtime
-                best_file = file
-        if best_file:
-            build_logger.info('{.name} looks like most recent saved TIM'.format(best_file))
-            for file in db_files:
-                if file != best_file:
-                    file.unlink()
-            build_logger.info('Loading {.name}'.format(best_file))
+            if file.name == db_name:
+                build_logger.info('{.name} is up to date TIM'.format(file))
+                try:
+                    with file.open('rb') as f:
+                        instance = pickle.load(f)
+                    self._set_instance(instance)
+                    self.remove_old_tims({file.name})
+                    self.up_to_date = True
+                    return
+                except (EOFError, ValueError, FileNotFoundError):
+                    build_logger.info('{.name} is corrupt, removing'.format(file))
+                break
+        
+        if latest_file:
+            build_logger.info('{.name} looks like most recent saved TIM but is not up to date'.format(latest_file))
             try:
                 with file.open('rb') as f:
                     instance = pickle.load(f)
                 self._set_instance(instance)
             except (EOFError, ValueError, FileNotFoundError):
-                build_logger.info('{.name} is corrupt, removing'.format(best_file))
-                if best_file.exists():
-                    best_file.unlink()
-                best_file = None
-                best_mtime = ''
-        if best_file:
+                build_logger.info('{.name} is corrupt, removing'.format(latest_file))
+                if latest_file.exists():
+                    latest_file.unlink()
+                latest_file = None
+                latest_mtime = ''
+        if latest_file:
             for file in db_files:
-                if file != best_file and file.exists():
+                if file != latest_file and file.exists():
                     file.unlink()
-        self.current_file = best_file
+        self.current_file = latest_file
     
     def load(self, quick=False):
         """ Load an instance of the TextInfoModel 
@@ -132,13 +165,12 @@ class TIMManager:
         version will then be made ready.
         
         """
-        self.load_cached()
-        if quick and self.instance is not None:
+        db_file_name = self.get_db_name()
+        self.load_cached(db_file_name)
+        if self.up_to_date or quick and self.instance is not None:
             return
         
-        db_file_name = self.get_db_name()
         if self.current_file:
-            self.up_to_date = (self.current_file.name == db_file_name)
             build_logger.info('TIM DB name = {}, up_to_date = {}'.format(self.current_file, self.up_to_date))
         else:
             build_logger.info('No TIM DB exists')
@@ -165,7 +197,7 @@ class TIMManager:
         self.instance = instance
         # Other threads can now use it.
         self.ready.set()
-        
+        return
         try:
             sc.scimm
             import sc.scimm
@@ -588,7 +620,7 @@ class PaliPageNumbinator:
         self.load()
 
     def load(self):
-        from sc.scimm import table_reader
+        from sc.csv_loader import table_reader
 
         reader = table_reader('pali_concord')
 

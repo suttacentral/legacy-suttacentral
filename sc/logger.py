@@ -96,7 +96,7 @@ def file_handler(name=None):
     if name:
         logfile = sc.config.log_dir / (name + '.log' if not name.endswith('.log') else '')
     else:
-        logfile = config.log_path
+        logfile = sc.config.log_dir / config.app['log_name']
     handler = RotatingFileHandler(str(logfile), 
                 maxBytes=4*1024*1024, backupCount=1)
     handler.setFormatter(SCLogFormatter(with_name=not name))
@@ -113,7 +113,7 @@ def get_named_logger(name, level='INFO'):
 
 file_log = file_handler()
 
-startup_log = RotatingFileHandler(config.app['log_startup_path'], maxBytes=1*1024*1024, backupCount=1)
+startup_log = RotatingFileHandler(str(sc.config.log_dir / config.app['log_startup_name']), maxBytes=1*1024*1024, backupCount=1)
 startup_log.setFormatter(SCLogFormatter())
 startup_log.setLevel('INFO')
 

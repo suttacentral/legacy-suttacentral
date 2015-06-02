@@ -5,7 +5,7 @@ import time
 import regex
 import lxml.html
 
-import sc, sc.scimm
+import sc
 import sc.logger
 from sc.search.indexer import ElasticIndexer
 from sc.search import es
@@ -25,6 +25,7 @@ class DiscourseIndexer(ElasticIndexer):
     # Different doc types are possible.
     doc_type = None 
     version = 0
+    suppress_elasticsearch_errors = True
     def __init__(self):
         super().__init__(config_name=discourse_index)
         self.latest_timestamp = ''
@@ -261,6 +262,13 @@ def start_updater():
         updater.start()
 
 start_updater()
+
+def update(force=False, _indexer=[]):
+    if not discourse_is_available:
+        return
+    if not _indexer:
+        _indexer.append(DiscourseIndexer())
+    _indexer[0].update()
 
 def make_snippet(plain_string, length=250):
     pattern = r'.{,%i}(?:[.!?,:;]|$)' % (length, )

@@ -47,6 +47,13 @@ def server():
         os.execlp('cherryd', 'cherryd', '-i', 'sc.server')
 
 @task
+def elastic_indexer():
+    """Run the Elasticsearch Indexer Daemon """
+    blurb(elastic_indexer)
+    import sc.search.updater
+    sc.search.updater.start()
+
+@task
 def test_server():
     """Run test server to validate code."""
     blurb(test_server)
