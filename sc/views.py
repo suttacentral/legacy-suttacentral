@@ -20,6 +20,7 @@ from sc.menu import get_menu
 from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
 import sc.search.query
+import sc.search.discourse
 import sc.search.adv_search
 from sc.uid_expansion import uid_to_acro, uid_to_name
 
@@ -53,8 +54,8 @@ def jinja2_environment():
     env.filters['min'] = min
     env.filters['datetime'] = util.format_datetime
     env.filters['timedelta'] = util.format_timedelta
-    env.filters['uid_to_name'] = lambda uid: scimm.imm(uid_to_name(uid)
-    env.filters['uid_to_acro'] = lambda uid: scimm.imm(uid_to_acro(uid)
+    env.filters['uid_to_name'] = lambda uid: scimm.imm(uid_to_name(uid))
+    env.filters['uid_to_acro'] = lambda uid: scimm.imm(uid_to_acro(uid))
 
     def sub_filter(string, pattern, repl):
         return regex.sub(pattern, repl, string)

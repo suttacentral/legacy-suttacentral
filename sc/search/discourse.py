@@ -5,7 +5,7 @@ import time
 import regex
 import lxml.html
 
-import sc, sc.scimm
+import sc
 import sc.logger
 from sc.search.indexer import ElasticIndexer
 from sc.search import es
@@ -25,6 +25,7 @@ class DiscourseIndexer(ElasticIndexer):
     # Different doc types are possible.
     doc_type = None 
     version = 0
+    suppress_elasticsearch_errors = True
     def __init__(self):
         super().__init__(config_name=discourse_index)
         self.latest_timestamp = ''
@@ -235,32 +236,12 @@ class DiscourseIndexer(ElasticIndexer):
          self.locs = locals()
          raise
 
-
-updater = None
-import threading
-class DiscourseUpdater(threading.Thread):
-    daemon = True
-    indexer = None
-    def run(self):
-        time.sleep(1)
-        self.indexer = DiscourseIndexer()
-        while True:
-            self.indexer.update()
-            time.sleep(sc.config.discourse['sync_period'])
-
-def start_updater():
-    global updater
-    if updater is not None:
+def update(force=False, _indexer=[]):
+    if not discourse_is_available:
         return
-    if sc.config.app['update_search']:
-        if not discourse_is_available:
-            logger.error('Elasticsearch or Discourse Not Available')
-            updater = False
-            return
-        updater = DiscourseUpdater()
-        updater.start()
-
-start_updater()
+    if not _indexer:
+        _indexer.append(DiscourseIndexer())
+    _indexer[0].update()
 
 def make_snippet(plain_string, length=250):
     pattern = r'.{,%i}(?:[.!?,:;]|$)' % (length, )
@@ -328,7 +309,6 @@ def search(uid):
       }
     }
     import json
-    print(json.dumps(body, indent=2))
     result = es.search(discourse_index, doc_type='topic', body=body)
     hits = result['hits']['hits']
     out = {

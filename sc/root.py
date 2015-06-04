@@ -7,8 +7,6 @@ from sc import show, donations
 from sc.tools import webtools
 
 # We expose everything we need to here.
-    
-
 def get_cookie_or_param(name):
     if name in cherrypy.request.cookie:
         return cherrypy.request.cookie[name].value

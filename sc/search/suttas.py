@@ -12,9 +12,11 @@ from sc.search.indexer import ElasticIndexer
 
 logger = logging.getLogger(__name__)
 
-class SuttaIndexer(ElasticIndexer):
-    doc_type = 'sutta'
-    version = 4
+sutta_dump_file = sc.db_dir / 'suttas.json'
+
+class SuttaDumper:
+    def __init__(self):
+        self.volpage_mapping = self.calculate_sutta_volpages()
     
     def calculate_sutta_volpages(self):
         rex = regex.compile(r'^(?<vol>\D+)(?<page>\d+)$')
@@ -55,14 +57,36 @@ class SuttaIndexer(ElasticIndexer):
             "boost": boost
         }
     
+    def dump_suttas(self):
+        imm = sc.scimm.imm()
+        
+        out = [self.extra_fields(sutta) for sutta in imm.suttas.values()]
+        out.sort(key=lambda s: s['ordering'])
+        
+        with sutta_dump_file.open('w') as f:
+            json.dump(out, f)
+
+class SuttaIndexer(ElasticIndexer):
+    doc_type = 'sutta'
+    version = 4
+    
+    def load_suttas(self):
+        try:
+            with sutta_dump_file.open('r') as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return []
+    
     def yield_suttas(self, size):
         chunk = []
         chunk_size = 0
-        for _, sutta in sorted(sc.scimm.imm().suttas.items()):
+        suttas = self.load_suttas()
+        
+        for sutta in suttas:
             action = {
                 '_id': sutta.uid
             }
-            action.update(self.extract_fields(sutta))
+            action.update(sutta)
             chunk.append(action)
             chunk_size += len(str(action).encode(encoding='utf8'))
             if chunk_size > size:
@@ -74,8 +98,10 @@ class SuttaIndexer(ElasticIndexer):
         raise StopIteration
 
     def get_extra_state(self):
-        state = sorted(f.stat().st_mtime_ns for f in sc.table_dir.glob('*.csv'))
-        return state
+        try:
+            return sutta_dump_file.stat().st_mtime_ns
+        except FileNotFoundError:
+            return None
         
     def is_updated_needed(self):
         # Always completely rebuild index if data changes
@@ -86,8 +112,6 @@ class SuttaIndexer(ElasticIndexer):
         return False
     
     def update_data(self, force=False):
-        index_name = self.index_name
-        self.volpage_mapping = self.calculate_sutta_volpages()
         self.process_chunks(self.yield_suttas(size=500000))
 
 def periodic_update(i):

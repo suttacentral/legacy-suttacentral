@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Copy to daemonize and edit.
+
+HOME=/path/to/home
+SC_ROOT="$HOME/suttacentral"
+cd "$SC_ROOT"
+
+exec invoke elastic_indexer

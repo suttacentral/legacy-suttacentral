@@ -116,8 +116,11 @@ class AutocompleteIndexer(ElasticIndexer):
         # and keep track of boost scores.
         entries = defaultdict(list)
         for entry in text_titles:
-            key = (entry['heading.title'], entry['lang'])
-            entries[key].append(entry['boost'])
+            try:
+                key = (entry['heading.title'], entry['lang'])
+                entries[key].append(entry['boost'])
+            except KeyError:
+                pass
         for entry in sutta_titles:
             key = (entry['name'], entry['lang'])
             entries[key].append(entry['boost'])

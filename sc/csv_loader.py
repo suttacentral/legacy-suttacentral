@@ -35,3 +35,6 @@ def table_reader(tablename):
             except TypeError as e:
                 raise TypeError('Error on line {} in table {}, ({})'.format(
                     lineno, tablename, e))
+
+def load_table(tablename):
+    return {row.uid: row for row in table_reader(tablename)}

@@ -9,11 +9,7 @@
                         "index_analyzer": "uid_standard",
                         "search_analyzer": "uid_globbing"
                     },
-                    "division": {
-                        "type": "string",
-                        "index": "not_analyzed"
-                    },
-                    "subdivision": {
+                    "path": {
                         "type": "string",
                         "index": "not_analyzed"
                     },

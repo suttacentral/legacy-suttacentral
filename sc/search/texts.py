@@ -8,7 +8,8 @@ from copy import deepcopy
 from collections import defaultdict
 from elasticsearch.helpers import scan
 import sc
-from sc import scimm, textfunctions
+from sc import textfunctions
+from sc import uid_expansion
 from sc.util import unique, numericsortkey
 
 from sc.search.indexer import ElasticIndexer
@@ -107,7 +108,6 @@ class TextIndexer(ElasticIndexer):
         return boost
         
     def yield_docs_from_dir(self, lang_dir, size, to_add=None, to_delete=None):
-        imm = sc.scimm.imm()
         lang_uid = lang_dir.stem
         files = sorted(lang_dir.glob('**/*.html'), key=lambda s: numericsortkey(s.stem))
         chunk = []
@@ -121,7 +121,6 @@ class TextIndexer(ElasticIndexer):
             if uid not in to_add and uid not in to_delete:
                 continue
             try:
-                root_lang = imm.get_root_lang_from_uid(uid)
                 action = {
                     '_id' : uid,
                     }
@@ -131,29 +130,34 @@ class TextIndexer(ElasticIndexer):
                     chunk_size += len(htmlbytes) + 512
                     subdivision = division = None
                     
-                    # Try to guess by file path
-                    parts = file.relative_to(lang_dir).parts
-                    # Canonical form is lang/pitika/division/subdivision
-                    for part in parts:
-                        if part in imm.subdivisions:
-                            subdivision = part
-                        if part in imm.divisions:
-                            division = part
+                    parts = file.relative_to(lang_dir).parent.parts
                     
-                    if not subdivision:
-                        if uid in imm.suttas:
-                            subdivision = imm.suttas[uid].subdivision.uid
+                    if len(parts) > 0:
+                        if parts[0] in uid_expansion.languages:
+                            root_lang = parts[0]
+                            parts = parts[1:]
                         else:
-                            subdivision = imm.guess_subdiv_uid(uid)
-
-                    if division is None:
-                        if subdivision is not None:
-                            division = imm.subdivisions[subdivision].division.uid
+                            root_lang = lang_uid
+                        
+                    else:
+                        root_lang = None
+                    
+                    if len(parts) > 0:
+                        pitaka = parts[0]
+                    else:
+                        pitaka = None
+                    
+                    
+                    subdivision = None
+                    if len(parts) > 1:
+                        division = parts[1]
+                        if len(parts) > 2:
+                            subdivision = parts[2]
                         else:
-                            division = imm.guess_div_uid(uid)
-                            if division is None:
-                                logger.error('Could not guess division for uid {}, file {!s}'.format(uid, file))
-                            
+                            subdivision = uid
+                    else:
+                        division = uid
+                    
                     action.update({
                         'uid': uid,
                         'division': division,
@@ -166,8 +170,7 @@ class TextIndexer(ElasticIndexer):
                     
                     action.update(self.extract_fields_from_html(htmlbytes))
             except (ValueError, IndexError) as e:
-                logger.error("An error while processing {!s} ({!s})".format(file, e))
-                continue
+                logger.exception('{!s}'.format(file))
 
             chunk.append(action)
             if chunk_size > size:
@@ -218,8 +221,6 @@ class TextIndexer(ElasticIndexer):
         chunks = self.yield_docs_from_dir(self.lang_dir,  size=500000, to_add=to_add, to_delete=to_delete)
         self.process_chunks(chunks)
             
-        
-
 def update(force=False):
     def sort_key(d):
         if d.stem == 'en':

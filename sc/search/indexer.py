@@ -6,6 +6,7 @@ import elasticsearch
 from elasticsearch.helpers import bulk
 from math import log
 import sc
+from sc import uid_expansion
 from sc.util import recursive_merge
 
 logger = logging.getLogger(__name__)
@@ -43,6 +44,7 @@ class ElasticIndexer:
     
     es = es
     version = 1
+    suppress_elasticsearch_errors = False
 
     @property
     def doc_type(self):
@@ -227,10 +229,14 @@ class ElasticIndexer:
         for chunk in chunks:
             if not chunk:
                 continue
-            res = bulk(self.es,
+            try:
+                res = bulk(self.es,
                         index=self.index_name,
                         doc_type=self.doc_type,
-                        actions=(t for t in chunk if t is not None))
+                        actions=(t for t in chunk if t is not None),
+                        raise_on_exception=not self.suppress_elasticsearch_errors)
+            except elasticsearch.helpers.BulkIndexError:
+                pass
     
     def length_boost(self, length, midpoint=250):
         if length < midpoint:
@@ -270,12 +276,11 @@ class ElasticIndexer:
         return out
 
 def _make_acro_to_name_and_uid_filter():
-    imm = sc.scimm.imm()
     mapping = []
-    for uid in sorted(imm._uid_to_acro_map):
+    for uid in sorted(uid_expansion._uid_to_acro_map):
         syns = [uid]
-        acro = imm._uid_to_acro_map[uid]
-        name = imm._uid_to_name_map[uid]
+        acro = uid_expansion._uid_to_acro_map[uid]
+        name = uid_expansion._uid_to_name_map[uid]
         if acro.lower() != uid:
             syns.append(acro)
         syns.append(name)

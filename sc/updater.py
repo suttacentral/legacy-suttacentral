@@ -27,30 +27,17 @@ def run_updaters():
     import sc.scimm
     import sc.textdata
     import sc.text_image
-    import sc.search.indexer
-    import sc.search.dicts
-    import sc.search.texts
-    import sc.search.suttas
-    import sc.search.discourse
-    import sc.search.autocomplete
     from sc.util import filelock
     
     
-    # name, function, lock needed?
+    # name, function, repeat?
     functions = [
         ('sc.textdata.periodic_update', sc.textdata.periodic_update, False),
-        ('sc.scimm.periodic_update', sc.scimm.periodic_update, False),
-        ('sc.textdata.periodic_update', sc.textdata.periodic_update, False),
-        ('sc.text_image.update_symlinks', sc.text_image.update_symlinks, False)
+        ('sc.scimm.periodic_update', sc.scimm.periodic_update, True),
+        ('sc.textdata.periodic_update', sc.textdata.periodic_update, True),
+        ('sc.text_image.update_symlinks', sc.text_image.update_symlinks, True)
     ]
-    if sc.config.app['update_search']:
-        functions.extend([
-            ('sc.search.dicts.periodic_update', sc.search.dicts.periodic_update, True),
-            ('sc.search.suttas.periodic_update', sc.search.suttas.periodic_update, True),
-            ('sc.search.texts.periodic_update', sc.search.texts.periodic_update, True),
-            ('sc.search.autocomplete.periodic_update', sc.search.autocomplete.periodic_update, True)
-        ])
-    
+
     time.sleep(0.5)
     i = 0
     
@@ -71,31 +58,32 @@ def run_updaters():
             lastGitCommitTime = gitCommitTime
                 
         if not skip:
-            for fn_name, fn, global_lock in functions:
+            for fn_name, fn, repeat in functions:
                 if halt:
                     return
+                if not repeat and i > 0:
+                    continue
                 if i > 0:
                     time.sleep(1)
                 try:
-                    if global_lock:
-                        with filelock('/tmp/suttacentral_updater_global.lock', block=False) as acquired:
-                            if acquired:
-                                fn(times_called[fn_name])
-                                times_called[fn_name] += 1
-                            else:
-                                logger.warn('Search index update lock not acquired.')
-                                time.sleep(10)
-                                continue
-                    else:
-                        fn(times_called[fn_name])
-                        times_called[fn_name] += 1
+                    fn(times_called[fn_name])
+                    times_called[fn_name] += 1
                 except Exception as e:
-                    logger.error('An exception occured when running {}'.format(fn_name))
-                    raise
+                    logger.exception('An exception occured when running {}'.format(fn_name))
+                    
         if is_interactive():
             return            
+        
+        if i == 0:
+            # Perform special first-pass actions
+            if sc.config.app['update_search']:
+                import sc.search.updater
+                sc.search.updater.start_non_blocking()
+        
         time.sleep(sc.config.db_refresh_interval)
         i += 1
-
+        
 updater = threading.Thread(target=run_updaters, daemon=True)
 updater.start()
+
+
