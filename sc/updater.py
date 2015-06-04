@@ -69,8 +69,8 @@ def run_updaters():
                     fn(times_called[fn_name])
                     times_called[fn_name] += 1
                 except Exception as e:
-                    logger.error('An exception occured when running {}'.format(fn_name))
-                    raise
+                    logger.exception('An exception occured when running {}'.format(fn_name))
+                    
         if is_interactive():
             return            
         

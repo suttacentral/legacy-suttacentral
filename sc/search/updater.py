@@ -46,8 +46,8 @@ def run_periodic():
                 fn(times_called[fn_name])
                 times_called[fn_name] += 1
             except Exception as e:
-                logger.error('An exception occured when running {}'.format(fn_name))
-                raise
+                logger.exception('An exception occured when running {}'.format(fn_name))
+                
             time.sleep(1)
     scheduler.enter(sc.config.db_refresh_interval, action=run_periodic, priority=2)
 

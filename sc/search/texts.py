@@ -170,8 +170,7 @@ class TextIndexer(ElasticIndexer):
                     
                     action.update(self.extract_fields_from_html(htmlbytes))
             except (ValueError, IndexError) as e:
-                logger.error("An error while processing {!s} ({!s})".format(file, e))
-                raise
+                logger.exception('{!s}'.format(file))
 
             chunk.append(action)
             if chunk_size > size:
@@ -222,8 +221,6 @@ class TextIndexer(ElasticIndexer):
         chunks = self.yield_docs_from_dir(self.lang_dir,  size=500000, to_add=to_add, to_delete=to_delete)
         self.process_chunks(chunks)
             
-        
-
 def update(force=False):
     def sort_key(d):
         if d.stem == 'en':

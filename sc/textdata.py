@@ -68,15 +68,11 @@ class TextInfo:
         return out
 
 class TIMManager:
-    instance = None
-    current_file = None
     db_name_tmpl = 'text-info-model_{}.pickle'
     version = 1
     def __init__(self):
         self.instance = None
         self.ready = threading.Event()
-        # up_to_date is False if stale, True if fresh, None if undetermined.
-        self.up_to_date = None
     
     @classmethod
     def get_db_name(cls):
@@ -146,14 +142,7 @@ class TIMManager:
                 build_logger.info('{.name} is corrupt, removing'.format(latest_file))
                 if latest_file.exists():
                     latest_file.unlink()
-                latest_file = None
-                latest_mtime = ''
-        if latest_file:
-            for file in db_files:
-                if file != latest_file and file.exists():
-                    file.unlink()
-        self.current_file = latest_file
-    
+                
     def load(self, quick=False):
         """ Load an instance of the TextInfoModel 
         
@@ -167,25 +156,22 @@ class TIMManager:
         """
         db_file_name = self.get_db_name()
         self.load_cached(db_file_name)
-        if self.up_to_date or quick and self.instance is not None:
+        if quick and self.instance is not None:
             return
         
-        if self.current_file:
-            build_logger.info('TIM DB name = {}, up_to_date = {}'.format(self.current_file, self.up_to_date))
+        if self.instance and getattr(self.instance, 'name', None) == db_file_name:
+            return
         else:
-            build_logger.info('No TIM DB exists')
-        
-        if not self.up_to_date:
             db_file = sc.db_dir / db_file_name
             build_logger.info('Building new instance, filename = {.name}'.format(db_file))
-            instance = self.build()
+            instance = self.build(db_file_name)
             self._set_instance(instance)
             build_logger.info('Saving TIM to disk as {.name}'.format(db_file))
             with db_file.open('wb') as f:
                 pickle.dump(instance, f)
     
-    def build(self):
-        tim = TextInfoModel()
+    def build(self, name):
+        tim = TextInfoModel(name)
         tim.build()
         return tim
     
@@ -223,10 +209,11 @@ class TextInfoModel:
 
     """
     FILES_N = 200
-    def __init__(self):
+    def __init__(self, name="unnamed"):
         self._by_lang = {}
         self._by_uid = {}
         self._metadata = {}
+        self.name = name
     
     def build_process(self, percent):
         if percent % 10 == 0:
@@ -372,7 +359,17 @@ class TextInfoModel:
                     metadata = self.get_metadata(path)
                     if metadata:
                         author = metadata['author']
-                        
+                
+                if author is None:
+                    metadata = root.select_one('#metaarea')
+                    if metadata:
+                        metadata_text = metadata.text_content()
+                        m = regex.match(r'.{,80}\.', metadata_text)
+                        if not m:
+                            m = regex.match(r'.{,80}(?=\s)', metadata_text)
+                        if m:
+                            author = m[0]
+                            
                 if author is None:
                     logger.warn('Could not determine author for {}/{}'.format(lang_uid, uid))
                     author = ''
@@ -451,7 +448,11 @@ class TextInfoModel:
         e = root.select_one('meta[data-author]')
         if e:
             return e.attrib['data-author']
-            
+        e = root.select_one('meta[name=description]')
+        
+        if e:
+            return e.attrib['content']
+        
         e = root.select_one('#metaarea > .author')
         if e:
             return e.text

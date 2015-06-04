@@ -320,3 +320,13 @@ def profile(locals_dict, globals_dict, *args, **kwargs):
         '\n'.join('<tr>' + ''.join(
             '<td>{}'.format(s) for s in line.split(maxsplit=5)) for line in table.split('\n'))
     )
+
+def build_maitenance_page():
+    html = GenericView('errors/maintenance', {}).render()
+    with (sc.static_dir / 'maintenance.html').open('w', encoding='utf8') as f:
+        f.write(html)
+
+try:
+    build_maitenance_page()
+except Exception as e:
+    logger.exception()

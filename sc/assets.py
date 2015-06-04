@@ -193,4 +193,3 @@ def get_js_datascripts_filename():
         import tasks.jsdata
         tasks.jsdata.build(minify=True, quiet=True)
     return str(filepath)
-    
