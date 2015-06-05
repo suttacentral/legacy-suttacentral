@@ -103,7 +103,7 @@ class Root(object):
         if cherrypy.request.method != 'POST':
             raise cherrypy.NotFound()
         return show.donate(page, **kwargs)
-
+    
 class Admin(object):
     """Requests to /admin/*"""
 
@@ -114,3 +114,16 @@ class Admin(object):
     @cherrypy.expose
     def data_notify(self, **kwargs):
         return show.admin_data_notify(kwargs.get('payload'))
+
+    @cherrypy.expose
+    def reload(self, module=None):
+        if cherrypy.request.headers.get('Cf-Connecting-Ip'):
+            raise cherrypy.HTTPError(403)
+        if not module:
+            return
+        if cherrypy.request.method != 'POST':
+            return
+        import importlib
+        module = importlib.import_module(module)
+        importlib.reload(module)
+        return {'status': 'success'}
