@@ -21,6 +21,7 @@ from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
 import sc.search.query
 import sc.search.discourse
+import sc.search.autocomplete
 import sc.search.adv_search
 from sc.uid_expansion import uid_to_acro, uid_to_name
 

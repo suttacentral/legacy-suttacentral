@@ -37,6 +37,7 @@ def quick():
         'invoke assets.compile --precompress',
         'invoke test_server',
         'sudo supervisorctl restart sc-production',
+        'sudo supervisorctl restart elastic-indexer',
         'invoke assets.clean --older'
     )
 
