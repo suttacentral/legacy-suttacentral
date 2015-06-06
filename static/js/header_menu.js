@@ -77,22 +77,23 @@ sc.headerMenu = {
     scrollEvents: [],
     scrollShowHide: function(e){
         var self = sc.headerMenu,
-            scrollTop = $(document.body).scrollTop(),
+            scrollTop = $(document).scrollTop(),
             scrollAmount = scrollTop - self.lastScreenScroll;
-        
+       
         self.lastScreenScroll = scrollTop;
+        
+        if (scrollTop < 20) {
+            $('header').removeClass('retracted');
+            return
+        }
+
         if (scrollAmount > 0) {
             $('header').addClass('retracted');
             self.hideAll();
             return
         }
         
-        if (scrollTop == 0) {
-            $('header').removeClass('retracted');
-            return
-        }
-        
-        var now = e.timeStamp;
+        // var now = e.timeStamp;
         if (scrollAmount < -3) {
              $('header').removeClass('retracted');
              return
