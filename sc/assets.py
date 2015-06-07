@@ -122,6 +122,7 @@ def get_env():
         'js/vendor/jquery.cookies.js',
         'js/vendor/jquery.dropdown.js',
         'js/vendor/polyglot.js',
+        'js/vendor/jquery.mobile.custom.min.js',
         'js/lib/jquery.scrolllock.js',
         'js/lib/jquery.unveil.js',
         'js/lib/jquery.details.js',
