@@ -44,7 +44,7 @@ class DiscourseIndexer(ElasticIndexer):
         return root.text_content().strip()
     
     def get_extra_state(self):
-        stamp = int(time.time() % sc.config.discourse['rebuild_period'])
+        stamp = time.time() // sc.config.discourse['rebuild_period']
         return {"rebuild_number": stamp}
     
     def connect(self):
