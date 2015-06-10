@@ -94,9 +94,11 @@ No parallel
 {%- endif -%}
 </td>
 <td>
+<div class="translations">
 {% for translation in parallel.sutta.translations -%}
-<a href='{{translation.url}}' class='tran' {%- if translation.abstract %} title='{{translation.abstract}}'{% endif %}>{{translation.lang.uid}}</a>{% if not loop.last %} | {% endif %} 
+<a href='{{translation.url}}' class='tran' {%- if translation.abstract %} title='{{translation.abstract}}'{% endif %}>{{translation.lang.uid}}</a>{% if not loop.last %}{% endif %} 
 {% endfor -%}
+</div>
 </td>
 {% endif %}
 </tr>
@@ -144,9 +146,11 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 {%- endif -%}
 </td>
 <td>
+<div class="translations">
 {% for translation in parallel.sutta.translations -%}
-<a href='{{translation.url}}' class='tran' title='{{translation.abstract}}'>{{translation.lang.uid}}</a>{% if not loop.last %} | {% endif %} 
+<a href='{{translation.url}}' class='tran' title='{{translation.abstract}}'>{{translation.lang.uid}}</a>{% if not loop.last %}{% endif %} 
 {% endfor -%}
+</div>
 </td>
 </tr>
 {%- endfor %}

@@ -3,7 +3,7 @@
 sc.intr = {
     lang: window.localStorage.getItem('sc.intr.lang') || 'en',
     run: function() {
-        var self = this;
+        var self = sc.intr;
         if ($('#home').length == 0) {
             $('.translations').each(function(i, div){
             
@@ -12,7 +12,7 @@ sc.intr = {
                     $links = $div.find('.tran'),
                     $trigger = $('<a href="#"/>'),
                     $specialLang = $div.find('a:contains(' + self.lang + ')').first();
-            
+                if ($links.length == 0) return
                 $div.addClass('ready');    
                 if ($specialLang.length) {
                     $specialLang.addClass('special');
@@ -186,5 +186,4 @@ sc.intr = {
         }
     }
 }
-
-sc.intr.run()
+$(document).ready(sc.intr.run);
