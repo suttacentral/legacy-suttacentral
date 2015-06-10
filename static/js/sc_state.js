@@ -24,5 +24,5 @@ sc = {
         }
     }
 }
-window.onunload = sc.sessionState.save;
+$(window).on('unload', sc.sessionState.save);
 sc.sessionState.load();
