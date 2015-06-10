@@ -74,7 +74,7 @@ sc.headerMenu = {
     },
     scrollShowHide: function(e){
         var self = sc.headerMenu,
-            scrollTop = $(document.body).scrollTop(),
+            scrollTop = $("body").scrollTop() || $("html").scrollTop(),
             scrollAmount = scrollTop - self.lastScreenScroll,
             header = $('header');
 
