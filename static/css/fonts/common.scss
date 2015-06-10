@@ -50,7 +50,6 @@ $noto-sans-myanmar: 'Noto Sans Myanmar';
     $url: '#{$base_font_url}/#{$font-path}';
     src: url('#{$url}.eot');
     src: url('#{$url}.eot?#iefix') format('embedded-opentype'),
-        url('#{$url}.woff2') format('woff2'),
          url('#{$url}.woff') format('woff'),
          url('#{$url}.ttf') format('truetype'),
          url('#{$url}.svg##{$svg-id}') format('svg');
