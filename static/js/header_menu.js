@@ -50,8 +50,6 @@ sc.headerMenu = {
         /* This function is responsible for tweaking the column widths and alignment on the
          * home page creating a very fluid experience
          */
-        
-
         var contents = $('.contents.active'),
             contentsWidth = contents.width(),
             ruler = $('<span>m</span>').appendTo(contents.find('.column li:last')),
@@ -74,35 +72,37 @@ sc.headerMenu = {
         
         $('#panel').css({'height': panelHeight})
     },
-    scrollEvents: [],
     scrollShowHide: function(e){
         var self = sc.headerMenu,
             scrollTop = $(document.body).scrollTop(),
-            scrollAmount = scrollTop - self.lastScreenScroll;
-        
+            scrollAmount = scrollTop - self.lastScreenScroll,
+            header = $('header');
+
         self.lastScreenScroll = scrollTop;
-        if (scrollAmount > 0) {
-            $('header').addClass('retracted');
-            self.hideAll();
+        if (scrollTop <= 10) {
+            header.removeClass('retracted');
             return
         }
         
-        if (scrollTop == 0) {
-            $('header').removeClass('retracted');
+        
+        if (scrollAmount > 0) {
+            if (!header.hasClass('retracted')) {
+                header.addClass('retracted');
+                self.hideAll();
+            }
             return
         }
         
         var now = e.timeStamp;
-        if (scrollAmount < -3) {
-             $('header').removeClass('retracted');
+        if (scrollAmount < 0) {
+             header.removeClass('retracted');
              return
         }
-        self.scrollEvents.push([scrollAmount, e.timeStamp]);
     }
 }
 
 
-setTimeout(function(){
+$(document).ready(function(){
     $('header .pitaka_menu a').each(function(){
         $(this).attr('href', '#' + $(this).attr('href').replace(/^\.*\//, '').replace('.html', ''));
     });
