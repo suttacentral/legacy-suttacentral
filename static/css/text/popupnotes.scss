@@ -59,6 +59,16 @@ a.bib:hover .deets,
     font-style: normal;
 }
 
+a.note .deets,
+a.note:hover .deets,
+a.bib .deets,
+a.bib:hover .deets {
+    top: 1.5em;
+    margin: 0;
+    left: -10em;    //  Center it under target triangle
+    width: 20em;    //  Note that this is the max-width
+}
+
 a.note .deets li,
 a.note:hover .deets li,
 a.bib .deets li,
