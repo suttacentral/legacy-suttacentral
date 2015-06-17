@@ -161,7 +161,7 @@ $header-large-width:     800px;
     td, th {
         max-width:8em;
         padding: 0.25em 0.25em;
-        overflow:hidden;
+        // overflow:hidden;
     }
     td:nth-child(3), th:nth-child(3) {
         display:none;
@@ -181,7 +181,9 @@ $header-large-width:     800px;
     a.note .deets,
     a.note:hover .deets,
     a.bib .deets,
-    a.bib:hover .deets,
+    a.bib:hover .deets {
+        width: 10em;
+    }
     .var .deets,
     .cross .deets,
     {
