@@ -31,6 +31,23 @@ $sidebar-tabs-vertical-padding: 0.4em;
             transition: none;
         }
     }
+
+    #pali-lookup-controls {
+        background-color: blue;
+        > a.button {
+            &::before {
+                content: "▶  ";
+                font-size: 80%;
+                margin-left: -1em;
+            }
+
+            &.dropdown-open::before {
+                content: "▼  ";
+                font-size: 80%;
+                margin-left: -1em;
+            }            
+        }
+    }
     
     select, button {
         /* Override user agent styling */

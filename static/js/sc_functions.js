@@ -198,7 +198,7 @@ sc.piLookup = {
         self.makeButtons();
         
         var $prime = $('<div class="button prime"/>').append(self.buttons[self.lang]),
-            $selector = $('<a class="button">Lookup Language ▼</a>'),
+            $selector = $('<a class="button">Lookup Language</a>'),
             $dropdown = $('<div class="dropdown dropdown-relative"/>').attr('id', selectorId),
             $dropdownPanel = $('<div class="dropdown-panel">').appendTo($dropdown);
         
