@@ -69,8 +69,11 @@
       </div>
       <div class="tab" id="navigation-tab">
         <div class="inner-wrap">
-            {% if imm(uid) and lang_code == 'en' %}
+            
+            {% if discourse_results %}
             {% include "discourse-results.html" %}
+            {% endif %}
+            {% if imm(uid) %}
             <div class="x1 button-row">
                 <a class="button" href="/{{ uid }}" id="text-details-button" title="Go to parallels and references">Textual Details ▶</a>
             </div>

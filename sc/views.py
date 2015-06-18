@@ -377,7 +377,10 @@ class TextView(ViewBase):
         context.text = m['content']
         
         context.discourse_link = None
-        if self.uid in imm.suttas and sc.config.discourse['forum_url']:
+        context.discourse_results = None
+        if (self.uid in imm.suttas and 
+                sc.config.discourse['forum_url'] and
+                self.lang_code == 'en' or imm.languages[self.lang_code].isroot):
             sutta = imm.suttas
             query = '%22{}%22|{}'.format(uid_to_acro(self.uid).replace(' ', ' '), self.uid)
             context.discourse_link = '{}?search={}'.format(sc.config.discourse['forum_url'], query)
@@ -386,7 +389,7 @@ class TextView(ViewBase):
                 context.discourse_results = sc.search.discourse.search(self.uid)
             except:
                 logger.exception('Failed to retrieve discourse_results')
-                context.discourse_results = None
+                
         if context.embed:
             context.text = self.shorter_text(context.text)
         context.has_quotes = '‘' in context.text or '“' in context.text
