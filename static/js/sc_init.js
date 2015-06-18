@@ -240,7 +240,7 @@ function onMainLoad() {
                 
                 event.clipboardData.setData('text/html', table[0].outerHTML);
             })
-        });q
+        });
     }
 }
 
