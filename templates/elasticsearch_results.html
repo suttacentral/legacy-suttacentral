@@ -38,19 +38,19 @@
 {% if hit._type == 'text' %}
 <li class="result-text">
 {% if source.is_root %}
-<span class="type" title="{{source.lang}}">Root Text</span>
+<small class="source" title="{{source.lang}}">Root Text</small>
 {% else %}
-<span class="type" title="{{source.lang}}">Translation</span>
+<small class="source" title="{{source.lang}}">Translation</small>
 {% endif %}
 <a class="text-result" href="/{{ source.lang }}/{{ source.uid }}">{{ source.uid|uid_to_acro }} : {{ source.heading.title|title }}</a>
 {% elif hit._type == 'definition' %}
 <li class="result-definition">
-<span class="type">Dictionary</span>
+<small class="source">Dictionary</small>
 <a class="definition-result" href="/define/{{ source.term|urlencode }}">Definition for the {{ source.lang|uid_to_name|lower }} word <em>{{ source.term|title }}</em>{% if source.gloss %} ({{ source.gloss }}){% endif %}</a>
 {% elif hit._type == 'sutta' %}
 {% set sutta = imm.suttas[source.uid] %}
 <li class="result-sutta">
-<span class="type">Sutta</span>
+<small class="source">Sutta</small>
 <a class="sutta-result" href="/{{source.uid}}">Parallels and details for {{ source.uid|uid_to_acro }}: {{ source.name or '?' }}</a>
 <table>
 {{macros.sutta_row(sutta)}}

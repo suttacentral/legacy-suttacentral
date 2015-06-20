@@ -13,8 +13,11 @@ $med-width:     908px;
 $large-width:   1200px;
 
 //  These are breakpoints that fall between the standard breakpoints above
-$header-small-width:     550px;
-$header-large-width:     800px;
+$header-small-width:        550px;
+$header-large-width:        800px;
+$definitions-small-width:   600px;
+$results-small-width:       470px;
+$results-med-width:         520px;
 
 /*
     MIXINS
@@ -360,4 +363,63 @@ $header-large-width:     800px;
     }
 }
 
+
+/*
+    FOR BREAKPOINT:  $definitions-small-width
+*/
+@include if-screen-wider($definitions-small-width) {     //  WIDER
+
+}
+
+
+@include if-screen-narrower($definitions-small-width) {    //  NARROWER
+    .define {
+        .related_terms {
+            width: 100%;
+            float: none;
+            margin: 20px 1em 0 1em;
+        }
+        .entries {
+            width: 100%;
+            float: none;
+            margin: 20px 1em 0 1em;
+        }
+    }
+}
+
+
+/*
+    FOR BREAKPOINT:  $results-med-width
+*/
+@include if-screen-wider($results-med-width) {     //  WIDER
+
+}
+
+@include if-screen-narrower($results-med-width) {    //  NARROWER
+    #main_search_results .search-box {
+        font-size: 0.9em;
+    }
+}
+
+
+/*
+    FOR BREAKPOINT:  $results-small-width
+*/
+@include if-screen-wider($results-small-width) {     //  WIDER
+
+}
+
+@include if-screen-narrower($results-small-width) {    //  NARROWER
+    #main_search_results .search-box {
+        font-size: 0.8em;
+    }
+    #page-main-search {
+        margin: 0em 0.2em;
+        & > input,
+        & > button,
+        & > select {
+            margin: 0em 0.2em;
+        }
+    }
+}
 
