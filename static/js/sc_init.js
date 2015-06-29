@@ -62,6 +62,7 @@ sc.classes = {
         "sht": "References for SHT fragments.",
         "snp-vagga-section-verse": "Chapter, section, and verse number within the section.",
         "snp-vagga-verse": "Chapter, and verse number within the chapter.",
+        "ss": "Paragraph numbers in Shai Schwartz"
         "t": "Volume, page, column, and line number in the Taishō canon.",
         "titus": "",
         "t-linehead": "Volume, page, column, and line number in the Taishō canon.",
