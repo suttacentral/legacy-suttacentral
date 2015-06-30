@@ -4,8 +4,6 @@
  */
  sc.sidebar = {
     init: function() {
-
-
         var self=this;
         self.node = $('#sidebar');
         $('#toc').remove();

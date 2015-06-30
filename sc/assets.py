@@ -137,11 +137,13 @@ def get_env():
         'js/sc_init.js',
         'js/header_menu.js',
         'js/sc_formatter.js',
+        'js/sc_popup.js',
         'js/sc_popupnotes.js',
         'js/sc_lzh2en_lookup.js',
         'js/text_image.js',
         'js/discourse.js',
         'js/fonts.js',
+        'js/paliLookup2.0.js',
         sc_data_scripts_file,
         
         'js/tracking.js',
