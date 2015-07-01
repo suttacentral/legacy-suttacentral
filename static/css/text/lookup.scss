@@ -101,6 +101,9 @@
             display: none;
         }
         
+        .poor-match {
+            background-color: mix(#ddd, #F7D1C2);
+        }
         
     }
 }
@@ -109,7 +112,7 @@
     font-weight: bold;
     background-color: white;
     border-radius: 0.1em;
-    padding: 0em 0.0em;
+    padding: 0.1em 0.5em;
     .letter {
         margin: 0em;
         display: inline-block;

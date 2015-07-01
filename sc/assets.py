@@ -105,7 +105,13 @@ def get_env():
         filters='cssmin',
         output='css/compiled/nonfree-%(version)s.css'
     )
-
+    
+    css_palilookup_standalone = webassets.Bundle(
+        'css/text/lookup.scss',
+        filters='cssmin',
+        output='css/compiled/paliLookup2.0-standalone.css')
+    
+    env.register('css_paliLookup_standalone', css_palilookup_standalone)
     env.register('css_free', css_free)
     env.register('css_nonfree', css_nonfree)
     
@@ -151,6 +157,14 @@ def get_env():
         output='js/compiled/core-%(version)s.js'
     )
     env.register('js_core', js_core)
+    
+    paliLookup_standalone = webassets.Bundle(
+        'js/sc_popup.js',
+        'js/paliLookup2.0.js',
+        filters=None,
+        output='js/compiled/paliLookup2.0-standalone.js'
+    )
+    env.register('paliLookup-standalone', paliLookup_standalone)
 
     # For some reason, webassets does not create these directories if
     # they do not exist...

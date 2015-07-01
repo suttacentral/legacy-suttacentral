@@ -66,24 +66,9 @@ class DictIndexer(ElasticIndexer):
 
         self.process_actions({'_id': entry['term'], '_source': entry}
                               for entry in sorted_entries)
-   #def yield_chunks(self, entries, size=100000):
-        #chunk = []
-        #chunk_size = 0
-        #for i, entry in enumerate(entries):
-            #chunk_size += len(str(entry))
-            #chunk.append({
-                #"_id": entry["term"],
-                #"_source": entry
-                #})
-            #if chunk_size > size:
-                #yield chunk
-                #chunk = []
-                #chunk_size = 0
-        #if chunk:
-            #yield chunk
-        #raise StopIteration
+
     def fix_term(self, term):
-        return regex.sub(r'[^\p{alpha}\s]', '', term).strip().casefold()
+        return regex.sub(r'[^\p{alpha}\s]', '', term).strip().casefold().replace('ṁ', 'ṃ')
 
     def add_file(self, file, all_entries, glosses):
         root = sc.tools.html.parse(str(file)).getroot()
@@ -128,8 +113,8 @@ class DictIndexer(ElasticIndexer):
             json_entry["entries"].append(
                 {"source": source,
                 "priority": priority,
-                "html_content": str(entry)})
-            content = '\n' + entry.text_content().replace('\n', ' ').replace('  ', ' ')
+                "html_content": str(entry).replace('ṁ', 'ṃ')})
+            content = '\n' + entry.text_content().replace('ṁ', 'ṃ').replace('\n', ' ').replace('  ', ' ')
             json_entry["content"] += content
             
             
