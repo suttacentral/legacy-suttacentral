@@ -225,7 +225,7 @@ h1, h2, h3, h4, h5, h6 {
 #text:lang(he) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,.evam {
-                        font-family:  'Noto Sans Hebrew', serif;
+                        font-family:  'Noto Sans Hebrew', @include sans-serif;
                         line-height:2;
                         letter-spacing: 0;
         }
