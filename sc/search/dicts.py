@@ -27,7 +27,7 @@ class DictIndexer(ElasticIndexer):
                           in sorted(self.lang_dir.iterdir())
                           if file.suffix in {'.html', '.json'}]
         return {'mtimes': current_mtimes,
-                'version': 3}
+                'version': 4}
 
     def is_update_needed(self):
         if not self.index_exists():
