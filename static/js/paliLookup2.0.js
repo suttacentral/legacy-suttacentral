@@ -6,6 +6,11 @@ sc = window.sc || {};
  * to by async.
  * 
  * Depends on jQuery, underscore and elasticsearch.jquery.js
+ * 
+ * Note that altough the API is able to make PUSH and DELETE requests
+ * and so on, all requests made to https://elastic.suttacentral.net
+ * are converted to GET before being received by the elasticsearch
+ * server. As such only the public API is readonly.
  *
  */
 
@@ -745,7 +750,7 @@ sc.paliLookup.activate = function() {
         sc.markupGenerator.wrapWords(target, '<span class="lookup"><span class="lookup-word-marker"></span>', '</span>')
         target.addClass('lookup-marked-up');
     })
-    sc.paliLookup.init({elasticUrl: 'http://localhost:9200', target: '.lookup'});
+    sc.paliLookup.init({elasticUrl: sc.exports.elasticsearch_api_url, target: '.lookup'});
     sc.paliLookup.addHandlers();    
 }
 
