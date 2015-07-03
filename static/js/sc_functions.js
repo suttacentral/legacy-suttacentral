@@ -138,11 +138,11 @@ sc.piLookup = {
             name: 'Español',
             scriptUrl: 'data/pi2es-maindata-v1.js'
         }, 
-        /*{
+        {
             lang: 'pt',
             name: 'Português',
-            scriptUrl: 'data/pi2pt-maindata-v1.js'
-        }, */
+            scriptUrl: 'data/pi2pt-maindata-v1.1.js'
+        },
         {
             lang: 'id',
             name: 'Bahasa Indonesia',
