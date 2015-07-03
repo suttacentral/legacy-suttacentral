@@ -51,6 +51,7 @@ a.sc:before {content:"SC "}
 a.sen82:before {content:"Sen "}
 a.sht:before {content:"SHT "}
 a.snp-vagga-section-verse:before, a.snp-vagga-verse:before {content:"SNP "}
+a.ss:before {content:"SS "}
 a.t:before, a.t-linehead:before {content:"T "}
 a.tri62:before, a.tri95:before {content:"Tri "}
 a.ud-sutta:before, a.ud-vagga-sutta:before {content:"Ud "}
@@ -143,6 +144,8 @@ CSS Class	HTML Title
 .pl     	"Paragraph numbers in Peter van Loosbroek."
 
 .san89		"Paragraph numbers in Sander, 1987."
+
+.ss       "Paragraph numbers in Shai Schwartz."
 
 .tri62		"Sūtra and paragraph number in Tripāṭhī, 1962."
 

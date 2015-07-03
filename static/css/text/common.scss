@@ -68,7 +68,29 @@
         url(//fonts.gstatic.com/ea/notosansjapanese/v3/NotoSansJP-Black.otf) format('opentype');
  }
 
-
+/*
+ * Noto Sans Hebrew (Hebrew) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'Noto Sans Hebrew';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/notosanshebrew/v4/NotoSansHebrew-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/notosanshebrew/v4/NotoSansHebrew-Regular.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosanshebrew/v4/NotoSansHebrew-Regular.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosanshebrew/v4/NotoSansHebrew-Regular.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosanshebrew/v4/NotoSansHebrew-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Hebrew';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/notosanshebrew/v4/NotoSansHebrew-Bold.eot);
+  src: url(//fonts.gstatic.com/ea/notosanshebrew/v4/NotoSansHebrew-Bold.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosanshebrew/v4/NotoSansHebrew-Bold.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosanshebrew/v4/NotoSansHebrew-Bold.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosanshebrew/v4/NotoSansHebrew-Bold.ttf) format('truetype');
+}
 
 .sutta {
     max-width: 40em;
@@ -195,6 +217,16 @@ h1, h2, h3, h4, h5, h6 {
         h1, h2, h3, h4, h5, h6, p,li,.evam {
                         font-family: 'DDC Uchen', serif;
                         line-height:2;
+                        letter-spacing: 0;
+        }
+}
+}
+
+#text:lang(he) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,.evam {
+                        font-family:  'Noto Sans Hebrew', serif;
+                        line-height:1.5;
                         letter-spacing: 0;
         }
 }

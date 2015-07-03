@@ -70,9 +70,10 @@ class TokenType(Enum):
     
 
 class Token:
-    def __init__(self, type, value):
+    def __init__(self, type, value, ctxt=None):
         self.type = type
         self.value = value
+        self.ctxt = ctxt
     
     def __repr__(self):
         return 'Token(TokenType.{}, "{}")'.format(self.type.name, self.value)
@@ -132,6 +133,7 @@ class Html2Po:
         pattern = r'(?<!\d+)([.;:!?—][\u200b\s]*)'
         parts = regex.split(pattern, html_string)
         segments = [''.join(parts[i:i+2]).strip() for i in range(0, len(parts), 2)]
+        sentence_count = 0
         for segment in segments:
             if not segment:
                 continue
@@ -145,8 +147,9 @@ class Html2Po:
                         if self.token_stream[-1].type == TokenType.newline and self.token_stream[-2].type == TokenType.text:
                             self.token_stream[-2].value += m[1]
                             line = m[2].strip()
-                        
-                    self.add_token(TokenType.text, line)
+                    sentence_count += 1
+                    ctxt = '{}:{}.{}'.format(self.uid, self.paragraph_count, sentence_count)
+                    self.add_token(TokenType.text, line, ctxt)
                 
                 if i + 1 < len(lines):
                     br = lines[i + 1].strip()
@@ -154,12 +157,14 @@ class Html2Po:
                         self.add_token(TokenType.comment, br)
                 self.add_token(TokenType.newline)
     
-    def add_token(self, type, value=None):
-        self.token_stream.append(Token(type, value))
+    def add_token(self, type, value=None, ctxt=None):
+        self.token_stream.append(Token(type, value, ctxt))
     
     def recursive_deconstruct(self, element):
+        
         self.add_token(TokenType.comment, self.make_open_tag(element))
         if element.tag in {'p', 'h1', 'h2', 'h3', 'h4'}:
+            self.paragraph_count += 1
             self.segment_inner(element)
         else:
             for child in element:
@@ -202,6 +207,8 @@ msgstr ""
                 else:
                     parts.append('#: {}'.format(token.value.strip()))
             elif token.type == TokenType.text:
+                if token.ctxt:
+                    parts.append('msgctxt "{}"'.format(token.ctxt))
                 parts.append('msgid "{}"'.format(token.value.strip().replace('\n', ' ')))
                 parts.append('msgstr ""')
             elif token.type == TokenType.newline:
@@ -219,13 +226,16 @@ msgstr ""
         root = doc.getroot()
         cleanup(root)
         self.root = root
+        self.paragraph_count = 0
+        self.uid = pathlib.Path(filename).stem
         self.recursive_deconstruct(root)
 
+
 for file in args.infiles:
+    outfile = outpath / pathlib.Path(file).with_suffix('.po').name
     html2po = Html2Po()
     html2po.process(file)
     string = html2po.tostring()
-    outfile = outpath / pathlib.Path(file).with_suffix('.po').name
     with outfile.open('w', encoding='utf8') as f:
         f.write(string)
 
