@@ -1,1 +1,0 @@
-sc.exports = {"elasticsearch_api_url": "//localhost:9200/"}
