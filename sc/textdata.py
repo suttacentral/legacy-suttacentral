@@ -76,10 +76,10 @@ class TIMManager:
     
     @classmethod
     def get_db_name(cls):
-        files = sorted(sc.text_dir.glob('**/*.html'))
+        files = sorted(sc.text_dir.glob('**/*.html'), key=lambda f: str(f))
         md5 = hashlib.md5()
         for file in files:
-            md5.update(str(file.stat().st_mtime_ns).encode('ascii'))
+            md5.update((str(file) + str(file.stat().st_mtime_ns)).encode('ascii'))
         md5.update(str(cls.version).encode('ascii'))
         
         return cls.db_name_tmpl.format(md5.hexdigest()[:10])
