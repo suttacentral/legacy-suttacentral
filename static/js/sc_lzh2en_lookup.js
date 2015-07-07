@@ -183,7 +183,7 @@ sc.lzh2enLookup = {
         if (!graphs)
             return
 
-        var popup = ['<div class="popup"><table>'],
+        var popup = ['<table>'],
             first = true,
             fallback = false;
         for (i = graphs.length; i > 0; i--) {
@@ -211,9 +211,9 @@ sc.lzh2enLookup = {
         if (first)
             return
 
-        popup.push('</table></div>')
+        popup.push('</table>')
 
-        popup = self.popup(nodes[0], popup.join('\n'))
+        popup = sc.popup.popup(nodes[0], popup.join('\n'))
     },
     lookupHandler: function(e){
         sc.lzh2enLookup.setCurrent(e.target);
@@ -230,54 +230,5 @@ sc.lzh2enLookup = {
             return ('<tr class="fallback"><td class="ideograph"><a>' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enFallbackData[graph][0] + ': ' + sc.lzh2enFallbackData[graph][1] + '</td></tr>')
         }
         return "";
-    },
-    popup: function(parent, popup) {
-        var offset, docWith, dupe, docWidth, isAbsolute = false
-        if ('left' in parent || 'top' in parent) {
-            offset = parent
-            offset.left = offset.left || 0
-            offset.top = offset.top || 0
-            parent = document.body
-            isAbsolute = true
-
-        } else {
-            parent = $(parent)
-            offset = parent.offset()
-        }
-        popup = $(popup)
-
-        //We need to measure the doc width now.
-        docWidth = $(document).width()
-        // We need to create a dupe to measure it.
-        dupe = $(popup).clone()
-            
-        $(this.markupTarget).append(dupe)
-        var popupWidth = dupe.innerWidth(),
-            popupHeight = dupe.innerHeight();
-        dupe.remove()
-        //The reason for the duplicity is because if you realize the
-        //actual popup and measure that, then any transition effects
-        //cause it to zip from it's original position...
-        if (!isAbsolute) {
-            offset.top += parent.innerHeight() - popupHeight - parent.outerHeight();
-            offset.left -= popupWidth / 2;
-        }
-
-        if (offset.left < 1) {
-            offset.left = 1;
-            popup.innerWidth(popupWidth + 5);
-        }
-        
-        if (offset.left + popupWidth + 5 > docWidth)
-        {
-            offset.left = docWidth - (popupWidth + 5);
-        }
-        popup.offset(offset)
-        $(this.markupTarget).append(popup)
-        popup.offset(offset)
-
-        popup.mouseleave(function(e){$(this).remove()});
-        
-        return popup;
     }
 }

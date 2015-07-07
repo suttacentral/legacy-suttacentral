@@ -1,0 +1,124 @@
+
+.text-popup {
+    position: absolute;
+    display: inline-block;
+    background: #F7D1C2;
+    z-index: 103;
+    padding: 1px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    transition: visibility 0s ease 0.15s,opacity 0.3s ease;
+    transition-delay:1ms;
+    box-shadow:6px 4px 10px rgba(136, 136, 136, 0.3);
+    max-width: 27em;
+    
+    td {
+        padding: 0.3em 0.3em;            
+    }
+    
+    .meaning {
+        font-family: 'Source Sans Pro', sans-serif;
+        font-size: 80%;
+    }
+        
+    table {
+        margin: 0;
+        padding: 0;
+    }
+
+    table, tr, td {
+        border: none;
+        background: none;
+    }
+
+    &.fallback {
+        border: 2px crimson dotted;
+        margin:1px;
+    }
+
+    &.info {
+        border: 2px lightskyblue solid;
+    }
+
+    td:nth-child(odd) td {
+        background: pastel-color(light-yellow);
+    }
+
+    tr:not(:first-child) td {
+        border-top: 1px grey solid;
+        margin: 0.2em;
+    }
+
+    .ideograph a:link {
+        text-decoration: none;
+        color: black;
+    }
+
+    .ideograph {
+        white-space: nowrap;
+        font-size: 1.2em;
+    }
+
+    span.current_lookup:not(.punctuation){
+        color: saturated-color(dark-purple);
+        background: yellow;
+    }
+}
+
+#text[lang=pi] {
+    .text-popup {
+        li {
+            height: 1.5em;
+            overflow: hidden;
+        }
+        
+        li.clicked {
+            height: inherit;
+            max-height: 12em;
+            overflow-y: auto;
+            border: 1px solid gray;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        .source {
+            background: #ccc;
+            border-radius: 0.25em;
+            padding: 0.15em;
+            width: 2.5em;
+            margin-left: 0.5em;
+            font-size: 90%;
+            font-weight: bold;
+        }
+        
+        .content, dl, dd {
+            display: inline;
+            padding: 0;
+            margin: 0;
+        }
+        dt {
+            display: none;
+        }
+        
+        .poor-match {
+            background-color: mix(#ddd, #F7D1C2);
+        }
+        
+    }
+}
+
+.decomposed {
+    font-weight: bold;
+    background-color: white;
+    border-radius: 0.1em;
+    padding: 0.1em 0.5em;
+    .letter {
+        margin: 0em;
+        display: inline-block;
+        padding: 0em 0.05em;
+        &.selected {
+            background-color: #dadada;
+        }
+    }
+}

@@ -671,7 +671,6 @@ function toLookupMarkup(startNode)
 
 var G_uniRegExpNSG = /[–   :;?!,.“‘]+/gi;
 
-
 function lookupWordHandler(event){
     if (!sc.userPrefs.getPref("paliLookup")) return;
     if (! 'paliDictionary' in window) return;

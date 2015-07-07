@@ -6,6 +6,7 @@ See: http://webassets.readthedocs.org/
 import logging
 import webassets
 from webassets.script import CommandLineEnvironment
+import json, os.path
 
 import sc
 from sc import config
@@ -44,10 +45,10 @@ def compile():
     cmd = CommandLineEnvironment(get_env(), log)
     cmd.build()
 
-def build_sc_uid_expansion(env):
+def make_uid_expansion_data_file(env):
     from sc.csv_loader import table_reader
-    import json, os.path
-    filename = 'js/sc_uid_expansion_data.js'
+
+    filename = 'js/tmp/sc_uid_expansion_data.js'
     fullname = os.path.join(env.directory, filename)
     
     with open(fullname, 'w', encoding='UTF8') as outfile:
@@ -56,6 +57,17 @@ def build_sc_uid_expansion(env):
         
         outfile.write('sc.util.expand_uid_data = {}'.format(
             json.dumps(data, ensure_ascii=False)))
+    
+    return filename
+
+def make_exports_file(env):
+    import json
+    
+    filename = 'js/tmp/exports.js'
+    fullname = os.path.join(env.directory, filename)
+    
+    with open(fullname, 'w', encoding='UTF8') as outfile:
+        outfile.write('sc.exports = ' + json.dumps(sc.config.exports))
     
     return filename
 
@@ -105,12 +117,16 @@ def get_env():
         filters='cssmin',
         output='css/compiled/nonfree-%(version)s.css'
     )
-
+    
+    css_palilookup_standalone = webassets.Bundle(
+        'css/text/lookup.scss',
+        filters='cssmin',
+        output='css/compiled/paliLookup2.0-standalone.css')
+    
+    env.register('css_paliLookup_standalone', css_palilookup_standalone)
     env.register('css_free', css_free)
     env.register('css_nonfree', css_nonfree)
     
-    sc_uid_expansion_data_file = build_sc_uid_expansion(env)
-
     sc_data_scripts_file = get_js_datascripts_filename()
     
     js_core = webassets.Bundle(
@@ -128,7 +144,8 @@ def get_env():
         'js/lib/jquery.details.js',
         'js/intr.js',
         'js/sc_utility.js',
-        sc_uid_expansion_data_file,
+        make_exports_file(env),
+        make_uid_expansion_data_file(env),
         'js/text.js',
         'js/text_selections.js',
         'js/search.js',
@@ -137,11 +154,13 @@ def get_env():
         'js/sc_init.js',
         'js/header_menu.js',
         'js/sc_formatter.js',
+        'js/sc_popup.js',
         'js/sc_popupnotes.js',
         'js/sc_lzh2en_lookup.js',
         'js/text_image.js',
         'js/discourse.js',
         'js/fonts.js',
+        'js/paliLookup2.0.js',
         sc_data_scripts_file,
         
         'js/tracking.js',
@@ -149,6 +168,14 @@ def get_env():
         output='js/compiled/core-%(version)s.js'
     )
     env.register('js_core', js_core)
+    
+    paliLookup_standalone = webassets.Bundle(
+        'js/sc_popup.js',
+        'js/paliLookup2.0.js',
+        filters=None,
+        output='js/compiled/paliLookup2.0-standalone.js'
+    )
+    env.register('paliLookup-standalone', paliLookup_standalone)
 
     # For some reason, webassets does not create these directories if
     # they do not exist...

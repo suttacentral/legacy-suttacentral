@@ -304,7 +304,11 @@ sc.init = function(reset)
             {
                 toSyllablesInit();
             }
-            sc.piLookup.enablePaliLookup(true);
+            if (sc.piLookup.lang == 'en') {
+                sc.paliLookup.activate();
+            } else {
+                sc.piLookup.enablePaliLookup(true);
+            }
         } else {
             transliterate(sc.mode.translitFunc);
         }
