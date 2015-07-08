@@ -41,11 +41,6 @@ def div_translation_count(lang):
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, define=None, details=None, **kwargs):
     query.strip()
-    match_type = "best_fields"
-    if regex.match(r'^"[^"]+"$', query):
-        match_type = "phrase"
-    query = regex.sub(r'''[,'"]+''', ' ', query)
-    query.strip()
     indexes = []
     if details is not None:
         indexes = ['suttas']
@@ -61,6 +56,37 @@ def search(query, highlight=True, offset=0, limit=10,
                             for index in indexes
                             if es.cluster.health(index, timeout='0.01s')['status']
                             in {'green', 'yellow'})
+    
+    fields =  ["content", "content.*^0.5",
+               "term^1.5", "term.*^0.5",
+               "gloss^1.5",
+               "lang^0.5",
+               "author^0.5",
+               "uid", "uid.division^0.7",
+               "name^1.25", "name.*^0.75",
+               "heading.title^0.5",
+               "heading.title.plain^0.5",
+               "heading.title.shingle^0.5"]
+    
+    if (regex.search(r'[:"~*]', query) or regex.search(r'AND|OR|NOT', query)):
+        query = query.replace('define:', 'term:')
+        inner_query = {
+            "query_string": {
+                "fields": fields,
+                "query": query,
+                "use_dis_max" : True
+            }
+        }
+    else:
+        inner_query = {
+            "multi_match": {
+                "type": "best_fields",
+                "tie_breaker": 0.3,
+                "fields": fields,
+                "query": query
+            }
+        }
+    
     body = {
         "from": offset,
         "size": limit,
@@ -68,23 +94,7 @@ def search(query, highlight=True, offset=0, limit=10,
         "timeout": "15s",
         "query": {
             "function_score": {
-                "query": {
-                    "multi_match": {
-                        "type": match_type,
-                        "tie_breaker": 0.3,
-                        "fields": ["content", "content.*^0.5",
-                                   "term^1.5", "term.*^0.5",
-                                   "gloss^1.5",
-                                   "lang^0.5",
-                                   "author^0.5",
-                                   "uid", "uid.division^0.7",
-                                   "name^1.25", "name.*^0.75",
-                                   "heading.title^0.5",
-                                   "heading.title.plain^0.5",
-                                   "heading.title.shingle^0.5"],
-                        "query": query
-                    }
-                },
+                "query": inner_query,
                 "functions": [
                     {
                         "boost_factor": "1.2",
@@ -129,6 +139,8 @@ def search(query, highlight=True, offset=0, limit=10,
             }
         }
     }
+    import json
+    print(json.dumps(body, indent=2))
     
     if highlight:
         body["highlight"] = {
