@@ -16,6 +16,9 @@ sc.popup = {
         
         if (markupTarget.length == 0) {
             markupTarget = $('main');
+            if (markupTarget.length == 0) {
+                markupTarget = $('body');
+            }
         }
         if ('left' in parent || 'top' in parent) {
             offset = parent
@@ -64,12 +67,15 @@ sc.popup = {
         });
         
         popup.mouseleave(function(e){
+                if (protected) {
+                    return
+                }
                 $(this).remove();
                 self.isPopupHover = false
             });
         this.clear();
         if (protected) {
-            popup.data('protected', true);
+            popup.data('protected', protected);
         }
         this.popups.push(popup);
         return popup;

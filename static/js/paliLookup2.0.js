@@ -18,6 +18,7 @@ sc.paliLookup = {
     _cache: {},
     _handlers: [],
     index: 'en-dict',
+    main: '#text',
     sources: {
         cped: {
             'brief': 'CPD',
@@ -59,23 +60,28 @@ sc.paliLookup = {
         });
         self.isReady = true
     },
+    lookups: {},
     addHandlers: function() {
         var self = this;
-        $('main').on('mouseover.lookup', self.targetSelector, function(e){
+        $(self.main).on('mouseover.lookup', self.targetSelector, function(e){
             if ($(e.target).parents('.text-popup').length > 0) {
                 return
             }
-            sc.popup.clear(true);
-            self.lookup(e.target, null, _.bind(self.buildQuery, self));
+            setTimeout(function(){
+                if ($(e.target).is(':hover')) {
+                    sc.popup.clear(true);
+                    self.lookup(e.target, null, _.bind(self.buildQuery, self));
+                }
+            }, 50);
         });
-        $('main').on('click.lookup', self.targetSelector, function(e) {
+        $(self.main).on('click.lookup', self.targetSelector, function(e) {
             sc.popup.clear(true);
             self.decomposeMode(e.target);
         });
     },
     removeHandlers: function() {
         sc.popup.clear(true);
-        $('main').off('.lookup')
+        $(self.main).off('.lookup')
     },
     deTiTerm: function(term) {
         return term.replace(/n[”’]+ti$/, 'ṃ').replace(/[”’]+ti$/, '');
@@ -90,11 +96,6 @@ sc.paliLookup = {
         term = this.deTiTerm(term);
         if (!term || term.match(/^\s+$/)) return null
         return term
-    },
-    buildPopup: function(results) {
-        var body = $('<div class="popup-wrap"/>'),
-            leftCol = $('<div class="left-col"/>').appendTo(body),
-            rightCol = $('<div class="right-col"/>').appendTo(body);
     },
     lookup: function(node, term, queryFn) {
         var self = this;
@@ -117,39 +118,56 @@ sc.paliLookup = {
                 var ul = $('<ul/>').appendTo(meaning);
                 hit._source.entries.forEach(function(entry) {
                     var li = $('<li/>').appendTo(ul);
-                    $('<a class="source"/>').text(self.sources[entry.source].brief)
-                                            .attr('title', self.sources[entry.source].name)
-                                            .appendTo(li);
                     
                     var content = $('<div class="content"/>').append(entry.html_content)
                                                .appendTo(li);
+                    $('<a class="source"/>').text(self.sources[entry.source].brief)
+                                            .attr('title', self.sources[entry.source].name)
+                                            .prependTo(content).css('float', 'left');
                     content.find('dt').remove();
                     content.find('dd > p:first-child').contents().unwrap();
                 });
             });
-            popup = sc.popup.popup(node, table);
+            var popupAnchor = $(node).children('.lookup-word-marker')
+            popup = sc.popup.popup(popupAnchor[0], table);
             if (popup) {
+                popup.find('li').addClass('expandable');
                 popup.on('click', 'li', function(e) {
-                    popup.find('.clicked').removeClass('clicked');
                     $(this).addClass('clicked');
+                    self.expandEntry(this, popup);
                     return false
                 });
             }
         });
     },
+    expandEntry: function(entry, popup) {
+        var textField = $('<div class="popup-text-overlay"/>').html($(entry).html()),
+            closeButton = $('<div class="popup-close-button">✖</div>').css('float', 'right');
+        textField.children('.content').prepend(closeButton);
+        popup.append(textField);
+        
+        textField.height(Math.max(popup.height(),
+                         Math.min(textField.children('.content').height(), popup.width() * 0.6)));
+        
+        closeButton.on('click', function(){
+            textField.remove();
+            return false
+        });
+    },
+    charRex: /(?:[aiueoāīū]|br|[kgcjtṭdḍbp]h|[kgcjtṭdḍp](?!h)|[mnyrlvshṅṇṃṃñḷ]|b(?![rh]))/ig,
     decomposeMode: function(node) {
         var self = this,
             term = self.getTerm(node),
             popup = $('<div class="decomposed"/>');
         if (!term) return
-
-        _(term).each(function(char) {
+        
+        term.match(self.charRex).forEach(function(char) {
             popup.append($('<span class="letter"/>').text(char))
         });
         var em = Number(getComputedStyle(node, "").fontSize.match(/(\d*(\.\d*)?)px/)[1])
         var pos = $(node).offset();
-        
-        sc.popup.popup($(node).offset(), popup, true);
+        var popupAnchor = $(node).children('.lookup-word-marker')
+        sc.popup.popup(popupAnchor.offset(), popup, true);
         var offset = popup.parent().offset();
         offset.top -= em / 3;
         offset.left -= em / 2;
@@ -163,7 +181,7 @@ sc.paliLookup = {
                              .join('');
             sc.popup.clear();
             console.log('Looking up: ', out);
-            self.lookup(e.target, out, _.bind(self.buildQueryDecomposed, self));
+            self.lookup(node, out, _.bind(self.buildQueryDecomposed, self));
             return false
         })
     },
@@ -202,9 +220,11 @@ sc.paliLookup = {
     },
     decompose: function(term, callback) {
         term = this.deTiTerm(term)
-        var out = this.conjugate(term);
-        for (var j = term.length - 1; j > 0; j--) {
-            subTerm = term.slice(0, j);
+        var out = this.conjugate(term),
+            chars = term.match(this.charRex);
+        
+        for (var j = chars.length - 1; j > 0; j--) {
+            subTerm = chars.slice(0, j).join('');
             if (subTerm.length <= 2) continue
             out = out.concat(this.decomposeVowels(subTerm));
         }
@@ -314,7 +334,8 @@ sc.paliLookup = {
                         terms: {
                           term: this.decompose(term)
                         }
-                    }
+                    },
+                    boost: 5.0
                 }
             }
         }
@@ -709,37 +730,20 @@ sc.markupGenerator = {
             node.parentNode.replaceChild(proxy, node);
             proxy.outerHTML = newHtml;
         });
-            
-            
-        //contents.each(function(i, childNode) {
-            //if (childNode.nodeType == document.ELEMENT_NODE) {
-                //if (excludeFn && excludeFn(childNode)) {
-                    //return
-                //}
-                //self.wrapWords(childNode, markupOpen, markupClose, excludeFn);
-            //} else if (childNode.nodeType == document.TEXT_NODE) {
-                //var text = childNode.nodeValue;
-                //if (text.search(self.paliAlphaRex) == -1) {
-                    //return
-                //}
-                //var newHtml = text.replace(self.paliRex, function(m, word) {
-                    //return markupOpen + word + markupClose;
-                //});
-                //var proxy = $('<span/>')[0];
-                //node.replaceChild(proxy, childNode);
-                //proxy.outerHTML = newHtml;
-            //}
-        //});
     }
 }
 
 sc.paliLookup.targets = 'p, h1, h2, h3, h4, h5'
+sc.paliLookup.exclusions = '.text-popup *'
 sc.paliLookup.activate = function() {
     var self = this;
     $('#text').on('mouseover.lookupMarkup', self.targets , function(e) {
         
         var target = $(e.target);
         if (!target.is(self.targets)) {
+            return true
+        }
+        if (target.is(self.exclusions)) {
             return true
         }
         if (target.hasClass('lookup-marked-up')) {

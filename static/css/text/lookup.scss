@@ -29,6 +29,7 @@
     table, tr, td {
         border: none;
         background: none;
+        border-collapse: collapse;
     }
 
     &.fallback {
@@ -72,13 +73,6 @@
             overflow: hidden;
         }
         
-        li.clicked {
-            height: inherit;
-            max-height: 12em;
-            overflow-y: auto;
-            border: 1px solid gray;
-        }
-        
         ul {
             list-style: none;
         }
@@ -92,6 +86,10 @@
             font-weight: bold;
         }
         
+        .content {
+            word-break: break-word;
+        }
+        
         .content, dl, dd {
             display: inline;
             padding: 0;
@@ -101,8 +99,46 @@
             display: none;
         }
         
+        .expandable {
+            cursor: pointer;
+            &.clicked {
+                cursor: inherit;
+            }
+        }
+        
         .poor-match {
             background-color: mix(#ddd, #F7D1C2);
+        }
+        
+        .popup-text-overlay {
+            padding: 0.1em;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 99%;
+            background: pink;
+            overflow-y: auto;
+            overflow-x: hidden;
+            .source {
+                height: 1em;
+                width: initial;
+                padding-left: 0;
+                padding-right: 0.5em;                
+            }
+            
+            .popup-close-button {
+                margin-right: 0.7em;
+                font-size: 150%;
+                line-height: 1em;
+                width: 0.5em;
+                height: 0.5em;
+                text-align: center;
+                text-shadow: 2px 2px 2px black;
+                
+                &:hover {
+                    cursor: pointer;
+                }
+            }
         }
         
     }
@@ -122,3 +158,5 @@
         }
     }
 }
+
+
