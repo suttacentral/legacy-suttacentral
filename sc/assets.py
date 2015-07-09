@@ -171,6 +171,8 @@ def get_env():
     env.register('js_core', js_core)
     
     paliLookup_standalone = webassets.Bundle(
+        'js/vendor/elasticsearch-5.0.0.jquery.min.js',
+        'js/lib/text-nodes.js',
         'js/sc_popup.js',
         'js/paliLookup2.0.js',
         filters=None,
