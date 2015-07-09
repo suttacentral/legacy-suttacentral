@@ -117,7 +117,7 @@ a.bl {display:none;}
     letter-spacing:0.02em;
 }
 
-.smallcaps {
+.smallcaps, .speaker {
     @include serif-small-caps;
     text-transform:lowercase;
     letter-spacing:0.02em;
@@ -154,7 +154,7 @@ q:after {
 /* TEXT */
 
 
-.evam {
+.evam,  {
     @include serif-small-caps;
     letter-spacing:0.02em;
 }
