@@ -8,15 +8,13 @@ sc.text_selection = (function() {
     var elementSelector = 'article > *:not(div),\
                            article > div.hgroup,\
                            article > div:not(.hgroup) > *',
-
         $elements = $(elementSelector),
         valid_char_rex = /[^ \n “”‘’.,?!—]/g,
-        ignoreClasses,
+        ignoreSelector = '.text-popup *',
         link;
     
     function nodeFilter() {
-        //return !$(this).is(ignoreClasses);
-        if ($(this).is(ignoreClasses)) {
+        if ($(this).is(ignoreSelector)) {
             return false
         }
         if (this.nodeType == 3 && /^\s*[“”‘’]+\s*$/.test(this.nodeValue)) {
