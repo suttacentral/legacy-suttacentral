@@ -3,6 +3,7 @@ sc.popup = {
     isPopupHover: false,
     popups: [],
     popup: function(parent, popup, protected) {
+        console.log('Creating popup', [parent, popup, protected]);
         var self = this,
             offset,
             docWith,
@@ -91,5 +92,6 @@ sc.popup = {
             }
         });
         this.popups = keep;
+        this.isPopupHover = false;
     }
 }

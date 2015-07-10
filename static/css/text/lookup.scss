@@ -68,8 +68,14 @@
 
 #text[lang=pi] {
     .text-popup {
+        ul {
+            margin: 0;
+        }
+        
         li {
             height: 1.5em;
+            margin-top: 0.1em;
+            margin-bottom: 0.1em;
             overflow: hidden;
         }
         
@@ -142,6 +148,11 @@
         }
         
     }
+}
+
+.lookup-word-marker {
+    display: inline-block;
+    position: absolute;
 }
 
 .decomposed {
