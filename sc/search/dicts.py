@@ -68,7 +68,9 @@ class DictIndexer(ElasticIndexer):
                               for entry in sorted_entries)
 
     def fix_term(self, term):
-        return regex.sub(r'[^\p{alpha}\s]', '', term).strip().casefold().replace('ṁ', 'ṃ')
+        term = regex.sub(r'[^\p{alpha}\s]', '', term).strip().casefold()
+        term = term.replace('ṁ', 'ṃ')
+        return term
 
     def add_file(self, file, all_entries, glosses):
         root = sc.tools.html.parse(str(file)).getroot()

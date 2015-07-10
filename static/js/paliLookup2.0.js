@@ -86,21 +86,30 @@ sc.paliLookup = {
     deTiTerm: function(term) {
         return term.replace(/n[”’]+ti$/, 'ṃ').replace(/[”’]+ti$/, '');
     },
+    normalizeTerm: function(term) {
+        return term.toLowerCase()
+                   .normalize('NFC')
+                   .replace(/\xad/g, '')
+                   .replace(/ṁ/g, 'ṃ')
+                   .replace(/ṃ([gk])/g, 'ṅ$1')
+                   .replace('\xad', '')
+                   .replace(/^([^”’]+)/, '$1')
+    },
     getTerm: function(node) {
         var term = node.childNodes[1].nodeValue;
-        
-        term = term.replace(/ṁ/g, 'ṃ')
-                   .replace('\xad', '')
-                   .toLowerCase()
-                   .replace(/^([^”’]+)/, '$1');
-        term = this.deTiTerm(term);
         if (!term || term.match(/^\s+$/)) return null
+        return term
+    },
+    getTermNormalized: function(node) {
+        var term = this.getTerm(node)
+        term = this.normalizeTerm(term)
+        term = this.deTiTerm(term);
         return term
     },
     lookup: function(node, term, queryFn) {
         var self = this;
         
-        var term = term || self.getTerm(node);
+        var term = term || self.getTermNormalized(node);
         if (!term) return
 
         self.search(term, queryFn, function(results) {
@@ -157,7 +166,7 @@ sc.paliLookup = {
     charRex: /(?:[aiueoāīū]|br|[kgcjtṭdḍbp]h|[kgcjtṭdḍp](?!h)|[mnyrlvshṅṇṃṃñḷ]|b(?![rh]))/ig,
     decomposeMode: function(node) {
         var self = this,
-            term = self.getTerm(node),
+            term = self.deTiTerm(self.getTerm(node)),
             popup = $('<div class="decomposed"/>');
         if (!term) return
         
@@ -168,7 +177,7 @@ sc.paliLookup = {
         var pos = $(node).offset();
         var popupAnchor = $(node).children('.lookup-word-marker')
         sc.popup.popup(popupAnchor.offset(), popup, true);
-        var offset = popup.parent().offset();
+        var offset = popupAnchor.offset();
         offset.top -= em / 3;
         offset.left -= em / 2;
         popup.parent().offset(offset);
@@ -179,6 +188,7 @@ sc.paliLookup = {
             var out = letters.map(function(i, e) {return $(e).text()})
                              .get()
                              .join('');
+            out = self.normalizeTerm(out);
             sc.popup.clear();
             console.log('Looking up: ', out);
             self.lookup(node, out, _.bind(self.buildQueryDecomposed, self));
@@ -263,7 +273,7 @@ sc.paliLookup = {
                     "should": [
                         {
                             "fuzzy": {
-                                "term": {
+                                "term.normalized": {
                                     "max_expansions": 5,
                                     "prefix_length": 3,
                                     "value": term
@@ -272,7 +282,7 @@ sc.paliLookup = {
                         },
                         {
                             "fuzzy": {
-                                "term": {
+                                "term.normalized": {
                                     "max_expansions": 5,
                                     "prefix_length": 2,
                                     "value": term.replace(/ṃ$/, '')
@@ -285,7 +295,7 @@ sc.paliLookup = {
         } else {
             fuzzyQuery = {
                 "fuzzy": {
-                    "term": {
+                    "term.normalized": {
                         "max_expansions": 5,
                         "prefix_length": 3,
                         "value": term
@@ -302,7 +312,7 @@ sc.paliLookup = {
                             constant_score: {
                                 filter: {
                                     term: {
-                                        term: term
+                                        'term.normalized': term
                                     }
                                 },
                                 boost: 10
@@ -312,7 +322,7 @@ sc.paliLookup = {
                             constant_score: {
                                 filter: {
                                     terms: {
-                                      term: this.conjugate(term)
+                                      'term.normalized': this.conjugate(term)
                                     }
                                 },
                                 boost: 10
@@ -332,7 +342,7 @@ sc.paliLookup = {
                 constant_score: {
                     filter: {
                         terms: {
-                          term: this.decompose(term)
+                          'term.normalized': this.decompose(term)
                         }
                     },
                     boost: 5.0
@@ -343,7 +353,7 @@ sc.paliLookup = {
     },
     esSearch: function(query, callback) {
         var self = this;
-        console.log(JSON.stringify(query, null, 2));
+        console.log([JSON.stringify(query, null, 2)]);
         self.client.search({
             index: self.index,
             type: 'definition',

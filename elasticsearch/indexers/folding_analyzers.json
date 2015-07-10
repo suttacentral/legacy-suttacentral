@@ -14,20 +14,30 @@
                         "type": "pattern_replace",
                         "pattern": " ",
                         "replacement": ""
+                    },
+                    "pali_normalize_filter": {
+                        "type": "pattern_replace",
+                        "pattern": "ṃ([gk])",
+                        "replacement": "ṅ$1"
                     }
                 },
                 "analyzer": {
                     "folding_analyzer": {
                         "tokenizer": "icu_tokenizer",
                         "char_filter": ["denumber"],
-                        "filter": ["icu_folding"]
+                        "filter": ["pali_normalize_filter", "icu_folding"]
                     },
                     "folding_shingle_analyzer": {
                         "tokenizer": "icu_tokenizer",
                         "char_filter": ["denumber"],
-                        "filter": ["icu_folding",
+                        "filter": ["pali_normalize_filter",
+                                   "icu_folding",
                                     "compounder",
                                     "despacer"]
+                    },
+                    "pali_normalizer": {
+                        "tokenizer": "keyword",
+                        "filter": ["pali_normalize_filter"]
                     }
                 }
             }

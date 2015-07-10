@@ -97,6 +97,10 @@
                             "folded": {                            
                                 "type": "string",
                                 "analyzer": "folding_analyzer"
+                            },
+                            "normalized": {
+                                "type": "string",
+                                "analyzer": "pali_normalizer"
                             }
                         }
                     },
