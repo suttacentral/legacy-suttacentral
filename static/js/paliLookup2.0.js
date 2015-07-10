@@ -137,7 +137,7 @@ sc.paliLookup = {
                     content.find('dd > p:first-child').contents().unwrap();
                 });
             });
-            var popupAnchor = $(node).children('.lookup-word-marker')
+            var popupAnchor = $(node).children('.lookup-word-marker');
             popup = sc.popup.popup(popupAnchor[0], table);
             if (popup) {
                 popup.find('li').addClass('expandable');
@@ -190,7 +190,6 @@ sc.paliLookup = {
                              .join('');
             out = self.normalizeTerm(out);
             sc.popup.clear();
-            console.log('Looking up: ', out);
             self.lookup(node, out, _.bind(self.buildQueryDecomposed, self));
             return false
         })
@@ -238,7 +237,6 @@ sc.paliLookup = {
             if (subTerm.length <= 2) continue
             out = out.concat(this.decomposeVowels(subTerm));
         }
-        console.log('Decomposed: ', out);
         return out;
     },
     storeInCache: function(term, resp) {
@@ -266,7 +264,6 @@ sc.paliLookup = {
         //});
     },
     buildQuery: function(term) {
-        console.log(this);
         if (term.match(/ṃ$/)) {
             var fuzzyQuery = {
                 "bool": {
@@ -353,13 +350,12 @@ sc.paliLookup = {
     },
     esSearch: function(query, callback) {
         var self = this;
-        console.log([JSON.stringify(query, null, 2)]);
+        //console.log([JSON.stringify(query, null, 2)]);
         self.client.search({
             index: self.index,
             type: 'definition',
             body: query
         }).then(function(resp) {
-            console.log(resp.hits.total);
             callback(resp);
         }, function(err) {
             console.trace(err.message);
@@ -759,7 +755,6 @@ sc.paliLookup.activate = function() {
         if (target.hasClass('lookup-marked-up')) {
             return
         }
-        console.log(target);
         
         sc.markupGenerator.wrapWords(target, '<span class="lookup"><span class="lookup-word-marker"></span>', '</span>')
         target.addClass('lookup-marked-up');
