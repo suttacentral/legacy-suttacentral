@@ -24,7 +24,7 @@ discourse_is_available = (sc.search.is_available()
 class DiscourseIndexer(ElasticIndexer):
     # Different doc types are possible.
     doc_type = None 
-    version = 0
+    version = 1
     suppress_elasticsearch_errors = True
     def __init__(self):
         super().__init__(config_name=discourse_index)
@@ -148,6 +148,8 @@ class DiscourseIndexer(ElasticIndexer):
         
         def category_is_visible(category):
             if category['read_restricted']:
+                return False
+            if category['name'] == 'Meta':
                 return False
             parent_id = category['parent_category_id']
             if parent_id:

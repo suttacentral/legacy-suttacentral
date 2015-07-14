@@ -82,7 +82,6 @@ def default(*args, **kwargs):
             return ParallelView(sutta).render()
         
     elif len(args) >= 2:
-        
         if args[1] == 'citation.txt':
             # Citation
             cherrypy.response.headers['Content-Type'] = "text/plain"
@@ -96,6 +95,13 @@ def default(*args, **kwargs):
         # New style urls have the language code first then the uid
         lang_code = args[0]
         uid = args[1]
+        
+        if len(args) >= 3:
+            if args[2] == 'discussion':
+                if not imm.text_exists(uid, lang_code):
+                    return cherrypy.NotFound()
+                return TextDiscussionView(uid, lang_code, embed=True).render()
+                
         
         redirect = False
         bookmark = None
