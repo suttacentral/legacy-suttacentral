@@ -28,7 +28,7 @@ sc.text_selection = (function() {
         for (var k in (sc.classes.margin))  {
             a.push('.' + k);
         }
-        ignoreClasses = ','.join(a);
+        var ignoreClasses = ','.join(a);
         highlightSelection();
 
         $(document.body).on('mouseup', function(){_.delay(updateLink, 1)});
