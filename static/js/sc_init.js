@@ -66,6 +66,7 @@ sc.classes = {
         "t": "Volume, page, column, and line number in the Taishō canon.",
         "titus": "",
         "t-linehead": "Volume, page, column, and line number in the Taishō canon.",
+        "tb": "Paragraph numbers in Thanissaro Bhikkhu.",
         "ud-sutta": "Sutta number.",
         "ud-vagga-sutta": "Chapter/sutta number.",
         "tri62": "Sūtra and paragraph number in Tripāṭhī, 1962.",
