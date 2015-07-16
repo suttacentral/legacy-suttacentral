@@ -9,7 +9,7 @@ sc.popup = {
             dupe,
             docWidth,
             isAbsolute = false,
-            markupTarget = $('#text');
+            markupTarget = $(document.body);
         if (self.isPopupHover) {
             return false
         }

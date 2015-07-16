@@ -1,3 +1,5 @@
+@import '../lib/colors';
+@import '../lib/mixins';
 
 .text-popup {
     position: absolute;
@@ -66,8 +68,34 @@
     }
 }
 
-#text[lang=pi] {
-    .text-popup {
+
+.text-popup
+
+    .content {
+        word-break: break-word;
+    }
+    
+    .content, dl, dd {
+        display: inline;
+        padding: 0;
+        margin: 0;
+    }
+    
+    dt {
+        display: none;
+    }
+    
+    .source {
+        background: #ccc;
+        border-radius: 0.25em;
+        padding: 0.15em;
+        width: 2.5em;
+        margin-left: 0.5em;
+        font-size: 90%;
+        font-weight: bold;
+    }
+    
+    .pali {
         ul {
             margin: 0;
         }
@@ -82,28 +110,8 @@
         ul {
             list-style: none;
         }
-        .source {
-            background: #ccc;
-            border-radius: 0.25em;
-            padding: 0.15em;
-            width: 2.5em;
-            margin-left: 0.5em;
-            font-size: 90%;
-            font-weight: bold;
-        }
-        
-        .content {
-            word-break: break-word;
-        }
-        
-        .content, dl, dd {
-            display: inline;
-            padding: 0;
-            margin: 0;
-        }
-        dt {
-            display: none;
-        }
+
+
         
         .expandable {
             cursor: pointer;
@@ -115,37 +123,37 @@
         .poor-match {
             background-color: mix(#ddd, #F7D1C2);
         }
+    }
         
-        .popup-text-overlay {
-            padding: 0.1em;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 99%;
-            background: pink;
-            overflow-y: auto;
-            overflow-x: hidden;
-            .source {
-                height: 1em;
-                width: initial;
-                padding: 0.05em 0.25em 0.35em 0.2em;
-            }
-            
-            .popup-close-button {
-                margin-right: 0.7em;
-                font-size: 150%;
-                line-height: 1em;
-                width: 0.5em;
-                height: 0.5em;
-                text-align: center;
-                text-shadow: 2px 2px 2px black;
-                
-                &:hover {
-                    cursor: pointer;
-                }
-            }
+    .popup-text-overlay {
+        padding: 0.1em;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 99%;
+        background: pink;
+        overflow-y: auto;
+        overflow-x: hidden;
+        
+        .source {
+            height: 1em;
+            width: initial;
+            padding: 0.05em 0.25em 0.35em 0.2em;
         }
         
+        .popup-close-button {
+            margin-right: 0.7em;
+            font-size: 150%;
+            line-height: 1em;
+            width: 0.5em;
+            height: 0.5em;
+            text-align: center;
+            text-shadow: 2px 2px 2px black;
+            
+            &:hover {
+                cursor: pointer;
+            }
+        }
     }
 }
 
@@ -175,12 +183,10 @@
     font-size: 80%;
     input {
         width: 22%;
-        margin: 0;
     }
     button {
-        width: 8%;
+        width: 7%;
     }
-    box-shadow: inset 0 0 1px rgba(0,0,0,0.5);
 }
 
 tr.glossary td {

@@ -120,7 +120,7 @@ def get_env():
     
     css_palilookup_standalone = webassets.Bundle(
         'css/text/lookup.scss',
-        filters='cssmin',
+        filters='pyscss',
         output='css/compiled/paliLookup2.0-standalone.css')
     
     env.register('css_paliLookup_standalone', css_palilookup_standalone)
@@ -171,7 +171,7 @@ def get_env():
     env.register('js_core', js_core)
     
     paliLookup_standalone = webassets.Bundle(
-        'js/vendor/elasticsearch-5.0.0.jquery.min.js',
+        'js/vendor/elasticsearch-5.0.0.js',
         'js/lib/text-nodes.js',
         'js/sc_popup.js',
         'js/paliLookup2.0.js',

@@ -46,7 +46,7 @@ sc.paliLookup = {
         self.targetSelector = args.target;
         // Ensure that elasticsearch library is available.
         if ($.es === undefined) {
-            $.getScript('https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/5.0.0/elasticsearch.jquery.min.js')
+            $.getScript('https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/5.0.0/elasticsearch.min.js')
              .success(function(){self.init1(args)})
         } else {
             self.init1(args);
@@ -55,7 +55,7 @@ sc.paliLookup = {
     init1: function(args) {
         var self = this;
         
-        self.client = $.es.Client({
+        self.client = elasticsearch.Client({
             hosts: self.elasticUrl
         });
         self.isReady = true
@@ -144,7 +144,7 @@ sc.paliLookup = {
             
             var hits = self.getScoredHits(results.responses, weights);
             
-            var table = $('<table/>');
+            var table = $('<table class="pali"/>');
             
             hits.slice(0, 4).forEach(function(hit) {
                 var tr = $('<tr/>').appendTo(table);
@@ -190,7 +190,7 @@ sc.paliLookup = {
             closeButton = $('<div class="popup-close-button">✖</div>').css('float', 'right');
         textField.children('.content').prepend(closeButton);
         popup.append(textField);
-        
+        textField.find('[original-title]').attr('original-title', '');
         textField.height(Math.max(popup.height(),
                          Math.min(textField.children('.content').height(), popup.width() * 0.6)));
         
@@ -774,7 +774,7 @@ sc.paliLookup = {
                     constant_score: {
                         filter: {
                             term: {
-                                'term': term
+                                'normalized': term
                             }
                         }
                     }
@@ -794,7 +794,7 @@ sc.paliLookup = {
                                 constant_score: {
                                     filter: {
                                         terms: {
-                                            'term': terms
+                                            'normalized': terms
                                         }
                                     }
                                 }
@@ -803,7 +803,7 @@ sc.paliLookup = {
                                 constant_score: {
                                     filter: {
                                         terms: {
-                                          'term': _(terms).chain()
+                                          'normalized': _(terms).chain()
                                                           .map(_.bind(sc.paliLookup.conjugate, sc.paliLookup))
                                                           .flatten()
                                                           .compact()
@@ -819,18 +819,25 @@ sc.paliLookup = {
             }
         },
         getEntries: function(terms, callback) {
-            var body = this.buildQueryBody(term);
+            if (typeof(terms) == "string") {
+                terms = terms.split(sc.paliLookup.markupGenerator.splitRex);
+                terms = _(terms).filter(_.bind(RegExp.prototype.test, 
+                                               sc.paliLookup.markupGenerator.paliAlphaRex))
+            }
+            var body = this.buildQueryBody(terms);
             return sc.paliLookup.client.search({index: this.index,
                                          type: this.type,
                                          body: body});
         },
         createInputBar: function(term) {
             var self = this;
+            term = term.toLowerCase();
             var form = $('<form disabled class="add-glossary-entry">' +
               '<input name="term" value="' + term + '" required>' +
               '<input name="gloss" placeholder="gloss" value="">' +
               '<input name="context" placeholder="context" value="">' +
               '<input name="comment" placeholder="comment">' +
+              '<input name="user" type="hidden" value="user">' +
               '<button>+</button>' +
               '</form>');
             
@@ -857,6 +864,10 @@ sc.paliLookup = {
                 if (!items.gloss && !items.comment) {
                     return
                 }
+                
+                items.term = items.term.toLowerCase();
+                items.normalized = sc.paliLookup.normalizeTerm(items.gloss);
+                
                 self.addEntry(items).then(function(e){ 
                     form.find('button').text('✓');
                 });
@@ -904,11 +915,12 @@ sc.paliLookup = {
         }
     },
     /* General Initialization Code */
+    mouseovertarget: '#text',
     targets: 'p, h1, h2, h3, h4, h5',
     exclusions: '.text-popup *',
     activate: function() {
         var self = this;
-        $('#text').on('mouseover.lookupMarkup', self.targets , function(e) {
+        $(self.mouseovertarget).on('mouseover.lookupMarkup', self.targets , function(e) {
             
             var target = $(e.target);
             if (!target.is(self.targets)) {
