@@ -40,25 +40,21 @@ sc.paliLookup = {
     isReady: false,
     init: function(args) {
         var self = this;
-        if (self.isReady) return
-        
-        self.elasticUrl = args.elasticUrl;
-        self.targetSelector = args.target;
-        // Ensure that elasticsearch library is available.
-        if ($.es === undefined) {
-            $.getScript('https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/5.0.0/elasticsearch.min.js')
-             .success(function(){self.init1(args)})
-        } else {
-            self.init1(args);
+        this.elasticUrl = args.elasticUrl;
+        this.targetSelector = args.target;
+        var inner = function() {
+            self.client = elasticsearch.Client({
+                hosts: args.elasticUrl
+            });
+            sc.paliLookup.glossary.init();
         }
-    },
-    init1: function(args) {
-        var self = this;
         
-        self.client = elasticsearch.Client({
-            hosts: self.elasticUrl
-        });
-        self.isReady = true
+        if (!window.elasticsearch) {
+            $.getScript('https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/5.0.0/elasticsearch.js')
+             .success(inner);
+        } else {
+            inner()
+        }
     },
     lookups: {},
     addHandlers: function() {
@@ -475,7 +471,7 @@ sc.paliLookup = {
         ['uno',1,1,''],
         ['ūnaṁ',1,1,''],
         ['ūsu',1,1,''],
-        ['u',1,2,'u'],
+        ['ū',0,2,'u'],
         ['āni',0,2,'a'],
         ['īni',1,2,''],
         ['ūni',1,2,''],
@@ -748,11 +744,14 @@ sc.paliLookup = {
     glossary: {
         index: 'pi2en-glossary',
         type: 'entry',
+        client: null,
+        init: function() {
+            this.client = sc.paliLookup.client;
+        },
         addEntry: function(term, context, gloss, comment) {
-            var client = sc.paliLookup.client;
             if (typeof(term) == "string") {
                 var body = {
-                    term: sc.paliLookup.normalizeTerm(term),
+                    term: term,
                     context: context,
                     gloss: gloss,
                     comment: comment
@@ -760,10 +759,12 @@ sc.paliLookup = {
             } else {
                 var body = term;
             }
-            return client.index({
+            body.normalized = sc.paliLookup.normalizeTerm(body.term);
+            body.source = body.source || 'user';
+            return this.client.index({
                 index: this.index,
                 type: this.type,
-                id: body.term + ':' + body.context,
+                id: body.context ? body.term + '-' + body.context : body.term,
                 body: body
             })
         },
@@ -780,7 +781,7 @@ sc.paliLookup = {
                     }
                 }
             }
-            return sc.paliLookup.client.search({index: this.index,
+            return this.client.search({index: this.index,
                                          type: this.type,
                                          body: body});
         },                            
@@ -818,16 +819,21 @@ sc.paliLookup = {
                 }
             }
         },
-        getEntries: function(terms, callback) {
+        getEntries: function(terms, args) {
             if (typeof(terms) == "string") {
                 terms = terms.split(sc.paliLookup.markupGenerator.splitRex);
                 terms = _(terms).filter(_.bind(RegExp.prototype.test, 
                                                sc.paliLookup.markupGenerator.paliAlphaRex))
             }
+            
             var body = this.buildQueryBody(terms);
-            return sc.paliLookup.client.search({index: this.index,
-                                         type: this.type,
-                                         body: body});
+            var query = {index: this.index,
+                         type: this.type,
+                         body: body}
+            if (args) {
+                _.extend(query, args);
+            }
+            return this.client.search(query);
         },
         createInputBar: function(term) {
             var self = this;
@@ -866,9 +872,9 @@ sc.paliLookup = {
                 }
                 
                 items.term = items.term.toLowerCase();
-                items.normalized = sc.paliLookup.normalizeTerm(items.gloss);
-                
-                self.addEntry(items).then(function(e){ 
+                items.normalized = sc.paliLookup.normalizeTerm(items.term);
+                console.log(items);
+                self.addEntry(items).then(function(e){
                     form.find('button').text('✓');
                 });
                 form.children().attr('disabled', 'disabled');
@@ -918,8 +924,11 @@ sc.paliLookup = {
     mouseovertarget: '#text',
     targets: 'p, h1, h2, h3, h4, h5',
     exclusions: '.text-popup *',
+    isActive: false,
     activate: function() {
         var self = this;
+        if (self.isActive) return
+        self.isActive = true;
         $(self.mouseovertarget).on('mouseover.lookupMarkup', self.targets , function(e) {
             
             var target = $(e.target);
@@ -942,6 +951,7 @@ sc.paliLookup = {
     deactivate: function() {
         $('#text').off('mouseover.lookupMarkup')
         sc.paliLookup.removeHandlers();
+        this.isActive = false;
     },
     toggleOn: false,
     toggle: function() {

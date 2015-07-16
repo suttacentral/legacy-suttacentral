@@ -33,11 +33,9 @@ function sortaz(mydata){  // sort pali array
 }
 
 function sortStrip(word) {
-    if(DPR_prefs['nigahita']) {
-        word = word.replace(/ṁ/g, 'ṃ');
-        word = word.replace(/Ṁ/g, 'Ṃ');
-    }
-    word = toUni(word.toLowerCase()).replace(/[^a-zāīūṃṅñṭḍṇḷ#]/g,'');
+    word = word.replace(/ṁ/g, 'ṃ');
+    word = word.replace(/Ṁ/g, 'Ṃ');
+    word = word.toLowerCase().replace(/[^a-zāīūṃṅñṭḍṇḷ#]/g,'');
     return word;
 }
 
@@ -79,4 +77,4 @@ function comparePaliAlphabet(a,b) {
 
 window.comparePaliAlphabet = comparePaliAlphabet;
 
-});
+})();
