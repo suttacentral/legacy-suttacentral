@@ -143,6 +143,7 @@ def get_env():
         'js/vendor/jquery.unveil.js',
         'js/vendor/jquery.details.js',
         'js/lib/text-nodes.js',
+        'js/lib/pali-sort.js',
         'js/intr.js',
         'js/sc_utility.js',
         make_exports_file(env),
@@ -173,6 +174,7 @@ def get_env():
     paliLookup_standalone = webassets.Bundle(
         'js/vendor/elasticsearch-5.0.0.js',
         'js/lib/text-nodes.js',
+        'js/lib/pali-sort.js',
         'js/sc_popup.js',
         'js/paliLookup2.0.js',
         filters=None,
