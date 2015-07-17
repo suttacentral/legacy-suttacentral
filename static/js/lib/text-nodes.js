@@ -34,4 +34,4 @@ $.fn.textNodes = function(filter) {
     }
     this.each(function(){iterNodes(this)});
     return $(result)
-}
+};

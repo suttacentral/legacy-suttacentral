@@ -56,5 +56,5 @@ sc.epigraph = {
         this.loadEpigraph(num);
     }
 }
-sc.epigraph.init()
+sc.epigraph.init();
 

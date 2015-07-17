@@ -309,4 +309,4 @@ function paint(){
         endOffset = range.endOffset;
     
 
-}
+};

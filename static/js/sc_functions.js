@@ -1021,4 +1021,4 @@ function previousInOrder(node, permissables) {
     else if (permissables.indexOf(node.nodeType) != -1)
         return node;
     return previousInOrder(node, permissables);
-}
+};
