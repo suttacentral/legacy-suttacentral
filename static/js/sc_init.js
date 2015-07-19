@@ -33,6 +33,7 @@ sc.classes = {
 	"jd": "Paragraph numbers in Dr. Julius Dutoit.",
 	"jsk": "Paragraph numbers in J.S. Krüger.",
         "kel": "Paragraph numbers in Kelly, Sawyer, and Yareham.",
+        "kl": "Paragraph numbers in Kåre A. Lie.",
 	"ks": "Paragraph numbers in Karl Seidenstücker.",
         "mat85": "Paragraph numbers in Matsumura, 1985.",
         "mat88": "Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988.",

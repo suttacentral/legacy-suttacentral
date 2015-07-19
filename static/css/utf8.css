@@ -26,6 +26,7 @@ a.hs:before {content:"hs "}
 a.jd:before {content:"JD "}
 a.jsk:before {content:"JSK "}
 a.kel:before {content:"Kel "}
+a.kl:before {content:"KL "}
 a.ks:before {content:"KS "}
 a.mat85:before, a.mat88:before {content:"Mat "}
 a.mit57:before {content:"Mit "}
@@ -233,6 +234,8 @@ The following references are secondary. They appear in the same files as some of
 .mt		"Paragraph numbers in Maitrimurti / Trätow."
 
 .sb		"Paragraph numbers in Fritz Schaefer / Raimund Beyerlein."
+
+.kl             "Paragraph numbers in Kåre A. Lie."
 
 .skt-mg-bu-pm	"Rule numbers in the Sanskrit Mahāsaṅghika Bhikhhu Pātimokkha."
 In a few cases there are no paragraph numbers, these should be added as "SC" numbers. These texts are:
