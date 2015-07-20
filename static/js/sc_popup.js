@@ -65,14 +65,15 @@ sc.popup = {
         popup.mouseenter(function(e) {
             self.isPopupHover = true
         });
-        
-        popup.mouseleave(function(e){
+        setTimeout(function(){
+            popup.mouseleave(function(e){
                 if (protected) {
                     return
                 }
                 $(this).remove();
                 self.isPopupHover = false
             });
+        }, 1500)
         this.clear();
         if (protected) {
             popup.data('protected', protected);

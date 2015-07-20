@@ -209,13 +209,14 @@ sc.paliLookup = {
         textField.find('[original-title]').attr('original-title', '');
         textField.height(Math.max(popup.height(),
                          Math.min(textField.children('.content').height(), popup.width() * 0.6)));
-        
-        textField.on('click', function(e) {
-            if ($(e.target).is('.popup-text-overlay, .popup-close-button')) {
-                textField.remove();
-                return false
-            }
-        });
+        setTimeout(function(){
+            textField.on('click', function(e) {
+                if ($(e.target).is('.popup-text-overlay, .popup-close-button')) {
+                    textField.remove();
+                    return false
+                }
+            });
+        }, 400);
     },
     charRex: /(?:[aiueoāīū]|br|[kgcjtṭdḍbp]h|[kgcjtṭdḍp](?!h)|[mnyrlvshṅṇṃṃñḷ]|b(?![rh]))/ig,
     decomposeMode: function(node) {
