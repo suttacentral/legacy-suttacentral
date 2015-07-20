@@ -177,7 +177,7 @@ def get_env():
         'js/lib/pali-sort.js',
         'js/sc_popup.js',
         'js/paliLookup2.0.js',
-        filters=None,
+        filters='rjsmin',
         output='js/compiled/paliLookup2.0-standalone.js'
     )
     env.register('paliLookup-standalone', paliLookup_standalone)

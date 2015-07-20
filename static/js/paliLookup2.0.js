@@ -15,8 +15,8 @@ sc = window.sc || {};
  */
 
 sc.paliLookup = {
-    _cache: {},
     _handlers: [],
+    lookaheadN: 5,
     index: 'en-dict',
     main: '#text',
     sources: {
@@ -63,12 +63,32 @@ sc.paliLookup = {
             if ($(e.target).parents('.text-popup').length > 0) {
                 return
             }
+            // Only create popup after a short delay as a "debouncing" measure
             setTimeout(function(){
                 if ($(e.target).is(':hover')) {
                     sc.popup.clear(true);
                     var term = self.getTerm(e.target),
                         query = self.buildQueryStandard(term);
                     self.lookup(e.target, term, query.query, query.weights, true);
+                    
+                    //Precache next terms
+                    if (self.lookaheadN) {
+                        var targets = $(self.targetSelector),
+                            index = targets.index(e.target),
+                            lookaheadN = self.lookaheadN,
+                            lookaheadQueries = [];
+                        
+                        // Download in blocks of lookahead
+                        // For example if we mouseover the 3rd element
+                        // we would download the block 3-4 and 5-9
+                        targets.slice(index + 1, Math.floor((index + lookaheadN * 1.5 + 1) / lookaheadN) * lookaheadN)
+                               .each(function(i, element) {
+                                   var term = self.getTerm(element);
+                                   lookaheadQueries.push(self.buildQueryStandard(term).query);
+                               });
+                        console.log(lookaheadQueries);
+                        self.msearchPrecache(lookaheadQueries);
+                    }
                 }
             }, 50);
         });
@@ -390,17 +410,86 @@ sc.paliLookup = {
             weights: [1]
         }
     },
-    cache: {},
-    msearch: function(multi_search_query) {
+    _cache: {},
+    /**
+     * Create a unique key from a query, guaranteed to not collide.
+     * Basically JSON but with sorted keys.
+     * @param {Object} query - An object representable as JSON.
+     * @returns {String}
+     */
+    keyify: function(query) {
+        return sortedStringify(query);
+    },
+    /** 
+     * msearch "wrapper" which adds caching
+     * @param {Array} msearch_query - As required by elastic.js msearch
+     * @returns {Promise}
+     */
+    msearch: function(msearch_query) {
         var self = this;
         
-        var key = JSON.stringify(multi_search_query);
-        var promise = this.cache[key];
+        var key = self.keyify(msearch_query);
+        var promise = this._cache[key];
         if (!promise) {
-            promise = self.client.msearch(multi_search_query)
-            this.cache[key] = promise;
+            promise = self.client.msearch(msearch_query)
+            this._cache[key] = promise;
         }
         return promise
+    },
+    /** Precache queries, returns nothing. Stampede safe.
+     * @param {Array} queries to be requested and cached.
+     */
+    msearchPrecache: function(queries) {
+        var self = this,
+            new_queries = [],
+            keys = [];
+        queries.forEach(function(msearch_query) {
+            var key = self.keyify(msearch_query);
+            if (key in self._cache) {
+                return
+            }
+            new_queries.push(msearch_query);
+            keys.push(key);
+        })
+        var r = self._msearchBuffered(new_queries);
+        keys.forEach(function(key, i) { 
+            self._cache[key] = r[i];
+        });        
+    },
+    /** Perform multiple multi searches in a single request
+     * @param {Array} msearch_queries
+     * @returns {Array} Array of promises in the same order as the queries.
+     */
+    _msearchBuffered: function(msearch_queries) {
+        var self = sc.paliLookup,
+            out = [],
+            deferred = [];
+        
+        if (msearch_queries.length == 0) {
+            deferred.reject();
+        }
+        
+        var combined = _.clone(msearch_queries[0]);
+            combined.body = [];
+        
+        msearch_queries.forEach(function(query, i) {
+            console.log([query], i)
+            combined.body.push.apply(combined.body, query.body);
+            deferred.push($.Deferred());
+        });
+            
+        self.client.msearch(combined).done(function(resp) {
+            var responses = resp.responses,
+                place = 0;
+            
+            msearch_queries.forEach(function(query, i) {
+                var count = query.body.length / 2;
+                
+                deferred[i].resolve({responses: responses.slice(place, place + count)});
+                place += count;
+            });
+        });
+        return deferred;
     },
     conjugate: function(word){
         var self = this;
