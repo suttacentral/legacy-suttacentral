@@ -144,6 +144,7 @@ def get_env():
         'js/vendor/jquery.details.js',
         'js/lib/text-nodes.js',
         'js/lib/pali-sort.js',
+        'js/lib/sorted-stringify.js',
         'js/intr.js',
         'js/sc_utility.js',
         make_exports_file(env),
