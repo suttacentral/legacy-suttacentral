@@ -467,7 +467,7 @@ sc.paliLookup = {
             deferred = [];
         
         if (msearch_queries.length == 0) {
-            deferred.reject();
+            return deferred
         }
         
         var combined = _.clone(msearch_queries[0]);
@@ -523,8 +523,6 @@ sc.paliLookup = {
     },
     // suffix, keep count, min word length, replacement
     endings: [
-        ["i",0,"i"],
-        ["u",0,"u"],
         ["ati",0,"a"],
         ["āti",0,"ā"],
         ["eti",0,"e"],
@@ -546,7 +544,6 @@ sc.paliLookup = {
         ["mhi",1,""],
         ["esu",0,"a"],
         ["ayo",1,"i"],
-        ["ī",1,"ī"],
         ["inā",1,"i"],
         ["īhi",1,"ī"],
         ["hi",2,""],
@@ -555,11 +552,10 @@ sc.paliLookup = {
         ["ino",1,"i"],
         ["īnaṃ",1,"ī"],
         ["īsu",1,"ī"],
-        ["i",2,"ii"],
+        ["i",2,"ī"],
         ["inaṃ",0,"i"],
         ["avo",1,"u"],
         ["ave",1,"u"],
-        ["ū",1,"ū"],
         ["unā",1,"u"],
         ["ūhi",1,"ū"],
         ["ūbhi",1,"ū"],
@@ -570,7 +566,7 @@ sc.paliLookup = {
         ["āni",2,"a"],
         ["īni",2,"ī"],
         ["ūni",2,"ū"],
-        ["a",2,"aa"],
+        ["a",2,"ā"],
         ["āyo",0,"a"],
         ["āhi",0,"a"],
         ["ābhi",0,"a"],
@@ -664,8 +660,8 @@ sc.paliLookup = {
         ["esu",0,"o"],
         ["ato",2,"ati"],
         ["atā",2,"ati"],
-        ["ato",2,"aati"],
-        ["atā",2,"aati"],
+        ["ato",2,"āti"],
+        ["atā",2,"āti"],
         ["eto",2,"eti"],
         ["etā",2,"eti"],
         ["oto",2,"oti"],
@@ -678,14 +674,10 @@ sc.paliLookup = {
         ["atā",1,"ati"],
         ["iya",2,"a"],
         ["uyaṃ",0,""],
-        ["ati",0,"ati"],
-        ["āti",0,"āti"],
-        ["eti",0,"eti"],
-        ["oti",0,"oti"],
         ["anti",0,"ati"],
         ["si",3,"ti"],
         ["asi",0,"ati"],
-        ["atha",0,"aati"],
+        ["atha",0,"āti"],
         ["āmi",0,"ati"],
         ["āma",0,"ati"],
         ["āmi",0,"āti"],
@@ -983,8 +975,8 @@ sc.paliLookup = {
     markupGenerator: {
         paliAlphaRex: /([aiueokgcjtdnpbmyrlvshāīūṭḍṅṇṃñḷ])/i,
         paliRex: /([aiueokgcjtdnpbmyrlvshāīūṭḍṅṇṃñḷ’­”]+)/ig,
-        splitRex: /([^  \n,.– —:;?!"'“‘-]+)/,
-        defaultExcludeFn: function(node) {
+        splitRex: /(&[a-z]+;|<\??[a-z]+[^>]*>|[^  \n,.– —:;?!"'“‘\/\-]+)/i,
+        excludeFn: function(node) {
             if (node.parentNode.nodeName == 'A') {
                 if ($(node.parentNode).parents('h1,h2,h3,h4,h5').length == 0) {
                     return false
@@ -995,11 +987,11 @@ sc.paliLookup = {
         },
         wrapWords: function(node, markupOpen, markupClose, excludeFn) {
             var self = this,
-                contents = $(node).contents();
-            if (excludeFn === undefined) {
-                excludeFn = self.defaultExcludeFn;
-            }
+                contents = $(node).contents(),
+                excludeFn = self.excludeFn;
+
             $(node).textNodes().each(function(i, node){
+                console.log(i, node, node.parentNode, excludeFn(node));
                 if (excludeFn && excludeFn(node)) {
                     return
                 }

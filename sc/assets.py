@@ -176,6 +176,7 @@ def get_env():
         'js/vendor/elasticsearch-5.0.0.js',
         'js/lib/text-nodes.js',
         'js/lib/pali-sort.js',
+        'js/lib/sorted-stringify.js',
         'js/sc_popup.js',
         'js/paliLookup2.0.js',
         filters='rjsmin',
