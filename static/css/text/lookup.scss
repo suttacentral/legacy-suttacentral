@@ -48,6 +48,10 @@
         border-top: 1px grey solid;
         margin: 0.2em;
     }
+    
+    tfoot {
+        border-top: 1px grey solid;
+    }
 
     .ideograph a:link {
         text-decoration: none;
@@ -66,8 +70,7 @@
 }
 
 
-.text-popup
-
+.text-popup {
     .content {
         word-break: break-word;
     }
@@ -183,6 +186,28 @@
     }
     button {
         width: 7%;
+    }
+}
+
+.term {
+    .diff-replace, .diff-delete, .diff-insert {
+      background-color: mix(#ffb, #F7D1C2, 60%);
+    }
+}
+
+.text-popup .hide {
+    display: none;
+}
+
+
+
+td.unhide {
+    text-align: right;
+    font-size: 60%;
+    background: lighten(#F7D1C2, 8%);
+    &:hover {
+        background: lighten(#F7D1C2, 12%);
+        cursor: pointer;
     }
 }
 

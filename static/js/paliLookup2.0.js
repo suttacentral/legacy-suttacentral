@@ -158,14 +158,18 @@ sc.paliLookup = {
         
         self.msearch(query).then(function(results) {
             
-            var hits = self.getScoredHits(results.responses, weights);
-            
-            var table = $('<table class="pali"/>');
-            
-            hits.slice(0, 4).forEach(function(hit) {
+            var hits = self.getScoredHits(results.responses, weights),
+                table = $('<table class="pali"/>'),
+                maxScore = _(hits).chain().pluck('_score').max().value(),
+                hiddenCount = 0;
+            hits.forEach(function(hit) {
                 var tr = $('<tr/>').appendTo(table);
                 if (hit._score < 5) {
                     tr.addClass('poor-match')
+                }
+                if (maxScore > 1 && hit._score < 5 && hit._score < maxScore) {
+                    tr.addClass('hide');
+                    hiddenCount += 1;
                 }
                 $('<td class="term"/>').text(hit._source.term).appendTo(tr);
                 var meaning = $('<td class="meaning"/>').appendTo(tr);
@@ -182,13 +186,14 @@ sc.paliLookup = {
                     content.find('dd > p:first-child').contents().unwrap();
                 });                                        
             });
+            
             if (includeGlossary) {
-                $('<tr class="glossary"><td colspan=2></td></tr>')
+                $('<tfoot><tr class="glossary"><td colspan=2></td></tr></tfoot>')
                            .appendTo(table)
                            .find('td')
                            .append(self.glossary.createInputBar(term));
             }
-            
+            self.addUnhideBar(table);
             var popupAnchor = $(node).children('.lookup-word-marker');
             popup = sc.popup.popup(popupAnchor[0], table);
             if (popup) {
@@ -198,8 +203,49 @@ sc.paliLookup = {
                     self.expandEntry(this, popup);
                     return false
                 });
+                
+                if (popup.tipsy) {
+                    popup.find('[title]').removeAttr('title');
+                }
+                
+                if (window.PTL) {
+                    popup.find('.poor-match .term').each(function(){
+                        var ele = $(this),
+                            searchTerm = ele.text();
+                        
+                        if (term == searchTerm) return
+                        
+                        ele.html(window.PTL.editor.doDiff(term, searchTerm));
+                        var last = ele.contents().last()
+                        if (last.is('.diff-delete') && last.text() == 'ṃ') {
+                            last.remove();
+                        }
+                    });
+                }
+                
+                
             }
         });
+    },
+    addUnhideBar: function(table) {
+        var self = this,
+            hiddenCount = table.find('tr.hide').length;
+        
+        if (hiddenCount > 0) {
+            var string = hiddenCount == 1 ? ' fuzzy result…' : ' fuzzy results…',
+                tr = $('<tr><td colspan=2 class="unhide">' + hiddenCount + string + '</td></tr>')
+                .appendTo(table);
+            tr.one('click', function() {
+                table.find('tr.hide')
+                     .slice(0, hiddenCount == 5 ? 5 : 4)
+                     .removeClass('hide');
+                tr.remove();
+                self.addUnhideBar(table);
+                if (table.parent().length) {
+                    table.parent().data('alignFn')();
+                }
+            });
+        }
     },
     expandEntry: function(entry, popup) {
         var textField = $('<div class="popup-text-overlay"/>').html($(entry).html()),
@@ -495,7 +541,9 @@ sc.paliLookup = {
     conjugate: function(word){
         var self = this;
         var results = [word];
-        results.push(word.slice(0, -1));
+        if (word.length > 3) {
+            results.push(word.slice(0, -1));
+        }
         for (var pass = 0; pass < 2; pass++) {
             if (pass == 1) {
                 if (word.slice(-1) == 'ṃ') {
@@ -511,7 +559,7 @@ sc.paliLookup = {
                     new_suffix = ending[2];
                     
                     
-                if(word.length > min_length && word.substring(word.length - suffix.length, word.length) === suffix) {
+                if(word.length > min_length && word.slice(-suffix.length) == suffix) {
                     var new_word = word.slice(0, -suffix.length) + new_suffix;
                     if (new_word.length >= 2) {
                         results.push(new_word);

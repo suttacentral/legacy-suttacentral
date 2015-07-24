@@ -121,7 +121,7 @@ def get_env():
     css_palilookup_standalone = webassets.Bundle(
         'css/text/lookup.scss',
         filters='pyscss',
-        output='css/compiled/paliLookup2.0-standalone.css')
+        output='css/compiled/paliLookup2.1-standalone.css')
     
     env.register('css_paliLookup_standalone', css_palilookup_standalone)
     env.register('css_free', css_free)
@@ -180,7 +180,7 @@ def get_env():
         'js/sc_popup.js',
         'js/paliLookup2.0.js',
         filters='rjsmin',
-        output='js/compiled/paliLookup2.0-standalone.js'
+        output='js/compiled/paliLookup2.1-standalone.js'
     )
     env.register('paliLookup-standalone', paliLookup_standalone)
 
