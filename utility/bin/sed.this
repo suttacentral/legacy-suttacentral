@@ -1,0 +1,1 @@
+sed -i -e s/ā/ah/g -e s/ī/ee/g -e s/ū/oo/g -e s/Ā/ah/g -e s/Ī/Ee/g -e s/Ū/Oo/g -e s/ṭ/t/g -e s/Ṭ/T/g -e s/ḍ/d/g -e s/Ḍ/D/g -e s/ḷ/l/g -e s/ṃ/ng/g -e s/ṇ/n/g -e s/ṅ/ng/g -e s/ṁ/ng/g -e s/\’/\'/g *.txt
