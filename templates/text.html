@@ -87,7 +87,7 @@
                                     + (['root'] if text_ref.lang.uid == (sutta if sutta else division.collection).lang.uid else [])
                                     + (['this'] if not offsite and lang_code == text_ref.lang.uid else []) %}
                     <li{% if classes %} class="{{ classes|join(' ') }}"{% endif %}>
-                        <a href="{{ text_ref.url }}" title="{{ text_ref.abstract }}" {% if offsite %}target="_blank"{% endif %}>{{ text_ref.lang.name }}</a></li>
+                        <a href="{{ text_ref.url }}" title="{{ text_ref.abstract }}" {% if offsite %} target="_blank"{% endif %}>{{ text_ref.lang.name }}</a></li>
                     {% endfor %}
                     
                 </ul>

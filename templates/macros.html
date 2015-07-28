@@ -46,7 +46,8 @@
 {% if sutta.translations %}
 <div class="translations">
 {% for translation in sutta.translations -%}
-<a href='{{translation.url}}' class='tran' {% if translation.abstract -%} title='{{translation.abstract}}'{% endif %}>{{translation.lang.iso_code}}</a>
+{% set offsite = translation.url[0] != '/' %}
+<a href='{{translation.url}}' class='tran' {% if translation.abstract -%} title='{{translation.abstract}}'{% endif %} {% if offsite %}target="_blank"{% endif %}>{{translation.lang.iso_code}}</a>
 {% endfor -%}
 </div>
 {% endif %}
