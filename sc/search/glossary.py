@@ -13,16 +13,32 @@ es = sc.search.es
 
 logger = logging.getLogger(__name__)
 
+INDEX_NAME = 'pi2en-glossary'
+FILE = sc.data_dir / 'dicts' / 'en' / 'bb_glossary.json'
+
 def normalize(term):
     term = term.lower()
     term = unicodedata.normalize('NFC', term)
     term = term.replace('\xad', '').replace('ṁ', 'ṃ').replace('ṃg', 'ṅg').replace('ṃk', 'ṅk')
     return term
 
+def periodic_update(i):
+    try:
+        result = es.get(INDEX_NAME, 'mtime', 'mtime')
+        stored_mtime = result['_source']['mtime']
+    except elasticsearch.exceptions.NotFoundError:
+        stored_mtime = None
+    
+    file_mtime = FILE.stat().st_mtime_ns
+    if str(file_mtime) == str(stored_mtime):
+        return
+    else:
+        load()
+        es.index(INDEX_NAME, 'mtime', {'mtime': file_mtime}, 'mtime')
+
 def load():
  try:
-    file = sc.data_dir / 'dicts' / 'en' / 'bb_glossary.json'
-    with file.open() as f:
+    with FILE.open() as f:
         data = json.load(f)
     seen = defaultdict(int)
     for pali, gloss, context in data:

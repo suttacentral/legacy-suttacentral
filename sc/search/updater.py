@@ -12,12 +12,14 @@ import sc.search.indexer
 import sc.search.dicts
 import sc.search.texts
 import sc.search.suttas
+import sc.search.glossary
 import sc.search.discourse
 import sc.search.autocomplete
 
 scheduler = sched.scheduler()
 
 localdata_functions = [
+    ('sc.search.glossary.periodic_update', sc.search.glossary.periodic_update),
     ('sc.search.dicts.periodic_update', sc.search.dicts.periodic_update),
     ('sc.search.suttas.periodic_update', sc.search.suttas.periodic_update),
     ('sc.search.texts.periodic_update', sc.search.texts.periodic_update),
