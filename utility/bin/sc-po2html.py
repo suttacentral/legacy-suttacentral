@@ -28,6 +28,7 @@ class Po2Html:
         with open(file, 'r', encoding='utf8') as f:
             string = f.read()
         dropping = True
+        last_is_comment = False
         out = [self.head()]
         for m in regex.finditer(r'#:\s*(?<comment>.*)|msgstr (?:"(?<msgstr>.*)"\n?)+', string):
             print(m[0], dropping)
@@ -41,8 +42,16 @@ class Po2Html:
             else:
                 if m['comment']:
                     out.append(m['comment'])
+                    last_is_comment = True
                 else:
-                    out.append(self.unescape(' '.join(m.captures('msgstr'))))
+                    passage = self.unescape(' '.join(m.captures('msgstr')))
+                    passage = passage.strip()
+                    if passage:
+                        if not last_is_comment:
+                            out.append(' ')
+                        last_is_comment = False
+                        out.append(passage)
+                    
         html_string = ''.join(out)
         return self.pretty_print(html_string)
     

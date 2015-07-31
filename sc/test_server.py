@@ -98,6 +98,7 @@ def stop(exit_code, msg=None):
         cherrypy.engine.exit()
         cherrypy.server.stop()
         logger.info('Now shutting down test server on port {}'.format(sc.config['test']['port']))
+        time.sleep(1)
     except NameError:
         pass
     time.sleep(0.5)
