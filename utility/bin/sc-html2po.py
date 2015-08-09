@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import time
 import regex
 import hashlib
@@ -8,24 +9,33 @@ import argparse
 import lxml.html
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Convert HTML to PO')
-    parser.add_argument('infiles', type=str, nargs='+', help="Source HTML Files")
+    parser = argparse.ArgumentParser(description='Convert HTML to PO',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('-f', '--flat', action='store_true', help="Don't use relative paths")
+    parser.add_argument('-z', '--no-zfill', action='store_true', help="Don't zfill numbers")
     parser.add_argument('--out', type=str, help="Destination Folder")
-    parser.add_argument('--strip-tags', type=str, help="CSS selector for stripping tags but leaving text")
-    parser.add_argument('--strip-trees', type=str, help="CSS selector for removing entire element trees")
+    parser.add_argument('--strip-tags',
+                        type=str,
+                        help="CSS selector for stripping tags but leaving text",
+                        default=".ms, .msdiv")
+    parser.add_argument('--strip-trees',
+                        type=str,
+                        help="CSS selector for removing entire element trees",
+                        default="#metaarea")
+    parser.add_argument('infiles', type=str, nargs='+', help="Source HTML Files")
     return parser.parse_args()
     
 args = parse_args()
 
-if args.strip_tags:
-    strip = args.strip
-else:
-    strip = '.var, .cross, .ms, .msdiv, q.open, q.close'
-
-if args.strip_trees:
-    remove = args.strip_trees
-else:
-    remove = '#metaarea'
+strip = args.strip_tags
+remove = args.strip_trees
+infiles = []
+for infile in args.infiles:
+    infile = pathlib.Path(infile)
+    if infile.is_dir():
+        infiles.extend(infile.glob('**/*.html'))
+    else:
+        infiles.append(infile)
 
 if args.out:
     outpath = pathlib.Path(args.out)
@@ -184,7 +194,7 @@ msgstr ""
 "POT-Creation-Date: {}\n"
 "Last-Translator: sujato <sujato@gmail.com>\n"
 "Language-Team: suttacentral\n"
-"Language: en_GB\n"
+"Language: pi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -230,11 +240,68 @@ msgstr ""
         self.uid = pathlib.Path(filename).stem
         self.recursive_deconstruct(root)
 
+common_path = None
+if not args.flat and len(infiles) > 0:
+    common_path = pathlib.Path(os.path.commonprefix([str(p) for p in infiles]))
 
-for file in args.infiles:
-    outfile = outpath / pathlib.Path(file).with_suffix('.po').name
+class ZFiller:
+    def __init__(self):
+        self.tree = {}
+        self.seen = set()
+    
+    def split(self, string):
+        return [int(part) if part.isdigit() else part 
+                for part
+                in regex.findall(r'\p{alpha}+|\d+|[^\p{alpha}\d]+', string)]
+    
+    def add_files(self, files):
+        for file in files:
+            string = file.relative_to(common_path)
+            parts = self.split(str(string))
+            branch = self.tree
+            for part in parts:
+                if part not in branch:
+                    branch[part] = {}
+                branch = branch[part]
+                self.seen.add(part)
+    
+    def zfill(self, string):
+     try:
+        parts = self.split(string)
+        out = []
+        branch = self.tree
+        for part in parts:
+            if isinstance(part, int):
+                maxlen = len(str(max(branch.keys())))
+                out.append(str(part).zfill(maxlen))
+            else:
+                out.append(part)
+            branch = branch[part]
+        return ''.join(out)
+     except Exception as e:
+         globals().update(locals())
+         raise
+
+if not args.no_zfill:
+    z = ZFiller()
+    z.add_files(infiles)
+
+for file in infiles:
+    if common_path:
+        outfile = file.relative_to(common_path)
+    else:
+        outfile = file.stem        
+        
+    if not args.no_zfill:
+        outfile = z.zfill(str(outfile.parent / outfile.stem))
+    outfile = outpath / (str(outfile) + '.po')
+    try:
+        outfile.parent.mkdir(parents=True)
+    except FileExistsError:
+        pass
+    
     html2po = Html2Po()
-    html2po.process(file)
+    html2po.process(str(file))
     string = html2po.tostring()
     with outfile.open('w', encoding='utf8') as f:
         f.write(string)
