@@ -10,7 +10,7 @@ sc = window.sc || {};
  * Note that altough the API is able to make PUSH and DELETE requests
  * and so on, all requests made to https://elastic.suttacentral.net
  * are converted to GET before being received by the elasticsearch
- * server. As such only the public API is readonly.
+ * server. As such the public API is readonly.
  *
  */
 

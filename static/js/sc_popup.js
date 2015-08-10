@@ -73,13 +73,23 @@ sc.popup = {
         popup.mouseenter(function(e) {
             self.isPopupHover = true
         });
+        function remove() {
+            popup.fadeOut(500);
+            self.isPopupHover = false
+
+        }
         setTimeout(function(){
+            if (!popup.is(':hover')) {
+                remove();
+            }                
             popup.mouseleave(function(e){
                 if (protected) {
                     return
                 }
-                $(this).remove();
-                self.isPopupHover = false
+                remove();
+            }).mouseenter(function(e){
+                self.isPopupHover = true
+                popup.stop().fadeIn(0);
             });
         }, 1500)
         this.clear();
