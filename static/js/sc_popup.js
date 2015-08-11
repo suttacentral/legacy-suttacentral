@@ -3,13 +3,15 @@ sc.popup = {
     isPopupHover: false,
     popups: [],
     popup: function(parent, popup, protected) {
+        console.log(parent, popup);
         var self = this,
             offset,
             docWith,
             dupe,
             docWidth,
             isAbsolute = false,
-            markupTarget = $(document.body);
+            markupTarget = $(document.body),
+            entered = false;
         if (self.isPopupHover) {
             return false
         }
@@ -65,7 +67,15 @@ sc.popup = {
             }
             popup.offset(offset)
             markupTarget.append(popup)
+            if (offset.top < 0) {
+                console.log('Adjusting Popup Top');
+                popup.height(popup.height() + offset.top);
+                offset.top = 0;
+                popup.css({'overflow-x': 'initial',
+                           'overflow-y': 'scroll'}) 
+            }
             popup.offset(offset)
+            
         }
         
         align();
@@ -79,16 +89,17 @@ sc.popup = {
 
         }
         setTimeout(function(){
-            if (!popup.is(':hover')) {
+            if (entered && !popup.is(':hover')) {
                 remove();
-            }                
+            }
             popup.mouseleave(function(e){
                 if (protected) {
                     return
                 }
                 remove();
             }).mouseenter(function(e){
-                self.isPopupHover = true
+                entered = true;
+                self.isPopupHover = true;
                 popup.stop().fadeIn(0);
             });
         }, 1500)

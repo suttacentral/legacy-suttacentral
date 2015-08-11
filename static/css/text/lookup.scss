@@ -67,6 +67,15 @@
         color: saturated-color(dark-purple);
         background: yellow;
     }
+    
+    .accept {
+        color: #666;
+        cursor: pointer;
+    }
+    .accepted {
+        font-weight: bold;
+        color: #000;
+    }
 }
 
 

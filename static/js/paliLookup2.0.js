@@ -46,6 +46,7 @@ sc.paliLookup = {
             self.client = elasticsearch.Client({
                 hosts: args.elasticUrl
             });
+            sc.paliLookup.termBreakCache.loadFromServer();
             sc.paliLookup.glossary.init();
         }
         
@@ -69,7 +70,11 @@ sc.paliLookup = {
                     sc.popup.clear(true);
                     var term = self.getTerm(e.target),
                         query = self.buildQueryStandard(term);
-                    self.lookup(e.target, term, query.query, query.weights, true);
+                    self.lookup({node: e.target,
+                                 term: term,
+                                 query: query.query,
+                                 weights: query.weights,
+                                 includeGlossary: true});
                     
                     //Precache next terms
                     if (self.lookaheadN) {
@@ -96,6 +101,7 @@ sc.paliLookup = {
             sc.popup.clear(true);
             self.decomposeMode(e.target);
         });
+        $(window).on('unload', this.termBreakCache.saveToServer);
     },
     removeHandlers: function() {
         sc.popup.clear(true);
@@ -145,19 +151,25 @@ sc.paliLookup = {
                 
             });
         }
-        
-        out.sort(function(a, b) { return a - b; })
+        console.log('OUT: ', out);
+        out.reverse();
+        out = _.sortBy(out, function(a, b) { return b._score - a._score; })
         return out
     },
-    lookup: function(node, term, query, weights, includeGlossary) {
-        var self = this;
+    lookup: function(args) {
+        var self = this,
+            node = args.node,
+            term = args.term,
+            query = args.query,
+            weights = args.weights, 
+            includeGlossary = args.includeGlossary,
+            preFn = args.preFn;
         
         var term = term || self.getTermNormalized(node);
         if (!term) return
         console.log('Now searching', [query, weights]);
         
         self.msearch(query).then(function(results) {
-            
             var hits = self.getScoredHits(results.responses, weights),
                 table = $('<table class="pali"/>'),
                 maxScore = _(hits).chain().pluck('_score').max().value(),
@@ -194,6 +206,9 @@ sc.paliLookup = {
                            .append(self.glossary.createInputBar(term));
             }
             self.addUnhideBar(table);
+            if (preFn) {
+                preFn(table);
+            }
             var popupAnchor = $(node).children('.lookup-word-marker');
             popup = sc.popup.popup(popupAnchor[0], table);
             if (popup) {
@@ -281,6 +296,7 @@ sc.paliLookup = {
         var offset = popupAnchor.offset();
         offset.top -= em / 3;
         offset.left -= em / 2;
+        
         popup.parent().offset(offset);
         popup.on('mouseover click', '.letter', function(e) {
             $('.letter.selected').removeClass('selected');
@@ -292,7 +308,32 @@ sc.paliLookup = {
             out = self.normalizeTerm(out);
             sc.popup.clear();
             var query = self.buildQueryDecomposed(out);
-            self.lookup(node, out, query.query, query.weights);
+            self.lookup({node: node,
+                         term: out,
+                         query: query.query,
+                         weights: query.weights,
+                         preFn: function(popup){
+                             popup.find('tr').each(function() {
+                                var tr = $(this),
+                                    td = $('<td class="accept">✓</td>'),
+                                    thisTerm = tr.children('.term').text();
+                                if ((self.termBreakCache.retrieve(term) || []).indexOf(thisTerm) != -1) {
+                                    td.addClass('accepted');
+                                }
+                                tr.append(td);
+                            })
+                            popup.on('click', '.accept', function(){
+                                var thisTerm = $(this).siblings('.term').text();
+                                if ($(this).hasClass('accepted')) {
+                                    $(this).removeClass('accepted');
+                                    self.termBreakCache.unstore(term, thisTerm);
+                                } else {
+                                    self.termBreakCache.store(term, thisTerm);
+                                    $(this).addClass('accepted');
+                                }
+                            });
+                         }
+                        })
             return false
         })
     },
@@ -358,6 +399,16 @@ sc.paliLookup = {
             filter: {
                 term: {
                     'term.normalized': term
+                }
+            }
+        }
+    },
+    exactQueryTerms: function(terms) {
+        return {
+            _source: this.source,
+            filter: {
+                terms: {
+                    'term.normalized': terms
                 }
             }
         }
@@ -431,18 +482,31 @@ sc.paliLookup = {
         }
     },
     buildQueryStandard: function(term) {
-        term = this.normalizeTerm(term);
+        var term = this.normalizeTerm(term),
+            body = [
+                    {}, this.exactQuery(term),
+                    {}, this.conjugatedQuery(term),
+                    {}, this.fuzzyQuery(term)
+                   ],
+            weights = [10, 5, 1],
+            components = this.termBreakCache.retrieve(term);
+        if (components) {
+            components.forEach(function(component) {
+                body.push({});
+                body.push(this.exact
+                
+            });
+            body.push({});
+            body.push(this.exactQueryTerms(components));
+            weights.push(8);
+        }
         return {
             query: {
                 index: this.index,
                 type: this.type,
-                body: [
-                    {}, this.exactQuery(term),
-                    {}, this.conjugatedQuery(term),
-                    {}, this.fuzzyQuery(term)
-                ]
+                body: body
             },
-            weights: [10, 5, 1]
+            weights: weights
         }
     },
     buildQueryDecomposed: function(term) {
@@ -568,6 +632,57 @@ sc.paliLookup = {
             }
         }
         return _.uniq(results);
+    },
+    termBreakCache: {
+        storage: {},
+        keyize: function(term) {
+            return sc.paliLookup.normalizeTerm(sc.paliLookup.deTiTerm(term));
+        },
+        store: function(term, component) {
+            var key = this.keyize(term)
+                components = this.storage[key] || [];
+            if (components.indexOf(component) == -1) {
+                components.push(component);
+                this.storage[key] = components;
+            }
+        },
+        unstore: function(term, component) {
+            var key = this.keyize(term),
+                components = this.storage[key] || [],
+                index = components.indexOf(component);
+            if (index >= 0) {
+                components.splice(index, 1);
+                this.storage[key] = components;
+            }
+        },
+        retrieve: function(term) {
+            return this.storage[this.keyize(term)];
+        },
+        remove: function(term) {
+            delete this.storage[this.keyize(term)];
+        },
+        saveToServer: function() {
+            sc.paliLookup.client.index({
+                index: 'pali-lookup',
+                type: 'compounds',
+                id: 'localuser',
+                body: {
+                    data: this.storage
+                }
+            })  
+        },
+        loadFromServer: function() {
+            var self = this;
+            sc.paliLookup.client.get({
+                index: 'pali-lookup',
+                type: 'compounds',
+                id: 'localuser'
+            }).then(function(resp) {
+                self.storage = resp._source.data;
+            }).error(function() {
+                return
+            });
+        }
     },
     // suffix, keep count, min word length, replacement
     endings: [
@@ -1099,3 +1214,5 @@ sc.paliLookup = {
         }
     }
 }
+
+_.bindAll(sc.paliLookup.termBreakCache, "keyize", "store", "unstore", "retrieve", "remove", "saveToServer", "loadFromServer");
