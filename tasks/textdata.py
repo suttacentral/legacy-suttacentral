@@ -1,14 +1,11 @@
 from tasks.helpers import *
 
 @task
-def rebuild():
-    """ Rebuild Text Info Model without causing downtime """
-    # This is useful after changes to TextData that require every
-    # entry be updated.
-    blurb(rebuild)
+def ensure_up_to_date():
+    """ Ensure the TextInfoModel is up to date """
+    blurb(ensure_up_to_date)
     import sc.textdata
-    tim = sc.textdata.tim_no_update()
-    tim.build(force=True)
+    sc.textdata.ensure_up_to_date()
 
 @task
 def deletelang(lang):

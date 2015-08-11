@@ -36,7 +36,7 @@ def _color_print(string, color):
 
 def blurb(function):
     """Print the function's docstring in present participle tense."""
-    text = function.__doc__
+    text = function.__doc__.strip()
     first, rest = text.split(' ', 1)
     first = _PP_HINTS.get(first, first + 'ing')
     notice('{} {}..'.format(first, rest))

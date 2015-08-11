@@ -579,8 +579,8 @@ def periodic_update(i):
         tim_manager.load(quick=False)
         
 
-def rebuild_tim():
-    tim_manager.load()
+def ensure_up_to_date():
+    tim_manager.load(quick=False)
 
 class PaliPageNumbinator:
     msbook_to_ptsbook_mapping = {
