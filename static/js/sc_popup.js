@@ -2,8 +2,7 @@ sc = window.sc || {};
 sc.popup = {
     isPopupHover: false,
     popups: [],
-    popup: function(parent, popup, protected) {
-        console.log(parent, popup);
+    popup: function(location, popup, protected) {
         var self = this,
             offset,
             docWith,
@@ -27,16 +26,16 @@ sc.popup = {
         
         function align() {
             popup.removeAttr('style');
-            if ('left' in parent || 'top' in parent) {
-                offset = parent
+            if ('left' in location || 'top' in location) {
+                offset = location
                 offset.left = offset.left || 0
                 offset.top = offset.top || 0
-                parent = document.body
+                location = document.body
                 isAbsolute = true
 
             } else {
-                parent = $(parent)
-                offset = parent.offset()
+                location = $(location)
+                offset = location.offset()
             }
             
             //We need to measure the doc width now.
@@ -52,7 +51,7 @@ sc.popup = {
             //actual popup and measure that, then any transition effects
             //cause it to zip from it's original position...
             if (!isAbsolute) {
-                offset.top += parent.innerHeight() - popupHeight - parent.outerHeight();
+                offset.top += location.innerHeight() - popupHeight - location.outerHeight();
                 offset.left -= popupWidth / 2;
             }
 
@@ -68,7 +67,6 @@ sc.popup = {
             popup.offset(offset)
             markupTarget.append(popup)
             if (offset.top < 0) {
-                console.log('Adjusting Popup Top');
                 popup.height(popup.height() + offset.top);
                 offset.top = 0;
                 popup.css({'overflow-x': 'initial',
@@ -83,20 +81,26 @@ sc.popup = {
         popup.mouseenter(function(e) {
             self.isPopupHover = true
         });
-        function remove() {
-            popup.fadeOut(500);
-            self.isPopupHover = false
-
-        }
-        setTimeout(function(){
-            if (entered && !popup.is(':hover')) {
-                remove();
-            }
-            popup.mouseleave(function(e){
-                if (protected) {
+        function removeIfNeeded() {
+            if (protected) return
+            var node = popup,
+                visited = [];
+            while (node) {
+                if ($(node).is(':hover')) {
+                    setTimeout(removeIfNeeded, 300);
                     return
                 }
-                remove();
+                node = $(node).data('parent');
+                if (visited.indexOf(node) != -1) break
+                visited.push(node);
+            }
+            popup.fadeOut(500);
+            self.isPopupHover = false
+        }
+        setTimeout(function(){
+            removeIfNeeded();
+            popup.mouseleave(function(e){
+                removeIfNeeded();
             }).mouseenter(function(e){
                 entered = true;
                 self.isPopupHover = true;
@@ -104,6 +108,7 @@ sc.popup = {
             });
         }, 1500)
         this.clear();
+        
         if (protected) {
             popup.data('protected', protected);
         }

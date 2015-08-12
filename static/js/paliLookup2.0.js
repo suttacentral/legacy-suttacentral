@@ -91,7 +91,6 @@ sc.paliLookup = {
                                    var term = self.getTerm(element);
                                    lookaheadQueries.push(self.buildQueryStandard(term).query);
                                });
-                        console.log(lookaheadQueries);
                         self.msearchPrecache(lookaheadQueries);
                     }
                 }
@@ -101,7 +100,6 @@ sc.paliLookup = {
             sc.popup.clear(true);
             self.decomposeMode(e.target);
         });
-        $(window).on('unload', this.termBreakCache.saveToServer);
     },
     removeHandlers: function() {
         sc.popup.clear(true);
@@ -137,7 +135,6 @@ sc.paliLookup = {
             var result = results[i],
                 weight = weights[i] || 1,
                 max_score = result.hits.max_score;
-                console.log(max_score);
             result.hits.hits.forEach(function(hit) {
                 var score = weight * hit._score / max_score,
                     seenHit = seen[hit._id];
@@ -151,8 +148,6 @@ sc.paliLookup = {
                 
             });
         }
-        console.log('OUT: ', out);
-        out.reverse();
         out = _.sortBy(out, function(a, b) { return b._score - a._score; })
         return out
     },
@@ -160,6 +155,7 @@ sc.paliLookup = {
         var self = this,
             node = args.node,
             term = args.term,
+            parent = args.parent || args.node,
             query = args.query,
             weights = args.weights, 
             includeGlossary = args.includeGlossary,
@@ -167,7 +163,6 @@ sc.paliLookup = {
         
         var term = term || self.getTermNormalized(node);
         if (!term) return
-        console.log('Now searching', [query, weights]);
         
         self.msearch(query).then(function(results) {
             var hits = self.getScoredHits(results.responses, weights),
@@ -211,6 +206,8 @@ sc.paliLookup = {
             }
             var popupAnchor = $(node).children('.lookup-word-marker');
             popup = sc.popup.popup(popupAnchor[0], table);
+            popup.data('parent', parent);
+            
             if (popup) {
                 popup.find('li').addClass('expandable');
                 popup.on('click', 'li', function(e) {
@@ -292,7 +289,7 @@ sc.paliLookup = {
         var em = Number(getComputedStyle(node, "").fontSize.match(/(\d*(\.\d*)?)px/)[1])
         var pos = $(node).offset();
         var popupAnchor = $(node).children('.lookup-word-marker')
-        sc.popup.popup(popupAnchor.offset(), popup, true);
+        var dPopup = sc.popup.popup(popupAnchor.offset(), popup, true);
         var offset = popupAnchor.offset();
         offset.top -= em / 3;
         offset.left -= em / 2;
@@ -310,6 +307,7 @@ sc.paliLookup = {
             var query = self.buildQueryDecomposed(out);
             self.lookup({node: node,
                          term: out,
+                         parent: dPopup,
                          query: query.query,
                          weights: query.weights,
                          preFn: function(popup){
@@ -482,7 +480,8 @@ sc.paliLookup = {
         }
     },
     buildQueryStandard: function(term) {
-        var term = this.normalizeTerm(term),
+        var self = this,
+            term = this.normalizeTerm(term),
             body = [
                     {}, this.exactQuery(term),
                     {}, this.conjugatedQuery(term),
@@ -493,12 +492,9 @@ sc.paliLookup = {
         if (components) {
             components.forEach(function(component) {
                 body.push({});
-                body.push(this.exact
-                
+                body.push(self.exactQuery(component));
+                weights.push(8);
             });
-            body.push({});
-            body.push(this.exactQueryTerms(components));
-            weights.push(8);
         }
         return {
             query: {
@@ -584,7 +580,6 @@ sc.paliLookup = {
             combined.body = [];
         
         msearch_queries.forEach(function(query, i) {
-            console.log([query], i)
             combined.body.push.apply(combined.body, query.body);
             deferred.push($.Deferred());
         });
@@ -635,6 +630,21 @@ sc.paliLookup = {
     },
     termBreakCache: {
         storage: {},
+        mapping: {},
+        updateMapping: function(key) {
+            var self = this;
+            if (key === undefined) {
+                _.each(this.storage, function(value, key) {
+                    self.updateMapping(key);
+                });
+                return
+            }
+            var conjugations = {};
+            sc.paliLookup.conjugate(key).forEach(function(t) {
+                conjugations[t] = key;
+            })
+            _.extend(this.mapping, conjugations);
+        },
         keyize: function(term) {
             return sc.paliLookup.normalizeTerm(sc.paliLookup.deTiTerm(term));
         },
@@ -644,6 +654,8 @@ sc.paliLookup = {
             if (components.indexOf(component) == -1) {
                 components.push(component);
                 this.storage[key] = components;
+                this.updateMapping(key);
+                this.saveToServer();
             }
         },
         unstore: function(term, component) {
@@ -656,7 +668,19 @@ sc.paliLookup = {
             }
         },
         retrieve: function(term) {
-            return this.storage[this.keyize(term)];
+            var key = this.keyize(term),
+                result = this.storage[key];
+            if (!result || result.length == 0) {
+                var terms = sc.paliLookup.conjugate(key);
+                for (var i = 0; i < terms.length; ++i) {
+                    var mappedTerm = this.mapping[terms[i]];
+                    if (mappedTerm) {
+                        result = this.storage[mappedTerm];
+                        break
+                    }
+                }
+            }
+            return result
         },
         remove: function(term) {
             delete this.storage[this.keyize(term)];
@@ -679,6 +703,7 @@ sc.paliLookup = {
                 id: 'localuser'
             }).then(function(resp) {
                 self.storage = resp._source.data;
+                self.updateMapping();
             }).error(function() {
                 return
             });
@@ -1101,7 +1126,6 @@ sc.paliLookup = {
             this.getEntry(term).then(function(result) {
                 if (result.hits.total > 0) {
                     _(result.hits.hits[0]._source).each(function(value, name) {
-                        console.log(name  +':' + value);
                         if (value) {
                             form.find('[name=' + name + ']').val(value);
                         }
@@ -1109,9 +1133,7 @@ sc.paliLookup = {
                 }
             });
             
-            form.on('submit', function(e) {
-                console.log('Submitting Form', form.serialize());
-                
+            form.on('submit', function(e) {              
                 e.preventDefault();
                 
                 var items = _(form.serializeArray()).chain()
@@ -1124,7 +1146,6 @@ sc.paliLookup = {
                 
                 items.term = items.term.toLowerCase();
                 items.normalized = sc.paliLookup.normalizeTerm(items.term);
-                console.log(items);
                 self.addEntry(items).then(function(e){
                     form.find('button').text('✓');
                 });
@@ -1154,7 +1175,6 @@ sc.paliLookup = {
                 excludeFn = self.excludeFn;
 
             $(node).textNodes().each(function(i, node){
-                console.log(i, node, node.parentNode, excludeFn(node));
                 if (excludeFn && excludeFn(node)) {
                     return
                 }
