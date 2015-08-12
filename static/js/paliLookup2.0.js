@@ -514,7 +514,7 @@ sc.paliLookup = {
                     {}, this.decomposedQuery(term)
                 ]
             },
-            weights: [1]
+            weights: [5]
         }
     },
     _cache: {},
