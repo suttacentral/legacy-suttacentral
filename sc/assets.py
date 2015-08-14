@@ -164,6 +164,7 @@ def get_env():
         'js/text_image.js',
         'js/discourse.js',
         'js/fonts.js',
+        'js/lib/idb-cache.js',
         'js/paliLookup2.0.js',
         sc_data_scripts_file,
         

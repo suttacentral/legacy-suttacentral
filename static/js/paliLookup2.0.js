@@ -18,6 +18,7 @@ sc.paliLookup = {
     _handlers: [],
     lookaheadN: 5,
     index: 'en-dict',
+    type: 'definition',
     main: '#text',
     sources: {
         cped: {
@@ -525,7 +526,53 @@ sc.paliLookup = {
      * @returns {String}
      */
     keyify: function(query) {
-        return sortedStringify(query);
+        var key = 'a',
+            string = orderedStringify(query),
+            m = /"(?:term(?:\.[^"]+)?|normalized)":\[?"([^"]+)"/.exec(string);
+        if (!m) {
+            console.log(string);
+        }
+        key = m[1];
+        key += murmurhash3_32_gc(string);
+        return key
+    },
+    _idbcache: new IDBCache('palilookup-cache', 2),
+    cachedQuery: function(method, query) {
+        var self = this
+            fn = _.bind(sc.paliLookup.client[method], sc.paliLookup.client),
+            key = self.keyify(query);
+
+        if (self._idbcache.available) {
+            var promise = new Promise(function(resolve, reject) {
+                self._idbcache.get(key)
+                              .then(function(result) {
+                                  resolve(result.data);
+                               })
+                              .catch(function(e){
+                                  fn(query)
+                                             .then(function(result) {
+                                                 self._idbcache.add(key, result);
+                                                 resolve(result);
+                                             });
+                              });
+                })
+            return promise;
+        }
+        
+        var promise = this._cache[key];
+        if (!promise) {
+            promise = self.client.msearch(msearch_query)
+            this._cache[key] = promise;
+        }
+        return promise
+    },
+    /**
+     * search "wrapper" which adds caching
+     * @param {Object} query
+     * @returns {Promise}
+     */
+    search: function(query) {
+        return this.cachedQuery('search', query);
     },
     /** 
      * msearch "wrapper" which adds caching
@@ -533,15 +580,7 @@ sc.paliLookup = {
      * @returns {Promise}
      */
     msearch: function(msearch_query) {
-        var self = this;
-        
-        var key = self.keyify(msearch_query);
-        var promise = this._cache[key];
-        if (!promise) {
-            promise = self.client.msearch(msearch_query)
-            this._cache[key] = promise;
-        }
-        return promise
+        return this.cachedQuery('msearch', msearch_query)
     },
     /** Precache queries, returns nothing. Stampede safe.
      * @param {Array} queries to be requested and cached.
@@ -1057,7 +1096,7 @@ sc.paliLookup = {
                     }
                 }
             }
-            return this.client.search({index: this.index,
+            return sc.paliLookup.search({index: this.index,
                                          type: this.type,
                                          body: body});
         },                            
@@ -1109,7 +1148,7 @@ sc.paliLookup = {
             if (args) {
                 _.extend(query, args);
             }
-            return this.client.search(query);
+            return sc.paliLookup.search(query);
         },
         createInputBar: function(term) {
             var self = this;
