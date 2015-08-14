@@ -142,6 +142,7 @@ def get_env():
         'js/vendor/jquery.scrolllock.js',
         'js/vendor/jquery.unveil.js',
         'js/vendor/jquery.details.js',
+        'js/vendor/murmurhash3_gc.js',
         'js/lib/text-nodes.js',
         'js/lib/pali-sort.js',
         'js/lib/sorted-stringify.js',
