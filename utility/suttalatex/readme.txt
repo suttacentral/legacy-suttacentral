@@ -9,7 +9,7 @@ Inside this directory there are 6 files that need to be translated:
 
 1. about.txt - translate this text exactly - it will be used on the last page of the document.
 2. bio.txt - write a biography of the author. Do not put the author's name at the bottom or top - this will be done automatically.
-3. coverbacktext.txt - write a short text for the back of the cover. An example text is given.
+3. coverbacktext.txt - write a short text for the back of the cover. An example text is given. (please leave the \quad code in it)
 4. preface.txt - write a preface to the document. Again, do not put the author's name at the bottom, this is done automatically.
 5. trans.txt - translate all texts behind the '=' exactly according to the instructions in the document. Do not change the names before the '='.
 6. vagga.csv - translate the pali headings of the vaggas that you need. It is not necessary to translate all, only the ones you will be using (so no need to translate DN vaggas if you are going to do the MN). Do not change the first 2 columns.
