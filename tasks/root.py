@@ -65,3 +65,10 @@ def update_data():
     blurb(update_data)
     with local.cwd(sc.data_dir):
         run('git pull')
+
+@task
+def update_glossary():
+    """Update the elasticsearch glossary"""
+    from sc.search.glossary import load
+    load()
+    
