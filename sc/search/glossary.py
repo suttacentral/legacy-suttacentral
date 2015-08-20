@@ -6,6 +6,7 @@ import unicodedata
 import sc
 import sc.tools.html
 import sc.textfunctions
+import elasticsearch.exceptions
 from elasticsearch.helpers import bulk
 from sc.search.indexer import ElasticIndexer
 from collections import defaultdict

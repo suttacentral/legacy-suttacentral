@@ -45,6 +45,8 @@ class ElasticIndexer:
     es = es
     version = 1
     suppress_elasticsearch_errors = False
+    
+    non_aliased_indexes = {'pali-lookup', 'pi2en-glossary'}
 
     @property
     def doc_type(self):
@@ -154,6 +156,8 @@ class ElasticIndexer:
         r = self.es.indices.get_aliases('_all')
         for k, v in r.items():
             if k.startswith('.'):
+                continue
+            if k in self.non_aliased_indexes:
                 continue
             if exclude_prefix and k.startswith(exclude_prefix):
                 continue
