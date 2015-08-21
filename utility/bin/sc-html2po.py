@@ -140,7 +140,7 @@ class Html2Po:
             self.add_token(TokenType.comment, m[1])
             html_string = m[2]
         html_string = self.mangle(html_string)
-        pattern = r'(?<!\d+)([.;:!?—][\u200b\s]*)'
+        pattern = r'(?<!\d+)([.;:!?—]\p{punct}*[\u200b\s]*)'
         parts = regex.split(pattern, html_string)
         segments = [''.join(parts[i:i+2]).strip() for i in range(0, len(parts), 2)]
         sentence_count = 0
@@ -242,7 +242,7 @@ msgstr ""
 
 common_path = None
 if not args.flat and len(infiles) > 0:
-    common_path = pathlib.Path(os.path.commonprefix([str(p) for p in infiles]))
+    common_path = pathlib.Path(os.path.commonprefix([str(p if p.is_dir() else p.parent) for p in infiles]))
 
 class ZFiller:
     def __init__(self):
