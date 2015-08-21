@@ -242,7 +242,7 @@ msgstr ""
 
 common_path = None
 if not args.flat and len(infiles) > 0:
-    common_path = pathlib.Path(os.path.commonprefix([str(p if p.is_dir() else p.parent) for p in infiles]))
+    common_path = pathlib.Path(*os.path.commonprefix([(p if p.is_dir() else p.parent).parts for p in infiles]))
 
 class ZFiller:
     def __init__(self):
