@@ -6,7 +6,10 @@ import regex
 import hashlib
 import pathlib
 import argparse
+import logging
 import lxml.html
+
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Convert HTML to PO',
@@ -22,10 +25,19 @@ def parse_args():
                         type=str,
                         help="CSS selector for removing entire element trees",
                         default="#metaarea")
+    parser.add_argument('-v', '--verbose', action='store_true');
     parser.add_argument('infiles', type=str, nargs='+', help="Source HTML Files")
     return parser.parse_args()
     
 args = parse_args()
+
+logger = logging.Logger('sc-html2po')
+handler = logging.StreamHandler()
+logger.addHandler(handler)
+if args.verbose:
+    handler.setLevel('INFO')
+else:
+    handler.setLevel('WARN')
 
 strip = args.strip_tags
 remove = args.strip_trees
@@ -108,7 +120,7 @@ class Html2Po:
 
     def make_close_tag(self, e):
         return '</{}>'.format(e.tag)
-
+    
     def mangle_repl(self, m):
         if m[0] in self.mangle_lookup:
             mangle_key = self.mangle_lookup[m[0]]
@@ -140,7 +152,8 @@ class Html2Po:
             self.add_token(TokenType.comment, m[1])
             html_string = m[2]
         html_string = self.mangle(html_string)
-        pattern = r'(?<!\d+)([.;:!?—]\p{punct}*[\u200b\s]*)'
+        logger.info(html_string)
+        pattern = r'(?<!\d+)([.;:!?—](?:\p{punct}+|\s*MANG[0-9]+GLE[\p{punct}\d]*MANG[0-9]+GLE)*[\u200b\s]*)'
         parts = regex.split(pattern, html_string)
         segments = [''.join(parts[i:i+2]).strip() for i in range(0, len(parts), 2)]
         sentence_count = 0
