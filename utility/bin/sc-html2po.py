@@ -161,7 +161,7 @@ class Html2Po:
             if not segment:
                 continue
             segment = self.demangle(segment)
-            lines = regex.split('(<br[^>]*>)', segment)
+            lines = regex.split('(<br[^>]*>|(?:<a [^>]+></a>)*$)', segment)
             for i in range(0, len(lines), 2):
                 line = lines[i].strip()
                 if line:
