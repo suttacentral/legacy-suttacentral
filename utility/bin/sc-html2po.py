@@ -209,17 +209,17 @@ msgstr ""
     
     def tostring(self):
         parts = [self.preamble()]
-        last_token = None
+        prev_token = None
         for token in self.token_stream:
             if token.type == TokenType.comment:
-                if last_token and (last_token.type == TokenType.comment):
+                if prev_token and (prev_token.type == TokenType.comment):
                     parts[-1] += token.value.strip()
                 else:
                     parts.append('#: {}'.format(token.value.strip()))
             elif token.type == TokenType.text:
                 if token.ctxt:
                     parts.append('msgctxt "{}"'.format(token.ctxt))
-                parts.append('msgid "{}"'.format(token.value.strip().replace('\n', ' ')))
+                parts.append('msgid "{}"'.format(token.value.strip().replace('\n', ' ').replace('"', '\\"')))
                 parts.append('msgstr ""')
             elif token.type == TokenType.newline:
                 parts.append('')
@@ -228,7 +228,7 @@ msgstr ""
                 break
             else:
                 raise ValueError('{} is not a valid type'.format(token.type))
-            last_token = token
+            prev_token = token
         return ('\n'.join(parts))
     
     def process(self, filename):        
