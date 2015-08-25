@@ -27,7 +27,7 @@ def periodic_update(i):
     try:
         result = es.get(INDEX_NAME, 'mtime', 'mtime')
         stored_mtime = result['_source']['mtime']
-    except elasticsearch.exceptions.NotFoundError:
+    except (elasticsearch.exceptions.NotFoundError, KeyError):
         stored_mtime = None
     
     file_mtime = FILE.stat().st_mtime_ns
