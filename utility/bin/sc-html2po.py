@@ -141,7 +141,7 @@ class Html2Po:
 
     def segment_inner(self, e):
         html_string = lxml.html.tostring(e, encoding='unicode').strip()
-        html_string = html_string.replace('\n', ' ').replace('\xad', '').replace('\xa0', ' ')
+        html_string = html_string.replace('\n', ' ').replace('\xa0', ' ')#.replace('\xad', '')
         m = regex.match(r'<[^<]+>\s*(.*)</\w+>', html_string, flags=regex.DOTALL)
         if not m:
             raise ValueError(html_string)
@@ -153,7 +153,7 @@ class Html2Po:
             html_string = m[2]
         html_string = self.mangle(html_string)
         logger.info(html_string)
-        pattern = r'(?<!\d+)([.;:!?—](?:\p{punct}+|\s*MANG[0-9]+GLE[\p{punct}\d]*MANG[0-9]+GLE)*[\u200b\s]*)'
+        pattern = r'(?<!\d+)([.;:!?—](?:\p{punct}+|\s*MANG[0-9]+GLE[\p{punct}\d]*MANG[0-9]+GLE)*[\u200b\s]*|(?<!^)…\s*(?:pe\s*…\s*)?[.;:!?—]*)'
         parts = regex.split(pattern, html_string)
         segments = [''.join(parts[i:i+2]).strip() for i in range(0, len(parts), 2)]
         sentence_count = 0
