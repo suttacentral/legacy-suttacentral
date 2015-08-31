@@ -20,6 +20,7 @@ import argparse, collections, os, regex, sys, time, urllib, urllib.request
 import env
 import sc
 import json
+import pathlib
 from lxml import html
 from urllib.parse import urljoin
 
@@ -88,23 +89,27 @@ def process(host, url, omit_codes=None, omit_rex=None, timeout=30):
         ending = 'html'
         new_url += '.html'
     depth = len(new_url.split('/')) - 1
-    filename = os.path.join(output_dir, new_url)
-    try:
-        os.makedirs(os.path.dirname(filename))
-    except OSError:
-        pass
+    outfile = output_dir / new_url
+    
+    if not outfile.parent.exists():
+        try:
+            outfile.parent.mkdir(parents=True)
+        except OSError:
+            sys.stderr.write('Failed to create folder: {}\n'.format(outfile.parent))
+            return
     pagedata = readurl(fullurl)
 
     if ending not in ('html', 'js', 'css'):
-        with open(filename, 'wb') as f:
+        with outfile.open('wb') as f:
             f.write(pagedata)
         return
+
 
     if ending in ('css', 'js'):
         text = pagedata.decode(encoding='utf8')
         if ending == 'css':
             text = fixcss(text, depth)
-        with open(filename, 'w', encoding='utf8') as f:
+        with outfile.open('w', encoding='utf8') as f:
             f.write(text)
         return
 
@@ -148,7 +153,7 @@ def process(host, url, omit_codes=None, omit_rex=None, timeout=30):
 
         a.attrib[attr] = new_href
 
-    with open(filename, 'wb') as f:
+    with outfile.open('wb') as f:
         f.write(b'<!DOCTYPE html>\n')
         f.write(html.tostring(root, encoding='utf8'))
 
@@ -156,7 +161,7 @@ if __name__ == '__main__':
 
     args = parse_args()
     host = 'http://{}'.format(args.host)
-    output_dir = args.dir
+    output_dir = pathlib.Path(args.dir)
     quiet = args.quiet
     wait = args.wait
     extra_omit = {'sht-lookup'}

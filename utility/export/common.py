@@ -44,11 +44,11 @@ def zip(out_path, in_path, quiet=False):
 
 def x7z(out_path, in_path, quiet=False):
     with plumbum.local.cwd(str(in_path.parent)):
-        # These settings chosen after some testing, -mx=3 is 6x faster
-        # than -mx=5, and 15% larger. 10 minutes to do the compression
-        # is more reasonable than 1 hour.
+        # These settings chosen after some testing. Using PPMd method
+        # results in smaller files and much faster compression than 
+        # LZMA method.
         cmd = plumbum.cmd.nice['-20',
-                plumbum.local['7z']['a', '-t7z', '-mx=3', '-md=1m', '-mmt=off',
+                plumbum.local['7z']['a', '-t7z', '-m0=PPMd', '-mx9', '-mmem=64m', '-mo=32', '-mmt=off',
                     str(out_path), in_path.name]]
         if quiet:
             cmd()
