@@ -1,0 +1,100 @@
+{% raw %}
+\documentclass{article}
+{% endraw %}
+\usepackage{{ '[' }}{{ transl_dict['transl_language'] }}{{ ']' }}{babel}
+\usepackage[papersize={{ '{' }}{{ cover_width }}in, {{ cover_height }}in{{ '}' }},margin=0mm]{geometry}
+{% include 'cover_header.tex' %}
+\fboxsep=0pt%
+\colorbox{pastel-yellow}{\parbox[c][{{ top_bar }}in][c]{1\textwidth}{{ '{' }}%
+\tabular{l}
+\begin{minipage}[c][{{ top_bar }}in]{{ '{' }}{{ margin_lr }}in}\hspace{0.1em}
+\end{minipage}
+\begin{minipage}[c][{{ top_bar }}in]{{ '{' }}{{ book_width }}in}\vspace{0.47in}
+\begin{quote}\setstretch{0.8}\textcolor{cool-blue}{\caps{SuttaCentral}}\\
+\textcolor{dark-medium-gray}{\itshape\footnotesize {{ transl_dict['early_transl'] }}{{ '}' }}\end{quote}\hspace{0.1em}
+\end{minipage}
+\begin{minipage}[c][{{ top_bar }}in]{{ '{' }}{{ spine_width }}in}\vspace{0.25in}
+\centering \textcolor{cool-blue}{SC}
+\end{minipage}
+\begin{minipage}[c][{{ top_bar }}in]{{ '{' }}{{ book_width }}in}\vspace{0.28in}
+\begin{quote}\centering\MakeLowercase{\caps{\sffamily {{ transl_dict['wordsofthebuddha_transl'] }}{{ '}' }}}\end{quote}
+\end{minipage}
+\begin{minipage}[c][{{ top_bar }}in]{{ '{' }}{{ margin_lr }}in}\hspace{0.1em}
+\end{minipage}
+\endtabular}}%
+\textcolor{dark-saturated-red}{\hrule height 0.05in}
+\begin{minipage}[c][{{ text_height }}in]{{ '{' }}{{ margin_lr }}in}\hspace{0.1em}
+\end{minipage}\begin{minipage}[c][{{ text_height }}in]{{ '{' }}{{ book_width }}in}
+\vfill
+\begin{quote}
+{% include coverbacktext %}
+\end{quote}
+\vfill
+\noindent\hfil\rule{0.3333333\textwidth}{.4pt}\hfil
+\begin{center}
+\vfill
+\begin{quote}
+\textit{\sffamily SuttaCentral {{ transl_dict['gathers_transl'] }}{{ '}' }}
+\end{quote}
+\vfill
+\end{center}
+\end{minipage}
+\begin{minipage}[c][{{ text_height }}in]{{ '{' }}{{ spine_width }}in}
+\centering
+\rotatebox{270}{
+{\Large {{ transl_dict['title_transl'] }}{{ '}' }}
+\hspace{2em}
+\lowercase{\caps{\Large {{ transl_dict['author'] }}{{ '}' }}}
+}
+\end{minipage}
+\begin{minipage}[c][{{ text_height }}in]{{ '{' }}{{ book_width }}in}
+\begin{center}
+\vfill
+
+\begin{quote}
+\begin{center}
+\begin{spacing}{2.5}
+{\Huge\SkolarSb {{ transl_dict['title_transl'] }}{{ '}' }}
+\end{spacing}
+\end{center}
+\end{quote}
+
+{\Large\sffamily {{ transl_dict['volumenr_transl'] }}{{ '}' }}
+
+
+\vfill
+
+\emph{\large\sffamily {{ transl_dict['atranslationof_transl'] }}{{ '}' }}
+
+\vspace{1em}
+
+\caps{\LARGE {{ transl_dict['title'] }}{{ '}' }}
+
+\vspace{1em}
+
+\emph{\large\sffamily {{ transl_dict['by_transl'] }}{{ '}' }}
+
+\vspace{1em}
+
+\MakeLowercase{\caps{\Huge\SkolarLight {{ transl_dict['author'] }}{{ '}' }}}
+
+\vfill
+\end{center}
+\end{minipage}\begin{minipage}[c][{{ text_height }}in]{{ '{' }}{{ margin_lr }}in}\hspace{0.1em}
+\end{minipage}
+\fboxsep=0pt%
+\colorbox{{ '{' }}{{ bottom_colour }}{{ '}' }}{\parbox[c][{{ bottom_bar }}in][c]{1\textwidth}{{ '{' }}%
+\tabular{l}
+\begin{minipage}[c][{{ bottom_bar }}in]{{ '{' }}{{ margin_lr }}in}\hspace{0.1em}
+\end{minipage}
+\begin{minipage}[c][{{ bottom_bar }}in]{{ '{' }}{{ book_width }}in}
+\centering \fboxrule=4pt%
+\fcolorbox{white}{white}{\barcode{{ '{' }}{{ isbn }}{{ '}' }}}\vspace{0.25in}
+\end{minipage}\begin{minipage}[c][{{ bottom_bar }}in]{{ '{' }}{{ spine_width }}in}
+\centering \textcolor{white}{\sffamily {{ transl_dict['volumenr_transl'] }}{{ '}' }}\\\bigskip\textcolor{white}{\Huge ☸}\vspace{0.25in}
+\end{minipage}\begin{minipage}[c][{{ bottom_bar }}in]{{ '{' }}{{ book_width }}in}
+\centering \textcolor{white}{\fontsize{60}{60}\selectfont ☸}\vspace{0.25in}
+\end{minipage}\begin{minipage}[c][{{ bottom_bar }}in]{{ '{' }}{{ margin_lr }}in}\hspace{0.1em}
+\end{minipage}
+\endtabular}}%
+\end{document}
