@@ -518,7 +518,6 @@ sc.paliLookup = {
             weights: [5]
         }
     },
-    _cache: {},
     /**
      * Create a unique key from a query, guaranteed to not collide.
      * Basically JSON but with sorted keys.
@@ -536,34 +535,32 @@ sc.paliLookup = {
         key += murmurhash3_32_gc(string);
         return key
     },
+    _promise_cache: {},
     _idbcache: new IDBCache('palilookup-cache', 2),
     cachedQuery: function(method, query) {
         var self = this
             fn = _.bind(sc.paliLookup.client[method], sc.paliLookup.client),
             key = self.keyify(query);
-
-        if (self._idbcache.available) {
-            var promise = new Promise(function(resolve, reject) {
-                self._idbcache.get(key)
-                              .then(function(result) {
-                                  resolve(result.data);
-                               })
-                              .catch(function(e){
-                                  fn(query)
-                                             .then(function(result) {
-                                                 self._idbcache.add(key, result);
-                                                 resolve(result);
-                                             });
-                              });
-                })
-            return promise;
+        
+        if (key in self._promise_cache) {
+            return self._promise_cache[key]
         }
         
-        var promise = this._cache[key];
-        if (!promise) {
-            promise = self.client.msearch(msearch_query)
-            this._cache[key] = promise;
+        if (self._idbcache.available) {
+            var promise = self._idbcache.get(key)
+                                 .then(function(result) {
+                                    return result.data;
+                                 })
+                                 .catch(function(e){
+                                     return fn(query).then(function(result) {
+                                                 self._idbcache.add(key, result);
+                                                 return result;
+                                            });
+                                 });
+        } else {
+            promise = fn(msearch_query);
         }
+        self._promise_cache[key] = promise;
         return promise
     },
     /**
@@ -591,7 +588,7 @@ sc.paliLookup = {
             keys = [];
         queries.forEach(function(msearch_query) {
             var key = self.keyify(msearch_query);
-            if (key in self._cache) {
+            if (key in self._promise_cache) {
                 return
             }
             new_queries.push(msearch_query);
@@ -623,7 +620,7 @@ sc.paliLookup = {
             deferred.push($.Deferred());
         });
             
-        self.client.msearch(combined).done(function(resp) {
+        self.msearch(combined).done(function(resp) {
             var responses = resp.responses,
                 place = 0;
             
