@@ -407,6 +407,17 @@ $sidebar-tabs-vertical-padding: 0.4em;
     background: #00751A; 
     color:white; 
     font-weight:bold;
+    
+    > .count {
+        display: inline-block;
+        line-height: initial;
+        margin-left: 1em;
+        border-radius: 50%;
+        width: 1.5em;
+        height: 1.5em;
+        background: lighten(#00751A, 5%);
+    }
+    
 }
 
 #discourse-search-results 
@@ -457,5 +468,10 @@ $sidebar-tabs-vertical-padding: 0.4em;
         display: inline-block;
         width: 0.4em;
         margin-right: 0.2em;
+    }
+    .notify-check-wrap {
+        margin-bottom: 1em;
+        padding: 1em;
+        border-top: 1px solid #ddd;
     }
 }

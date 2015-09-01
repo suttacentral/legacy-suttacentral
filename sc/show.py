@@ -100,8 +100,12 @@ def default(*args, **kwargs):
             if args[2] == 'discussion':
                 if not imm.text_exists(uid, lang_code):
                     return cherrypy.NotFound()
-                return TextDiscussionView(uid, lang_code, embed=True).render()
-                
+                result = TextDiscussionView(uid, lang_code, embed=kwargs.get('embed')).render()
+                if result:
+                    # Permit these to be cached for 1 hour (note, we make
+                    # sure we have a valid result first!)
+                    cherrypy.response.headers['cache-control'] = 'public, max-age=3600'
+                    return result
         
         redirect = False
         bookmark = None

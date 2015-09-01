@@ -69,9 +69,9 @@
       </div>
       <div class="tab" id="navigation-tab">
         <div class="inner-wrap">
-            
             {% if discourse_results %}
-            {% include "discourse-results.html" %}
+            <div id="discourse-results-wrapper">
+            </div>
             {% endif %}
             {% if imm(uid) %}
             <div class="x1 button-row">

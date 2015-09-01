@@ -114,18 +114,18 @@ def get_env():
     sc_data_scripts_file = get_js_datascripts_filename()
     
     js_core = webassets.Bundle(
-        'js/vendor/underscore-1.7.0.js',
+        'js/vendor/underscore-1.8.3.js',
         'js/sc_state.js',
         'js/vendor/ZeroClipboard-2.2.0.js',
         'js/vendor/jquery.hashchange-1.3.min.js',
         'js/vendor/jquery.easytabs-3.2.0.min.js',
-        'js/vendor/jquery.cookies.js',
         'js/vendor/jquery.dropdown.js',
         'js/vendor/polyglot.js',
         'js/vendor/jquery.mobile.custom.min.js',
         'js/lib/jquery.scrolllock.js',
         'js/lib/jquery.unveil.js',
         'js/lib/jquery.details.js',
+        'js/exports.js',
         'js/intr.js',
         'js/sc_utility.js',
         sc_uid_expansion_data_file,
