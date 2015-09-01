@@ -59,7 +59,9 @@ sc.discourse = {
         var count = $('#discourse-search-results').find('li').length,
             n = new Notification("Discourse",
                 {
-                    body: "There are {} discissions about {}".format(count, sc.exports.uid),
+                    body: "There are {} discussion{} about {}".format(count,
+                                                                   count == 1 ? '' : 's',
+                                                                   sc.util.uidToAcro(sc.exports.uid)),
                     icon: "/img/apple-touch-icon-114x114-precomposed.png"
                 });
             n.onclick = function() {

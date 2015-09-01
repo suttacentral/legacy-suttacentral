@@ -167,7 +167,7 @@ sc.util = {
     },
     _expandUid: function(uid, i){
         var self = this,
-            spaced = uid.replace(/(\D)(\d)/g, '$1 $2'),
+            spaced = uid.replace(/(\D)(\d)/g, '$1 $2'),
             expansion;
         return spaced.replace(/[^\d\s]+/g, function(m){
             expansion = self.expand_uid_data[m];
