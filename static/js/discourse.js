@@ -34,7 +34,7 @@ sc.discourse = {
                     self.notifyRequest();
                 }
             })
-            if (self.shouldNotify) {
+            if (self.shouldNotify && conversationCount > 0) {
                 self.notify();
             }
         }
