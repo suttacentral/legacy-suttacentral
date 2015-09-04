@@ -4,10 +4,8 @@ sc.discourse = {
     init: function() {
         var self = sc.discourse,
             conversationCount = $('#discourse-search-results').find('li').length;
-        if (conversationCount > 9) {
-            conversationCount = '9+';
-        }
-        self.visible =  $('#discourse-search-results').css('display') != 'none' ;
+
+        self.visible = $('#discourse-search-results').css('display') != 'none' ;
         $('#discourse-link-button').on('click', function(e) {
             e.preventDefault();
             self.visible = !self.visible;
@@ -17,7 +15,7 @@ sc.discourse = {
                 self.hide();
             }
             return false
-        }).append('<span class="count">{}</span>'.format(conversationCount));
+        });
         
         if ("Notification" in window) {
             self.shouldNotify = localStorage.getItem('sc.discourse.shouldNotify') == "true";
@@ -77,10 +75,11 @@ sc.discourse = {
 
 var discourseWrapper = $('#discourse-results-wrapper');
 if (discourseWrapper.length) {
-    var url = window.location.origin + '/en/' + sc.exports.uid + '/discussion';
+    var url = window.location.origin + '/en/' + sc.exports.uid + '/discussion?ajax=1';
     $.ajax(url, {cache: true, dataType: 'html'})
      .then(function(data) {
          discourseWrapper[0].outerHTML = data;
+         $('#discourse-search-results').hide();
          sc.discourse.init();
      });
 }

@@ -1,14 +1,14 @@
 {% if discourse_link %}
 {% set topics = discourse_results.topics %}
 {% set categories = discourse_results.categories %}
-{% if not embed %}
+{% if ajax %}
 <div class="x1 button-row">
     <a class="button" href="{{discourse_link}}" id="discourse-link-button" 
         title="Go to discourse.suttacentral.net, where you can join a discussion or find information and resources."
-    >Discuss &amp; Discover</a>
+    >Discuss &amp; Discover <span class="count">{{ topics|length }}</span></a>
 </div>
 {% endif %}
-<div id="discourse-search-results"{% if not embed %} style="display: none"{% endif %}>
+<div id="discourse-search-results">
     <div id="discourse-search-heading">Conversations at <a href="http://discourse.suttacentral.net">discourse.suttacentral.net</a></div>
     <ul class="results">
         {% for hit in topics %}
@@ -24,7 +24,7 @@
     </ul>
 </div>
 {% endif %}
-{% if embed %}
+{% if not ajax %}
 {% if nonfree_fonts -%}
   {%- assets 'css_nonfree' -%}
     <link rel="stylesheet" href="{{ ASSET_URL }}">
