@@ -352,7 +352,6 @@ class TextDiscussionView(ViewBase):
         self.embed = embed
     
     def setup_context(self, context):
-        imm = sc.scimm.imm()
         if not sc.config.discourse['forum_url']:
             return
 

@@ -41,6 +41,17 @@ def default(*args, **kwargs):
 
     full = len(args) == 2 and args[1] == 'full'
     
+    if args[-1] == 'discussion':
+        uid = args[-2]
+        lang_code = None if len(args) == 2 else args[-3]
+        
+        result = TextDiscussionView(uid, lang_code, embed=kwargs.get('embed')).render()
+        if result:
+            # Permit these to be cached for 1 hour (note, we make
+            # sure we have a valid result first!)
+            cherrypy.response.headers['cache-control'] = 'public, max-age=3600'
+            return result
+    
     if len(args) == 1 or full:
         uid = args[0]
 
@@ -95,17 +106,6 @@ def default(*args, **kwargs):
         # New style urls have the language code first then the uid
         lang_code = args[0]
         uid = args[1]
-        
-        if len(args) >= 3:
-            if args[2] == 'discussion':
-                if not imm.text_exists(uid, lang_code):
-                    return cherrypy.NotFound()
-                result = TextDiscussionView(uid, lang_code, embed=kwargs.get('embed')).render()
-                if result:
-                    # Permit these to be cached for 1 hour (note, we make
-                    # sure we have a valid result first!)
-                    cherrypy.response.headers['cache-control'] = 'public, max-age=3600'
-                    return result
         
         redirect = False
         bookmark = None
