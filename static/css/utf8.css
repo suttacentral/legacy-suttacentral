@@ -5,6 +5,8 @@ separate file for now.... */
 
 /*a.bl:before {content:"bl "}*/
 a.ba:before {content:"BA "}
+a.bi:before {content:"BI "}
+a.bjt:before {content:"BJT "}
 a.bm:before {content:"BM "}
 a.bn:before {content:"BN "}
 a.bps:before {content:"BPS "}
@@ -57,6 +59,7 @@ a.t:before, a.t-linehead:before {content:"T "}
 a.tb:before {content:"TB "}
 a.tri62:before, a.tri95:before {content:"Tri "}
 a.ud-sutta:before, a.ud-vagga-sutta:before {content:"Ud "}
+a.ttc:before {content:"TTC "}
 /*a.tu:before {content:" "}*/
 a.uv:before {content:"Uv "}
 a.vai58:before, a.vai59:before, a.vai61:before {content:"Vai "}
@@ -111,6 +114,10 @@ CSS Class	HTML Title
 
 .verse-num		"Verse number."
 
+.bi             "Paragraph numbers in Bhikkhu Indacanda."
+
+.bjt            "Paragraph numbers in Buddha Jayanthi."
+
 .bm     	"Paragraph numbers in Bhikkhu Mettiko."
 
 .bn     	"Paragraph numbers in Bhikkhu Ñāṇadassana."
@@ -154,6 +161,8 @@ CSS Class	HTML Title
 .tri62		"Sūtra and paragraph number in Tripāṭhī, 1962."
 
 .tri95		"Section and paragraph number in Tripāṭhī, 1995."
+
+.ttc            "Paragraph numbers in Thích Thiện Châu."
 
 .har04		"Paragraph number in Hartmann, 2004."
 
