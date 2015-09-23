@@ -339,4 +339,5 @@ def build_maitenance_page():
 try:
     build_maitenance_page()
 except Exception as e:
-    logger.exception()
+    logger.exception("Could not build maitenance page")
+    raise
