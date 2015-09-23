@@ -85,17 +85,12 @@ form{
         border-radius: 3px;
         vertical-align: top;
         box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-<<<<<<< HEAD
-        
-=======
-        margin: 0;
->>>>>>> 10a4e4576ba1e2dde709a814936d0bad708cb676
-    }
 
     label.checked {
         background: saturated-color(bright-purple);
     }
-  >  label{
+    
+    >  label{
     margin:0 0.7em 0 0;
     }
     input[type=checkbox],
@@ -107,13 +102,13 @@ form{
       opacity   : 0;
     }
 
-    input[type=radio   ]{
+    input[type=radio]{
       display      : inline-block;
       margin-left  : -2em;
       line-height  : 1.5em;
     }
 
-    input[type=radio]  + span{
+    input[type=radio] + span{
       display          : inline-block;
       width            : 0.875em;
       height           : 0.875em;

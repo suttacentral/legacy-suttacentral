@@ -29,7 +29,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 __jinja2_environment = None
-def jinja2_environment():
+def jinja2_environment(rebuild=False):
     """Return the Jinja2 environment singleton used by all views.
     
     For information on Jinja2 custom filters, see
@@ -37,9 +37,13 @@ def jinja2_environment():
     """
 
     global __jinja2_environment
-    if __jinja2_environment:
+    if not rebuild and __jinja2_environment:
         return __jinja2_environment
+    
+    __jinja2_environment = build_jinja2_environment()
+    return __jinja2_environment
 
+def build_jinja2_environment():
     env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(str(sc.templates_dir)),
         extensions=[AssetsExtension],
@@ -84,8 +88,6 @@ def jinja2_environment():
                 replacement, string)
         return string
     env.filters['sht_expansion'] = sht_expansion
-
-    __jinja2_environment = env
     return env
 
 class NewRelicBrowserTimingProxy:
@@ -136,7 +138,9 @@ class ViewBase:
     a (reasonably) relavent title.
     """
 
-    env = jinja2_environment()
+    @property
+    def env(self):
+        return jinja2_environment()
     
     @property
     def should_fix_whitespace(self):

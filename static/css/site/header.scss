@@ -10,6 +10,8 @@ $hamburger-font-size:           14px;
 
 header {
     background: ns-color(header-background-color);
+    background: red;
+    background: blue;
     height: $header-height;
     line-height: 2.2em;
     border-bottom: $header-border-width solid ns-color(header-border-color);
