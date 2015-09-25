@@ -85,6 +85,7 @@ form{
         border-radius: 3px;
         vertical-align: top;
         box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
 
     label.checked {
         background: saturated-color(bright-purple);
@@ -176,11 +177,13 @@ form{
     background: saturated-color(bright-green);
     box-shadow: 1px 1px 5px rgba(200,200,200,1);
 }
+
 ul#required {
-  margin: 2em 0 1em 0;
- }
- #required li{
-  text-align:left;
-  list-style-type: none;
+    margin: 2em 0 1em 0;
+}
+ 
+#required li{
+    text-align:left;
+    list-style-type: none;
 }
 

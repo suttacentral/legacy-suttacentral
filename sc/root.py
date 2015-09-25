@@ -124,7 +124,5 @@ class Admin(object):
         
         import sc.init
         sc.init.reinit()
-        #import importlib
-        #module = importlib.import_module(module)
-        #importlib.reload(module)
+        
         return {'status': 'success'}

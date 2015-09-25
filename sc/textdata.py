@@ -130,7 +130,6 @@ class TIMManager:
                     components[lang_uid] = lang_tim
                     with db_file.open('wb') as f:
                         f.write(lz4.compress(pickle.dumps(lang_tim)))
-                    build_logger.info('Saving TIM data for "{}" to disk'.format(lang_uid))
                 files_used.add(db_file)
         
         build_logger.info('Removing unused db files'.format(lang_uid))
