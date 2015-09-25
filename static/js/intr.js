@@ -24,7 +24,7 @@ sc.intr = {
                 }
                 $trigger.text($links.length - 1 + ' ▾')
 
-                var $dropdown = $('<div class="dropdown dropdown-relative dropdown-tip dropdown-anchor-right"/>'),
+                var $dropdown = $('<div class="dropdown dropdown-relative dropdown-tip dropdown-anchor-right"/>').hide(),
                     $dropdownPanel = $('<div class="dropdown-panel"/>');
 
                 $trigger.attr('data-dropdown', '#' + id);
@@ -41,6 +41,7 @@ sc.intr = {
                     $div.prepend('<span class="tran special">  </span>')
                 }
             });
+            console.log('Hiding dropdowns');
         }
 
         $('.divtable').on('click', '.tran', function(e) {
@@ -186,4 +187,4 @@ sc.intr = {
         }
     }
 }
-$(document).ready(sc.intr.run);
+sc.intr.run()
