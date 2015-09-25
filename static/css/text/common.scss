@@ -108,19 +108,16 @@ h1.mirror-row{line-height:1.5}
 #text:lang(my), #text:lang(pi-Mymr) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
-                        font-family: 'Noto Sans Myanmar', serif;
-                        letter-spacing: 0;
-                        line-height: 2em;
+            font-family: 'Noto Sans Myanmar', serif;
+            letter-spacing: 0;
+            line-height: 2em;
         }
         h1, h2, h3, h4, h5, h6 {
-                        font-weight: bold;
-                        }
-}
-}
-
+            font-weight: bold;
+        }
+    }
 
     #metaarea p {
-        
         letter-spacing: 0;
         line-height: 2em;
     }
