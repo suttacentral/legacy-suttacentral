@@ -1,9 +1,11 @@
 import os
+import lz4
 import time
 import regex
 import pickle
 import pathlib
 import hashlib
+import logging
 import scandir
 import sqlite3
 import datetime
@@ -11,9 +13,11 @@ import functools
 import threading
 from itertools import chain
 
-import sc, sc.util, sc.logger
+import sc
+import sc.util
+import sc.logger
 from sc.tools import html
-import logging
+
 logger = logging.getLogger(__name__)
 
 build_logger = logging.getLogger(__name__ + '.build')
@@ -70,7 +74,7 @@ class TextInfo:
         return out
 
 class TIMManager:
-    db_name_tmpl = 'text-info-model-{lang}_{hash}.pickle'
+    db_name_tmpl = 'text-info-model-{lang}_{hash}.pklz'
     version = 1
     def __init__(self):
         self.instance = None
@@ -116,15 +120,16 @@ class TIMManager:
                 db_file = sc.db_dir / db_filename
                 if db_file.exists():
                     with db_file.open('rb') as f:
-                        data = pickle.load(f)
+                        data = pickle.loads(lz4.uncompress(f.read()))
                         components[lang_uid] = data
                     build_logger.info('Loading TIM data for "{}" from disk'.format(lang_uid))
                 else:
                     build_logger.info('Building TIM data for "{}"'.format(lang_uid))
                     lang_tim = TextInfoModel(name=lang_uid)
                     lang_tim.build(lang_dir, force=True)
+                    components[lang_uid] = lang_tim
                     with db_file.open('wb') as f:
-                        pickle.dump(lang_tim, f)
+                        f.write(lz4.compress(pickle.dumps(lang_tim)))
                     build_logger.info('Saving TIM data for "{}" to disk'.format(lang_uid))
                 files_used.add(db_file)
         
@@ -532,12 +537,8 @@ tim_manager = TIMManager()
 def tim():
     return tim_manager.get()
     
-def periodic_update(i):
-    if i == 0:
-        tim_manager.load(quick=True)
-    else:
-        tim_manager.load(quick=False)
-        
+def build():
+    tim_manager.load()
 
 def ensure_up_to_date():
     tim_manager.load(quick=False)

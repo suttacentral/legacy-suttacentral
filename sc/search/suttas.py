@@ -114,10 +114,7 @@ class SuttaIndexer(ElasticIndexer):
     def update_data(self, force=False):
         self.process_chunks(self.yield_suttas(size=500000))
 
-def periodic_update(i):
-    if not sc.search.is_available():
-        logger.error('Elasticsearch Not Available')
-        return
+def update():
     indexer = SuttaIndexer('suttas')
     indexer.update()
 

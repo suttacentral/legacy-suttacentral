@@ -121,11 +121,9 @@ class Admin(object):
             raise cherrypy.HTTPError(403)
         if cherrypy.request.method != 'POST':
             return
-        import sc.views
-        import sc.assets
-        sc.assets.compile()
-        sc.views.jinja2_environment(rebuild=True)
         
+        import sc.init
+        sc.init.reinit()
         #import importlib
         #module = importlib.import_module(module)
         #importlib.reload(module)

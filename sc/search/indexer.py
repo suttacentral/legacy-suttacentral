@@ -45,6 +45,7 @@ class ElasticIndexer:
     es = es
     version = 1
     suppress_elasticsearch_errors = False
+    non_aliased_indexes = {'pi2en-glossary', 'translations', 'pali-lookup'}
 
     @property
     def doc_type(self):
@@ -163,7 +164,8 @@ class ElasticIndexer:
                 index_name = next(iter(v['aliases']))
                 mapping[index_name] = k
             except StopIteration:
-                logger.error('Oops {}, {}'.format(k, v))
+                if index_name not in self.non_aliased_indexes:
+                    logger.error('Oops {}, {}'.format(k, v))
             
         return mapping
 

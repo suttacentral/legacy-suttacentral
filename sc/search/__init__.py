@@ -15,3 +15,18 @@ def is_available():
 # Make elasticsearch STFU
 logging.getLogger('elasticsearch').setLevel('ERROR')
 logging.getLogger('elasticsearch.trace').setLevel('ERROR')
+
+def update_indexes():
+    if not is_available():
+        logger.error('Elasticsearch Not Available')
+        return
+    import sc.search.dicts
+    import sc.search.texts
+    import sc.search.suttas
+    import sc.search.autocomplete
+
+    sc.search.dicts.update()
+    sc.search.suttas.update()
+    sc.search.texts.update()
+    sc.search.autocomplete.update()
+    

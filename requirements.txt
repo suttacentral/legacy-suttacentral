@@ -3,6 +3,7 @@
 # Put compiled packages first as there may be missing dependencies
 lxml==3.4.4
 regex==2015.9.15
+lz4==0.7.0
 
 # Remaining packages not compiled or have python fallbacks
 Babel==1.3

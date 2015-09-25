@@ -20,7 +20,7 @@ def _green_text(text):
         return text
 
 try:
-    from sc import app, updater, config
+    from sc import app, config
 
     app.setup()
     app.mount()

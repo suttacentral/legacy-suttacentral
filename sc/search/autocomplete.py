@@ -217,9 +217,3 @@ def search(query, limit, lang=None, **params):
 def update():
     indexer = AutocompleteIndexer('autocomplete')
     indexer.update()
-
-def periodic_update(i):
-    if not sc.search.is_available():
-        logger.error('Elasticsearch Not Available')
-        return
-    update()
