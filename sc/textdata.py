@@ -97,7 +97,7 @@ class TIMManager:
         
         return cls.db_name_tmpl.format(lang=lang_dir.stem, hash=md5.hexdigest()[:10])
     
-    def load(self, quick=False):
+    def load(self, force=False):
         """ Load an instance of the TextInfoModel 
         
         This generates a database per language folder, if no
@@ -118,7 +118,7 @@ class TIMManager:
                 lang_uid = lang_dir.stem
                 db_filename = self.get_db_name(lang_dir)
                 db_file = sc.db_dir / db_filename
-                if db_file.exists():
+                if not force and db_file.exists():
                     with db_file.open('rb') as f:
                         data = pickle.loads(lz4.uncompress(f.read()))
                         components[lang_uid] = data
@@ -139,7 +139,7 @@ class TIMManager:
                 file.unlink()
         
         # Now we need to splice the individual languages
-        tim = TextInfoModel('wholeness')
+        tim = TextInfoModel('Oneness')
         
         build_logger.info('Splicing TIM data'.format(lang_uid))
         for lang_uid, baby_tim in components.items():
@@ -149,8 +149,6 @@ class TIMManager:
         
         self._set_instance(tim)
         build_logger.info('TIM is ready'.format(lang_uid))
-        
-        
     
     def get(self):
         self.ready.wait()
@@ -160,15 +158,6 @@ class TIMManager:
         self.instance = instance
         # Other threads can now use it.
         self.ready.set()
-        return
-        try:
-            sc.scimm
-            import sc.scimm
-            imm = sc.scimm.imm(wait=False)
-            if imm:
-                imm.tim = instance
-        except NameError:
-            pass
 
 
 class TextInfoModel:
@@ -533,8 +522,7 @@ class TextInfoModel:
 
 tim_manager = TIMManager()
 
-def tim():
-    return tim_manager.get()
+tim = tim_manager.get
     
 def build():
     tim_manager.load()

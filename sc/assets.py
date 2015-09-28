@@ -164,7 +164,7 @@ def compress_static():
         compress_cmd = plumbum.local['zopfli']['--gzip']
     except plumbum.CommandNotFound:
         print('zopfli not available, falling back to gzip')
-        compress_cmd = plumbum.local['gzip']['-9 -k']
+        compress_cmd = plumbum.local['gzip']['-9', '-k']
     
     extensions = {'.js', '.css', '.svg', '.ttf'}
     files = set(sc.static_dir.glob('fonts/**/*'))

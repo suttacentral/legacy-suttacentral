@@ -164,7 +164,7 @@ class ElasticIndexer:
                 index_name = next(iter(v['aliases']))
                 mapping[index_name] = k
             except StopIteration:
-                if index_name not in self.non_aliased_indexes:
+                if k not in self.non_aliased_indexes:
                     logger.error('Oops {}, {}'.format(k, v))
             
         return mapping

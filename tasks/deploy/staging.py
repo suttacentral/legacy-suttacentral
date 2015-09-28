@@ -40,7 +40,6 @@ def full(branch=None):
     blurb(full)
     _staging_run(
         'touch tmp/maintenance',
-        'sudo supervisorctl stop sc-staging',
         'git pull',
         'cd data',
         'git pull',
@@ -50,7 +49,7 @@ def full(branch=None):
         'invoke jsdata.build',
         'invoke assets.compile --precompress',
         'invoke textdata.ensure_loads',
-        'sudo supervisorctl start sc-staging',
+        'sudo supervisorctl restart sc-staging',
         'rm -f tmp/maintenance',
         'invoke dictionary.build',
         'invoke search.index'
@@ -76,10 +75,7 @@ def quick(branch=None):
         'cd data',
         'git pull',
         'cd ..',
-        'pip install -q -r requirements.txt',
-        'invoke assets.compile --precompress',
-        'invoke textdata.ensure_loads',
-        'sudo supervisorctl restart sc-staging',
+        "curl -XPOST 'http://localhost:8087/admin/reload' -d ''",
         'invoke assets.clean --older'
     )
 

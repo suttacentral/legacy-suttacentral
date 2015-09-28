@@ -15,7 +15,6 @@ from sc.util import unique, numericsortkey
 from sc.search.indexer import ElasticIndexer
 
 logger = logging.getLogger(__name__)
-logger.setLevel('INFO')
 
 #handler = logging.StreamHandler()
 #handler.setLevel('INFO')

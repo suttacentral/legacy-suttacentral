@@ -120,9 +120,9 @@ class Admin(object):
         if cherrypy.request.headers.get('Cf-Connecting-Ip'):
             raise cherrypy.HTTPError(403)
         if cherrypy.request.method != 'POST':
-            return
+            raise cherrypy.HTTPError(404)
         
         import sc.init
         sc.init.reinit()
         
-        return {'status': 'success'}
+        return 'success'
