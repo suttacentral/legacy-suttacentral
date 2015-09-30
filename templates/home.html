@@ -116,3 +116,12 @@
 </div> {# id=intro #}
 
 {%- endblock %}
+
+{% block panel %}
+{{ panel_html }}
+<script>
+    localStorage.setItem('sc.panel-html', document.getElementById('panel-screen-wrap').innerHTML +
+                                          document.getElementById('panel').innerHTML);
+    localStorage.setItem('sc.panel-time', new Date().getTime());
+</script>
+{% endblock %}
