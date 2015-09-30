@@ -45,14 +45,11 @@ def full(branch=None):
         'git pull',
         'cd ..',
         'pip install -q -r requirements.txt',
-        'invoke clean --aggressive',
         'invoke jsdata.build',
         'invoke assets.compile --precompress',
         'invoke textdata.ensure_loads',
         'sudo supervisorctl restart sc-staging',
-        'rm -f tmp/maintenance',
-        'invoke dictionary.build',
-        'invoke search.index'
+        'invoke assets.clean --older'
     )
 
 
