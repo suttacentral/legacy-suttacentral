@@ -45,7 +45,10 @@ sc.paliLookup = {
         this.targetSelector = args.target;
         var inner = function() {
             self.client = elasticsearch.Client({
-                hosts: args.elasticUrl
+                hosts: args.elasticUrl,
+                apiVersion: "1.7",
+                requestTimeout: 30000,
+                maxRetries: 30
             });
             sc.paliLookup.termBreakCache.loadFromServer();
             sc.paliLookup.glossary.init();
