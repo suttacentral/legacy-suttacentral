@@ -17,3 +17,18 @@ def index():
     blurb(index)
     import sc.search.texts
     textsearch.build()
+
+@task
+def dump_lookup_data(file='lookup-data.json'):
+    """Dump non-reproducible data from the es indexes"""
+    import sc.search.dumpload
+    print('Dumping data to {!s}'.format(file))
+    sc.search.dumpload.dump_lookup_data(file)
+    print('Success')
+
+@task
+def load_lookup_data(file='lookup-data.json'):
+    import sc.search.dumpload
+    sc.search.dumpload.load_lookup_data(file)
+    print('Success')
+    

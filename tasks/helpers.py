@@ -16,6 +16,8 @@ _PP_HINTS = {
     'Create': 'Creating',
     'Delete': 'Deleting',
     'Drop': 'Dropping',
+    'Dump': 'Dumping',
+    'Load': 'Loading',
     'Prepare': 'Preparing',
     'Reset': 'Resetting',
     'Run': 'Running',
