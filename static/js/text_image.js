@@ -13,17 +13,19 @@ sc.text_image = {
         
         $.ajax('/data?' + $.param({text_images: 1, 
                                    uid: uid,
-                                   volpage_ids: ids})
+                                   volpage_ids: ids,
+                                   _: 1})
             ).success(sc.text_image.processData);
         
     },
     processData: function(data, status, jqXHR) {
         console.log(data);
-        _.each(data.text_images, function(url, id, _data) {
+        _.each(data.text_images, function(uri, id, _data) {
             // getElementById doesn't require escaping. unlike $('#...')
             var e = $(document.getElementById(id)),
                 link = $('<span/>');
-            e.attr({'data-src': url,
+            e.attr({'data-src': uri.url,
+                    'data-file': uri.filename,
                     'title': 'View Page Image'})
                 .addClass('text-info-button')
                 .on('click', sc.text_image.showImage);

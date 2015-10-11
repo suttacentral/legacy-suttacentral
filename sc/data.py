@@ -98,7 +98,8 @@ class Data:
         for vp_id in volpage_ids.split(','):
             result = get(uid, vp_id)
             if result:
-                out[vp_id] = '/text_images/' + result['url']
+                out[vp_id] = {"url": '/text_images/' + result,
+                              "filename": (sc.text_image_symlink_dir / result).resolve().name}
         return out
 
 data = Data()

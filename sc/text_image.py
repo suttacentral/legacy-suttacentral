@@ -8,73 +8,66 @@ from sc.util import Timer
 
 import pathlib
 
-text_image_index = {}
+index = {}
 
-TextPageImage = namedtuple('TextPageImage', ['ed', 'vol', 'page'])
-# NamedTuple meaning it compares equal to a simple tuple (ed,vol,page)
-
-def make_text_image_index():
-
-    files = [f for 
+def update_symlinks(n=0):
+    """ Symlinks are used mainly for the ease of serving with Nginx """
+    
+    source_files = [f for 
              f in sc.text_image_source_dir.glob('**/*') 
              if f.suffix in {'.png', '.jpg'}]
-    files.sort(key=lambda f: sc.util.numericsortkey(str(f)))
+    source_files.sort(key=str)
+
     
-    out = {}
-    prev = None
-    for file in files:
-        m = regex.match(r'(?<ed>\w+)-(?<book_acro>\w+)-vol\.(?<book_num>\d+)-pg\.(?<page>\d+)', file.stem)
-        if m:
-            ed = m['ed']
-            vol = m['book_acro'] + m['book_num'].lstrip('0')
-            page = m['page'].lstrip('0')
-            tpi = TextPageImage(ed, vol, page)
-            out[tpi] = {'file' : file.absolute(),
-                        'url': '{}-{}-{}{}'.format(ed,
-                                                   vol,
-                                                   page,
-                                                   file.suffix)}
-            if prev:
-                if prev.vol == tpi.vol:
-                    out[prev]['next'] = tpi
-                    out[tpi]['prev'] = prev
-            prev = tpi
-            
-    return out
-
-
-# The index key is a TextPageImage, value is a Path
-index = make_text_image_index()
-
-def update_symlinks(n):
-    """ Symlinks are used mainly for the ease of serving with Nginx """
-    if n > 0: return
     symlink_dir = sc.text_image_symlink_dir.absolute()
-    for tpi, info in sorted(index.items(), key=lambda t: t[0]):
-        symlink = symlink_dir / info['url']
+    for file in source_files:
+        normalized_id = normalize_id(file.stem)
+        symlink = (symlink_dir / normalized_id).with_suffix(file.suffix)
+        if normalized_id in index:
+            raise ValueError('Duplicate filename detected: {!s}'.format(file))
+        index[normalized_id] = symlink.name
         if symlink.is_symlink():
-            if symlink.resolve() == info['file']:
+            if symlink.resolve() == file:
                 continue
             else:
-                symlink.unlink()
+                symlink.unlink()    
         if not symlink.parent.exists():
             symlink.parent.mkdir(parents=True)
-        symlink.symlink_to(info['file'])
+        
+        symlink.symlink_to(file)
     
 
-def get(sutta_uid, volpage_id):
-    uid_m = regex.match(r'(?<vol>[a-z]+)', sutta_uid)
-    vp_m = regex.match(r'(?<ed>[a-z]+)(?:(?<vol_num>[0-9]+)\.)?(?<page_num>[0-9.]+)', volpage_id)
+def normalize_id(value, _divs=set()):
+    # Normalize into form:
+    # manuscript-book-vol-page
+    # pts-mn-1-96
+    # vl
     
-    if uid_m is None or vp_m is None:
+    if not _divs:
+        import sc.scimm
+        imm = sc.scimm.imm()
+        _divs.update(imm.divisions)
+        _divs.add('vi')
+    
+    if 'pts' in value:
+        value = value.replace('-pg.', '-').replace('-vol.', '').replace('.', '-').replace('-pg-', '-').replace('--', '-').replace('-jat', '-ja')
+        value = regex.sub(r'\d+', lambda m: str(int(m[0])), value)
+        value = regex.sub(r'[a-z]+(?=\d)', lambda m: m[0] + '-' if m[0] in _divs else m[0], value)
+    return value
+
+def get(sutta_uid, volpage):
+    
+    m = regex.match('[a-z]+', sutta_uid)
+    if not m:
         return None
+    div = m[0]
+    
+    if volpage.startswith('pts'):
+        if volpage.startswith('pts-vp-pi'):
+            # This is vinaya
+            volpage = normalize_id('pts-vi-' + volpage[9:])
+        else:
+            volpage = normalize_id('pts-' + div + '-' + volpage[3:])
         
-    ed = vp_m['ed']
-    if vp_m['vol_num']:
-        vol = uid_m['vol'] + vp_m['vol_num']
-    else:
-        vol = uid_m['vol']
-    page = vp_m['page_num']
-    print((ed, vol, page))
-    result = index.get((ed, vol, page), None)
+    result = index.get(volpage, None)
     return result
