@@ -52,7 +52,7 @@ sc.paliLookup = {
         }
         
         if (!window.elasticsearch) {
-            $.getScript('https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/5.0.0/elasticsearch.js')
+            $.getScript('https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/8.2.0/elasticsearch.min.js')
              .success(inner);
         } else {
             inner()
@@ -537,10 +537,17 @@ sc.paliLookup = {
     },
     _promise_cache: {},
     _idbcache: new IDBCache('palilookup-cache', 2),
+    _last_queries: [],
     cachedQuery: function(method, query) {
         var self = this
             fn = _.bind(sc.paliLookup.client[method], sc.paliLookup.client),
-            key = self.keyify(query);
+            key = self.keyify(query, method);
+        
+        self._last_queries.push(query)
+        if (self._last_queries.length > 10) {
+            self._last_queries.splice(0, self._last_queries.length - 10)
+        }
+            
         
         if (key in self._promise_cache) {
             return self._promise_cache[key]
@@ -558,7 +565,7 @@ sc.paliLookup = {
                                             });
                                  });
         } else {
-            promise = fn(msearch_query);
+            promise = fn(query);
         }
         self._promise_cache[key] = promise;
         return promise
@@ -596,7 +603,7 @@ sc.paliLookup = {
         })
         var r = self._msearchBuffered(new_queries);
         keys.forEach(function(key, i) { 
-            self._cache[key] = r[i];
+            self._promise_cache[key] = r[i];
         });        
     },
     /** Perform multiple multi searches in a single request
@@ -620,7 +627,7 @@ sc.paliLookup = {
             deferred.push($.Deferred());
         });
             
-        self.msearch(combined).done(function(resp) {
+        self.msearch(combined).then(function(resp) {
             var responses = resp.responses,
                 place = 0;
             
@@ -1160,6 +1167,11 @@ sc.paliLookup = {
               '</form>');
             
             this.getEntry(term).then(function(result) {
+                if (!result.hits) {
+                    console.log('Bad Results!');
+                    console.log(result);
+                    return
+                }
                 if (result.hits.total > 0) {
                     _(result.hits.hits[0]._source).each(function(value, name) {
                         if (value) {
