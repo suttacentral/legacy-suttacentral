@@ -163,7 +163,7 @@ $(document).ready(function(){
             localStorage.setItem('sc.panel-data', panelData);
             localStorage.setItem('sc.panel-time', nowTime);
             proceed(panelData);
-        }).error(function(){
+        }, function(){
             // Useful for offling browsing
             if (panelData) {
                 proceed(panelData);
