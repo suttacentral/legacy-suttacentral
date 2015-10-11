@@ -62,11 +62,17 @@
 {% if not ajax %}
 {% if not embed %}
 
-{{ panel_html }}
+{% block panel %}
+<div id="panel-placeholder"></div>
+{% endblock %}
 
 <div id="page-footer-push"></div>
 
 </div>{# page-wrap #}
+
+<script id="sc-exports" type="application/json">
+{{exports|json}}
+</script>
 
 {% include 'footer.html' %}
 {% endif %} {# /embed #}

@@ -38,8 +38,24 @@ def default(*args, **kwargs):
     """
 
     imm = scimm.imm()
+    
+    if args[0] == 'panel':
+        max_age = 86400 * 7
+        cherrypy.response.headers['cache-control'] = 'public, max-age={}'.format(max_age)
+        return GenericView('panel', {}).render()
 
     full = len(args) == 2 and args[1] == 'full'
+    
+    if args[-1] == 'discussion':
+        uid = args[-2]
+        lang_code = None if len(args) == 2 else args[-3]
+        
+        result = TextDiscussionView(uid, lang_code, embed=kwargs.get('embed')).render()
+        if result:
+            # Permit these to be cached for 1 hour (note, we make
+            # sure we have a valid result first!)
+            cherrypy.response.headers['cache-control'] = 'public, max-age=3600'
+            return result
     
     if len(args) == 1 or full:
         uid = args[0]
@@ -95,13 +111,6 @@ def default(*args, **kwargs):
         # New style urls have the language code first then the uid
         lang_code = args[0]
         uid = args[1]
-        
-        if len(args) >= 3:
-            if args[2] == 'discussion':
-                if not imm.text_exists(uid, lang_code):
-                    return cherrypy.NotFound()
-                return TextDiscussionView(uid, lang_code, embed=True).render()
-                
         
         redirect = False
         bookmark = None
@@ -335,4 +344,5 @@ def build_maitenance_page():
 try:
     build_maitenance_page()
 except Exception as e:
-    logger.exception()
+    logger.exception("Could not build maitenance page")
+    raise

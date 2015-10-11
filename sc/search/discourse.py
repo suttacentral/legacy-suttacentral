@@ -274,37 +274,55 @@ def search(uid):
     uid = uid.lower()
     body = {
       "query": {
-        "bool": {
-          "should": [
-            {
-              "has_child": {
-                "type": "post",
-                "score_mode": "sum",
-                "query": {
-                  "match": {
-                    "plain": uid
-                  }
-                },
-                "inner_hits": {
-                    "size": 1,
-                    "_source": ["post_number", "id"],
-                    "highlight": {
-                        "fields": {
-                            "plain": {}
+        "function_score": {
+          "query": {
+            "bool": {
+              "should": [
+                {
+                  "has_child": {
+                    "type": "post",
+                    "score_mode": "sum",
+                    "query": {
+                      "match": {
+                        "plain": uid
+                      }
+                    },
+                    "inner_hits": {
+                        "size": 1,
+                        "_source": ["post_number", "id"],
+                        "highlight": {
+                            "fields": {
+                                "plain": {}
+                            }
                         }
                     }
+                  }
+                },
+                {
+                  "match": {
+                    "tags": uid
+                  }
+                },
+                {
+                  "match": {
+                    "title": uid
+                  }
                 }
-              }
-            },
+              ]
+            }
+          },
+          "boost_mode": "sum",
+          "functions": [
             {
-              "match": {
-                "tags": uid
-              }
-            },
-            {
-              "match": {
-                "title": uid
-              }
+              "gauss":{
+                "updated_at": {
+                    "origin": "now",
+                    "scale": "21d",
+                    "offset": "7d",
+                    "decay":  0.5
+                }
+              },
+              "weight": 2
             }
           ]
         }

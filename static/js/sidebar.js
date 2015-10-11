@@ -83,8 +83,6 @@
         return false;
     },
     setReady: function() {
-        // this.node[0].style.visibility = 'visible';
-        $('#menu').addClass("show-dongle");
         if (this.getDongleHideAlertState() == false) {
             $('#menu').addClass("show-dongle-notification");
         }

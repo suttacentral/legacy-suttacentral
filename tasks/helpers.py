@@ -25,6 +25,7 @@ _PP_HINTS = {
     'Stop': 'Stopping',
     'Update': 'Updating',
     'Ensure': 'Ensuring',
+    'Send': 'Sending'
 }
 
 

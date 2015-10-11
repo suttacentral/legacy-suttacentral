@@ -57,6 +57,7 @@ def jinja2_environment():
     env.filters['timedelta'] = util.format_timedelta
     env.filters['uid_to_name'] = lambda uid: uid_to_name(uid)
     env.filters['uid_to_acro'] = lambda uid: uid_to_acro(uid)
+    env.filters['json'] = json.dumps
 
     def sub_filter(string, pattern, repl):
         return regex.sub(pattern, repl, string)
@@ -191,6 +192,7 @@ class ViewBase:
         }
         if self.template_name != 'panel':
             params['panel_html'] = self.panel_html()
+        params['exports'] = {}
         return ViewContext(params)
 
     def massage_whitespace(self, text):
@@ -336,6 +338,7 @@ class ParallelView(ViewBase):
         context.has_alt_volpage = has_alt_volpage
         context.has_alt_acronym = has_alt_acronym
         context.citation = SuttaCitationView(self.sutta).render()
+        context.exports['uid'] = self.sutta.uid
 
 class VinayaParallelView(ParallelView):
     template_name = 'vinaya_parallel'
@@ -349,8 +352,7 @@ class TextDiscussionView(ViewBase):
         self.embed = embed
     
     def setup_context(self, context):
-        if (not sc.config.discourse['forum_url'] or
-            not (self.lang_code == 'en' or imm.languages[self.lang_code].isroot)):
+        if not sc.config.discourse['forum_url']:
             return
 
         query = '%22{}%22|{}'.format(uid_to_acro(self.uid).replace(' ', ' '), self.uid)
@@ -440,6 +442,8 @@ class TextView(ViewBase):
         nextprev = imm.get_next_prev(uid=self.uid, lang_uid=self.lang_code)
         context.next_data = nextprev['next']
         context.prev_data = nextprev['prev']
+        context.exports['uid'] = self.uid
+        context.exports['lang'] = self.lang_code
         
     def shorter_text(self, html, target_len=2500):
         # Don't bother cutting off excessively short amount of text
