@@ -1,4 +1,5 @@
 import regex
+import threading
 from collections import namedtuple
 
 import sc
@@ -8,10 +9,14 @@ from sc.util import Timer
 
 import pathlib
 
+_index_ready = threading.Event()
 index = {}
 
 def update_symlinks(n=0):
     """ Symlinks are used mainly for the ease of serving with Nginx """
+    global index
+    
+    tmp_index = {}
     
     source_files = [f for 
              f in sc.text_image_source_dir.glob('**/*') 
@@ -23,9 +28,9 @@ def update_symlinks(n=0):
     for file in source_files:
         normalized_id = normalize_id(file.stem)
         symlink = (symlink_dir / normalized_id).with_suffix(file.suffix)
-        if normalized_id in index:
+        if normalized_id in tmp_index:
             raise ValueError('Duplicate filename detected: {!s}'.format(file))
-        index[normalized_id] = symlink.name
+        tmp_index[normalized_id] = symlink.name
         if symlink.is_symlink():
             if symlink.resolve() == file:
                 continue
@@ -35,7 +40,8 @@ def update_symlinks(n=0):
             symlink.parent.mkdir(parents=True)
         
         symlink.symlink_to(file)
-    
+    index = tmp_index
+    _index_ready.set()
 
 def normalize_id(value, _divs=set()):
     # Normalize into form:
@@ -47,6 +53,7 @@ def normalize_id(value, _divs=set()):
         import sc.scimm
         imm = sc.scimm.imm()
         _divs.update(imm.divisions)
+        _divs.update(subdiv.uid for subdiv in imm.divisions['kn'].subdivisions)
         _divs.add('vi')
     
     if 'pts' in value:
@@ -56,7 +63,7 @@ def normalize_id(value, _divs=set()):
     return value
 
 def get(sutta_uid, volpage):
-    
+    _index_ready.wait()
     m = regex.match('[a-z]+', sutta_uid)
     if not m:
         return None
@@ -67,7 +74,15 @@ def get(sutta_uid, volpage):
             # This is vinaya
             volpage = normalize_id('pts-vi-' + volpage[9:])
         else:
-            volpage = normalize_id('pts-' + div + '-' + volpage[3:])
+            # check if uid is pre-hyphened as is the case with 
+            # sn pts1 and pts2
+            m = regex.match(r'^(pts[123]-)(.*)', volpage)
+            if m:
+                volpage = normalize_id(m[1] + div + '-' + m[2])
+            else:
+                volpage = normalize_id('pts-' + div + '-' + volpage[3:])
         
     result = index.get(volpage, None)
+    if not result:
+        print(volpage)
     return result
