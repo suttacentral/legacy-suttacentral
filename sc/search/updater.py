@@ -37,7 +37,7 @@ def run_periodic():
     # come through git, otherwise never skip.
     if sc.config.updated_through_git_only:
         git_commit_time = sc.scm.scm.last_commit_time
-        skip = gitCommitTime == last_git_commit_time
+        skip = git_commit_time == last_git_commit_time
         last_git_commit_time = git_commit_time
             
     if not skip:
