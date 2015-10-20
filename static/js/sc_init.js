@@ -220,13 +220,6 @@ function onMainLoad() {
         sc.sidebar.init();
         sc.init();
     }
-    ZeroClipboard.config({swfPath: "/js/vendor/ZeroClipboard-2.2.0.swf", 
-                          cacheBust: false,
-                          forceHandCursor: true,
-                          forceEnhancedClipboard: true});
-    ZeroClipboard.on('error', function(e) {
-            ZeroClipboard.destroy();
-    });
     
     var parallelCitationLabel = $('#parallel-citation .label');
     var parallelCitationTextField = $('#parallel-citation > input');
