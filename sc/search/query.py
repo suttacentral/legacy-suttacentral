@@ -38,6 +38,88 @@ def div_translation_count(lang):
             in result['aggregations']['div_uids']['buckets']})
     return mapping
 
+
+def make_text_search_query(lang, root_lang, query, author, uid, search_title, search_body):
+    query = query.trim()
+    m = regex.match(r'^"(.*)"$', query)
+    if m:
+        query = m[0]
+        phrase_search = True
+    else:
+        phrase_search = False
+    
+    filters = []
+    if root_lang:
+        filters.append({
+            "term": {
+                "root_lang": root_lang
+            }
+        })
+    if author:
+        filters.append({
+            "term": {
+                "author": author
+            }
+        })
+    if division:
+        filters.append({
+            "or": [
+                    {
+                        "term": {
+                            "subdivision": division
+                        }
+                    }, 
+                    {
+                    "term": {
+                        "division": division
+                    }
+                ]
+            })
+    if uid:
+        filters.append({
+            "query": {
+                "wildcard": {
+                    "uid": uid
+                }
+            }
+        })
+    
+    if not search_title and not search_body:
+        search_title = True
+        search_body = True
+    
+    fields = []
+    
+    if search_title:
+        fields.extend(["heading.title^0.5",
+                       "heading.title.plain^0.5",
+                       "heading.title.shingle^0.5"])
+    
+    if search_body:
+        fields.extend(["content", "content.*^0.5"])
+    
+    body = {
+        "from": offset,
+        "size": limit,
+        "_source": ["uid", "lang", "name", "volpage", "gloss", "term", "heading", "is_root"],
+        "timeout": "15s",
+        "query": {
+            "function_score": {
+                "multi_match": {
+                    "query": query,
+                    "fields": fields
+                    "type": "phrase" if phrase_search else "best_fields"                    
+                }
+            }
+        }
+            
+        
+
+
+def search(query, highlight=True, offset=0, limit=10,
+            lang=None, **kwargs):
+    
+
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, define=None, details=None, **kwargs):
     query.strip()
