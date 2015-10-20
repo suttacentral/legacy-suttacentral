@@ -32,6 +32,9 @@ if not _reloading:
 
 
 def update_search():
+    import sc.search
+    import sc.search.updater
+
     if search_lock.acquire(blocking=False):
         try:
             sc.search.updater.start()
@@ -59,11 +62,9 @@ def init():
         print("Updating Image Symlinks")
         sc.text_image.update_symlinks()
         
-        import sc.search
-        import sc.search.updater
-        
-        print("Initiating Index Update in Background")
-        threading.Thread(target=update_search, daemon=True).run()
+        if sc.config.app['update_search']:
+            print("Initiating Index Update in Background")
+            threading.Thread(target=update_search, daemon=True).run()
         
         if module_reloader is None:
             module_reloader = ModuleReloader()
