@@ -10,7 +10,7 @@ import sc
 from sc import textfunctions
 from sc.search.indexer import ElasticIndexer
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('search.suttas')
 
 sutta_dump_file = sc.db_dir / 'suttas.json'
 

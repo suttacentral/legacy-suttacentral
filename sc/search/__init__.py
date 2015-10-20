@@ -2,7 +2,8 @@ import logging
 import elasticsearch
 from elasticsearch import ConnectionError
 
-logger = logging.getLogger(__name__)
+import sc.logger
+logger = sc.logger.get_named_logger('search')
 
 es = elasticsearch.Elasticsearch()
 
@@ -10,7 +11,6 @@ def is_available():
     if not es.ping():
         return False
     return True
-    
 
 # Make elasticsearch STFU
 logging.getLogger('elasticsearch').setLevel('ERROR')

@@ -14,12 +14,7 @@ from sc.util import unique, numericsortkey
 
 from sc.search.indexer import ElasticIndexer
 
-logger = logging.getLogger(__name__)
-
-#handler = logging.StreamHandler()
-#handler.setLevel('INFO')
-#logger.addHandler(handler)
-
+logger = logging.getLogger('search.texts')
 
 class TextIndexer(ElasticIndexer):
     doc_type = 'text'

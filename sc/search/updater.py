@@ -3,7 +3,7 @@
 import time
 import threading
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('search.updater')
 
 import sc
 
