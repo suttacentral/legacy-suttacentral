@@ -1,0 +1,4 @@
+endsutta and endsection (not finsutta and finsection in tex) are not defined
+\hfour and \hfive are not defined
+
+cross-span and var-span are now both treated as footnotes.
