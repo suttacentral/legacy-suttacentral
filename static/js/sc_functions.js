@@ -141,7 +141,7 @@ sc.piLookup = {
         {
             lang: 'pt',
             name: 'Português',
-            scriptUrl: 'data/pi2pt-maindata-v1.1.js'
+            scriptUrl: 'data/pi2pt-maindata-v1.2.js'
         },
         {
             lang: 'id',
