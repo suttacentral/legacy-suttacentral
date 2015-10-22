@@ -13145,7 +13145,6 @@ sc.piLookup.register({script: 'pt', data: {
 "bhakkhita": ["p.p. de bhakkhati", "comido, alimentado, ingerido."],
 "bhakkheti": ["bhakkh + e", "come, alimenta-se, ingere."],
 "bhakhituṁ": ["infem. de bhakkhati", "comer, alimentar-se, ingerir."],
-"bhaga": ["neutro", "sorte; fortuna; órgão femino, vagina."],
 "bhagavā": ["neutro", "afortunado, abençoado. (masc.) epíteto para o Buddha."],
 "bhagandalā": ["fem.", "fístula, úlcera, chaga, tumor."],
 "bhagavantu": ["adj.", "afortunado, abençoado. (masc.) epíteto para o Buddha. // bhāgavantu (adj.) participativo; compartilhante."],
