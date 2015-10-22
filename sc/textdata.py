@@ -129,7 +129,7 @@ class TIMManager:
                     lang_tim.build(lang_dir, force=True)
                     components[lang_uid] = lang_tim
                     with db_file.open('wb') as f:
-                        f.write(lz4.compress(pickle.dumps(lang_tim)))
+                        f.write(lz4.compress(pickle.dumps(lang_tim, protocol=pickle.HIGHEST_PROTOCOL)))
                 files_used.add(db_file)
         
         build_logger.info('Removing unused db files'.format(lang_uid))
