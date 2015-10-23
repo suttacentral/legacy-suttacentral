@@ -70,10 +70,11 @@ def make_text_search_query(lang, root_lang, query, author, uid, search_title, se
                         }
                     }, 
                     {
-                    "term": {
-                        "division": division
+                        "term": {
+                            "division": division
+                        }
                     }
-                ]
+                ]            
             })
     if uid:
         filters.append({
@@ -107,17 +108,19 @@ def make_text_search_query(lang, root_lang, query, author, uid, search_title, se
             "function_score": {
                 "multi_match": {
                     "query": query,
-                    "fields": fields
+                    "fields": fields,
                     "type": "phrase" if phrase_search else "best_fields"                    
                 }
             }
         }
+    }
             
         
 
 
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, **kwargs):
+    pass
     
 
 def search(query, highlight=True, offset=0, limit=10,
