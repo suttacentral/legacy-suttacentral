@@ -1,6 +1,6 @@
 Convert Suttas in a directory to Latex output including cover
 
-Updated 15th August 2015
+Updated 15th Oct 2015
 --------------------------------------------------------------
 
 To use this module, copy the directory 'English' and give it a new name, preferably the language you want to use but any name will do.
@@ -50,5 +50,4 @@ python convertepub.py
 Complete the directory name of where the sutta files are stored (f.i. pt/pi/su/mn/).
 Type which suttas you want in this book, the output-name (the files will be stored in a directory called nikaya+output-name). Also enter again the directory of your translation files and other info.
 
-In the Terminal, go the the just created directory and run (change the relevant sections where needed):
-ebook-convert toc.html mn_port.epub --smarten-punctuation --cover mn_epub.png --authors 'Michael Beisert' --publisher 'SuttaCentral' --language 'portuguese' --title 'Majjhima Nikaya' --max-toc-links 54
+right-click on the toc.xhtml you just created and edit ebook. Right now this does not work properly yet and more research is needed but this is the way you can create one for the time being. Import the cover with 'maintain aspect ratio' and change the toc.ncx file (copy and paste from what python created)

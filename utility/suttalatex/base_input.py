@@ -126,7 +126,7 @@ def match_sutta_vagga(nikaya, language):
             vagga_dict[rows[1]] = rows[2]
 
     sutta_dict = dict()
-    for rows in csv.reader(open(base_dir+'sutta.csv', mode='r')):
+    for rows in csv.reader(open(base_dir+'templates/sutta.csv', mode='r')):
         if rows[4] == '1' and rows[2] == nikaya:
             sutta_dict[rows[1]] = rows[3]
 
