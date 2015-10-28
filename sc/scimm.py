@@ -50,9 +50,11 @@ def numsortkey(input, index=0):
 
 class _Imm:
     _uidlangcache = {}
+    _cache = None
     _instance = None
     _ready = threading.Event()
     def __init__(self, timestamp):
+        self._cache = {}
         self.tim = textdata.tim()
         self.build()
         self.build_parallels_data()
@@ -64,6 +66,7 @@ class _Imm:
         self.load_epigraphs()
         self.timestamp = timestamp
         self.build_time = datetime.now()
+        
     
     def __call__(self, uid):
         if uid in self.collections:

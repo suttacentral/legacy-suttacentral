@@ -9,6 +9,8 @@ var sc = window.sc || {}
 sc.classes = {
     margin: {
         "as": "Page numbers in Yamada, 1972.",
+        "bi": "Paragraph numbers in Bhikkhu Indacanda.",
+        "bjt": "Paragraph numbers in Buddha Jayanthi.",
         "bl": "(Not defined in GRETIL source.)",
 	"bm": "Paragraph numbers in Bhikkhu Mettiko.",
 	"bn": "Paragraph numbers in Bhikkhu Ñāṇadassana.",
@@ -68,6 +70,7 @@ sc.classes = {
         "titus": "",
         "t-linehead": "Volume, page, column, and line number in the Taishō canon.",
         "tb": "Paragraph numbers in Thanissaro Bhikkhu.",
+        "ttc": "Paragraph numbers in Thích Thiện Châu.",
         "ud-sutta": "Sutta number.",
         "ud-vagga-sutta": "Chapter/sutta number.",
         "tri62": "Sūtra and paragraph number in Tripāṭhī, 1962.",
@@ -217,13 +220,6 @@ function onMainLoad() {
         sc.sidebar.init();
         sc.init();
     }
-    ZeroClipboard.config({swfPath: "/js/vendor/ZeroClipboard-2.2.0.swf", 
-                          cacheBust: false,
-                          forceHandCursor: true,
-                          forceEnhancedClipboard: true});
-    ZeroClipboard.on('error', function(e) {
-            ZeroClipboard.destroy();
-    });
     
     var parallelCitationLabel = $('#parallel-citation .label');
     var parallelCitationTextField = $('#parallel-citation > input');

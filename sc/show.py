@@ -38,6 +38,11 @@ def default(*args, **kwargs):
     """
 
     imm = scimm.imm()
+    
+    if args[0] == 'panel':
+        max_age = 86400 * 7
+        cherrypy.response.headers['cache-control'] = 'public, max-age={}'.format(max_age)
+        return GenericView('panel', {}).render()
 
     full = len(args) == 2 and args[1] == 'full'
     

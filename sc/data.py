@@ -5,7 +5,13 @@ import sc.search.query
 
 class Data:
     def translation_count(self, lang, **kwargs):
-        return sc.search.query.div_translation_count(lang)
+        imm = sc.scimm.imm()
+        key = 'trcount_{}'.format(lang)
+        cache = imm._cache
+        if key not in cache:
+            value = sc.search.query.div_translation_count(lang)
+            cache[key] = value
+        return cache[key]
 
     def langs(self, **kwargs):
         imm = sc.scimm.imm()
@@ -98,7 +104,8 @@ class Data:
         for vp_id in volpage_ids.split(','):
             result = get(uid, vp_id)
             if result:
-                out[vp_id] = '/text_images/' + result['url']
+                out[vp_id] = {"url": '/text_images/' + result,
+                              "filename": (sc.text_image_symlink_dir / result).resolve().name}
         return out
 
 data = Data()

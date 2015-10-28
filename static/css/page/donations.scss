@@ -85,13 +85,13 @@ form{
         border-radius: 3px;
         vertical-align: top;
         box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        margin: 0;
     }
 
     label.checked {
         background: saturated-color(bright-purple);
     }
-    
-    >  label{
+  >  label{
     margin:0 0.7em 0 0;
     }
     input[type=checkbox],
@@ -103,13 +103,13 @@ form{
       opacity   : 0;
     }
 
-    input[type=radio]{
+    input[type=radio   ]{
       display      : inline-block;
       margin-left  : -2em;
       line-height  : 1.5em;
     }
 
-    input[type=radio] + span{
+    input[type=radio]  + span{
       display          : inline-block;
       width            : 0.875em;
       height           : 0.875em;
@@ -177,13 +177,11 @@ form{
     background: saturated-color(bright-green);
     box-shadow: 1px 1px 5px rgba(200,200,200,1);
 }
-
 ul#required {
-    margin: 2em 0 1em 0;
-}
- 
-#required li{
-    text-align:left;
-    list-style-type: none;
+  margin: 2em 0 1em 0;
+ }
+ #required li{
+  text-align:left;
+  list-style-type: none;
 }
 

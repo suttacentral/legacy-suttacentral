@@ -71,7 +71,7 @@ sc.text_selection = (function() {
         ignoreClasses = ','.join(a);
         highlightSelection();
 
-        $(document.body).on('mouseup', function(){_.delay(updateLink, 1)});
+        $(document.body).on('mouseup', 'p', function(){_.delay(updateLink, 1)});
 
     }
     
@@ -299,31 +299,21 @@ sc.text_selection = (function() {
         
         var clientRects = result[0].range.getClientRects()
         var quoteControls = $(
-            '<div id="quote-controls" data-clipboard-text="{}" title="Link to selected text">'.format(link) +
+            '<div id="quote-controls" data-clipboard-target="#quote-link" title="Link to selected text">'.format(link) +
             '<input id="quote-link" value="{}" readonly>'.format(link) +
             '<input id="quote-copied" value="URL Copied" disabled>' +
             '</div>'),
             quoteLink = quoteControls.find('#quote-link'),
             quoteCopied = quoteControls.find('#quote-copied');
             
-            quoteControls.appendTo(document.body)
-                     .css({'position': 'fixed',
-                            'top': clientRects[0].top,
-                            'left': clientRects[0].left});
-            quoteLink.on('click', function(){
-                quoteLink.select();
-            });
-            var client = new ZeroClipboard(quoteControls);
-            
-            client.on('ready', function(readyEvent) {
-                quoteLink.val('…/' + shortLink);
-                client.on('copy', function(event) {
-                    $('#quote-controls').addClass('copied').delay(1100).removeClass('copied');
-                    $('#quote-copied').fadeIn(500).delay(100).fadeOut(500);
-                    $('#quote-link').fadeTo(0, 0.0).delay(1100).fadeTo(100, 1.0);
-                })
-            })
-        
+        quoteControls.appendTo(document.body)
+                 .css({'position': 'fixed',
+                        'top': clientRects[0].top,
+                        'left': clientRects[0].left});
+        quoteLink.on('click', function(){
+            quoteLink.select();
+        });
+
         $(window).one('scroll', function(){
             updateLink(true);
         });
@@ -339,6 +329,14 @@ sc.text_selection = (function() {
             createReference: createReferenceChrome,
             nodeFilter: nodeFilter}
 })();
+
+var clipboard = new Clipboard('#quote-controls');
+clipboard.on('success', function(event) {
+    console.log('Success');
+    $('#quote-controls').addClass('copied').delay(1100).removeClass('copied');
+    $('#quote-copied').fadeIn(500).delay(100).fadeOut(500);
+    $('#quote-link').fadeTo(0, 0.0).delay(1100).fadeTo(100, 1.0);
+})
 
 function paint(){
     var selection = window.getSelection(),

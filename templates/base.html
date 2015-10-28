@@ -62,7 +62,9 @@
 {% if not ajax %}
 {% if not embed %}
 
-{{ panel_html }}
+{% block panel %}
+<div id="panel-placeholder"></div>
+{% endblock %}
 
 <div id="page-footer-push"></div>
 

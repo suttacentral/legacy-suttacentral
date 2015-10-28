@@ -1,10 +1,52 @@
 sc.headerMenu = {
-    node: $('#panel-screen-wrap, #panel'),
     lastScreenScroll: 0,
     animationDone: true,
     toggle: function(e){
         $(this).toggleClass('active');
         $('header .pitaka_menu').not(this).removeClass('active')
+    },
+    init: function() {
+        $('header .pitaka_menu a').each(function(){
+            $(this).attr('href', '#' + $(this).attr('href').replace(/^\.*\//, '').replace('.html', ''));
+        });
+        $('header .pitaka_menu').on('click', function(){sc.headerMenu.update($(this)); return false});
+
+        //  If click on the search-popup-btn, then add classes to configure the layout properly
+        $('.search-popup-btn').on('click', function() {
+            $('#menu').addClass('search-box-popup');
+            $('#page-header-search input').focus();
+            $('#page-header-search input').one('focusout', function(event) {
+                // on focusout, setup a handler to be called on the input box *after* the transition animations complete
+                $('#page-header-search input').one("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(e){
+                    $('#page-header-search input').removeClass('collapse-effect');
+                    $('#menu').removeClass('search-box-popup');
+                });
+                //  Fire off the transition animation by adding the class (see handler above)
+                $('#page-header-search input').addClass('collapse-effect');
+            });
+        });
+
+        $('#panel-screen-wrap').on('click', function(e) {
+            if ($(e.target).is('a'))
+                return true;
+            if ($("#autocomplete-dropdown").is(":visible")) {
+                $('#panel-screen-wrap').removeClass('active');    //  if search drop down is visible, remove shadow box
+            } else {
+                sc.headerMenu.update($(e.target));
+            }
+            return false
+        }).on('mousewheel', function(e){
+            if (e.target == this) {
+                // sc.headerMenu.hideAll();
+                sc.headerMenu.update($(e.target));
+                return false;
+            }
+            return true
+        })
+            
+        $(window).on('ready resize', sc.headerMenu.adjustColumns);
+        $(window).scroll(sc.headerMenu.scrollShowHide);
+        $('#panel').scrollLock();
     },
     update: function(element, mode) {
         var self = sc.headerMenu,
@@ -36,7 +78,7 @@ sc.headerMenu = {
         else {
             animationDone = true;
             self.hideAll();
-            self.node.addClass('active');
+            $('#panel-screen-wrap, #panel').addClass('active');
             target.addClass('active');
             element.addClass('active');
             setTimeout(self.adjustColumns, 50);
@@ -103,46 +145,34 @@ sc.headerMenu = {
 
 
 $(document).ready(function(){
-    $('header .pitaka_menu a').each(function(){
-        $(this).attr('href', '#' + $(this).attr('href').replace(/^\.*\//, '').replace('.html', ''));
-    });
-    $('header .pitaka_menu').on('click', function(){sc.headerMenu.update($(this)); return false});
-
-    //  If click on the search-popup-btn, then add classes to configure the layout properly
-    $('.search-popup-btn').on('click', function() {
-        $('#menu').addClass('search-box-popup');
-        $('#page-header-search input').focus();
-        $('#page-header-search input').one('focusout', function(event) {
-            // on focusout, setup a handler to be called on the input box *after* the transition animations complete
-            $('#page-header-search input').one("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(e){
-                $('#page-header-search input').removeClass('collapse-effect');
-                $('#menu').removeClass('search-box-popup');
-            });
-            //  Fire off the transition animation by adding the class (see handler above)
-            $('#page-header-search input').addClass('collapse-effect');
+    function proceed(panelData) {
+        if ($('#panel-placeholder').length) {
+            $('#panel-placeholder')[0].outerHTML = panelData;
+        }
+        sc.headerMenu.init();
+    }
+    var panelData = localStorage.getItem('sc.panel-data'),
+        panelTime = localStorage.getItem('sc.panel-time'),
+        nowTime = new Date().getTime();
+    console.log('Panel Data : ' + (panelData ? panelData.length : undefined));
+    if (!panelData || nowTime - panelTime > (86400 * 7)) {
+        $.ajax('/panel', {
+            cache: true,
+            dataType: 'html'
+        }).then(function(panelData) {
+            localStorage.setItem('sc.panel-data', panelData);
+            localStorage.setItem('sc.panel-time', nowTime);
+            proceed(panelData);
+        }, function(){
+            // Useful for offling browsing
+            if (panelData) {
+                proceed(panelData);
+            }
         });
-    });
-
-    $('#panel-screen-wrap').on('click', function(e) {
-        if ($(e.target).is('a'))
-            return true;
-        if ($("#autocomplete-dropdown").is(":visible")) {
-            $('#panel-screen-wrap').removeClass('active');    //  if search drop down is visible, remove shadow box
-        } else {
-            sc.headerMenu.update($(e.target));
-        }
-        return false
-    }).on('mousewheel', function(e){
-        if (e.target == this) {
-            // sc.headerMenu.hideAll();
-            sc.headerMenu.update($(e.target));
-            return false;
-        }
-        return true
-    })
+    } else {
+        proceed(panelData);        
+    }
+    
         
-    $(window).on('ready resize', sc.headerMenu.adjustColumns);
-    $(window).scroll(sc.headerMenu.scrollShowHide);
-    $('#panel').scrollLock();
-});
+})
     
