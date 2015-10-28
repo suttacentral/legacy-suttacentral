@@ -19,6 +19,9 @@ def clean(aggressive=False):
         tasks.dictionary.clean()
         tasks.exports.offline.clean(older=False)
         tasks.search.clean()
+        for file in sc.db_dir.glob('*'):
+            if not file.isdir():
+                file.unlink()
     else:
         tasks.assets.clean(older=True)
         tasks.exports.offline.clean(older=True)

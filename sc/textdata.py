@@ -29,24 +29,6 @@ build_logger.setLevel('INFO')
 
 """
 
-def text_dir_md5(extra_files=[__file__]):
-    """ Generates an md5 hash based on text modification times
-
-    This can be used to detect if the database is up to date.
-
-    By default uses all directories (not files) in the text_dir,
-    plus this module file since changes to this module are quite
-    likely to result in a different final database.
-
-    """
-    files = chain(sc.text_dir.glob('**/*.html'), (pathlib.Path(f) for f in extra_files))
-    mtimes = (file.stat().st_mtime_ns for file in files)
-    
-    from hashlib import md5
-    from array import array
-    
-    return md5(array('Q', mtimes)).hexdigest()
-
 class TextInfo:
     __slots__ = ('uid', 'file_uid', 'lang', 'path', 'bookmark', 'name',
                  'author', 'volpage', 'prev_uid', 'next_uid', 
@@ -81,18 +63,7 @@ class TIMManager:
     
     @classmethod
     def get_db_name(cls, lang_dir):
-        files = []
-        # Use faster os.walk method - 4x faster than pathlib.glob
-        # thanks to scandir changes in py3.5
-        for dir, _, filenames  in os.walk(str(lang_dir)):
-            for file in filenames:
-                if not file.endswith('.html'):
-                    continue
-                files.append('{}/{}'.format(dir, file))
-        files.sort()
-        md5 = hashlib.md5()
-        for file in files:
-            md5.update(str(os.stat(file).st_mtime_ns).encode('ascii'))
+        md5 = sc.util.get_folder_deep_md5(lang_dir, include_filter=lambda file: file.endswith('.html'))
         md5.update(str(cls.version).encode('ascii'))
         
         return cls.db_name_tmpl.format(lang=lang_dir.stem, hash=md5.hexdigest()[:10])
@@ -118,18 +89,19 @@ class TIMManager:
                 lang_uid = lang_dir.stem
                 db_filename = self.get_db_name(lang_dir)
                 db_file = sc.db_dir / db_filename
+                lang_tim = None
                 if not force and db_file.exists():
-                    with db_file.open('rb') as f:
-                        data = pickle.loads(lz4.uncompress(f.read()))
-                        components[lang_uid] = data
-                    build_logger.info('Loading TIM data for "{}" from disk'.format(lang_uid))
-                else:
+                    try:
+                        lang_tim = sc.util.lz4_pickle_load(db_file)
+                        build_logger.info('Loading TIM data for "{}" from disk'.format(lang_uid))
+                    except Exception as e:
+                        logging.exception(e)
+                if not lang_tim:
                     build_logger.info('Building TIM data for "{}"'.format(lang_uid))
                     lang_tim = TextInfoModel(name=lang_uid)
                     lang_tim.build(lang_dir, force=True)
-                    components[lang_uid] = lang_tim
-                    with db_file.open('wb') as f:
-                        f.write(lz4.compress(pickle.dumps(lang_tim, protocol=pickle.HIGHEST_PROTOCOL)))
+                    sc.util.lz4_pickle_dump(lang_tim, db_file)
+                components[lang_uid] = lang_tim
                 files_used.add(db_file)
         
         build_logger.info('Removing unused db files'.format(lang_uid))

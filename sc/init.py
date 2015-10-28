@@ -38,6 +38,7 @@ def update_search():
         try:
             sc.search.updater.start()
             sc.search.update_indexes()
+            print("Index Update Complete")
         finally:
             search_lock.release()
 
@@ -52,14 +53,15 @@ def init():
         import sc
         import sc.scimm
         import sc.textdata
-        import sc.text_image
+        import sc.text_image_index
         
         print("Building TIM")
         sc.textdata.build()
         print("Building IMM")
         sc.scimm.build()
-        print("Updating Image Symlinks")
-        sc.text_image.update_symlinks()
+        print("Building Text Image Index")
+        sc.text_image_index.build()
+        print("Components are now ready")
         
         if sc.config.app['update_search']:
             print("Initiating Index Update in Background")

@@ -1,6 +1,7 @@
 import regex
 import threading
 from collections import namedtuple
+from typing import Mapping
 
 import sc
 from sc.views import ViewBase
@@ -12,9 +13,38 @@ import pathlib
 _index_ready = threading.Event()
 index = {}
 
-def update_symlinks(n=0):
+class NormalizedId(str):
+    pass
+
+cache_template = 'text-image-index_{}.pklz'
+
+def clear_old_cache_files(newest):
+    for file in sc.db_dir.glob(cache_template.format('*')):
+        if file == newest:
+            continue
+        else:
+            file.unlink()
+
+def create_index_and_update_symlinks() -> Mapping[NormalizedId, str]:
     """ Symlinks are used mainly for the ease of serving with Nginx """
-    global index
+    
+    def image_filter(filename):
+        return filename.endswith('.png') or filename.endswith('.jpg')
+    
+    symlink_md5 = sc.util.get_folder_shallow_md5(folder=sc.text_image_symlink_dir, check_mtime=False, include_filter=image_filter)
+    images_md5 = sc.util.get_folder_deep_md5(folder=sc.text_image_source_dir, check_mtime=True, include_filter=image_filter)
+    
+    combined_md5 = symlink_md5
+    combined_md5.update(symlink_md5.digest())
+    cache_file = sc.db_dir / cache_template.format(combined_md5.hexdigest()[:10])
+    if cache_file.exists():
+        try:
+            cached = sc.util.lz4_pickle_load(cache_file)
+            print('Loading cached Text Image Index from disk')
+            return cached
+        except Exception as e:
+            print(e)
+            cache_file.unlink()
     
     tmp_index = {}
     
@@ -23,7 +53,6 @@ def update_symlinks(n=0):
              if f.suffix in {'.png', '.jpg'}]
     source_files.sort(key=str)
 
-    
     symlink_dir = sc.text_image_symlink_dir.absolute()
     for file in source_files:
         normalized_id = normalize_id(file.stem)
@@ -35,15 +64,21 @@ def update_symlinks(n=0):
             if symlink.resolve() == file:
                 continue
             else:
-                symlink.unlink()    
-        if not symlink.parent.exists():
-            symlink.parent.mkdir(parents=True)
-        
+                symlink.unlink()
+
+        symlink.parent.mkdir(parents=True, exist_ok=True)
         symlink.symlink_to(file)
-    index = tmp_index
+    print('Saving Text Image Index to disk')
+    sc.util.lz4_pickle_dump(tmp_index, cache_file)
+    clear_old_cache_files(newest=cache_file)
+    return tmp_index
+
+def build(n=0):
+    global index
+    index = create_index_and_update_symlinks()
     _index_ready.set()
 
-def normalize_id(value, _divs=set()):
+def normalize_id(value, _divs=set()) -> NormalizedId:
     # Normalize into form:
     # manuscript-book-vol-page
     # pts-mn-1-96
@@ -60,9 +95,9 @@ def normalize_id(value, _divs=set()):
         value = value.replace('-pg.', '-').replace('-vol.', '').replace('.', '-').replace('-pg-', '-').replace('--', '-').replace('-jat', '-ja')
         value = regex.sub(r'\d+', lambda m: str(int(m[0])), value)
         value = regex.sub(r'[a-z]+(?=\d)', lambda m: m[0] + '-' if m[0] in _divs else m[0], value)
-    return value
+    return NormalizedId(value)
 
-def get(sutta_uid, volpage):
+def get(sutta_uid, volpage) -> str:
     _index_ready.wait()
     m = regex.match('[a-z]+', sutta_uid)
     if not m:

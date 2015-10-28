@@ -6,10 +6,18 @@ import pathlib
 import textwrap
 import time
 import regex
+import hashlib
+import pickle
+import lz4
+
+from pathlib import Path
 from collections import deque
 import itertools
 from contextlib import contextmanager
 from datetime import datetime
+
+from typing import Union, Callable, Optional
+HASH = hashlib._hashlib.HASH
 
 from . import config
 
@@ -264,3 +272,43 @@ class Timer:
     def __exit__(self, *args):
         self.end = time.clock()
         self.interval = self.end - self.start
+
+def get_folder_shallow_md5(folder:Union[str, Path], check_mtime:bool=True, follow_symlinks:bool=False, include_filter:Callable[[str], bool]=None) -> HASH:
+    files = sorted(os.scandir(str(folder)), key=lambda f: f.name)
+    md5 = hashlib.md5(str([f.name for f in files]).encode('utf-16'))
+    if check_mtime:
+        for dir_entry in files:
+            md5.update(str(dir_entry.stat(follow_symlinks=follow_symlinks).st_mtime_ns).encode('utf-16'))
+    return md5
+
+def get_folder_deep_md5(folder:Union[str, Path], check_mtime:bool=True, follow_symlinks:bool=False, include_filter:Callable[[str], bool]=None) -> HASH:
+    files = []
+    stat = os.stat if follow_symlinks else os.lstat
+    # Use faster os.walk method - 4x faster than pathlib.glob
+    # thanks to scandir changes in py3.5
+    for dir, _, filenames  in os.walk(str(folder)):
+        for file in filenames:
+            if include_filter and not include_filter(file):
+                continue
+            files.append('{}/{}'.format(dir, file))
+    files.sort()
+    md5 = hashlib.md5()
+    md5.update(str(files).encode('utf-16'))
+    for file in files:
+        if check_mtime:
+            md5.update(str(os.stat(file).st_mtime_ns).encode('utf-16'))
+    return md5
+
+def lz4_pickle_dump(data, filename):
+    path = pathlib.Path(filename)
+    with path.open('wb') as f:
+        f.write(lz4.compress(pickle.dumps(data, protocol=pickle.HIGHEST_PROTOCOL)))
+    
+def lz4_pickle_load(filename):
+    path = pathlib.Path(filename)
+    with path.open('rb') as f:
+        compressed = f.read()
+        decompressed = lz4.uncompress(compressed)
+        data = pickle.loads(decompressed)
+        return data
+
