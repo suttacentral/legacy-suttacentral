@@ -52,9 +52,12 @@ def update_symlinks():
     for tpi, info in sorted(index.items(), key=lambda t: t[0]):
         symlink = symlink_dir / info['url']
         if symlink.is_symlink():
-            if symlink.resolve() == info['file']:
-                continue
-            else:
+            try:
+                if symlink.resolve() == info['file']:
+                    continue
+                else:
+                    symlink.unlink()
+            except FileNotFoundError:
                 symlink.unlink()
         if not symlink.parent.exists():
             symlink.parent.mkdir(parents=True)
