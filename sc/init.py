@@ -7,7 +7,6 @@ import logging
 import pathlib
 import importlib
 import threading
-import scandir
 logger = logging.getLogger(__name__)
 
 logging.getLogger('urllib3').setLevel(logging.WARNING)
@@ -146,7 +145,7 @@ class AutoReloader(threading.Thread):
     
     def get_data_files(self):
         files = []
-        for dir, _, filenames in scandir.walk(str(sc.data_dir)):
+        for dir, _, filenames in os.walk(str(sc.data_dir)):
             for filename in filenames:
                 parts = filename.split('.')
                 if len(parts) > 1:

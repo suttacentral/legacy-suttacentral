@@ -1,6 +1,7 @@
 import json
 import regex
 import logging
+from inspect import currentframe, getargvalues
 
 import elasticsearch
 from sc.search import es
@@ -38,8 +39,8 @@ def div_translation_count(lang):
             in result['aggregations']['div_uids']['buckets']})
     return mapping
 
-
-def make_text_search_query(lang, root_lang, query, author, uid, search_title, search_body):
+def make_text_search_query(query, lang, root_lang=None, author=None, uid=None, search_title=None, search_body=None):
+    
     query = query.trim()
     m = regex.match(r'^"(.*)"$', query)
     if m:
@@ -47,6 +48,9 @@ def make_text_search_query(lang, root_lang, query, author, uid, search_title, se
         phrase_search = True
     else:
         phrase_search = False
+    
+    query_params = {k:v for k,v in getargvalues(currentframe()) if v is not None}
+                    
     
     filters = []
     if root_lang:

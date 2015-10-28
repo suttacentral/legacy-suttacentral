@@ -6,7 +6,6 @@ import pickle
 import pathlib
 import hashlib
 import logging
-import scandir
 import sqlite3
 import datetime
 import functools
@@ -83,8 +82,9 @@ class TIMManager:
     @classmethod
     def get_db_name(cls, lang_dir):
         files = []
-        # Use faster scandir.walk method - 4x faster than pathlib.glob
-        for dir, _, filenames  in scandir.walk(str(lang_dir)):
+        # Use faster os.walk method - 4x faster than pathlib.glob
+        # thanks to scandir changes in py3.5
+        for dir, _, filenames  in os.walk(str(lang_dir)):
             for file in filenames:
                 if not file.endswith('.html'):
                     continue
