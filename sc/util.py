@@ -273,7 +273,7 @@ class Timer:
         self.end = time.clock()
         self.interval = self.end - self.start
 
-def get_folder_shallow_md5(folder:Union[str, Path], check_mtime:bool=True, follow_symlinks:bool=False, include_filter:Callable[[str], bool]=None) -> HASH:
+def get_folder_shallow_md5(folder:Union[str, Path], check_mtime=True, follow_symlinks=False, include_filter:Callable[[str], bool]=None) -> HASH:
     files = sorted(os.scandir(str(folder)), key=lambda f: f.name)
     md5 = hashlib.md5(str([f.name for f in files]).encode('utf-16'))
     if check_mtime:
@@ -281,7 +281,7 @@ def get_folder_shallow_md5(folder:Union[str, Path], check_mtime:bool=True, follo
             md5.update(str(dir_entry.stat(follow_symlinks=follow_symlinks).st_mtime_ns).encode('utf-16'))
     return md5
 
-def get_folder_deep_md5(folder:Union[str, Path], check_mtime:bool=True, follow_symlinks:bool=False, include_filter:Callable[[str], bool]=None) -> HASH:
+def get_folder_deep_md5(folder:Union[str, Path], check_mtime=True, follow_symlinks=False, include_filter:Callable[[str], bool]=None) -> HASH:
     files = []
     stat = os.stat if follow_symlinks else os.lstat
     # Use faster os.walk method - 4x faster than pathlib.glob
@@ -307,8 +307,5 @@ def lz4_pickle_dump(data, filename):
 def lz4_pickle_load(filename):
     path = pathlib.Path(filename)
     with path.open('rb') as f:
-        compressed = f.read()
-        decompressed = lz4.uncompress(compressed)
-        data = pickle.loads(decompressed)
-        return data
+        return pickle.loads(lz4.uncompress(f.read()))
 

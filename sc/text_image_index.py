@@ -16,14 +16,12 @@ index = {}
 class NormalizedId(str):
     pass
 
-cache_template = 'text-image-index_{}.pklz'
+def build(n=0):
+    global index
+    index = create_index_and_update_symlinks()
+    _index_ready.set()
 
-def clear_old_cache_files(newest):
-    for file in sc.db_dir.glob(cache_template.format('*')):
-        if file == newest:
-            continue
-        else:
-            file.unlink()
+cache_filename_template = 'text-image-index_{}.pklz'
 
 def create_index_and_update_symlinks() -> Mapping[NormalizedId, str]:
     """ Symlinks are used mainly for the ease of serving with Nginx """
@@ -36,7 +34,7 @@ def create_index_and_update_symlinks() -> Mapping[NormalizedId, str]:
     
     combined_md5 = symlink_md5
     combined_md5.update(symlink_md5.digest())
-    cache_file = sc.db_dir / cache_template.format(combined_md5.hexdigest()[:10])
+    cache_file = sc.db_dir / cache_filename_template.format(combined_md5.hexdigest()[:10])
     if cache_file.exists():
         try:
             cached = sc.util.lz4_pickle_load(cache_file)
@@ -73,10 +71,12 @@ def create_index_and_update_symlinks() -> Mapping[NormalizedId, str]:
     clear_old_cache_files(newest=cache_file)
     return tmp_index
 
-def build(n=0):
-    global index
-    index = create_index_and_update_symlinks()
-    _index_ready.set()
+def clear_old_cache_files(newest):
+    for file in sc.db_dir.glob(cache_filename_template.format('*')):
+        if file == newest:
+            continue
+        else:
+            file.unlink()
 
 def normalize_id(value, _divs=set()) -> NormalizedId:
     # Normalize into form:
