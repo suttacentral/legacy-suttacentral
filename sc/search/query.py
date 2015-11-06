@@ -39,6 +39,13 @@ def div_translation_count(lang):
             in result['aggregations']['div_uids']['buckets']})
     return mapping
 
+def text_search(query, lang=None, **kwargs):
+    import langid
+    lang_guess = langid.identifier
+    if lang is None:
+        lang = lang_guess
+    query = make_text_search_query(query, lang=lang, lang_guess=lang_guess, **kwargs)
+
 def make_text_search_query(query, lang, root_lang=None, author=None, uid=None, search_title=None, search_body=None):
     
     query = query.trim()
@@ -50,7 +57,6 @@ def make_text_search_query(query, lang, root_lang=None, author=None, uid=None, s
         phrase_search = False
     
     query_params = {k:v for k,v in getargvalues(currentframe()) if v is not None}
-                    
     
     filters = []
     if root_lang:
@@ -121,7 +127,21 @@ def make_text_search_query(query, lang, root_lang=None, author=None, uid=None, s
             
         
 
+lang_bias = {'en': 1.4, 'pi': 1.2}
 
+def rank_language(string):
+    import sc.lib.langid as langid
+    rank = langid.rank(string.casefold())[:4]
+    
+    biased_rank = sorted( 
+        ( (lang, score * lang_bias.get(lang, 1.0)) for lang, score in rank ), 
+        key=lambda t: t[1], 
+        reverse=True)
+    return biased_rank
+
+def guess_language(string):
+    return rank_language(string)[0][0]
+    
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, **kwargs):
     pass
