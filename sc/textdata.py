@@ -500,7 +500,7 @@ def build():
     tim_manager.load()
 
 def ensure_up_to_date():
-    tim_manager.load(quick=False)
+    tim_manager.load()
 
 class PaliPageNumbinator:
     msbook_to_ptsbook_mapping = {
