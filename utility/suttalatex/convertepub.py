@@ -13,14 +13,16 @@ import csv
 import shutil
 from base_input import get_globals, match_sutta_vagga, Sutta
 
+navnum = 3
+
 def ReadWritePage(inputname,titletext):
     """
-    Helper function to read a text file and write the output html file
+    Helper function to read a text file and write the output xhtml file
     """
     linenr = 1
     inputOpen = open(language+'/'+inputname+'.txt','r')
-    outputWrite = open(namelist[0]+versionnumber+'/'+inputname+'.html','w')
-    outputWrite.write(open('templates/header_epub_template.html').read())
+    outputWrite = open(namelist[0]+versionnumber+'/'+inputname+'.xhtml','w')
+    outputWrite.write(open('templates/header_epub_template.xhtml').read())
     outputWrite.write('<article>\n<h1'+titletext+'</h1>\n')
     for line in inputOpen:
         line = re.sub(r' https://(.*?) ',r' <a href="https://\1">\1</a> ',line)
@@ -51,8 +53,8 @@ def writeExtraPages():
     ReadWritePage('about',' class="endtext">'+transl_dict['about_transl']+' SuttaCentral')
 
     #Metadata
-    outputWrite = open(namelist[0]+versionnumber+'/metaarea.html','w')
-    outputWrite.write(open('templates/header_epub_template.html').read())
+    outputWrite = open(namelist[0]+versionnumber+'/metaarea.xhtml','w')
+    outputWrite.write(open('templates/header_epub_template.xhtml').read())
     outputWrite.write('<p>'+transl_dict['edition_notice']+'</p>\n')
     outputWrite.write('<p>'+transl_dict['meta_area']+'</p>\n')
     outputWrite.write('<p>'+transl_dict['copyright_notice']+'</p>\n')
@@ -94,19 +96,25 @@ def footNotes(line,fileFoots):
     '''
     footnotetitles = re.findall(r'<span class=".*?" title="(.*?)" id="note(\d{1,5})">.*?</span>',line)
     for nn in range(len(footnotetitles)):
-        fileFoots.write('<p><a id="note'+footnotetitles[nn][1]+'">'+footnotetitles[nn][1]+': '+footnotetitles[nn][0].strip()+'</a></p>\n')
+        fileFoots.write('<p><a epub:type="footnote" id="n'+footnotetitles[nn][1]+'">'+footnotetitles[nn][1]+': '+footnotetitles[nn][0].strip()+'</a></p>\n')
+        #fileFoots.write('<p><a id="note'+footnotetitles[nn][1]+'">'+footnotetitles[nn][1]+': '+footnotetitles[nn][0].strip()+'</a></p>\n')
 
     line = re.sub(r'<span class="var" title="(.*?)" id="note(\d{1,5})">(.*?)</span>',
-        r'\3<sup><a class="footnote" href="#note\2">\2</a></sup>',line)
+                r'\3<a class="note" epub:type="noteref" href="#n\2">\2</a>',line)
+        #r'\3<sup><a class="footnote" href="#note\2">\2</a></sup>',line)
     line = re.sub(r'<span class="cross" title="(.*?)" id="note(\d{1,5})">(.*?)</span>',
-        r'\3<sup><a class="footnote" href="#note\2">\2</a></sup>',line)
+                r'\3<a class="note" epub:type="noteref" href="#n\2">\2</a>',line)
+        #r'\3<sup><a class="footnote" href="#note\2">\2</a></sup>',line)
     return line
 
 def writeSutta(each_sutta):
     """
     Takes the sutta information for each sutta and writes it to file
     """
-    fileFoots = open('footnotes.html','w')
+    global navnum
+
+
+    fileFoots = open('footnotes.xhtml','w')
     fileFoots.write('<hr>\n<aside>\n')
 
     if len(namelist) > 3:
@@ -116,7 +124,7 @@ def writeSutta(each_sutta):
     suttapath = os.path.join(suttadir,suttaname+'.html')
 
     fileOpen = open(suttapath,'r')
-    fileWrite = open(namelist[0]+'_temp/'+namelist[0]+str(suttanrs[each_sutta])+'.html','w')
+    fileWrite = open(namelist[0]+'_temp/'+namelist[0]+str(suttanrs[each_sutta])+'.xhtml','w')
 
     #If the suttasections starts with a digit, this is thrown out.
     if not Sutta(suttapath).get_section_title()[0].isdigit():
@@ -129,12 +137,22 @@ def writeSutta(each_sutta):
 
     if suttaname in sutta_vagga_dict.keys():
         fileWrite.write('<h1 class="vagga">'+sutta_vagga_dict[suttaname]+'</h1>\n')
-        TOCWrite.write('</p>\n<p class="pref"><a href="'+namelist[0]+str(suttanrs[each_sutta])+'.html">'+sutta_vagga_dict[suttaname]+'</a><br>\n')
+        TOCWrite.write('</p>\n<p class="pref"><a href="'+namelist[0]+str(suttanrs[each_sutta])+'.xhtml">'+sutta_vagga_dict[suttaname]+'</a><br>\n')
+        if navnum != 3:
+            TOC_ncxWrite.write('</navpoint>\n')
+        TOC_ncxWrite.write('<navPoint id="num_'+str(navnum)+'" playOrder="'+str(navnum)+
+            '">\n<navLabel>\n<text>'+sutta_vagga_dict[suttaname]+'</text>\n</navLabel>\n<content src="'
+            +namelist[0]+str(suttanrs[each_sutta])+'.xhtml"/>\n')
+        navnum += 1
 
     fileWrite.write('<h1><a id="'+namelist[0]+str(suttanrs[each_sutta])+'"></a>'+str(suttanrs[each_sutta])+' '+sectionname+'</h1>')
-    TOCWrite.write('<a href="'+namelist[0]+str(suttanrs[each_sutta])+'.html#'+namelist[0]+str(suttanrs[each_sutta])+'" class="sutta">'
+    TOCWrite.write('<a href="'+namelist[0]+str(suttanrs[each_sutta])+'.xhtml#'+namelist[0]+str(suttanrs[each_sutta])+'" class="sutta">'
         +str(suttanrs[each_sutta])+' '+re.sub(r'<span .*?>(.*?)</span>',r'\1',sectionname)+'</a><br>\n')
-        
+    TOC_ncxWrite.write('<navPoint id="num_'+str(navnum)+'" playOrder="'+str(navnum)+
+        '">\n<navLabel>\n<text>'+str(suttanrs[each_sutta])+' '+sectionname+
+        '</text>\n</navLabel>\n<content src="'+namelist[0]+str(suttanrs[each_sutta])+'.xhtml#'+namelist[0]+str(suttanrs[each_sutta])+'"/>\n</navPoint>')
+    navnum += 1
+
     for line in fileOpen:
         if line.startswith('</div>'):
             break
@@ -157,10 +175,10 @@ def writeSutta(each_sutta):
 
     fileWrite.close()
 
-    fileOpen = open(namelist[0]+'_temp/'+namelist[0]+str(suttanrs[each_sutta])+'.html','r')
-    fileWrite = open(namelist[0]+versionnumber+'/'+namelist[0]+str(suttanrs[each_sutta])+'.html','w')
+    fileOpen = open(namelist[0]+'_temp/'+namelist[0]+str(suttanrs[each_sutta])+'.xhtml','r')
+    fileWrite = open(namelist[0]+versionnumber+'/'+namelist[0]+str(suttanrs[each_sutta])+'.xhtml','w')
 
-    fileWrite.write(open('templates/header_epub_template.html').read())
+    fileWrite.write(open('templates/header_epub_template.xhtml').read())
     fileWrite.write('<article>\n')
 
     for line in fileOpen:
@@ -191,13 +209,13 @@ def writeSutta(each_sutta):
 
     fileFoots.write('\n</aside>')
     fileFoots.close()
-    fileWrite.write(open('footnotes.html','r').read())
+    fileWrite.write(open('footnotes.xhtml','r').read())
 
     fileWrite.write('\n</article>\n</body>\n</html>')
     fileWrite.close()
 
-    os.remove(namelist[0]+'_temp/'+namelist[0]+str(suttanrs[each_sutta])+'.html')
-    os.remove('footnotes.html')
+    os.remove(namelist[0]+'_temp/'+namelist[0]+str(suttanrs[each_sutta])+'.xhtml')
+    os.remove('footnotes.xhtml')
 
 
 # loads all user input as data in dictionary
@@ -217,9 +235,11 @@ for rows in csv.reader(open(language+'/trans.txt', mode='r'),delimiter='='):
 sutta_vagga_dict = match_sutta_vagga(namelist[0],language)
 
 #TOC
-TOCWrite = open(namelist[0]+versionnumber+'/toc.html','w')
-TOCWrite.write(open('templates/header_epub_template.html').read())
-TOCWrite.write('<h1>'+transl_dict['contents']+'</h1>\n<p class="pref"><a href="metaarea.html"></a></p>\n<p class="pref"><a href="preface.html">'
+TOCWrite = open(namelist[0]+versionnumber+'/toc.xhtml','w')
+TOC_ncxWrite = open(namelist[0]+versionnumber+'/toc.ncx','w')
+TOCWrite.write(open('templates/header_epub_template.xhtml').read())
+TOC_ncxWrite.write(open('templates/toc_header.ncx').read())
+TOCWrite.write('<h1>'+transl_dict['contents']+'</h1>\n<p class="pref"><a href="metaarea.xhtml"></a></p>\n<p class="pref"><a href="preface.xhtml">'
     +transl_dict['preface_transl']+'</a>')
 
 for each_sutta in range(startsutta, endsutta):
@@ -229,7 +249,13 @@ writeExtraPages()
 
 os.rmdir(namelist[0]+'_temp/')
 
-TOCWrite.write('</p>\n<p class="pref"><a href="bio.html">'+transl_dict['bio_transl']+': '+transl_dict['author']+
-    '</a></p>\n<p class="pref"><a href="about.html">'+transl_dict['about_transl']+
+TOCWrite.write('</p>\n<p class="pref"><a href="bio.xhtml">'+transl_dict['bio_transl']+': '+transl_dict['author']+
+    '</a></p>\n<p class="pref"><a href="about.xhtml">'+transl_dict['about_transl']+
     ' SuttaCentral</a></p>\n</body>\n</html>')
+TOC_ncxWrite.write('</navpoint>\n<navPoint id="num_'+str(navnum)+'" playOrder="'+str(navnum)+
+    '">\n<navLabel>\n<text>'+transl_dict['bio_transl']+': '+transl_dict['author']+
+    '</text>\n</navLabel>\n<content src="bio.xhtml"/>\n</navPoint>\n<navPoint id="num_'
+    +str(navnum+1)+'" playOrder="'+str(navnum+1)+'">\n<navLabel>\n<text>'
+    +transl_dict['about_transl']+' SuttaCentral</text>\n</navLabel>\n<content src="about.xhtml"/>\n</navPoint>\n</navMap>\n</ncx>')
 TOCWrite.close()
+TOC_ncxWrite.close()
