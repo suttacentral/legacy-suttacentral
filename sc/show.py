@@ -7,6 +7,7 @@ import sc.data
 from sc.scm import data_scm
 from sc.util import filelock
 from sc.views import *
+from sc.language import LanguageView
 import sc.donations
 
 logger = logging.getLogger(__name__)
@@ -56,6 +57,10 @@ def default(*args, **kwargs):
             # sure we have a valid result first!)
             cherrypy.response.headers['cache-control'] = 'public, max-age=3600'
             return result
+    if len(args) <= 2:
+        if args[0] in imm.languages:
+            div_uid = None if len(args) == 1 else args[1]
+            return LanguageView(lang=args[0], div_uid=div_uid).render()
     
     if len(args) == 1 or full:
         uid = args[0]
