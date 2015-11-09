@@ -23,11 +23,11 @@ from collections import OrderedDict, defaultdict, namedtuple
 import sc
 from sc import config, textfunctions, textdata
 from sc.classes import *
-import sc.updater
 from sc.uid_expansion import uid_to_acro, uid_to_name
 
-
 from sc.csv_loader import table_reader
+
+import sc.init
 
 logger = logging.getLogger(__name__)
 
@@ -782,7 +782,7 @@ def imm(wait=True):
             _Imm._ready.wait()
     return _Imm._instance
 
-def periodic_update(i):
+def build():
     timestamp = max(int(file.stat().st_mtime) for file in sc.table_dir.glob('**/*'))
     if not _Imm._instance or _Imm._instance.timestamp != timestamp:
         logger.info('Building IMM')

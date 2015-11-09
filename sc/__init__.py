@@ -1,7 +1,14 @@
+import sys
+import threading
 from pathlib import Path
 
 from sc.configuration import Config
 
+def check_python_version(min_version):
+    actual_version = sys.version_info[:3]
+    if actual_version < min_version:
+        raise SystemExit('SuttaCentral requires Python >= {min[0]}.{min[1]}.{min[2]}, actual python version is {act[0]}.{act[1]}.{act[2]}'.format(min=min_version, act=actual_version))
+    
 
 def reload_constants():
     """Reload runtime constants."""
@@ -37,6 +44,7 @@ def set_constants():
     # Assign all constants to the module.
     globals().update(locals())
 
+check_python_version(min_version=(3, 5, 0))
 
 config = Config()
 

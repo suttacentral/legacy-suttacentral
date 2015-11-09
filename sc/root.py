@@ -116,14 +116,13 @@ class Admin(object):
         return show.admin_data_notify(kwargs.get('payload'))
 
     @cherrypy.expose
-    def reload(self, module=None):
+    def reload(self, **kwargs):#, module=None):
         if cherrypy.request.headers.get('Cf-Connecting-Ip'):
             raise cherrypy.HTTPError(403)
-        if not module:
-            return
         if cherrypy.request.method != 'POST':
-            return
-        import importlib
-        module = importlib.import_module(module)
-        importlib.reload(module)
-        return {'status': 'success'}
+            raise cherrypy.HTTPError(404)
+        
+        import sc.init
+        sc.init.reinit()
+        
+        return 'success'

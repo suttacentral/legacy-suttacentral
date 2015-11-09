@@ -10,7 +10,7 @@ import sc
 from sc import textfunctions
 from sc.search.indexer import ElasticIndexer
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('search.suttas')
 
 sutta_dump_file = sc.db_dir / 'suttas.json'
 
@@ -114,10 +114,7 @@ class SuttaIndexer(ElasticIndexer):
     def update_data(self, force=False):
         self.process_chunks(self.yield_suttas(size=500000))
 
-def periodic_update(i):
-    if not sc.search.is_available():
-        logger.error('Elasticsearch Not Available')
-        return
+def update():
     indexer = SuttaIndexer('suttas')
     indexer.update()
 

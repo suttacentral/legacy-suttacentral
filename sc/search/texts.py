@@ -14,13 +14,7 @@ from sc.util import unique, numericsortkey
 
 from sc.search.indexer import ElasticIndexer
 
-logger = logging.getLogger(__name__)
-logger.setLevel('INFO')
-
-handler = logging.StreamHandler()
-handler.setLevel('INFO')
-logger.addHandler(handler)
-
+logger = logging.getLogger('search.texts')
 
 class TextIndexer(ElasticIndexer):
     doc_type = 'text'
@@ -206,9 +200,7 @@ class TextIndexer(ElasticIndexer):
             fields="mtime",
             query=None,
             size=500)}
-        print('{} stored mtimes'.format(len(stored_mtimes)))
         current_mtimes = {file.stem: int(file.stat().st_mtime) for file in self.lang_dir.glob('**/*.html')}
-        print('{} current mtimes'.format(len(current_mtimes)))
         to_delete = set(stored_mtimes).difference(current_mtimes)
         to_add = current_mtimes.copy()
         for uid, mtime in stored_mtimes.items():
@@ -234,9 +226,3 @@ def update(force=False):
         if lang_dir.is_dir():
             indexer = TextIndexer(lang_dir.stem, lang_dir)
             indexer.update()
-
-def periodic_update(i):
-    if not sc.search.is_available():
-        logger.error('Elasticsearch Not Available')
-        return
-    update()

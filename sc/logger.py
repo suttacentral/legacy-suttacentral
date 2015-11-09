@@ -99,17 +99,19 @@ def file_handler(name=None):
         logfile = sc.config.log_dir / config.app['log_name']
     handler = RotatingFileHandler(str(logfile), 
                 maxBytes=4*1024*1024, backupCount=1)
-    handler.setFormatter(SCLogFormatter(with_name=not name))
+    handler.setFormatter(SCLogFormatter())
     return handler
     
-def get_named_logger(name, level='INFO'):
+def get_named_logger(name, level='INFO', _cache={}):
     """ A logger which logs to a named file """
-    logger = logging.getLogger(name)
-    handler = sc.logger.file_handler(name)
-    logger.addHandler(handler)
-    logger.setLevel(level)
-    handler.setLevel(level)
-    return logger
+    if name not in _cache:
+        logger = logging.getLogger(name)
+        handler = file_handler(name)
+        logger.addHandler(handler)
+        logger.setLevel(level)
+        handler.setLevel(level)
+        _cache[name] = logger
+    return _cache[name]
 
 file_log = file_handler()
 

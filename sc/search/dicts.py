@@ -10,7 +10,7 @@ from sc.search.indexer import ElasticIndexer
 
 es = sc.search.es
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('search.dicts')
 
 class DictIndexer(ElasticIndexer):
     doc_type = 'definition'
@@ -241,11 +241,3 @@ fc = FuzzyCache()
 if fc.is_valid():
     def get_fuzzy_terms(term, lang='en'):
         return fc.retrieve(term, lang)
-    
-
-
-def periodic_update(i):
-    if not sc.search.is_available():
-        logger.error('Elasticsearch Not Available')
-        return
-    update()

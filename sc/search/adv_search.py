@@ -6,7 +6,7 @@ import sc.scimm
 from sc.search import es
 import sc.views
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('search.adv_search')
 
 def sutta_search(**kwargs):
     mode = kwargs.get("mode") or "wildcard"

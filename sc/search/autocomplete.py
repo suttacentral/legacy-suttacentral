@@ -8,7 +8,7 @@ import sc.search
 
 from sc.search.indexer import ElasticIndexer
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('search.autocomplete')
 
 class AutocompleteIndexer(ElasticIndexer):
     doc_type = 'autocomplete'
@@ -217,9 +217,3 @@ def search(query, limit, lang=None, **params):
 def update():
     indexer = AutocompleteIndexer('autocomplete')
     indexer.update()
-
-def periodic_update(i):
-    if not sc.search.is_available():
-        logger.error('Elasticsearch Not Available')
-        return
-    update()

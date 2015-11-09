@@ -1,17 +1,22 @@
+import os
+import lz4
 import time
 import regex
 import pickle
 import pathlib
 import hashlib
+import logging
 import sqlite3
 import datetime
 import functools
 import threading
 from itertools import chain
 
-import sc, sc.util, sc.logger
+import sc
+import sc.util
+import sc.logger
 from sc.tools import html
-import logging
+
 logger = logging.getLogger(__name__)
 
 build_logger = logging.getLogger(__name__ + '.build')
@@ -23,24 +28,6 @@ build_logger.setLevel('INFO')
 """ A tool responsible for collating information from the texts
 
 """
-
-def text_dir_md5(extra_files=[__file__]):
-    """ Generates an md5 hash based on text modification times
-
-    This can be used to detect if the database is up to date.
-
-    By default uses all directories (not files) in the text_dir,
-    plus this module file since changes to this module are quite
-    likely to result in a different final database.
-
-    """
-    files = chain(sc.text_dir.glob('**/*.html'), (pathlib.Path(f) for f in extra_files))
-    mtimes = (file.stat().st_mtime_ns for file in files)
-    
-    from hashlib import md5
-    from array import array
-    
-    return md5(array('Q', mtimes)).hexdigest()
 
 class TextInfo:
     __slots__ = ('uid', 'file_uid', 'lang', 'path', 'bookmark', 'name',
@@ -68,112 +55,72 @@ class TextInfo:
         return out
 
 class TIMManager:
-    db_name_tmpl = 'text-info-model_{}.pickle'
+    db_name_tmpl = 'text-info-model-{lang}_{hash}.pklz'
     version = 1
     def __init__(self):
         self.instance = None
         self.ready = threading.Event()
     
     @classmethod
-    def get_db_name(cls):
-        files = sorted(sc.text_dir.glob('**/*.html'), key=lambda f: str(f))
-        md5 = hashlib.md5()
-        for file in files:
-            md5.update((str(file) + str(file.stat().st_mtime_ns)).encode('ascii'))
+    def get_db_name(cls, lang_dir):
+        md5 = sc.util.get_folder_deep_md5(lang_dir, include_filter=lambda file: file.endswith('.html'))
         md5.update(str(cls.version).encode('ascii'))
         
-        return cls.db_name_tmpl.format(md5.hexdigest()[:10])
+        return cls.db_name_tmpl.format(lang=lang_dir.stem, hash=md5.hexdigest()[:10])
     
-    @classmethod
-    def get_db_files(cls):
-         return list(sc.db_dir.glob(cls.db_name_tmpl.format('*')))
-    
-    @classmethod
-    def get_latest_tim(cls):
-        latest_mtime = 0
-        latest_file = None
-        db_files = cls.get_db_files()
-        for file in db_files:
-            build_logger.debug('{.name} appears to be saved TIM'.format(file))
-            mtime = file.stat().st_mtime
-            if mtime > latest_mtime:
-                latest_mtime = mtime
-                latest_file = file
-        
-        return latest_file, db_files
-    
-    def remove_old_tims(self, db_files, keep=set()):
-        db_files = self.get_db_files()
-        db_files.sort(reverse=True, key=lambda f: f.stat().st_mtime)
-        for file in db_files[5:]:
-            if file not in keep:
-                try:
-                    file.unlink()
-                except FileNotFoundError:
-                    pass
-    
-    def load_cached(self, db_name):
-        if self.instance:
-            return
-
-        latest_file, db_files = self.get_latest_tim()
-        
-        for file in db_files:
-            if file.name == db_name:
-                build_logger.info('{.name} is up to date TIM'.format(file))
-                try:
-                    with file.open('rb') as f:
-                        instance = pickle.load(f)
-                    self._set_instance(instance)
-                    self.remove_old_tims({file.name})
-                    self.up_to_date = True
-                    return
-                except (EOFError, ValueError, FileNotFoundError):
-                    build_logger.info('{.name} is corrupt, removing'.format(file))
-                break
-        
-        if latest_file:
-            build_logger.info('{.name} looks like most recent saved TIM but is not up to date'.format(latest_file))
-            try:
-                with file.open('rb') as f:
-                    instance = pickle.load(f)
-                self._set_instance(instance)
-            except (EOFError, ValueError, FileNotFoundError):
-                build_logger.info('{.name} is corrupt, removing'.format(latest_file))
-                if latest_file.exists():
-                    latest_file.unlink()
-                
-    def load(self, quick=False):
+    def load(self, force=False):
         """ Load an instance of the TextInfoModel 
         
-        If a saved copy is present, it will be made available nearly
-        instantly. Whether or not a saved copy is available, it will
-        then check if it is up to date, and set the up_to_date flag (takes a few seconds),
-        if it is not up_to_date, it will then proceed to generate
-        a fresh version of the database (takes a few minutes), the fresh
-        version will then be made ready.
+        This generates a database per language folder, if no
+        file has changed within a language folder, the cached data is 
+        simply unpickled and reused.
+        If any file has changed, the entire data for that language is
+        regenerated and pickled.
+        The individual databases per language folder are finally spliced
+        into a single database.
         
         """
-        db_file_name = self.get_db_name()
-        self.load_cached(db_file_name)
-        if quick and self.instance is not None:
-            return
         
-        if self.instance and getattr(self.instance, 'name', None) == db_file_name:
-            return
-        else:
-            db_file = sc.db_dir / db_file_name
-            build_logger.info('Building new instance, filename = {.name}'.format(db_file))
-            instance = self.build(db_file_name)
-            self._set_instance(instance)
-            build_logger.info('Saving TIM to disk as {.name}'.format(db_file))
-            with db_file.open('wb') as f:
-                pickle.dump(instance, f)
-    
-    def build(self, name):
-        tim = TextInfoModel(name)
-        tim.build()
-        return tim
+        components = {}
+        files_used = set()
+        
+        for lang_dir in sorted(sc.text_dir.glob('*')):
+            if lang_dir.is_dir():
+                lang_uid = lang_dir.stem
+                db_filename = self.get_db_name(lang_dir)
+                db_file = sc.db_dir / db_filename
+                lang_tim = None
+                if not force and db_file.exists():
+                    try:
+                        lang_tim = sc.util.lz4_pickle_load(db_file)
+                        build_logger.info('Loading TIM data for "{}" from disk'.format(lang_uid))
+                    except Exception as e:
+                        logging.exception(e)
+                if not lang_tim:
+                    build_logger.info('Building TIM data for "{}"'.format(lang_uid))
+                    lang_tim = TextInfoModel(name=lang_uid)
+                    lang_tim.build(lang_dir, force=True)
+                    sc.util.lz4_pickle_dump(lang_tim, db_file)
+                components[lang_uid] = lang_tim
+                files_used.add(db_file)
+        
+        build_logger.info('Removing unused db files'.format(lang_uid))
+        # Delete Unused Files:
+        for file in sc.db_dir.glob(self.db_name_tmpl.format(lang='*', hash='*')):
+            if file not in files_used:
+                file.unlink()
+        
+        # Now we need to splice the individual languages
+        tim = TextInfoModel('Oneness')
+        
+        build_logger.info('Splicing TIM data'.format(lang_uid))
+        for lang_uid, baby_tim in components.items():
+            sc.util.recursive_merge(tim._by_lang, baby_tim._by_lang)
+            sc.util.recursive_merge(tim._by_uid, baby_tim._by_uid)
+            sc.util.recursive_merge(tim._metadata, baby_tim._metadata)
+        
+        self._set_instance(tim)
+        build_logger.info('TIM is ready'.format(lang_uid))
     
     def get(self):
         self.ready.wait()
@@ -183,15 +130,6 @@ class TIMManager:
         self.instance = instance
         # Other threads can now use it.
         self.ready.set()
-        return
-        try:
-            sc.scimm
-            import sc.scimm
-            imm = sc.scimm.imm(wait=False)
-            if imm:
-                imm.tim = instance
-        except NameError:
-            pass
 
 
 class TextInfoModel:
@@ -307,126 +245,113 @@ class TextInfoModel:
         if m1 and m2 and m1 == m2:
             return True
     
-    def build(self, force=False):
+    def build(self, lang_dir, force=False):
         # The pagenumbinator should be scoped because it uses
         # a large chunk of memory which should be gc'd.
         # But it shouldn't be created at all if we don't need it.
         # So we use a getter, and delete it when we are done.
         self._ppn = None
-        file_i = 0
-        file_of_total_i = 0
-        percent = 0
-        file_count = sum(1 for _ in sc.text_dir.glob('**/*.html'))
-        for lang_dir in sc.text_dir.glob('*'):
-            lang_uid = lang_dir.stem
-            all_files = sorted(lang_dir.glob('**/*.html'), key=lambda f: sc.util.numericsortkey(f.stem))
-            files = [f for f in all_files if f.stem == 'metadata'] + [f for f in all_files if f.stem != 'metadata']
-            for i, htmlfile in enumerate(files):
-             try:
-                if not self._should_process_file(htmlfile, force):
-                    continue
-                logger.info('Adding file: {!s}'.format(htmlfile))
-                uid = htmlfile.stem
-                root = html.parse(str(htmlfile)).getroot()
-                
-                # Set the previous and next uids, using explicit data
-                # if available, otherwise making a safe guess.
-                # The safe guess relies on comparing uids, and will not
-                # capture relationships such as the order of patimokha
-                # rules.
-                prev_uid = root.get('data-prev')
-                next_uid = root.get('data-next')
-                if not (prev_uid or next_uid):
-                    if i > 0:
-                        prev_uid = files[i - 1].stem
-                        if not self.uids_are_related(uid, prev_uid):
-                            prev_uid = None
-                    if i + 1 < len(files):
-                        next_uid = files[i + 1].stem
-                        if not self.uids_are_related(uid, next_uid):
-                            next_uid = None
-                
-                path = htmlfile.relative_to(sc.text_dir)
-                author = self._get_author(root, lang_uid, uid)
-                
-                if uid == 'metadata':
-                    if author is None:
-                        raise ValueError('Metadata file {} does not define author'.format(path))
-                    self.add_metadata(path, author, root)
-                    continue
-                
+
+        lang_uid = lang_dir.stem
+        all_files = sorted(lang_dir.glob('**/*.html'), key=lambda f: sc.util.numericsortkey(f.stem))
+        files = [f for f in all_files if f.stem == 'metadata'] + [f for f in all_files if f.stem != 'metadata']
+        for i, htmlfile in enumerate(files):
+         try:
+            if not self._should_process_file(htmlfile, force):
+                continue
+            logger.info('Adding file: {!s}'.format(htmlfile))
+            uid = htmlfile.stem
+            root = html.parse(str(htmlfile)).getroot()
+            
+            # Set the previous and next uids, using explicit data
+            # if available, otherwise making a safe guess.
+            # The safe guess relies on comparing uids, and will not
+            # capture relationships such as the order of patimokha
+            # rules.
+            prev_uid = root.get('data-prev')
+            next_uid = root.get('data-next')
+            if not (prev_uid or next_uid):
+                if i > 0:
+                    prev_uid = files[i - 1].stem
+                    if not self.uids_are_related(uid, prev_uid):
+                        prev_uid = None
+                if i + 1 < len(files):
+                    next_uid = files[i + 1].stem
+                    if not self.uids_are_related(uid, next_uid):
+                        next_uid = None
+            
+            path = htmlfile.relative_to(sc.text_dir)
+            author = self._get_author(root, lang_uid, uid)
+            
+            if uid == 'metadata':
                 if author is None:
-                    metadata = self.get_metadata(path)
-                    if metadata:
-                        author = metadata['author']
-                
-                if author is None:
-                    metadata = root.select_one('#metaarea')
-                    if metadata:
-                        metadata_text = metadata.text_content()
-                        m = regex.match(r'.{,80}\.', metadata_text)
-                        if not m:
-                            m = regex.match(r'.{,80}(?=\s)', metadata_text)
-                        if m:
-                            author = m[0]
-                            
-                if author is None:
-                    logger.warn('Could not determine author for {}/{}'.format(lang_uid, uid))
-                    author = ''
-                
-                name = self._get_name(root, lang_uid, uid)
-                volpage = self._get_volpage(root, lang_uid, uid)
-                embedded = self._get_embedded_uids(root, lang_uid, uid)
-                
-                fstat = htmlfile.stat()
-                cdate = self.datestr(fstat.st_ctime)
-                mdate = self.datestr(fstat.st_mtime)
+                    raise ValueError('Metadata file {} does not define author'.format(path))
+                self.add_metadata(path, author, root)
+                continue
+            
+            if author is None:
+                metadata = self.get_metadata(path)
+                if metadata:
+                    author = metadata['author']
+            
+            if author is None:
+                metadata = root.select_one('#metaarea')
+                if metadata:
+                    metadata_text = metadata.text_content()
+                    m = regex.match(r'.{,80}\.', metadata_text)
+                    if not m:
+                        m = regex.match(r'.{,80}(?=\s)', metadata_text)
+                    if m:
+                        author = m[0]
+                        
+            if author is None:
+                logger.warn('Could not determine author for {}/{}'.format(lang_uid, uid))
+                author = ''
+            
+            name = self._get_name(root, lang_uid, uid)
+            volpage = self._get_volpage(root, lang_uid, uid)
+            embedded = self._get_embedded_uids(root, lang_uid, uid)
+            
+            fstat = htmlfile.stat()
+            cdate = self.datestr(fstat.st_ctime)
+            mdate = self.datestr(fstat.st_mtime)
 
-                textinfo = TextInfo(uid=uid, lang=lang_uid, path=path, 
-                                    name=name, author=author,
-                                    volpage=volpage, prev_uid=prev_uid,
-                                    next_uid=next_uid,
-                                    cdate=cdate,
-                                    mdate=mdate,
-                                    file_uid=uid)
-                self.add_text_info(lang_uid, uid, textinfo)
+            textinfo = TextInfo(uid=uid, lang=lang_uid, path=path, 
+                                name=name, author=author,
+                                volpage=volpage, prev_uid=prev_uid,
+                                next_uid=next_uid,
+                                cdate=cdate,
+                                mdate=mdate,
+                                file_uid=uid)
+            self.add_text_info(lang_uid, uid, textinfo)
 
-                for child in embedded:
-                    child.path = path
-                    child.author = author
-                    child.file_uid = uid
-                    self.add_text_info(lang_uid, child.uid, child)
+            for child in embedded:
+                child.path = path
+                child.author = author
+                child.file_uid = uid
+                self.add_text_info(lang_uid, child.uid, child)
 
-                m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
-                if m:
-                    range_textinfo = TextInfo(uid=uid+'#', 
-                    lang=lang_uid,
-                    path=path,
-                    name=name,
-                    author=author,
-                    volpage=volpage,
-                    file_uid=uid)
-                    start = int(m[2])
-                    end = int(m[3]) + 1
-                    for i in range(start, end):
-                        iuid = m[1] + str(i)
-                        if self.exists(iuid, lang_uid):
-                            continue
+            m = regex.match(r'(.*?)(\d+)-(\d+)$', uid)
+            if m:
+                range_textinfo = TextInfo(uid=uid+'#', 
+                lang=lang_uid,
+                path=path,
+                name=name,
+                author=author,
+                volpage=volpage,
+                file_uid=uid)
+                start = int(m[2])
+                end = int(m[3]) + 1
+                for i in range(start, end):
+                    iuid = m[1] + str(i)
+                    if self.exists(iuid, lang_uid):
+                        continue
 
-                        self.add_text_info(lang_uid, iuid, range_textinfo)
-                file_i += 1
-                if (file_i % self.FILES_N) == 0:
-                    self._on_n_files()
-                file_of_total_i += 1
-                new_percent = int(0.5 + 100 * file_of_total_i / file_count)
-                if new_percent > percent:
-                    percent = new_percent
-                    self.build_process(percent)
-             except Exception as e:
-                 print('An exception occured: {!s}'.format(htmlfile))
-                 raise
-        if (file_i % self.FILES_N) != 0:
-            self._on_n_files()
+                    self.add_text_info(lang_uid, iuid, range_textinfo)
+        
+         except Exception as e:
+             print('An exception occured: {!s}'.format(htmlfile))
+             raise
         
         del self._ppn
 
@@ -569,15 +494,10 @@ class TextInfoModel:
 
 tim_manager = TIMManager()
 
-def tim():
-    return tim_manager.get()
+tim = tim_manager.get
     
-def periodic_update(i):
-    if i == 0:
-        tim_manager.load(quick=True)
-    else:
-        tim_manager.load(quick=False)
-        
+def build():
+    tim_manager.load()
 
 def ensure_up_to_date():
     tim_manager.load(quick=False)
