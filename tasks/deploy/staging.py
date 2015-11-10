@@ -73,7 +73,7 @@ def quick(branch=None):
         'git pull',
         'cd ..',
         'echo "Requesting the server reload assets"',
-        'curl -XPOST "http://localhost:8087/admin/reload" -d "{}"',
+        'curl -s -XPOST "http://localhost:8087/admin/reload" -d "{}"',
         'invoke assets.clean --older'
     )
 
