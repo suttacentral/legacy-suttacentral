@@ -9,21 +9,26 @@
     }
 
     & > button {
-    padding: .25em 0.5em;
-       border: 0;
+        padding: .25em 0.5em;
+        border: 0;
         box-shadow:0 0 1px rgba(0,0,0,0.8)inset;
         
         background:0;
         color:#565656;
         @include sans-serif;
 
-        &.hover {
+        &:hover {
             background:#eee;
         }
 
-        &.active {
+        &:active {
             background:#ddd;
         }
+        &.copied {
+            background: #bbb;
+            transition: all 0.20s ease;
+        }
+        transition: all 0.20s ease;
     }
 
     @media print {

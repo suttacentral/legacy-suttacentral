@@ -32,13 +32,7 @@ def quick():
         'cd data',
         'git pull',
         'cd ..',
-        'pip install -q -r requirements.txt',
-        'invoke jsdata.build --minify',
-        'invoke assets.compile --precompress',
-        'invoke textdata.ensure_up_to_date',
-        'invoke test_server',
-        'sudo supervisorctl restart sc-production',
-        'sudo supervisorctl restart elastic-indexer',
+        "curl -XPOST 'http://localhost:8086/admin/reload' -d ''",
         'invoke assets.clean --older'
     )
 

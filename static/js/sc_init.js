@@ -197,11 +197,6 @@ sc.mode = {}
 sc.data = {}
 sc.jsBaseUrl = $('script[src*="js/"]').last().attr('src').match(/((.*\/|^)js\/)/)[0];
 
-function setupZeroClipboard(element) {
-    
-    return new ZeroClipboard(element);
-}
-
 function onMainLoad() {
     sc.mode = {}
     var images = $("img");
@@ -228,18 +223,13 @@ function onMainLoad() {
         parallelCitationTextField.on('click', function() {
             parallelCitationTextField.select();
         });
-        var client = setupZeroClipboard(parallelCitationButton);
-        client.on('ready', function(event) {
-            console.log('Ready');
-            client.on('copy', function(event) {
-                console.log('Copy event!');
-                event.clipboardData.setData('text/plain', parallelCitationTextField.val());
-                var table = $('main table').first().clone();
-                table.find('#parallel-citation').remove();
-                
-                event.clipboardData.setData('text/html', table[0].outerHTML);
-            })
-        });
+        parallelCitationTextField.attr('id', 'parallel-citation-field')
+        parallelCitationButton.attr('data-clipboard-target', '#parallel-citation-field');
+        var clipboard = new Clipboard('#parallel-citation > button');
+        clipboard.on('success', function(e) {
+            parallelCitationButton.addClass('copied');
+            setTimeout(function(){parallelCitationButton.removeClass('copied')}, 250);
+        })
     }
 }
 
