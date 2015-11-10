@@ -4,7 +4,7 @@ import csv
 
 '''
 This module creates a cover for a 6x9 inch book with a given number of pages and the user input of the translation texts
-that need to be printed on the file.
+that need to be printed on the file. (disabled)
 It also creates the cover for an ePub book 590x775px.
 '''
 
@@ -16,20 +16,20 @@ while True:
         break
     except:
         print('Not a valid directory, please try again')
-while True:
-    pages = input("Enter the number of pages in the book: ")
-    try:
-        pages_in_file = int(pages)
-        break
-    except:
-        print('This is not an integer, please try again.')
+#while True:
+#    pages = input("Enter the number of pages in the book: ")
+#    try:
+#        pages_in_file = int(pages)
+#        break
+#    except:
+#        print('This is not an integer, please try again.')
 
 covername = input("Enter the output name for your cover: ")
 versionnumber = input("Enter the output directory name: ")
 
 #sets number of pages to the nearest divisible by 4
-if pages_in_file % 4 != 0:
-    pages_in_file += 4 - (pages_in_file % 4)
+#if pages_in_file % 4 != 0:
+#    pages_in_file += 4 - (pages_in_file % 4)
 
 #book dimensions
 book_width = 6
@@ -103,7 +103,7 @@ def write_Epub():
     # create the ePub cover
     fileWriteEPub = open(versionnumber+'/'+covername+'_epub.tex', 'w')
     cover_width = book_width
-    cover_height = 7.63
+    cover_height = 6.50
     # 7.63 is based on the size of the ebook that came with Calibre
     top_bar = 1.45
     bottom_bar = 1.5
@@ -118,8 +118,8 @@ def write_Epub():
 
     fileWriteEPub.close()
 
-write_Coverbacktext()
-write_Paperback()
-write_Hardcover()
+#write_Coverbacktext()
+#write_Paperback()
+#write_Hardcover()
 write_Epub()
-os.remove('coverbacktext.tmp')
+#os.remove('coverbacktext.tmp')
