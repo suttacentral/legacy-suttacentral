@@ -37,7 +37,7 @@ def reset():
     tasks.search.index()
 
 @task
-def server():
+def server(v=False):
     """Run the server."""
     blurb(server)
     if config.newrelic_license_key:

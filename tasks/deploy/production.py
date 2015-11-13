@@ -38,6 +38,23 @@ def quick():
     )
 
 @task
+def full(branch=None):
+    """Deploy to the staging server."""
+    blurb(full)
+    _production_run(
+        'git pull',
+        'cd data',
+        'git pull',
+        'cd ..',
+        'pip install -q -r requirements.txt',
+        'invoke jsdata.build',
+        'invoke assets.compile --precompress',
+        'invoke textdata.ensure_loads',
+        'sudo supervisorctl restart sc-production',
+        'invoke assets.clean --older'
+    )
+
+@task
 def test():
     _production_run(
         'git pull',
