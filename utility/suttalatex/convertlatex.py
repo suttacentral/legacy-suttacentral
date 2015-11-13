@@ -5,6 +5,9 @@
 See readme file for instructions on how to use this module
 This converts a number of suttas in a directory to tex.
 pi/su/mn/
+
+NOTE: I have moved the section about throwing out the number before the sutta to the Sutta class
+ - might still need to be removed here!!!
 ''' 
 import re
 import os

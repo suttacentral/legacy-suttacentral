@@ -31,7 +31,13 @@ class Sutta:
         return self._division
 
     def get_section_title(self):
-        self._section_title = re.findall(r'<h1>(.*?)</h1>', self._readSutta)[0]
+        self._section_title = re.findall(r'<h1.*?>(.*?)</h1>', self._readSutta)[0]
+        #If the suttasection starts with a digit, this is thrown out.
+        if self._section_title[0].isdigit():
+            self._section_title = re.findall(r'\d{1,5}(.*?)', self._section_title)[0]
+            self._section_title = self._section_title.strip()
+        if self._section_title.startswith('.'):
+            self._section_title = re.findall(r'\. (.*?)', self._section_title)[0]
         return self._section_title
 
 
