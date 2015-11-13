@@ -7,6 +7,8 @@ import elasticsearch
 from sc.search import es
 logger = logging.getLogger(__name__)
 
+import sc.util
+
 def div_translation_count(lang):
     " Returns the count of translations per subdivision "
     body = {
@@ -145,7 +147,21 @@ def guess_language(string):
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, **kwargs):
     pass
-    
+
+def get_available_indexes(indexes, _cache=sc.util.TimedCache(lifetime=30)):
+    key = tuple(indexes)
+    try:
+        available = _cache[key]
+    except KeyError:
+        available = []
+        for index in indexes:
+            try:
+                if es.cluster.health(index, timeout='0.05s')['status'] in {'green', 'yellow'}:
+                    available.append(index)
+            except:
+                pass
+        _cache[key] = available
+    return available
 
 def search(query, highlight=True, offset=0, limit=10,
             lang=None, define=None, details=None, **kwargs):
@@ -160,11 +176,8 @@ def search(query, highlight=True, offset=0, limit=10,
 
     if not indexes:
         indexes = ['en', 'pi', 'suttas', 'en-dict']
-
-    index_string = ','.join(index
-                            for index in indexes
-                            if es.cluster.health(index, timeout='0.01s')['status']
-                            in {'green', 'yellow'})
+    
+    index_string = ','.join(get_available_indexes(indexes))
     
     fields =  ["content", "content.*^0.5",
                "term^1.5", "term.*^0.5",
