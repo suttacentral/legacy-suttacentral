@@ -6,8 +6,7 @@
                 "properties": {
                     "uid": {
                         "type": "string",
-                        "index_analyzer": "uid_standard",
-                        "search_analyzer": "uid_globbing"
+                        "index": "not_analyzed"
                     },
                     "path": {
                         "type": "string",
@@ -15,7 +14,7 @@
                     },
                     "lang": {
                         "type": "string",
-                        "analyzer": "uid_standard"
+                        "index": "not_analyzed"
                     },
                     "root_lang": {
                         "type": "string",
@@ -42,7 +41,7 @@
                                     },
                                     "shingle": {
                                         "type": "string",
-                                        "index_analyzer": "folding_analyzer",
+                                        "analyzer": "folding_analyzer",
                                         "search_analyzer": "folding_shingle_analyzer"
                                     }
                                 }

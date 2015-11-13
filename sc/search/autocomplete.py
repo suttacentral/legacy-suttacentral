@@ -56,11 +56,12 @@ class AutocompleteIndexer(ElasticIndexer):
                  self.doc_type: {
                     "properties": {
                        "lang": {
-                          "type": "string"
+                          "type": "string",
+                          "index": "not_analyzed"
                        },
                        "title": {
                           "type": "string",
-                            "index_analyzer": "autocomplete_ngram_analyzer",
+                            "analyzer": "autocomplete_ngram_analyzer",
                             "search_analyzer": "autocomplete_query_analyzer",
                             "fields": {
                                 "lowercase": {

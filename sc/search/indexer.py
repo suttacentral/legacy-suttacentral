@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 es = elasticsearch.Elasticsearch()
 
-from elasticsearch.exceptions import ConnectionError
+from elasticsearch.exceptions import ConnectionError, NotFoundError, RequestError
 
 def is_available():
     return es.ping()
@@ -21,6 +21,9 @@ def is_available():
 # Silence Elasticsearch spammy logging.
 logging.getLogger('elasticsearch').setLevel('ERROR')
 logging.getLogger('elasticsearch.trace').setLevel('ERROR')
+
+class IndexCreationFailure(Exception):
+    pass
 
 class ElasticIndexer:
     """ Indexer for loading data into an ElasticSearch index.
@@ -122,10 +125,18 @@ class ElasticIndexer:
 
     def create_index(self):
         logger.info('Creating index named {}, alias {}'.format(self.index_name, self.index_alias))
-        self.es.indices.create(self.index_name, self.index_config)
+        try:
+            self.es.indices.create(self.index_name, self.index_config)
+        except RequestError as e:
+            msg = 'Failure to create index "{}" from config "{}"'.format(self.index_alias, self.config_name)
+            msg += '\n' + json.dumps(e.info, indent=2)
+            raise IndexCreationFailure(msg) from e
     
     def update_aliases(self):
-        indexes_to_alias = list(self.es.indices.get_aliases(self.index_alias))
+        try:
+            indexes_to_alias = list(self.es.indices.get_aliases(self.index_alias))
+        except NotFoundError:
+            indexes_to_alias = {}
         alias_actions = []
         obsolete_indexes = []
 
@@ -170,13 +181,12 @@ class ElasticIndexer:
         return mapping
 
     def delete_obsolete_indices(self):
-        for index in self.es.indices.status()['indices']:
+        for index in self.es.indices.stats()['indices']:
             if not index.startswith(self.index_prefix):
                 continue
             if index in self.es.indices.get_alias(self.index_alias):
                 continue
             self.es.indices.delete(index)
-                
     
     def wait_for_index(self, timeout='20s'):
         """ Returns True if index is ready, False if it times out """
