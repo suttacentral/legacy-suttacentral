@@ -23,4 +23,4 @@ def deletelang(lang):
 def ensure_loads():
     "Updating creation and modification dates database"
     from sc import textdata
-    textdata.tim_manager.ensure_up_to_date()
+    textdata.ensure_up_to_date()
