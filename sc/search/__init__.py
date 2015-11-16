@@ -8,9 +8,12 @@ logger = sc.logger.get_named_logger('search')
 es = elasticsearch.Elasticsearch()
 
 def is_available():
-    if not es.ping():
-        return False
-    return True
+    try:
+        if not es.ping():
+            return False
+        return True
+    except ConnectionError:
+        return False    
 
 # Make elasticsearch STFU
 logging.getLogger('elasticsearch').setLevel('ERROR')
