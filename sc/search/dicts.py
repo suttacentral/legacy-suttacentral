@@ -176,9 +176,10 @@ def get_nearby_terms(number, lang='en'):
 def get_fuzzy_terms(term, lang='en'):
     resp = es.search(index=lang+'-dict', doc_type='definition', _source=['term', 'gloss'], body={
         "query": {
-            "fuzzy_like_this": {
+            "multi_match": {
                 "fields": ["term", "term.folded"],
-                "like_text": term
+                "query": term,
+                "fuzziness": "AUTO"
             }
         }
     })
