@@ -200,7 +200,7 @@ class AutoReloader(threading.Thread):
                 self.step()
             except InitError as e:
                 logger.exception(e)
-            time.sleep(1)
+            time.sleep(5)
             self.i += 1
             
 def start():
