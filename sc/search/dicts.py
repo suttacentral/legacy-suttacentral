@@ -3,6 +3,9 @@ import json
 import regex
 import logging
 import sqlite3
+import threading
+import elasticsearch
+
 import sc
 import sc.tools.html
 import sc.textfunctions
@@ -11,6 +14,8 @@ from sc.search.indexer import ElasticIndexer
 es = sc.search.es
 
 logger = logging.getLogger('search.dicts')
+
+source_dir = sc.data_dir / 'dicts'
 
 class DictIndexer(ElasticIndexer):
     doc_type = 'definition'
@@ -66,25 +71,10 @@ class DictIndexer(ElasticIndexer):
 
         self.process_actions({'_id': entry['term'], '_source': entry}
                               for entry in sorted_entries)
-   #def yield_chunks(self, entries, size=100000):
-        #chunk = []
-        #chunk_size = 0
-        #for i, entry in enumerate(entries):
-            #chunk_size += len(str(entry))
-            #chunk.append({
-                #"_id": entry["term"],
-                #"_source": entry
-                #})
-            #if chunk_size > size:
-                #yield chunk
-                #chunk = []
-                #chunk_size = 0
-        #if chunk:
-            #yield chunk
-        #raise StopIteration
+    
     def fix_term(self, term):
         return regex.sub(r'[^\p{alpha}\s]', '', term).strip().casefold()
-
+    
     def add_file(self, file, all_entries, glosses):
         root = sc.tools.html.parse(str(file)).getroot()
         meta = (('source', 'source'), ('priority', 'priority'), ('root_lang', 'lang'))
@@ -139,7 +129,6 @@ class DictIndexer(ElasticIndexer):
         self.index_folder()
     
 def update():
-    source_dir = sc.data_dir / 'dicts'
     for lang_dir in source_dir.glob('*'):
         if lang_dir.is_dir():
             config_name = lang_dir.stem
@@ -156,9 +145,11 @@ def get_entry(term, lang='en'):
     source['entries'].sort(key=lambda d: d['priority'])
     return source
 
-def get_nearby_terms(number, lang='en'):
-    resp = es.search(index=lang+'-dict', doc_type='definition', _source=['term', 'gloss'], body={
-      "query":{
+def nearby_terms_query(number, lang='en'):
+    return {
+      "size": 12,
+      "_source": ['term', 'gloss'],
+      "query": {
          "constant_score": {
            "filter": {
              "range": {
@@ -170,11 +161,12 @@ def get_nearby_terms(number, lang='en'):
            }
          }
       }
-    }, size=12)
-    return [d['_source'] for d in resp['hits']['hits']]
+    }
 
-def get_fuzzy_terms(term, lang='en'):
-    resp = es.search(index=lang+'-dict', doc_type='definition', _source=['term', 'gloss'], body={
+def fuzzy_terms_query(term, lang='en'):
+    return {
+        "size": 10,
+        "_source": ['term', 'gloss'],
         "query": {
             "multi_match": {
                 "fields": ["term", "term.folded"],
@@ -182,63 +174,22 @@ def get_fuzzy_terms(term, lang='en'):
                 "fuzziness": "AUTO"
             }
         }
-    })
-    return [d['_source'] for d in resp['hits']['hits'] if d['_source']['term'] != term]
+    }
 
-
-class FuzzyCache:
-    def __init__(self):
-        self.filename = sc.db_dir / 'search_fuzzy_cache.sqlite'
-
-    def is_valid(self):
-        return self.filename.exists()
-
-    def connect(self):
-        return sqlite3.connect(str(self.filename))
+def get_nearby_and_fuzzy_terms(term, number, lang='en'):
+    body = [
+        {},
+        nearby_terms_query(number, lang),
+        {},
+        fuzzy_terms_query(term, lang)
+    ]
     
-    def build(self):
-        if self.filename.exists():
-            self.filename.unlink()
-        con = self.connect()
-        con.execute('CREATE TABLE terms (term, lang, payload)')
-        con.execute('CREATE UNIQUE INDEX term_index ON terms(term, lang)')
-        data = self.build_fuzzy_cache()
-        self.add_data(data)
+    resp = es.msearch(index=lang+'-dict',
+                      doc_type='definition',
+                      body=body)
+    return {"nearby": [d['_source'] for d in resp['responses'][0]['hits']['hits']],
+            "fuzzy": [d['_source'] for d in resp['responses'][1]['hits']['hits']]}
 
-    def add_data(self, data):
-        con = sqlite3.connect(str(self.filename))
-        con.executemany('INSERT INTO terms VALUES (?, ?, ?)', ((
-            term, lang, json.dumps(fuzzies, ensure_ascii=False))
-            for (term, lang), fuzzies
-            in data))
-        con.commit()
-        
-    def retrieve(self, term, lang):
-        con = self.connect()
-        r = con.execute('SELECT payload FROM terms WHERE term = ? AND lang=?',
-            (term, lang))
-        try:
-            payload = r.fetchone()[0]
-            return json.loads(payload)
-        except IndexError:
-            return []
-    
-    def build_fuzzy_cache(self):
-        start=time.time()
-        terms = elasticsearch.helpers.scan(es, doc_type='definition', fields='term')
-        terms = [(t['fields']['term'], t['_index']) for t in terms]
-        results = []
-        for i, (term, lang) in enumerate(terms):
-            pc_done = int(100 * (i / len(terms)))
-            for term in term:
-                results.append(((term, lang), get_fuzzy_terms(term, lang)))
-            print(r'{}% done'.format(pc_done), end='\r')
-        print('\n')
-        print(time.time() - start)
-        return results
-
-fc = FuzzyCache()
-
-if fc.is_valid():
-    def get_fuzzy_terms(term, lang='en'):
-        return fc.retrieve(term, lang)
+def get_fuzzy_terms(term, lang='en'):
+    resp = es.search(index=lang+'-dict', doc_type='definition', body=fuzzy_terms_query(term, lang))
+    return [d['_source'] for d in resp['hits']['hits']]

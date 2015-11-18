@@ -703,10 +703,12 @@ class DefinitionView(ViewBase):
         context.title = "define: {}".format(self.term)
         entry = context.entry = dicts.get_entry(self.term)
         if entry:
-            context.near_terms = dicts.get_nearby_terms(entry['number'])
+            nearby_and_fuzzy = dicts.get_nearby_and_fuzzy_terms(term=term, number=entry['number'])
+            context.near_terms = nearby_and_fuzzy['nearby']
+            context.fuzzy_terms = nearby_and_fuzzy['fuzzy']
         else:
             context.near_terms = []
-        context.fuzzy_terms = dicts.get_fuzzy_terms(term)
+            context.fuzzy_terms = dicts.get_fuzzy_terms(term)
 
 class ElasticSearchResultsView(ViewBase):
     template_name = 'elasticsearch_results'
