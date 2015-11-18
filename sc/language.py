@@ -80,7 +80,7 @@ class TranslationTreeBuilder:
             count += self.add_descendent_counts(child) or 0
         if count > 0:
             node["descendents"] = count
-        return count + len(node.get("translations", ()))
+        return count + (1 if node.get("translations") else 0)
     
     def build_from_imm(self):
         self.tree = self.add_node(self.imm.languages[self.lang], None)
