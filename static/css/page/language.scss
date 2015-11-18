@@ -19,3 +19,10 @@
 #intro {
     padding-bottom: 2em;
 }
+
+.extras:before {
+    content: "[";
+}
+.extras:after {
+    content: "]";
+}

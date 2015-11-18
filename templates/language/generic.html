@@ -33,7 +33,9 @@
             {% if loop.first %}
                 <a href="{{translation.url}}">{{translation.name}}</a>
             {% else %}
+                {% if loop.index == 2 %}<span class="extras">{% endif %}
                 <a href="{{translation.url}}"> {{loop.index}}</a>
+                {% if loop.last %}</span>{% endif %}
             {% endif %}
         {% endfor %}
     {% endif %}
