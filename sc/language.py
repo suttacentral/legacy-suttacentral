@@ -14,12 +14,12 @@ available_language_templates = {f.stem for f in (sc.templates_dir / 'language').
 class LanguageView(ViewBase):
     template_name = 'language/generic'
     def __init__(self, lang, div_uid):
-        print('Creating Language View')
         self.lang = lang
         self.div_uid = div_uid
         if div_uid is None:
             if lang in available_language_templates:
                 self.template_name = 'language/' + lang
+        print('Creating Language View for {}/{} with template {}'.format(lang, div_uid, self.template_name))
     
     def setup_context(self, context):
         tree = get_translation_tree(self.lang)
@@ -80,7 +80,7 @@ class TranslationTreeBuilder:
             count += self.add_descendent_counts(child) or 0
         if count > 0:
             node["descendents"] = count
-        return count + 1 # self counts as 1
+        return count + len(node.get("translations", ()))
     
     def build_from_imm(self):
         self.tree = self.add_node(self.imm.languages[self.lang], None)

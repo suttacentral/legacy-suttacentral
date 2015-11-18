@@ -57,11 +57,11 @@ def default(*args, **kwargs):
             # sure we have a valid result first!)
             cherrypy.response.headers['cache-control'] = 'public, max-age=3600'
             return result
-    #if  len(args) <= 2:
-        #if args[0] in imm.languages:
-            #div_uid = None if len(args) == 1 else args[1]
-            #if div_uid in imm.divisions or div_uid in imm.subdivisions and not imm.get_translations(args[0], div_uid)
-                #return LanguageView(lang=args[0], div_uid=div_uid).render()
+    if len(args) <= 2:
+        if args[0] in imm.languages:
+            div_uid = None if len(args) == 1 else args[1]
+            if div_uid is None or (div_uid in imm.divisions or div_uid in imm.subdivisions) and not imm.tim.get(lang_uid=args[0], uid=div_uid):
+                return LanguageView(lang=args[0], div_uid=div_uid).render()
     
     if len(args) == 1 or full:
         uid = args[0]

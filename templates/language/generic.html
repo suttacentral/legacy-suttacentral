@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="language">
+
+{% block introduction %}
+{% endblock %}
+
+<table>
+{% set cutoff_level = 'division' if root.descendents > 50 and root.type == 'language' else None %}
+{% for node in [root] recursive %}
+<tr>
+    {% set show_uid = node.type in ('sutta',) %}
+    {% set colspan = 1 + (0 if node.translations else 1) + (0 if show_uid else 1) %}
+    {% if show_uid %}<td>{{ node.uid|uid_to_acro }}</td>{% endif %}
+    <td colspan="{{colspan}}" class="{{node.type}}">
+    {% if node.descendents %}
+
+        {% if node.type == cutoff_level and not node.translations %}
+            <a href="/{{lang}}/{{node.uid}}">{{node.name}}</a>
+        {% else %}
+            {{node.name}}
+        {% endif %}
+        {% if node.descendents > 0 and not node.translations and node.type in ('division', 'subdivision') %}
+        <span class="descendent_count">({{node.descendents}})</span>
+        {% endif %}
+
+    {% else %}
+        {{node.name}}
+    {% endif %}
+    {% if node.translations %}
+        <td>
+        {% for translation in node.translations %}
+            {% if loop.first %}
+                <a href="{{translation.url}}">{{translation.name}}</a>
+            {% else %}
+                <a href="{{translation.url}}"> {{loop.index}}</a>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    </td>
+    {% if node.children and not node.type == cutoff_level %}
+        {{ loop(node.children) }}
+    {% endif %}
+
+{% endfor %}
+</table>
+</div>
+{% endblock %}
+
