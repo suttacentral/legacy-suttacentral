@@ -1,9 +1,11 @@
-.language, .collection, .division, .subdivision {
-    color: #767676;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding-top: 1em;
-    font-weight: bold;
+table {
+    .language, .collection, .division, .subdivision {
+        color: #767676;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding-top: 1em;
+        font-weight: bold;
+    }
 }
 
 .subdivision {
