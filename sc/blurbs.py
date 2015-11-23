@@ -1,5 +1,10 @@
 blurbs = {
 "en": {
+"dn": "The Long Discourses",
+"mn": "The Medium Length Discourses",
+"sn": "The Connected Discourses",
+"an": "The Numerical Discourses",
+"kn": "The Small Discourses",
 "an3.1": "Fools are dangerous, but the wise are safe.",
 "an3.2": "Marks of a fool and an astute person: body, speech, and mind.",
 "an3.3": "Marks of a fool and an astute person: thinking, speaking, and doing.",
