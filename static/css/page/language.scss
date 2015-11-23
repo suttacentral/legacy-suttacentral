@@ -3,7 +3,6 @@
     ul {
         list-style: none;
     }
-    
     .sutta-heading, .division-heading {
         font-size: 125%;
     }
@@ -17,8 +16,12 @@
         float: inherit;
     }
     
-    .li-sutta {
-        margin-bottom: 1em;
+    li > div {
+        border-left: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        border-radius: 0.1em;
+        margin: 0.2em;
+        display: inline-block;
     }
 
     :link[href^=http]:after {
