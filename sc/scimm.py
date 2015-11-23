@@ -714,18 +714,8 @@ class _Imm:
         logger.info('Loaded {} epigraphs, {} are valid, {} are invalid'.format(count + 1, valid, count - valid))
     
     def get_blurb(self, lang, uid):
-        if not lang in self.blurbs:
-            self.load_blurbs(lang)
-        return self.blurbs[lang].get(uid)
-    
-    def load_blurbs(self, lang):
-        blurb_dir = sc.data_dir / 'blurbs' / lang
-        blurbs = {}
-        if blurb_dir.exists():
-            for file in blurb_dir.glob('*.json'):
-                with file.open('r') as f:
-                    blurbs.update(json.load(f))
-        self.blurbs[lang] = blurbs
+        from sc.blurbs import blurbs
+        return blurbs.get(lang, {}).get(uid, None)
 
     def get_random_epigraph(self):
         import random
