@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="language-page" id="onecol">
+
+{% macro translator_url(translation) -%}
+<a href="{{translation.url}}">{{ translation.translator }}</a>
+{%- endmacro %}
+
+{% block introduction %}
+{% endblock %}
+
+
+{% set cutoff_level = 'division' if root.type == 'language' and root.descendents > 50 else None %}
+{% set cutoff_level = 'subdivision' if root.type == 'division' and root.children|count > 3 and root.descendents > 200 else cutoff_level %}
+
+{% for node in [root] recursive %}
+{% if loop.first %}<ul>{% endif %}
+<li class="li-{{node.type}}">
+    <div>
+    {% if node.type != 'sutta' %}
+    <div class="division-heading">
+    {% if node.type == cutoff_level %}
+    <a href="/{{lang}}/{{node.uid}}">{{ node.name }} ({{node.descendents}})</a>
+    {% else %}
+    {{ node.name }}
+    {% endif %}
+    </div>
+    {% elif node.type == 'sutta' %}
+    <div class="sutta-heading">
+        {% set translation = node.translations[0] %}
+        <a class="translation-link" href="{{translation.url}}"><span class="acro">{{node.uid|uid_to_acro}}:</span> <span class="title">{{ translation.name }}</span></a>
+    </div>
+    <div class="sutta-extra">
+        Translation of
+        <a href="/{{node.root_lang}}/{{node.uid}}">{{node.name + " Sutta" if not node.name.endswith('Sutta')}}</a>
+         by {{ translator_url(translation) }}.
+         {%- if node.translations|length > 1 %}
+         Alternative translation{{'' if node.translations|length == 2 else 's' }} by 
+         {% for translation in node.translations[1:] %}
+         {{ translator_url(translation) }}</a>
+         {%- if loop.last %}.{% elif loop.revindex == 2 %} and {% else %},{% endif %}
+         {% endfor %}
+         {% endif %}
+         <a href='/{{node.uid}}' 
+ title='Parallels and details for {{node.uid|uid_to_acro}}' class="details">▶</a>
+    </div>
+    {% endif %}
+    {% if node.blurb %}
+    <div class="blurb">{{node.blurb}}</div>
+    {% endif %}
+    </div>
+    {% if node.children and not node.type == cutoff_level %}
+        {{ loop(node.children) }}
+    {% endif %}
+    </li>
+{% if loop.last %}</ul>{% endif %}
+{% endfor %}
+</ul>
+</div>
+{% endblock %}
+
