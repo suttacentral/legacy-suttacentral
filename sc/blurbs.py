@@ -1,10 +1,11 @@
 blurbs = {
 "en": {
-"dn": "The Long Discourses",
-"mn": "The Medium Length Discourses",
-"sn": "The Connected Discourses",
-"an": "The Numerical Discourses",
-"kn": "The Small Discourses",
+"dn": "The collection of Long Discourses largely themed around conversion of non-buddhists",
+"mn": "The collection of Medium Length Discourses, largely themed around doctrinal teachings to disciples",
+"sn": "The collection of Connected Discourses, arranged by topic and likely the oldest collection",
+"an": "The Numerical Discourses, because sometimes it's just easier to number stuff than invent names",
+"kn": "The collection of Small Discourses, but in fact the largest of the collections",
+"da": "Broadly parallel to the Pali Digha Nikaya (Long Discourses)",
 "an3.1": "Fools are dangerous, but the wise are safe.",
 "an3.2": "Marks of a fool and an astute person: body, speech, and mind.",
 "an3.3": "Marks of a fool and an astute person: thinking, speaking, and doing.",
