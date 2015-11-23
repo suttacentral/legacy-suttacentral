@@ -9,6 +9,7 @@ Example:
         ... >
 """
 
+import json
 import time
 import math
 import regex
@@ -66,6 +67,7 @@ class _Imm:
         self.load_epigraphs()
         self.timestamp = timestamp
         self.build_time = datetime.now()
+        self.blurbs = {}
         
     
     def __call__(self, uid):
@@ -143,7 +145,7 @@ class _Imm:
         # From external_text table
         text_refs = defaultdict(list)
         for row in table_reader('external_text'):
-            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], name=None, abstract=row.abstract, url=row.url, priority=row.priority) )
+            text_refs[row.sutta_uid].append( TextRef(lang=self.languages[row.language], name=None, author=None, abstract=row.abstract, url=row.url, priority=row.priority) )
 
         self._external_text_refs = text_refs.copy()
         
@@ -710,6 +712,20 @@ class _Imm:
                     self.epigraphs.append({'sutta': self.suttas[uid], 'content': content, 'href': href})
                     valid += 1
         logger.info('Loaded {} epigraphs, {} are valid, {} are invalid'.format(count + 1, valid, count - valid))
+    
+    def get_blurb(self, lang, uid):
+        if not lang in self.blurbs:
+            self.load_blurbs(lang)
+        return self.blurbs[lang].get(uid)
+    
+    def load_blurbs(self, lang):
+        blurb_dir = sc.data_dir / 'blurbs' / lang
+        blurbs = {}
+        if blurb_dir.exists():
+            for file in blurb_dir.glob('*.json'):
+                with file.open('r') as f:
+                    blurbs.update(json.load(f))
+        self.blurbs[lang] = blurbs
 
     def get_random_epigraph(self):
         import random

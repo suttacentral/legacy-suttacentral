@@ -373,9 +373,9 @@ class MaybeParallel:
         self.division = division
 
 class TextRef(ConciseRepr, Serializable, namedtuple('TextRef', 
-        'lang name abstract url priority')):
+        'lang name author abstract url priority')):
     __slots__ = ()
-    _serialize_attrs = ['lang', 'name', 'abstract', 'url']
+    _serialize_attrs = ['lang', 'name', 'author', 'abstract', 'url']
 
     @staticmethod
     def sort_key(t):
@@ -390,6 +390,7 @@ class TextRef(ConciseRepr, Serializable, namedtuple('TextRef',
         return cls(lang=lang,
                         name=textinfo.name,
                         abstract=textinfo.author or lang.name,
+                        author=textinfo.author,
                         url=Sutta.canon_url(uid=textinfo.path.stem,
                                             lang_code=lang.uid,
                                             bookmark=textinfo.bookmark),

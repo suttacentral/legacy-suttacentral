@@ -27,14 +27,15 @@
     {% else %}
         {{node.name}}
     {% endif %}
+    
     {% if node.translations %}
         <td>
         {% for translation in node.translations %}
             {% if loop.first %}
-                <a href="{{translation.url}}">{{translation.name}}</a>
+                <a {{ extlink(translation.url) }} href="{{translation.url}}">{{translation.name}}</a>
             {% else %}
                 {% if loop.index == 2 %}<span class="extras">{% endif %}
-                <a href="{{translation.url}}"> {{loop.index}}</a>
+                <a {{ extlink(translation.url) }} href="{{translation.url}}"> {{loop.index}}</a>
                 {% if loop.last %}</span>{% endif %}
             {% endif %}
         {% endfor %}

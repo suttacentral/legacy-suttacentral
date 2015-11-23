@@ -1,4 +1,5 @@
 
+from urllib.parse import urlparse
 from collections import OrderedDict
 
 
@@ -11,8 +12,12 @@ from sc.views import ViewBase
 available_language_templates = {f.stem for f in (sc.templates_dir / 'language').glob('*.html')
                                              if f.stem != 'generic'}
 
+class TreeNode(dict):
+    def has_translations(self):
+        return len(self.translations) > 0
+
 class LanguageView(ViewBase):
-    template_name = 'language/generic'
+    template_name = 'language/newstyle'
     def __init__(self, lang, div_uid):
         self.lang = lang
         self.div_uid = div_uid
@@ -94,6 +99,7 @@ class TranslationTreeBuilder:
                         sut = self.add_node(sutta, subdiv)
     
     def add_node(self, imm_tree_object, parent):
+        uid = imm_tree_object.uid
         if isinstance(imm_tree_object, sc.classes.SuttaCommon):
             type_name = 'sutta'
             if imm_tree_object.uid not in self.all_lang_translations:
@@ -101,13 +107,19 @@ class TranslationTreeBuilder:
         else:
             type_name = type(imm_tree_object).__name__.lower()
         translations = self.get_translations(imm_tree_object)
+        root_lang = None
+        if parent:
+            root_lang = parent["root_lang"] or getattr(imm_tree_object.lang, "uid", None)
+            
         try:
-            obj = { "uid": imm_tree_object.uid,
+            obj = TreeNode({ "uid": uid,
                     "name": imm_tree_object.name,
                     "type": type_name,
                     "children": [],
-                    "translations": translations
-                    }
+                    "translations": translations,
+                    "root_lang": root_lang,
+                    "blurb": self.imm.get_blurb(self.lang, uid)
+                    })
             if parent:
                 parent["children"].append(obj)
             return obj
@@ -131,7 +143,8 @@ class TranslationTreeBuilder:
     def create_translation(self, text_ref):
         return {
             "name": text_ref.name,
-            "url": text_ref.url
+            "url": text_ref.url,
+            "translator": text_ref.author or text_ref.abstract
         }
         
     def get_node_with_uid(self, uid):
