@@ -99,7 +99,7 @@ class Data:
         }
     
     def text_images(self, uid, volpage_ids, **kwargs):
-        from sc.text_image import get
+        from sc.text_image_index import get
         out = {}
         for vp_id in volpage_ids.split(','):
             result = get(uid, vp_id)
