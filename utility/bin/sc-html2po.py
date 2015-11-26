@@ -6,7 +6,10 @@ import regex
 import hashlib
 import pathlib
 import argparse
+import logging
 import lxml.html
+
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Convert HTML to PO',
@@ -22,10 +25,19 @@ def parse_args():
                         type=str,
                         help="CSS selector for removing entire element trees",
                         default="#metaarea")
+    parser.add_argument('-v', '--verbose', action='store_true');
     parser.add_argument('infiles', type=str, nargs='+', help="Source HTML Files")
     return parser.parse_args()
     
 args = parse_args()
+
+logger = logging.Logger('sc-html2po')
+handler = logging.StreamHandler()
+logger.addHandler(handler)
+if args.verbose:
+    handler.setLevel('INFO')
+else:
+    handler.setLevel('WARN')
 
 strip = args.strip_tags
 remove = args.strip_trees
@@ -108,7 +120,7 @@ class Html2Po:
 
     def make_close_tag(self, e):
         return '</{}>'.format(e.tag)
-
+    
     def mangle_repl(self, m):
         if m[0] in self.mangle_lookup:
             mangle_key = self.mangle_lookup[m[0]]
@@ -129,7 +141,7 @@ class Html2Po:
 
     def segment_inner(self, e):
         html_string = lxml.html.tostring(e, encoding='unicode').strip()
-        html_string = html_string.replace('\n', ' ').replace('\xad', '').replace('\xa0', ' ')
+        html_string = html_string.replace('\n', ' ').replace('\xa0', ' ')#.replace('\xad', '')
         m = regex.match(r'<[^<]+>\s*(.*)</\w+>', html_string, flags=regex.DOTALL)
         if not m:
             raise ValueError(html_string)
@@ -140,7 +152,8 @@ class Html2Po:
             self.add_token(TokenType.comment, m[1])
             html_string = m[2]
         html_string = self.mangle(html_string)
-        pattern = r'(?<!\d+)([.;:!?—][\u200b\s]*)'
+        logger.info(html_string)
+        pattern = r'(?<!\d+)([.;:!?—](?:\p{punct}+|\s*MANG[0-9]+GLE[\p{punct}\d]*MANG[0-9]+GLE)*[\u200b\s]*|(?<!^)…\s*(?:pe\s*…\s*)?[.;:!?—]*)'
         parts = regex.split(pattern, html_string)
         segments = [''.join(parts[i:i+2]).strip() for i in range(0, len(parts), 2)]
         sentence_count = 0
@@ -148,7 +161,7 @@ class Html2Po:
             if not segment:
                 continue
             segment = self.demangle(segment)
-            lines = regex.split('(<br[^>]*>)', segment)
+            lines = regex.split('(<br[^>]*>|(?:<a [^>]+></a>)*$)', segment)
             for i in range(0, len(lines), 2):
                 line = lines[i].strip()
                 if line:
@@ -209,17 +222,17 @@ msgstr ""
     
     def tostring(self):
         parts = [self.preamble()]
-        last_token = None
+        prev_token = None
         for token in self.token_stream:
             if token.type == TokenType.comment:
-                if last_token and (last_token.type == TokenType.comment):
+                if prev_token and (prev_token.type == TokenType.comment):
                     parts[-1] += token.value.strip()
                 else:
                     parts.append('#: {}'.format(token.value.strip()))
             elif token.type == TokenType.text:
                 if token.ctxt:
                     parts.append('msgctxt "{}"'.format(token.ctxt))
-                parts.append('msgid "{}"'.format(token.value.strip().replace('\n', ' ')))
+                parts.append('msgid "{}"'.format(token.value.strip().replace('\n', ' ').replace('"', '\\"')))
                 parts.append('msgstr ""')
             elif token.type == TokenType.newline:
                 parts.append('')
@@ -228,7 +241,7 @@ msgstr ""
                 break
             else:
                 raise ValueError('{} is not a valid type'.format(token.type))
-            last_token = token
+            prev_token = token
         return ('\n'.join(parts))
     
     def process(self, filename):        
@@ -242,7 +255,7 @@ msgstr ""
 
 common_path = None
 if not args.flat and len(infiles) > 0:
-    common_path = pathlib.Path(os.path.commonprefix([str(p) for p in infiles]))
+    common_path = pathlib.Path(*os.path.commonprefix([(p if p.is_dir() else p.parent).parts for p in infiles]))
 
 class ZFiller:
     def __init__(self):
