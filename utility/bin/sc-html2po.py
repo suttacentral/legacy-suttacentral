@@ -9,7 +9,7 @@ import argparse
 import logging
 import lxml.html
 
-
+HTML_COMMENT_FORMAT = '#.'
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Convert HTML to PO',
@@ -228,7 +228,7 @@ msgstr ""
                 if prev_token and (prev_token.type == TokenType.comment):
                     parts[-1] += token.value.strip()
                 else:
-                    parts.append('#: {}'.format(token.value.strip()))
+                    parts.append('{} {}'.format(HTML_COMMENT_FORMAT, token.value.strip()))
             elif token.type == TokenType.text:
                 if token.ctxt:
                     parts.append('msgctxt "{}"'.format(token.ctxt))
