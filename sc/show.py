@@ -77,6 +77,10 @@ def default(*args, **kwargs):
             return UidsView().render()
 
         uid = uid.replace('_', '#')
+        
+        if regex.match(r'it\d+', uid):
+            new_url = '/{}'.format(uid.replace('it', 'iti'))
+            raise cherrypy.HTTPRedirect(new_url, 301)
 
         # Divisions
         division = imm.divisions.get(uid)
