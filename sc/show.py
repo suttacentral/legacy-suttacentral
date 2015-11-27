@@ -104,6 +104,7 @@ def default(*args, **kwargs):
             return ParallelView(sutta).render()
         
     elif len(args) >= 2:
+        
         if args[1] == 'citation.txt':
             # Citation
             cherrypy.response.headers['Content-Type'] = "text/plain"
@@ -118,6 +119,8 @@ def default(*args, **kwargs):
         lang_code = args[0]
         uid = args[1]
         
+        
+        
         redirect = False
         bookmark = None
 
@@ -128,6 +131,9 @@ def default(*args, **kwargs):
             elif lang_code == 'zh' and imm.text_exists(uid, 'lzh'):
                 redirect = True
                 lang_code = 'lzh'
+            elif uid.startswith('it') and imm.text_exists(uid.replace('it', 'iti'), lang_code):
+                redirect = True
+                uid = uid.replace('it', 'iti')
             else:
                 raise cherrypy.NotFound()
 
