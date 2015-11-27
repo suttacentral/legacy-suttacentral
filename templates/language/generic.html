@@ -30,8 +30,9 @@
     {% if node.translations %}
         <td>
         {% for translation in node.translations %}
+        {% set translation_name = translation.name or "[No Title]" %}
             {% if loop.first %}
-                <a href="{{translation.url}}">{{translation.name}}</a>
+                <a href="{{translation.url}}">{{translation_name}}</a>
             {% else %}
                 {% if loop.index == 2 %}<span class="extras">{% endif %}
                 <a href="{{translation.url}}"> {{loop.index}}</a>
