@@ -275,6 +275,8 @@ $sidebar-tabs-vertical-padding: 0.4em;
     }
 }
 
+
+
 #darkness{
     position:absolute;
     z-index:-10;
@@ -385,6 +387,10 @@ $sidebar-tabs-vertical-padding: 0.4em;
     -webkit-appearance: none;
 }
 
+#pin-sidebar {
+    margin-left: 0.5em;
+}
+
 #languages {
     width:100%;
 }
@@ -473,5 +479,12 @@ $sidebar-tabs-vertical-padding: 0.4em;
         margin-bottom: 1em;
         padding: 1em;
         border-top: 1px solid #ddd;
+    }
+}
+
+main.sidebar-pinned {
+    margin-left: 20rem;
+    #darkness {
+        display: none;
     }
 }

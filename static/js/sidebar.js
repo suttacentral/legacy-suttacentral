@@ -97,6 +97,7 @@
         sc.sessionState.setItem('sidebar.active', true);
     },
     hide: function() {
+        if (localStorage.getItem('sc.sidebar.pinned')) return false;
         this.node.removeClass('active');
         this.node.removeClass('fast');
         sc.sessionState.setItem('sidebar.active', false);
@@ -106,6 +107,7 @@
         this.node.easytabs('select', tab);
     },
     bindButtons: function(){
+        $('[name=sidebar-pinned]').on('click', sc.sidebar.togglePinSidebar);
         $('#text-info').click(toggleTextualInfo);
         $('#pali-lookup').click(_.bind(sc.piLookup.togglePaliLookup, sc.piLookup));
         for (f in transFuncs) {
@@ -119,7 +121,6 @@
         });
         $('#t-line-by-line').click(this.toggleLineByLine);
         this.initChineseLookup();
-
     },
     tracking: function(e) {
         // Track usage of sidebar controls
@@ -153,6 +154,18 @@
             sc.sessionState.setItem('t-line-by-line', true);
         }
         
+    },
+    togglePinSidebar: function(e) {
+        var isPinned = ($('[name=sidebar-pinned]').prop('checked') == true);
+        console.log('Pinned = ' + isPinned);
+        
+        if (isPinned) {
+            localStorage.setItem('sc.sidebar.pinned', true);
+            $('main').addClass('sidebar-pinned');
+        } else {
+            localStorage.removeItem('sc.sidebar.pinned');
+            $('main').removeClass('sidebar-pinned');
+        }
     },
     initChineseLookup: function() {
         if ($('#lzh2en').length == 0) return;

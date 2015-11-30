@@ -5,6 +5,8 @@
     overflow: hidden;
     background-color: ns-color(footer-background-color);
     white-space:nowrap;
+    position: relative;
+    z-index: 2;
 
     @media print {
         display: none;

@@ -19,13 +19,19 @@
 <div id="sidebar">
     <script>
     {# This is inlined as we want it to run right here #}
+    if (localStorage.getItem('sc.sidebar.pinned')) {
+        document.getElementsByTagName('main')[0].classList.add('sidebar-pinned');
+    } else {
+        document.getElementById('sidebar').style.visibility = 'hidden';
+    }
+    console.log('Main: ', document.getElementsByTagName('main'));
     setTimeout(function(){
         document.getElementById('sidebar').style.visibility = 'visible';
         {% if has_quotes %}
         document.getElementsByTagName('main')[0].style.visibility = 'visible';
         {% endif %}
         }, 500);
-    document.getElementById('sidebar').style.visibility = 'hidden';
+    
     {% if has_quotes %}
     document.getElementsByTagName('main')[0].style.visibility = 'hidden';
     {% endif %}
@@ -64,6 +70,8 @@
                 <a class="button" id="t-line-by-line" title="View line-by-line as in CBETA">View line-by-line</a>
             </div>
             {% endif %}
+            <div id="pin-sidebar"><label><input type="checkbox" name="sidebar-pinned"> Keep Sidebar Extended</label></div>
+            <script>document.getElementsByName('sidebar-pinned')[0].checked = localStorage.getItem('sc.sidebar.pinned') == "true"</script>
             <div id="message-box"></div>
         </div>
       </div>
