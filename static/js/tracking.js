@@ -42,9 +42,27 @@ $('main').on('click contextmenu', '.file', function(){
 
 // Track usage of sidebar controls
 $('#controls-tab').on('click', '.button', function(e){
-    var value = $(e.target).attr('id') || $(e.target).text();
+    var $target = $(e.target),
+        value = $target.attr('id') || $target.text();
     if ($(this).is('select')) {
         value += '-' + this.value;
     }
     sc.trackEvent(value)
+});
+
+$('#controls-tab').on('change', 'input', function(e){
+    var $target = $(e.target),
+        label = $target.attr('id') || $target.attr('name'),
+        value = $target.prop('checked');
+    
+    if (value === undefined) {
+        value = $target.val();
+    }    
+    
+    sc.trackEvent({
+        category: "input",
+        label: label,
+        action: 'click',
+        value: value.toString() });
+    
 });

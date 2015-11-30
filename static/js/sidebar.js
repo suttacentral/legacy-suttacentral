@@ -122,25 +122,6 @@
         $('#t-line-by-line').click(this.toggleLineByLine);
         this.initChineseLookup();
     },
-    tracking: function(e) {
-        // Track usage of sidebar controls
-        var self=this;
-        $('#controls-tab').on('click', '.button', function(e){
-            self.trackEvent($(e.target).attr('id') || $(e.target).text())
-        });
-    },
-    trackEvent: function(label) {
-        if ('ga' in window) {
-            ga('send', {
-                hitType: 'event',
-                eventCategory: 'button',
-                eventAction: 'click',
-                eventLabel: label
-            })
-        } else {
-            console.log('Event: ' + label);
-        }
-    },
     toggleLineByLine: function(e) {
         var brs = $('br.t-br');
         if (brs.length) {
