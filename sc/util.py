@@ -78,7 +78,7 @@ def wrap(text, width=80, indent=0):
     ])
     return textwrap.indent(text.strip(), ' ' * indent)
 
-def numericsortkey(string, _rex=regex.compile(r'(\d+)')):
+def numericsortkey(string, _split=regex.compile(r'(\d+)').split):
     """ Intelligently sorts most kinds of data.
     
     Should work on absolutely any configuration of characters in a string
@@ -96,9 +96,9 @@ def numericsortkey(string, _rex=regex.compile(r'(\d+)')):
     """
     
     # if regex.fullmatch('\d+', s) then int(s) is valid, and vice-verca.
-    return [int(s) if i % 2 else s for i, s in enumerate(_rex.split(string))]
+    return [int(s) if i % 2 else s for i, s in enumerate(_split(str(string)))]
 
-def humansortkey(string, _rex=regex.compile(r'(\d+(?:[.-]\d+)*)')):
+def humansortkey(string, _split=regex.compile(r'(\d+(?:[.-]\d+)*)').split):
     """ Properly sorts more constructions than numericsort
     
     Should generally be preferred to numericsort unless a simpler ordering
@@ -110,7 +110,7 @@ def humansortkey(string, _rex=regex.compile(r'(\d+(?:[.-]\d+)*)')):
     """
     # With split, every second element will be the one in the capturing group.
     return [numericsortkey(s) if i % 2 else s 
-            for i, s in enumerate(_rex.split(string))]
+            for i, s in enumerate(_split(str(string)))]
 
 class TimedCache:
     """ A lightweight cache which removes content after a given time
