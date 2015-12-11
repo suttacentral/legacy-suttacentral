@@ -1,15 +1,18 @@
 #!/usr/bin/env python
 
 import os
+
 import time
 import regex
 import hashlib
+import logging
 import pathlib
 import argparse
-import logging
+import datetime
 import lxml.html
 
-HTML_COMMENT_FORMAT = '#.'
+from babel.messages.catalog import Catalog
+from babel.messages.pofile import read_po, write_po
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Convert HTML to PO',
@@ -218,31 +221,42 @@ msgstr ""
         string = regex.sub(r'(?i)\n(\n#: <br[^>]*>)', r'\1', string)
         string = regex.sub(r'\n(\n(?:#: </\w+>(?:\n|$))+)', r'\1\n', string)
         return string
-        
     
-    def tostring(self):
-        parts = [self.preamble()]
+    def create_catalog(self):
+        catalog = Catalog(
+            locale=None,
+            domain=None,
+            fuzzy=False,
+            header_comment="#Translation Template For SuttaCentral",
+            project='suttas',
+            creation_date=datetime.datetime.utcnow(),
+            language_team="SuttaCentral",
+            charset="UTF-8"
+        )
+        
+        comments = []
         prev_token = None
         for token in self.token_stream:
             if token.type == TokenType.comment:
-                if prev_token and (prev_token.type == TokenType.comment):
-                    parts[-1] += token.value.strip()
+                if comments: # and prev_token and prev_token.type == TokenType.comment:
+                    comments[0] += token.value.strip()
                 else:
-                    parts.append('{} {}'.format(HTML_COMMENT_FORMAT, token.value.strip()))
+                    comments.append(token.value.strip())
             elif token.type == TokenType.text:
-                if token.ctxt:
-                    parts.append('msgctxt "{}"'.format(token.ctxt))
-                parts.append('msgid "{}"'.format(token.value.strip().replace('\n', ' ').replace('"', '\\"')))
-                parts.append('msgstr ""')
+                catalog.add(id=token.value.strip().replace('\n', ' ').replace('"', '\\"'),
+                            string="",
+                            auto_comments=comments,
+                            context=token.ctxt
+                )
+                comments.clear()
             elif token.type == TokenType.newline:
-                parts.append('')
+                pass
             elif token.type == TokenType.end:
-                parts.append('')
                 break
             else:
                 raise ValueError('{} is not a valid type'.format(token.type))
             prev_token = token
-        return ('\n'.join(parts))
+        return catalog
     
     def process(self, filename):        
         doc = lxml.html.parse(filename)
@@ -315,7 +329,7 @@ for file in infiles:
     
     html2po = Html2Po()
     html2po.process(str(file))
-    string = html2po.tostring()
-    with outfile.open('w', encoding='utf8') as f:
-        f.write(string)
+    catalog = html2po.create_catalog()
+    with outfile.open('wb') as f:
+        write_po(f, catalog, width=-1)
 
