@@ -252,6 +252,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 }
 
+#text:lang(ta) {
+     .sutta {
+        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
+                        font-family: 'Noto Sans Tamil', serif;
+                        letter-spacing: 0;
+                        line-height: 1.8;
+        }
+        h1, h2, h3, h4, h5, h6{
+                        font-weight: 700;
+                     
+        }
+}
+}
 // Metaarea should not be visible while it is still inside the #text
 // element. Javascript automagically moves it into the sidebar.
 // This prevents 'flashing' when the javascript is slow to load.
