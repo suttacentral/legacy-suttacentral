@@ -1,3 +1,26 @@
+/*
+ * Noto Sans Tamil (Tamil) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'Noto Sans Tamil';
+  font-style: normal;
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/notosanstamil/v3/NotoSansTamil-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/notosanstamil/v3/NotoSansTamil-Regular.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosanstamil/v3/NotoSansTamil-Regular.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosanstamil/v3/NotoSansTamil-Regular.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosanstamil/v3/NotoSansTamil-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Tamil';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/notosanstamil/v3/NotoSansTamil-Bold.eot);
+  src: url(//fonts.gstatic.com/ea/notosanstamil/v3/NotoSansTamil-Bold.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosanstamil/v3/NotoSansTamil-Bold.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosanstamil/v3/NotoSansTamil-Bold.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosanstamil/v3/NotoSansTamil-Bold.ttf) format('truetype');
+}
 
 @font-face {
   font-family: 'Noto Sans Sinhala';
