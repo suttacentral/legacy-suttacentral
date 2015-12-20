@@ -36,6 +36,7 @@ a.ms:before {content:"MS "}
 a.mt:before {content:"MT "}
 a.nm:before {content:"NM "}
 a.np:before {content:"NP "}
+a.nst:before {content:"NST "}
 a.of:before {content:"OF "}
 a.pl:before {content:"PL "}
 a.pts:before {content:"PTS "}
@@ -150,6 +151,8 @@ CSS Class	HTML Title
 .nm     	"Paragraph numbers in Nyānatiloka Mahāthera."
 
 .np     	"Paragraph numbers in Nyānaponika Mahāthera."
+
+.nst            "Paragraph numbers in Ven. Nilwakke Somananda Thera."
 
 .pl     	"Paragraph numbers in Peter van Loosbroek."
 

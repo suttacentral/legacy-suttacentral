@@ -45,6 +45,7 @@ sc.classes = {
         "ms-pa": "",
 	"nm": "Paragraph numbers in Nyānatiloka Mahāthera.",
 	"np": "Paragraph numbers in Nyānaponika Mahāthera.",
+        "nst": "Paragraph numbers in Ven. Nilwakke Somananda Thera.",
         "of": "Paragraph numbers in Otto Franke, 1913.",
 	"pl": "Paragraph numbers in Peter van Loosbroek.",
         "pts": "Pali Text Society vol/page number.",
