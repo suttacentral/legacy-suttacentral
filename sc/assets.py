@@ -7,10 +7,15 @@ import logging
 import webassets
 from webassets.script import CommandLineEnvironment
 import json, os.path
+import regex
 
 import sc
 from sc import config
 
+
+def rename_sc_to_suttacentral(_in, out, **kwargs):
+    out.write(regex.sub(r'\bsc\b', 'suttacentral', _in.read()))
+    
 
 def clean(older=False):
     """Remove outdated compiled assets."""
@@ -121,7 +126,7 @@ def get_env():
     css_palilookup_standalone = webassets.Bundle(
         'css/text/lookup.scss',
         filters='pyscss',
-        output='css/compiled/paliLookup2.2-standalone.css')
+        output='css/compiled/paliLookup2.3-standalone.css')
     
     env.register('css_paliLookup_standalone', css_palilookup_standalone)
     env.register('css_free', css_free)
@@ -174,14 +179,17 @@ def get_env():
     env.register('js_core', js_core)
     
     paliLookup_standalone = webassets.Bundle(
-        'js/vendor/elasticsearch-5.0.0.js',
+        'js/vendor/elasticsearch-10.0.1.jquery.js',
+        'js/vendor/underscore-1.8.3.js',
+        'js/vendor/murmurhash3_gc.js',
+        'js/lib/idb-cache.js',
         'js/lib/text-nodes.js',
         'js/lib/pali-sort.js',
         'js/lib/sorted-stringify.js',
         'js/sc_popup.js',
         'js/paliLookup2.0.js',
-        filters='rjsmin',
-        output='js/compiled/paliLookup2.2-standalone.js'
+        filters=(rename_sc_to_suttacentral, 'rjsmin'),
+        output='js/compiled/paliLookup2.3-standalone.js'
     )
     env.register('paliLookup-standalone', paliLookup_standalone)
 
