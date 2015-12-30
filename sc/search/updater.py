@@ -22,6 +22,8 @@ class Updater(threading.Thread):
 
 updater_thread = Updater()
 
-def start():
+def start(blocking=False):
     if not updater_thread.started:
         updater_thread.start()
+        if blocking:
+            updater_thread.join()
