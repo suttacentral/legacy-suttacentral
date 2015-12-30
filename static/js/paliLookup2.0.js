@@ -44,18 +44,18 @@ sc.paliLookup = {
         this.elasticUrl = args.elasticUrl;
         this.targetSelector = args.target;
         var inner = function() {
-            self.client = elasticsearch.Client({
+            self.client = $.es.Client({
                 hosts: args.elasticUrl,
-                apiVersion: "1.7",
+                apiVersion: "2.0",
                 requestTimeout: 30000,
-                maxRetries: 30
+                maxRetries: 0
             });
             sc.paliLookup.termBreakCache.loadFromServer();
             sc.paliLookup.glossary.init();
         }
         
-        if (!window.elasticsearch) {
-            $.getScript('https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/8.2.0/elasticsearch.min.js')
+        if (!$.es) {
+            $.getScript('https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/10.0.1/elasticsearch.jquery.min.js')
              .success(inner);
         } else {
             inner()
@@ -118,7 +118,8 @@ sc.paliLookup = {
                    .replace(/\xad/g, '')
                    .replace(/ṁ/g, 'ṃ')
                    .replace(/ṃ([gk])/g, 'ṅ$1')
-                   .replace(/^([^”’]+)/, '$1')
+                   .replace(/n[”’]+ti/, 'ṃ')
+                   .replace(/[”’]+ti/, '')
     },
     getTerm: function(node) {
         var term = node.childNodes[1].nodeValue;
@@ -164,7 +165,7 @@ sc.paliLookup = {
             weights = args.weights, 
             includeGlossary = args.includeGlossary,
             preFn = args.preFn;
-        
+        console.log('Lookup: ' + term);
         var term = term || self.getTermNormalized(node);
         if (!term) return
         
@@ -223,7 +224,7 @@ sc.paliLookup = {
                 if (popup.tipsy) {
                     popup.find('[title]').removeAttr('title');
                 }
-                
+                /*
                 if (window.PTL) {
                     popup.find('.poor-match .term').each(function(){
                         var ele = $(this),
@@ -238,6 +239,7 @@ sc.paliLookup = {
                         }
                     });
                 }
+                */
                 
                 
             }
@@ -400,7 +402,7 @@ sc.paliLookup = {
             _source: this.source,
             filter: {
                 term: {
-                    'term.normalized': term
+                    'term.folded': term
                 }
             }
         }
@@ -410,7 +412,7 @@ sc.paliLookup = {
             _source: this.source,
             filter: {
                 terms: {
-                    'term.normalized': terms
+                    'term.folded': terms
                 }
             }
         }
@@ -420,7 +422,7 @@ sc.paliLookup = {
             _source: this.source,
             filter: {
                 terms: {
-                  'term.normalized': this.conjugate(term)
+                  'term.folded': this.conjugate(term)
                 }
             }
         }
@@ -434,7 +436,7 @@ sc.paliLookup = {
                         "should": [
                             {
                                 "fuzzy": {
-                                    "term.normalized": {
+                                    "term.folded": {
                                         "max_expansions": 10,
                                         "prefix_length": 3,
                                         "value": term
@@ -443,7 +445,7 @@ sc.paliLookup = {
                             },
                             {
                                 "fuzzy": {
-                                    "term.normalized": {
+                                    "term.folded": {
                                         "max_expansions": 10,
                                         "prefix_length": 2,
                                         "value": term.replace(/ṃ$/, '')
@@ -459,7 +461,7 @@ sc.paliLookup = {
                 _source: this.source,
                 "query": {
                     "fuzzy": {
-                        "term.normalized": {
+                        "term.folded": {
                             "max_expansions": 5,
                             "prefix_length": 3,
                             "value": term
@@ -476,7 +478,7 @@ sc.paliLookup = {
                 constant_score: {
                     filter: {
                         terms: {
-                          'term.normalized': this.decompose(term)
+                          'term.folded': this.decompose(term)
                         }
                     }
                 }
@@ -527,14 +529,14 @@ sc.paliLookup = {
      * @param {Object} query - An object representable as JSON.
      * @returns {String}
      */
-    keyify: function(query) {
+    keyify: function(query, method) {
         var key = 'a',
             string = orderedStringify(query),
-            m = /"(?:term(?:\.[^"]+)?|normalized)":\[?"([^"]+)"/.exec(string);
+            m = /"(?:term(?:\.[^"]+)?|folded)":\[?"([^"]+)"/.exec(string);
         if (!m) {
             console.log(string);
         }
-        key = m[1];
+        key = method + '_' + m[1];
         key += murmurhash3_32_gc(string);
         return key
     },
@@ -542,6 +544,7 @@ sc.paliLookup = {
     _idbcache: new IDBCache('palilookup-cache', 2),
     _last_queries: [],
     cachedQuery: function(method, query) {
+        console.log(method, query)
         var self = this
             fn = _.bind(sc.paliLookup.client[method], sc.paliLookup.client),
             key = self.keyify(query, method);
@@ -553,22 +556,30 @@ sc.paliLookup = {
             
         
         if (key in self._promise_cache) {
+            console.log('Returning from local cache')
             return self._promise_cache[key]
         }
         
         if (self._idbcache.available) {
+            console.log('Returning from IDB cache')
             var promise = self._idbcache.get(key)
                                  .then(function(result) {
                                     return result.data;
                                  })
                                  .catch(function(e){
-                                     return fn(query).then(function(result) {
-                                                 self._idbcache.add(key, result);
-                                                 return result;
+                                    return fn(query).then(function(result) {
+                                                console.log('Adding to cache [' + key +']: ', result);
+                                                self._idbcache.add(key, result);
+                                                return result
                                             });
                                  });
         } else {
-            promise = fn(query);
+            console.log(promise);
+            promise = fn(query)
+            promise.fail(function(){
+                console.log('Error when running query with method: ' + method);
+                console.log(query)
+            });
         }
         self._promise_cache[key] = promise;
         return promise
@@ -593,11 +604,12 @@ sc.paliLookup = {
      * @param {Array} queries to be requested and cached.
      */
     msearchPrecache: function(queries) {
+        console.log('Performing precache ', queries);
         var self = this,
             new_queries = [],
             keys = [];
         queries.forEach(function(msearch_query) {
-            var key = self.keyify(msearch_query);
+            var key = self.keyify(msearch_query, 'msearch');
             if (key in self._promise_cache) {
                 return
             }
@@ -750,7 +762,7 @@ sc.paliLookup = {
             }).then(function(resp) {
                 self.storage = resp._source.data;
                 self.updateMapping();
-            }).error(function() {
+            }).fail(function() {
                 return
             });
         }
@@ -1097,7 +1109,7 @@ sc.paliLookup = {
                     constant_score: {
                         filter: {
                             term: {
-                                'normalized': term
+                                'folded': term
                             }
                         }
                     }
@@ -1117,7 +1129,7 @@ sc.paliLookup = {
                                 constant_score: {
                                     filter: {
                                         terms: {
-                                            'normalized': terms
+                                            'folded': terms
                                         }
                                     }
                                 }
@@ -1126,7 +1138,7 @@ sc.paliLookup = {
                                 constant_score: {
                                     filter: {
                                         terms: {
-                                          'normalized': _(terms).chain()
+                                          'folded': _(terms).chain()
                                                           .map(_.bind(sc.paliLookup.conjugate, sc.paliLookup))
                                                           .flatten()
                                                           .compact()
@@ -1159,7 +1171,7 @@ sc.paliLookup = {
         },
         createInputBar: function(term) {
             var self = this;
-            term = term.toLowerCase();
+            term = sc.paliLookup.normalizeTerm(term);
             var form = $('<form disabled class="add-glossary-entry">' +
               '<input name="term" value="' + term + '" required>' +
               '<input name="gloss" placeholder="gloss" value="">' +
@@ -1171,7 +1183,7 @@ sc.paliLookup = {
             
             this.getEntry(term).then(function(result) {
                 if (!result.hits) {
-                    console.log('Bad Results!');
+                    console.log('Bad Results for ' + term + '!');
                     console.log(result);
                     return
                 }
@@ -1285,5 +1297,5 @@ sc.paliLookup = {
         }
     }
 }
-
+_.bindAll(sc.paliLookup, "lookup")
 _.bindAll(sc.paliLookup.termBreakCache, "keyize", "store", "unstore", "retrieve", "remove", "saveToServer", "loadFromServer");
