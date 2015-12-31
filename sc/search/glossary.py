@@ -66,6 +66,8 @@ def load():
             "_id": pali if not context else '{}-{}'.format(pali, context)
         })
     
+    mapping = {}
+    
     # Clear Entries if Needed:
     if es.indices.exists('pi2en-glossary'):
         query = {
@@ -75,7 +77,11 @@ def load():
                     }
                 }
             }
-        es.delete_by_query('pi2en-glossary', 'entry', query)
+        request = es.search('pi2en-glossary', 'entry', body=query, scroll='1m')
+        while request['hits']['hits']:
+            for hit in request['hits']['hits']:
+                es.delete(index='pi2en-glossary', doc_type='entry', id=hit['_id'])
+            request = es.scroll(request['_scroll_id'], scroll='1m')
     
     # Load Entries
     bulk(client=es,
