@@ -14,12 +14,47 @@ sc = window.sc || {};
  *
  */
 
+var asciify = sc.util.asciify;
+
+function makeCache(max_n) {
+    var _store = [];
+    if (max_n < 0) {
+        max_n = Infinity;
+    } else  if (!max_n) {
+        max_n = 10;
+    }
+    
+    var cache = {
+        retrieve: function(key) {
+            for (var i = 0; i < _store.length; i++) {
+                var item = _store[i];
+                if (item.key == key) {
+                    return item.value;
+                }
+            }
+            return null        
+        },
+        add: function(key, value) {
+            if (_store.length > max_n) {
+                _store.splice(0, _store.length - max_n);
+            }
+            _store.push({key: key, value: value});
+        },
+        _store: _store
+    }
+    return cache
+}
+        
+
 sc.paliLookup = {
     _handlers: [],
-    lookaheadN: 5,
+    lookaheadN: 0,
     index: 'en-dict',
     type: 'definition',
     main: '#text',
+    _promise_cache: makeCache(10),
+    _idbcache: {},//new IDBCache('palilookup-cache', 3),
+    _last_queries: [],
     sources: {
         cped: {
             'brief': 'CPD',
@@ -402,7 +437,7 @@ sc.paliLookup = {
             _source: this.source,
             filter: {
                 term: {
-                    'term.folded': term
+                    'term': term
                 }
             }
         }
@@ -412,7 +447,7 @@ sc.paliLookup = {
             _source: this.source,
             filter: {
                 terms: {
-                    'term.folded': terms
+                    'term.folded': _.map(terms, asciify)
                 }
             }
         }
@@ -422,7 +457,7 @@ sc.paliLookup = {
             _source: this.source,
             filter: {
                 terms: {
-                  'term.folded': this.conjugate(term)
+                  'term.folded': _.map(this.conjugate(term), asciify)
                 }
             }
         }
@@ -439,7 +474,7 @@ sc.paliLookup = {
                                     "term.folded": {
                                         "max_expansions": 10,
                                         "prefix_length": 3,
-                                        "value": term
+                                        "value": asciify(term)
                                     }
                                 }
                             },
@@ -448,7 +483,7 @@ sc.paliLookup = {
                                     "term.folded": {
                                         "max_expansions": 10,
                                         "prefix_length": 2,
-                                        "value": term.replace(/ṃ$/, '')
+                                        "value": asciify(term.replace(/ṃ$/, ''))
                                 }
                               }
                             }
@@ -464,7 +499,7 @@ sc.paliLookup = {
                         "term.folded": {
                             "max_expansions": 5,
                             "prefix_length": 3,
-                            "value": term
+                            "value": asciify(term)
                         }
                     }
                 }
@@ -478,7 +513,7 @@ sc.paliLookup = {
                 constant_score: {
                     filter: {
                         terms: {
-                          'term.folded': this.decompose(term)
+                          'term.folded': _.map(this.decompose(term), asciify)
                         }
                     }
                 }
@@ -540,9 +575,6 @@ sc.paliLookup = {
         key += murmurhash3_32_gc(string);
         return key
     },
-    _promise_cache: {},
-    _idbcache: new IDBCache('palilookup-cache', 2),
-    _last_queries: [],
     cachedQuery: function(method, query) {
         console.log(method, query)
         var self = this
@@ -553,20 +585,20 @@ sc.paliLookup = {
         if (self._last_queries.length > 10) {
             self._last_queries.splice(0, self._last_queries.length - 10)
         }
-            
         
-        if (key in self._promise_cache) {
-            console.log('Returning from local cache')
-            return self._promise_cache[key]
+        var cached_value = self._promise_cache.retrieve(key);
+        if (cached_value) {
+            return cached_value;
         }
         
         if (self._idbcache.available) {
             console.log('Returning from IDB cache')
             var promise = self._idbcache.get(key)
                                  .then(function(result) {
+                                    console.log('Result: ', result);
                                     return result.data;
                                  })
-                                 .catch(function(e){
+                                 .fail(function(e){
                                     return fn(query).then(function(result) {
                                                 console.log('Adding to cache [' + key +']: ', result);
                                                 self._idbcache.add(key, result);
@@ -581,7 +613,7 @@ sc.paliLookup = {
                 console.log(query)
             });
         }
-        self._promise_cache[key] = promise;
+        self._promise_cache.add(key, promise);
         return promise
     },
     /**
@@ -1129,7 +1161,7 @@ sc.paliLookup = {
                                 constant_score: {
                                     filter: {
                                         terms: {
-                                            'folded': terms
+                                            'folded': _.map(terms, asciify)
                                         }
                                     }
                                 }
@@ -1143,6 +1175,7 @@ sc.paliLookup = {
                                                           .flatten()
                                                           .compact()
                                                           .unique()
+                                                          .map(asciify)
                                                           .value()
                                         }
                                     }
