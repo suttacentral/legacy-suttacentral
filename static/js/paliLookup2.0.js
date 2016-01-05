@@ -200,7 +200,7 @@ sc.paliLookup = {
             weights = args.weights, 
             includeGlossary = args.includeGlossary,
             preFn = args.preFn;
-        console.log('Lookup: ' + term);
+        //console.log('Lookup: ' + term);
         var term = term || self.getTermNormalized(node);
         if (!term) return
         
@@ -567,16 +567,16 @@ sc.paliLookup = {
     keyify: function(query, method) {
         var key = 'a',
             string = orderedStringify(query),
-            m = /"(?:term(?:\.[^"]+)?|folded)":\[?"([^"]+)"/.exec(string);
+            m = /"(?:term(?:\.[^"]+)?|folded|normalized)":\[?"([^"]+)"/.exec(string);
         if (!m) {
-            console.log(string);
+            //console.log(string);
         }
-        key = method + '_' + m[1];
+        key = method + '_' + m ? m[1] : '';
         key += murmurhash3_32_gc(string);
         return key
     },
     cachedQuery: function(method, query) {
-        console.log(method, query)
+        //console.log(method, query)
         var self = this
             fn = _.bind(sc.paliLookup.client[method], sc.paliLookup.client),
             key = self.keyify(query, method);
@@ -592,25 +592,25 @@ sc.paliLookup = {
         }
         
         if (self._idbcache.available) {
-            console.log('Returning from IDB cache')
+            //console.log('Returning from IDB cache')
             var promise = self._idbcache.get(key)
                                  .then(function(result) {
-                                    console.log('Result: ', result);
+                                    //console.log('Result: ', result);
                                     return result.data;
                                  })
                                  .fail(function(e){
                                     return fn(query).then(function(result) {
-                                                console.log('Adding to cache [' + key +']: ', result);
+                                                //console.log('Adding to cache [' + key +']: ', result);
                                                 self._idbcache.add(key, result);
                                                 return result
                                             });
                                  });
         } else {
-            console.log(promise);
+            //console.log(promise);
             promise = fn(query)
             promise.fail(function(){
-                console.log('Error when running query with method: ' + method);
-                console.log(query)
+                //console.log('Error when running query with method: ' + method);
+                //console.log(query)
             });
         }
         self._promise_cache.add(key, promise);
@@ -636,7 +636,7 @@ sc.paliLookup = {
      * @param {Array} queries to be requested and cached.
      */
     msearchPrecache: function(queries) {
-        console.log('Performing precache ', queries);
+        //console.log('Performing precache ', queries);
         var self = this,
             new_queries = [],
             keys = [];
@@ -1141,7 +1141,7 @@ sc.paliLookup = {
                     constant_score: {
                         filter: {
                             term: {
-                                'folded': term
+                                'normalized': term
                             }
                         }
                     }
@@ -1161,7 +1161,7 @@ sc.paliLookup = {
                                 constant_score: {
                                     filter: {
                                         terms: {
-                                            'folded': _.map(terms, asciify)
+                                            'normalized': _.map(terms, asciify)
                                         }
                                     }
                                 }
@@ -1170,7 +1170,7 @@ sc.paliLookup = {
                                 constant_score: {
                                     filter: {
                                         terms: {
-                                          'folded': _(terms).chain()
+                                          'normalized': _(terms).chain()
                                                           .map(_.bind(sc.paliLookup.conjugate, sc.paliLookup))
                                                           .flatten()
                                                           .compact()
@@ -1216,8 +1216,8 @@ sc.paliLookup = {
             
             this.getEntry(term).then(function(result) {
                 if (!result.hits) {
-                    console.log('Bad Results for ' + term + '!');
-                    console.log(result);
+                    //console.log('Bad Results for ' + term + '!');
+                    //console.log(result);
                     return
                 }
                 if (result.hits.total > 0) {
