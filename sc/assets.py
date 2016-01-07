@@ -170,6 +170,7 @@ def get_env():
         'js/fonts.js',
         'js/lib/idb-cache.js',
         'js/paliLookup2.0.js',
+        'js/palilookup/main.js',
         sc_data_scripts_file,
         
         'js/tracking.js',
