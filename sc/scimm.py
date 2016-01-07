@@ -64,9 +64,9 @@ class _Imm:
         self.build_parallel_sutta_group('vinaya_kd')
         # self.build_search_data()
         self.load_epigraphs()
+        self.verify_uid_uniqueness()
         self.timestamp = timestamp
-        self.build_time = datetime.now()
-        
+        self.build_time = datetime.now()        
     
     def __call__(self, uid):
         if uid in self.collections:
@@ -77,7 +77,20 @@ class _Imm:
             return self.subdivisions[uid]
         elif uid in self.suttas:
             return self.suttas[uid]
-
+    
+    def verify_uid_uniqueness(self):
+        mappings = [self.pitakas, self.sects, self.languages, self.collections, self.divisions, self.subdivisions, self.suttas]
+        
+        used_uids = dict()
+        
+        for mapping in mappings:
+            for uid, thing in mapping.items():
+                if uid in used_uids:
+                    if isinstance(thing, Subdivision) and isinstance(used_uids[uid], Division):
+                        continue
+                    logger.error('UID: {thing.uid} is used for <{thing.__class__.__name__}>: "{thing.name}" and <{other.__class__.__name__}>: "{other.name}"'.format(thing=mapping[uid], other=used_uids[uid]))
+                used_uids[uid] = mapping[uid]
+        
     def build(self):
         """ Build the sutta central In Memory Model
 
