@@ -219,7 +219,7 @@ var scUrlCreator = (function(){
         "pi-tv-pvr-bu-pj": "Pārājika", "pi-tv-pvr-bu-sk": "Sekhiyā",
         "pi-tv-pvr-bu-ss": "Saṅghādisesā", "pp": "Puggalapaññatti",
         "prajnaptisastra": "Prajnaptiśāstra", "prakaranapada": "Prakaraṇapada",
-        "ps": "Paṭisambhidāmagga", "pt": "Paṭṭhāna", "pv": "Petavatthu",
+        "ps": "Paṭisambhidāmagga", "patthana": "Paṭṭhāna", "pv": "Petavatthu",
         "sa": "Saṃyuktāgama (1st)", "sa-2": "Saṃyuktāgama (2nd)",
         "sa-3": "Saṃyuktāgama (3rd)", "sa1-100": "Saṃyuktāgama 1–100",
         "sa1001-1100": "Saṃyuktāgama 1001–1100", "sa101-200": "Saṃyuktāgama 101–200",
