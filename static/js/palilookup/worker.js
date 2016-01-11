@@ -4,45 +4,11 @@ var start = Date.now();
 
 var window = self;
 
-importScripts('/js/lib/qwest.min.js', '/js/vendor/dexie.min.js', '/js/vendor/underscore-1.8.3.js');
+import {Dexie} from 'dexie';
+import {qwest} from 'qwest';
+import {levenshteinDistance} from '../lib/edit-distance.js';
 
-
-/* Libraries */
-
-function levenshteinDistance(a, b) {
-    if(a.length == 0) return b.length; 
-    if(b.length == 0) return a.length; 
-
-    var matrix = [];
-
-    // increment along the first column of each row
-    var i;
-    for(i = 0; i <= b.length; i++){
-        matrix[i] = [i];
-    }
-
-    // increment each column in the first row
-    var j;
-    for(j = 0; j <= a.length; j++){
-        matrix[0][j] = j;
-    }
-
-    // Fill in the rest of the matrix
-    for(i = 1; i <= b.length; i++){
-        for(j = 1; j <= a.length; j++){
-            if(b.charAt(i-1) == a.charAt(j-1)){
-                matrix[i][j] = matrix[i-1][j-1];
-            } else {
-                matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
-                                    Math.min(matrix[i][j-1] + 1, // insertion
-                                        matrix[i-1][j] + 1)); // deletion
-            }
-        }
-    }
-
-    return matrix[b.length][a.length];
-}
-
+import {_} from 'underscore';
 
 function postProgress(type, progress) {
     console.log(type, progress);
@@ -54,7 +20,9 @@ Dexie.Promise.on('error', function(error) {
     throw error;
 });
 
-var db = new Dexie('palilookup2');
+var db = new Dexie('palilookup2'),
+    async = Dexie.Yield.async,
+    spawn = Dexie.Yield.spawn;
 
 db.version(1).stores({
     'entries': 'term',
@@ -67,7 +35,7 @@ db.on('ready', function() {
             console.log('already populated');
         } else {
             console.log('Populating database');
-            
+
             var promise = new Dexie.Promise(function(resolve, reject) {
                 qwest.get('/js/data/all_dict.json',
                       null,
@@ -88,7 +56,7 @@ db.on('ready', function() {
                     var offset = 0,
                         chunkSize = Math.floor(1 + data.length / 100),
                         chunks = [];
-                        
+
                     while (offset < data.length) {
                         chunks.push(data.slice(offset, offset + chunkSize));
                         offset += chunkSize;
@@ -115,7 +83,7 @@ db.on('ready', function() {
                     console.log('Adding data in ' + chunks.length + ' chunks of ' + chunkSize + ' entries');
                     loadNextChunk();
                 });
-                    
+
             }).then(function(){
                 console.log('Transaction committed');
             })
@@ -149,7 +117,7 @@ self.addEventListener('message', function(event) {
 function getEntriesByTerms(query) {
     console.log('New Query: ' + JSON.stringify(query));
     db.entries.where('term').anyOf(query.terms).toArray(function(results){
-        self.postMessage({id: query.id, hits: results});        
+        self.postMessage({id: query.id, hits: results});
     })
 }
 
@@ -162,13 +130,13 @@ function getEntriesFuzzy(query) {
             term = query.term,
             rex = null,
             hits = [];
-        
+
         if (query.prefix_length) {
             rex = RegExp('^' + term.slice(0, 2));
         }
-        
+
         var maxEditDistance = Math.floor(term.length / 3);
-        
+
         terms.forEach(function(otherTerm) {
             if (!rex || rex.test(otherTerm)) {
                 if (Math.abs(otherTerm.length - term.length) > maxEditDistance) {
@@ -180,10 +148,10 @@ function getEntriesFuzzy(query) {
                 }
             }
         })
-        
+
         hits = _.sortBy(hits, 'editDistance');
         hits = _.pluck(hits, 'term');
-        
+
         getEntriesByTerms({id: query.id, terms: hits});
     })
 }
@@ -205,7 +173,7 @@ function addAllEntriesToDatabase(entries, db) {
                     }
                 })
             }
-            
+
             processSlice(0, 200);
         })
         return promise;
@@ -246,7 +214,9 @@ var data = null;
 //function handleMessage(event) {
     //console.log('Message Received from main script');
     //console.log(event.data);
-    
+
     //port.postMessage("You sent me data of length " + event.data.length);
 //}
 */
+
+var foo = (t) => t.length;
