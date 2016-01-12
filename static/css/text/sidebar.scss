@@ -17,7 +17,7 @@ $sidebar-tabs-vertical-padding: 0.4em;
     width: $sidebar-width;
     @include sans-serif;
     color: misc-color(dark-medium-gray);
-    z-index: 2;
+    z-index: 3;
     background: misc-color(light-light-gray);
     box-shadow: 0.1em 0.1em 0.2em rgba(0,0,0,0.2);
 
