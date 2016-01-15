@@ -35,7 +35,7 @@ class DictIndexer(ElasticIndexer):
         if not self.alias_exists():
             return True
         return False
-    
+
     def index_folder(self):
         lang_dir = self.lang_dir
         glossfile = lang_dir / 'gloss.json'
@@ -45,9 +45,9 @@ class DictIndexer(ElasticIndexer):
                 glosses = {t[0]: t[1] for t in json.load(f)}
         else:
             glosses = {}
-        
+
         all_entries = {}
-        
+
         for source_file in lang_dir.glob('*.html'):
             self.add_file(source_file, all_entries, glosses)
 
@@ -58,7 +58,10 @@ class DictIndexer(ElasticIndexer):
         # Sort entries overall alphabetically (pali)
         sorted_entries = sorted(all_entries.values(), key=lambda d: sc.textfunctions.palisortkey(d["term"]))
         del all_entries
-        
+
+        with (sc.static_dir / 'json' / lang_dir.stem).with_suffix('.json').open('w', encoding='utf8') as f:
+            json.dump(sorted_entries, f)
+
         # Correctly number entries
         for i, entry in enumerate(sorted_entries):
             entry["number"] = i + 1
@@ -85,7 +88,7 @@ class DictIndexer(ElasticIndexer):
         lang = root.head.select('[name=root_lang]')[0].get("content")
         for i, entry in enumerate(root.iter('dl')):
             term = self.fix_term(next(entry.iter('dfn')).text_content())
-            
+
             entry.attrib['id'] = source
 
             # Rewrite URL's
@@ -94,7 +97,7 @@ class DictIndexer(ElasticIndexer):
                 if not href or not href.startswith('#'):
                     continue
                 a.set('href', './{}#{}'.format(href.lstrip('#'), source))
-            
+
             if term not in all_entries:
                 all_entries[term] = {
                     "term": term,
@@ -118,13 +121,13 @@ class DictIndexer(ElasticIndexer):
                 "html_content": str(entry).replace('ṁ', 'ṃ')})
             content = '\n' + entry.text_content().replace('ṁ', 'ṃ').replace('\n', ' ').replace('  ', ' ')
             json_entry["content"] += content
-            
-            
+
+
         logger.info('Added {} entries from {}'.format(i + 1, source))
 
     def update_data(self):
         self.index_folder()
-    
+
 def update():
     source_dir = sc.data_dir / 'dicts'
     for lang_dir in source_dir.glob('*'):
@@ -181,7 +184,7 @@ class FuzzyCache:
 
     def connect(self):
         return sqlite3.connect(str(self.filename))
-    
+
     def build(self):
         if self.filename.exists():
             self.filename.unlink()
@@ -198,7 +201,7 @@ class FuzzyCache:
             for (term, lang), fuzzies
             in data))
         con.commit()
-        
+
     def retrieve(self, term, lang):
         con = self.connect()
         r = con.execute('SELECT payload FROM terms WHERE term = ? AND lang=?',
@@ -208,7 +211,7 @@ class FuzzyCache:
             return json.loads(payload)
         except IndexError:
             return []
-    
+
     def build_fuzzy_cache(self):
         start=time.time()
         terms = elasticsearch.helpers.scan(es, doc_type='definition', fields='term')
@@ -228,7 +231,7 @@ fc = FuzzyCache()
 if fc.is_valid():
     def get_fuzzy_terms(term, lang='en'):
         return fc.retrieve(term, lang)
-    
+
 
 
 def periodic_update(i):
