@@ -1,6 +1,5 @@
 a.msdiv,a.ms, a.ms-pa, .infomode #text p a.ms, .infomode #text p a.ms-pa {display:none;}
 
-
 a.da {
     display: none;
 }
@@ -16,7 +15,7 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
     a.wal48, a.wal50, a.wal52, a.wal55b, a.wal57c, a.wal58, a.wal59a, a.wal60,
     a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.wr,
     a.yam72, a.es, a.bm, a.bn, a.hh, a.jd, a.ks, a.nm, a.np, a.pl, a.wg, a.jsk, a.mt, a.sb, a.ss, a.tb,
-    a.kl, a.bi, a.bjt, a.ttc
+    a.kl, a.bi, a.bjt, a.ttc, #text:lang(si).msdiv
 {
     visibility:hidden;
     
@@ -35,6 +34,7 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
     transition-property:opacity;
     opacity: 0;
     float:right;
+    clear:both;
     .infomode & {
 		visibility:visible;
 		opacity: 1;
@@ -113,6 +113,7 @@ a.ks
 a.mat85, a.mat88
 a.mit57
 a.ms
+a.msdiv
 a.mt
 a.nm
 a.np
