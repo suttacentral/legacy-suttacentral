@@ -59,7 +59,7 @@ var scUrlCreator = (function(){
         "ea9": "Ekottarikāgama 9", "gf": "Gāndhārī fragments",
         "gr-dg-bu-pm": "Bhikkhu Pātimokkha", "gr-dg-bu-pm-pc": "Pācittiyā",
         "gr-pm-bf13": "Bhikkhu Pātimokkha", "gr-pm-bf13-np": "Nissaggiyā Pācittiyā",
-        "it": "Itivuttaka", "ja": "Jātaka", "jnanaprasthana": "Jnānaprasthāna",
+        "iti": "Itivuttaka", "ja": "Jātaka", "jnanaprasthana": "Jnānaprasthāna",
         "kf": "Khotanese fragments", "kn": "Khuddaka Nikāya", "kp": "Khuddakapāṭha",
         "kv": "Kathāvatthu", "lal": "Lalitavistara",
         "lzh-dg-bi-kammavaca": "Bhikkhunī Kammavācā",
