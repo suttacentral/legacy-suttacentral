@@ -322,6 +322,13 @@ Text added by the editor or translator for clarification.
     }
     }
 
+.metre {visibility: hidden;
+.infomode & {
+        color:#9B8D00;
+        visibility: visible;
+    }
+    }
+
 .expanded {display:inline
 .infomode & {
         color: misc-color(light-medium-gray);
