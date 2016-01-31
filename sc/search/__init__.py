@@ -26,10 +26,8 @@ def update_indexes():
     import sc.search.dicts
     import sc.search.texts
     import sc.search.suttas
-    import sc.search.autocomplete
 
     sc.search.dicts.update()
     sc.search.suttas.update()
     sc.search.texts.update()
-    sc.search.autocomplete.update()
     
