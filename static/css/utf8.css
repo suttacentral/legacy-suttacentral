@@ -33,6 +33,7 @@ a.ks:before {content:"KS "}
 a.mat85:before, a.mat88:before {content:"Mat "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
+a.msdiv:before {content:"Msdiv "}
 a.mt:before {content:"MT "}
 a.nm:before {content:"NM "}
 a.np:before {content:"NP "}
@@ -147,6 +148,8 @@ CSS Class	HTML Title
 .mat88		"Paragraph numbers in Matsumura, 1988."
 
 .mit57		"Paragraph numbers in Mittal, 1957."
+
+.msdiv		"Msdiv paragraph numbers."
 
 .nm     	"Paragraph numbers in Nyānatiloka Mahāthera."
 

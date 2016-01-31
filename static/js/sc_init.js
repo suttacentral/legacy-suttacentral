@@ -41,6 +41,7 @@ sc.classes = {
         "mat88": "Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988.",
         "mit57": "Paragraph numbers in Mittal, 1957.",
         "ms": "Mahāsaṅgīti paragraph number.",
+        "msdiv": "Msdiv paragraph numbers.",
         "mt": "Paragraph numbers in Maitrimurti / Trätow.",
         "ms-pa": "",
 	"nm": "Paragraph numbers in Nyānatiloka Mahāthera.",
