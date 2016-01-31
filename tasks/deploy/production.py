@@ -95,3 +95,20 @@ def update_search():
         'invoke dictionary.build',
         'invoke search.index'
     )
+
+@task
+def elastic_restart():
+    """Restart elasticsearch service"""
+    blurb(elastic_restart)
+    _production_run(
+        'sudo service elasticsearch restart'
+    )
+
+@task
+def elastic_nuke():
+    """Nuke elasticsearch search indexes"""
+    blurb(elastic_nuke)
+    _production_run(
+        "curl -XDELETE 'http://localhost:9200/_all'"
+        )
+    
