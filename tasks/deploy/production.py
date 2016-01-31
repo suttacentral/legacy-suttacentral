@@ -109,6 +109,8 @@ def elastic_nuke():
     """Nuke elasticsearch search indexes"""
     blurb(elastic_nuke)
     _production_run(
-        "curl -XDELETE 'http://localhost:9200/_all'"
+        "curl -s -XDELETE 'http://localhost:9200/_all'",
+        'sleep 5',
+        'curl -s -XPOST "http://localhost:8086/admin/reload" -d "{}"'
         )
     
