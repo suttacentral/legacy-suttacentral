@@ -5,10 +5,10 @@
 {% macro sutta_acronym(sutta, show_alt, brief=false) %}
 {% set acronym=sutta.brief_acronym if brief else sutta.acronym %}
 {%- if sutta.text_ref -%}{# TODO: Insert nbsp where needed #}
-<a href='{{sutta.text_ref.url}}' {%- if sutta.text_ref.title %} title='{{sutta.text_ref.abstract}}' {%- endif %}>
+<a class="acro" href='{{sutta.text_ref.url}}' {%- if sutta.text_ref.title %} title='{{sutta.text_ref.abstract}}' {%- endif %}>
 {{acronym|sub("(?<![,;]) ", "&nbsp;")}}
 {%- else -%}
-{{acronym|sub("(?<![,;]) ", "&nbsp;")}}
+<a class="acro">{{acronym|sub("(?<![,;]) ", "&nbsp;")}}</a>
 {%- endif -%}</a>
 {%- if not brief and sutta.alt_acronym and show_alt %}
  <span class='altAcronym'>{{sutta.alt_acronym|sub("(?<![,;]) ", "&nbsp;")}}</span>

@@ -219,6 +219,14 @@ function onMainLoad() {
         sc.init();
     }
     
+    if ($('.divtable').length > 0) {
+        $('.divtable .acro').each(function(){
+            var e = $(this);
+            if (e.attr('title')) return
+            e.attr('title', sc.util.acro_to_name(e.text()));
+        })
+    }
+    
     var parallelCitationLabel = $('#parallel-citation .label');
     var parallelCitationTextField = $('#parallel-citation > input');
     var parallelCitationButton = $('#parallel-citation > button');
