@@ -31,6 +31,7 @@ a.kel:before {content:"Kel "}
 a.kl:before {content:"KL "}
 a.ks:before {content:"KS "}
 a.mat85:before, a.mat88:before {content:"Mat "}
+a.mkv:before, {content:"Mkv "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
 a.msdiv:before {content:"Msdiv "}
@@ -53,7 +54,7 @@ a.rs-vp:before {content: "RS vp "}
 a.san87:before, a.san89:before {content:"San "}
 a.sb:before {content:"SB "}
 a.sc:before {content:"SC "}
-a.sen82:before {content:"Sen "}
+a.sen:before {content:"Sen "}
 a.sht:before {content:"SHT "}
 a.snp-vagga-section-verse:before, a.snp-vagga-verse:before {content:"SNP "}
 a.ss:before {content:"SS "}
@@ -209,6 +210,8 @@ CSS Class	HTML Title
 
 .mat88		"Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988."
 
+.mkv     	"Page numbers in Mahākarmavibhaṅga."
+
 .san87		"Paragraph numbers in Sander, 1987."
 
 .gno78		"Paragraph numbers in Gnoli, 1978."
@@ -227,7 +230,7 @@ CSS Class	HTML Title
 
 .vai58		"Page numbers in Vaidya, 1958."
 
-.sen82		"Section and paragraph numbers in Senart, 1882."
+.sen		"Section and paragraph numbers in Senart, 1882."
 
 .roth		"Paragraph numbers in Roth, 1970."
 
