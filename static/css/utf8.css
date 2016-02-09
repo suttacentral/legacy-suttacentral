@@ -25,12 +25,14 @@ a.har04:before {content:"Har "}
 a.hoe16:before {content:"Hoe "}
 a.hos89a:before, a.hos89b:before, a.hos91:before {content:"Hos "}
 a.hs:before {content:"hs "}
+a.jb:before {content:"JB "}
 a.jd:before {content:"JD "}
 a.jsk:before {content:"JSK "}
 a.kel:before {content:"Kel "}
 a.kl:before {content:"KL "}
 a.ks:before {content:"KS "}
 a.mat85:before, a.mat88:before {content:"Mat "}
+a.mc:before {content:"MC "}
 a.mkv:before {content:"Mkv "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
@@ -138,6 +140,8 @@ CSS Class	HTML Title
 
 .hh     	"Paragraph numbers in Hellmuth Hecker."
 
+.jb             "Verse numbers in Gāndhārī Dharmapada, John Brough, London 1962"
+
 .jd     	"Paragraph numbers in Dr. Julius Dutoit."
 
 .jsk     	"Paragraph numbers in Prof. J.S. Krüger."
@@ -147,6 +151,8 @@ CSS Class	HTML Title
 .mat85		"Paragraph numbers in Matsumura, 1985."
 
 .mat88		"Paragraph numbers in Matsumura, 1988."
+
+.mc             "Verse numbes in Patna Dharmapada, Margaret Cone"
 
 .mit57		"Paragraph numbers in Mittal, 1957."
 
