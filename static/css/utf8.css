@@ -43,6 +43,10 @@ a.np:before {content:"NP "}
 a.nst:before {content:"NST "}
 a.of:before {content:"OF "}
 a.pl:before {content:"PL "}
+a.pravr-v-i:before {content:"Pravr-v I "}
+a.pravr-v-ii:before {content:"Pravr-v II "}
+a.pravr-v-iii:before {content:"Pravr-v III "}
+a.pravr-v-iv:before {content:"Pravr-v IV "}
 a.pts:before {content:"PTS "}
 a.pts1:before {content:"PTS (1st ed.) "}
 a.pts2:before {content:"PTS (2nd ed.) "}
@@ -165,6 +169,14 @@ CSS Class	HTML Title
 .nst            "Paragraph numbers in Ven. Nilwakke Somananda Thera."
 
 .pl     	"Paragraph numbers in Peter van Loosbroek."
+
+.pravr-v-i      "Paragraph numbers in Pravrajyāvastu vol I Vogel/Wille"
+
+.pravr-v-ii     "Paragraph numbers in Pravrajyāvastu vol II Vogel/Wille"
+
+.pravr-v-iii    "Paragraph numbers in Pravrajyāvastu vol III Vogel/Wille"
+
+.pravr-v-iv     "Paragraph numbers in Pravrajyāvastu vol IV Vogel/Wille"
 
 .san89		"Paragraph numbers in Sander, 1987."
 
