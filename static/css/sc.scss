@@ -322,10 +322,11 @@ Text added by the editor or translator for clarification.
     }
     }
 
-.metre {visibility: hidden;
+.metre {display:none;
 .infomode & {
         color:#9B8D00;
-        visibility: visible;
+        font-family: sans-serif;
+        display:block;
     }
     }
 
