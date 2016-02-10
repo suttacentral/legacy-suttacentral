@@ -52,6 +52,7 @@ sc.classes = {
         "nst": "Paragraph numbers in Ven. Nilwakke Somananda Thera.",
         "of": "Paragraph numbers in Otto Franke, 1913.",
 	"pl": "Paragraph numbers in Peter van Loosbroek.",
+        "pos-v": "Paragraph numbers in Posadhavastu von Hinüber",
         "pravr-v-i": "Paragraph numbers in Pravrajyāvastu vol I Vogel/Wille",
         "pravr-v-ii": "Paragraph numbers in Pravrajyāvastu vol II Vogel/Wille",
         "pravr-v-iii": "Paragraph numbers in Pravrajyāvastu vol III Vogel/Wille",

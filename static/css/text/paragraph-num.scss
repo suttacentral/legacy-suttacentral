@@ -6,7 +6,7 @@ a.da {
 
 
 a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
-    a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel,
+    a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.pos-v,
     a.mat85, a.mat88, a.mit57, a.of, a.mkv, a.mc, a.jb, a.pravr-v-i, a.pravr-v-ii, a.pravr-v-iii, a.pravr-v-iv,
     a.pts, a.pts1, a.pts2, a.pts-cs, a.pts-vp-en, a.pts-vp-pi, a.pts_pn, a.pts-p-pi, a.roth, a.rs-vp,
     a.san87, a.san89, a.sc, a.sen, a.sht, a.snp-vagga-section-verse, a.snp-vagga-verse,
@@ -44,7 +44,7 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
 
 
 a.sc {margin:0.7em -6em 0 0em; color: saturated-color(bright-purple); clear:both;}
-a.gbm {clear:both}
+a.gbm, a.pos-v {clear:both}
 a.t, a.t-linehead {
 	margin: 0 -10em 0 0;
 	color: saturated-color(plain-green);
@@ -123,6 +123,7 @@ a.np
 a.nst
 a.of
 a.pl
+a.pos-v
 a.pravr-v-i, a.pravr-v-ii, a.pravr-v-iii, a.pravr-v-iv
 a.pts
 a.san87, a.san89

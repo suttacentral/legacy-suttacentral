@@ -43,6 +43,7 @@ a.np:before {content:"NP "}
 a.nst:before {content:"NST "}
 a.of:before {content:"OF "}
 a.pl:before {content:"PL "}
+a.pos-v:before {content:"Pos-v "}
 a.pravr-v-i:before {content:"Pravr-v I "}
 a.pravr-v-ii:before {content:"Pravr-v II "}
 a.pravr-v-iii:before {content:"Pravr-v III "}
@@ -167,6 +168,8 @@ CSS Class	HTML Title
 .np     	"Paragraph numbers in Nyānaponika Mahāthera."
 
 .nst            "Paragraph numbers in Ven. Nilwakke Somananda Thera."
+
+.pos-v          "Paragraph numbers in Posadhavastu von Hinüber"
 
 .pl     	"Paragraph numbers in Peter van Loosbroek."
 
