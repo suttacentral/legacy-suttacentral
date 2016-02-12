@@ -335,6 +335,17 @@ Text added by the editor or translator for clarification.
     }
     }
 
+.metre2 {display:none;
+.infomode & {
+        color:#9B8D00;
+        font-family: 'Source Sans Pro',sans-serif;
+        display: block;
+        float: left;
+        margin-left: -3em;
+        text-align: right;
+    }
+    }
+
 .expanded {display:inline
 .infomode & {
         color: misc-color(light-medium-gray);
