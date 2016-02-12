@@ -37,6 +37,8 @@ a.mkv:before {content:"Mkv "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
 a.msdiv:before {content:"Msdiv "}
+a.msviv:before {content:"Msv IV "}
+a.msvwi:before {content:"Msv Wi "}
 a.mt:before {content:"MT "}
 a.nm:before {content:"NM "}
 a.np:before {content:"NP "}
@@ -44,6 +46,7 @@ a.nst:before {content:"NST "}
 a.of:before {content:"OF "}
 a.pl:before {content:"PL "}
 a.pos-v:before {content:"Pos-v "}
+a.prava-v:before {content:"Prava-v "}
 a.pravr-v-i:before {content:"Pravr-v I "}
 a.pravr-v-ii:before {content:"Pravr-v II "}
 a.pravr-v-iii:before {content:"Pravr-v III "}
@@ -73,6 +76,7 @@ a.ttc:before {content:"TTC "}
 /*a.tu:before {content:" "}*/
 a.uv:before {content:"Uv "}
 a.vai58:before, a.vai59:before, a.vai61:before {content:"Vai "}
+a.var-v:before {content:"Var-v "}
 a.verse-num-pts:before {content:"PTS verse "}
 a.vn:before {content:"Vn "}
 a.wal48:before, a.wal50:before, a.wal52:before, a.wal57c:before, a.wal58:before, a.wal59a:before, a.wal60:before, a.wal61:before, a.wal68a:before, a.wal70a:before, a.wal70b:before, a.wal76:before, a.wal78:before, a.wal80c:before {content:"Wal "}
@@ -163,6 +167,10 @@ CSS Class	HTML Title
 
 .msdiv		"Msdiv paragraph numbers."
 
+.msviv          "Vol/page in Gilgit Manuscript N. Dutt vollIII part IV"
+
+.msvwi          "Vol/page in Wille"
+
 .nm     	"Paragraph numbers in Nyānatiloka Mahāthera."
 
 .np     	"Paragraph numbers in Nyānaponika Mahāthera."
@@ -172,6 +180,8 @@ CSS Class	HTML Title
 .pos-v          "Paragraph numbers in Posadhavastu von Hinüber"
 
 .pl     	"Paragraph numbers in Peter van Loosbroek."
+
+.prava-v	"Paragraph numbers in Pravaranavastu Jin-il Chung"
 
 .pravr-v-i      "Paragraph numbers in Pravrajyāvastu vol I Vogel/Wille"
 
@@ -196,6 +206,8 @@ CSS Class	HTML Title
 .har04		"Paragraph number in Hartmann, 2004."
 
 .fuk03		"Page numbers in Fukita, 2003"
+
+.var-v          "Paragraph numbers in Varsavastu Masanori Shono"
 
 .wal50		"Paragraph numbers in Waldschmidt, 1950 (etc.)."
 
