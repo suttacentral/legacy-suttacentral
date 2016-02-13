@@ -6,13 +6,13 @@ a.da {
 
 
 a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
-    a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel,
-    a.mat85, a.mat88, a.mit57, a.of, 
+    a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.pos-v, a.prava-v,
+    a.mat85, a.mat88, a.mit57, a.of, a.mkv, a.mc, a.jb, a.pravr-v-i, a.pravr-v-ii, a.pravr-v-iii, a.pravr-v-iv,
     a.pts, a.pts1, a.pts2, a.pts-cs, a.pts-vp-en, a.pts-vp-pi, a.pts_pn, a.pts-p-pi, a.roth, a.rs-vp,
-    a.san87, a.san89, a.sc, a.sen82, a.sht, a.snp-vagga-section-verse, a.snp-vagga-verse,
-    a.t, a.titus, a.t-linehead, a.ud-sutta, a.ud-vagga-sutta, a.tri62, a.tri95,
+    a.san87, a.san89, a.sc, a.sen, a.sht, a.snp-vagga-section-verse, a.snp-vagga-verse,
+    a.t, a.titus, a.t-linehead, a.ud-sutta, a.ud-vagga-sutta, a.tri62, a.tri95, a.msviv, a.msvwi,
     a.tu, a.uv, a.vai58, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.nst,
-    a.wal48, a.wal50, a.wal52, a.wal55b, a.wal57c, a.wal58, a.wal59a, a.wal60,
+    a.wal48, a.wal50, a.wal52, a.wal55b, a.wal57c, a.wal58, a.wal59a, a.wal60, a.var-v,
     a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.wr,
     a.yam72, a.es, a.bm, a.bn, a.hh, a.jd, a.ks, a.nm, a.np, a.pl, a.wg, a.jsk, a.mt, a.sb, a.ss, a.tb,
     a.kl, a.bi, a.bjt, a.ttc, #text:lang(si) a.msdiv
@@ -44,6 +44,10 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
 
 
 a.sc {margin:0.7em -6em 0 0em; color: saturated-color(bright-purple); clear:both;}
+<<<<<<< HEAD
+=======
+a.gbm, a.pos-v, a.prava-v, a.msviv, a.msvwi {clear:both}
+>>>>>>> gandari
 a.t, a.t-linehead {
 	margin: 0 -10em 0 0;
 	color: saturated-color(plain-green);
@@ -64,7 +68,7 @@ a.pts {margin:-2em -6em 0 0; color: saturated-color(dark-yellow);}
 a.pts1, a.snp-vagga-section-verse {margin:-1.8em -8em 0 0; color: saturated-color(dark-yellow);}
 a.pts2, a.snp-vagga-verse,a.pts-vp-en {margin:-0.3em -8em 0 0; color: saturated-color(plain-red);}
 a.vn {margin:0.7em -6em 0 0; color: saturated-color(plain-purple);}
-a.sht {margin:0.8em -6em 0 0; color: saturated-color(plain-purple);}
+a.sht {margin:0.8em -6em 0 0; color: saturated-color(plain-purple);clear:both;}
 a.wal52,a.mat88,a.vai58 {margin: 0.8em -6em 0 0; color: saturated-color(plain-purple);}
 /*a.titus {margin: -0.1em -6em 0 0; color: $saturated-purple;}*/
 a.titus {display:none}
@@ -104,26 +108,34 @@ a.hh
 a.hoe16
 a.hos89a, a.hos89b, a.hos91
 a.hs
+a.jb
 a.jd
 a.jsk
 a.kel
 a.kl
 a.ks
 a.mat85, a.mat88
+a.mc
+a.mkv
 a.mit57
 a.ms
 a.msdiv
+a.msviv
+a.msvwi
 a.mt
 a.nm
 a.np
 a.nst
 a.of
 a.pl
+a.pos-v
+a.prava-v
+a.pravr-v-i, a.pravr-v-ii, a.pravr-v-iii, a.pravr-v-iv
 a.pts
 a.san87, a.san89
 a.sb
 a.sc
-a.sen82
+a.sen
 a.sht
 a.snp-vagga-section-verse
 a.snp-vagga-verse
@@ -136,6 +148,7 @@ a.ud-sutta
 a.ud-vagga-sutta
 a.uv
 a.vai58, a.vai59, a.vai61
+a.var-v
 a.verse-num-pts
 a.vn
 a.wal48, a.wal50, a.wal52, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c

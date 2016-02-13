@@ -322,6 +322,19 @@ Text added by the editor or translator for clarification.
     }
     }
 
+.metre {display:none;
+.infomode & {
+        color:#9B8D00;
+        font-family: 'hetu_schetu_sc','Source Sans Pro',sans-serif;
+        display: block;
+        position:absolute;
+        margin-top:-0.5rem;
+        text-transform:lowercase;
+        letter-spacing:0.2em; 
+        font-size:0.6em;
+    }
+    }
+
 .expanded {display:inline
 .infomode & {
         color: misc-color(light-medium-gray);

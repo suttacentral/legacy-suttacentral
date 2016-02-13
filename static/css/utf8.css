@@ -25,21 +25,32 @@ a.har04:before {content:"Har "}
 a.hoe16:before {content:"Hoe "}
 a.hos89a:before, a.hos89b:before, a.hos91:before {content:"Hos "}
 a.hs:before {content:"hs "}
+a.jb:before {content:"JB "}
 a.jd:before {content:"JD "}
 a.jsk:before {content:"JSK "}
 a.kel:before {content:"Kel "}
 a.kl:before {content:"KL "}
 a.ks:before {content:"KS "}
 a.mat85:before, a.mat88:before {content:"Mat "}
+a.mc:before {content:"MC "}
+a.mkv:before {content:"Mkv "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
 a.msdiv:before {content:"Msdiv "}
+a.msviv:before {content:"Msv IV "}
+a.msvwi:before {content:"Msv Wi "}
 a.mt:before {content:"MT "}
 a.nm:before {content:"NM "}
 a.np:before {content:"NP "}
 a.nst:before {content:"NST "}
 a.of:before {content:"OF "}
 a.pl:before {content:"PL "}
+a.pos-v:before {content:"Pos-v "}
+a.prava-v:before {content:"Prava-v "}
+a.pravr-v-i:before {content:"Pravr-v I "}
+a.pravr-v-ii:before {content:"Pravr-v II "}
+a.pravr-v-iii:before {content:"Pravr-v III "}
+a.pravr-v-iv:before {content:"Pravr-v IV "}
 a.pts:before {content:"PTS "}
 a.pts1:before {content:"PTS (1st ed.) "}
 a.pts2:before {content:"PTS (2nd ed.) "}
@@ -53,7 +64,7 @@ a.rs-vp:before {content: "RS vp "}
 a.san87:before, a.san89:before {content:"San "}
 a.sb:before {content:"SB "}
 a.sc:before {content:"SC "}
-a.sen82:before {content:"Sen "}
+a.sen:before {content:"Sen "}
 a.sht:before {content:"SHT "}
 a.snp-vagga-section-verse:before, a.snp-vagga-verse:before {content:"SNP "}
 a.ss:before {content:"SS "}
@@ -65,6 +76,7 @@ a.ttc:before {content:"TTC "}
 /*a.tu:before {content:" "}*/
 a.uv:before {content:"Uv "}
 a.vai58:before, a.vai59:before, a.vai61:before {content:"Vai "}
+a.var-v:before {content:"Var-v "}
 a.verse-num-pts:before {content:"PTS verse "}
 a.vn:before {content:"Vn "}
 a.wal48:before, a.wal50:before, a.wal52:before, a.wal57c:before, a.wal58:before, a.wal59a:before, a.wal60:before, a.wal61:before, a.wal68a:before, a.wal70a:before, a.wal70b:before, a.wal76:before, a.wal78:before, a.wal80c:before {content:"Wal "}
@@ -137,6 +149,8 @@ CSS Class	HTML Title
 
 .hh     	"Paragraph numbers in Hellmuth Hecker."
 
+.jb             "Verse numbers in Gāndhārī Dharmapada, John Brough, London 1962"
+
 .jd     	"Paragraph numbers in Dr. Julius Dutoit."
 
 .jsk     	"Paragraph numbers in Prof. J.S. Krüger."
@@ -147,9 +161,15 @@ CSS Class	HTML Title
 
 .mat88		"Paragraph numbers in Matsumura, 1988."
 
+.mc             "Verse numbes in Patna Dharmapada, Margaret Cone"
+
 .mit57		"Paragraph numbers in Mittal, 1957."
 
 .msdiv		"Msdiv paragraph numbers."
+
+.msviv          "Vol/page in Gilgit Manuscript N. Dutt vollIII part IV"
+
+.msvwi          "Vol/page in Wille"
 
 .nm     	"Paragraph numbers in Nyānatiloka Mahāthera."
 
@@ -157,7 +177,19 @@ CSS Class	HTML Title
 
 .nst            "Paragraph numbers in Ven. Nilwakke Somananda Thera."
 
+.pos-v          "Paragraph numbers in Posadhavastu von Hinüber"
+
 .pl     	"Paragraph numbers in Peter van Loosbroek."
+
+.prava-v	"Paragraph numbers in Pravaranavastu Jin-il Chung"
+
+.pravr-v-i      "Paragraph numbers in Pravrajyāvastu vol I Vogel/Wille"
+
+.pravr-v-ii     "Paragraph numbers in Pravrajyāvastu vol II Vogel/Wille"
+
+.pravr-v-iii    "Paragraph numbers in Pravrajyāvastu vol III Vogel/Wille"
+
+.pravr-v-iv     "Paragraph numbers in Pravrajyāvastu vol IV Vogel/Wille"
 
 .san89		"Paragraph numbers in Sander, 1987."
 
@@ -174,6 +206,8 @@ CSS Class	HTML Title
 .har04		"Paragraph number in Hartmann, 2004."
 
 .fuk03		"Page numbers in Fukita, 2003"
+
+.var-v          "Paragraph numbers in Varsavastu Masanori Shono"
 
 .wal50		"Paragraph numbers in Waldschmidt, 1950 (etc.)."
 
@@ -209,6 +243,8 @@ CSS Class	HTML Title
 
 .mat88		"Paragraph numbers for Mahāsudarśanasūtra in Matsumura, 1988."
 
+.mkv     	"Page numbers in Mahākarmavibhaṅga."
+
 .san87		"Paragraph numbers in Sander, 1987."
 
 .gno78		"Paragraph numbers in Gnoli, 1978."
@@ -227,7 +263,7 @@ CSS Class	HTML Title
 
 .vai58		"Page numbers in Vaidya, 1958."
 
-.sen82		"Section and paragraph numbers in Senart, 1882."
+.sen		"Section and paragraph numbers in Senart, 1882."
 
 .roth		"Paragraph numbers in Roth, 1970."
 
