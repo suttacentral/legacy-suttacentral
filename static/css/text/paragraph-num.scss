@@ -63,7 +63,7 @@ div#text:not(.line-by-line) a.t {
 a.wp {margin:-0.7em -6em 0 0; color: saturated-color(plain-red);}
 a.pts {margin:-2em -6em 0 0; color: saturated-color(dark-yellow);}
 a.pts1, a.snp-vagga-section-verse {margin:-1.8em -8em 0 0; color: saturated-color(dark-yellow);}
-a.pts2, a.snp-vagga-verse,a.pts-vp-en {margin:-0.3em -8em 0 0; color: saturated-color(plain-red);}
+a.pts2, a.snp-vagga-verse,a.pts-vp-en {margin:-0.3em -8em 0 0; color: saturated-color(plain-red);clear:both;}
 a.vn {margin:0.7em -6em 0 0; color: saturated-color(plain-purple);}
 a.sht {margin:0.8em -6em 0 0; color: saturated-color(plain-purple);clear:both;}
 a.wal52,a.mat88,a.vai58 {margin: 0.8em -6em 0 0; color: saturated-color(plain-purple);}
@@ -72,18 +72,14 @@ a.titus {display:none}
 
 /* Buddhist Discipline Paragraph Numbers */
 a.pts-vp-en {
-    margin: 0.75em -10em 0 0;
+    margin: 0.75em -10em 0 0;clear:both;
 }
-
-
 a.pts-cs {
-    margin: -0.35em -10em 0 0;
+    margin: 0 -10em 0 0; clear: both;
 }
-
 a.pts-vp-pi, a.pts-p-pi {
-    margin: -1.5em -10em 0 0;color: saturated-color(plain-purple);
+    margin: 0 -10em 0 0; color: saturated-color(plain-purple); clear:both;
 }
-
 
 
 /* TODO systematically do for all of them (alphabetical order)
