@@ -10,6 +10,7 @@ sc.classes = {
     margin: {
         "as": "Page numbers in Yamada, 1972.",
         "adh-v": "Paragraph numbers in Adhikaraṇavastu, Gnoli 1978",
+        "cps": "Paragraph numbers in Catuṣpariṣatsūtra, E. Waldschmidt, 1952-62",
         "bhaisv": "Paragraph numbers in Bhaiṣajyavastu, J. Chung und K. Wille",
         "bi": "Paragraph numbers in Bhikkhu Indacanda.",
         "bjt": "Paragraph numbers in Buddha Jayanthi.",
@@ -83,6 +84,8 @@ sc.classes = {
         "san89": "Paragraph numbers in Sander, 1987.",
         "say-v": "Paragraph numbers in Śayanāsanavastu, Gnoli 1978",
         "sb": "Paragraph numbers in Fritz Schaefer / Raimund Beyerlein.",
+        "sbvi": "Paragraph numbers in Saṅghabhedavastu, Gnoli / Venkatacharya, 1977-78",
+        "sbvii": "Paragraph numbers in Saṅghabhedavastu, Gnoli / Venkatacharya, 1977-78",
         "sc": "Sutta Central paragraph number.",
         "sen": "Section and paragraph numbers in Senart, 1882.",
         "sht": "References for SHT fragments.",

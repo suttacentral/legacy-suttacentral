@@ -13,6 +13,7 @@ a.bm:before {content:"BM "}
 a.bn:before {content:"BN "}
 a.bps:before {content:"BPS "}
 a.bjt:before {content:"BJT "}
+a.cps:before {content:"CPS "}
 a.d-vp:before {content:"D vp "}
 a.divy:before {content:"Divy "}
 a.eno89:before {content:"Eno "}
@@ -72,6 +73,8 @@ a.rs-vp:before {content: "RS vp "}
 a.san87:before, a.san89:before {content:"San "}
 a.say-v:before {content:"Say-v "}
 a.sb:before {content:"SB "}
+a.sbvi:before {content:"SBV I "}
+a.sbvii:before {content:"SBV II "}
 a.sc:before {content:"SC "}
 a.sen:before {content:"Sen "}
 a.sht:before {content:"SHT "}
@@ -150,6 +153,8 @@ CSS Class	HTML Title
 
 .bn     	"Paragraph numbers in Bhikkhu Ñāṇadassana."
 
+.cps            "Paragraph numbers in Catuṣpariṣatsūtra, E. Waldschmidt, 1952-62"
+
 .divy           "Paragraph numbers in Divyāvadāna, ed. E.B. Cowell, R.A. Neil, Cambridge 1886"
 
 .eno89		"Paragraph numbers in Enomoto, 1989."
@@ -217,6 +222,10 @@ CSS Class	HTML Title
 .pravr-v-iii    "Paragraph numbers in Pravrajyāvastu vol III Vogel/Wille"
 
 .pravr-v-iv     "Paragraph numbers in Pravrajyāvastu vol IV Vogel/Wille"
+
+.sbvi           "Paragraph numbers in Saṅghabhedavastu, Gnoli / Venkatacharya, 1977-78"
+
+.sbvii          "Paragraph numbers in Saṅghabhedavastu, Gnoli / Venkatacharya, 1977-78"
 
 .san89		"Paragraph numbers in Sander, 1987."
 
