@@ -13,7 +13,7 @@ a.bm:before {content:"BM "}
 a.bn:before {content:"BN "}
 a.bps:before {content:"BPS "}
 a.bjt:before {content:"BJT "}
-a.cps:before {content:"CPS "}
+a.cps:before {content:"Cps "}
 a.d-vp:before {content:"D vp "}
 a.divy:before {content:"Divy "}
 a.eno89:before {content:"Eno "}
@@ -42,10 +42,10 @@ a.mkv:before {content:"Mkv "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
 a.msdiv:before {content:"Msdiv "}
-a.msvi:before {content:"Msv I "}
-a.msvii:before {content:"Msv II "}
-a.msviii:before {content:"Msv III "}
-a.msviv:before {content:"Msv IV "}
+a.msvi:before {content:"Msv i "}
+a.msvii:before {content:"Msv ii "}
+a.msviii:before {content:"Msv iii "}
+a.msviv:before {content:"Msv iv "}
 a.msvwi:before {content:"Msv Wi "}
 a.mt:before {content:"MT "}
 a.nm:before {content:"NM "}
@@ -56,10 +56,10 @@ a.pand-v:before {content:"Pand-v "}
 a.pl:before {content:"PL "}
 a.pos-v:before {content:"Pos-v "}
 a.prava-v:before {content:"Prava-v "}
-a.pravr-v-i:before {content:"Pravr-v I "}
-a.pravr-v-ii:before {content:"Pravr-v II "}
-a.pravr-v-iii:before {content:"Pravr-v III "}
-a.pravr-v-iv:before {content:"Pravr-v IV "}
+a.pravr-v-i:before {content:"Pravr-v i "}
+a.pravr-v-ii:before {content:"Pravr-v ii "}
+a.pravr-v-iii:before {content:"Pravr-v iii "}
+a.pravr-v-iv:before {content:"Pravr-v iv "}
 a.pts:before {content:"PTS "}
 a.pts1:before {content:"PTS (1st ed.) "}
 a.pts2:before {content:"PTS (2nd ed.) "}
@@ -73,8 +73,8 @@ a.rs-vp:before {content: "RS vp "}
 a.san87:before, a.san89:before {content:"San "}
 a.say-v:before {content:"Say-v "}
 a.sb:before {content:"SB "}
-a.sbvi:before {content:"SBV I "}
-a.sbvii:before {content:"SBV II "}
+a.sbvi:before {content:"Sbv i "}
+a.sbvii:before {content:"Sbv ii "}
 a.sc:before {content:"SC "}
 a.sen:before {content:"Sen "}
 a.sht:before {content:"SHT "}
