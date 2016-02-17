@@ -4,7 +4,9 @@ separate file for now.... */
 
 
 /*a.bl:before {content:"bl "}*/
+a.adh-v:before {content:"Adhik-v "}
 a.ba:before {content:"BA "}
+a.bhaisv:before {content:"Bhais-v "}
 a.bi:before {content:"BI "}
 a.bjt:before {content:"BJT "}
 a.bm:before {content:"BM "}
@@ -12,6 +14,7 @@ a.bn:before {content:"BN "}
 a.bps:before {content:"BPS "}
 a.bjt:before {content:"BJT "}
 a.d-vp:before {content:"D vp "}
+a.divy:before {content:"Divy "}
 a.eno89:before {content:"Eno "}
 a.es:before {content:"ES "}
 a.fuk03:before {content:"Fuk "}
@@ -24,19 +27,23 @@ a.gno78:before {content:"Gno "}
 a.har04:before {content:"Har "}
 a.hoe16:before {content:"Hoe "}
 a.hos89a:before, a.hos89b:before, a.hos91:before {content:"Hos "}
-a.hs:before {content:"hs "}
+a.hs:before {content:"Hs "}
 a.jb:before {content:"JB "}
 a.jd:before {content:"JD "}
 a.jsk:before {content:"JSK "}
+a.kat-v:before {content:"Kathina-v "}
 a.kel:before {content:"Kel "}
 a.kl:before {content:"KL "}
 a.ks:before {content:"KS "}
-a.mat85:before, a.mat88:before {content:"Mat "}
+a.mat85:before, a.mat88:before, a.mat96:before {content:"Mat "}
 a.mc:before {content:"MC "}
 a.mkv:before {content:"Mkv "}
 a.mit57:before {content:"Mit "}
 a.ms:before {content:"MS "}
 a.msdiv:before {content:"Msdiv "}
+a.msvi:before {content:"Msv I "}
+a.msvii:before {content:"Msv II "}
+a.msviii:before {content:"Msv III "}
 a.msviv:before {content:"Msv IV "}
 a.msvwi:before {content:"Msv Wi "}
 a.mt:before {content:"MT "}
@@ -44,6 +51,7 @@ a.nm:before {content:"NM "}
 a.np:before {content:"NP "}
 a.nst:before {content:"NST "}
 a.of:before {content:"OF "}
+a.pand-v:before {content:"Pand-v "}
 a.pl:before {content:"PL "}
 a.pos-v:before {content:"Pos-v "}
 a.prava-v:before {content:"Prava-v "}
@@ -62,6 +70,7 @@ a.pts-cs:before {content:"PTS cs ";}
 a.pts-p-pi:before {content: "PTS p pi "}
 a.rs-vp:before {content: "RS vp "}
 a.san87:before, a.san89:before {content:"San "}
+a.say-v:before {content:"Say-v "}
 a.sb:before {content:"SB "}
 a.sc:before {content:"SC "}
 a.sen:before {content:"Sen "}
@@ -129,6 +138,10 @@ CSS Class	HTML Title
 
 .verse-num		"Verse number."
 
+.adh-v          "Paragraph numbers in Adhikaraṇavastu, Gnoli 1978"
+
+.bhaisv         "Paragraph numbers in Bhaiṣajyavastu, J. Chung und K. Wille"
+
 .bi             "Paragraph numbers in Bhikkhu Indacanda."
 
 .bjt            "Paragraph numbers in Buddha Jayanthi."
@@ -136,6 +149,8 @@ CSS Class	HTML Title
 .bm     	"Paragraph numbers in Bhikkhu Mettiko."
 
 .bn     	"Paragraph numbers in Bhikkhu Ñāṇadassana."
+
+.divy           "Paragraph numbers in Divyāvadāna, ed. E.B. Cowell, R.A. Neil, Cambridge 1886"
 
 .eno89		"Paragraph numbers in Enomoto, 1989."
 
@@ -155,17 +170,27 @@ CSS Class	HTML Title
 
 .jsk     	"Paragraph numbers in Prof. J.S. Krüger."
 
+.kat-v          "Paragraph numbers in Kaṭhinavastu, Matsumura, 1996."
+
 .ks     	"Paragraph numbers in Karl Seidenstücker."
 
 .mat85		"Paragraph numbers in Matsumura, 1985."
 
 .mat88		"Paragraph numbers in Matsumura, 1988."
 
+.mat96          "Paragraph numbers in Matsumura, 1996."
+
 .mc             "Verse numbes in Patna Dharmapada, Margaret Cone"
 
 .mit57		"Paragraph numbers in Mittal, 1957."
 
 .msdiv		"Msdiv paragraph numbers."
+
+.msvi           "Vol/page in Gilgit Manuscript, ed. N. Dutt, vol. III.1"
+
+.msvii          "Vol/page in Gilgit Manuscript, ed. N. Dutt, vol. III, part 2, Srinagar 1942."
+
+.msviii         "Vol/page in Gilgit Manuscript, ed. N. Dutt, vol. III, part 3, Srinagar 1943."
 
 .msviv          "Vol/page in Gilgit Manuscript N. Dutt vollIII part IV"
 
@@ -176,6 +201,8 @@ CSS Class	HTML Title
 .np     	"Paragraph numbers in Nyānaponika Mahāthera."
 
 .nst            "Paragraph numbers in Ven. Nilwakke Somananda Thera."
+
+.pand-v         "Paragraph numbers in Pāṇḍulohitakavastu Nobuyuki Yamagiwa"
 
 .pos-v          "Paragraph numbers in Posadhavastu von Hinüber"
 
@@ -192,6 +219,8 @@ CSS Class	HTML Title
 .pravr-v-iv     "Paragraph numbers in Pravrajyāvastu vol IV Vogel/Wille"
 
 .san89		"Paragraph numbers in Sander, 1987."
+
+.say-v          "Paragraph numbers in Śayanāsanavastu, Gnoli 1978"
 
 .ss             "Paragraph numbers in Shai Schwartz."
 

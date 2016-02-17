@@ -8,9 +8,10 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
     a.t, a.titus, a.t-linehead, a.ud-sutta, a.ud-vagga-sutta, a.tri62, a.tri95, a.msviv, a.msvwi,
     a.tu, a.uv, a.vai58, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.nst, a.msvi,
     a.wal48, a.wal50, a.wal52, a.wal55b, a.wal57c, a.wal58, a.wal59a, a.wal60, a.var-v,
-    a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.wr,
+    a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.wr, a.divy,
     a.yam72, a.es, a.bm, a.bn, a.hh, a.jd, a.ks, a.nm, a.np, a.pl, a.wg, a.jsk, a.mt, a.sb, a.ss, a.tb,
-    a.kl, a.bi, a.bjt, a.ttc, #text:lang(si) a.msdiv
+    a.kl, a.bi, a.bjt, a.ttc, #text:lang(si) a.msdiv, a.bhaisv, a.msvii, a.mat96, a.kat-v, a.pand-v,
+    a.msviii, a.say-v, a.adh-v
 {
     visibility:hidden;
     text-align:left;
@@ -38,7 +39,7 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
 
 
 a.sc {color: saturated-color(bright-purple);}
-a.msviv, a.msvwi, a.msvi {color: saturated-color(dark-yellow);}
+a.msviv, a.msvwi, a.msvi, a.msvii, a.msviii {color: saturated-color(dark-yellow);}
 a.t, a.t-linehead {color: saturated-color(plain-green);}
 .line-by-line a.t-linehead {display: none;}
 div#text:not(.line-by-line) a.t {display: none;}
@@ -47,19 +48,22 @@ a.pts {color: saturated-color(dark-yellow);}
 a.pts1, a.snp-vagga-section-verse {color: saturated-color(dark-yellow);}
 a.pts2, a.snp-vagga-verse,a.pts-vp-en {color: saturated-color(plain-red);clear:both;}
 a.vn, a.sht {color: saturated-color(plain-purple);}
-a.wal52,a.mat88,a.vai58 {color: saturated-color(plain-purple);}
+a.wal52,a.mat88,a.vai58,a.mat96 {color: saturated-color(plain-purple);}
 
 /* Buddhist Discipline Paragraph Numbers */
 a.pts-vp-pi, a.pts-p-pi {color: saturated-color(plain-purple);}
 
 /* TODO systematically do for all of them (alphabetical order)
+a.adh-v
 a.ba
+a.bhaisv
 a.bi
 a.bjt
 a.bl
 a.bm
 a.bn
 a.bps
+a.divy
 a.eno89
 a.es
 a.fuk03
@@ -74,29 +78,30 @@ a.hs
 a.jb
 a.jd
 a.jsk
+a.kat-v
 a.kel
 a.kl
 a.ks
-a.mat85, a.mat88
+a.mat85, a.mat88, a.mat96
 a.mc
 a.mkv
 a.mit57
 a.ms
 a.msdiv
-a.msvi
-a.msviv
-a.msvwi
+a.msvi, a.msvii, a.msviii, a.msviv, a.msvwi
 a.mt
 a.nm
 a.np
 a.nst
 a.of
+a.pand-v
 a.pl
 a.pos-v
 a.prava-v
 a.pravr-v-i, a.pravr-v-ii, a.pravr-v-iii, a.pravr-v-iv
 a.pts
 a.san87, a.san89
+a.say-v
 a.sb
 a.sc
 a.sen
