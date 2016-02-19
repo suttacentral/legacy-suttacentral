@@ -32,7 +32,7 @@ a.hs:before {content:"Hs "}
 a.jb:before {content:"JB "}
 a.jd:before {content:"JD "}
 a.jsk:before {content:"JSK "}
-a.kat-v:before {content:"Kathina-v "}
+a.kat:before {content:"Kathina-v "}
 a.kel:before {content:"Kel "}
 a.kl:before {content:"KL "}
 a.ks:before {content:"KS "}
@@ -175,7 +175,7 @@ CSS Class	HTML Title
 
 .jsk     	"Paragraph numbers in Prof. J.S. Krüger."
 
-.kat-v          "Paragraph numbers in Kaṭhinavastu, Matsumura, 1996."
+.kat            "Paragraph numbers in Kaṭhinavastu, Matsumura, 1996."
 
 .ks     	"Paragraph numbers in Karl Seidenstücker."
 
@@ -227,7 +227,9 @@ CSS Class	HTML Title
 
 .sbvii          "Paragraph numbers in Saṅghabhedavastu, Gnoli / Venkatacharya, 1977-78"
 
-.san89		"Paragraph numbers in Sander, 1987."
+.san87		"Paragraph numbers in Sander, 1987."
+
+.san89		"Paragraph numbers in Sander, 1989."
 
 .say-v          "Paragraph numbers in Śayanāsanavastu, Gnoli 1978"
 
