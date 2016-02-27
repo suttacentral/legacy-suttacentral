@@ -62,8 +62,8 @@ a.pravr-v-ii:before {content:"Pravr-v ii "}
 a.pravr-v-iii:before {content:"Pravr-v iii "}
 a.pravr-v-iv:before {content:"Pravr-v iv "}
 a.pts:before {content:"PTS "}
-a.pts1ed:before {content:"PTS (1st ed.) "}
-a.pts2ed:before {content:"PTS (2nd ed.) "}
+a.pts1ed:before {content:"PTS \(1st ed.) "}
+a.pts2ed:before {content:"PTS \(2nd ed.) "}
 a.pts-vp-pi:before {content: "PTS vp pi ";}
 a.pts-vp-en:before {content: "PTS vp en ";}
 a.pts_pn:before {content:"PTS "}
