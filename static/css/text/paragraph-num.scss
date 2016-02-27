@@ -3,7 +3,7 @@ a.msdiv,a.ms, a.ms-pa, a.da, a.titus .infomode #text p a.ms, .infomode #text p a
 a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
     a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.pos-v, a.prava-v,
     a.mat85, a.mat88, a.mit57, a.of, a.mkv, a.mc, a.jb, a.pravr-v-i, a.pravr-v-ii, a.pravr-v-iii, a.pravr-v-iv,
-    a.pts, a.pts1, a.pts2, a.pts-cs, a.pts-vp-en, a.pts-vp-pi, a.pts_pn, a.pts-p-pi, a.roth, a.rs-vp,
+    a.pts, a.pts1ed, a.pts2ed, a.pts-cs, a.pts-vp-en, a.pts-vp-pi, a.pts_pn, a.pts-p-pi, a.roth, a.rs-vp,
     a.san87, a.san89, a.sc, a.sen, a.sht, a.snp-vagga-section-verse, a.snp-vagga-verse,
     a.t, a.titus, a.t-linehead, a.ud-sutta, a.ud-vagga-sutta, a.tri62, a.tri95, a.msviv, a.msvwi,
     a.tu, a.uv, a.vai58, a.vai59, a.vai61, a.verse-num-pts, a.vimula, a.vn, a.nst, a.msvi,
@@ -11,7 +11,7 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
     a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.wr, a.divy,
     a.yam72, a.es, a.bm, a.bn, a.hh, a.jd, a.ks, a.nm, a.np, a.pl, a.wg, a.jsk, a.mt, a.sb, a.ss, a.tb,
     a.kl, a.bi, a.bjt, a.ttc, #text:lang(si) a.msdiv, a.bhaisv, a.msvii, a.mat96, a.kat, a.pand-v,
-    a.msviii, a.say-v, a.adh-v, a.cps, a.sbvi, a.sbvii
+    a.msviii, a.say-v, a.adh-v, a.cps, a.sbvi, a.sbvii, a.ia
 {
     visibility:hidden;
     text-align:left;
@@ -45,8 +45,8 @@ a.t, a.t-linehead {color: saturated-color(plain-green);}
 div#text:not(.line-by-line) a.t {display: none;}
 a.wp, a.gbm {color: saturated-color(plain-red);}
 a.pts {color: saturated-color(dark-yellow);}
-a.pts1, a.snp-vagga-section-verse {color: saturated-color(dark-yellow);}
-a.pts2, a.snp-vagga-verse,a.pts-vp-en {color: saturated-color(plain-red);clear:both;}
+a.pts1ed, a.snp-vagga-section-verse {color: saturated-color(dark-yellow);}
+a.pts2ed, a.snp-vagga-verse,a.pts-vp-en {color: saturated-color(plain-red);clear:both;}
 a.vn, a.sht {color: saturated-color(plain-purple);}
 a.wal52,a.mat88,a.vai58,a.mat96 {color: saturated-color(plain-purple);}
 
@@ -76,6 +76,7 @@ a.hh
 a.hoe16
 a.hos89a, a.hos89b, a.hos91
 a.hs
+a.ia
 a.jb
 a.jd
 a.jsk

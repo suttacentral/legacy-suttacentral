@@ -23,6 +23,7 @@ a.fol:before {content:"Fol "}
 a.gatha-number:before {content:"Verse "}
 a.hh:before {content:"HH "}
 /*a.gatn:before {content:" "}*/
+a.ia:before {content:"IA "}
 a.gbm:before {content:"GBM "}
 a.gno78:before {content:"Gno "}
 a.har04:before {content:"Har "}
@@ -61,8 +62,8 @@ a.pravr-v-ii:before {content:"Pravr-v ii "}
 a.pravr-v-iii:before {content:"Pravr-v iii "}
 a.pravr-v-iv:before {content:"Pravr-v iv "}
 a.pts:before {content:"PTS "}
-a.pts1:before {content:"PTS (1st ed.) "}
-a.pts2:before {content:"PTS (2nd ed.) "}
+a.pts1ed:before {content:"PTS (1st ed.) "}
+a.pts2ed:before {content:"PTS (2nd ed.) "}
 a.pts-vp-pi:before {content: "PTS vp pi ";}
 a.pts-vp-en:before {content: "PTS vp en ";}
 a.pts_pn:before {content:"PTS "}
@@ -168,6 +169,8 @@ CSS Class	HTML Title
 .hoe16		"Verse numbers in Hoernle, 1916."
 
 .hh     	"Paragraph numbers in Hellmuth Hecker."
+
+.ia             "Paragraph numbers in Indra Anggara"
 
 .jb             "Verse numbers in Gāndhārī Dharmapada, John Brough, London 1962"
 
