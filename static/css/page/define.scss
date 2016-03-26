@@ -50,9 +50,31 @@
         float: left;
         margin: 0 1em;
     }
+    
+    .near_terms ul,.fuzzy_terms ul {
+        margin-left:0;
+    }
+    
+    .related_terms h3{
+        margin:0;
+    }
+    
+    dd .info{
+        display:none;
+    }
 
     ul {
         list-style: none;
+    }
+    
+    .ref {
+        @include sans-serif;
+        color:#565656;
+        font-size:0.8em;
+        background:rgb(215, 215, 215),
+        padding: 0.1em 0.2em 0 0.2em
+        border-radius: 3px;
+        border: 1px solid rgb(190, 190, 190);
     }
 
     .google-maps {
