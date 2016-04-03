@@ -387,8 +387,9 @@ $sidebar-tabs-vertical-padding: 0.4em;
     -webkit-appearance: none;
 }
 
-#pin-sidebar {
-    margin-left: 0.5em;
+#pin-sidebar label {
+    padding: 0.5em;
+    display: inline-block;
 }
 
 #languages {
