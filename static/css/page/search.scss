@@ -43,15 +43,17 @@
 
 ul.results {
     list-style: none;
+    margin:0;
     li {
         position: relative;
         .type {
             position: absolute;
             width: 10em;
             text-align:right;
-            right: 1em;
+            right: 0em;
             color: grey;
             font-size: 75%;
+            @include sans-serif;
         }            
     }
     
@@ -93,6 +95,7 @@ li.result > a {
 
 #search-nav {
     margin: auto;
+    @include sans-serif;
     
     td {
         border-top: none;
@@ -102,12 +105,10 @@ li.result > a {
 
 .search-nextprev {
     text-align: center;
-    width: 4em;
     display: inline-block;
 }
 .search-page {
     text-align: center;
-    width: 1em;
     display: inline-block;
 }
 
@@ -147,4 +148,5 @@ li.result > a {
 
 .advanced-search-link {
     float: right;
+    @include sans-serif;
 }
