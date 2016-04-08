@@ -90,6 +90,7 @@ a.ttc:before {content:"TTC "}
 a.uv:before {content:"Uv "}
 a.vai58:before, a.vai59:before, a.vai61:before {content:"Vai "}
 a.var-v:before {content:"Var-v "}
+a.verse-num-sc:before {content:"SC verse "}
 a.verse-num-pts:before {content:"PTS verse "}
 a.vn:before {content:"Vn "}
 a.wal48:before, a.wal50:before, a.wal52:before, a.wal57c:before, a.wal58:before, a.wal59a:before, a.wal60:before, a.wal61:before, a.wal68a:before, a.wal70a:before, a.wal70b:before, a.wal76:before, a.wal78:before, a.wal80c:before {content:"Wal "}
@@ -139,6 +140,8 @@ CSS Class	HTML Title
 .snp-vagga-section-verse	"Chapter, section, and verse number within the section."
 
 .verse-num-pts		"Verse number in the Pali Text Society edition."
+
+.verse-num-sc		"SuttaCentral verse number"
 
 .verse-num		"Verse number."
 

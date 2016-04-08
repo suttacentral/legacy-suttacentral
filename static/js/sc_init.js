@@ -108,6 +108,7 @@ sc.classes = {
         "vai59": "Page and line numbers in Vaidya, 1959.",
         "vai61": "Page and line numbers in Vaidya, 1961.",
         "var-v": "Paragraph numbers in Varsavastu Masanori Shono",
+        "verse-num-sc": "SuttaCentral verse number",
         "verse-num-pts": "Verse number in the Pali Text Society edition.",
         "vimula": "",
         "vn": "Vietnamese translation paragraph number.",
