@@ -171,3 +171,54 @@ def verify_parallels(*uids):
             print('{} fails'.format(uid))
 
 verify_parallels('dn16', 'dn2', 'mn1', 'mn10', 'mn16')
+
+def add_notes():
+    from sc.csv_loader import table_reader
+    
+    notes = [e for e in table_reader('correspondence') if e.footnote]
+    
+    for entry in notes:
+        uid = entry.sutta_uid
+        other_uid = entry.other_sutta_uid
+        note = entry.footnote
+        partial = entry.partial
+        
+        count = 0
+        for obj in parallels_index[uid]:
+            group = obj['group']
+            if other_uid in group:
+                if 'notes' not in obj:
+                    obj['notes'] = []
+                obj['notes'].append({
+                    'uids': [uid, other_uid],
+                    'note': note
+                })
+                count += 1
+        if count == 0:
+            globals().update(locals())
+            raise ValueError('Group could not be applied anywhere!')
+            
+        if count > 1:
+            #globals().update(locals())
+            print('Group applied in multiple places!')
+
+add_notes()            
+with open('with_notes.json', 'w') as f:
+    json.dump(parallels, f, ensure_ascii=False, indent=2, sort_keys=True)
+    
+
+for p in parallels:
+    for k,v in p:
+        if v == 1:
+            p[k] = True
+
+import regex
+def fix_whitespace(m):
+    return regex.sub(r'\n\s+', ' ', m[0])
+
+import json
+with open('with_notes.json', 'w') as f:
+    f.write(
+        regex.sub(r'(?s)\[[^\[\]]+\]', fix_whitespace,
+              json.dumps(parallels, ensure_ascii=0, indent=2, sort_keys=True)))
+

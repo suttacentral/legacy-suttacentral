@@ -18,18 +18,23 @@ for c in imm.collections.values():
 from lxml import etree
 parallels = etree.Element('parallels')
 
-defined = set()
+
 
 def is_valid_parallel(sutta, uid):
     for parallel in sutta.parallels:
         if parallel.sutta.uid == uid:
-            if not parallel.partial and not parallel.footnote:
+            if not parallel.partial:
                 return True
             return False
     return False
 
 
 parallel_groups_seen = set()
+parallel_pairs_seen = set()
+
+def make_key(uid, other_uid, partial):
+    return tuple(sorted((uid, other_uid)) + [partial or None])
+
 # Create Parallel Pairs
 for sutta in suttas:
     uid = sutta.uid
@@ -59,19 +64,18 @@ for sutta in suttas:
     for parallel in sutta.parallels:
         other_uid = parallel.sutta.uid
         partial = parallel.partial
-        note = parallel.footnote
-        key = tuple(sorted((uid, other_uid)) + [partial, note])
-        if key in defined:
+        key = make_key(uid, other_uid, partial)
+        if key in parallel_pairs_seen:
             continue
 
         # Can this sutta be added to the group?
-        if not note and not partial:
+        if not partial:
             for group_uid in group_seen:
                 if not is_valid_parallel(imm.suttas[group_uid], other_uid):
                     break
             else:
                 group.append(etree.Element('ll', sutta=other_uid))
-                defined.add(key)
+                parallel_pairs_seen.add(key)
                 group_seen.add(other_uid)
                 continue
         
@@ -79,12 +83,19 @@ for sutta in suttas:
         
         if partial:
             e.set('partial', 'y')
-        if note:
-            e.set('note', note)
         e.append(e.makeelement('ll', sutta=uid))
         e.append(e.makeelement('ll', sutta=other_uid))
 
-        defined.add(key)
+        parallel_pairs_seen.add(key)
+    
+    if len(group_seen) > 1:
+        for uid1 in group_seen:
+            for uid2 in group_seen:
+                if uid1 == uid2:
+                    continue
+                key = make_key(uid1, uid2, None)
+                parallel_pairs_seen.add(key)
+        
 
     if len(group) == 0:
         parallels.remove(group)
