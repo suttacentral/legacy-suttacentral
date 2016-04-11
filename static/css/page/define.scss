@@ -2,7 +2,8 @@
     padding-top: 2em;
 
     h1, h2 {
-        text-align: center;
+        width: 70%;
+        float: right;
     }
 
     .source {
@@ -28,7 +29,7 @@
     }
 
     dd {
-        margin: 1em;
+        margin: 1em 0;
     }
 
 
@@ -50,9 +51,53 @@
         float: left;
         margin: 0 1em;
     }
+    
+    .near_terms ul,.fuzzy_terms ul {
+        margin-left:0;
+    }
+    
+    .related_terms h3{
+        margin:1em 0;
+    }
+    
+    dd.info{
+        display:none;
+    }
 
     ul {
         list-style: none;
+        margin: 0;
     }
+    
+    .ref {
+        @include sans-serif;
+        color:#565656;
+        font-size:0.8em;
+        background:rgb(215, 215, 215);
+        padding: 0.1em 0.2em 0 0.2em;
+        border-radius: 3px;
+        border: 1px solid rgb(190, 190, 190);
+        margin:0 0.1em;
+    }
+
+    .google-maps {
+        position: relative;
+        padding-bottom: 75%; // This is the aspect ratio
+        height: 0;
+        width: 50%;
+        height: 50%;
+        margin-left: 1em;
+        margin-bottom: 1em;
+        float:right;
+        overflow: hidden;
+    }
+    .google-maps iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
 }
 
