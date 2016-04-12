@@ -129,7 +129,7 @@ sc.headerMenu = {
         
         
         if (scrollAmount > 0) {
-            if (!main.hasClass('sidebar-pinned')) {
+            if (!main.hasClass('sidebar-pinned') && !header.hasClass('retracted')) {
                 header.addClass('retracted');
                 self.hideAll();
             }
