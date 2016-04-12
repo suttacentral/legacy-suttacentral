@@ -143,9 +143,12 @@
         if (isPinned) {
             localStorage.setItem('sc.sidebar.pinned', true);
             $('main').addClass('sidebar-pinned');
+            $('header').removeClass('retracted');
+            $('header').addClass('header-pinned');
         } else {
             localStorage.removeItem('sc.sidebar.pinned');
             $('main').removeClass('sidebar-pinned');
+            $('header').removeClass('header-pinned');
         }
     },
     initChineseLookup: function() {

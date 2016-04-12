@@ -128,7 +128,7 @@ sc.headerMenu = {
         
         
         if (scrollAmount > 0) {
-            if (!header.hasClass('retracted')) {
+            if (!header.hasClass('header-pinned')) {
                 header.addClass('retracted');
                 self.hideAll();
             }
