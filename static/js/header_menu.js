@@ -119,6 +119,7 @@ sc.headerMenu = {
             scrollTop = $("body").scrollTop() || $("html").scrollTop(),
             scrollAmount = scrollTop - self.lastScreenScroll,
             header = $('header');
+            main = $('main');
 
         self.lastScreenScroll = scrollTop;
         if (scrollTop <= 10) {
@@ -128,7 +129,7 @@ sc.headerMenu = {
         
         
         if (scrollAmount > 0) {
-            if (!header.hasClass('header-pinned')) {
+            if (!main.hasClass('sidebar-pinned')) {
                 header.addClass('retracted');
                 self.hideAll();
             }
