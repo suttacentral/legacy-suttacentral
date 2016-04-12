@@ -126,10 +126,11 @@ sc.headerMenu = {
             header.removeClass('retracted');
             return
         }
-        
-        
+
+        var isPinnedH = ($('[name=header-pinned]').prop('checked') == true);
+
         if (scrollAmount > 0) {
-            if (!main.hasClass('sidebar-pinned') && !header.hasClass('retracted')) {
+            if (!isPinnedH && !header.hasClass('retracted')) {
                 header.addClass('retracted');
                 self.hideAll();
             }

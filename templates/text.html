@@ -70,8 +70,9 @@
                 <a class="button" id="t-line-by-line" title="View line-by-line as in CBETA">View line-by-line</a>
             </div>
             {% endif %}
-            <div id="pin-sidebar"><label><input type="checkbox" name="sidebar-pinned"> Keep Sidebar & Header Extended</label></div>
+            <div id="pin-sidebar"><label><input type="checkbox" name="sidebar-pinned"> Keep Sidebar Extended</label></div>
             <script>document.getElementsByName('sidebar-pinned')[0].checked = localStorage.getItem('sc.sidebar.pinned') == "true"</script>
+            <div id="pin-header"><label><input type="checkbox" name="header-pinned"> Keep Header Extended</label></div>
             <div id="message-box"></div>
         </div>
       </div>
