@@ -127,6 +127,11 @@ sc.headerMenu = {
         }
 
         var isPinnedH = ($('[name=header-pinned]').prop('checked') == true);
+        if (isPinnedH) {
+            localStorage.setItem('sc.header.pinned', true);
+        } else {
+            localStorage.removeItem('sc.header.pinned');
+        }
 
         if (scrollAmount > 0) {
             if (!isPinnedH && !header.hasClass('retracted')) {
