@@ -119,8 +119,7 @@ sc.headerMenu = {
             scrollTop = $("body").scrollTop() || $("html").scrollTop(),
             scrollAmount = scrollTop - self.lastScreenScroll,
             header = $('header');
-            main = $('main');
-
+            
         self.lastScreenScroll = scrollTop;
         if (scrollTop <= 10) {
             header.removeClass('retracted');

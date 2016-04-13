@@ -33,7 +33,7 @@
             self.selectTab(sidebarTab)
         }
 
-        if (sc.sessionState.getItem('sidebar.active')) {
+        if (sc.sessionState.getItem('sidebar.active') || $('main').hasClass('sidebar-pinned')) {
             if (!self.isVisible()) {
                 self.show();
                 self.node.addClass('fast')
