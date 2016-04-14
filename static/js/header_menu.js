@@ -119,17 +119,22 @@ sc.headerMenu = {
             scrollTop = $("body").scrollTop() || $("html").scrollTop(),
             scrollAmount = scrollTop - self.lastScreenScroll,
             header = $('header');
-            main = $('main');
-
+            
         self.lastScreenScroll = scrollTop;
         if (scrollTop <= 10) {
             header.removeClass('retracted');
             return
         }
-        
-        
+
+        var isPinnedH = ($('[name=header-pinned]').prop('checked') == true);
+        if (isPinnedH) {
+            localStorage.setItem('sc.header.pinned', true);
+        } else {
+            localStorage.removeItem('sc.header.pinned');
+        }
+
         if (scrollAmount > 0) {
-            if (!main.hasClass('sidebar-pinned') && !header.hasClass('retracted')) {
+            if (!isPinnedH && !header.hasClass('retracted')) {
                 header.addClass('retracted');
                 self.hideAll();
             }
