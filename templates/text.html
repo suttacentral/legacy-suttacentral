@@ -72,8 +72,8 @@
             {% endif %}
             <div id="pin-sidebar">Keep Extended:<label><input type="checkbox" name="sidebar-pinned"> Sidebar</label><label><input type="checkbox" name="header-pinned"> Header</label></div>
             <script>
-            document.getElementsByName('sidebar-pinned')[0].checked = localStorage.getItem('sc.sidebar.pinned') == "true"
-            document.getElementsByName('header-pinned')[0].checked = localStorage.getItem('sc.header.pinned') == "true"
+            document.getElementsByName('sidebar-pinned')[0].checked = localStorage.getItem('sc.sidebar.pinned') == "true";
+            document.getElementsByName('header-pinned')[0].checked = localStorage.getItem('sc.headerMenu.pinned') == "true";
             </script>
             
             <div id="message-box"></div>

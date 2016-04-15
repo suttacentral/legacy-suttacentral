@@ -43,6 +43,8 @@ sc.headerMenu = {
             }
             return true
         })
+
+        $('[name=header-pinned]').on('click', sc.headerMenu.togglePinHeader);
             
         $(window).on('ready resize', sc.headerMenu.adjustColumns);
         $(window).scroll(sc.headerMenu.scrollShowHide);
@@ -82,6 +84,17 @@ sc.headerMenu = {
             target.addClass('active');
             element.addClass('active');
             setTimeout(self.adjustColumns, 50);
+        }
+    },
+
+    togglePinHeader: function(e) {
+        var isPinnedH = ($('[name=header-pinned]').prop('checked') == true);
+        console.log('Pinned Header = ' + isPinnedH);
+        
+        if (isPinnedH) {
+            localStorage.setItem('sc.headerMenu.pinned', true);
+        } else {
+            localStorage.removeItem('sc.headerMenu.pinned');
         }
     },
     hideAll: function(e){
@@ -126,15 +139,9 @@ sc.headerMenu = {
             return
         }
 
-        var isPinnedH = ($('[name=header-pinned]').prop('checked') == true);
-        if (isPinnedH) {
-            localStorage.setItem('sc.header.pinned', true);
-        } else {
-            localStorage.removeItem('sc.header.pinned');
-        }
-
         if (scrollAmount > 0) {
-            if (!isPinnedH && !header.hasClass('retracted')) {
+            var isHPinned = localStorage.getItem('sc.headerMenu.pinned');
+            if (!isHPinned && !header.hasClass('retracted')) {
                 header.addClass('retracted');
                 self.hideAll();
             }
