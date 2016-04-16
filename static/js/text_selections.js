@@ -290,13 +290,13 @@ sc.text_selection = (function() {
             target = '{}-{}'.format(targetStart, targetEnd);
         }
 
-        var lang_uid = $('#text').attr('lang'),
+        var lang_uid = $('#text').attr('lang') || sc.exports.lang,
             uid = $('.sutta').attr('id'),
             shortLink = '{}/{}/{}'.format(lang_uid, uid, target),
             link = '{}/{}'.format(window.location.origin,
                                  shortLink);
             
-        
+        link = link.replace('.null', '');
         var clientRects = result[0].range.getClientRects()
         var quoteControls = $(
             '<div id="quote-controls" data-clipboard-target="#quote-link" title="Link to selected text">'.format(link) +
