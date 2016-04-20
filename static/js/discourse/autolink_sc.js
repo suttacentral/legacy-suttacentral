@@ -239,7 +239,7 @@ var scUrlCreator = (function(){
         "skt-jnanaprasthana": "Jnānaprasthāna", "skt-lo-asc": "Abhisamācārika",
         "skt-lo-bi-pn": "Bhikkhunī Pakiṇṇaka", "skt-lo-bi-vb": "Bhikkhunī Vibhaṅga",
         "skt-lo-bi-vb-as": "Sekhiyā", "skt-lo-bi-vb-gd": "Garudhamma",
-        "skt-lo-bi-vb-nidana": "Nidāna", "skt-lo-bi-vb-np": "Nissaggiyā Pācittiyā",
+        "skt-lo-bi-nidana": "Nidāna", "skt-lo-bi-vb-np": "Nissaggiyā Pācittiyā",
         "skt-lo-bi-vb-pc": "Pācittiyā", "skt-lo-bi-vb-pd": "Pāṭidesanīyā",
         "skt-lo-bi-vb-pj": "Pārājika", "skt-lo-bi-vb-sk": "Sekhiyā",
         "skt-lo-bi-vb-ss": "Saṅghādisesā", "skt-lo-bu-pm": "Bhikkhu Pātimokkha",

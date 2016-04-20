@@ -49,6 +49,7 @@ sc.headerMenu = {
         $(window).on('ready resize', sc.headerMenu.adjustColumns);
         $(window).scroll(sc.headerMenu.scrollShowHide);
         $('#panel').scrollLock();
+
     },
     update: function(element, mode) {
         var self = sc.headerMenu,
