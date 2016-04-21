@@ -45,6 +45,9 @@ sc.headerMenu = {
         })
 
         $('[name=header-pinned]').on('click', sc.headerMenu.togglePinHeader);
+        if (localStorage.getItem('sc.headerMenu.pinned')){
+            $('main').addClass('header-pinned');
+        };
             
         $(window).on('ready resize', sc.headerMenu.adjustColumns);
         $(window).scroll(sc.headerMenu.scrollShowHide);
@@ -94,8 +97,10 @@ sc.headerMenu = {
         
         if (isPinnedH) {
             localStorage.setItem('sc.headerMenu.pinned', true);
+            $('main').addClass('header-pinned');
         } else {
             localStorage.removeItem('sc.headerMenu.pinned');
+            $('main').removeClass('header-pinned');
         }
     },
     hideAll: function(e){

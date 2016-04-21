@@ -128,28 +128,26 @@
 .mirror-middle{text-align:right;position:absolute;margin-top:0.2em;}
 h1.mirror-row{line-height:1.5}
 }
-#text:lang(my), #text:lang(pi-Mymr) {
-     .sutta {
-        h1, h2, h3, h4, h5, h6, p,li,a,.evam {
-            font-family: 'Noto Sans Myanmar', serif;
-            letter-spacing: 0;
-            line-height: 2em;
-        }
+
+:lang(zh), :lang(lzh),  :lang(ko), :lang(jp), :lang(my), :lang(si), :lang(hi), :lang(th), :lang(mr),  :lang(bo),  :lang(he),  :lang(ta) {
+    .endsutta, .endvagga,  .endsection, .enddivision, .end, .namo, .uddana, .uddanagatha, .evam, em, i, .speaker {
+        font-weight: normal !important;
+        font-style: normal !important;
+        letter-spacing: 0;
+    }
+    .sutta {
         h1, h2, h3, h4, h5, h6 {
             font-weight: bold;
-        }
+            font-style: normal;
+            letter-spacing: 0;
     }
-
-    #metaarea p {
-        letter-spacing: 0;
-        line-height: 2em;
     }
 }
 
 #text:lang(zh), #text:lang(lzh) {
     .sc {display: none}
-    .uddanagatha{font-style:normal !important}
 }
+
 #text:lang(si), #text:lang(pi-Sinh) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
@@ -158,8 +156,7 @@ h1.mirror-row{line-height:1.5}
                         line-height: 1.8;
         }
         h1, h2, h3, h4, h5, h6{
-                        font-weight: 700;
-                     
+                        font-weight: 700;            
         }
 }
 }
@@ -170,21 +167,19 @@ h1.mirror-row{line-height:1.5}
                         letter-spacing: 0;
                         line-height: 2;
         }
-        h1, h2, h3, h4, h5, h6 {
-                        font-weight: bold;
-                        }
+     }
+     #metaarea p {
+        letter-spacing: 0;
+        line-height: 2em;
+    }
 }
-}
+
 #text:lang(th), #text:lang(pi-Thai) {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: "Lumen Thai", serif;
                         letter-spacing: 0;
-                        font-style:normal !important;
                         line-height:2;
-        }
-h1, h2, h3, h4, h5, h6 {
-                        font-weight: bold;
         }
 }
 }
@@ -195,9 +190,6 @@ h1, h2, h3, h4, h5, h6 {
                         letter-spacing: 0;
                         line-height:1.8;
         }
-        h1, h2, h3, h4, h5, h6 {
-                        font-weight: bold;
-        }
 }
 }
 
@@ -205,14 +197,12 @@ h1, h2, h3, h4, h5, h6 {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: 'KoPub Batang', serif;
-                         letter-spacing: 0;
+                        letter-spacing: 0;
                         line-height:1.8;
-
         }
         .hgroup p {font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;}
         h1, h2, h3, h4, h5, h6 {
                         font-weight: 700;
-
         }
 }
 }
@@ -221,14 +211,12 @@ h1, h2, h3, h4, h5, h6 {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,a,.evam {
                         font-family: 'Noto Sans Japanese', serif;
-                        line-height:1.8;
                         letter-spacing: 0;
+                        line-height:1.8;
         }
-
         h1, h2, h3, h4, h5, h6 {
                         font-weight: 700;
         }
-  
 }
 }
 
@@ -236,8 +224,8 @@ h1, h2, h3, h4, h5, h6 {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,.evam {
                         font-family: 'DDC Uchen', serif;
-                        line-height:2;
                         letter-spacing: 0;
+                        line-height:2;
         }
 }
 }
@@ -246,8 +234,8 @@ h1, h2, h3, h4, h5, h6 {
      .sutta {
         h1, h2, h3, h4, h5, h6, p,li,.evam {
                         font-family:  'Noto Sans Hebrew', serif;
-                        line-height:1.5;
                         letter-spacing: 0;
+                        line-height:1.5;
         }
 }
 }

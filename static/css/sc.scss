@@ -238,19 +238,6 @@ q:after {
 
 .tri {display:inline;}
 
-/* KOREAN */
-
-/* VIETNAMESE */
-
-
-
-/*CHINESE*/
-:lang(zh), :lang(lzh),  :lang(ko), :lang(jp), :lang(my), :lang(si), :lang(hi), :lang(th), :lang(mr){
-    .endsutta, .endvagga,  .endsection, .enddivision, .end, .namo {
-        font-weight:normal !important;
-        font-style:normal !important;
-    }
-}
 h1 .t-note{display:none}
 
 .tlineheadnote {color:red;}
