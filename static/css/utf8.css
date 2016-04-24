@@ -83,11 +83,13 @@ a.snp-vagga-section-verse:before, a.snp-vagga-verse:before {content:"SNP "}
 a.ss:before {content:"SS "}
 a.t:before, a.t-linehead:before {content:"T "}
 a.tb:before {content:"TB "}
+a.text-gatha-number:before {content:"T verse "}
 a.tri62:before, a.tri95:before {content:"Tri "}
 a.ud-sutta:before, a.ud-vagga-sutta:before {content:"Ud "}
 a.ttc:before {content:"TTC "}
 /*a.tu:before {content:" "}*/
 a.uv:before {content:"Uv "}
+a.vagga-gatha-number:before {content:"T vagga/verse "}
 a.vai58:before, a.vai59:before, a.vai61:before {content:"Vai "}
 a.var-v:before {content:"Var-v "}
 a.verse-num-sc:before {content:"SC verse "}
@@ -241,6 +243,8 @@ CSS Class	HTML Title
 
 .ss             "Paragraph numbers in Shai Schwartz."
 
+.text-gatha-number   "Taishō verse number"
+
 .tb             "Paragraph numbers in Thanissaro Bhikkhu."
 
 .tri62		"Sūtra and paragraph number in Tripāṭhī, 1962."
@@ -252,6 +256,8 @@ CSS Class	HTML Title
 .har04		"Paragraph number in Hartmann, 2004."
 
 .fuk03		"Page numbers in Fukita, 2003"
+
+.vagga-gatha-number  "Taishō vagga and verse number"
 
 .var-v          "Paragraph numbers in Varsavastu Masanori Shono"
 
