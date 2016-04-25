@@ -54,6 +54,14 @@ a.wal52,a.mat88,a.vai58,a.mat96 {color: saturated-color(plain-purple);}
 /* Buddhist Discipline Paragraph Numbers */
 a.pts-vp-pi, a.pts-p-pi {color: saturated-color(plain-purple);}
 
+/* Paragraph ID to open below the header when header is pinned  */
+main.header-pinned {
+     a.sc, a.t-linehead, a.verse-num-sc {
+        margin-top: -$id-offset-top;
+         padding-top: $id-offset-top;
+         }
+} 
+
 /* TODO systematically do for all of them (alphabetical order)
 a.adh-v
 a.ba
