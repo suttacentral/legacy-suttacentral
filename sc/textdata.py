@@ -153,6 +153,21 @@ class TextInfoModel:
         self._metadata = {}
         self.name = name
     
+    def to_json(self):
+        def default(obj):
+            if hasattr(obj, 'as_dict'):
+                result = obj.as_dict()
+                for k, v in list(result.items()):
+                    if not v or k in {'path', 'lang', 'cdate', 'mdate', 'uid', 'file_uid', 'bookmark'}:
+                        del result[k]
+                return result
+            elif isinstance(obj, pathlib.Path):
+                return str(obj)
+            else:
+                raise TypeError("{} does not have as_dict method".format(obj))
+        return json.dumps(self._by_lang, indent=2, ensure_ascii=False, default=default)
+        
+    
     def build_process(self, percent):
         if percent % 10 == 0:
             build_logger.info('TIM build {}% done'.format(percent))

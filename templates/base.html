@@ -20,15 +20,12 @@
 {{ newrelic_browser_timing.header }}
 <!--[if lt IE 10]><script src="/js/vendor/modernizr-2.6.3.min.js"></script><![endif]-->
 {% endif %} {# /embed #}
-{% if nonfree_fonts -%}
-  {%- assets 'css_nonfree' -%}
-    <link rel="stylesheet" href="{{ ASSET_URL }}">
-  {% endassets -%}
-{%- else -%}
-  {%- assets 'css_free' -%}
-    <link rel="stylesheet" href="{{ ASSET_URL }}">
-  {% endassets -%}
-{%- endif -%}
+
+{%- assets 'css_core' -%}
+  <link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets -%}
+
+
 {% if not embed %}
 <meta property="og:site_name" content="Sutta Central">
 <meta property="og:type" content="website">
@@ -39,6 +36,7 @@
 {% endblock %}
 
 {% endif %} {# /embed #}
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js" async></script>
 </head>
 {% set body_classes = (['offline'] if offline else []) + (['embed'] if embed else []) %}
 
@@ -87,6 +85,9 @@
 {% assets 'js_core' %}
 <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
+
+<script src="https://use.typekit.net/ahz6bna.js"></script>
+<script>try{Typekit.load({ async: true });}catch(e){}</script>
 
 {% if not offline and config.internet_connectivity and config.google_analytics and not embed %}
 <script>

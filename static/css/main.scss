@@ -1,4 +1,6 @@
-// Fonts are specified in main-(non)free.scss
+// @font-face rules
+@import 'fonts/fonts-mixins';
+@import 'fonts/fonts-auto';
 
 // Variables and mixins
 @import 'lib/colors';

@@ -1,0 +1,23 @@
+{
+    "families": {
+        "gentium-basic": "Gentium Basic",
+        "skolar-sutta-web": "Skolar Sutta Web",
+        "skolar-sutta-web-sc": "Skolar Sutta Web SC",
+        "source-sans-pro": "Source Sans Pro",
+        "lumen-thai": "Lumen Thai",
+        "ko-pub-batang": "Ko Pub Batang",
+        "skolar-devanagari": "Skolar Devanagari",
+        "hetu-schetu-sc": "hetu_schetu_sc",
+        "tharlon": "Tharlon",
+        "ddc-uchen": "DDC Uchen",
+        "noto-sans-myanmar": "Noto Sans Myanmar",
+        "noto-sans-hebrew": "Noto Sans Hebrew"
+    },
+    "weights": {
+        "bold": "bold",
+        "semibold": "600"
+    },
+    "styles": {
+        "italic": "italic"
+    }
+}
