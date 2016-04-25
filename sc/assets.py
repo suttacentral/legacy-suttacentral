@@ -180,7 +180,7 @@ def compile_fonts(flavors=['woff', 'woff2']):
     font_face_decls = []
     
     fonts_output_dir = fonts_dir / 'compiled'
-    if not fonts_output_dir.exits():
+    if not fonts_output_dir.exists():
         fonts_output_dir.mkdir()
     try:
         with fonts_json_file.open() as f:
