@@ -35,7 +35,7 @@ def checkout_branch(code=None, data=None):
         
 
 @task
-def full(branch=None):
+def full():
     """Deploy to the staging server."""
     blurb(full)
     _staging_run(
@@ -52,19 +52,8 @@ def full(branch=None):
         'invoke assets.clean --older'
     )
 
-
 @task
-def nonfree_fonts():
-    """Copy local nonfree fonts to the staging server."""
-    blurb(nonfree_fonts)
-    run('rsync -avz ' +
-        'static/fonts/nonfree/ ' +
-        'sc-staging@vps.suttacentral.net:' +
-        '/home/sc-staging/suttacentral/static/fonts/nonfree/', fg=True)
-
-
-@task
-def quick(branch=None):
+def quick():
     """Deploy simple changes to the staging server."""
     blurb(quick)
     _staging_run(
@@ -78,6 +67,34 @@ def quick(branch=None):
     )
 
 @task
+
+@task
+def push_fonts(delete=False):
+    """Copy local fonts to the staging server."""
+    blurb(push_fonts)
+    run('rsync -avz ' +
+        '--exclude="compiled" ' +
+        '--include="*.woff" --include="*.woff2" --include="nonfree"' +
+        '--exclude="*" ' +
+        ('--delete ' if delete else '') +
+        'static/fonts/ ' +
+        'sc-staging@vps.suttacentral.net:' +
+        '/home/sc-staging/suttacentral/static/fonts/', fg=True)
+
+@task
+def pull_fonts(delete=False):
+    """Copy fonts from the staging server to local"""
+    blurb(pull_fonts)
+    run('rsync -avz ' +
+        '--exclude="compiled" ' +
+        '--include="*.woff" --include="*.woff2" --include="nonfree"' +
+        '--exclude="*" ' +
+        ('--delete ' if delete else '') +
+        'sc-staging@vps.suttacentral.net:' + 
+        '/home/sc-staging/suttacentral/static/fonts/' +
+        'static/fonts/ '
+        , fg=True)
+        
 def rebuild_tim():
     """ Rebuild TIM on the staging server """
     _staging_run(
