@@ -165,8 +165,8 @@ font_face_template = '''
     font-family: '{family}';
     font-weight: {weight};
     font-style: {style};
-    src: url('{url}.woff') format('woff'),
-         url('{url}.woff2') format('woff2');
+    src: url('{url}.woff') format('woff2'),
+         url('{url}.woff2') format('woff');
 }}
 '''
 
