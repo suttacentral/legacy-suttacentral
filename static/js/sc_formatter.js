@@ -111,7 +111,7 @@ sc.formatter = {
         $('p').each(function(){
             var p = $(this),
                 text = p.text(),
-                m = text.match(/^[  \n0-9.-]*([“‘]+)(.)/);
+                m = text.match(/^[  \n0-9.-]*([“‘「]+)(.)/);
             if (m) {
                 var snip = m[2],
                     quoted = m[1] + m[2];
