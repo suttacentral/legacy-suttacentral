@@ -73,7 +73,7 @@ sc.classes = {
         "pravr-v-iii": "Paragraph numbers in Pravrajyāvastu vol III Vogel/Wille",
         "pravr-v-iv": "Paragraph numbers in Pravrajyāvastu vol IV Vogel/Wille",
         "pts": "Pali Text Society vol/page number.",
-        "pts-s": "Pali Text Society vol/page number.",
+        "pts-s": "Pali Text Society section number.",
         "pts1ed": "Page number of Pali Text Society, 1st edition.",
         "pts2ed": "Page number of Pali Text Society, 2nd edition.",
         "pts-cs": "Chapter and section of Pali Text Society editions.",
