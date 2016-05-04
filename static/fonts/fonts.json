@@ -1,4 +1,8 @@
 {
+    "defaults": {
+        "subset": false,
+        "save_as": ["woff", "woff2"]
+    },
     "families": {
         "gentium-basic": "Gentium Basic",
         "skolar-sutta-web": "Skolar Sutta Web",
@@ -8,10 +12,26 @@
         "ko-pub-batang": "Ko Pub Batang",
         "skolar-devanagari": "Skolar Devanagari",
         "hetu-schetu-sc": "hetu_schetu_sc",
-        "tharlon": "Tharlon",
         "ddc-uchen": "DDC Uchen",
         "noto-sans-myanmar": "Noto Sans Myanmar",
-        "noto-sans-hebrew": "Noto Sans Hebrew"
+        "noto-sans-hebrew": "Noto Sans Hebrew",
+        "noto-sans": {
+            "name": "Noto Sans",
+            "subset_languages": "*"
+        },
+        "NotoSansKR": {
+            "name": "Noto Sans KR",
+            "subset_languages": "ko"
+        },
+        "NotoSansJP": {
+            "name": "Noto Sans JP",
+            "subset_languages": "jp"
+        },
+        "NotoSansTC": {
+            "name": "Noto Sans TC",
+            "subset_languages": ["zh", "lzh"]
+        },
+        "NotoSansSC": null
     },
     "weights": {
         "bold": "bold",
@@ -19,5 +39,16 @@
     },
     "styles": {
         "italic": "italic"
+    },
+    "languages": {
+        "default": "skolar",
+        "ko": "noto",
+        "jp": "noto",
+        "zh": "noto",
+        "lzh": "noto",
+        "he": "noto",
+        "bo": "noto",
+        "my": "noto",
+        "si": "noto"
     }
 }

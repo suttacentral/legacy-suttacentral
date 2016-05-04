@@ -21,6 +21,7 @@ from itertools import chain
 from collections import OrderedDict, defaultdict, namedtuple
 
 import sc
+import sc.fonts
 from sc import config, textfunctions, textdata
 from sc.classes import *
 from sc.uid_expansion import uid_to_acro, uid_to_name
@@ -62,11 +63,11 @@ class _Imm:
         self.build_grouped_suttas()
         self.build_parallel_sutta_group('vinaya_pm')
         self.build_parallel_sutta_group('vinaya_kd')
-        # self.build_search_data()
         self.load_epigraphs()
         self.verify_uid_uniqueness()
+        self.font_data = sc.fonts.get_fonts_data()
         self.timestamp = timestamp
-        self.build_time = datetime.now()        
+        self.build_time = datetime.now()
     
     def __call__(self, uid):
         if uid in self.collections:

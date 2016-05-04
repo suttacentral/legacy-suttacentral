@@ -56,9 +56,10 @@ class TextInfo:
 
 class TIMManager:
     db_name_tmpl = 'text-info-model-{lang}_{hash}.pklz'
-    version = 1
+    version = 2
     def __init__(self):
         self.instance = None
+        self.load_lock = threading.Lock()
         self.ready = threading.Event()
     
     @classmethod
@@ -67,7 +68,25 @@ class TIMManager:
         md5.update(str(cls.version).encode('ascii'))
         
         return cls.db_name_tmpl.format(lang=lang_dir.stem, hash=md5.hexdigest()[:10])
-    
+
+    def load_if_needed(self, force=False):
+        """ Only load if loading not already in progress
+                
+        If another thread is already loading the TIM, then
+        this method simply waits until loading is complete
+        and then returns. It does not result in an unessecary
+        load. 
+        In contrast the load method will always result
+        in the TIM being loaded or reloaded.
+        """
+        if self.load_lock.acquire(blocking=False):
+            try:
+                self.load_inner()
+            finally:
+                self.load_lock.release()
+        else:
+            self.ready.wait()
+        
     def load(self, force=False):
         """ Load an instance of the TextInfoModel 
         
@@ -80,7 +99,10 @@ class TIMManager:
         into a single database.
         
         """
-        
+        with self.load_lock:
+            self.load_inner(force)
+    
+    def load_inner(self, force=False):        
         components = {}
         files_used = set()
         
@@ -118,12 +140,15 @@ class TIMManager:
             sc.util.recursive_merge(tim._by_lang, baby_tim._by_lang)
             sc.util.recursive_merge(tim._by_uid, baby_tim._by_uid)
             sc.util.recursive_merge(tim._metadata, baby_tim._metadata)
+            sc.util.recursive_merge(tim._codepoints, baby_tim._codepoints)
         
         self._set_instance(tim)
         build_logger.info('TIM is ready'.format(lang_uid))
     
     def get(self):
-        self.ready.wait()
+        if self.instance:
+            return self.instance
+        self.load_if_needed()
         return self.instance
         
     def _set_instance(self, instance):
@@ -151,6 +176,7 @@ class TextInfoModel:
         self._by_lang = {}
         self._by_uid = {}
         self._metadata = {}
+        self._codepoints = {}
         self.name = name
     
     def to_json(self):
@@ -181,6 +207,16 @@ class TextInfoModel:
     def datestr(self, timestamp):
         return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d')
     
+    def get_codepoints_used(self, lang_uid=None, weight_or_style='normal'):
+        if lang_uid:
+            unicodes_by_weight = self._codepoints.get(lang_uid)
+            if not unicodes_by_weight: 
+                return None
+            return unicodes_by_weight[weight_or_style]
+        
+        result = set()
+        result.update(*(unicodes[weight_or_style] for unicodes in self._codepoints.values()))
+        return result
 
     def get(self, uid=None, lang_uid=None):
         """ Returns TextInfo entries which match arguments
@@ -260,12 +296,30 @@ class TextInfoModel:
         if m1 and m2 and m1 == m2:
             return True
     
+    
+    def is_bold(self, lang, element):
+        if element.tag in {'b', 'strong'}:
+            return True
+        if lang in {'zh', 'lzh', 'ko', 'jp', 'tw'}:
+            if element.tag in {'h1', 'h2', 'h3', 'h4', 'h5', 'h6'}:
+                return True
+        return False
+    
+    def is_italic(self, lang, element):
+        if element.tag in {'i', 'em'}:
+            return True
+        return False    
+    
     def build(self, lang_dir, force=False):
         # The pagenumbinator should be scoped because it uses
         # a large chunk of memory which should be gc'd.
         # But it shouldn't be created at all if we don't need it.
         # So we use a getter, and delete it when we are done.
         self._ppn = None
+        
+        codepoints = set()
+        bold_codepoints = set()
+        italic_codepoints = set()        
 
         lang_uid = lang_dir.stem
         all_files = sorted(lang_dir.glob('**/*.html'), key=lambda f: sc.util.numericsortkey(f.stem))
@@ -277,6 +331,19 @@ class TextInfoModel:
             logger.info('Adding file: {!s}'.format(htmlfile))
             uid = htmlfile.stem
             root = html.parse(str(htmlfile)).getroot()
+            
+            #Set codepoint data
+            
+            _stack = [root]
+            while _stack:
+                e = _stack.pop()
+                if self.is_bold(lang_uid, e):
+                    bold_codepoints.update(e.text_content())
+                elif self.is_italic(lang_uid, e):
+                    italic_codepoints.update(e.text_content())
+                else:
+                    _stack.extend(e)
+            codepoints.update(root.text_content())                
             
             # Set the previous and next uids, using explicit data
             # if available, otherwise making a safe guess.
@@ -367,6 +434,12 @@ class TextInfoModel:
          except Exception as e:
              print('An exception occured: {!s}'.format(htmlfile))
              raise
+        
+        self._codepoints[lang_uid] = {
+            'normal': codepoints,
+            'bold': bold_codepoints,
+            'italic': italic_codepoints
+        }
         
         del self._ppn
 

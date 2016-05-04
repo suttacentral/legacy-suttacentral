@@ -229,6 +229,8 @@ msgstr ""
             fuzzy=False,
             header_comment="#Translation Template For SuttaCentral",
             project='suttas',
+            version='1',
+            msgid_bugs_address='sujato@gmail.com',
             creation_date=datetime.datetime.utcnow(),
             language_team="SuttaCentral",
             charset="UTF-8"

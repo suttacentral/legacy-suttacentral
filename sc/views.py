@@ -167,6 +167,7 @@ class ViewBase:
 
     def get_global_context(self):
         """Return a dictionary of variables accessible by all templates."""
+        imm = sc.scimm.imm()
         nonfree_fonts = config.nonfree_fonts
         offline = True
         try:
@@ -190,7 +191,8 @@ class ViewBase:
             'embed': 'embed' in cherrypy.request.params,
             'search_query': '',
             'no_index': False,
-            'imm': sc.scimm.imm(),
+            'font_class': imm.font_data['languages']['default'],
+            'imm': imm,
             'ajax': 'ajax' in cherrypy.request.params,
             'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()}
         }
@@ -403,6 +405,10 @@ class TextView(ViewBase):
         context.textdata = textdata = imm.get_text_data(self.uid, self.lang_code)
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
+        
+        font_class = imm.font_data['languages'].get(self.lang_code)
+        if font_class:
+            context.font_class = font_class
         
         context.discourse_link = None
         context.discourse_results = None
