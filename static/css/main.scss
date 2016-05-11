@@ -1,6 +1,9 @@
 // @font-face rules
-@import 'fonts/fonts-mixins';
 @import 'fonts/fonts-auto';
+@import 'fonts/fonts-external';
+@import 'fonts/fonts-mixins';
+@import 'fonts/languages';
+
 
 // Variables and mixins
 @import 'lib/colors';

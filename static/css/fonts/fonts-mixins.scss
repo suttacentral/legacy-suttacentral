@@ -1,7 +1,11 @@
 
+@mixin serif($extra:'') {
+    font-family: $skolar-sutta-web, serif unquote($extra);
+}
 
-
-
+@mixin serif-small-caps($extra:'') {
+    font-family: $skolar-sutta-web-sc, $skolar-sutta-web, serif unquote($extra);
+}
 
 @mixin sans-serif($extra:'') {
     font-family: $source-sans-pro, sans-serif unquote($extra);
@@ -13,4 +17,12 @@
 
 @mixin monospace($extra:'') {
     font-family: monospace unquote($extra);
+}
+
+@mixin lumen-thai($extra:'') {
+    font-family: $lumen-thai, lumen-thai unquote($extra);
+}
+
+@mixin skolar-devanagari($extra:'') {
+    font-family: $skolar-devanagari, skolar-devanagari unquote($extra);
 }

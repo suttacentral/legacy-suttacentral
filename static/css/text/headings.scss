@@ -1,15 +1,14 @@
 .sutta {
+
     h1, h2, h3, h4, h5, h6, .hgroup p {
-        @include serif-small-caps;
         text-align: center;
-        font-weight: normal;
-        letter-spacing: 0.02em;
     }
 
-    h1, h1 a {
+   h1, h1 a {
         color: ns-color(sutta-h1-color);
     }
-
+    
+    
     h2, h2 a, h3, h3 a, h4, h4 a, h5, h5 a, h6, h6 a, .hgroup p, .hgroup p a {
         color: ns-color(sutta-h2-color);
     }
@@ -38,38 +37,112 @@
         font-size: 1em;
         line-height: 1.5em;
     }
-h5{
-        
+    
+    h5{
         margin: 0.7em 0 0.5em 0;
         font-size: 1em;
-}
-h6{
+    }
+    
+    h6 {
         text-align:left;
         text-transform:lowercase;
         margin: 0.7em 0 0.5em 0;
         font-size: 1em;
-        }
+    }
 
     .hgroup {
         margin-top: 6em;
-
-   
-
-        & > p {
-            margin: 0;
+        p {
             @include sans-serif-small-caps;
-            font-size: 1em;
             text-transform: lowercase;
             letter-spacing: 0.05em;
+            margin: 0;
+            font-size: 1em;
             padding:0;
         }
+        
 
         h1 ~ p {
-        @include serif;
-        text-transform:none;
             margin: -2em 0 2em 0;
-            font-style: italic;
-                        
         }
+    }
+    
+    /*bilingual headings*/
+    .mirror {
+        display:table;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom:4.6em;
+        
+        & > * {
+            display:table-row;
+        }
+    }
+    
+    .mirror-left {
+        text-align:right;
+        display:table-cell;
+        padding-right: 1rem;
+        border-right: 1px solid #e2e2e2;
+    }
+    
+    .mirror-right {
+        text-align:left;
+        display:table-cell;
+        padding-left: 1rem;
+    }
+    
+    .mirror-middle {
+        text-align:right;
+        position:absolute;
+        margin-top:0.2em;
+    }
+    
+    h1.mirror-row {
+        line-height:1.5
+    }
+}
+
+/* This is the defaults for texts using a skolar font */
+.skolar-font {
+    .sutta {
+        h1, h2, h3, h4, h5, h6, .hgroup p {
+            font-family: $skolar-sutta-web-sc, $source-sans-pro, sans-serif;
+            text-align: center;
+            font-weight: normal;
+            letter-spacing: 0.02em;
+        }
+    
+        .hgroup {
+
+            h1 ~ p {
+                @include serif;
+                text-transform:none;
+                font-style: italic;
+            }
+        }
+    }
+}
+
+.noto-font {
+    font-family: $noto-sans serif;
+    letter-spacing: 0;
+    line-height: 1.8;
+
+    .endsutta, .endvagga,  .endsection, .enddivision, .end, .namo, .uddana, .uddanagatha, .evam, em, i, .speaker {
+        font-weight: normal;
+        font-style: normal;
+    }
+    
+    .sutta {
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: bold;
+            font-style: normal;
+            letter-spacing: 0;
+        }
+    }
+    
+    [lang=pi], [lang=en] {
+        font-family: 'Noto Sans', sans-serif;
     }
 }

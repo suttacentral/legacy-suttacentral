@@ -26,4 +26,4 @@ The alternative entry looks like this:
  
 This means that upon encountering a font starting with "noto-sans-cjk" it will be subsetted to only those glyphs found in the language `ko` (if the font file is bold, the subset will be only those glyphs which are ko and bold), the output file will be named "noto-sans-ko..." and a @font-face rule will be created allowing "Noto Sans Ko" (or $noto-sans-ko) to be used to refer to the subset.
 
-`"subset": ["zh", "lzh"]` can be used to refer to create a subset based on multiple texts. `"subset": "*"` will subset based on all glyphs
+`"subset": ["zh", "lzh"]` can be used to refer to create a subset based on multiple texts. `"subset": "\*"` will subset based on all glyphs - note that the difference between `"subset": "\*"` and the lack of subset instructions altogether is that the latter simply does not subset at all - i.e. the default is perform no subsetting.

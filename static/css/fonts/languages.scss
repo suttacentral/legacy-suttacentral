@@ -1,0 +1,59 @@
+/* Language Specific Rules */
+
+[lang=zh], [lang=lzh] {
+    font-family: $noto-sans-tc, serif;
+}
+
+[lang=si], [lang=pi-Sinh] {
+    font-family: 'Noto Sans Sinhala', serif;
+}
+
+[lang=my], [lang=pi-Mymr] {
+    font-family: 'Noto Sans Myanmar', serif;
+    line-height: 2;
+}
+
+[lang=th], [lang=pi-Thai] {
+    font-family: 'Lumen Thai', serif;
+    line-height: 2;
+}
+
+[lang=hi], [lang=mr], [lang=pi-Deva] {
+    font-family: 'Skolar Devanagari', serif;
+}
+
+[lang=ko] {
+    font-family: $noto-sans-kr, serif;
+}
+
+[lang=jp] {
+    font-family: $noto-sans-jp, serif;
+}
+
+[lang=bo] {
+    font-family: 'DDC Uchen', serif;
+    line-height:2;
+}
+
+[lang=he] {
+    font-family:  'Noto Sans Hebrew', serif;
+    line-height:1.5;
+}
+
+[lang=ta] {
+    font-family: 'Noto Sans Tamil', serif;
+}
+
+/* This is the defaults for texts using a skolar font */
+.skolar-font {
+    font-family: $skolar-sutta-web, serif;
+}
+
+.noto-font {
+    font-family: $noto-sans serif;
+    line-height: 1.8;
+
+    [lang=pi], [lang=en] {
+        font-family: 'Noto Sans', sans-serif;
+    }
+}

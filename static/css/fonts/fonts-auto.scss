@@ -6,21 +6,19 @@
  * If a new font file is added, edit static/fonts/fonts.json
  * This will cause the required @font-face declarations to be generated.
 */
-$noto-sans-jp = 'Noto Sans JP';
-$noto-sans-kr = 'Noto Sans KR';
-$noto-sans-tc = 'Noto Sans TC';
-$ddc-uchen = 'DDC Uchen';
-$gentium-basic = 'Gentium Basic';
-$hetu-schetu-sc = 'hetu_schetu_sc';
-$ko-pub-batang = 'Ko Pub Batang';
-$lumen-thai = 'Lumen Thai';
-$noto-sans = 'Noto Sans';
-$noto-sans-hebrew = 'Noto Sans Hebrew';
-$noto-sans-myanmar = 'Noto Sans Myanmar';
-$skolar-devanagari = 'Skolar Devanagari';
-$skolar-sutta-web = 'Skolar Sutta Web';
-$skolar-sutta-web-sc = 'Skolar Sutta Web SC';
-$source-sans-pro = 'Source Sans Pro';
+$noto-sans-jp: 'Noto Sans JP';
+$noto-sans-kr: 'Noto Sans KR';
+$noto-sans-tc: 'Noto Sans TC';
+$noto-serif: 'Noto Serif';
+$hetu-schetu-sc: 'hetu_schetu_sc';
+$ko-pub-batang: 'Ko Pub Batang';
+$lumen-thai: 'Lumen Thai';
+$noto-sans: 'Noto Sans';
+$noto-sans-hebrew: 'Noto Sans Hebrew';
+$skolar-devanagari: 'Skolar Devanagari';
+$skolar-sutta-web: 'Skolar Sutta Web';
+$skolar-sutta-web-sc: 'Skolar Sutta Web SC';
+$source-sans-pro: 'Source Sans Pro';
 
 @font-face {
     font-family: 'Noto Sans JP';
@@ -58,48 +56,40 @@ $source-sans-pro = 'Source Sans Pro';
     font-family: 'Noto Sans TC';
     font-weight: bold;
     font-style: normal;
-    src: url('/fonts/compiled/noto-sans-tc_bold_zh_lzh_b2890b5ed1af.woff2') format('woff2'),
-         url('/fonts/compiled/noto-sans-tc_bold_zh_lzh_b2890b5ed1af.woff') format('woff');
+    src: url('/fonts/compiled/noto-sans-tc_bold_zh_lzh_88e7512652ad.woff2') format('woff2'),
+         url('/fonts/compiled/noto-sans-tc_bold_zh_lzh_88e7512652ad.woff') format('woff');
 }
 
 @font-face {
     font-family: 'Noto Sans TC';
     font-weight: normal;
     font-style: normal;
-    src: url('/fonts/compiled/noto-sans-tc_regular_zh_lzh_c653357e167f.woff2') format('woff2'),
-         url('/fonts/compiled/noto-sans-tc_regular_zh_lzh_c653357e167f.woff') format('woff');
+    src: url('/fonts/compiled/noto-sans-tc_regular_zh_lzh_dbdd08434792.woff2') format('woff2'),
+         url('/fonts/compiled/noto-sans-tc_regular_zh_lzh_dbdd08434792.woff') format('woff');
 }
 
 @font-face {
-    font-family: 'DDC Uchen';
-    font-weight: normal;
-    font-style: normal;
-    src: url('/fonts/compiled/ddc-uchen_3ee9f860150e.woff2') format('woff2'),
-         url('/fonts/compiled/ddc-uchen_3ee9f860150e.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Gentium Basic';
+    font-family: 'Noto Serif';
     font-weight: bold;
     font-style: normal;
-    src: url('/fonts/compiled/gentium-basic-bold_3634b490e7e6.woff2') format('woff2'),
-         url('/fonts/compiled/gentium-basic-bold_3634b490e7e6.woff') format('woff');
+    src: url('/fonts/compiled/noto-serif_bold_c8053b195ced.woff2') format('woff2'),
+         url('/fonts/compiled/noto-serif_bold_c8053b195ced.woff') format('woff');
 }
 
 @font-face {
-    font-family: 'Gentium Basic';
-    font-weight: bold;
-    font-style: italic;
-    src: url('/fonts/compiled/gentium-basic-bold-italic_125c1221bd38.woff2') format('woff2'),
-         url('/fonts/compiled/gentium-basic-bold-italic_125c1221bd38.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Gentium Basic';
+    font-family: 'Noto Serif';
     font-weight: normal;
     font-style: italic;
-    src: url('/fonts/compiled/gentium-basic-italic_f1af42f106f5.woff2') format('woff2'),
-         url('/fonts/compiled/gentium-basic-italic_f1af42f106f5.woff') format('woff');
+    src: url('/fonts/compiled/noto-serif_italic_4420590b0955.woff2') format('woff2'),
+         url('/fonts/compiled/noto-serif_italic_4420590b0955.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Noto Serif';
+    font-weight: normal;
+    font-style: normal;
+    src: url('/fonts/compiled/noto-serif_regular_21916de691d2.woff2') format('woff2'),
+         url('/fonts/compiled/noto-serif_regular_21916de691d2.woff') format('woff');
 }
 
 @font-face {
@@ -210,8 +200,8 @@ $source-sans-pro = 'Source Sans Pro';
     font-family: 'Noto Sans';
     font-weight: bold;
     font-style: normal;
-    src: url('/fonts/compiled/noto-sans_bold_c6fe63085696.woff2') format('woff2'),
-         url('/fonts/compiled/noto-sans_bold_c6fe63085696.woff') format('woff');
+    src: url('/fonts/compiled/noto-sans_bold_fbaf2247904b.woff2') format('woff2'),
+         url('/fonts/compiled/noto-sans_bold_fbaf2247904b.woff') format('woff');
 }
 
 @font-face {
@@ -226,32 +216,16 @@ $source-sans-pro = 'Source Sans Pro';
     font-family: 'Noto Sans';
     font-weight: normal;
     font-style: italic;
-    src: url('/fonts/compiled/noto-sans_italic_b4df17855578.woff2') format('woff2'),
-         url('/fonts/compiled/noto-sans_italic_b4df17855578.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Noto Sans Myanmar';
-    font-weight: bold;
-    font-style: normal;
-    src: url('/fonts/compiled/noto-sans-myanmar-bold_e71bada3ef02.woff2') format('woff2'),
-         url('/fonts/compiled/noto-sans-myanmar-bold_e71bada3ef02.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Noto Sans Myanmar';
-    font-weight: normal;
-    font-style: normal;
-    src: url('/fonts/compiled/noto-sans-myanmar_8fd19345f372.woff2') format('woff2'),
-         url('/fonts/compiled/noto-sans-myanmar_8fd19345f372.woff') format('woff');
+    src: url('/fonts/compiled/noto-sans_italic_a47bf04486a1.woff2') format('woff2'),
+         url('/fonts/compiled/noto-sans_italic_a47bf04486a1.woff') format('woff');
 }
 
 @font-face {
     font-family: 'Noto Sans';
     font-weight: normal;
     font-style: normal;
-    src: url('/fonts/compiled/noto-sans_regular_813f78c04fe7.woff2') format('woff2'),
-         url('/fonts/compiled/noto-sans_regular_813f78c04fe7.woff') format('woff');
+    src: url('/fonts/compiled/noto-sans_regular_3524483ba4b8.woff2') format('woff2'),
+         url('/fonts/compiled/noto-sans_regular_3524483ba4b8.woff') format('woff');
 }
 
 @font-face {

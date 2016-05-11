@@ -21,6 +21,7 @@
 <!--[if lt IE 10]><script src="/js/vendor/modernizr-2.6.3.min.js"></script><![endif]-->
 {% endif %} {# /embed #}
 
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
 {%- assets 'css_core' -%}
   <link rel="stylesheet" href="{{ ASSET_URL }}">
 {% endassets -%}
@@ -51,7 +52,7 @@
 {% include 'outdated_browser.html' %}
 {% endif %}
 {% endif %} {# not ajax #}
-<main class="{font_class}">
+<main class="{{font_class}}">
 {% if ajax %}
 <meta name="title" content="{{title}}">
 {% endif %}

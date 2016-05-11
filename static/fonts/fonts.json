@@ -4,7 +4,6 @@
         "save_as": ["woff", "woff2"]
     },
     "families": {
-        "gentium-basic": "Gentium Basic",
         "skolar-sutta-web": "Skolar Sutta Web",
         "skolar-sutta-web-sc": "Skolar Sutta Web SC",
         "source-sans-pro": "Source Sans Pro",
@@ -12,12 +11,14 @@
         "ko-pub-batang": "Ko Pub Batang",
         "skolar-devanagari": "Skolar Devanagari",
         "hetu-schetu-sc": "hetu_schetu_sc",
-        "ddc-uchen": "DDC Uchen",
-        "noto-sans-myanmar": "Noto Sans Myanmar",
         "noto-sans-hebrew": "Noto Sans Hebrew",
         "noto-sans": {
             "name": "Noto Sans",
             "subset_languages": "*"
+        },
+        "NotoSerif": {
+                "name": "Noto Serif",
+                "subset_languages": "*"
         },
         "NotoSansKR": {
             "name": "Noto Sans KR",
@@ -40,15 +41,18 @@
     "styles": {
         "italic": "italic"
     },
-    "languages": {
-        "default": "skolar",
-        "ko": "noto",
-        "jp": "noto",
-        "zh": "noto",
-        "lzh": "noto",
-        "he": "noto",
-        "bo": "noto",
-        "my": "noto",
-        "si": "noto"
+    "css_font_class": {
+        "default": "skolar-font",
+        "ko": "noto-font",
+        "jp": "noto-font",
+        "zh": "skolar-font",
+        "lzh": "skolar-font",
+        "he": "noto-font",
+        "bo": "noto-font",
+        "my": "noto-font",
+        "si": "noto-font",
+        "hi": "noto-font",
+        "ta": "noto-font",
+        "mr": "noto-font"
     }
 }

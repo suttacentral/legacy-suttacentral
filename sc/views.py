@@ -19,6 +19,7 @@ from sc import assets, config, data_repo, scimm, util
 from sc.menu import get_menu
 from sc.scm import scm, data_scm
 from sc.classes import Parallel, Sutta
+from sc.textfunctions import cjk_regex
 import sc.search.query
 import sc.search.discourse
 import sc.search.autocomplete
@@ -191,7 +192,7 @@ class ViewBase:
             'embed': 'embed' in cherrypy.request.params,
             'search_query': '',
             'no_index': False,
-            'font_class': imm.font_data['languages']['default'],
+            'font_class': imm.font_data['css_font_class']['default'],
             'imm': imm,
             'ajax': 'ajax' in cherrypy.request.params,
             'cookies': {m.key: m.value for m in cherrypy.request.cookie.values()}
@@ -406,7 +407,7 @@ class TextView(ViewBase):
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
         
-        font_class = imm.font_data['languages'].get(self.lang_code)
+        font_class = imm.font_data['css_font_class'].get(self.lang_code)
         if font_class:
             context.font_class = font_class
         
@@ -435,7 +436,7 @@ class TextView(ViewBase):
         # Eliminate newlines from Full-width-glyph languages like Chinese
         # because they convert into spaces when rendered.
         # TODO: This check should use 'language' table
-        if self.lang_code in {'zh'}:
+        if self.lang_code in {'zh', 'lzh', 'ko', 'jp'}:
             context.text = self.massage_cjk(context.text)
         context.lang_code = self.lang_code
 
@@ -518,13 +519,15 @@ class TextView(ViewBase):
             raise cherrypy.NotFound()
     
     @staticmethod
-    def massage_cjk(text):
+    def massage_cjk(text, lang_code='lzh'):
         def deline(string):
             return string.replace('\n', '').replace('<p', '\n<p')
         
         m = regex.match(r'(?s)(.*?)(<aside[^>]+id="metaarea".*?</aside>)(.*)', text)
         if m or not m:
             pre, meta, post = m[1:]
+            
+            meta = cjk_regex.sub(r'<span lang="{}">\1</span>'.format(lang_code), meta)
             return ''.join([deline(pre), meta, deline(post)])
         return deline(text)
 

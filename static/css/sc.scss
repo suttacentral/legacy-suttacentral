@@ -152,17 +152,6 @@ q:after {
 /*#text_info_button, #pali_lookup_button, #zh2en*/
 
 /* TEXT */
-
-
-.evam,  {
-    @include serif-small-caps;
-    letter-spacing:0.02em;
-}
-
-.badfonts .evam {
-    font-family: serif;
-}
-
 .sutta ul {
     list-style-type: none;
     padding:0 0 1.5em 0;
@@ -295,9 +284,10 @@ Text hypothetically reconstructed by the editor or translator.
     background:#fefefe;
     box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);
 }
-p .add .author, p.add .author {
-        @include sans-serif-small-caps;
-    }
+
+p .add, p .author, p.add p.author {
+    @include sans-serif-small-caps;
+}
 
 /*There are some editorial additions marked <span class="add"></span>. Previously these were hidden by default, but they are now visible by default.
 
@@ -309,8 +299,9 @@ Text added by the editor or translator for clarification.
     }
     }
 
-.metre {display:none;
-.infomode & {
+.metre {
+    display:none;
+    .infomode & {
         color:#9B8D00;
         font-family: 'hetu_schetu_sc','Source Sans Pro',sans-serif;
         display: block;
@@ -320,13 +311,14 @@ Text added by the editor or translator for clarification.
         letter-spacing:0.2em; 
         font-size:0.6em;
     }
-    }
+}
 
-.expanded {display:inline
-.infomode & {
+.expanded {
+    display:inline
+    .infomode & {
         color: misc-color(light-medium-gray);
     }
-    }
+}
 
 .suppliedmetre {
     color: #767676;
@@ -382,9 +374,7 @@ Reading corrected by the editor.
 */
 
 .sic {
-    
     .infomode & {
-        
         color: pastel-color(bright-red);
     }
 }
