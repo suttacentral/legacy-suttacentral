@@ -67,14 +67,12 @@ def quick():
     )
 
 @task
-
-@task
 def push_fonts(delete=False):
     """Copy local fonts to the staging server."""
     blurb(push_fonts)
     run('rsync -avz ' +
         '--exclude="compiled" ' +
-        '--include="*.woff" --include="*.woff2" --include="nonfree"' +
+        '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree"' +
         '--exclude="*" ' +
         ('--delete ' if delete else '') +
         'static/fonts/ ' +
@@ -87,7 +85,7 @@ def pull_fonts(delete=False):
     blurb(pull_fonts)
     run('rsync -avz ' +
         '--exclude="compiled" ' +
-        '--include="*.woff" --include="*.woff2" --include="nonfree"' +
+        '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree"' +
         '--exclude="*" ' +
         ('--delete ' if delete else '') +
         'sc-staging@vps.suttacentral.net:' + 
