@@ -20,14 +20,15 @@ def parse_args():
     parser.add_argument('-f', '--flat', action='store_true', help="Don't use relative paths")
     parser.add_argument('-z', '--no-zfill', action='store_true', help="Don't zfill numbers")
     parser.add_argument('--out', type=str, help="Destination Folder")
+    parser.add_argument('--lang', type=str, default='pi', help='Language Code')
     parser.add_argument('--strip-tags',
                         type=str,
                         help="CSS selector for stripping tags but leaving text",
-                        default=".ms, .msdiv")
+                        default=".ms, .msdiv, .t, .t-linehead, .tlinehead, .t-byline, .t-juanname, .juannum, .mirror-right")
     parser.add_argument('--strip-trees',
                         type=str,
                         help="CSS selector for removing entire element trees",
-                        default="#metaarea")
+                        default="#metaarea, .mirror-left, p.suttainfo")
     parser.add_argument('-v', '--verbose', action='store_true');
     parser.add_argument('infiles', type=str, nargs='+', help="Source HTML Files")
     return parser.parse_args()
@@ -145,20 +146,28 @@ class Html2Po:
     def segment_inner(self, e):
         html_string = lxml.html.tostring(e, encoding='unicode').strip()
         html_string = html_string.replace('\n', ' ').replace('\xa0', ' ')#.replace('\xad', '')
-        m = regex.match(r'<[^<]+>\s*(.*)</\w+>', html_string, flags=regex.DOTALL)
+        m = regex.match(r'<[^<]+>[ \n\t]*(.*)</\w+>', html_string, flags=regex.DOTALL)
         if not m:
             raise ValueError(html_string)
             
         html_string = m[1]
-        m = regex.match(r'(?i)((?:<a[^<]*></a>\s*)*)(.*)', html_string)
+        m = regex.match(r'(?i)((?:<a[^<]*></a>[ \n\t]*)*)(.*)', html_string)
         if m[1]:
             self.add_token(TokenType.comment, m[1])
             html_string = m[2]
         html_string = self.mangle(html_string)
         logger.info(html_string)
-        pattern = r'(?<!\d+)([.;:!?—](?:\p{punct}+|\s*MANG[0-9]+GLE[\p{punct}\d]*MANG[0-9]+GLE)*[\u200b\s]*|(?<!^)…\s*(?:pe\s*…\s*)?[.;:!?—]*)'
+        pattern = r'(?<!\d+)([.;:!?—，。：；！…？—](?:\p{punct}+|[ \n\t]*MANG[0-9]+GLE[\p{punct}\d]*MANG[0-9]+GLE)*[\u200b\s]*|(?<!^)…[ \n\t]*(?:pe[ \n\t]*…[ \n\t]*)?[.;:!?—；：。，，。：；！…？—]*)'
         parts = regex.split(pattern, html_string)
         segments = [''.join(parts[i:i+2]).strip() for i in range(0, len(parts), 2)]
+        
+        for i, segment in list(enumerate(segments)):
+            print(segment)
+            m = regex.match(r'(?r)[「「『]$', segment)
+            if m:
+                print(segments[i], segments[i+1], segment[-1] + segments[i + 1])
+                segments[i + 1] = segment[-1] + segments[i + 1]
+                segments[i] = segment[:-1]
         sentence_count = 0
         for segment in segments:
             if not segment:
@@ -168,7 +177,7 @@ class Html2Po:
             for i in range(0, len(lines), 2):
                 line = lines[i].strip()
                 if line:
-                    m = regex.match(r'^\s*(</\w+>)(.*)', line, flags=regex.DOTALL)
+                    m = regex.match(r'^[ \n\t]*(</\w+>)(.*)', line, flags=regex.DOTALL)
                     if m:
                         if self.token_stream[-1].type == TokenType.newline and self.token_stream[-2].type == TokenType.text:
                             self.token_stream[-2].value += m[1]
@@ -207,15 +216,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: {}\n"
+"POT-Creation-Date: {date}\n"
 "Last-Translator: sujato <sujato@gmail.com>\n"
 "Language-Team: suttacentral\n"
-"Language: pi\n"
+"Language: {lang}\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: sc-html2po\n"'''.format(time.strftime('%Y-%m-%d %H:%M%z'))
+"X-Generator: sc-html2po\n"'''.format(date=time.strftime('%Y-%m-%d %H:%M%z'), lang=args.lang)
     
     def pretty_string(self, string):
         string = regex.sub(r'(?i)\n(\n#: <br[^>]*>)', r'\1', string)
