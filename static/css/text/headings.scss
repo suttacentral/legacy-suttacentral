@@ -117,7 +117,6 @@
                 letter-spacing: 0.05em;
             }
 
-
             h1 ~ p {
                 @include serif;
                 text-transform:none;
@@ -151,7 +150,13 @@
 }
 
 [lang=th] {
-
+    .sutta {
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: bold;
+            font-style: normal;
+        }
+    }
+    
 }
 
 [lang=he] {
