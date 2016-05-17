@@ -407,9 +407,8 @@ class TextView(ViewBase):
         context.title = textdata.name if textdata else '?'
         context.text = m['content']
         
-        font_class = imm.font_data['css_font_class'].get(self.lang_code)
-        if font_class:
-            context.font_class = font_class
+        if self.lang_code in imm.font_data['css_font_class']:
+            context.font_class = imm.font_data['css_font_class'][self.lang_code]
         
         context.discourse_link = None
         context.discourse_results = None

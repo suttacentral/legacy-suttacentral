@@ -43,16 +43,18 @@
     },
     "css_font_class": {
         "default": "skolar-font",
-        "ko": "noto-font",
+        "ko": "noto-sans-font",
         "jp": "noto-font",
-        "zh": "skolar-font",
-        "lzh": "skolar-font",
-        "he": "noto-font",
-        "bo": "noto-font",
-        "my": "noto-font",
-        "si": "noto-font",
-        "hi": "noto-font",
-        "ta": "noto-font",
-        "mr": "noto-font"
+        "zh": "noto-sans-font",
+        "lzh": "noto-sans-font",
+        "he": "noto-sans-font",
+        "bo": "noto-sans-font",
+        "my": "noto-sans-font",
+        "si": "noto-sans-font",
+        "hi": "noto-sans-font",
+        "ta": "noto-sans-font",
+        "mr": "noto-sans-font",
+        "th": "",
+        "ru": "noto-font"
     }
 }

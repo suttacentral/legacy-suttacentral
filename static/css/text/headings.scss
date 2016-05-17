@@ -53,9 +53,6 @@
     .hgroup {
         margin-top: 6em;
         p {
-            @include sans-serif-small-caps;
-            text-transform: lowercase;
-            letter-spacing: 0.05em;
             margin: 0;
             font-size: 1em;
             padding:0;
@@ -114,6 +111,12 @@
         }
     
         .hgroup {
+            p {
+                @include sans-serif-small-caps;
+                text-transform: lowercase;
+                letter-spacing: 0.05em;
+            }
+
 
             h1 ~ p {
                 @include serif;
@@ -124,7 +127,7 @@
     }
 }
 
-.noto-font {
+.noto-sans-font {
     font-family: $noto-sans serif;
     letter-spacing: 0;
     line-height: 1.8;
@@ -145,4 +148,14 @@
     [lang=pi], [lang=en] {
         font-family: 'Noto Sans', sans-serif;
     }
+}
+
+[lang=th] {
+
+}
+
+[lang=he] {
+  h1, h2, h3, h4, h5, h6, .hgroup p {
+    text-transform: lowercase;
+  }
 }

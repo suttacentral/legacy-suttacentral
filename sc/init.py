@@ -109,7 +109,7 @@ class ModuleReloader:
     @staticmethod
     def get_file_mtimes():
         mtimes = {}
-        for k in sys.modules:
+        for k in list(sys.modules):
             if k.startswith('sc.'):
                 module = sys.modules[k]
                 mtimes[k] = (os.stat(module.__file__).st_mtime, module)
@@ -129,8 +129,6 @@ class ModuleReloader:
                     
         self._file_mtimes = new_mtimes
 
-
-
 class AutoReloader(threading.Thread):
     """Auto Reloader which examines state of files and decides if the
     server should reload data.
@@ -138,8 +136,9 @@ class AutoReloader(threading.Thread):
     Don't use this in production!
     """
     
-    def __init__(self):
+    def __init__(self, extra_files=[]):
         super().__init__(daemon=True)
+        self.extra_files = list(extra_files)
         self.watchlist = []
         self.mtimes = {}
         self.last_mtime_sum = None
@@ -157,7 +156,7 @@ class AutoReloader(threading.Thread):
         return sorted(files)
     
     def step(self):
-        watchlist = self.watchlist
+        watchlist = self.extra_files + self.watchlist
         mtimes = self.mtimes
         major = (self.i % 10 == 0)
         if major:
@@ -218,7 +217,7 @@ if not _reloading:
 def start_autoreloader():
     global auto_reloader
     if not auto_reloader:
-        auto_reloader = AutoReloader().start()
+        auto_reloader = AutoReloader(extra_files=[sc.static_dir / 'fonts' / 'fonts.json']).start()
         
     
     
