@@ -255,7 +255,7 @@ def compile_fonts(flavors=['woff', 'woff2']):
     
     with (sc.static_dir / 'css' / 'fonts' / 'fonts-auto.scss').open('w') as f:
         f.write(font_header)
-        f.writelines("${}: '{}';\n".format(name_to_var(key), details if isinstance(details, str) else details["name"]) for key, details in sorted(font_data["families"].items()) if details)
+        f.writelines("${}: '{}';\n".format(name_to_var(key) if (isinstance(details, str) or not 'var' in details) else details['var'], details if isinstance(details, str) else details["name"]) for key, details in sorted(font_data["families"].items()) if details)
         f.writelines(font_face_decls)
     
     for key in set(font_data["families"]) - fonts_seen:

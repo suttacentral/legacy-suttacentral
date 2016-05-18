@@ -29,7 +29,8 @@
             "name": "Noto Sans JP",
             "subset_languages": "jp"
         },
-        "NotoSansTC": {
+        "NotoSansCJKtc": {
+            "var": "noto-sans-tc",
             "name": "Noto Sans TC",
             "subset_languages": ["zh", "lzh"]
         },
