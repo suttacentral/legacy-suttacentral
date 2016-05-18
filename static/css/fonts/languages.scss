@@ -25,48 +25,46 @@
 
 
 [lang=zh], [lang=lzh] {
-    font-family: $noto-sans-tc, serif;
+    font-family: $noto-sans-tc, $noto-sans, serif;
 }
 
 [lang=si], [lang=pi-Sinh] {
-    font-family: 'Noto Sans Sinhala', serif;
+    font-family: 'Noto Sans Sinhala', $noto-sans, serif;
     line-height: 1.8;
 }
 
 [lang=my], [lang=pi-Mymr] {
-    font-family: 'Noto Sans Myanmar', serif;
+    font-family: 'Noto Sans Myanmar', $noto-sans, serif;
     line-height: 2;
 }
 
 [lang=th], [lang=pi-Thai] {
-    font-family: 'Lumen Thai', serif;
+    font-family: 'Lumen Thai', $skolar-sutta-web, serif;
     line-height: 2;
 }
 
 [lang=hi], [lang=mr], [lang=pi-Deva] {
-    font-family: 'Skolar Devanagari', serif;
+    font-family: 'Skolar Devanagari', $skolar-sutta-web, serif;
 }
 
 [lang=ko] {
-    font-family: $noto-sans-kr, serif;
+    font-family: $noto-sans-kr, $noto-sans, serif;
 }
 
 [lang=jp] {
-    font-family: $noto-sans-jp, serif;
+    font-family: $noto-sans-jp, $noto-sans, serif;
 }
 
 [lang=bo] {
-    font-family: 'DDC Uchen', serif;
+    font-family: $noto-sans-tibetan, $noto-sans, serif;
     line-height:2;
 }
 
 [lang=he] {
-    font-family:  'Noto Sans Hebrew', serif;
+    font-family:  'Noto Sans Hebrew', $noto-sans, serif;
     line-height:1.5;
 }
 
 [lang=ta] {
-    font-family: 'Noto Sans Tamil', serif;
+    font-family: 'Noto Sans Tamil', $noto-sans, serif;
 }
-
-

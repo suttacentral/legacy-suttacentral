@@ -167,7 +167,7 @@ def compile_fonts(flavors=['woff', 'woff2']):
                     
                     for language in subset_languages:
                         codepoints = tim.get_codepoints_used(lang_uid=language, weight_or_style=weight)
-                        if not codepoints:
+                        if codepoints is None:
                             logger.error('Error in fonts.json, language uid "{}" not found in TIM'.format(language))
                         else:
                             subset_unicodes.update(codepoints)
