@@ -175,8 +175,11 @@ def compile_fonts(flavors=['woff', 'woff2']):
                 subset_md5 = md5.copy()
                 subset_md5.update(subset_text.encode(encoding='utf8'))
                 
-                if not nonfree:
+                if nonfree and not sc.config.app['debug']:
+                    outname = ''
+                else:
                     outname = name_to_var(subset_details['name']) + '_'
+                
                 
                 outname += weight.replace('normal', 'regular')
                 if subset_languages != '*':
@@ -251,11 +254,30 @@ def compile_fonts(flavors=['woff', 'woff2']):
         for file in unneeded_fonts:
             file.unlink()
     
-    font_face_decls
+    def details_to_variable(details):
+        if isinstance(details, list):
+            raise TypeError('details should not be a list')
+        if isinstance(details, str):
+            name = details
+            variable = name_to_var(name)
+        else:
+            if 'var' in details:
+                variable = details['var']
+                name = details['name']
+            else:
+              name = details['name']
+              variable = name_to_var(name)
+        return {"variable": variable, "name": name}
     
+    variable_decls = []
+    for key, details in sorted(font_data["families"].items()):
+        if details:
+          variable_decls.extend(details_to_variable(details) for details in (details if isinstance(details, list) else [details]))
+
     with (sc.static_dir / 'css' / 'fonts' / 'fonts-auto.scss').open('w') as f:
         f.write(font_header)
-        f.writelines("${}: '{}';\n".format(name_to_var(key) if (isinstance(details, str) or not 'var' in details) else details['var'], details if isinstance(details, str) else details["name"]) for key, details in sorted(font_data["families"].items()) if details)
+
+        f.writelines("${variable}: '{name}';\n".format(**e) for e in variable_decls)
         f.writelines(font_face_decls)
     
     for key in set(font_data["families"]) - fonts_seen:

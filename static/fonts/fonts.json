@@ -4,7 +4,18 @@
         "save_as": ["woff", "woff2"]
     },
     "families": {
-        "skolar-sutta-web": "Skolar Sutta Web",
+        "skolar-sutta-web": [
+            {
+                "name": "Skolar Sutta Web",
+                "subset_languages": "*",
+                "subset_regex": "[^\\p{Script=Cyrillic}]"
+            },
+            {
+                "name": "Skolar Cyrillic",
+                "subset_languages": "*",
+                "subset_regex": "[\\p{Script=Cyrillic}]"
+            }
+        ],
         "skolar-sutta-web-sc": "Skolar Sutta Web SC",
         "source-sans-pro": "Source Sans Pro",
         "lumen-thai": "Lumen Thai",
