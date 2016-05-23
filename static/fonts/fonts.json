@@ -9,6 +9,7 @@
             "name": "Skolar Sutta Web",
             "subset_languages": "*"
         },
+        "skolar-sutta-web": null,
         "skolar-sutta-web-sc": "Skolar Sutta Web SC",
         "source-sans-pro": "Source Sans Pro",
         "lumen-thai": "Lumen Thai",
@@ -61,7 +62,6 @@
         "hi": "noto-sans-font",
         "ta": "noto-sans-font",
         "mr": "noto-sans-font",
-        "th": "",
-        "ru": "noto-font"
+        "th": ""
     }
 }

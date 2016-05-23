@@ -197,6 +197,16 @@ def compile_fonts(flavors=['woff', 'woff2']):
                         subset_text_file.write(subset_text)
                         subset_text_file.flush()
                         fontTools.subset.main(args=[str(file), 
+                                        #'--layout-features=*',
+                                        #'--glyph-names',
+                                        #'--symbol-cmap',
+                                        #'--legacy-cmap',
+                                        #'--notdef-glyph',
+                                        #'--notdef-outline',
+                                        #'--recommended-glyphs',
+                                        #'--name-IDs=*',
+                                        #'--name-legacy',
+                                        #'--name-languages=*',
                                         '--output-file={}'.format(str(primary_out_file)),
                                         '--text-file={}'.format(subset_text_file.name), 
                                         '--flavor={}'.format(suffix),
