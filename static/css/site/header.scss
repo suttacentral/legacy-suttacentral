@@ -3,6 +3,8 @@ $header-padding:            6px;
 $header-border-width:       4px;
 $panel-offset-top:          $header-height + $header-padding - 2px;
 
+$id-offset-top:                 $header-height + $header-padding + $header-border-width + 8px;
+
 $header-left-width:             240px;
 $header-left-width-narrow:      68px;
 $header-left-width-very-narrow: 40px;
@@ -498,3 +500,4 @@ height: initial;
         transform: rotate(45deg);
     }
 }
+
