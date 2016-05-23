@@ -88,6 +88,7 @@ a.ud-sutta:before, a.ud-vagga-sutta:before {content:"Ud "}
 a.ttc:before {content:"TTC "}
 /*a.tu:before {content:" "}*/
 a.uv:before {content:"Uv "}
+a.vagga-gatha-num-sc:before {content:"Vagga/verse "}
 a.vai58:before, a.vai59:before, a.vai61:before {content:"Vai "}
 a.var-v:before {content:"Var-v "}
 a.verse-num-sc:before {content:"SC verse "}
@@ -146,6 +147,8 @@ CSS Class	HTML Title
 .verse-num		"Verse number."
 
 .adh-v          "Paragraph numbers in Adhikaraṇavastu, Gnoli 1978"
+
+.ba             "Paragraph numbers in The Book of Analysis, Thittila 1969"
 
 .bhaisv         "Paragraph numbers in Bhaiṣajyavastu, J. Chung und K. Wille"
 
@@ -229,6 +232,8 @@ CSS Class	HTML Title
 
 .pravr-v-iv     "Paragraph numbers in Pravrajyāvastu vol IV Vogel/Wille"
 
+.pts-s          "Pali Text Society section number."
+
 .sbvi           "Paragraph numbers in Saṅghabhedavastu, Gnoli / Venkatacharya, 1977-78"
 
 .sbvii          "Paragraph numbers in Saṅghabhedavastu, Gnoli / Venkatacharya, 1977-78"
@@ -252,6 +257,8 @@ CSS Class	HTML Title
 .har04		"Paragraph number in Hartmann, 2004."
 
 .fuk03		"Page numbers in Fukita, 2003"
+
+.vagga-gatha-num-sc  "SuttaCentral vagga and verse number"
 
 .var-v          "Paragraph numbers in Varsavastu Masanori Shono"
 

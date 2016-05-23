@@ -11,7 +11,8 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
     a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c, a.wp, a.wr, a.divy,
     a.yam72, a.es, a.bm, a.bn, a.hh, a.jd, a.ks, a.nm, a.np, a.pl, a.wg, a.jsk, a.mt, a.sb, a.ss, a.tb,
     a.kl, a.bi, a.bjt, a.ttc, #text:lang(si) a.msdiv, a.bhaisv, a.msvii, a.mat96, a.kat, a.pand-v,
-    a.msviii, a.say-v, a.adh-v, a.cps, a.sbvi, a.sbvii, a.ia, a.verse-num-sc
+    a.msviii, a.say-v, a.adh-v, a.cps, a.sbvi, a.sbvii, a.ia, a.verse-num-sc, 
+    a.vagga-gatha-num-sc, a.ba, a.pts-s
 {
     visibility:hidden;
     text-align:left;
@@ -45,13 +46,21 @@ a.t, a.t-linehead {color: saturated-color(plain-green);}
 div#text:not(.line-by-line) a.t {display: none;}
 a.wp, a.gbm, a.verse-num-sc {color: saturated-color(plain-red);}
 a.pts {color: saturated-color(dark-yellow);}
-a.pts1ed, a.snp-vagga-section-verse {color: saturated-color(dark-yellow);}
-a.pts2ed, a.snp-vagga-verse,a.pts-vp-en {color: saturated-color(plain-red);clear:both;}
+a.pts1ed, a.snp-vagga-section-verse, a.vagga-gatha-num-sc {color: saturated-color(dark-yellow);}
+a.pts2ed, a.snp-vagga-verse,a.pts-vp-en, a.pts-s {color: saturated-color(plain-red);}
 a.vn, a.sht {color: saturated-color(plain-purple);}
 a.wal52,a.mat88,a.vai58,a.mat96 {color: saturated-color(plain-purple);}
 
 /* Buddhist Discipline Paragraph Numbers */
 a.pts-vp-pi, a.pts-p-pi {color: saturated-color(plain-purple);}
+
+/* Paragraph ID to open below the header when header is pinned  */
+main.header-pinned {
+     a.sc, a.t-linehead, a.verse-num-sc, a.mc, a.jb, a.uv, a.vagga-gatha-num-sc {
+        margin-top: -$id-offset-top;
+         padding-top: $id-offset-top;
+         }
+} 
 
 /* TODO systematically do for all of them (alphabetical order)
 a.adh-v
@@ -102,6 +111,7 @@ a.pos-v
 a.prava-v
 a.pravr-v-i, a.pravr-v-ii, a.pravr-v-iii, a.pravr-v-iv
 a.pts
+a.pts-s
 a.san87, a.san89
 a.say-v
 a.sb
@@ -119,6 +129,7 @@ a.ttc
 a.ud-sutta
 a.ud-vagga-sutta
 a.uv
+a.vagga-gatha-num-sc
 a.vai58, a.vai59, a.vai61
 a.var-v
 a.verse-num-sc
