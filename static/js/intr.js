@@ -22,7 +22,7 @@ sc.intr = {
                         return
                     }
                 }
-                $trigger.text($links.length - 1 + ' ▾')
+                var linksCount = $links.length;
 
                 var $dropdown = $('<div class="dropdown dropdown-relative dropdown-tip dropdown-anchor-right"/>').hide(),
                     $dropdownPanel = $('<div class="dropdown-panel"/>');
@@ -37,9 +37,11 @@ sc.intr = {
                 $div.append($dropdown)
                 if ($specialLang.length) {
                     $div.prepend($specialLang.addClass('special'));
+                    linksCount -= 1;
                 } else {
                     $div.prepend('<span class="tran special">  </span>')
                 }
+                $trigger.text(linksCount + ' ▾')
             });
             console.log('Hiding dropdowns');
         }
