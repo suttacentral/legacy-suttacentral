@@ -36,11 +36,12 @@
 {% for hit in results.hits.hits -%}
 {% set source = hit._source %}
 {% if hit._type == 'text' %}
-<li class="result-text">
+{% set lang_iso_code = imm['languages'][source.lang].iso_code %}
+<li class="result-text" lang={{lang_iso_code}}>
 {% if source.is_root %}
-<span class="type" title="{{source.lang}}">Root Text</span>
+<span class="type" title="{{lang_iso_code}}">Root Text</span>
 {% else %}
-<span class="type" title="{{source.lang}}">Translation</span>
+<span class="type" title="{{lang_iso_code}}">Translation</span>
 {% endif %}
 <a class="text-result" href="/{{ source.lang }}/{{ source.uid }}">{{ source.uid|uid_to_acro }} : {{ source.heading.title|title }}</a>
 {% elif hit._type == 'definition' %}

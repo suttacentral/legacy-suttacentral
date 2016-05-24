@@ -138,6 +138,8 @@ class ViewBase:
     Views should assign the 'title' context variable so that the page will have
     a (reasonably) relavent title.
     """
+    
+    should_add_lang_tags = True
 
     @property
     def env(self):
@@ -205,6 +207,15 @@ class ViewBase:
     def massage_whitespace(self, text):
         return regex.sub(r'\n[ \n\t]+', r'\n', text)
     
+    cjk_tag_rex = regex.compile(r'<(td[^>]*)>([^>]*' + cjk_regex.pattern.strip('()+') + '[^>]*)</(td)>')
+    
+    def add_lang_tags(self, string):
+        def subfn(m):
+            if 'lang' in m[1]:
+                return m[0]
+            return r'<{m[1]} lang="lzh">{m[2]}</{m[3]}>'.format(m=m)
+        return self.cjk_tag_rex.sub(subfn, string)
+    
     def panel_html(self, _cache=[]):
         if not _cache:
             _cache.append(GenericView('panel', {}).render())
@@ -229,6 +240,8 @@ class ViewBase:
         string = template.render(dict(context))
         if self.should_fix_whitespace:
             string = self.massage_whitespace(string)
+        if self.should_add_lang_tags:
+          string = self.add_lang_tags(string)
         return string
 """
 ['__cause__', '__class__', '__context__', '__delattr__', '__dict__',
