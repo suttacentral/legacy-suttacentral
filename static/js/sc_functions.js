@@ -424,24 +424,21 @@ function toSyllablesInit(){
 
 function transliterate(func){
     if (!wordMap[func.name]) wordMap[func.name] = {};
-    if (func == toMyanmar) {
-        $('#text').attr('lang', 'my');
-    }
-if (!wordMap[func.name]) wordMap[func.name] = {};
-    if (func == toThai) {
-        $('#text').attr('lang', 'th');
-    }
-    if (!wordMap[func.name]) wordMap[func.name] = {};
-    if (func == toSinhala) {
-        $('#text').attr('lang', 'si');
-    }
-     if (!wordMap[func.name]) wordMap[func.name] = {};
-    if (func == toDevar) {
-        $('#text').attr('lang', 'hi');
-    }
 
-     else {
-        // TODO other languages
+    
+    if (func == toMyanmar) {
+        $('#text').attr('lang', 'pi-Mymr');
+    }
+    else if (func == toThai) {
+        $('#text').attr('lang', 'pi-Thai');
+    }
+    else if (func == toSinhala) {
+        $('#text').attr('lang', 'pi-Sinh');
+    }
+    else if (func == toDevar) {
+        $('#text').attr('lang', 'pi-Deva');
+    }
+    else {
         $('#text').attr('lang', 'pi');
     }
     if (func == toSyllables) {
