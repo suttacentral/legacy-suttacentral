@@ -171,7 +171,8 @@ def compile_fonts(flavors=['woff', 'woff2']):
                             logger.error('Error in fonts.json, language uid "{}" not found in TIM'.format(language))
                         else:
                             subset_unicodes.update(codepoints)
-                subset_text = ''.join(sorted(subset_unicodes))
+                subset_text = ''.join(subset_unicodes)
+                subset_text = ''.join(sorted(subset_text.lower() + subset_text.upper()))
                 subset_md5 = md5.copy()
                 subset_md5.update(subset_text.encode(encoding='utf8'))
                 
