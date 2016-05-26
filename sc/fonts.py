@@ -211,6 +211,7 @@ def compile_fonts(flavors=['woff', 'woff2']):
                                         '--output-file={}'.format(str(primary_out_file)),
                                         '--text-file={}'.format(subset_text_file.name), 
                                         '--flavor={}'.format(suffix),
+                                        '--layout-features+=smcp',
                                         '--desubroutinize'])
                 font = None
                 size = {}

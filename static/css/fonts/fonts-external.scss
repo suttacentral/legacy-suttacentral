@@ -44,3 +44,10 @@
        url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.woff) format('woff'),
        url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.ttf) format('truetype');
 }
+
+@font-face {
+  font-family: 'Skolar PE';
+  font-style: normal;
+  font-weight: normal;
+  src: url(/fonts/nonfree/SkolarPE-Regular.otf);
+}

@@ -11,11 +11,13 @@
         },
         "skolar-sutta-web": null,
         "skolar-sutta-web-sc": "Skolar Sutta Web SC",
-        "source-sans-pro": "Source Sans Pro",
+        "SourceSansPro": {
+            "name": "Source Sans Pro",
+            "subset_languages": "*"
+        },
         "lumen-thai": "Lumen Thai",
         "ko-pub-batang": "Ko Pub Batang",
         "skolar-devanagari": "Skolar Devanagari",
-        "hetu-schetu-sc": "hetu_schetu_sc",
         "noto-sans-hebrew": "Noto Sans Hebrew",
         "NotoSansTibetan": "Noto Sans Tibetan",
         "noto-sans": {

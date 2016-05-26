@@ -105,10 +105,12 @@
 .skolar-font {
     .sutta {
         h1, h2, h3, h4, h5, h6, .hgroup p {
-            font-family: $skolar-sutta-web-sc, $source-sans-pro, sans-serif;
+            font-family: $skolar-sutta-web, $source-sans-pro, sans-serif;
             text-align: center;
             font-weight: normal;
             letter-spacing: 0.02em;
+            font-variant-caps: small-caps;
+            font-feature-settings: "smcp" 1;
         }
     
         .hgroup {
