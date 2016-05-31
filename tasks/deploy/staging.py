@@ -73,7 +73,7 @@ def push_fonts(delete=False):
     run('rsync -avz '
         '--exclude="compiled" '
         '--exclude="*~" '
-        '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree"'
+        '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree" '
         '--exclude="**" ' +
         ('--delete ' if delete else '') +
         'static/fonts/ '
@@ -87,7 +87,7 @@ def pull_fonts(delete=False):
     run('rsync -avz '
         '--exclude="compiled" '
         '--exclude="*~" '
-        '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree"'
+        '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree" '
         '--exclude="**" ' +
         ('--delete ' if delete else '') +
         'sc-staging@vps.suttacentral.net:' + 
