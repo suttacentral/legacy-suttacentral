@@ -70,30 +70,33 @@ def quick():
 def push_fonts(delete=False):
     """Copy local fonts to the staging server."""
     blurb(push_fonts)
-    run('rsync -avz '
-        '--exclude="compiled" '
-        '--exclude="*~" '
-        '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree" '
-        '--exclude="**" ' +
-        ('--delete ' if delete else '') +
-        'static/fonts/ '
-        'sc-staging@vps.suttacentral.net:'
-        '/home/sc-staging/suttacentral/static/fonts/', fg=True)
+    run(' '.join([
+          'rsync -avz',
+          '--exclude="compiled"',
+          '--exclude="*~"',
+          '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree"',
+          '--exclude="**"',
+          ('--delete' if delete else ''),
+          'static/fonts/',
+          'sc-staging@vps.suttacentral.net:/home/sc-staging/suttacentral/static/fonts/'
+        ]), 
+        fg=True)
 
 @task
 def pull_fonts(delete=False):
     """Copy fonts from the staging server to local"""
     blurb(pull_fonts)
-    run('rsync -avz '
-        '--exclude="compiled" '
-        '--exclude="*~" '
-        '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree" '
-        '--exclude="**" ' +
-        ('--delete ' if delete else '') +
-        'sc-staging@vps.suttacentral.net:' + 
-        '/home/sc-staging/suttacentral/static/fonts/' +
-        'static/fonts/ '
-        , fg=True)
+    run(' ' .join([
+          'rsync -avz',
+          '--exclude="compiled"',
+          '--exclude="*~"',
+          '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree"',
+          '--exclude="**"', 
+          ('--delete' if delete else ''),
+          'sc-staging@vps.suttacentral.net:/home/sc-staging/suttacentral/static/fonts/',
+          'static/fonts/'
+        ]),
+        fg=True)
         
 def rebuild_tim():
     """ Rebuild TIM on the staging server """
