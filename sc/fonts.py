@@ -148,6 +148,8 @@ def compile_fonts(flavors=['woff', 'woff2']):
             continue
         
         if font_details['subset']:
+            extra_subset_commands = ['--layout-features+=smcp,c2sc',
+                                     '--desubroutinize']
             if font_details['weight'] in {'bold', 'semibold'}:
                 weight = 'bold'
             elif font_details['style'] in {'italic'}:
@@ -175,6 +177,7 @@ def compile_fonts(flavors=['woff', 'woff2']):
                 subset_text = ''.join(sorted(subset_text.lower() + subset_text.upper()))
                 subset_md5 = md5.copy()
                 subset_md5.update(subset_text.encode(encoding='utf8'))
+                subset_md5.update(''.join(extra_subset_commands).encode(encoding='utf8'))
                 
                 if nonfree and not sc.config.app['debug']:
                     outname = ''
@@ -210,9 +213,7 @@ def compile_fonts(flavors=['woff', 'woff2']):
                                         #'--name-languages=*',
                                         '--output-file={}'.format(str(primary_out_file)),
                                         '--text-file={}'.format(subset_text_file.name), 
-                                        '--flavor={}'.format(suffix),
-                                        '--layout-features+=smcp',
-                                        '--desubroutinize'])
+                                        '--flavor={}'.format(suffix)] + extra_subset_commands)
                 font = None
                 size = {}
                 for flavor in font_details['save_as'][1:]:
