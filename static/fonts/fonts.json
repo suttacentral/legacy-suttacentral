@@ -5,14 +5,11 @@
     },
     "families": {
         "SkolarPE": {
-            "var": "skolar-sutta-web",
             "name": "Skolar Sutta Web",
             "subset_languages": "*"
         },
-        "skolar-sutta-web": null,
-        "skolar-sutta-web-sc": "Skolar Sutta Web SC",
-        "SourceSansPro": {
-            "name": "Source Sans Pro",
+        "SkolarSansPE": {
+            "name": "Skolar Sans",
             "subset_languages": "*"
         },
         "lumen-thai": "Lumen Thai",
@@ -36,15 +33,19 @@
             "name": "Noto Sans JP",
             "subset_languages": "jp"
         },
-        "NotoSansCJKtc": {
-            "var": "noto-sans-tc",
-            "name": "Noto Sans TC",
+        "NotoSansCJKsc": {
+            "name": "Noto Sans SC",
             "subset_languages": ["zh", "lzh"]
         },
-        "NotoSansSC": null
+        "NotoSansCJKtc": {
+            "name": "Noto Sans TC",
+            "subset_languages": ["zh", "lzh"]
+        }
     },
     "weights": {
         "bold": "bold",
+        "bd": "bold",
+        "it": "italic",
         "semibold": "600"
     },
     "styles": {

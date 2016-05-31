@@ -4,15 +4,19 @@
 }
 
 @mixin serif-small-caps($extra:'') {
-    font-family: $skolar-sutta-web-sc, $skolar-sutta-web, serif unquote($extra);
+    font-family: $skolar-sutta-web, serif unquote($extra);
+    font-variant-caps: small-caps;
+    font-feature-settings: "smcp" 1, "c2sc" 1;
 }
 
 @mixin sans-serif($extra:'') {
-    font-family: $source-sans-pro, sans-serif unquote($extra);
+    font-family: $skolar-sans, sans-serif unquote($extra);
 }
 
 @mixin sans-serif-small-caps($extra:'') {
-    font-family: $hetu-schetu-sc, $source-sans-pro, sans-serif unquote($extra);
+    font-family: $skolar-sans, sans-serif unquote($extra);
+    font-variant-caps: small-caps;
+    font-feature-settings: "smcp" 1, "c2sc" 1;
 }
 
 @mixin monospace($extra:'') {

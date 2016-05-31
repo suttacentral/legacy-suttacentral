@@ -69,7 +69,7 @@ form{
 }
 
 .fancy-tick {
-    font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;
+    @include sans-serif-small-caps;
     text-transform: lowercase;
     color: white;
     margin:0 auto 2em auto;
@@ -157,7 +157,7 @@ form{
     font-size:  120%;
     display: inline-block;
     background: saturated-color(dark-green);
-    font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;
+    @include sans-serif-small-caps;
     text-transform: lowercase;
     vertical-align: middle;
     border-radius: 50%;

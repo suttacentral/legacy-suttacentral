@@ -375,7 +375,7 @@ height: initial;
                 display: block;
                 padding: 0;
                 text-align: center;
-                font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;
+                @include sans-serif-small-caps;
                 font-weight: normal;
                 font-size: 1em;
                 color: #565656;
@@ -465,7 +465,7 @@ height: initial;
     }
 }
 .btn-confirm {
-    font-family: 'hetu_schetu_sc', 'Source Sans Pro', sans-serif;
+    @include sans-serif-small-caps;
     text-transform: lowercase;
     color: white;
     font-size: 120%;

@@ -1,7 +1,8 @@
 .sutta {
 
-    h1, h2, h3, h4, h5, h6, .hgroup p {
+    h1, h2, h3, h4, h5, h6, .hgroup p, .subheading {
         text-align: center;
+        font-weight: normal!important;
     }
 
    h1, h1 a {
@@ -105,25 +106,22 @@
 .skolar-font {
     .sutta {
         h1, h2, h3, h4, h5, h6, .hgroup p {
-            font-family: $skolar-sutta-web, $source-sans-pro, sans-serif;
+            @include serif-small-caps;
             text-align: center;
             font-weight: normal;
             letter-spacing: 0.02em;
-            font-variant-caps: small-caps;
-            font-feature-settings: "smcp" 1;
+            
         }
     
         .hgroup {
+            h1 ~ p {
+                @include serif;
+                text-transform:none;
+            }
             p {
                 @include sans-serif-small-caps;
                 text-transform: lowercase;
                 letter-spacing: 0.05em;
-            }
-
-            h1 ~ p {
-                @include serif;
-                text-transform:none;
-                font-style: italic;
             }
         }
     }
@@ -142,7 +140,6 @@
     .sutta {
         h1, h2, h3, h4, h5, h6 {
             font-weight: bold;
-            font-style: normal;
             letter-spacing: 0;
         }
     }
@@ -156,7 +153,6 @@
     .sutta {
         h1, h2, h3, h4, h5, h6 {
             font-weight: bold;
-            font-style: normal;
         }
     }
     
