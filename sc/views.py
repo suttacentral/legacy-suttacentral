@@ -208,13 +208,22 @@ class ViewBase:
         return regex.sub(r'\n[ \n\t]+', r'\n', text)
     
     cjk_tag_rex = regex.compile(r'<(td[^>]*)>([^>]*' + cjk_regex.pattern.strip('()+') + '[^>]*)</(td)>')
+    tib_tag_rex = regex.compile(r'<(td[^>]*)>([^>]*' + '[\u0F00-\u0FFF]' + '[^>]*)</(td)>')
     
     def add_lang_tags(self, string):
-        def subfn(m):
+        def subfn_cjk(m):
             if 'lang' in m[1]:
                 return m[0]
             return r'<{m[1]} lang="lzh">{m[2]}</{m[3]}>'.format(m=m)
-        return self.cjk_tag_rex.sub(subfn, string)
+        
+        def subfn_tib(m):
+          if 'lang' in m[1]:
+            return m[0]
+          return r'<{m[1]} lang="bo">{m[2]}</{m[3]}>'.format(m=m)
+        
+        string = self.cjk_tag_rex.sub(subfn_cjk, string)
+        string = self.tib_tag_rex.sub(subfn_tib, string)
+        return string
     
     def panel_html(self, _cache=[]):
         if not _cache:
