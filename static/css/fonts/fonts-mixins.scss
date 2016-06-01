@@ -1,4 +1,6 @@
 
+/* The following mixins are only really applicable to Skolar */
+
 @mixin serif($extra:'') {
     font-family: $skolar-sutta-web, serif unquote($extra);
 }
@@ -6,7 +8,13 @@
 @mixin serif-small-caps($extra:'') {
     font-family: $skolar-sutta-web, serif unquote($extra);
     font-variant-caps: small-caps;
-    font-feature-settings: "smcp" 1, "c2sc" 1;
+    font-feature-settings: "smcp";
+}
+
+@mixin serif-all-small-caps($extra: '') {
+    font-family: $skolar-sutta-web, serif unquote($extra);
+    font-variant-caps: all-small-caps;
+    font-feature-settings: "smcp", "c2sc";
 }
 
 @mixin sans-serif($extra:'') {
@@ -15,18 +23,13 @@
 
 @mixin sans-serif-small-caps($extra:'') {
     font-family: $skolar-sans, sans-serif unquote($extra);
-    font-variant-caps: small-caps;
-    font-feature-settings: "smcp" 1, "c2sc" 1;
+    font-variant-caps: all-small-caps;
+    font-feature-settings: "smcp";
 }
 
-@mixin monospace($extra:'') {
-    font-family: monospace unquote($extra);
+@mixin sans-serif-all-small-caps($extra:'') {
+    font-family: $skolar-sans, sans-serif unquote($extra);
+    font-variant-caps: all-small-caps;
+    font-feature-settings: "smcp", "c2sc";
 }
 
-@mixin lumen-thai($extra:'') {
-    font-family: $lumen-thai, lumen-thai unquote($extra);
-}
-
-@mixin skolar-devanagari($extra:'') {
-    font-family: $skolar-devanagari, skolar-devanagari unquote($extra);
-}

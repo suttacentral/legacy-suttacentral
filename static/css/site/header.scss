@@ -375,12 +375,11 @@ height: initial;
                 display: block;
                 padding: 0;
                 text-align: center;
-                @include sans-serif-small-caps;
+                @include sans-serif-all-small-caps;
+                letter-spacing: 0.02em;
                 font-weight: normal;
                 font-size: 1em;
                 color: #565656;
-                text-transform: lowercase;
-                letter-spacing: 0.02em;
                 outline: none;
                 border-right: 1px solid #767676;
                 border-left: 1px solid #767676;
@@ -435,7 +434,7 @@ height: initial;
     top: 80px;
     width: 250px;
     max-width: 500px;
-    font-family:'Source Sans Pro', sans-serif;
+    @include sans-serif;
     border-radius: 3px;
     background: #EEBDAA;
     padding: 1em;
@@ -465,8 +464,7 @@ height: initial;
     }
 }
 .btn-confirm {
-    @include sans-serif-small-caps;
-    text-transform: lowercase;
+    @include sans-serif-all-small-caps;
     color: white;
     font-size: 120%;
     background: pastel-color(plain-purple);

@@ -17,8 +17,7 @@
         max-width:18em;
         padding: 2em 0 0 0;
         clear: both;
-        @include sans-serif-small-caps;
-        text-transform: lowercase;
+        @include sans-serif-all-small-caps;
         letter-spacing: 0.03em;
         text-align: left;
 

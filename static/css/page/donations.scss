@@ -7,7 +7,7 @@
     padding:  3px 6px;
     font-size:  120%;
     display: inline-block;
-    font-family: 'Source Sans Pro', sans-serif;
+    @include sans-serif;
     background: white;
     border-radius: 3px;
     box-shadow:  0px 0px 3px black inset;
@@ -38,7 +38,7 @@
 .currency-input + button{
    display: inline-block;
   font-size:120%;
-  font-family: 'Source Sans Pro', sans-serif;
+  @include sans-serif;
   background: pastel-color(bright-green);
   color: misc-color(dark-medium-gray);
   border-radius:50%;
@@ -69,8 +69,7 @@ form{
 }
 
 .fancy-tick {
-    @include sans-serif-small-caps;
-    text-transform: lowercase;
+    @include sans-serif-all-small-caps;
     color: white;
     margin:0 auto 2em auto;
     font-size:120%;
@@ -157,8 +156,7 @@ form{
     font-size:  120%;
     display: inline-block;
     background: saturated-color(dark-green);
-    @include sans-serif-small-caps;
-    text-transform: lowercase;
+    @include sans-serif-all-small-caps;
     vertical-align: middle;
     border-radius: 50%;
     color: white;

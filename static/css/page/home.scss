@@ -30,8 +30,7 @@
         padding: 1.5em 1.5em 0 1.5em;
         .read-this {
             text-align: right;
-            @include sans-serif-small-caps;
-            text-transform: lowercase;
+            @include sans-serif-all-small-caps;
         }
         .read-this a {
             padding: 0.2em 0.4em;
@@ -47,8 +46,7 @@
         margin-top: 0;
         margin-bottom: 0.5em;
         letter-spacing: 0.02em;
-        @include serif-small-caps;
-        text-transform: lowercase;
+        @include serif-all-small-caps;
         font-style: normal;
     }
     .epigraph-parallels {

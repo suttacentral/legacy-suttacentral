@@ -156,9 +156,8 @@ $sidebar-tabs-vertical-padding: 0.4em;
             width:33.33%;
             float: left;
             background: misc-color(light-light-gray);
-            text-transform:lowercase;
+            @include sans-serif-all-small-caps;
             letter-spacing:0.02em;
-            @include sans-serif-small-caps;
             height: $sidebar-tabs-height;
             & > a {
                 display: inline-block;
@@ -222,9 +221,8 @@ $sidebar-tabs-vertical-padding: 0.4em;
     .previous,
     .top,
     .next {
-        text-transform:lowercase;
-            letter-spacing:0.02em;
-            @include sans-serif-small-caps;  
+        @include sans-serif-all-small-caps;  
+        letter-spacing:0.02em;
     }
 }
 
