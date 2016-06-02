@@ -264,7 +264,7 @@ Text hypothetically reconstructed by the editor or translator.
 }
 
 .skolar-font {
-    p .add, p .author, p.add, p.author {
+    p .author{
         @include sans-serif-all-small-caps;
     }
 }
