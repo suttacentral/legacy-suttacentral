@@ -267,6 +267,10 @@ Text hypothetically reconstructed by the editor or translator.
     p .author{
         @include sans-serif-all-small-caps;
     }
+    
+    p.add, p .add {
+        @include sans-serif;
+    }
 }
 
 /*There are some editorial additions marked <span class="add"></span>. Previously these were hidden by default, but they are now visible by default.

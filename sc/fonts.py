@@ -148,7 +148,7 @@ def compile_fonts(flavors=['woff', 'woff2']):
             continue
         
         if font_details['subset']:
-            extra_subset_commands = ['--layout-features+=smcp,c2sc',
+            extra_subset_commands = ['--layout-features+=liga,dlig,smcp,c2sc',
                                      '--desubroutinize']
             if font_details['weight'] in {'bold', 'semibold'}:
                 weight = 'bold'

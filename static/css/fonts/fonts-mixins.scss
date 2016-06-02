@@ -1,4 +1,3 @@
-
 /* The following mixins are only really applicable to Skolar */
 
 @mixin serif($extra:'') {
@@ -7,14 +6,17 @@
 
 @mixin serif-small-caps($extra:'') {
     font-family: $skolar-sutta-web, serif unquote($extra);
-    font-variant-caps: small-caps;
+    -webkit-font-feature-settings: "scmp";
     font-feature-settings: "smcp";
+    font-variant-caps: small-caps;
+
 }
 
 @mixin serif-all-small-caps($extra: '') {
     font-family: $skolar-sutta-web, serif unquote($extra);
-    font-variant-caps: all-small-caps;
+    -webkit-font-feature-settings: "smcp", "c2sc";
     font-feature-settings: "smcp", "c2sc";
+    font-variant-caps: all-small-caps;
 }
 
 @mixin sans-serif($extra:'') {
@@ -23,13 +25,19 @@
 
 @mixin sans-serif-small-caps($extra:'') {
     font-family: $skolar-sans, sans-serif unquote($extra);
-    font-variant-caps: all-small-caps;
+    -webkit-font-feature-settings: "smcp";
     font-feature-settings: "smcp";
+    font-variant-caps: small-caps;
 }
 
 @mixin sans-serif-all-small-caps($extra:'') {
     font-family: $skolar-sans, sans-serif unquote($extra);
-    font-variant-caps: all-small-caps;
+    -webkit-font-feature-settings: "smcp", "c2sc";
     font-feature-settings: "smcp", "c2sc";
+    font-variant-caps: all-small-caps;
 }
 
+/* General Mixins */
+@mixin monospace($extra:'') {
+    font-family: monospace;
+}

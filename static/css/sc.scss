@@ -28,7 +28,7 @@ tr.origin {background:#ececec;}
 table {
     .vagga {
         color:#767676;
-        @font-family serif-all-small-caps;
+        @include serif-all-small-caps;
         letter-spacing:0.05em;
     }
 

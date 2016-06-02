@@ -12,14 +12,6 @@
     }
 }
 
-@mixin font-feature-settings($args...) {
-    -moz-font-feature-settings: $args;
-    -ms-font-feature-settings: $args;
-    -o-font-feature-settings: $args;
-    -webkit-font-feature-settings: $args;
-    font-feature-settings: $args;
-}
-
 @mixin grid-container {
     @include box-sizing(border-box);
     @include clearfix;
