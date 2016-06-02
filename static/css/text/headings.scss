@@ -27,33 +27,36 @@
     }
 
     h2 {
-        margin: 0 0 0.85em 0;
+        margin: 1.3rem 0 0.75rem 0;
         font-size:1.5em;
-        line-height: 1.5em;
+        line-height: 1.125em;
     }
 
     h3 {
-        margin: 0em 0 1em 0;
+        margin: 0 0 0.75rem 0;
         font-size: 1.2em;
-        line-height: 1.5em;
+        line-height: 1.25em;
     }
 
     h4{
-        margin: 1.29em 0 1em 0;
-        font-size: 1em;
-        line-height: 1.5em;
+        margin: 0.85rem 0 0.75rem 0;
+        font-size: 1.1em;
+        line-height: 1.25em;
     }
     
     h5{
-        margin: 0.7em 0 0.5em 0;
+        margin: 0 0 0.75rem 0;
         font-size: 1em;
+        line-height: 1.25em;
     }
     
     h6 {
         text-align:left;
-        text-transform:lowercase;
-        margin: 0.7em 0 0.5em 0;
+        font-variant-caps: all-small-caps;
+        font-feature-settings: "smcp","c2sc";
+        margin: 0 0 0.25em 0;
         font-size: 1em;
+        line-height: 1.25em;
     }
 
     .hgroup {
@@ -103,7 +106,7 @@
     }
     
     h1.mirror-row {
-        line-height:1.5
+        line-height:1.2
     }
 }
 
