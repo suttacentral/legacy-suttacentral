@@ -179,7 +179,7 @@ def compile_fonts(flavors=['woff', 'woff2']):
                 subset_md5.update(subset_text.encode(encoding='utf8'))
                 subset_md5.update(''.join(extra_subset_commands).encode(encoding='utf8'))
                 
-                if nonfree and not sc.config.app['debug']:
+                if False: #nonfree and not sc.config.app['debug']:
                     outname = ''
                 else:
                     outname = name_to_var(subset_details['name']) + '_'
