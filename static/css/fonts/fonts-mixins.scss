@@ -6,8 +6,8 @@
 
 @mixin serif-small-caps($extra:'') {
     font-family: $skolar-sutta-web, serif unquote($extra);
-    -webkit-font-feature-settings: "smcp", "onum";
-    font-feature-settings: "smcp", "onum";
+    -webkit-font-feature-settings: "smcp";
+    font-feature-settings: "smcp";
     font-variant-caps: small-caps;
     font-variant-numeric: oldstyle-nums;
 
@@ -26,8 +26,8 @@
 
 @mixin sans-serif-small-caps($extra:'') {
     font-family: $skolar-sans, sans-serif unquote($extra);
-    -webkit-font-feature-settings: "smcp", "onum";
-    font-feature-settings: "smcp", "onum";
+    -webkit-font-feature-settings: "smcp";
+    font-feature-settings: "smcp";
     font-variant-caps: small-caps;
     font-variant-numeric: oldstyle-nums;
 }
