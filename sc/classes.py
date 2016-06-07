@@ -233,6 +233,7 @@ class GroupedSutta(SuttaCommon):
             if uid in imm.subdivisions:
                 return uid
             uid = uid[:-1]
+        raise ValueError("Subdivision for sutta with uid {} could not be determined".format(self.uid))
 
     @property
     def number(self):

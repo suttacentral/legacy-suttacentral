@@ -361,4 +361,4 @@ try:
     build_maitenance_page()
 except Exception as e:
     logger.exception("Could not build maitenance page")
-    raise
+    raise SystemExit("Failed to build the maitenace page, this indicates critical problems, exiting")
