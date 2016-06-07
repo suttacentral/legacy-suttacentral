@@ -39,6 +39,14 @@ font_face_template = '''
 }}
 '''
 
+def get_glyphs_from_table_data():
+    extras = set()
+    for file in sc.table_dir.glob('*.csv'):
+        with file.open() as f:
+            extras.update(f.read())
+    extras.difference_update('"')
+    return ''.join(sorted(extras))
+        
 
 def sizeof_fmt(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
@@ -125,6 +133,9 @@ def compile_fonts(flavors=['woff', 'woff2']):
     compiled_fonts = set(fonts_output_dir.glob('**/*'))
     valid_compiled_fonts = set()
     
+    
+    extra_global_subset_glyphs = get_glyphs_from_table_data()
+    
     for file in sorted(fonts_dir.glob('**/*')):
         changed = False
         nonfree = "nonfree" in file.parts
@@ -160,7 +171,8 @@ def compile_fonts(flavors=['woff', 'woff2']):
                 subset_languages = subset_details['subset_languages']
                 subset_unicodes = set()
                 
-                if subset_languages == '*':
+                if subset_languages == '*': # global subset
+                    subset_unicodes.update(extra_global_subset_glyphs)
                     subset_unicodes.update(tim.get_codepoints_used(lang_uid=None, weight_or_style=weight))
                 
                 else:
