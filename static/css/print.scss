@@ -1,5 +1,5 @@
 @media print {
-header,#nextprev{display:none}
+header,#nextprev,.transcol, .divtable td:last-child, .divtable a.details {display:none}
 
     * {
         background: transparent !important;
