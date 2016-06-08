@@ -10,18 +10,36 @@ def _production_run(*commands):
     ] + list(commands))
 
 @task
-def nonfree_fonts(force=False):
-    """Copy local nonfree fonts to the production server."""
-    blurb(nonfree_fonts)
-    command = 'rsync -avz ' + \
-        'static/fonts/nonfree/ ' + \
-        'sc-production@vps.suttacentral.net:' + \
-        '/home/sc-production/suttacentral/static/fonts/nonfree/'
-    if not force:
-        warning('*** Dry run...use the --force flag to make changes ***')
-        command = command.replace('rsync', 'rsync -n')
-    run(command, fg=True)
+def push_fonts(delete=False):
+    """Copy local fonts to the production server."""
+    blurb(push_fonts)
+    run(' '.join([
+          'rsync -avz',
+          '--exclude="compiled"',
+          '--exclude="*~"',
+          '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree"',
+          '--exclude="**"',
+          ('--delete' if delete else ''),
+          'static/fonts/',
+          'sc-production@vps.suttacentral.net:/home/sc-production/suttacentral/static/fonts/'
+        ]), 
+        fg=True)
 
+@task
+def pull_fonts(delete=False):
+    """Copy fonts from the production server to local"""
+    blurb(pull_fonts)
+    run(' ' .join([
+          'rsync -avz',
+          '--exclude="compiled"',
+          '--exclude="*~"',
+          '--include="*.woff" --include="*.woff2" --include="*.ttf" --include="*.otf" --include="nonfree"',
+          '--exclude="**"', 
+          ('--delete' if delete else ''),
+          'sc-production@vps.suttacentral.net:/home/sc-production/suttacentral/static/fonts/',
+          'static/fonts/'
+        ]),
+        fg=True)
 
 @task
 def quick():
