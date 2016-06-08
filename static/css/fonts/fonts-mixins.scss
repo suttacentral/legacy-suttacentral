@@ -9,8 +9,6 @@
     -webkit-font-feature-settings: "smcp";
     font-feature-settings: "smcp";
     font-variant-caps: small-caps;
-    font-variant-numeric: oldstyle-nums;
-
 }
 
 @mixin serif-all-small-caps($extra: '') {
@@ -29,7 +27,6 @@
     -webkit-font-feature-settings: "smcp";
     font-feature-settings: "smcp";
     font-variant-caps: small-caps;
-    font-variant-numeric: oldstyle-nums;
 }
 
 @mixin sans-serif-all-small-caps($extra:'') {
