@@ -39,6 +39,14 @@
     }
 }
 
+.highlight {
+    &:lang(lzh), &:lang(zh), &:lang(jp), &:lang(ko) {
+        font-weight: normal;
+        color: saturated-color(plain-red);
+    }
+}
+        
+
         
 
 ul.results {
