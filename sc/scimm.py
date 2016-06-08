@@ -794,6 +794,8 @@ def imm(wait=True):
     if wait:
         if not _Imm._instance:
             _Imm._ready.wait()
+            if not _Imm._instance:
+                raise SystemExit("IMM Build Failed, unable to proceed")
     return _Imm._instance
 
 def build():
@@ -807,4 +809,4 @@ def build():
             _Imm._ready.set()
         except Exception as e:
             logger.error("Critical Error: IMM buid failed.", e)
-            exit(2)
+            _Imm._ready.set()
