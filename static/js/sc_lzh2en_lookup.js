@@ -14,6 +14,7 @@ sc.lzh2enLookup = {
     mouseIn: 0,
     currentLookup: null,
     lastCurrentLookup: null,
+    popups: [],
     init: function(button, markup_target){
         this.markupTarget = $(markup_target).addClass('lzh2enLookup')[0];
         this.button = $(button).on('click', sc.lzh2enLookup.toggle);
@@ -166,7 +167,10 @@ sc.lzh2enLookup = {
             nodes = $(),
             iter = new Iter(node),
             i
-        $('.popup').remove()
+        self.popups.forEach(function(e) {
+            $(e).remove();
+        });
+        self.popups.length = 0;
         $('.current_lookup').removeClass('current_lookup fallback')
         this.currentLookup = node
         while (graphs.length < 10) {
@@ -183,9 +187,10 @@ sc.lzh2enLookup = {
         if (!graphs)
             return
 
-        var popup = ['<div class="popup"><table>'],
+        var popup = ['<div style="position: absolute"><div class="popup" style="position:relative"><table>'],
             first = true,
             fallback = false;
+        
         for (i = graphs.length; i > 0; i--) {
             var snip = graphs.slice(0, i)
             if (snip in sc.lzh2enData) {
@@ -211,9 +216,10 @@ sc.lzh2enLookup = {
         if (first)
             return
 
-        popup.push('</table></div>')
+        popup.push('</table></div></div>')
 
         popup = self.popup(nodes[0], popup.join('\n'))
+        self.popups.push(popup);
     },
     lookupHandler: function(e){
         sc.lzh2enLookup.setCurrent(e.target);
