@@ -3,73 +3,132 @@
 <div id="onecol">
 <article>
 
-{% macro color_unit(name) %}
-<div class="unit"><div class="b-{{ name }}">${{ name }}</div></div>
-{% endmacro %}
+<style>
+.unit {
+    min-height: 3em;
+    border: 1px solid black;
+    padding: .5em;
+    font-family: monospace;
+    font-size: .8em;
+    line-height: 1.3em;
+    text-align: center;
+    display: inline-block;
+    width: 18em;
+    height: 2em;
+    margin: 0.5em 0;
+}
 
-{% set types = ["pastel-", "saturated-"] %}
-{% set styles = ["", "dirty-", "dark-", "bright-", "light-"] %}
-{% set colors = ["yellow", "green", "red", "purple"] %}
+.unit .name {
+    color: white;
+    text-shadow: 1px 1px 1px black;
+    padding: 0.2em;
+    display: inline-block;
+}
+
+.unit .name:hover {
+    background-color: black;
+}
+
+.container {
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    zoom: 1;
+    display: inline-block;
+    width: 18em;
+    margin: 1em 0;
+}
+</style>
+
+{% set color_groups = {
+    "pastel-color": [
+        {
+            "plain-yellow": "#EEE8AA",
+            "dirty-yellow": "#B3AF8C",
+            "dark-yellow":   "#9B9237",
+            "bright-yellow": "#F7F2C2",
+            "light-yellow":  "#F7F3D0",
+        },{
+            "plain-green":    "#75A38F",
+            "dirty-green":   "#607A6F",
+            "dark-green":    "#266A4D",
+            "bright-green":  "#A4D1BE",
+            "light-green":   "#B0D1C3",
+        },{
+            "plain-red":      "#EEBDAA",
+            "dirty-red":     "#B3978C",
+            "dark-red":      "#9B5437",
+            "bright-red":    "#F7D1C2",
+            "light-red":     "#F7DBD0",
+        },{
+            "plain-purple":   "#8977A1",
+            "dirty-purple":  "#6C6179",
+            "dark-purple":   "#432769",
+            "bright-purple": "#B9A7D0",
+            "light-purple":  "#BFB2D0"
+        }
+    ],
+    "saturated-color": [
+        {
+            "plain-yellow":  "#EED900",
+            "dirty-yellow":  "#B3A72D",
+            "dark-yellow":   "#9B8D00",
+            "bright-yellow": "#F7E63E",
+            "light-yellow":  "#F7EA6F",
+        },{
+            "plain-green":   "#00B428",
+            "dirty-green":   "#228738",
+            "dark-green":    "#00751A",
+            "bright-green":  "#36DA5A",
+            "light-green":   "#62DA7C",
+        },{
+            "plain-red":     "#EE1700",
+            "dirty-red":     "#B3392D",
+            "dark-red":      "#9B0F00",
+            "bright-red":    "#F74F3E",
+            "light-red":     "#F77C6F",
+        },{
+            "plain-purple":  "#4805A2",
+            "dirty-purple":  "#472179",
+            "dark-purple":   "#2E0269",
+            "bright-purple": "#7A39D0",
+            "light-purple":  "#9161D0"
+        }
+    ],
+    "misc-color": [{
+        "cool-blue":         "#005179",
+        "bright-cool-blue":  "#007AFE",
+        "light-off-white":   "#fcfcfc",
+        "off-white":         "#f7f7f7",
+        "light-light-gray":  "rgb(235, 235, 235)",
+        "light-gray":        "rgb(215, 215, 215)",
+        "light-medium-gray": "rgb(190, 190, 190)",
+        "medium-gray":       "#767676",
+        "dark-medium-gray":  "#565656",
+        "dark-gray":         "rgb(43,  43,  43)"
+    }]
+}
+%}
+
+
 
 <div id="colors-page">
 
     <h1>SuttaCentral Colors</h1>
-
-    {% for type in types %}
-        <h2>
-            {% if type == "pastel-" %}
-                Pastel Colors
-            {% else %}
-                Saturated Colors
-            {% endif %}
-        </h2>
-        {% for style in styles %}
+    {% for function in ["pastel-color", "saturated-color", "misc-color"] %} 
+        {% set group = color_groups[function] %}
+        <h2>{{function|replace("-", " ")|title}}</h2>
+        {% for subgroup in group %}
             <div class="container">
-                {% for color in colors %}
-                    {{ color_unit(style + type + color) }}
-                {% endfor %}
+            {% for name, color in subgroup.items() %}
+                <div class="unit" style="background-color: {{color}}"><span class="name">{{function}}({{name}})</span></div>
+            {% endfor %}
             </div>
         {% endfor %}
     {% endfor %}
-
-    <h2>Other Colors</h2>
-
-    <div class="container">
-        {{ color_unit('light-light-gray') }}
-        {{ color_unit('light-off-white') }}
-        {{ color_unit('bright-cool-blue') }}
-        <div class="unit"></div>
-    </div>
-    <div class="container">
-        {{ color_unit('light-gray') }}
-        {{ color_unit('off-white') }}
-        {{ color_unit('cool-blue') }}
-        <div class="unit"></div>
-    </div>
-    <div class="container">
-        {{ color_unit('light-medium-gray') }}
-        <div class="unit"></div>
-        <div class="unit"></div>
-        <div class="unit"></div>
-    </div>
-    <div class="container">
-        {{ color_unit('medium-gray') }}
-        <div class="unit"></div>
-        <div class="unit"></div>
-        <div class="unit"></div>
-    </div>
-    <div class="container">
-        {{ color_unit('dark-medium-gray') }}
-        <div class="unit"></div>
-        <div class="unit"></div>
-        <div class="unit"></div>
-    </div>
-    <div class="container">
-        {{ color_unit('dark-gray') }}
-        <div class="unit"></div>
-        <div class="unit"></div>
-        <div class="unit"></div>
-    </div>
 
 </div>
 
