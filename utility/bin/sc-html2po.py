@@ -254,7 +254,7 @@ msgstr ""
                 else:
                     comments.append(token.value.strip())
             elif token.type == TokenType.text:
-                catalog.add(id=token.value.strip().replace('\n', ' ').replace('"', '\\"'),
+                catalog.add(id=token.value.strip().replace('\n', ' ').replace('"', '"'),
                             string="",
                             auto_comments=comments,
                             context=token.ctxt
