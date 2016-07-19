@@ -14,13 +14,13 @@
 <option disabled>Root Languages</option>
 {% for lang in search_languages %}
     {% if lang.isroot %}
-    <option value="{{lang.uid}}"{{' selected="selected"' if query_lang == lang.iso_code else ''}}>{{lang.name}}</option>
+    <option value="{{lang.uid}}"{{' selected="selected"' if query_lang == lang.uid else ''}}>{{lang.name}}</option>
     {% endif %}
 {% endfor %}
 <option disabled>Translations</option>
 {% for lang in search_languages %}
     {% if not lang.isroot %}
-    <option value="{{lang.uid}}"{{' selected="selected"' if query_lang == lang.iso_code else ''}}>{{lang.name}}</option>
+    <option value="{{lang.uid}}"{{' selected="selected"' if query_lang == lang.uid else ''}}>{{lang.name}}</option>
     {% endif %}
 {% endfor %}
 </select>
