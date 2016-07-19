@@ -769,7 +769,7 @@ class ElasticSearchResultsView(ViewBase):
             "query": self.query
         }
         if context.query_lang:
-            query_params['query_lang'] = context.query_lang
+            query_params['lang'] = context.query_lang
         context.base_query_url = '/search?{}'.format(urllib.parse.urlencode(query_params))
         
 class AdvancedSearchView(ElasticSearchResultsView):
