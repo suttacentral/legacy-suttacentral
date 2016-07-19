@@ -96,10 +96,11 @@ class TokenType(Enum):
     
 
 class Token:
-    def __init__(self, type, value, ctxt=None):
+    def __init__(self, type, value, ctxt=None, msgstr=''):
         self.type = type
         self.value = value
         self.ctxt = ctxt
+        self.msgstr = msgstr
     
     def __repr__(self):
         return 'Token(TokenType.{}, "{}")'.format(self.type.name, self.value)
@@ -144,8 +145,19 @@ class Html2Po:
         return regex.sub(r'MANG[0-9]+GLE', self.demangle_repl, html_string)
 
     def segment_inner(self, e):
+        
+        msgstr_mapping = {}
+        def sanitize_key(key):
+            return regex.sub(r'[\p{punct}\s]', '', key).casefold()
+            
+        msgstr_elements = e.cssselect('[data-msgstr]')
+        for msgstr_element in msgstr_elements:
+            msgstr_mapping[sanitize_key(msgstr_element.text_content())] = {'value': msgstr_element.get('data-msgstr'), 'used': False}
+        for msgstr_element in msgstr_elements:
+            msgstr_element.drop_tag()
+            
         html_string = lxml.html.tostring(e, encoding='unicode').strip()
-        html_string = html_string.replace('\n', ' ').replace('\xa0', ' ')#.replace('\xad', '')
+        html_string = html_string.replace('\n', ' ').replace('\xa0', ' ').replace('\xad', '')
         m = regex.match(r'<[^<]+>[ \n\t]*(.*)</\w+>', html_string, flags=regex.DOTALL)
         if not m:
             raise ValueError(html_string)
@@ -162,7 +174,6 @@ class Html2Po:
         segments = [''.join(parts[i:i+2]).strip() for i in range(0, len(parts), 2)]
         
         for i, segment in list(enumerate(segments)):
-            print(segment)
             m = regex.match(r'(?r)[「「『]$', segment)
             if m:
                 print(segments[i], segments[i+1], segment[-1] + segments[i + 1])
@@ -184,16 +195,25 @@ class Html2Po:
                             line = m[2].strip()
                     sentence_count += 1
                     ctxt = '{}:{}.{}'.format(self.uid, self.paragraph_count, sentence_count)
-                    self.add_token(TokenType.text, line, ctxt)
+                    msgstr = ''
+                    key = sanitize_key(lxml.html.fromstring(line).text_content())
+                    if key in msgstr_mapping:
+                        msgstr_mapping[key]['used'] = True
+                        msgstr = msgstr_mapping[key]['value']
+                    self.add_token(TokenType.text, line, ctxt, msgstr)
                 
                 if i + 1 < len(lines):
                     br = lines[i + 1].strip()
                     if br:
                         self.add_token(TokenType.comment, br)
                 self.add_token(TokenType.newline)
+        
+        for key, obj in msgstr_mapping.items():
+            if obj['used'] == False:
+                print('Failed to find use for {}: {}'.format(key, obj['value']))
     
-    def add_token(self, type, value=None, ctxt=None):
-        self.token_stream.append(Token(type, value, ctxt))
+    def add_token(self, type, value=None, ctxt=None, msgstr=''):
+        self.token_stream.append(Token(type, value, ctxt, msgstr))
     
     def recursive_deconstruct(self, element):
         
@@ -255,7 +275,7 @@ msgstr ""
                     comments.append(token.value.strip())
             elif token.type == TokenType.text:
                 catalog.add(id=token.value.strip().replace('\n', ' ').replace('"', '"'),
-                            string="",
+                            string=token.msgstr or '',
                             auto_comments=comments,
                             context=token.ctxt
                 )
@@ -325,6 +345,7 @@ if not args.no_zfill:
     z.add_files(infiles)
 
 for file in infiles:
+    print(file.stem)
     if common_path:
         outfile = file.relative_to(common_path)
     else:
