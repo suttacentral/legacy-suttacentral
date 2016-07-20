@@ -7,7 +7,7 @@ from enum import Enum
 from itertools import chain
 from collections import defaultdict
 
-from sc.util import unique
+from sc.util import unique, humansortkey
 
 
 logger = logging.getLogger(__name__)
@@ -16,12 +16,64 @@ import sc
 
 relationship_types = ['parallels', 'mentions']
 
+forward_relationship_names = {
+    'parallels': 'parallels',
+    'mentions': 'is mentioned in'
+}
+
+inverse_relationship_names = {
+    'parallels': 'parallels',
+    'mentions': 'mentions'
+}
+
+class Location:
+    def __init__(self, uid, bookmark=None):
+        self.partial = uid.startswith('~')
+        uid = uid.lstrip('~')
+        
+        if '#' in uid:
+            if bookmark:
+                raise ValueError("Bookmark should be None if uid contains '#'")
+            self.uid, self.bookmark = regex.match(r'(.*?)(#.*)', uid)[1:]
+        else:
+            self.uid = uid
+            self.bookmark = bookmark
+        self.node = None
+    def __str__(self):
+        if not self.bookmark:
+            return self.uid
+        else:
+            return '{}{}'.format(self.uid, self.bookmark)
+    def __repr__(self):
+        return 'Location({}={}, {}={}, {}={})'.format(
+            "uid", repr(self.uid),
+            "bookmark", repr(self.bookmark),
+            "node", repr(self.node)
+        )
+        
+
 class Relationship:
-    def __init__(self, uid, other_uid, relationship_type, partial):
-        self.uid = uid
-        self.other_uid = other_uid
+    def __init__(self, left, right, relationship_type, relationship_name, partial):
+        self.left = left
+        self.right = right
         self.relationship_type = relationship_type
+        self.relationship_name = relationship_name
         self.partial = partial
+    
+    def attach_nodes(self, imm):
+        self.left.node = imm(self.left.uid)
+        self.right.node = imm(self.right.uid)
+        
+    def __repr__(self):
+        return '\nRelationship({}={},{}={},{}={},{}={})'.format(
+            "left", repr(self.left.uid),
+            "right", repr(self.right.uid),
+            "relationship_type", repr(self.relationship_type),
+            "relationship_name", repr(self.relationship_name),
+            "partial", repr(self.partial)
+        )
+    def __str__(self):
+        return '{} {}{} {}'.format(self.left.uid, '~' if self.partial else '', self.relationship_type, self.right.uid) 
 
 class ParallelsManager:
     def __init__(self, data):
@@ -39,15 +91,17 @@ class ParallelsManager:
             # while ~ma45 and all other tidles are partially parallel to an8.81 and ma44
             # this means 
             
-            if 'uids' in entry:
-                seen_in_entry = set()
-                for uid in unique(entry.get('parallels', []) + entry.get('mentions', [])):
-                    normalized_uid = uid.lstrip('~').split('#')[0]
-                    if normalized_uid in seen_in_entry:
-                        logger.error('uid {} appears multiple times in entry: {}'.format(uid, entry))
-                    uid_mapping[normalized_uid].append(entry)
+            seen_in_entry = set()
+            for uid in unique(entry.get('parallels', []) + entry.get('mentions', [])):
+                normalized_uid = self.normalize_uid(uid)
+                if normalized_uid in seen_in_entry:
+                    logger.error('uid {} appears multiple times in entry: {}'.format(uid, entry))
+                uid_mapping[normalized_uid].append(entry)
             
         self.uid_mapping = uid_mapping
+    
+    def normalize_uid(self, uid):
+        return uid.lstrip('~').split('#')[0]
     
     def is_partial(self, uid):
         if uid.startswith('~'):
@@ -67,22 +121,55 @@ class ParallelsManager:
         
         found = False
         for entry in uid_mapping[uid]:
-            if 'parallels' in entry:
-                uids = entry['parallels']
-                for parallel_uid in uids:
-                    if parallel_uid.lstrip('~').split('#')[0] == uid:
-                        this_uid = parallel_uid
-                        found = True
-                        break
+            for relationship_type in relationship_types:
+                if relationship_type not in entry:
+                    continue
                 
-                for parallel_uid in uids:
-                    if parallel_uid == this_uid:
-                        continue
-                    if is_partial(this_uid) and is_partial(parallel_uid):
-                        # a partial is not parallel to a partial
-                        continue
-                    relationships.append(Relationship(uid=this_uid, other_uid=parallel_uid, relationship="parallels", self.is_partial(this_uid))
-                    
+                locations = [Location(uid) for uid in entry[relationship_type]]
+                for location in locations:
+                    print(location.uid)
+                    if location.uid == uid:
+                            this_location = location
+                            break
+                else:
+                    # It is possible a uid does not participate in every 
+                    # clause in a group
+                    continue                        
+                
+                if relationship_type == 'parallels':
+                    for other_location in locations:
+                        if other_location == this_location:
+                            continue
+                        if this_location.partial and other_location.partial:
+                            # a partial is not parallel to a partial
+                            continue
+                        relationships.append(Relationship(left=this_location, 
+                                                          right=other_location,
+                                                          relationship_type=relationship_type,
+                                                          relationship_name=forward_relationship_names[relationship_type],
+                                                          partial=this_location.partial or other_location.partial))
+                if relationship_type == 'mentions':
+                    if this_location == locations[0]:
+                        # this sutta is the one which is mentioned
+                        relationship_name = forward_relationship_names[relationship_type]
+                        for other_location in locations:
+                            if other_location == this_location:
+                                continue
+                            relationships.append(Relationship(this_location,
+                                                              other_location,
+                                                              relationship_type=relationship_type,
+                                                              relationship_name=relationship_name,
+                                                              partial = this_location.partial or other_location.partial))
+                    else:
+                        relationship_name = inverse_relationship_names[relationship_type]
+                        other_location = locations[0]
+                        relationships.append(Relationship(this_location,
+                                                          other_location,
+                                                          relationship_type=relationship_type,
+                                                          relationship_name=relationship_name,
+                                                          partial = this_location.partial or other_location.partial))
+                
+        return sorted(relationships, key=lambda o: humansortkey(o.left.uid))
                         
                     
                 
