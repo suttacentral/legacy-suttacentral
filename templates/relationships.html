@@ -7,9 +7,9 @@
     <table>
         {% for relationship in relationships %}
         <tr>
-            <td>{{ relationship.left }}</td>
+            <td>{{ relationship.left }}</a></td>
             <td>{{'~' if relationship.partial else ''}}{{ relationship.relationship_name }}</td>
-            <td>{{ relationship.right }}</td>
+            <td><a href="/ll/{{relationship.right.uid}}">{{ relationship.right }}</a></td>
         </tr>
         
         

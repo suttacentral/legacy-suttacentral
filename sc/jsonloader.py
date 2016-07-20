@@ -14,16 +14,18 @@ logger = logging.getLogger(__name__)
 
 import sc
 
-relationship_types = ['parallels', 'mentions']
+relationship_types = ['parallels', 'mentions', 'retells']
 
 forward_relationship_names = {
     'parallels': 'parallels',
-    'mentions': 'is mentioned in'
+    'mentions': 'is mentioned in',
+    'retells': 'is retold in'
 }
 
 inverse_relationship_names = {
     'parallels': 'parallels',
-    'mentions': 'mentions'
+    'mentions': 'mentions',
+    'retells': 'retells'
 }
 
 class Location:
@@ -92,7 +94,7 @@ class ParallelsManager:
             # this means 
             
             seen_in_entry = set()
-            for uid in unique(entry.get('parallels', []) + entry.get('mentions', [])):
+            for uid in unique(chain.from_iterable(entry.get(relationship_type, []) for relationship_type in relationship_types)):
                 normalized_uid = self.normalize_uid(uid)
                 if normalized_uid in seen_in_entry:
                     logger.error('uid {} appears multiple times in entry: {}'.format(uid, entry))
@@ -148,7 +150,7 @@ class ParallelsManager:
                                                           relationship_type=relationship_type,
                                                           relationship_name=forward_relationship_names[relationship_type],
                                                           partial=this_location.partial or other_location.partial))
-                if relationship_type == 'mentions':
+                if relationship_type in {'mentions', 'retells'}:
                     if this_location == locations[0]:
                         # this sutta is the one which is mentioned
                         relationship_name = forward_relationship_names[relationship_type]
