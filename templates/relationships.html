@@ -1,0 +1,22 @@
+{% extends "base.html" -%}
+{% import 'macros.html' as macros with context %}
+
+
+{%- block content -%}
+<div id="onecol">
+    <table>
+        {% for relationship in relationships %}
+        <tr>
+            <td>{{ relationship.left }}</td>
+            <td>{{'~' if relationship.partial else ''}}{{ relationship.relationship_name }}</td>
+            <td>{{ relationship.right }}</td>
+        </tr>
+        
+        
+        
+        {% endfor %} {# relationships #}
+    </table>
+        
+
+</div>
+{%- endblock -%}
