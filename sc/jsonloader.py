@@ -66,8 +66,8 @@ class Relationship:
         
     def __repr__(self):
         return '\nRelationship({}={},{}={},{}={},{}={})'.format(
-            "left", repr(self.left.uid),
-            "right", repr(self.right.uid),
+            "left", repr(str(self.left)),
+            "right", repr(str(self.right)),
             "relationship_type", repr(self.relationship_type),
             "relationship_name", repr(self.relationship_name),
             "partial", repr(self.partial)
@@ -169,7 +169,7 @@ class ParallelsManager:
                                                           relationship_name=relationship_name,
                                                           partial = this_location.partial or other_location.partial))
                 
-        return sorted(relationships, key=lambda o: humansortkey(o.left.uid))
+        return sorted(relationships, key=lambda o: humansortkey(str(o.left)))
                         
                     
                 
