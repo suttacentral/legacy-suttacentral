@@ -52,6 +52,18 @@ class Location:
             "bookmark", repr(self.bookmark),
             "node", repr(self.node)
         )
+    
+    def __getattr__(self, attr):
+        if attr in self.node:
+            return self.node[attr]
+        raise AttributeError(attr)
+    
+    def __hash__(self):
+        return self.uid.__hash__() ^ self.bookmark.__hash__()
+    
+    @property
+    def sort_key(self):
+        return humansortkey(str(self))
         
 
 class Relationship:
@@ -76,6 +88,9 @@ class Relationship:
         )
     def __str__(self):
         return '{} {}{} {}'.format(self.left.uid, '~' if self.partial else '', self.relationship_type, self.right.uid) 
+    
+    def __hash__(self):
+        return self.left.__hash__() ^ self.right.__hash__() ^ self.relationship_type.__hash__() ^ self.partial.__hash__()
 
 class ParallelsManager:
     def __init__(self, data):

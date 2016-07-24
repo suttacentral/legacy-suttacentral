@@ -70,4 +70,90 @@ tr.group-with-next {
     }
 }
 
+.relationships-page {
+* {box-sizing: border-box;
+}
 
+tr:nth-child(even) {
+    background-color: inherit;
+}
+
+    body{
+        color:#2b2b2b;
+        background: rgba(100,0,0,0.04)
+    }
+    table {
+
+        border-collapse: separate;
+        border-spacing: 0 0.5em;
+        margin:5em auto;
+    }
+    th{text-align:left}
+    td,th{padding:0.4em 0.5em;height:2em;}
+    td.col1{border-radius:2px;box-shadow: 0 0 3px rgba(0,0,0,0.12), 1px 1px 2px rgba(0,0,0,0.24);}
+
+    td.col3{border-radius:2px 0 0 2px;
+        box-shadow: 0 0 3px rgba(0,0,0,0.12), 1px 1px 2px rgba(0,0,0,0.24);
+    }
+    td.col4, td.col5{
+    box-shadow: 1px 0 3px rgba(0,0,0,0.12), 1px 1px 2px rgba(0,0,0,0.24);
+    }
+    td.col6{border-radius:0 2px 2px 0;
+    box-shadow: 1px 0 3px rgba(0,0,0,0.12), 1px 1px 2px rgba(0,0,0,0.24);
+    }
+
+    td.col2 {font-style: italic;text-align: center;padding-left:1em;padding-right:1em}
+    
+    .acronym {text-align: center }
+
+
+    .text-links {
+        height: 100%;
+        font-size:80%;
+        .translation-links, .root-link {
+            display: inline-block;
+            height: 100%;
+            border: 1px solid #eee;
+            border-radius: 2px;
+            background:#fff;
+            height: 2em;
+        }
+        .translation-link {
+            border-right: 1px solid #eee; 
+            padding:0.2em 0.5em;
+            display: inline-block;
+        }
+        .root-link {
+            padding:0.2em 0.5em;
+            display: inline-block;
+        }
+        .translation-dropdown {
+            padding: 0.2em 0.25em;
+        }
+        .details-link {}
+    }
+
+    .caption-text,.caption-volpage,.caption-trans,.trans, td.col5,th,td.col2
+    .caption-id, .caption-title{font-weight:bold;}
+    .caption-volpage,.caption-trans{margin:0 0.5em}
+    td.second,td.col1{background:#fff;}
+ 
+    th{display:none;}
+    .connector:before,.connector:after{content: '';
+        width: 80%;
+        border-bottom: solid 3px rgb(190, 190, 190);
+         position: absolute;
+        top:40%;
+        margin:0 0.2em;
+        z-index:-5;
+    }
+    .connector{position: relative;
+        display: inline-block;
+    }
+    .connector:before{right:100%;}
+    .connector:after{left:100%;}
+    
+    .top {height: 1.5em}
+    .middle {height: 1.5em}
+    .bottom {height: 1.5em}
+}
