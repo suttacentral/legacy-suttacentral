@@ -579,7 +579,7 @@ class _Imm:
                     return self.subdivisions[div_uid].division.collection.lang.uid
                 div_uid = div_uid[:-1]
         if uid[0] == 't':
-            return 'zh'
+            return 'lzh'
         if uid[:3] == 'skt':
             return 'skt'
         raise ValueError("No root lang could be determined for uid: {}".format(uid))
@@ -637,6 +637,25 @@ class _Imm:
         
         out.sort(key=TextRef.sort_key)
         return out
+        
+    def get_fuzzy(self, uid):
+        uid = uid.lstrip('~')
+        uid = uid.split('#')[0]
+        obj = self(uid)
+        
+        if not obj:
+            if '-' in uid:
+                obj = self(uid.split('-')[0])
+        
+        if obj:
+            return obj
+        
+        while uid:
+            uid = uid[:-1]
+            obj = self(uid)
+            if obj:
+                return obj
+        return None
 
     def text_path(self, uid, lang_uid):
         try:
@@ -667,6 +686,28 @@ class _Imm:
             if uid in self.divisions:
                 return uid
             uid = uid[:-1]
+    
+    def guess_lang(self, uid):
+        if not uid:
+            return None
+        obj = self.get_fuzzy(uid)
+        if obj is None:
+            return None
+        
+        while True:
+            try:
+                return obj.lang
+            except AttributeError:
+                pass
+            if 'collection' in obj:
+                obj = obj.collection
+            elif 'division' in obj:
+                obj = obj.division
+            elif 'subdivision' in obj:
+                obj = obj.subdivision
+            else:
+                return None                
+            
     
     @staticmethod
     def get_text_author(filepath):

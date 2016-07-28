@@ -71,89 +71,150 @@ tr.group-with-next {
 }
 
 .relationships-page {
-* {box-sizing: border-box;
-}
 
-tr:nth-child(even) {
-    background-color: inherit;
-}
 
-    body{
-        color:#2b2b2b;
-        background: rgba(100,0,0,0.04)
+    body {
+        color: #2b2b2b;
+        background: #fcfcfc;
+        font-family: "Skolar Sans PE";
+        line-height: 1.5;
     }
     table {
-
         border-collapse: separate;
         border-spacing: 0 0.5em;
-        margin:5em auto;
+        margin: 5em auto;
     }
-    th{text-align:left}
-    td,th{padding:0.4em 0.5em;height:2em;}
-    td.col1{border-radius:2px;box-shadow: 0 0 3px rgba(0,0,0,0.12), 1px 1px 2px rgba(0,0,0,0.24);}
-
-    td.col3{border-radius:2px 0 0 2px;
-        box-shadow: 0 0 3px rgba(0,0,0,0.12), 1px 1px 2px rgba(0,0,0,0.24);
-    }
-    td.col4, td.col5{
-    box-shadow: 1px 0 3px rgba(0,0,0,0.12), 1px 1px 2px rgba(0,0,0,0.24);
-    }
-    td.col6{border-radius:0 2px 2px 0;
-    box-shadow: 1px 0 3px rgba(0,0,0,0.12), 1px 1px 2px rgba(0,0,0,0.24);
+    caption {
+        margin-bottom: 1em
     }
 
-    td.col2 {font-style: italic;text-align: center;padding-left:1em;padding-right:1em}
+
+    .caption-volpage,
+    td:nth-last-of-type(1),
+    td.relation {
+        font-size: 80%;
+        color: #767676;
+    }
+    .caption-id,
+    .caption-title {
+        font-weight: bold;
+    }
+    .caption-volpage {
+        margin: 0 1rem;
+    }
+    td {
+        padding: 0.4em 0.5em;
+      
+    }
+    /* all cells have top and bottom border */
+    td {
+        border-radius: 2px;
+        border-top: 1px solid rgb(215, 215, 215);
+        border-bottom: 1px solid rgb(215, 215, 215);
+    }
     
-    .acronym {text-align: center }
-
-
-    .text-links {
-        height: 100%;
-        font-size:80%;
-        .translation-links, .root-link {
-            display: inline-block;
-            height: 100%;
-            border: 1px solid #eee;
-            border-radius: 2px;
-            background:#fff;
-            height: 2em;
-        }
-        .translation-link {
-            border-right: 1px solid #eee; 
-            padding:0.2em 0.5em;
-            display: inline-block;
-        }
-        .root-link {
-            padding:0.2em 0.5em;
-            display: inline-block;
-        }
-        .translation-dropdown {
-            padding: 0.2em 0.25em;
-        }
-        .details-link {}
+    
+    td.root, td.relation + td.related {
+        border-left: 1px solid rgb(215, 215, 215);
+    }
+    
+    td.root, td:last-child {
+        border-right: 1px solid rgb(215, 215, 215);
+    }
+    
+    
+    /* except relation which has none */
+    td.relation {
+        border: none;
+    }
+    
+    td.relation +
+    
+    td.relation + td.relation {
+        border-left: none;
+        border-right: none;
     }
 
-    .caption-text,.caption-volpage,.caption-trans,.trans, td.col5,th,td.col2
-    .caption-id, .caption-title{font-weight:bold;}
-    .caption-volpage,.caption-trans{margin:0 0.5em}
-    td.second,td.col1{background:#fff;}
- 
-    th{display:none;}
-    .connector:before,.connector:after{content: '';
+/*
+    td:nth-child(3){
+        border-top: 1px solid rgb(215, 215, 215);
+        border-left: 0 solid rgb(215, 215, 215);
+        border-right: 0 solid rgb(215, 215, 215);
+        border-bottom: 1px solid rgb(215, 215, 215);
+
+    }
+    td:nth-last-of-type(1) {
+        border-radius: 0 2px 2px 0;
+        border-top: 1px solid rgb(215, 215, 215);
+        border-left: 0 solid rgb(215, 215, 215);
+        border-right: 1px solid rgb(215, 215, 215);
+        border-bottom: 1px solid rgb(215, 215, 215);
+            
+    }
+*/
+
+    td.related,
+    td.root {
+        background: #f5f5f5;
+    }
+
+    .root-id, .root-text,.translated-text{
+        border-radius: 2px;
+        padding:0.2rem 1rem 0.1rem;
+        margin:0.1rem;
+    }
+    a.root-id:hover, a.root-text:hover, a.translated-text:hover
+    {
+        background: rgb(235, 235, 235)
+    }
+    .root-id{
+        display:block;
+    }
+    .root-text,.translated-text{
+        display:inline-block;
+        font-family:"skolar sans pe sb";
+        font-size:0.8rem;
+/*
+            color: #007AFE;
+*/
+    }
+
+    td:nth-last-of-type(2){
+        vertical-align: top;
+        padding-top:0.7rem;
+    }
+    td:nth-last-of-type(1){
+        vertical-align: top;
+        line-height: 1.25;
+        font-size: 0.7rem;
+        padding:0.8rem 1.5rem;
+    }
+    
+    /* This code controls the joiner */
+    
+    td.relation {
+        font-style: italic;
+        text-align: center;
+        padding-left: 1em;
+        padding-right: 1em
+    }
+    .connector:before,
+    .connector:after {
+        content: '';
         width: 80%;
-        border-bottom: solid 3px rgb(190, 190, 190);
-         position: absolute;
-        top:40%;
-        margin:0 0.2em;
-        z-index:-5;
+        position: absolute;
+        top: 40%;
+        margin: 0 0.2em;
+        z-index: -5;
+        border-bottom: solid 3px rgb(215, 215, 215);
     }
-    .connector{position: relative;
-        display: inline-block;
+    .connector {
+        position: relative;
     }
-    .connector:before{right:100%;}
-    .connector:after{left:100%;}
-    
-    .top {height: 1.5em}
-    .middle {height: 1.5em}
-    .bottom {height: 1.5em}
+    .connector:before {
+        right: 100%;
+    }
+    .connector:after {
+        left: 100%;
+    }
 }

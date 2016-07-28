@@ -41,6 +41,7 @@ class Location:
             self.uid = uid
             self.bookmark = bookmark
         self.node = None
+        self.root_lang = None
     def __str__(self):
         if not self.bookmark:
             return self.uid
@@ -53,18 +54,16 @@ class Location:
             "node", repr(self.node)
         )
     
-    def __getattr__(self, attr):
-        if attr in self.node:
-            return self.node[attr]
-        raise AttributeError(attr)
-    
     def __hash__(self):
         return self.uid.__hash__() ^ self.bookmark.__hash__()
     
     @property
     def sort_key(self):
-        return humansortkey(str(self))
-        
+        return humansortkey(str(self))        
+    
+    def attach_node(self, imm):
+        self.node = imm(self.uid)
+        self.root_lang = imm.guess_lang(self.uid)
 
 class Relationship:
     def __init__(self, left, right, relationship_type, relationship_name, partial):
@@ -75,8 +74,8 @@ class Relationship:
         self.partial = partial
     
     def attach_nodes(self, imm):
-        self.left.node = imm(self.left.uid)
-        self.right.node = imm(self.right.uid)
+        self.left.attach_node(imm)
+        self.right.attach_node(imm)
         
     def __repr__(self):
         return '\nRelationship({}={},{}={},{}={},{}={})'.format(

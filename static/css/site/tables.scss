@@ -13,10 +13,6 @@ caption {
     white-space: normal;
 }
 
-tr:nth-child(even) {
-    background-color: ns-color(table-row-even-background-color);
-}
-
 td, th {
     padding: 0.75em 1em;
     border-top: 1px solid ns-color(table-cell-border-color);
