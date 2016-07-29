@@ -146,7 +146,7 @@ class ParallelsManager:
         if not uid in uid_mapping:
             return None
         
-        seen = set()
+        
         
         def append_relationship(relationship):
             key = tuple(sorted([relationship.left.uid, relationship.right.uid]) + [relationship.relationship_type])
@@ -180,7 +180,7 @@ class ParallelsManager:
                             # a partial is not parallel to a partial
                             continue
                         partial = this_location.partial or other_location.partial
-                        append_relationship(Relationship(left=this_location, 
+                        relationships.append(Relationship(left=this_location, 
                                                          right=other_location,
                                                          relationship_type=relationship_type,
                                                          relationship_name=get_relationship_name(relationship_type, partial),
@@ -194,7 +194,7 @@ class ParallelsManager:
                             relationship_name = relationship_name=get_relationship_name(relationship_type, partial)
                             if other_location == this_location:
                                 continue
-                            append_relationship(Relationship(this_location,
+                            relationships.append(Relationship(this_location,
                                                             other_location,
                                                             relationship_type=relationship_type,
                                                             relationship_name=relationship_name,
@@ -203,16 +203,23 @@ class ParallelsManager:
                         partial = this_location.partial or other_location.partial
                         relationship_name = relationship_name=get_relationship_name(relationship_type, partial, inverse=True)
                         other_location = locations[0]
-                        append_relationship(Relationship(this_location,
+                        relationships.append(Relationship(this_location,
                                                         other_location,
                                                         relationship_type=relationship_type,
                                                         relationship_name=relationship_name,
                                                         partial=partial))
-                
-        return sorted(relationships, key=lambda o: humansortkey(str(o.left)))
-                        
-                    
-                
+        
+        
+        
+        seen = set()
+        filtered_relationships = []
+        for r in sorted(relationships, key=lambda o: humansortkey(str(o.left))):
+            key = (r.left.uid, r.right.uid, relationship_type)
+            if key not in seen:
+                filtered_relationships.append(r)
+            if not r.left.bookmark and not r.right.bookmark and not r.partial:
+                seen.add(key)
+        return filtered_relationships
             
 
 def load_json_file(name):
