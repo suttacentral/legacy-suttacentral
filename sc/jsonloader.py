@@ -146,6 +146,14 @@ class ParallelsManager:
         if not uid in uid_mapping:
             return None
         
+        seen = set()
+        
+        def append_relationship(relationship):
+            key = tuple(sorted([relationship.left.uid, relationship.right.uid]) + [relationship.relationship_type])
+            if key not in seen:
+                seen.add(key)
+                relationships.append(relationship)
+        
         found = False
         for entry in uid_mapping[uid]:
             for relationship_type in relationship_types:
@@ -172,11 +180,11 @@ class ParallelsManager:
                             # a partial is not parallel to a partial
                             continue
                         partial = this_location.partial or other_location.partial
-                        relationships.append(Relationship(left=this_location, 
-                                                          right=other_location,
-                                                          relationship_type=relationship_type,
-                                                          relationship_name=get_relationship_name(relationship_type, partial),
-                                                          partial=partial))
+                        append_relationship(Relationship(left=this_location, 
+                                                         right=other_location,
+                                                         relationship_type=relationship_type,
+                                                         relationship_name=get_relationship_name(relationship_type, partial),
+                                                         partial=partial))
                 if relationship_type in {'mentions', 'retells'}:
                     if this_location == locations[0]:
                         partial = this_location.partial or other_location.partial
@@ -186,20 +194,20 @@ class ParallelsManager:
                             relationship_name = relationship_name=get_relationship_name(relationship_type, partial)
                             if other_location == this_location:
                                 continue
-                            relationships.append(Relationship(this_location,
-                                                              other_location,
-                                                              relationship_type=relationship_type,
-                                                              relationship_name=relationship_name,
-                                                              partial=partial))
+                            append_relationship(Relationship(this_location,
+                                                            other_location,
+                                                            relationship_type=relationship_type,
+                                                            relationship_name=relationship_name,
+                                                            partial=partial))
                     else:
                         partial = this_location.partial or other_location.partial
                         relationship_name = relationship_name=get_relationship_name(relationship_type, partial, inverse=True)
                         other_location = locations[0]
-                        relationships.append(Relationship(this_location,
-                                                          other_location,
-                                                          relationship_type=relationship_type,
-                                                          relationship_name=relationship_name,
-                                                          partial=partial))
+                        append_relationship(Relationship(this_location,
+                                                        other_location,
+                                                        relationship_type=relationship_type,
+                                                        relationship_name=relationship_name,
+                                                        partial=partial))
                 
         return sorted(relationships, key=lambda o: humansortkey(str(o.left)))
                         
