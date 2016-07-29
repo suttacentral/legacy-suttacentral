@@ -210,6 +210,7 @@ tr.group-with-next {
     }
     .connector {
         position: relative;
+        white-space: nowrap;
     }
     .connector:before {
         right: 100%;
