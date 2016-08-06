@@ -350,7 +350,7 @@ def parseXML(filename):
     return _etree.parse(filename, parser=parser)
 
 class PrettyPrinter:
-    """ Pretty print HTML for Sutta Central
+    """ Pretty print HTML for SuttaCentral
     
     """
 

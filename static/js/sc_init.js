@@ -89,7 +89,7 @@ sc.classes = {
         "sb": "Paragraph numbers in Fritz Schaefer / Raimund Beyerlein.",
         "sbvi": "Paragraph numbers in Saṅghabhedavastu, Gnoli / Venkatacharya, 1977-78",
         "sbvii": "Paragraph numbers in Saṅghabhedavastu, Gnoli / Venkatacharya, 1977-78",
-        "sc": "Sutta Central paragraph number.",
+        "sc": "SuttaCentral paragraph number.",
         "sen": "Section and paragraph numbers in Senart, 1882.",
         "sht": "References for SHT fragments.",
         "snp-vagga-section-verse": "Chapter, section, and verse number within the section.",

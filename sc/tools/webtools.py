@@ -1,4 +1,4 @@
-""" Sutta Central HTML Text Processing Tools 
+""" SuttaCentral HTML Text Processing Tools 
 
 These tools are segregated because in a certain sense they have
 nothing to do with the suttas. In fact they could make a legitimate 
