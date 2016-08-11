@@ -14726,6 +14726,9 @@
               "parallels": ["ea24.8", "~mn31", "~ma185", "~mn128", "~ma72", "~sht-sutta75"]
           },
           {
+              "parallels": ["mn31#1-#7", "mn128#15-#19"]
+          },
+          {
               "parallels": ["iti100#2", "~mn92#23", "~snp3.7#verse-num-sc560"],
               "mentions": ["iti100#2", "mil5.5.3#1", "mil5.5.8#1", "~mil5.3.10#2"]
           },
