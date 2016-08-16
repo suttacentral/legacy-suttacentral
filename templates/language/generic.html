@@ -6,7 +6,7 @@
 {% endblock %}
 
 <table>
-{% set cutoff_level = 'division' if root.descendents > 50 and root.type == 'language' else None %}
+{% set cutoff_level = 'division' if root.descendents > 0 and root.type == 'language' else None %}
 {% for node in [root] recursive %}
 <tr>
     {% set show_uid = node.type in ('sutta',) %}

@@ -118,9 +118,8 @@
             text-align: center;
             font-weight: normal;
             letter-spacing: 0.02em;
-            
         }
-    
+
         .hgroup {
             h1 ~ p {
                 @include serif;
@@ -134,6 +133,9 @@
     }
 }
 
+#text:lang(skt) .hgroup { 
+        text-transform: capitalize;
+}
 .noto-sans-font {
     font-family: $noto-sans serif;
     letter-spacing: 0;
