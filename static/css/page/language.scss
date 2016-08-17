@@ -1,11 +1,11 @@
 table {
     .collection {
+        @include serif-small-caps;
         text-align: center;
-        font-variant: small-caps;
         font-size: 1.2em;
     }
     .language {
-        font-variant: small-caps;
+        @include serif-small-caps;
         text-align: center;
         font-size: 1.7em;
     }
