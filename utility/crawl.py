@@ -2,7 +2,7 @@
 
 """SuttaCentral Offline Crawl Utility
 
-This utility was created specifically for crawling Sutta Central and
+This utility was created specifically for crawling SuttaCentral and
 creating a reasonably clean and functional set of HTML files and other
 assets for offline use.
 

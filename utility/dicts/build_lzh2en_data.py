@@ -10,7 +10,7 @@ to change the information pulled out of them.
 Two subsettings are performed, firstly, only a subset of the information
 in the dictionaries is kept, secondly, only a subset of the entries in
 the dictionaries are kept - those being the ideographs which are actually
-used on Sutta Central.
+used on SuttaCentral.
 
 """
 
@@ -106,7 +106,7 @@ class BuddhdicBuilder:
                 print(head, pinyin, meaning)
                 print(str(entry))
         if skipped:
-            logging.info('{} entries do and {} entries do not appear in Sutta Central texts'.format(len(found), len(skipped)))
+            logging.info('{} entries do and {} entries do not appear in SuttaCentral texts'.format(len(found), len(skipped)))
             if self.args.verbose:
                 logging.info('Entries which do not appear: ')
                 logging.info(', '.join('{}: {}'.format(head, meaning) for head, meaning in skipped))
