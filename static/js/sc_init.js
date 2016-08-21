@@ -10,6 +10,7 @@ sc.classes = {
     margin: {
         "as": "Page numbers in Yamada, 1972.",
         "adh-v": "Paragraph numbers in Adhikaraṇavastu, Gnoli 1978",
+        "apz": "Paragraph numbers in A.P. de Zoysa",
         "cps": "Paragraph numbers in Catuṣpariṣatsūtra, E. Waldschmidt, 1952-62",
         "ba": "paragraph number in The Book of Analysis, Thittila 1969",
         "bhaisv": "Paragraph numbers in Bhaiṣajyavastu, J. Chung und K. Wille",

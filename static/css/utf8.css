@@ -5,6 +5,7 @@ separate file for now.... */
 
 /*a.bl:before {content:"bl "}*/
 a.adh-v:before {content:"Adhik-v "}
+a.apz:before {content:"APZ "}
 a.ba:before {content:"BA "}
 a.bhaisv:before {content:"Bhais-v "}
 a.bi:before {content:"BI "}
@@ -149,6 +150,8 @@ CSS Class	HTML Title
 .verse-num		"Verse number."
 
 .adh-v          "Paragraph numbers in Adhikaraṇavastu, Gnoli 1978"
+
+.apz		"Paragraph numbers in A.P. de Zoysa"
 
 .ba             "Paragraph numbers in The Book of Analysis, Thittila 1969"
 
