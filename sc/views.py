@@ -439,6 +439,7 @@ class TextView(ViewBase):
 
         context.uid = self.uid
         context.sutta = imm.suttas.get(self.uid)
+        context.subdivision = imm.subdivisions.get(self.uid)
         context.division = imm.divisions.get(self.uid)
         context.canonical = self.canonical
         
@@ -477,17 +478,17 @@ class TextView(ViewBase):
         if self.lang_code in {'zh', 'lzh', 'ko', 'jp'}:
             context.text = self.massage_cjk(context.text)
         context.lang_code = self.lang_code
-
-        context.text_refs = []
+        
+        context.root_lang = None
         if context.sutta:
-            if context.sutta.text_ref:
-                context.text_refs.append(context.sutta.text_ref)
-            context.text_refs.extend(context.sutta.translations)
-            
+            context.root_lang = context.sutta.lang
         elif context.division:
-            if context.division.text_ref:
-                context.text_refs.append(context.division.text_ref)
-            #context.text_refs.extend(context.division.translations)
+            context.root_lang = context.division.collection.lang
+        elif context.subdivision:
+            context.root_lang = context.subdivision.division.collection.lang
+        
+        context.text_refs = imm.get_text_refs(context.uid)
+        
         nextprev = imm.get_next_prev(uid=self.uid, lang_uid=self.lang_code)
         context.next_data = nextprev['next']
         context.prev_data = nextprev['prev']
@@ -786,7 +787,7 @@ class ElasticSearchResultsView(ViewBase):
             "query": self.query
         }
         if context.query_lang:
-            query_params['query_lang'] = context.query_lang
+            query_params['lang'] = context.query_lang
         context.base_query_url = '/search?{}'.format(urllib.parse.urlencode(query_params))
         
 class AdvancedSearchView(ElasticSearchResultsView):

@@ -631,11 +631,12 @@ class _Imm:
         for fuid in fuzzy_attempts(uid):
             textinfos = self.tim.get(uid=fuid)
             if textinfos:
-                for lang_uid, textinfo in textinfos:
+                for lang_uid, textinfo in textinfos.items():
                     out.append(TextRef.from_textinfo(textinfo, self.languages[lang_uid]))
                 break
         
         out.sort(key=TextRef.sort_key)
+        out.sort(key=lambda t: not t.lang.isroot)
         return out
         
     def get_fuzzy(self, uid):

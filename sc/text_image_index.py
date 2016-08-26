@@ -111,9 +111,9 @@ def get(sutta_uid, volpage) -> str:
         else:
             # check if uid is pre-hyphened as is the case with 
             # sn pts1 and pts2
-            m = regex.match(r'^(pts[123]-)(.*)', volpage)
+            m = regex.match(r'^(pts[123])(?:-|ed)?(.*)', volpage)
             if m:
-                volpage = normalize_id(m[1] + div + '-' + m[2])
+                volpage = normalize_id(m[1] + '-' + div + '-' + m[2])
             else:
                 volpage = normalize_id('pts-' + div + '-' + volpage[3:])
         

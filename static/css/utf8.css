@@ -18,6 +18,7 @@ a.d-vp:before {content:"D vp "}
 a.divy:before {content:"Divy "}
 a.eno89:before {content:"Eno "}
 a.es:before {content:"ES "}
+a.fa:before {content:"Fa "}
 a.fuk03:before {content:"Fuk "}
 a.fol:before {content:"Fol "}
 a.gatha-number:before {content:"Verse "}
@@ -33,6 +34,7 @@ a.hs:before {content:"Hs "}
 a.jb:before {content:"JB "}
 a.jd:before {content:"JD "}
 a.jsk:before {content:"JSK "}
+a.lh:before {content:"LH "}
 a.kat:before {content:"Kathina-v "}
 a.kel:before {content:"Kel "}
 a.kl:before {content:"KL "}
@@ -168,6 +170,8 @@ CSS Class	HTML Title
 
 .es    		"Paragraph numbers in Ekkehard Saß."
 
+.fa		"Verse numbers in Falk 2015."
+
 .uv		"Chapter and verse numbers for the Udānavarga."
 
 .dp		"Verse numbers for Dhammapada."
@@ -187,6 +191,8 @@ CSS Class	HTML Title
 .kat            "Paragraph numbers in Kaṭhinavastu, Matsumura, 1996."
 
 .ks     	"Paragraph numbers in Karl Seidenstücker."
+
+.lh		"Verse numbers in Lenz 2003, Hinüber 2004."
 
 .mat85		"Paragraph numbers in Matsumura, 1985."
 

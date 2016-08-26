@@ -1,4 +1,4 @@
-""" Analyzes the Sutta Central text repository
+""" Analyzes the SuttaCentral text repository
 
 Produces statistics on tags, classes and their usage.
 

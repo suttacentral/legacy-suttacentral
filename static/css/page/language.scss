@@ -1,20 +1,21 @@
 table {
-    .language, .collection, .division, .subdivision {
-        color: #767676;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding-top: 1em;
-        font-weight: bold;
+    .collection {
+        @include serif-small-caps;
+        text-align: center;
+        font-size: 1.2em;
     }
-}
-
-.subdivision {
-    font-size: 95%;
-}
-
-
-.collection {
-    margin-left: 4em;
+    .language {
+        @include serif-small-caps;
+        text-align: center;
+        font-size: 1.7em;
+    }
+    .division {
+        font-size: 1.1em;
+        color: #494949;
+    }
+    .subdivision {
+        font-size: 85%;
+    }
 }
 
 #intro {

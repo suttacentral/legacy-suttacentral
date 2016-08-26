@@ -45,9 +45,28 @@
        url(//fonts.gstatic.com/ea/notosanssinhala/v1/NotoSansSinhala-Regular.ttf) format('truetype');
 }
 
+/*
+ * Noto Sans Myanmar (Myanmar) http://www.google.com/fonts/earlyaccess
+ */
 @font-face {
-  font-family: 'Skolar PE';
+  font-family: 'Noto Sans Myanmar';
   font-style: normal;
-  font-weight: normal;
-  src: url(/fonts/nonfree/SkolarPE-Regular.otf);
+  font-weight: 400;
+  src: url(//fonts.gstatic.com/ea/notosansmyanmar/v4/NotoSansMyanmar-Regular.eot);
+  src: url(//fonts.gstatic.com/ea/notosansmyanmar/v4/NotoSansMyanmar-Regular.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosansmyanmar/v4/NotoSansMyanmar-Regular.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosansmyanmar/v4/NotoSansMyanmar-Regular.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosansmyanmar/v4/NotoSansMyanmar-Regular.ttf) format('truetype');
 }
+
+@font-face {
+  font-family: 'Noto Sans Myanmar';
+  font-style: normal;
+  font-weight: 700;
+  src: url(//fonts.gstatic.com/ea/notosansmyanmar/v4/NotoSansMyanmar-Bold.eot);
+  src: url(//fonts.gstatic.com/ea/notosansmyanmar/v4/NotoSansMyanmar-Bold.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/notosansmyanmar/v4/NotoSansMyanmar-Bold.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/notosansmyanmar/v4/NotoSansMyanmar-Bold.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/notosansmyanmar/v4/NotoSansMyanmar-Bold.ttf) format('truetype');
+}
+ 

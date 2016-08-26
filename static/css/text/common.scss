@@ -253,7 +253,7 @@ Text hypothetically reconstructed by the editor or translator.
 Text hypothetically reconstructed by the editor or translator.
 */
 
- p .add, p.add{
+#text:lang(gr) .add, #text:lang(pi) .add, #text:lang(skt) .add, #text:lang(bo) .add, #text:lang(lzh) .add, #text:lang(pr) .add, .infomode .add {
     border:1px solid rgb(215, 215, 215);
     display:inline;
     padding: 0 0.3em;
