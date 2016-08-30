@@ -132,6 +132,10 @@ $header-large-width:     800px;
     #page-footer-push {
         height: $mobile-footer-height;
     }
+    ul.results li .type, .advanced-search-link, label, #page-main-search>button:last-of-type {
+        display:none
+    }
+
     #onecol article,
     #text article,
     #home-start,
