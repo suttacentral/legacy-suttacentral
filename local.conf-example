@@ -1,0 +1,27 @@
+# Local configuration settings
+# ----------------------------
+#
+# Copy this file to local.conf and edit as you like.
+
+[global]
+    # engine.autoreload.on: True
+    # server.socket_host: '127.0.0.1'
+    # server.socket_port: 8800
+[app]
+    # base_url: 'http://localhost:8800'
+    # compile_assets: False
+    # data_dir: 'data'
+    # db_refresh_interval: 900
+    # debug: True
+    # default_locale: 'en_AU'
+    # development_bar: False
+    # internet_connectivity: True
+    # log_level: 'DEBUG'
+    # log_path: 'log/app.log'
+    # log_screen: True
+    # newrelic_environment: 'development'
+    # newrelic_license_key: '...'
+    # newrelic_real_user_monitoring: False
+    # nonfree_fonts: False
+    # runtime_tests: True
+    # timezone: 'UTC'
