@@ -27,7 +27,12 @@
     .grammar, .grammar + dd {
         display: inline-block;
     }
-
+    
+    dfn {
+        font-style: normal;
+        font-size: 1.2em;
+    }
+    
     dd {
         margin: 1em 0;
     }
