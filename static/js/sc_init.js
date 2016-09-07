@@ -309,9 +309,9 @@ sc.init = function(reset)
     if (reset) scState.restore("clean");
     
     buildTextualInformation();
-    if (sc.userPrefs.getPref("textInfo") === true) {
-        toggleTextualInfo(true);
-    }
+    // if (sc.userPrefs.getPref("textInfo") === true) {
+    //     toggleTextualInfo(true);
+    // }
     
     if (sc.mode.pali === true) {
         var translitFunc = null;

@@ -7,6 +7,9 @@
     } else {
         document.getElementById('sidebar').style.visibility = 'hidden';
     }
+    if (localStorage.getItem('infomode.on')) {
+        document.getElementsByTagName('body')[0].classList.add('infomode');
+    }
     console.log('Main: ', document.getElementsByTagName('main'));
     setTimeout(function(){
         document.getElementById('sidebar').style.visibility = 'visible';

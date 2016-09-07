@@ -302,18 +302,25 @@ function transliterateHandler()
     sc.userPrefs.setPref("script", this.id, true);
 }
 
-function toggleTextualInfo(force) {
+function toggleTextualInfo() {
     var showTextInfo = sc.userPrefs.getPref("textInfo");
     showTextInfo = !showTextInfo;
+    if ($('body').hasClass('infomode')) {
+        showTextInfo = false;
+    } else {
+        showTextInfo = true;
+    }
 
-    if (force === true) {showTextInfo = true;}
-    else if (force === false) {showTextInfo = false;}
+    // if (force === true) {showTextInfo = true;}
+    // else if (force === false) {showTextInfo = false;}
 
     if (showTextInfo)
     {
         $(document.body).addClass("infomode");
+        localStorage.setItem('infomode.on', true);
     } else {
         $(document.body).removeClass("infomode");
+        localStorage.removeItem('infomode.on');
     }
     sc.userPrefs.setPref("textInfo", showTextInfo, false);
     sc.text_image.init();
