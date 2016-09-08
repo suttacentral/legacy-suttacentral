@@ -23,6 +23,8 @@ sc.classes = {
         "bjt": "Buddha Jayanthi Tipitaka",
         "d-vp": "Vol/page of the Derge edition",
         "divy": "Paragraph numbers in Divyāvadāna, ed. E.B. Cowell, R.A. Neil, Cambridge 1886",
+        "dhskd": "Folio and line numbers in Dharmaskandha, Dietz, 1984",
+        "dhskm": "Folio and line numbers in Dharmaskandha, Matsuda, 1986",
         "eno89": "Paragraph numbers in Enomoto, 1989.",
 	"es": "Paragraph numbers in Ekkehard Saß.",
 	"fa": "Verse numbers in Falk 2015.",
