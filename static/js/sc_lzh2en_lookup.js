@@ -18,9 +18,9 @@ sc.lzh2enLookup = {
     init: function(button, markup_target){
         this.markupTarget = $(markup_target).addClass('lzh2enLookup')[0];
         this.button = $(button).on('click', sc.lzh2enLookup.toggle);
-        if (sc.sessionState.getItem('lzh2en.active')) {
+        if (sc.sessionState.getItem('lzh2en.active') || localStorage.getItem('lzh2en.on')) {
             this.activate();
-        }
+        };
     },
     before: function(){
         self = sc.lzh2enLookup;
@@ -45,6 +45,7 @@ sc.lzh2enLookup = {
     },
     activate: function(){
         var self = this;
+        localStorage.setItem('lzh2en.on', true);
         if (!this.originalHTML)
             this.originalHTML = this.markupTarget.innerHTML;
         
@@ -97,6 +98,7 @@ sc.lzh2enLookup = {
     },
     deactivate: function(){
         this.markupTarget.innerHTML = this.originalHTML;
+        localStorage.removeItem('lzh2en.on');
         sc.sidebar.messageBox.clear();
         sc.sidebar.messageBox.show('<p>Lookup disabled.</p>', {'timeout': 5000});
         sc.sessionState.setItem('lzh2en.active', false);
@@ -157,9 +159,12 @@ sc.lzh2enLookup = {
     },
     toggle: function(){
         self = sc.lzh2enLookup;
-        self.active = !self.active;
-        if (self.active) self.activate()
-        else self.deactivate();
+        // self.active = !self.active;
+        if (localStorage.getItem('lzh2en.on')) {
+            self.deactivate();
+        } else {
+            self.activate();
+        };
     },
     setCurrent: function(node) {
         var self=this,
@@ -231,9 +236,10 @@ sc.lzh2enLookup = {
         if (sc.lzh2enData[graph])
         {
             var href = "http://www.buddhism-dict.net/cgi-bin/xpr-ddb.pl?q=" + encodeURI(graph);
-            return ('<tr><td class="ideograph"><a href="' + href + '">' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enData[graph][0] + ': ' + sc.lzh2enData[graph][1] + '</td></tr>');
+            return ('<tr><td class="ideograph"><a title="Go to full entry at the DDB. Login with user name ‘guest’" href="' + href + '" target="_blank">' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enData[graph][0] + ': ' + sc.lzh2enData[graph][1] + '</td></tr>');
         } else if (sc.lzh2enFallbackData[graph]) {
-            return ('<tr class="fallback"><td class="ideograph"><a>' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enFallbackData[graph][0] + ': ' + sc.lzh2enFallbackData[graph][1] + '</td></tr>')
+            var href = "http://www.buddhism-dict.net/cgi-bin/dealt-lookup?q=" + encodeURI(graph);
+            return ('<tr class="fallback"><td class="ideograph"><a title="Go to full entry at the CJKV. Login with user name ‘guest’" href="' + href + '" target="_blank">' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enFallbackData[graph][0] + ': ' + sc.lzh2enFallbackData[graph][1] + '</td></tr>')
         }
         return "";
     },
