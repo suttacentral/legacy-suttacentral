@@ -18,6 +18,8 @@ sc.text_image = {
                             if (/^p_/.test(id) || /^\d+$/.test(id)) return
                             if (/\bpts[123]\b/.test(cls)) {
                                 id = id.replace(/^(pts[123])/, '$1-')
+                            } else if (/\bpts/.test(cls)) {
+                                id = id.replace(/\bpts/, 'pts-')
                             }
                             mapping[id] = this
                             return id
