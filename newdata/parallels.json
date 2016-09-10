@@ -1,6 +1,24 @@
 {
     "suttas": [
           {
+              "parallels": ["vb6", "~dhsk1-dhsk14"]
+          },
+          {
+              "parallels": ["~vb6", "dhsk1-dhsk14"]
+          },
+          {
+              "parallels": ["vb14", "~dhsk15-dhsk17"]
+          },
+          {
+              "parallels": ["~vb14", "dhsk15-dhsk17"]
+          },
+          {
+              "parallels": ["vb13", "~dhsk18-dhsk19"]
+          },
+          {
+              "parallels": ["~vb13", "dhsk18-dhsk19"]
+          },
+          {
               "parallels": ["sn46.33", "an5.23#1-2","~an3.101","~sa1246"]
           },
           {
@@ -5086,6 +5104,12 @@
           },
           {
               "parallels": ["sn35.107", "sa233", "sn12.44"]
+          },
+          {
+              "parallels": ["mn148#6", "~sn12.44#2-#3"]
+          },
+          {
+              "parallels": ["~mn148#6", "sn12.44#2-#3"]
           },
           {
               "parallels": ["sn35.108", "sa149", "~sa150-151"]
@@ -15251,6 +15275,12 @@
               "parallels": ["mn51#9", "~an4.198#1", "~dn33#165"]
           },
           {
+              "parallels": ["mn16#24", "~mn53#9"]
+          },
+          {
+              "parallels": ["~mn16#24", "mn53#9"]
+          },
+          {
               "mentions": ["mn54#17", "mnd1#23", "mnd1#76"]
           },
           {
@@ -15264,6 +15294,9 @@
           },
           {
               "parallels": ["mn60#24", "~an3.156-162#2", "~an4.198#2", "~dn25#11", "~dn8#15", "~mn12#42", "~mn45#5", "~mn51#9"]
+          },
+          {
+              "parallels": ["mn60#23", "mn51#5"]
           },
           {
               "mentions": ["mn62#11", "~mil7.4.6#6"]
