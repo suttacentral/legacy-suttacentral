@@ -7,6 +7,12 @@
               "parallels": ["~vb6", "dhsk1-dhsk14"]
           },
           {
+              "parallels": ["~mn71#3", "mn14#14"]
+          },
+          {
+              "parallels": ["mn71#3", "~mn14#14"]
+          },
+          {
               "parallels": ["vb14", "~dhsk15-dhsk17"]
           },
           {
