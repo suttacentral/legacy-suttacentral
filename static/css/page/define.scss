@@ -48,6 +48,10 @@
     .book_entry + .book_entry {
         border-top: 1px solid #ccc;
     }
+    
+    .book_entry+.book_entry small {
+    padding-top: 1.5em;
+    }
 
     .eti {
         color: misc-color(medium-gray);
@@ -115,4 +119,9 @@
 #main_search_results select,
 #main_search_results button {
     @include sans-serif;
+}
+
+.advanced-search-link+p, .advanced-search-link{
+    font-size:0.75em;
+    color:#767676;
 }
