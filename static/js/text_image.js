@@ -81,6 +81,6 @@ sc.text_image = {
     }
 }
 
-if (sc.userPrefs.getPref("textInfo") === true) {
+if (localStorage.getItem('infomode.on')) {
     sc.text_image.init();
 }
