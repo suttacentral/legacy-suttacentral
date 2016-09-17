@@ -302,17 +302,20 @@ function transliterateHandler()
     sc.userPrefs.setPref("script", this.id, true);
 }
 
-function toggleTextualInfo() {
+function toggleTextualInfo(force) {
+    if (localStorage.getItem('infomode.on')) {
+        sc.userPrefs.setPref('textinfo', localStorage.getItem('infomode.on'), false)
+    }
     var showTextInfo = sc.userPrefs.getPref("textInfo");
     showTextInfo = !showTextInfo;
-    if ($('body').hasClass('infomode')) {
-        showTextInfo = false;
-    } else {
-        showTextInfo = true;
-    }
+    // if ($('body').hasClass('infomode')) {
+    //     showTextInfo = false;
+    // } else {
+    //     showTextInfo = true;
+    // }
 
-    // if (force === true) {showTextInfo = true;}
-    // else if (force === false) {showTextInfo = false;}
+    if (force === true) {showTextInfo = true;}
+    else if (force === false) {showTextInfo = false;}
 
     if (showTextInfo)
     {
