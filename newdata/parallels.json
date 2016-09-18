@@ -1509,6 +1509,12 @@
               "remarks": "sht-sutta39: Identified in SHT viii p. 169."
           },
           {
+              "parallels": ["an9.8#2", "an9.7#2", "mn76#29", "~dn29#44"]
+          },
+          {
+              "parallels": ["~an9.8#2", "~an9.7#2", "~mn76#29", "dn29#44"]
+          },
+          {
               "parallels": ["arv1", "dn33#171"]
           },
           {
