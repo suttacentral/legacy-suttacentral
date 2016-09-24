@@ -60,11 +60,14 @@
         @include sans-serif;
     }
 
-
+    .entries{
+        margin-bottom:48px
+    }
+    
     .related_terms {
         width: 20%;
         float: left;
-        margin: 0 1em;
+        margin: 0 1em 48px;
         @include sans-serif;
     }
     
