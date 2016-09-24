@@ -29,6 +29,7 @@
         display: inline-block;
         font-size: 0.85em;
         color: misc-color(medium-gray);
+        @include sans-serif;
     }
     
     dfn {
