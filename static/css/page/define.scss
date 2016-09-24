@@ -9,7 +9,8 @@
     .source {
         float: right;
         margin-right: 1em;
-        padding: 0.3em 0 0 0;
+        padding: 0.2em 0 0 0;
+        color: misc-color(medium-gray);
     }
 
     .this {
@@ -26,15 +27,19 @@
 
     .grammar, .grammar + dd {
         display: inline-block;
+        font-size: 0.85em;
+        color: misc-color(medium-gray);
+        @include sans-serif;
     }
     
     dfn {
         font-style: normal;
-        font-size: 1.2em;
+        font-weight: bold;
+        text-transform:lowercase;
     }
     
     dd {
-        margin: 1em 0;
+        margin: 0 0 0.75em;
     }
 
     dd .term {
@@ -44,9 +49,15 @@
     .book_entry + .book_entry {
         border-top: 1px solid #ccc;
     }
+    
+    .book_entry+.book_entry small {
+    padding-top: 1.5em;
+    }
 
     .eti {
-        color: grey;
+        color: misc-color(medium-gray);
+        font-size: 0.85em;
+        @include sans-serif;
     }
 
 
@@ -77,10 +88,10 @@
         @include sans-serif;
         color:#565656;
         font-size:0.8em;
-        background:rgb(235, 235, 235);
-        padding: 0.1em 0.2em 0 0.2em;
+        background:misc-color(light-light-gray);
+        padding: .2em .3em 0.1em .3em;
         border-radius: 3px;
-        border: 1px solid rgb(190, 190, 190);
+        border: 1px solid misc-color(light-gray);
         margin:0 0.1em;
     }
 
@@ -105,3 +116,92 @@
 
 }
 
+.advanced-search-link + p,
+#main_search_results label,
+#main_search_results select,
+#main_search_results button {
+    @include sans-serif;
+}
+
+.advanced-search-link+p, .advanced-search-link{
+    font-size:0.75em;
+    color:#767676;
+}
+dd {
+.inline-li {
+    @include sans-serif;
+    font-weight: bold;
+    color: #767676;
+    padding: 0 0.5em;
+}
+.case {
+    color: misc-color(medium-gray);
+    @include sans-serif;
+    display: block;
+    font-feature-settings: "smcp" 1;
+    letter-spacing: 0.03em;
+    font-size: 0.8rem
+}
+.square {
+    color: misc-color(medium-gray);
+}
+ol {
+    list-style-type: none;
+    counter-reset: step-counter;
+    margin: 0 0 0 1.5em
+}
+.little {
+    list-style-type: decimal;
+}
+.little li {
+    margin: 0 0 0 0
+}
+ul {
+    list-style-type: disc;
+    margin: 0 0 0.75em 1em!important
+}
+ol li {
+    counter-increment: step-counter;
+    margin: 0.25em 0 0 0
+}
+.lower-latin>li::before {
+    content: counter(step-counter, lower-latin);
+}
+.upper-latin>li::before {
+    content: counter(step-counter, upper-latin);
+}
+.decimal>li::before {
+    content: counter(step-counter, decimal);
+}
+.upper-roman>li::before {
+    content: counter(step-counter, upper-roman);
+}
+.lower-greek>li::before {
+    content: counter(step-counter, lower-greek);
+}
+li::before {
+    font-weight: bold;
+    @include sans-serif;
+    position: absolute;
+    text-align: right;
+    margin-left: -1.5em;
+}
+h3,
+h4 {
+    font-weight: normal
+}
+h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.2em;
+    line-height: 1.25em;
+}
+h4 {
+    margin: 0.85rem 0 0.75rem 0;
+    font-size: 1.1em;
+    line-height: 1.25em;
+}
+ol+h3,
+ol+p {
+    margin-top: .75em
+}
+}
