@@ -56,6 +56,7 @@
     .eti {
         color: misc-color(medium-gray);
         font-size: 0.85em;
+        @include sans-serif;
     }
 
 
@@ -124,4 +125,82 @@
 .advanced-search-link+p, .advanced-search-link{
     font-size:0.75em;
     color:#767676;
+}
+dd {
+.inline-li {
+    @include sans-serif;
+    font-weight: bold;
+    color: #767676;
+    padding: 0 0.5em;
+}
+.case {
+    color: misc-color(medium-gray;
+    @include sans-serif;
+    display: block;
+    font-feature-settings: "smcp" 1;
+    letter-spacing: 0.03em;
+    font-size: 0.8rem
+}
+.square {
+    color: misc-color(medium-gray;
+}
+ol {
+    list-style-type: none;
+    counter-reset: step-counter;
+    margin: 0 0 0 1.5em
+}
+.little {
+    list-style-type: decimal;
+}
+.little li {
+    margin: 0 0 0 0
+}
+ul {
+    list-style-type: disc;
+    margin: 0 0 0.75em 1em!important
+}
+ol li {
+    counter-increment: step-counter;
+    margin: 0.25em 0 0 0
+}
+.lower-latin>li::before {
+    content: counter(step-counter, lower-latin);
+}
+.upper-latin>li::before {
+    content: counter(step-counter, upper-latin);
+}
+.decimal>li::before {
+    content: counter(step-counter, decimal);
+}
+.upper-roman>li::before {
+    content: counter(step-counter, upper-roman);
+}
+.lower-greek>li::before {
+    content: counter(step-counter, lower-greek);
+}
+li::before {
+    font-weight: bold;
+    @include sans-serif;
+    position: absolute;
+    text-align: right;
+    margin-left: -1.5em;
+}
+h3,
+h4 {
+    font-weight: normal
+}
+h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.2em;
+    line-height: 1.25em;
+}
+h4 {
+    margin: 0.85rem 0 0.75rem 0;
+    font-size: 1.1em;
+    line-height: 1.25em;
+}
+ol+h3,
+ol+p {
+    margin-top: .75em
+}
 }
