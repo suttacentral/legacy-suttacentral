@@ -45,11 +45,11 @@
     "weights": {
         "bold": "bold",
         "bd": "bold",
-        "it": "italic",
         "semibold": "600"
     },
     "styles": {
-        "italic": "italic"
+        "italic": "italic",
+        "it": "italic"
     },
     "css_font_class": {
         "default": "skolar-font",
