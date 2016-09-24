@@ -64,6 +64,7 @@
         width: 20%;
         float: left;
         margin: 0 1em;
+        @include sans-serif;
     }
     
     .near_terms ul,.fuzzy_terms ul {
