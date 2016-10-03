@@ -4,6 +4,13 @@
     h1, h2 {
         width: 70%;
         float: right;
+        @include sans-serif;
+        color: misc-color(medium-gray);
+    }
+    
+        h1 strong {
+        color: misc-color(dark-gray);
+        @include serif;
     }
 
     .source {
