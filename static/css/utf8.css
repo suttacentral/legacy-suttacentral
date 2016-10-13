@@ -13,6 +13,7 @@ a.bjt:before {content:"BJT "}
 a.bm:before {content:"BM "}
 a.bn:before {content:"BN "}
 a.bps:before {content:"BPS "}
+a.bv:before {content:"BV "}
 a.bjt:before {content:"BJT "}
 a.cps:before {content:"Cps "}
 a.d-vp:before {content:"D vp "}
@@ -166,6 +167,8 @@ CSS Class	HTML Title
 .bm     	"Paragraph numbers in Bhikkhu Mettiko."
 
 .bn     	"Paragraph numbers in Bhikkhu Ñāṇadassana."
+
+.bv		"Sutta numbers in buddha-vacana.org"
 
 .cps            "Paragraph numbers in Catuṣpariṣatsūtra, E. Waldschmidt, 1952-62"
 

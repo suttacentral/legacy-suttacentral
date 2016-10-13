@@ -20,6 +20,7 @@ sc.classes = {
 	"bm": "Paragraph numbers in Bhikkhu Mettiko.",
 	"bn": "Paragraph numbers in Bhikkhu Ñāṇadassana.",
         "bps": "Buddhist Publication Society",
+        "bv": "Sutta numbers in buddha-vacana.org",
         "bjt": "Buddha Jayanthi Tipitaka",
         "d-vp": "Vol/page of the Derge edition",
         "divy": "Paragraph numbers in Divyāvadāna, ed. E.B. Cowell, R.A. Neil, Cambridge 1886",
