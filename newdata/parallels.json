@@ -780,6 +780,21 @@
               "parallels": ["an4.114", "an5.140", "ea-2.26"]
           },
           {
+              "parallels": ["mn2#22", "mn125#22", "an4.114#9", "an4.157#3", "an4.165#3", "an5.140#12", "pi-tv-kd1#439", "pi-tv-bu-vb-pc65#3", "pi-tv-bi-vb-pc71#2"]
+          },
+          {
+              "parallels": ["mn125#16", "mn107#4-#6"]
+          },          
+          {
+              "parallels": ["an4.114#9-#10", "an5.140#12-#13"]
+          },
+          {
+              "parallels": ["an4.114#7-#8", "an5.140#9-#10", "~an4.164#4"]
+          },
+          {
+              "parallels": ["~an4.114#7-#8", "~an5.140#9-#10", "an4.164#4"]
+          },
+          {
               "parallels": ["an4.123-124", "ma168", "~mn120"],
               "remarks": "ma168: <span class='author'>Akanuma</span> p. 169 lists A iv. 123, 124 as parallel(s). Neither AN 4.123–124 at AN ii 126 nor AN 7.66 at AN iv 123–124 bears any resemblance to MN 120. He also lists MA 168 as a full parallel, yet  examination shows that this discourse differs in so many respects from MN 120 that it is probably best reckoned as a partial parallel. A so far unpublished Gandharī fragment, Senior manuscript 10, parallels part of MN 120 (Mark Allon, private communication)."
           },
@@ -4070,7 +4085,10 @@
               "parallels": ["sn1.61", "sa-2.247", "sa1020"]
           },
           {
-              "parallels": ["sn1.62", "sa-2.236", "sa1009"]
+              "parallels": ["sn1.62", "sa-2.236", "sa1009", "~an4.186#2"]
+          },
+          {
+              "parallels": ["~sn1.62", "~sa-2.236", "~sa1009", "an4.186#2"]
           },
           {
               "parallels": ["sn1.64", "sa-2.237", "sa1010"]
@@ -13800,9 +13818,6 @@
               "mentions": ["an4.110#1", "pp2.4#66"]
           },
           {
-              "parallels": ["an4.114#8", "an4.164#4"]
-          },
-          {
               "parallels": ["an4.122", "mn67#5-#9"]
           },
           {
@@ -13932,6 +13947,13 @@
           {
               "parallels": ["an4.37#3", "mn33#17-#20"],
               "mentions": ["an4.37#3", "kv18.9#4", "kv10.3#6"]
+          },
+          {
+              "parallels": ["sn35.120#3-#5", "mn39#8-#10", "sn35.127#4", "sn35.240#2", "an3.16#2-#4", "an4.37#3-#5"]
+          },
+          {
+              "parallels": ["sn35.120#3", "dn2#76", "dn3#39", "dn4#62", "dn5#96", "dn6#23", "dn7#2", "dn8#42", "dn9#13", "dn10#17", "dn11#15", "dn12#20", "dn13#59", "mn27#33", "mn38#105", "mn51#17", "mn53#4", "mn60#27", "mn76#22", "mn79#40", "mn94#22", "mn101#41", "mn107#4", "mn112#15", "an4.14#1", "an4.165#4", "an4.198#11", "an5.76#18", "an5.140#11", "an10.99#20", "an11.17#6", "mn39#8", "sn35.127#4", "sn35.240#2", "an3.16#2", "an4.37#3"],
+              "mentions": ["sn35.120#3", "mnd14#100", "mnd14#103"]
           },
           {
               "mentions": ["an4.38#4", "mnd10#40"]
@@ -14332,7 +14354,7 @@
               "parallels": ["an9.32", "dn34#176-#178", "~dn33#326"]
           },
           {
-              "parallels": ["an9.36#2", "mn64#17"],
+              "parallels": ["mn64#17-#21", "mn52#7-#15", "an9.36#2-#9", "an11.16#4-#9"],
               "mentions": ["an9.36#2", "cnd5#564", "mnd14#11", "cnd15#7"]
           },
           {
