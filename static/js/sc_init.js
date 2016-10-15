@@ -108,6 +108,7 @@ sc.classes = {
         "ttc": "Paragraph numbers in Thích Thiện Châu.",
         "ud-sutta": "Sutta number.",
         "ud-vagga-sutta": "Chapter/sutta number.",
+        "thv": "Sutta numbers in Thich Huyen-Vi",
         "tri62": "Sūtra and paragraph number in Tripāṭhī, 1962.",
         "tri95": "Section and paragraph number in Tripāṭhī, 1995.",
         "tu": "",
