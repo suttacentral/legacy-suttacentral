@@ -790,9 +790,9 @@ function lookupWord(word){
     }
     if (isTi) allMatches.push({"base":"iti", "meaning":"endquote"});
     for (var i in allMatches) {
-        var href = "http://suttacentral.net/search?lang=&define=&query=" + allMatches[i].base;
+        var href = "http://suttacentral.net/define/" + allMatches[i].base;
         
-        out += '<a href="'+href+'">' + allMatches[i].base + '</a>: ' + allMatches[i].meaning;
+        out += '<a href="'+href+'" target="_blank">' + allMatches[i].base + '</a>: ' + allMatches[i].meaning;
         if (i != allMatches.length - 1)
         {
             out += " + ";
