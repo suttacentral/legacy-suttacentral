@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument('--strip-tags',
                         type=str,
                         help="CSS selector for stripping tags but leaving text",
-                        default=".ms, .msdiv, .t, .t-linehead, .tlinehead, .t-byline, .t-juanname, .juannum, .mirror-right")
+                        default=".ms, .msdiv, .t, .t-linehead, .tlinehead, .t-byline, .t-juanname, .juannum, .mirror-right, .cross")
     parser.add_argument('--strip-trees',
                         type=str,
                         help="CSS selector for removing entire element trees",
@@ -92,6 +92,7 @@ class TokenType(Enum):
     comment = 1
     text = 2
     newline = 3
+    comment_note = 4
     end = 9
     
 
@@ -155,7 +156,14 @@ class Html2Po:
             msgstr_mapping[sanitize_key(msgstr_element.text_content())] = {'value': msgstr_element.get('data-msgstr'), 'used': False}
         for msgstr_element in msgstr_elements:
             msgstr_element.drop_tag()
-            
+        
+        variant_notes = {}
+        var_elements = e.cssselect('.var')
+        for var_element in var_elements:
+            variant_notes[var_element.text_content()] = 'VAR: {} → {}'.format(var_element.text_content(), var_element.get('title'))
+        for var_element in var_elements:
+            var_element.drop_tag()
+        
         html_string = lxml.html.tostring(e, encoding='unicode').strip()
         html_string = html_string.replace('\n', ' ').replace('\xa0', ' ').replace('\xad', '')
         m = regex.match(r'<[^<]+>[ \n\t]*(.*)</\w+>', html_string, flags=regex.DOTALL)
@@ -196,11 +204,16 @@ class Html2Po:
                     sentence_count += 1
                     ctxt = '{}:{}.{}'.format(self.uid, self.paragraph_count, sentence_count)
                     msgstr = ''
-                    key = sanitize_key(lxml.html.fromstring(line).text_content())
-                    if key in msgstr_mapping:
-                        msgstr_mapping[key]['used'] = True
-                        msgstr = msgstr_mapping[key]['value']
-                    self.add_token(TokenType.text, line, ctxt, msgstr)
+                    
+                    for var_text in list(variant_notes):
+                        if var_text in line:
+                            self.add_token(TokenType.comment_note, variant_notes.pop(var_text))
+                    if line and not line.isspace():
+                        key = sanitize_key(lxml.html.fromstring(line).text_content())
+                        if key in msgstr_mapping:
+                            msgstr_mapping[key]['used'] = True
+                            msgstr = msgstr_mapping[key]['value']
+                        self.add_token(TokenType.text, line, ctxt, msgstr)
                 
                 if i + 1 < len(lines):
                     br = lines[i + 1].strip()
@@ -266,6 +279,7 @@ msgstr ""
         )
         
         comments = []
+        comment_notes = []
         prev_token = None
         for token in self.token_stream:
             if token.type == TokenType.comment:
@@ -273,7 +287,11 @@ msgstr ""
                     comments[0] += token.value.strip()
                 else:
                     comments.append(token.value.strip())
+            elif token.type == TokenType.comment_note:
+                comment_notes.append(token.value)
             elif token.type == TokenType.text:
+                comments.extend(comment_notes)
+                comment_notes.clear()
                 catalog.add(id=token.value.strip().replace('\n', ' ').replace('"', '"'),
                             string=token.msgstr or '',
                             auto_comments=comments,

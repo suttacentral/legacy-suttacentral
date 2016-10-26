@@ -30,10 +30,12 @@ class Po2Html:
         dropping = True
         last_is_comment = False
         out = [self.head()]
-        for m in regex.finditer(r'#:\s*(?<comment>.*)|msgstr (?:"(?<msgstr>.*)"\n?)+', string):
+        for m in regex.finditer(r'#[.:]\s*(?<comment>.*)|msgstr (?:"(?<msgstr>.*)"\n?)+', string):
             print(m[0], dropping)
             if dropping:
                 if m['comment']:
+                    if regex.match(r'[\s\p{punct}]*VAR', m['comment']):
+                        continue
                     body_m = regex.search(r'(?is)<body.*', m['comment'])
                     if body_m:
                         dropping = False
