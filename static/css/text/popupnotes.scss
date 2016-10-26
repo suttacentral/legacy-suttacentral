@@ -187,7 +187,7 @@ span.lookup {
         display:block;
         z-index:20;
         bottom:0.2em;
-        margin-bottom:1.1em;
+        margin-bottom:0.8em;
         right: -50%;
         left: -50%;
         min-width: 10em;
@@ -207,6 +207,11 @@ span.lookup {
         letter-spacing:0;
         word-spacing:0;
         text-transform: none;
+        -webkit-transition: all 0.4s ease-out;
+        -moz-transition: all 0.4s ease-out;
+        -o-transition: all 0.4s ease-out;
+        -ms-transition: all 0.4s ease-out;
+        transition: all 0.4s ease-out;
 
         & > a {
             color: misc-color(dark-gray);
