@@ -101,14 +101,27 @@
     
     .ref {
         @include sans-serif;
-        color:#565656;
+        color:misc-color(dark-medium-gray);
         font-size:0.8em;
         background:misc-color(light-light-gray);
-        padding: .2em .3em 0.1em .3em;
+        padding: 0 .3em;
         border-radius: 3px;
         border: 1px solid misc-color(light-gray);
         margin:0 0.1em;
-        white-space:nowrap
+        white-space:nowrap;
+        display:inline-block
+    }
+    
+    abbr {
+        @include sans-serif;
+        color:white;
+        font-weight:bold;
+        font-size:0.8em;
+        background:misc-color(medium-gray);
+        padding: 0 .3em;
+        border-radius: 3px;
+        white-space:nowrap;
+        display:inline-block
     }
 
     .google-maps {
