@@ -1,4 +1,9 @@
 
+/* This rule prevents a problem with quote hanger */
+p > * {
+    text-indent: initial;
+}
+
 /* These rules always apply */
 .sutta {
     max-width: 40em;
