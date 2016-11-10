@@ -12,7 +12,7 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
     a.yam72, a.es, a.bm, a.bn, a.hh, a.jd, a.ks, a.nm, a.np, a.pl, a.wg, a.jsk, a.mt, a.sb, a.ss, a.tb,
     a.kl, a.bi, a.bjt, a.ttc, #text:lang(si) a.msdiv, a.bhaisv, a.msvii, a.mat96, a.kat, a.pand-v,
     a.msviii, a.say-v, a.adh-v, a.cps, a.sbvi, a.sbvii, a.ia, a.verse-num-sc, 
-    a.vagga-gatha-num-sc, a.ba, a.pts-s, a.fa, a.lh
+    a.vagga-gatha-num-sc, a.ba, a.pts-s, a.dhskd, a.dhskm
 {
     visibility:hidden;
     text-align:left;
@@ -44,7 +44,7 @@ a.msviv, a.msvwi, a.msvi, a.msvii, a.msviii {color: saturated-color(dark-yellow)
 a.t, a.t-linehead {color: saturated-color(plain-green);}
 .line-by-line a.t-linehead {display: none;}
 div#text:not(.line-by-line) a.t {display: none;}
-a.wp, a.gbm, a.verse-num-sc {color: saturated-color(plain-red);}
+a.wp, a.gbm, a.verse-num-sc, a.dhskm {color: saturated-color(plain-red);}
 a.pts {color: saturated-color(dark-yellow);}
 a.pts1ed, a.snp-vagga-section-verse, a.vagga-gatha-num-sc {color: saturated-color(dark-yellow);}
 a.pts2ed, a.snp-vagga-verse,a.pts-vp-en, a.pts-s {color: saturated-color(plain-red);}
@@ -74,9 +74,10 @@ a.bn
 a.bps
 a.cps
 a.divy
+a.dhskm
+a.dhskd
 a.eno89
 a.es
-a.fa
 a.fuk03
 a.fol
 a.gbm
@@ -90,7 +91,6 @@ a.ia
 a.jb
 a.jd
 a.jsk
-a.lh
 a.kat
 a.kel
 a.kl

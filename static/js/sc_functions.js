@@ -302,17 +302,20 @@ function transliterateHandler()
     sc.userPrefs.setPref("script", this.id, true);
 }
 
-function toggleTextualInfo() {
+function toggleTextualInfo(force) {
+    if (localStorage.getItem('infomode.on')) {
+        sc.userPrefs.setPref('textinfo', localStorage.getItem('infomode.on'), false)
+    }
     var showTextInfo = sc.userPrefs.getPref("textInfo");
     showTextInfo = !showTextInfo;
-    if ($('body').hasClass('infomode')) {
-        showTextInfo = false;
-    } else {
-        showTextInfo = true;
-    }
+    // if ($('body').hasClass('infomode')) {
+    //     showTextInfo = false;
+    // } else {
+    //     showTextInfo = true;
+    // }
 
-    // if (force === true) {showTextInfo = true;}
-    // else if (force === false) {showTextInfo = false;}
+    if (force === true) {showTextInfo = true;}
+    else if (force === false) {showTextInfo = false;}
 
     if (showTextInfo)
     {
@@ -787,9 +790,9 @@ function lookupWord(word){
     }
     if (isTi) allMatches.push({"base":"iti", "meaning":"endquote"});
     for (var i in allMatches) {
-        var href = "http://suttacentral.net/search?lang=&define=&query=" + allMatches[i].base;
+        var href = "http://suttacentral.net/define/" + allMatches[i].base;
         
-        out += '<a href="'+href+'">' + allMatches[i].base + '</a>: ' + allMatches[i].meaning;
+        out += '<a href="'+href+'" target="_blank">' + allMatches[i].base + '</a>: ' + allMatches[i].meaning;
         if (i != allMatches.length - 1)
         {
             out += " + ";

@@ -1,6 +1,81 @@
 {
     "suttas": [
           {
+              "parallels": ["vb6", "~dhsk1-dhsk14"]
+          },
+          {
+              "parallels": ["~vb6", "dhsk1-dhsk14"]
+          },
+          {
+              "parallels": ["~mn71#3", "mn14#14"]
+          },
+          {
+              "parallels": ["mn71#3", "~mn14#14"]
+          },
+          {
+              "parallels": ["vb14", "~dhsk15-dhsk17"]
+          },
+          {
+              "parallels": ["~vb14", "dhsk15-dhsk17"]
+          },
+          {
+              "parallels": ["vb13", "~dhsk18-dhsk19"]
+          },
+          {
+              "parallels": ["~vb13", "dhsk18-dhsk19"]
+          },
+          {
+              "parallels": ["sn46.33", "an5.23#1-2","~an3.101","~sa1246"]
+          },
+          {
+              "parallels": ["~sn46.33", "~an5.23#1-2","an3.101"]
+          },
+          {
+              "parallels": ["~sn46.33", "~an5.23#1-2","sa1246"]
+          },
+          {
+              "parallels": ["sn46.35","sn46.24","sa704", "~sn46.23"]
+          },
+          {
+              "parallels": ["~sn46.35","~sn46.24","~sa704", "sn46.23"]
+          },
+          {
+              "parallels": ["sn46.38","sa709"]
+          },
+          {
+              "parallels": ["sn46.37#1", "an5.51#2", "sn46.39#2", "sa707#t-linehead0189c14-#t-linehead0189c20"]
+          },
+          {
+              "parallels": ["sn46.34","sn46.39#3","sn46.55#23","sn46.37#2","sa707#t-linehead0189c21-#t-linehead0189c25"]
+          },
+          {
+              "parallels": ["sn46.39", "sa708"]
+          },
+          {
+              "parallels": ["an5.193", "sf124", "sf186", "sn46.55"]
+          },
+          {
+              "parallels": ["sn46.36","sa705#t-linehead0189b27-#t-linehead0189c02","sa708#t-linehead0190a26-#t-linehead0190b01"]
+          },
+          {
+              "parallels": ["sn46.40", "sa706", "~iti87"]
+          },
+          {
+              "parallels": ["~sn46.40", "~sa706", "iti87"]
+          },
+          {
+              "parallels": ["sn47.5#1","an5.52", "ea32.2", "~sa725", "~sa767", "sa611#t-linehead0171c01-#t-linehead0171c04"]
+          },
+          {
+              "parallels": ["sn47.5#2","sn47.45", "~sa725", "~sa767", "sa611#t-linehead0171b25-#t-linehead0171b28"]
+          },
+          {
+              "parallels": ["sa725", "~sn47.5", "~an5.52", "~sn47.45", "~ea32.2", "~sa767", "~sa611"]
+          },
+          {
+              "parallels": ["sa767", "~sn47.5", "~an5.52", "~sn47.45", "~ea32.2", "~sa725", "~sa611"]
+          },
+          {
               "parallels": ["an1.1-5", "ea9.7", "t792"]
           },
           {
@@ -259,6 +334,15 @@
           },
           {
               "parallels": ["an10.62", "ma52", "ma53", "~ma51", "~an10.61", "~t36", "~t37"]
+          },
+          {
+              "parallels": ["~an10.62", "~ma52", "~ma53", "ma51", "~an10.61"]
+          },
+          {
+              "parallels": ["~an10.62", "~ma52", "~ma53", "t36", "~an10.61"]
+          },
+          {
+              "parallels": ["~an10.62", "~ma52", "~ma53", "t37", "~an10.61"]
           },
           {
               "parallels": ["an10.69", "ea47.4", "~an10.70"]
@@ -696,6 +780,27 @@
               "parallels": ["an4.114", "an5.140", "ea-2.26"]
           },
           {
+              "parallels": ["mn2#22", "mn125#22", "an4.114#9", "an4.157#3", "an4.165#3", "an5.140#12", "pi-tv-kd1#439", "pi-tv-bu-vb-pc65#3", "pi-tv-bi-vb-pc71#2"]
+          },
+          {
+              "parallels": ["mn125#16", "mn107#4-#6"]
+          },
+          {
+              "parallels": ["an4.114#2-#3", "an5.140#2-#3"]
+          },
+          {
+              "parallels": ["an4.114#4-#5", "an5.140#5-#6"]
+          },
+          {
+              "parallels": ["an4.114#9-#10", "an5.140#12-#13"]
+          },
+          {
+              "parallels": ["an4.114#7-#8", "an5.140#9-#10", "~an4.164#4"]
+          },
+          {
+              "parallels": ["~an4.114#7-#8", "~an5.140#9-#10", "an4.164#4"]
+          },
+          {
               "parallels": ["an4.123-124", "ma168", "~mn120"],
               "remarks": "ma168: <span class='author'>Akanuma</span> p. 169 lists A iv. 123, 124 as parallel(s). Neither AN 4.123–124 at AN ii 126 nor AN 7.66 at AN iv 123–124 bears any resemblance to MN 120. He also lists MA 168 as a full parallel, yet  examination shows that this discourse differs in so many respects from MN 120 that it is probably best reckoned as a partial parallel. A so far unpublished Gandharī fragment, Senior manuscript 10, parallels part of MN 120 (Mark Allon, private communication)."
           },
@@ -953,9 +1058,6 @@
               "parallels": ["an5.192", "ma158"]
           },
           {
-              "parallels": ["an5.193", "sf124", "sf186", "sn46.55"]
-          },
-          {
               "parallels": ["an5.195", "sf245#11.12-#11.20"],
               "remarks": "sf245#11.12-#11.20: embedded parallel uid sf245.11.12-20"
           },
@@ -1048,12 +1150,6 @@
           },
           {
               "parallels": ["an5.50", "ea32.7"]
-          },
-          {
-              "parallels": ["an5.51", "~ea-2.19", "~an5.55", "~sa705", "~sa704", "~sa706", "~sa707", "~sa708", "~sa709", "~sa710", "~sn46.23", "~sn46.24", "~sn46.33-34", "~sn46.35-36", "~sn46.38", "~sn46.39", "~sn46.40"]
-          },
-          {
-              "parallels": ["an5.52", "ea32.2", "~sa767"]
           },
           {
               "parallels": ["an5.57", "~ma117", "~an3.39"]
@@ -1443,6 +1539,12 @@
               "remarks": "sht-sutta39: Identified in SHT viii p. 169."
           },
           {
+              "parallels": ["an9.8#2", "an9.7#2", "mn76#29", "~dn29#44"]
+          },
+          {
+              "parallels": ["~an9.8#2", "~an9.7#2", "~mn76#29", "dn29#44"]
+          },
+          {
               "parallels": ["arv1", "dn33#171"]
           },
           {
@@ -1671,15 +1773,6 @@
           },
           {
               "parallels": ["ea-2.1", "sn22.57_a"]
-          },
-          {
-              "parallels": ["ea-2.19", "~an5.51"]
-          },
-          {
-              "parallels": ["an5.55", "~an5.51"]
-          },
-          {
-              "parallels": ["sa725", "~sn46.24"]
           },
           {
               "parallels": ["ea-2.22", "~an5.241-244"]
@@ -2915,12 +3008,6 @@
               "parallels": ["sa673", "~an5.13", "~arv17", "~sn50.1"]
           },
           {
-              "parallels": ["sa705", "sa707", "sn46.38", "~an5.51", "~sa704", "~sa706", "~sa708", "~sa709", "~sa710", "~sn46.23", "~sn46.24", "~sn46.39", "~sn46.40"]
-          },
-          {
-              "parallels": ["sa710", "~sa705", "~sa704", "~sa706", "~sa707", "~sa708", "~sa709", "~an5.51", "~sn46.23", "~sn46.24", "~sn46.33-34", "~sn46.35-36", "~sn46.38", "~sn46.39", "~sn46.40"]
-          },
-          {
               "parallels": ["sa716", "~sn46.29"]
           },
           {
@@ -2958,9 +3045,6 @@
           },
           {
               "parallels": ["sa764", "~sn45.15"]
-          },
-          {
-              "parallels": ["sa767", "~an5.52", "~ea32.2"]
           },
           {
               "parallels": ["sa775-777", "~sn45.76", "~sn45.83"]
@@ -4007,7 +4091,10 @@
               "parallels": ["sn1.61", "sa-2.247", "sa1020"]
           },
           {
-              "parallels": ["sn1.62", "sa-2.236", "sa1009"]
+              "parallels": ["sn1.62", "sa-2.236", "sa1009", "~an4.186#2"]
+          },
+          {
+              "parallels": ["~sn1.62", "~sa-2.236", "~sa1009", "an4.186#2"]
           },
           {
               "parallels": ["sn1.64", "sa-2.237", "sa1010"]
@@ -5064,6 +5151,12 @@
               "parallels": ["sn35.107", "sa233", "sn12.44"]
           },
           {
+              "parallels": ["mn148#6", "~sn12.44#2-#3"]
+          },
+          {
+              "parallels": ["~mn148#6", "sn12.44#2-#3"]
+          },
+          {
               "parallels": ["sn35.108", "sa149", "~sa150-151"]
           },
           {
@@ -5564,12 +5657,6 @@
               "parallels": ["sn46.22", "sa728"]
           },
           {
-              "parallels": ["sn46.23", "sa709", "~an5.51", "~sa704", "~sa705", "~sa706", "~sa707", "~sa708", "~sa710", "~sn46.24", "~sn46.33-34", "~sn46.35-36", "~sn46.38", "~sn46.39", "~sn46.40"]
-          },
-          {
-              "parallels": ["sn46.24", "sa704", "sn46.35-36", "~an5.51", "~sa705", "~sa706", "~sa707", "~sa708", "~sa709", "~sa710", "~sa725", "~sn46.23", "~sn46.33-34", "~sn46.38", "~sn46.39", "~sn46.40"]
-          },
-          {
               "parallels": ["sn46.27", "sa729"]
           },
           {
@@ -5579,23 +5666,8 @@
               "parallels": ["sn46.3", "~sa723", "~sa724", "~sa736", "~sa740"]
           },
           {
-              "parallels": ["sn46.33-34", "~sa704", "~sa706", "~sa707", "~sa708", "~sa709", "~an5.51", "~sn46.23", "~sn46.24", "~sa710", "~sn46.35-36", "~sn46.38", "~sn46.39", "~sn46.40"]
-          },
-          {
-              "parallels": ["sn46.34", "sn47.37#2", "sa707#t-linehead0189c14-#t-linehead0189c20"]
-          },
-          {
-              "parallels": ["sn46.37", "sa707#t-linehead0189c14-#t-linehead0189c26"]
-          },
-          {
-              "parallels": ["sn46.39", "sa708", "~an5.51", "~sa704", "~sa705", "~sa706", "~sa707", "~sa709", "~sa710", "~sn46.23", "~sn46.24", "~sn46.33-34", "~sn46.35-36", "~sn46.38", "~sn46.40"]
-          },
-          {
               "parallels": ["sn46.4", "sa718"],
               "mentions": ["sn46.4", "ps2.3#39-#41"]
-          },
-          {
-              "parallels": ["sn46.40", "sa706", "~an5.51", "~sa704", "~sa705", "~sa707", "~sa708", "~sa709", "~sa710", "~sn46.23", "~sn46.24", "~sn46.33-34", "~sn46.35-36", "~sn46.38", "~sn46.39"]
           },
           {
               "parallels": ["sn46.41", "sa730"]
@@ -5699,9 +5771,6 @@
               "parallels": ["sn47.33", "~sa608"]
           },
           {
-              "parallels": ["sn47.37", "~sn46.34", "~sn46.36"]
-          },
-          {
               "parallels": ["sn47.39", "sa610"]
           },
           {
@@ -5718,9 +5787,6 @@
           },
           {
               "parallels": ["sn47.46", "~sa637"]
-          },
-          {
-              "parallels": ["sn47.5", "sa611"]
           },
           {
               "parallels": ["sn47.6", "sa617"]
@@ -13501,7 +13567,7 @@
               "mentions": ["an10.48#1", "ne37#489"]
           },
           {
-              "parallels": ["an10.61#4", "an3.95#6"]
+              "parallels": ["an10.61#4", "an3.95#6", "an10.61#8", "an10.62#4", "an10.62#8", "an4.147#2", "sn55.38", "sn12.23#7"]
           },
           {
               "parallels": ["an10.69#1", "dn1#41", "dn2#64", "mn76#2", "pi-tv-bu-vb-pc85#1", "sn56.10#1", "pi-tv-kd5#31"],
@@ -13550,13 +13616,22 @@
               "mentions": ["an10.90", "ps2.9#1-#27"]
           },
           {
-              "parallels": ["an10.92", "an9.27", "sn55.28", "sa846"]
+              "parallels": ["an10.92", "an9.27", "sn55.28", "sa846", "sn12.41"]
           },
           {
-              "parallels": ["an10.99#8", "dn2#46", "mn101#38", "mn27#23", "mn38#95", "mn76#22", "mn94#13"]
+              "parallels": ["dn2#46-#57", "mn38#95-#103", "mn27#23-#31", "mn76#22", "mn94#13-#20", "mn101#38-#39", "an10.99#8-#18"]
+          },
+          {
+              "parallels": ["dn2#75-#95", "mn38#104-#108", "mn27#32-#39", "mn76#22-#25", "mn94#21-#25", "mn101#41-#47", "an10.99#19-#30"]
+          },
+          {
+              "parallels": ["dn2#107-#111", "mn27#40-#42", "mn76#26-#28", "mn94#26-#28", "mn101#48-#50"]
           },
           {
               "parallels": ["an11.10#6-#8", "dn27#44-#46", "dn3#35-#37", "mn53#17-#8", "~sn21.11#3", "~sn6.11#2"]
+          },
+          {
+              "parallels": ["an10.99#6-#7", "mn38#wp28-#wp29"]
           },
           {
               "parallels": ["an11.11#3", "an6.10#2"],
@@ -13628,10 +13703,6 @@
           },
           {
               "mentions": ["an3.132#1", "pp2.3#30"]
-          },
-          {
-              "parallels": ["an3.156-162#2", "an4.198#2", "dn25#11", "dn8#15", "mn12#42", "mn45#5", "mn51#9", "~mn60#24"],
-              "mentions": ["an3.156-162#2", "mnd15#68", "pp2.4#110"]
           },
           {
               "mentions": ["an3.22#1", "pp2.3#4"]
@@ -13753,9 +13824,6 @@
               "mentions": ["an4.110#1", "pp2.4#66"]
           },
           {
-              "parallels": ["an4.114#8", "an4.164#4"]
-          },
-          {
               "parallels": ["an4.122", "mn67#5-#9"]
           },
           {
@@ -13812,9 +13880,6 @@
           },
           {
               "parallels": ["an4.195#6-#9", "~sn42.12#22"]
-          },
-          {
-              "parallels": ["an4.198#1", "dn33#165", "~mn51#9"]
           },
           {
               "parallels": ["an4.198#13-#14", "~mn101#43-#50", "~mn27#35-#42", "~mn38#107-#108", "~mn51#19-#23", "~mn94#24-#28"]
@@ -13886,8 +13951,11 @@
               "mentions": ["an4.36#4", "kv18.1#4"]
           },
           {
-              "parallels": ["an4.37#3", "mn33#17-#20"],
-              "mentions": ["an4.37#3", "kv18.9#4", "kv10.3#6"]
+              "parallels": ["sn35.120#3-#5", "mn39#8-#10", "sn35.127#4", "sn35.240#2", "an3.16#2-#4", "an4.37#3-#5"]
+          },
+          {
+              "parallels": ["sn35.120#3", "dn2#76", "dn3#39", "dn4#62", "dn5#96", "dn6#23", "dn7#2", "dn8#42", "dn9#13", "dn10#17", "dn11#15", "dn12#20", "dn13#59", "mn27#33", "mn38#105", "mn51#17", "mn53#4", "mn60#27", "mn76#22", "mn79#40", "mn94#22", "mn101#41", "mn107#4", "mn112#15", "an4.14#1", "an4.165#4", "an4.198#11", "an5.76#18", "an5.140#11", "an10.99#20", "an11.17#6", "mn39#8", "sn35.127#4", "sn35.240#2", "an3.16#2", "an4.37#3", "mn33#20"],
+              "mentions": ["sn35.120#3", "mnd14#100", "mnd14#103", "kv18.9#4", "kv10.3#6"]
           },
           {
               "mentions": ["an4.38#4", "mnd10#40"]
@@ -14288,7 +14356,7 @@
               "parallels": ["an9.32", "dn34#176-#178", "~dn33#326"]
           },
           {
-              "parallels": ["an9.36#2", "mn64#17"],
+              "parallels": ["mn64#17-#21", "mn52#7-#15", "an9.36#2-#9", "an11.16#4-#9"],
               "mentions": ["an9.36#2", "cnd5#564", "mnd14#11", "cnd15#7"]
           },
           {
@@ -15245,10 +15313,23 @@
               "parallels": ["mn50#21", "thag20.1#verse-num-sc1197"]
           },
           {
-              "parallels": ["mn51#9", "~an4.198#1", "~dn33#165"]
+              "parallels": ["mn16#24", "~mn53#9"]
+          },
+          {
+              "parallels": ["~mn16#24", "mn53#9"]
           },
           {
               "mentions": ["mn54#17", "mnd1#23", "mnd1#76"]
+          },
+          {
+              "parallels": ["dn8#15-#17", "dn25#11", "mn12#42-#44", "mn45#5-#7", "mn51#9-#11", "mn60#24", "an3.156-162#2-#4", "an4.198#2-#4"],
+              "mentions": ["an3.156-162#2-#4", "mnd15#68", "pp2.4#110"]
+          },
+          {
+              "parallels": ["mn60#23", "mn51#5", "dn33#165"]
+          },
+          {
+              "parallels": ["mn51#12-#14", "mn60#25-#27", "an4.198#5-#7"]
           },
           {
               "parallels": ["mn54#24", "sn35.244#3"]
@@ -15258,9 +15339,6 @@
           },
           {
               "mentions": ["mn57#9", "kv15.11#13"]
-          },
-          {
-              "parallels": ["mn60#24", "~an3.156-162#2", "~an4.198#2", "~dn25#11", "~dn8#15", "~mn12#42", "~mn45#5", "~mn51#9"]
           },
           {
               "mentions": ["mn62#11", "~mil7.4.6#6"]
@@ -16123,6 +16201,10 @@
               "mentions": ["sn4.6#6", "ne9#19"]
           },
           {
+              "parallels": ["~sn4.9#2", "dn19#87-#91"]
+          },
+          {
+              "parallels": ["sn4.9#2", "~dn19#87-#91"],
               "mentions": ["sn4.9#2", "mnd6#17", "mnd2#79"]
           },
           {

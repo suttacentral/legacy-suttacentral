@@ -1,3 +1,4 @@
+    
 {% if not embed %}
 <div id="sidebar">
     <script>
@@ -18,6 +19,11 @@
     {% if has_quotes %}
     document.getElementsByTagName('main')[0].style.visibility = 'hidden';
     {% endif %}
+
+    // console.log('Infomode = ' + localStorage.getItem('infomode.on'));
+    // if (localStorage.getItem('infomode.on')) {
+    //     document.getElementsByTagName('body')[0].classList.add('infomode');
+    // }
     </script>
       <div id="darkness"></div>
       <ul class='tabs'>
@@ -44,6 +50,7 @@
                 <a class="button" id="lzh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
             </div>
             {% endif %}
+
             <div class="x1 button-row">
                 <a class="button" id="text-info" title="View reference numbers, variant readings, etc.">Textual Information</a>
             </div>
@@ -77,15 +84,9 @@
                 <ul>
                     {% for text_ref in text_refs %}
                     {% set offsite = text_ref.url[0] != '/' %}
-                    {% set classes =  (['offsite'] if offsite else []) %}
-                    {% if text_ref.lang.uid == root_lang.uid %}
-                        {% set classes = classes + ['root'] %}
-                    {% endif %}
-                    
-                    {% if not offsite and lang_code == text_ref.lang.uid %}
-                        {% set classes = classes + ['this'] %}
-                    {% endif %}
-                    
+                    {% set classes =  (['offsite'] if offsite else [])
+                                    + (['root'] if text_ref.lang.uid == (sutta if sutta else division.collection).lang.uid else [])
+                                    + (['this'] if not offsite and lang_code == text_ref.lang.uid else []) %}
                     <li{% if classes %} class="{{ classes|join(' ') }}"{% endif %}>
                         <a href="{{ text_ref.url }}" title="{{ text_ref.abstract }}" {% if offsite %} target="_blank"{% endif %}>{{ text_ref.lang.name }}</a></li>
                     {% endfor %}
