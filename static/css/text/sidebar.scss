@@ -59,8 +59,8 @@ $sidebar-tabs-vertical-padding: 0.4em;
         padding-left: 3em;
     }
 
-    .ie summary {
-        padding-left: 8em;
+    details[open] {
+        margin-top: -2em;
     }
 
     .button-row {
