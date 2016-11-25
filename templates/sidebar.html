@@ -75,8 +75,9 @@
                 <a class="button" href="/{{ uid }}" id="text-details-button" title="Go to parallels and references">Textual Details ▶</a>
             </div>
             {% endif %}
-            <details class="x1 button-row languages">
-                <summary class="button">Languages</summary>
+            <div class="x1 button-row languages">
+            <details>
+                <summary style="float:none;" class="button">Languages</summary>
                 <ul>
                     {% for text_ref in text_refs %}
                     {% set offsite = text_ref.url[0] != '/' %}
@@ -94,7 +95,7 @@
                     {% endfor %}
                     
                 </ul>
-            </details>
+            </details></div>
             <div class="x2 button-row">
                 {% if prev_data %}
                     <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀ {{ prev_data.uid|uid_to_acro }}</a>
