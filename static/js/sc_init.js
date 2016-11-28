@@ -316,6 +316,10 @@ sc.init = function(reset)
     // if (sc.userPrefs.getPref("textInfo") === true) {
     //     toggleTextualInfo(true);
     // }
+
+    if (localStorage.getItem('infomode.on')) {
+        toggleTextualInfo(true);
+    }
     
     if (sc.mode.pali === true) {
         var translitFunc = null;
