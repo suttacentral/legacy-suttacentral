@@ -1,0 +1,2262 @@
+#Translation Template For SuttaCentral
+msgid ""
+msgstr ""
+"Project-Id-Version: suttas 1\n"
+"Report-Msgid-Bugs-To: sujato@gmail.com\n"
+"POT-Creation-Date: 2016-10-21 10:34-0144\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: SuttaCentral\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+
+#. <html><head><meta charset="UTF-8"><meta author="Bhikkhu Brahmali"><meta content="Pali text from the Mahāsaṅgīti Tipiṭaka Buddhavasse 2500" name="description"><title></title></head><body><div id="text" lang="en"><section class="sutta" id="pi-tv-bu-vb-ss2"><article><div class="hgroup"><p class="division"> 
+msgctxt "pi-tv-bu-vb-ss2:1.1"
+msgid "Theravāda Vinaya"
+msgstr "Theravāda Collection on Monastic Law"
+
+#. </p><p class="division">
+msgctxt "pi-tv-bu-vb-ss2:2.1"
+msgid "Mahāvibhaṅga"
+msgstr "Monks’ rules and their analysis"
+
+#. </p><p>
+msgctxt "pi-tv-bu-vb-ss2:3.1"
+msgid "Saṃ­ghā­di­sesa­kaṇḍa"
+msgstr ""
+
+#. </p><h1>
+#. <span class="add"> 
+msgctxt "pi-tv-bu-vb-ss2:4.1"
+msgid "Saṅghādisesā 2:"
+msgstr "Monks’ Suspension 2:"
+
+#. </span> 
+msgctxt "pi-tv-bu-vb-ss2:4.2"
+msgid "Kāyasaṃ­sagga­sikkhā­pada"
+msgstr "the training rule on physical contact"
+
+#. </h1></div><h2>
+msgctxt "pi-tv-bu-vb-ss2:5.1"
+msgid ""
+msgstr "Origin story"
+
+#. </h2><p><a class="sc" id="1"></a><a class="pts-vp-en" id="bd.1.199" href="#bd.1.199"></a><a class="pts-cs-empty" id="bu-ss.2.1" href="#bu-ss.2.1"></a><a class="pts-cs" id="bu-ss.2.1.1" href="#bu-ss.2.1.1"></a><a class="ms-pa" id="ms-pa993" href="#ms-pa993"></a> 
+msgctxt "pi-tv-bu-vb-ss2:5.2"
+msgid "Tena samayena buddho bhagavā sāvatthiyaṃ viharati jetavane anātha­piṇḍi­kassa ārāme."
+msgstr "At one time, the Buddha was staying at Sāvatthī in the Jeta Grove, Anāthapiṇḍika’s Monastery."
+
+msgctxt "pi-tv-bu-vb-ss2:5.3"
+msgid "Tena kho pana samayena āyasmā udāyī araññe viharati."
+msgstr "At that time Venerable Udāyī was staying in the wilderness."
+
+msgctxt "pi-tv-bu-vb-ss2:5.4"
+msgid "Tassāyasmato vihāro abhirūpo hoti dassanīyo pāsādiko, majjhegabbho, saman­tā­pariyā­gāro,"
+msgstr "He had a beautiful dwelling with a room in the middle and corridors on all sides."
+
+msgctxt "pi-tv-bu-vb-ss2:5.5"
+msgid "supaññattaṃ mañcapīṭhaṃ bhisi­bibbo­hanaṃ,"
+msgstr "The bed and bench were nicely made up,"
+
+msgctxt "pi-tv-bu-vb-ss2:5.6"
+msgid "pānīyaṃ paribhojanīyaṃ sūpaṭṭhitaṃ,"
+msgstr "and the water for drinking and that for washing had been well placed."
+
+msgctxt "pi-tv-bu-vb-ss2:5.7"
+msgid "pariveṇaṃ susammaṭṭhaṃ."
+msgstr "The precincts were well swept."
+
+msgctxt "pi-tv-bu-vb-ss2:5.8"
+msgid "Bahū manussā āyasmato udāyissa vihārapekkhakā āgacchanti."
+msgstr "Many people came to see Udāyī’s dwelling."
+
+#. </p><p><a class="sc" id="2"></a><a class="ms-pa" id="ms-pa994" href="#ms-pa994"></a> 
+msgctxt "pi-tv-bu-vb-ss2:6.1"
+msgid "Aññataropi brāhmaṇo sapajāpatiko yenāyasmā udāyī tenupasaṅkami;"
+msgstr "Among them was a certain brahmin and his wife."
+
+msgctxt "pi-tv-bu-vb-ss2:6.2"
+msgid "upasaṅkamitvā āyasmantaṃ udāyiṃ etadavoca—"
+msgstr "They approached Udāyī and said,"
+
+msgctxt "pi-tv-bu-vb-ss2:6.3"
+msgid "“icchāma mayaṃ bhoto udāyissa vihāraṃ pekkhitun”ti."
+msgstr "“Venerable, we would like to have look at your dwelling.”"
+
+#. </p><p>
+msgctxt "pi-tv-bu-vb-ss2:6.4"
+msgid "“Tena hi, brāhmaṇa, pekkhassū”ti,"
+msgstr "“Well then, brahmin, have a look.”"
+
+#. </p><p>
+msgctxt "pi-tv-bu-vb-ss2:6.5"
+msgid "avāpuraṇaṃ ādāya ghaṭikaṃ ugghāṭetvā kavāṭaṃ paṇāmetvā vihāraṃ pāvisi."
+msgstr "Udāyī took the key, unlatched the bolt, opened the door, and entered the dwelling."
+
+msgctxt "pi-tv-bu-vb-ss2:6.6"
+msgid "Sopi kho brāhmaṇo āyasmato udāyissa piṭṭhito pāvisi."
+msgstr "The brahmin entered after him"
+
+msgctxt "pi-tv-bu-vb-ss2:6.7"
+msgid "Sāpi kho brāhmaṇī tassa brāhmaṇassa piṭṭhito pāvisi."
+msgstr " and then the brahmin lady."
+
+msgctxt "pi-tv-bu-vb-ss2:6.8"
+msgid "Atha kho āyasmā udāyī ekacce vātapāne vivaranto ekacce vātapāne thakento gabbhaṃ anuparigantvā piṭṭhito āgantvā tassā brāhmaṇiyā aṅgamaṅgāni parāmasi."
+msgstr "Opening some windows and closing others, Udāyī walked around the inner room and came up from behind the brahmin lady, touching her here and there."
+
+#. <a class="pts-vp-en" id="bd.1.200" href="#bd.1.200"></a> 
+msgctxt "pi-tv-bu-vb-ss2:6.9"
+msgid "Atha kho so brāhmaṇo āyasmatā udāyinā saddhiṃ paṭisammoditvā agamāsi."
+msgstr "Then the brahmin thanked Udāyī and departed."
+
+#. </p><p>
+msgctxt "pi-tv-bu-vb-ss2:6.10"
+msgid "Atha kho so brāhmaṇo attamano attamanavācaṃ nicchāresi—"
+msgstr "The brahmin then expressed his delight,"
+
+msgctxt "pi-tv-bu-vb-ss2:6.11"
+msgid "“uḷārā ime samaṇā sakyaputtiyā ye ime evarūpe araññe viharanti."
+msgstr "“These Sakyan ascetics who live in the wilderness are superb."
+
+msgctxt "pi-tv-bu-vb-ss2:6.12"
+msgid "Bhavampi udāyī uḷāro yo evarūpe araññe viharatī”ti."
+msgstr "Venerable Udāyī is superb!”"
+
+#. </p><p><a class="sc" id="3"></a><a class="pts-vp-pi" id="pts-vp-pi3.120"></a><a class="ms-pa" id="ms-pa995" href="#ms-pa995"></a><a class="pts-vp-pi" id="vin.3.120" href="#vin.3.120"></a> 
+msgctxt "pi-tv-bu-vb-ss2:7.1"
+msgid "Evaṃ vutte, sā brāhmaṇī taṃ brāhmaṇaṃ etadavoca—"
+msgstr "But the brahmin lady said,"
+
+msgctxt "pi-tv-bu-vb-ss2:7.2"
+msgid "“kuto tassa uḷārattatā."
+msgstr "“What’s superb about him?"
+
+msgctxt "pi-tv-bu-vb-ss2:7.3"
+msgid "Yatheva me tvaṃ aṅgamaṅgāni parāmasi evameva me samaṇo udāyī aṅgamaṅgāni parāmasī”ti."
+msgstr "Just as you touch me here and there, so did he.”"
+
+#. </p><p>
+msgctxt "pi-tv-bu-vb-ss2:7.4"
+msgid "Atha kho so brāhmaṇo ujjhāyati khiyyati vipāceti—"
+msgstr "The brahmin then complained and criticized him,"
+
+msgctxt "pi-tv-bu-vb-ss2:7.5"
+msgid "“alajjino ime samaṇā sakyaputtiyā dussīlā musāvādino."
+msgstr "“These Sakyan ascetics are shameless and immoral liars."
+
+msgctxt "pi-tv-bu-vb-ss2:7.6"
+msgid "Ime hi nāma dhammacārino samacārino brahmacārino saccavādino sīlavanto kalyāṇadhammā paṭijānissanti."
+msgstr "They claim to live according to the Truth, to be celibate and of good conduct, to be truthful, moral, and of good character."
+
+msgctxt "pi-tv-bu-vb-ss2:7.7"
+msgid "Natthi imesaṃ sāmaññaṃ natthi imesaṃ brahmaññaṃ, naṭṭhaṃ imesaṃ sāmaññaṃ naṭṭhaṃ imesaṃ brahmaññaṃ,"
+msgstr "But they don’t have the qualities of an ascetic or a brahmin."
+
+msgctxt "pi-tv-bu-vb-ss2:7.8"
+msgid "kuto imesaṃ sāmaññaṃ kuto imesaṃ brahmaññaṃ, apagatā ime sāmaññā apagatā ime brahmaññā."
+msgstr "They’ve lost the plot."
+
+msgctxt "pi-tv-bu-vb-ss2:7.9"
+msgid "Kathañhi nāma samaṇo udāyī mama bhariyāya aṅgamaṅgāni parāmasissati."
+msgstr "How can the ascetic Udāyī touch my wife with his genitals?"
+
+#. <a class="pts-vp-en" id="bd.1.201" href="#bd.1.201"></a> 
+msgctxt "pi-tv-bu-vb-ss2:7.10"
+msgid "Na hi sakkā kulitthīhi kuladhītāhi kulakumārīhi kulasuṇhāhi kuladāsīhi ārāmaṃ vā vihāraṃ vā gantuṃ."
+msgstr "It’s not possible to go to a monastery or a monk’s dwelling with wives of respectable families, with daughters, girls, daughters-in-law, or female slaves of respectable families."
+
+msgctxt "pi-tv-bu-vb-ss2:7.11"
+msgid "Sace kulitthiyo kuladhītaro kulakumāriyo kulasuṇhāyo kuladāsiyo ārāmaṃ vā vihāraṃ vā gaccheyyuṃ, tāpi samaṇā sakyaputtiyā dūseyyun”ti."
+msgstr "If you do, the Sakyan ascetics might molest them.”"
+
+#. </p><p><a class="sc" id="4"></a><a class="pts-cs" id="bu-ss.2.1.2" href="#bu-ss.2.1.2"></a><a class="ms-pa" id="ms-pa996" href="#ms-pa996"></a> 
+msgctxt "pi-tv-bu-vb-ss2:8.1"
+msgid "Assosuṃ kho bhikkhu tassa brāhmaṇassa ujjhāyantassa khiyyantassa vipācentassa."
+msgstr "The monks heard the criticism of that brahmin."
+
+msgctxt "pi-tv-bu-vb-ss2:8.2"
+msgid "Ye te bhikkhū appicchā … pe …"
+msgstr "The monks of few desires …"
+
+msgctxt "pi-tv-bu-vb-ss2:8.3"
+msgid "te ujjhāyanti khiyyanti vipācenti—"
+msgstr "complained and criticized Udāyī,"
+
+msgctxt "pi-tv-bu-vb-ss2:8.4"
+msgid "“kathañhi nāma āyasmā udāyī mātugāmena saddhiṃ kāyasaṃsaggaṃ samāpajjissatī”ti."
+msgstr "“How can Venerable Udāyī make physical contact with a woman?”"
+
+#. </p><p><a class="sc" id="5"></a><a class="ms-pa" id="ms-pa997" href="#ms-pa997"></a> 
+msgctxt "pi-tv-bu-vb-ss2:9.1"
+msgid "Atha kho te bhikkhū āyasmantaṃ udāyiṃ aneka­pariyā­yena vigarahitvā bhagavato etamatthaṃ ārocesuṃ."
+msgstr "They then informed the Master."
+
+msgctxt "pi-tv-bu-vb-ss2:9.2"
+msgid "Atha kho bhagavā etasmiṃ nidāne etasmiṃ pakaraṇe bhikkhusaṃghaṃ sannipātāpetvā āyasmantaṃ udāyiṃ paṭipucchi—"
+msgstr "The Master had the Order of monks assembled and questioned Udāyī,"
+
+#. </p><p>
+msgctxt "pi-tv-bu-vb-ss2:9.3"
+msgid "“saccaṃ kira tvaṃ, udāyi, mātugāmena saddhiṃ kāyasaṃsaggaṃ samāpajjasī”ti?"
+msgstr "“Is it true, Udāyī, that you made physical contact with a woman?”"
+
+#. </p><p>
+msgctxt "pi-tv-bu-vb-ss2:9.4"
+msgid "“Saccaṃ, bhagavā”ti."
+msgstr "“It’s true, Master.”"
+
+#. </p><p>
+msgctxt "pi-tv-bu-vb-ss2:9.5"
+msgid "Vigarahi buddho bhagavā—"
+msgstr "The Buddha rebuked him,"
+
+msgctxt "pi-tv-bu-vb-ss2:9.6"
+msgid "“ananucchavikaṃ, moghapurisa, ananulomikaṃ appatirūpaṃ assāmaṇakaṃ akappiyaṃ akaraṇīyaṃ."
+msgstr "“Foolish man, it’s not suitable, it’s not proper, it’s not worthy of a recluse, it’s not allowable, it’s not to be done."
+
+msgctxt "pi-tv-bu-vb-ss2:9.7"
+msgid "Kathañhi nāma tvaṃ, moghapurisa, mātugāmena saddhiṃ kāyasaṃsaggaṃ samāpajjissasi."
+msgstr "How can you make physical contact with a woman?"
+
+msgctxt "pi-tv-bu-vb-ss2:9.8"
+msgid "Nanu mayā, moghapurisa, aneka­pariyā­yena virāgāya dhammo desito no sarāgāya … pe …"
+msgstr "Haven’t I given many teachings for the sake of dispassion, not for the sake of passion …"
+
+msgctxt "pi-tv-bu-vb-ss2:9.9"
+msgid "kāma­pari­ḷāhā­naṃ vūpasamo akkhāto."
+msgstr "for the stilling of the fever for sense pleasures?"
+
+msgctxt "pi-tv-bu-vb-ss2:9.10"
+msgid "Netaṃ, moghapurisa, appasannānaṃ vā pasādāya … pe …"
+msgstr "This will not give rise to confidence in those without it …"
+
+msgctxt "pi-tv-bu-vb-ss2:9.11"
+msgid "evañca pana, bhikkhave, imaṃ sikkhāpadaṃ uddiseyyātha—"
+msgstr "And, monks, this training rule should be recited thus:"
+
+#. </p><h2>
+msgctxt "pi-tv-bu-vb-ss2:10.1"
+msgid ""
+msgstr "Final ruling"
+
+#. </h2><p><a class="sc" id="6"></a><a class="ms-pa" id="ms-pa998" href="#ms-pa998"></a><a class="pts-vp-en" id="bd.1.202" href="#bd.1.202"></a>
+#. <strong class="rule"> 
+msgctxt "pi-tv-bu-vb-ss2:10.2"
+msgid "“Yo pana bhikkhu otiṇṇo vipariṇatena cittena mātugāmena saddhiṃ kāyasaṃsaggaṃ samāpajjeyya"
+msgstr "‘If a monk, lustful and with a distorted mind, makes physical contact with a woman—"
+
+msgctxt "pi-tv-bu-vb-ss2:10.3"
+msgid "hatthaggāhaṃ vā veṇiggāhaṃ vā aññatarassa vā aññatarassa vā aṅgassa parāmasanaṃ,"
+msgstr "holding her hand or hair, or touching any part of her body—"
+
+msgctxt "pi-tv-bu-vb-ss2:10.4"
+msgid "saṃghādiseso”ti."
+msgstr "he commits an offense entailing suspension.’”"
+
+#. </strong> 
+msgctxt "pi-tv-bu-vb-ss2:10.5"
+msgid "(<em>2</em>:<strong>6</strong>)"
+msgstr ""
+
+#. </p><h2>
+msgctxt "pi-tv-bu-vb-ss2:11.1"
+msgid ""
+msgstr "Definitions"
+
+#. </h2><p><a class="sc" id="7"></a><a class="pts-cs-empty" id="bu-ss.2.2" href="#bu-ss.2.2"></a><a class="pts-cs" id="bu-ss.2.2.1" href="#bu-ss.2.2.1"></a><a class="ms-pa" id="ms-pa999" href="#ms-pa999"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:11.2"
+msgid "Yo panāti"
+msgstr "A:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:11.3"
+msgid "yo yādiso … pe …"
+msgstr "whoever …"
+
+#. </span>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:11.4"
+msgid "bhikkhūti"
+msgstr "Monk:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:11.5"
+msgid "… pe …"
+msgstr "… The monk who has been given the full ordination by a complete Order of monks through a formal procedure consisting of one motion and three announcements that is unchallengeable and fit to stand—"
+
+#. </span> 
+msgctxt "pi-tv-bu-vb-ss2:11.6"
+msgid "ayaṃ imasmiṃ atthe adhippeto bhikkhūti."
+msgstr "this sort of monk is meant in this case."
+
+#. </p><p><a class="sc" id="8"></a><a class="pts-vp-pi" id="pts-vp-pi3.121"></a><a class="pts-vp-pi" id="vin.3.121" href="#vin.3.121"></a><a class="ms-pa" id="ms-pa1000" href="#ms-pa1000"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:12.1"
+msgid "Otiṇṇo nāma"
+msgstr "Lustful:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:12.2"
+msgid "sāratto apekkhavā paṭi­baddha­citto."
+msgstr "having lust, longing for, in love with."
+
+#. </span>
+#. </p><p><a class="sc" id="9"></a><a class="ms-pa" id="ms-pa1001" href="#ms-pa1001"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:13.1"
+msgid "Vipariṇatanti"
+msgstr "Distorted:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:13.2"
+msgid "rattampi cittaṃ vipariṇataṃ."
+msgstr "a mind with desire is distorted,"
+
+#. </span> 
+msgctxt "pi-tv-bu-vb-ss2:13.3"
+msgid "Duṭṭhampi cittaṃ vipariṇataṃ."
+msgstr "a mind with anger is distorted,"
+
+msgctxt "pi-tv-bu-vb-ss2:13.4"
+msgid "Mūḷhampi cittaṃ vipariṇataṃ."
+msgstr "a confused mind is distorted."
+
+msgctxt "pi-tv-bu-vb-ss2:13.5"
+msgid "Api ca rattaṃ cittaṃ imasmiṃ atthe adhippetaṃ vipariṇatanti."
+msgstr "But in this case “distorted” refers to a mind with desire."
+
+#. </p><p><a class="sc" id="10"></a><a class="ms-pa" id="ms-pa1002" href="#ms-pa1002"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:14.1"
+msgid "Mātugāmo nāma"
+msgstr "A woman:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:14.2"
+msgid "manussitthī, na yakkhī na petī, na tiracchānagatā."
+msgstr "a human female, not a female spirit, not a female ghost, not a female animal;"
+
+msgctxt "pi-tv-bu-vb-ss2:14.3"
+msgid "Antamaso tadahujātāpi dārikā, pageva mahattarī."
+msgstr "even a girl born on that very day, all the more an older one."
+
+#. </span>
+#. </p><p><a class="sc" id="11"></a><a class="ms-pa" id="ms-pa1003" href="#ms-pa1003"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:15.1"
+msgid "Saddhinti"
+msgstr "With:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:15.2"
+msgid "ekato."
+msgstr "together."
+
+#. </span>
+#. </p><p><a class="sc" id="12"></a><a class="ms-pa" id="ms-pa1004" href="#ms-pa1004"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:16.1"
+msgid "Kāyasaṃsaggaṃ samāpajjeyyāti"
+msgstr "Makes physical contact:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:16.2"
+msgid "ajjhācāro vuccati."
+msgstr "misconduct is what is meant."
+
+#. </span>
+#. </p><p><a class="sc" id="13"></a><a class="pts-vp-en" id="bd.1.203" href="#bd.1.203"></a><a class="ms-pa" id="ms-pa1005" href="#ms-pa1005"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:17.1"
+msgid "Hattho nāma"
+msgstr "Hand:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:17.2"
+msgid "kapparaṃ upādāya yāva agganakhā."
+msgstr "from the elbow to the tip of the nails."
+
+#. </span>
+#. </p><p><a class="sc" id="14"></a><a class="ms-pa" id="ms-pa1006" href="#ms-pa1006"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:18.1"
+msgid "Veṇī nāma"
+msgstr "Hair:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:18.2"
+msgid "suddhakesā vā, suttamissā vā, mālāmissā vā, hiraññamissā vā, suvaṇṇamissā vā, muttāmissā vā, maṇimissā vā."
+msgstr "just the hair; or hair with strings in it, with a garland, with gold, with pearls, or with gems."
+
+#. </span>
+#. </p><p><a class="sc" id="15"></a><a class="ms-pa" id="ms-pa1007" href="#ms-pa1007"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:19.1"
+msgid "Aṅgaṃ nāma"
+msgstr "Any part of her body:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:19.2"
+msgid "hatthañca veṇiñca ṭhapetvā avasesaṃ aṅgaṃ nāma."
+msgstr "anything apart from the hand and the hair is called “any part of her body.”"
+
+#. </span>
+#. </p><h4>
+msgctxt "pi-tv-bu-vb-ss2:20.1"
+msgid ""
+msgstr "Summary"
+
+#. </h4><p><a class="sc" id="16"></a><a class="pts-cs" id="bu-ss.2.2.2" href="#bu-ss.2.2.2"></a><a class="ms-pa" id="ms-pa1008" href="#ms-pa1008"></a> 
+msgctxt "pi-tv-bu-vb-ss2:20.2"
+msgid "Āmasanā, parāmasanā, omasanā, ummasanā, olaṅghanā, ullaṅghanā, ākaḍḍhanā, patikaḍḍhanā, abhiniggaṇhanā, abhinippīḷanā, gahaṇaṃ, chupanaṃ."
+msgstr "Physical contact, touching, stroking downwards, stroking upwards, pulling down, raising up, pulling, pushing, squeezing, pressing, taking hold of, contacting."
+
+#. </p><h4>
+msgctxt "pi-tv-bu-vb-ss2:21.1"
+msgid ""
+msgstr "Sub-definitions"
+
+#. </h4><p><a class="sc" id="17"></a><a class="ms-pa" id="ms-pa1009" href="#ms-pa1009"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:21.2"
+msgid "Āmasanā nāma"
+msgstr "Physical contact:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:21.3"
+msgid "āmaṭṭhamattā."
+msgstr "mere physical contact."
+
+#. </span>
+#. </p><p><a class="sc" id="18"></a><a class="ms-pa" id="ms-pa1010" href="#ms-pa1010"></a><a class="pts-vp-en" id="bd.1.204" href="#bd.1.204"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:22.1"
+msgid "Parāmasanā nāma"
+msgstr "Touching:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:22.2"
+msgid "itocito ca sañcopanā."
+msgstr "touching here and there."
+
+#. </span>
+#. </p><p><a class="sc" id="19"></a><a class="ms-pa" id="ms-pa1011" href="#ms-pa1011"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:23.1"
+msgid "Omasanā nāma"
+msgstr "Stroking downwards:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:23.2"
+msgid "heṭṭhā oropanā."
+msgstr "lowering down."
+
+#. </span>
+#. </p><p><a class="sc" id="20"></a><a class="ms-pa" id="ms-pa1012" href="#ms-pa1012"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:24.1"
+msgid "Ummasanā nāma"
+msgstr "Stroking upwards:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:24.2"
+msgid "uddhaṃ uccāraṇā."
+msgstr "raising up."
+
+#. </span>
+#. </p><p><a class="sc" id="21"></a><a class="ms-pa" id="ms-pa1013" href="#ms-pa1013"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:25.1"
+msgid "Olaṅghanā nāma"
+msgstr "Pulling down:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:25.2"
+msgid "heṭṭhā onamanā."
+msgstr "lowering."
+
+#. </span>
+#. </p><p><a class="sc" id="22"></a><a class="ms-pa" id="ms-pa1014" href="#ms-pa1014"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:26.1"
+msgid "Ullaṅghanā nāma"
+msgstr "Raising up:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:26.2"
+msgid "uddhaṃ uccāraṇā."
+msgstr "lifting."
+
+#. </span>
+#. </p><p><a class="sc" id="23"></a><a class="ms-pa" id="ms-pa1015" href="#ms-pa1015"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:27.1"
+msgid "Ākaḍḍhanā nāma"
+msgstr "Pulling:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:27.2"
+msgid "āviñchanā."
+msgstr "drawing to."
+
+#. </span>
+#. </p><p><a class="sc" id="24"></a><a class="ms-pa" id="ms-pa1016" href="#ms-pa1016"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:28.1"
+msgid "Patikaḍḍhanā nāma"
+msgstr "Pushing:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:28.2"
+msgid "patippaṇāmanā."
+msgstr "sending away."
+
+#. </span>
+#. </p><p><a class="sc" id="25"></a><a class="ms-pa" id="ms-pa1017" href="#ms-pa1017"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:29.1"
+msgid "Abhiniggaṇhanā nāma"
+msgstr "Squeezing:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:29.2"
+msgid "aṅgaṃ gahetvā nippīḷanā."
+msgstr "taking hold of a bodily part and then pressing."
+
+#. </span>
+#. </p><p><a class="sc" id="26"></a><a class="ms-pa" id="ms-pa1018" href="#ms-pa1018"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:30.1"
+msgid "Abhinippīḷanā nāma"
+msgstr "Pressing:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:30.2"
+msgid "kenaci saha nippīḷanā."
+msgstr "pressing with something."
+
+#. </span>
+#. </p><p><a class="sc" id="27"></a><a class="ms-pa" id="ms-pa1019" href="#ms-pa1019"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:31.1"
+msgid "Gahaṇaṃ nāma"
+msgstr "Take hold of:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:31.2"
+msgid "gahitamattaṃ."
+msgstr "mere taking hold of."
+
+#. </span>
+#. </p><p><a class="sc" id="28"></a><a class="ms-pa" id="ms-pa1020" href="#ms-pa1020"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:32.1"
+msgid "Chupanaṃ nāma"
+msgstr "Contacting:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:32.2"
+msgid "phuṭṭhamattaṃ."
+msgstr "mere contact."
+
+#. </span>
+#. </p><hr><p><a class="ms-pa" id="ms-pa1021" href="#ms-pa1021"></a><a class="sc" id="29"></a>
+#. <strong class="term"> 
+msgctxt "pi-tv-bu-vb-ss2:33.1"
+msgid "Saṃghādisesoti"
+msgstr "He commits an offense entailing suspension:"
+
+#. </strong><span class="gloss"> 
+msgctxt "pi-tv-bu-vb-ss2:33.2"
+msgid "… pe …"
+msgstr "…"
+
+#. </span> 
+msgctxt "pi-tv-bu-vb-ss2:33.3"
+msgid "tenapi vuccati “saṃghādiseso”ti."
+msgstr "Therefore, too, it is called “an offense entailing suspension.”"
+
+#. </p><h2>
+msgctxt "pi-tv-bu-vb-ss2:34.1"
+msgid ""
+msgstr "Permutations"
+
+#. </h2><h3>
+msgctxt "pi-tv-bu-vb-ss2:34.2"
+msgid ""
+msgstr "Permutations part 1"
+
+#. </h3><p><a class="sc" id="30"></a><a class="pts-cs-empty" id="bu-ss.2.3" href="#bu-ss.2.3"></a><a class="pts-cs" id="bu-ss.2.3.1" href="#bu-ss.2.3.1"></a><a class="ms-pa" id="ms-pa1022" href="#ms-pa1022"></a> 
+msgctxt "pi-tv-bu-vb-ss2:34.3"
+msgid "Itthī ca hoti itthisaññī sāratto ca bhikkhu ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:34.4"
+msgid "Naṃ itthiyā kāyena kāyaṃ āmasati parāmasati omasati ummasati olaṅgheti ullaṅgheti ākaḍḍhati patikaḍḍhati abhiniggaṇhāti abhinippīḷeti gaṇhāti chupati, āpatti saṃ­ghā­di­sesassa."
+msgstr "If the monk makes physical contact with the woman, body to body, if he touches her, strokes her downwards, strokes her upwards, pulls her down, raises her up, pulls her, pushes her, squeezes her, presses her, takes hold of her, contacts her, he commits an offense entailing suspension."
+
+#. </p><p><a class="sc" id="31"></a><a class="ms-pa" id="ms-pa1023" href="#ms-pa1023"></a> 
+msgctxt "pi-tv-bu-vb-ss2:35.1"
+msgid "Itthī ca hoti vematiko sāratto ca."
+msgstr "It is a woman, but he is unsure of it, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:35.2"
+msgid "Bhikkhu ca naṃ itthiyā kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the woman, body to body, if he touches her …"
+
+msgctxt "pi-tv-bu-vb-ss2:35.3"
+msgid "gaṇhāti chupati, āpatti thullaccayassa."
+msgstr "takes hold of her, contacts her, he commits a serious offense."
+
+#. </p><p><a class="sc" id="32"></a><a class="ms-pa" id="ms-pa1024" href="#ms-pa1024"></a> 
+msgctxt "pi-tv-bu-vb-ss2:36.1"
+msgid "Itthī ca hoti paṇḍakasaññī sāratto ca."
+msgstr "It is a woman, but he perceives her as a sexual eccentric, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:36.2"
+msgid "Bhikkhu ca naṃ itthiyā kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the woman, body to body, if he touches her …"
+
+msgctxt "pi-tv-bu-vb-ss2:36.3"
+msgid "gaṇhāti chupati, āpatti thullaccayassa."
+msgstr "takes hold of her, contacts her, he commits a serious offense."
+
+#. </p><p><a class="sc" id="33"></a><a class="ms-pa" id="ms-pa1025" href="#ms-pa1025"></a> 
+msgctxt "pi-tv-bu-vb-ss2:37.1"
+msgid "Itthī ca hoti purisasaññī sāratto ca."
+msgstr "It is a woman, but he perceives her as a man, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:37.2"
+msgid "Bhikkhu ca naṃ itthiyā kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the woman, body to body, if he touches her …"
+
+msgctxt "pi-tv-bu-vb-ss2:37.3"
+msgid "gaṇhāti chupati, āpatti thullaccayassa."
+msgstr "takes hold of her, contacts her, he commits a serious offense."
+
+#. </p><p><a class="sc" id="34"></a><a class="ms-pa" id="ms-pa1026" href="#ms-pa1026"></a> 
+msgctxt "pi-tv-bu-vb-ss2:38.1"
+msgid "Itthī ca hoti tiracchā­na­gata­saññī sāratto ca."
+msgstr "It is a woman, but he perceives her as an animal, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:38.2"
+msgid "Bhikkhu ca naṃ itthiyā kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the woman, body to body, if he touches her …"
+
+msgctxt "pi-tv-bu-vb-ss2:38.3"
+msgid "gaṇhāti chupati, āpatti thullaccayassa."
+msgstr "takes hold of her, contacts her, he commits a serious offense."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1027" href="#ms-pa1027"></a><a class="sc" id="35"></a><a class="pts-vp-pi" id="pts-vp-pi3.122"></a> 
+msgctxt "pi-tv-bu-vb-ss2:39.1"
+msgid "Paṇḍako ca hoti paṇḍakasaññī sāratto ca."
+msgstr "It is a sexual eccentric, he perceives him as a sexual eccentric, and he has lust."
+
+#. <a class="pts-vp-pi" id="vin.3.122" href="#vin.3.122"></a> 
+msgctxt "pi-tv-bu-vb-ss2:39.2"
+msgid "Bhikkhu ca naṃ paṇḍakassa kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the sexual eccentric, body to body, if he touches him …"
+
+msgctxt "pi-tv-bu-vb-ss2:39.3"
+msgid "gaṇhāti chupati, āpatti thullaccayassa."
+msgstr "takes hold of him, contacts him, he commits a serious offense."
+
+#. </p><p><a class="sc" id="36"></a><a class="ms-pa" id="ms-pa1028" href="#ms-pa1028"></a> 
+msgctxt "pi-tv-bu-vb-ss2:40.1"
+msgid "Paṇḍako ca hoti vematiko sāratto ca."
+msgstr "It is a sexual eccentric, but he is unsure of it, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:40.2"
+msgid "Bhikkhu ca naṃ paṇḍakassa kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the sexual eccentric, body to body, if he touches him …"
+
+msgctxt "pi-tv-bu-vb-ss2:40.3"
+msgid "gaṇhāti chupati, āpatti dukkaṭassa."
+msgstr "takes hold of him, contacts him, he commits an offense of wrong conduct."
+
+#. </p><p><a class="sc" id="37"></a><a class="ms-pa" id="ms-pa1029" href="#ms-pa1029"></a> 
+msgctxt "pi-tv-bu-vb-ss2:41.1"
+msgid "Paṇḍako ca hoti purisasaññī sāratto ca."
+msgstr "It is a sexual eccentric, but he perceives him as a man, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:41.2"
+msgid "Bhikkhu ca naṃ paṇḍakassa kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the sexual eccentric, body to body, if he touches him …"
+
+msgctxt "pi-tv-bu-vb-ss2:41.3"
+msgid "gaṇhāti chupati, āpatti dukkaṭassa."
+msgstr "takes hold of him, contacts him, he commits an offense of wrong conduct."
+
+#. </p><p><a class="sc" id="38"></a><a class="ms-pa" id="ms-pa1030" href="#ms-pa1030"></a> 
+msgctxt "pi-tv-bu-vb-ss2:42.1"
+msgid "Paṇḍako ca hoti tiracchā­na­gata­saññī sāratto ca."
+msgstr "It is a sexual eccentric, but he perceives him as an animal, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:42.2"
+msgid "Bhikkhu ca naṃ paṇḍakassa kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the sexual eccentric, body to body, if he touches him …"
+
+msgctxt "pi-tv-bu-vb-ss2:42.3"
+msgid "gaṇhāti chupati, āpatti dukkaṭassa."
+msgstr "takes hold of him, contacts him, he commits an offense of wrong conduct."
+
+#. </p><p><a class="sc" id="39"></a><a class="ms-pa" id="ms-pa1031" href="#ms-pa1031"></a> 
+msgctxt "pi-tv-bu-vb-ss2:43.1"
+msgid "Paṇḍako ca hoti itthisaññī sāratto ca."
+msgstr "It is a sexual eccentric, but he perceives him as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:43.2"
+msgid "Bhikkhu ca naṃ paṇḍakassa kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the sexual eccentric, body to body, if he touches him …"
+
+msgctxt "pi-tv-bu-vb-ss2:43.3"
+msgid "gaṇhāti chupati, āpatti dukkaṭassa."
+msgstr "takes hold of him, contacts him, he commits an offense of wrong conduct."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1032" href="#ms-pa1032"></a><a class="sc" id="40"></a> 
+msgctxt "pi-tv-bu-vb-ss2:44.1"
+msgid "Puriso ca hoti purisasaññī sāratto ca."
+msgstr "It is a man, he perceives him as a man, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:44.2"
+msgid "Bhikkhu ca naṃ purisassa kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the man, body to body, if he touches him …"
+
+msgctxt "pi-tv-bu-vb-ss2:44.3"
+msgid "gaṇhāti chupati, āpatti dukkaṭassa."
+msgstr "takes hold of him, contacts him, he commits an offense of wrong conduct."
+
+#. </p><p><a class="sc" id="41"></a><a class="ms-pa" id="ms-pa1033" href="#ms-pa1033"></a> 
+msgctxt "pi-tv-bu-vb-ss2:45.1"
+msgid "Puriso ca hoti vematiko … pe …"
+msgstr "It is a man, but he is unsure of it …"
+
+msgctxt "pi-tv-bu-vb-ss2:45.2"
+msgid "puriso ca hoti tiracchā­na­gata­saññī …"
+msgstr "It is a man, but he perceives him as an animal …"
+
+msgctxt "pi-tv-bu-vb-ss2:45.3"
+msgid "puriso ca hoti itthisaññī …"
+msgstr "It is a man, but he perceives him as a woman …"
+
+msgctxt "pi-tv-bu-vb-ss2:45.4"
+msgid "puriso ca hoti paṇḍakasaññī sāratto ca."
+msgstr "It is a man, but he perceives him as a sexual eccentric, and he has lust."
+
+#. <a class="pts-vp-en" id="bd.1.205" href="#bd.1.205"></a> 
+msgctxt "pi-tv-bu-vb-ss2:45.5"
+msgid "Bhikkhu ca naṃ purisassa kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the man, body to body, if he touches him …"
+
+msgctxt "pi-tv-bu-vb-ss2:45.6"
+msgid "gaṇhāti chupati, āpatti dukkaṭassa."
+msgstr "takes hold of him, contacts him, he commits an offense of wrong conduct."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1034" href="#ms-pa1034"></a><a class="sc" id="42"></a> 
+msgctxt "pi-tv-bu-vb-ss2:46.1"
+msgid "Tiracchānagato ca hoti tiracchā­na­gata­saññī sāratto ca."
+msgstr "It is an animal, he perceives it as an animal, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:46.2"
+msgid "Bhikkhu ca naṃ tiracchā­na­gatassa kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the animal, body to body, if he touches it …"
+
+msgctxt "pi-tv-bu-vb-ss2:46.3"
+msgid "gaṇhāti chupati, āpatti dukkaṭassa."
+msgstr "takes hold of it, contacts it, he commits an offense of wrong conduct."
+
+#. </p><p><a class="sc" id="43"></a><a class="ms-pa" id="ms-pa1035" href="#ms-pa1035"></a> 
+msgctxt "pi-tv-bu-vb-ss2:47.1"
+msgid "Tiracchānagato ca hoti vematiko … pe …"
+msgstr "It is an animal, but he is unsure of it …"
+
+msgctxt "pi-tv-bu-vb-ss2:47.2"
+msgid "tiracchānagato ca hoti itthisaññī …"
+msgstr "It is an animal, but he perceives it as a woman …"
+
+msgctxt "pi-tv-bu-vb-ss2:47.3"
+msgid "tiracchānagato ca hoti paṇḍakasaññī …"
+msgstr "It is an animal, but he perceives it as a sexual eccentric …"
+
+msgctxt "pi-tv-bu-vb-ss2:47.4"
+msgid "tiracchānagato ca hoti."
+msgstr "It is an animal,"
+
+msgctxt "pi-tv-bu-vb-ss2:47.5"
+msgid "Purisasaññī sāratto ca."
+msgstr "but he perceives it as a man, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:47.6"
+msgid "Bhikkhu ca naṃ tiracchā­na­gatassa kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the animal, body to body, if he touches it …"
+
+msgctxt "pi-tv-bu-vb-ss2:47.7"
+msgid "gaṇhāti chupati, āpatti dukkaṭassa."
+msgstr "takes hold of it, contacts it, he commits an offense of wrong conduct."
+
+#. </p><p class="endsutta"><a class="sc" id="44"></a><a class="ms-pa" id="ms-pa1036" href="#ms-pa1036"></a> 
+msgctxt "pi-tv-bu-vb-ss2:48.1"
+msgid "Ekamūlakaṃ niṭṭhitaṃ."
+msgstr "The section on one root item is finished."
+
+#. </p><p><a class="sc" id="45"></a><a class="pts-cs" id="bu-ss.2.3.2" href="#bu-ss.2.3.2"></a><a class="ms-pa" id="ms-pa1037" href="#ms-pa1037"></a> 
+msgctxt "pi-tv-bu-vb-ss2:49.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:49.2"
+msgid "Bhikkhu ca naṃ dvinnaṃ itthīnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the two women, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:49.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ saṃ­ghādi­sesānaṃ."
+msgstr "takes hold of them, contacts them, he commits two offenses entailing suspension."
+
+#. </p><p><a class="sc" id="46"></a><a class="ms-pa" id="ms-pa1038" href="#ms-pa1038"></a> 
+msgctxt "pi-tv-bu-vb-ss2:50.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ vematiko sāratto ca."
+msgstr "It is two women, but he is unsure about both, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:50.2"
+msgid "Bhikkhu ca naṃ dvinnaṃ itthīnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the two women, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:50.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ thullaccayānaṃ."
+msgstr "takes hold of them, contacts them, he commits two serious offenses."
+
+#. </p><p><a class="sc" id="47"></a><a class="ms-pa" id="ms-pa1039" href="#ms-pa1039"></a> 
+msgctxt "pi-tv-bu-vb-ss2:51.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ paṇḍakasaññī … pe …"
+msgstr "It is two women, but he perceives them as sexual eccentrics …"
+
+msgctxt "pi-tv-bu-vb-ss2:51.2"
+msgid "purisasaññī …"
+msgstr "but he perceives them as men …"
+
+msgctxt "pi-tv-bu-vb-ss2:51.3"
+msgid "tiracchā­na­gata­saññī sāratto ca."
+msgstr "but he perceives them as animals, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:51.4"
+msgid "Bhikkhu ca naṃ dvinnaṃ itthīnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the two women, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:51.5"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ thullaccayānaṃ."
+msgstr "takes hold of them, contacts them, he commits two serious offenses."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1040" href="#ms-pa1040"></a><a class="sc" id="48"></a> 
+msgctxt "pi-tv-bu-vb-ss2:52.1"
+msgid "Dve paṇḍakā dvinnaṃ paṇḍakānaṃ paṇḍakasaññī sāratto ca"
+msgstr "It is two sexual eccentrics, he perceives them both as sexual eccentrics, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:52.2"
+msgid "bhikkhu ca naṃ dvinnaṃ paṇḍakānaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the two sexual eccentrics, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:52.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ thullaccayānaṃ."
+msgstr "takes hold of them, contacts them, he commits two serious offenses."
+
+#. </p><p><a class="sc" id="49"></a><a class="ms-pa" id="ms-pa1041" href="#ms-pa1041"></a> 
+msgctxt "pi-tv-bu-vb-ss2:53.1"
+msgid "Dve paṇḍakā dvinnaṃ paṇḍakānaṃ vematiko … pe …"
+msgstr "It is two sexual eccentrics, but he is unsure about both …"
+
+msgctxt "pi-tv-bu-vb-ss2:53.2"
+msgid "purisasaññī …"
+msgstr "but he perceives them as men …"
+
+msgctxt "pi-tv-bu-vb-ss2:53.3"
+msgid "tiracchā­na­gata­saññī …"
+msgstr "but he perceives them as animals …"
+
+msgctxt "pi-tv-bu-vb-ss2:53.4"
+msgid "itthisaññī sāratto ca."
+msgstr "but he perceives them as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:53.5"
+msgid "Bhikkhu ca naṃ dvinnaṃ paṇḍakānaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the two sexual eccentrics, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:53.6"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1042" href="#ms-pa1042"></a><a class="sc" id="50"></a> 
+msgctxt "pi-tv-bu-vb-ss2:54.1"
+msgid "Dve purisā dvinnaṃ purisānaṃ purisasaññī sāratto ca"
+msgstr "It is two men, he perceives them both as men, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:54.2"
+msgid "bhikkhu ca naṃ dvinnaṃ purisānaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the two men, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:54.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct."
+
+#. </p><p><a class="sc" id="51"></a><a class="ms-pa" id="ms-pa1043" href="#ms-pa1043"></a> 
+msgctxt "pi-tv-bu-vb-ss2:55.1"
+msgid "Dve purisā dvinnaṃ purisānaṃ vematiko … pe …"
+msgstr "It is two men, but he is unsure about both …"
+
+msgctxt "pi-tv-bu-vb-ss2:55.2"
+msgid "tiracchā­na­gata­saññī …"
+msgstr "but he perceives them as animals …"
+
+msgctxt "pi-tv-bu-vb-ss2:55.3"
+msgid "itthisaññī …"
+msgstr "but he perceives them as women …"
+
+msgctxt "pi-tv-bu-vb-ss2:55.4"
+msgid "paṇḍakasaññī sāratto ca."
+msgstr "but he perceives them as sexual eccentrics, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:55.5"
+msgid "Bhikkhu ca naṃ dvinnaṃ purisānaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the two men, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:55.6"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1044" href="#ms-pa1044"></a><a class="sc" id="52"></a> 
+msgctxt "pi-tv-bu-vb-ss2:56.1"
+msgid "Dve tiracchānagatā dvinnaṃ tiracchā­na­gatā­naṃ tiracchā­na­gata­saññī sāratto ca."
+msgstr "It is two animals, he perceives them both as animals, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:56.2"
+msgid "Bhikkhu ca naṃ dvinnaṃ tiracchā­na­gatā­naṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the two animals, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:56.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct."
+
+#. </p><p><a class="sc" id="53"></a><a class="ms-pa" id="ms-pa1045" href="#ms-pa1045"></a> 
+msgctxt "pi-tv-bu-vb-ss2:57.1"
+msgid "Dve tiracchānagatā dvinnaṃ tiracchā­na­gatā­naṃ vematiko … pe …"
+msgstr "It is two animals, but he is unsure about both …"
+
+msgctxt "pi-tv-bu-vb-ss2:57.2"
+msgid "itthisaññī …"
+msgstr "but he perceives them as women …"
+
+msgctxt "pi-tv-bu-vb-ss2:57.3"
+msgid "paṇḍakasaññī …"
+msgstr "but he perceives them as sexual eccentrics …"
+
+msgctxt "pi-tv-bu-vb-ss2:57.4"
+msgid "purisasaññī sāratto ca."
+msgstr "but he perceives them as men, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:57.5"
+msgid "Bhikkhu ca naṃ dvinnaṃ tiracchā­na­gatā­naṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with the two animals, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:57.6"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct."
+
+#. </p><p><a class="sc" id="54"></a><a class="pts-vp-pi" id="pts-vp-pi3.123"></a><a class="pts-cs" id="bu-ss.2.3.3" href="#bu-ss.2.3.3"></a><a class="ms-pa" id="ms-pa1046" href="#ms-pa1046"></a> 
+msgctxt "pi-tv-bu-vb-ss2:58.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+#. <a class="pts-vp-pi" id="vin.3.123" href="#vin.3.123"></a><a class="pts-vp-en" id="bd.1.206" href="#bd.1.206"></a> 
+msgctxt "pi-tv-bu-vb-ss2:58.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:58.3"
+msgid "gaṇhāti chupati, āpatti saṃghādisesena dukkaṭassa."
+msgstr "takes hold of them, contacts them, he commits one offense entailing suspension and one offense of wrong conduct."
+
+#. </p><p><a class="sc" id="55"></a><a class="ms-pa" id="ms-pa1047" href="#ms-pa1047"></a> 
+msgctxt "pi-tv-bu-vb-ss2:59.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ vematiko sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he is unsure about both, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:59.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:59.3"
+msgid "gaṇhāti chupati, āpatti thullaccayena dukkaṭassa."
+msgstr "takes hold of them, contacts them, he commits one serious offense and one offense of wrong conduct."
+
+#. </p><p><a class="sc" id="56"></a><a class="ms-pa" id="ms-pa1048" href="#ms-pa1048"></a> 
+msgctxt "pi-tv-bu-vb-ss2:60.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ paṇḍakasaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as sexual eccentrics, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:60.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:60.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ thullaccayānaṃ."
+msgstr "takes hold of them, contacts them, he commits two serious offenses."
+
+#. </p><p><a class="sc" id="57"></a><a class="ms-pa" id="ms-pa1049" href="#ms-pa1049"></a> 
+msgctxt "pi-tv-bu-vb-ss2:61.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ purisasaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as men, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:61.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:61.3"
+msgid "gaṇhāti chupati, āpatti thullaccayena dukkaṭassa."
+msgstr "takes hold of them, contacts them, he commits one serious offense and one offense of wrong conduct."
+
+#. </p><p><a class="sc" id="58"></a><a class="ms-pa" id="ms-pa1050" href="#ms-pa1050"></a> 
+msgctxt "pi-tv-bu-vb-ss2:62.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ tiracchā­na­gata­saññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as animals, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:62.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:62.3"
+msgid "gaṇhāti chupati, āpatti thullaccayena dukkaṭassa."
+msgstr "takes hold of them, contacts them, he commits one serious offense and one offense of wrong conduct."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1051" href="#ms-pa1051"></a><a class="sc" id="59"></a> 
+msgctxt "pi-tv-bu-vb-ss2:63.1"
+msgid "Itthī ca puriso ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a man, but he perceives both as women and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:63.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:63.3"
+msgid "gaṇhāti chupati, āpatti saṃghādisesena dukkaṭassa."
+msgstr "takes hold of them, contacts them, he commits one offense entailing suspension and one offense of wrong conduct."
+
+#. </p><p><a class="sc" id="60"></a><a class="ms-pa" id="ms-pa1052" href="#ms-pa1052"></a> 
+msgctxt "pi-tv-bu-vb-ss2:64.1"
+msgid "Itthī ca puriso ca ubhinnaṃ vematiko … pe …"
+msgstr "It is a woman and a man, but he is unsure about both …"
+
+msgctxt "pi-tv-bu-vb-ss2:64.2"
+msgid "paṇḍakasaññī …"
+msgstr "but he perceives both as sexual eccentrics …"
+
+msgctxt "pi-tv-bu-vb-ss2:64.3"
+msgid "purisasaññī …"
+msgstr "but he perceives both as men …"
+
+msgctxt "pi-tv-bu-vb-ss2:64.4"
+msgid "tiracchā­na­gata­saññī sāratto ca."
+msgstr "but he perceives both as animals, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:64.5"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:64.6"
+msgid "gaṇhāti chupati, āpatti thullaccayena dukkaṭassa."
+msgstr "takes hold of them, contacts them, he commits one serious offense and one offense of wrong conduct."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1053" href="#ms-pa1053"></a><a class="sc" id="61"></a> 
+msgctxt "pi-tv-bu-vb-ss2:65.1"
+msgid "Itthī ca tiracchānagato ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and an animal, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:65.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:65.3"
+msgid "gaṇhāti chupati, āpatti saṃghādisesena dukkaṭassa."
+msgstr "takes hold of them, contacts them, he commits one offense entailing suspension and one offense of wrong conduct."
+
+#. </p><p><a class="sc" id="62"></a><a class="ms-pa" id="ms-pa1054" href="#ms-pa1054"></a> 
+msgctxt "pi-tv-bu-vb-ss2:66.1"
+msgid "Itthī ca tiracchānagato ca ubhinnaṃ vematiko … pe …"
+msgstr "It is a woman and an animal, but he is unsure about both …"
+
+msgctxt "pi-tv-bu-vb-ss2:66.2"
+msgid "paṇḍakasaññī …"
+msgstr "but he perceives them as sexual eccentrics …"
+
+msgctxt "pi-tv-bu-vb-ss2:66.3"
+msgid "purisasaññī …"
+msgstr "but he perceives them as men …"
+
+msgctxt "pi-tv-bu-vb-ss2:66.4"
+msgid "tiracchā­na­gata­saññī sāratto ca."
+msgstr "but he perceives them as animals, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:66.5"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:66.6"
+msgid "gaṇhāti chupati, āpatti thullaccayena dukkaṭassa."
+msgstr "takes hold of them, contacts them, he commits one serious offense and one offense of wrong conduct."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1055" href="#ms-pa1055"></a><a class="sc" id="63"></a> 
+msgctxt "pi-tv-bu-vb-ss2:67.1"
+msgid "Paṇḍako ca puriso ca ubhinnaṃ paṇḍakasaññī sāratto ca."
+msgstr "It is a sexual eccentric and a man, but he perceives both as sexual eccentrics, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:67.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:67.3"
+msgid "gaṇhāti chupati, āpatti thullaccayena dukkaṭassa."
+msgstr "takes hold of them, contacts them, he commits one serious offense and one offense of wrong conduct."
+
+#. </p><p><a class="sc" id="64"></a><a class="ms-pa" id="ms-pa1056" href="#ms-pa1056"></a> 
+msgctxt "pi-tv-bu-vb-ss2:68.1"
+msgid "Paṇḍako ca puriso ca ubhinnaṃ vematiko … pe …"
+msgstr "It is a sexual eccentric and a man, but he is unsure about both …"
+
+msgctxt "pi-tv-bu-vb-ss2:68.2"
+msgid "purisasaññī …"
+msgstr "but he perceives both as men …"
+
+msgctxt "pi-tv-bu-vb-ss2:68.3"
+msgid "tiracchā­na­gata­saññī …"
+msgstr "but he perceives both as animals …"
+
+msgctxt "pi-tv-bu-vb-ss2:68.4"
+msgid "itthisaññī sāratto ca."
+msgstr "but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:68.5"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:68.6"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct."
+
+#. </p><hr><p><a class="pts-vp-en" id="bd.1.207" href="#bd.1.207"></a><a class="ms-pa" id="ms-pa1057" href="#ms-pa1057"></a><a class="sc" id="65"></a> 
+msgctxt "pi-tv-bu-vb-ss2:69.1"
+msgid "Paṇḍako ca tiracchānagato ca ubhinnaṃ paṇḍakasaññī sāratto ca."
+msgstr "It is a sexual eccentric and an animal, but he perceives both as sexual eccentrics, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:69.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:69.3"
+msgid "gaṇhāti chupati, āpatti thullaccayena dukkaṭassa."
+msgstr "takes hold of them, contacts them, he commits one serious offense and one offense of wrong conduct."
+
+#. </p><p><a class="sc" id="66"></a><a class="ms-pa" id="ms-pa1058" href="#ms-pa1058"></a> 
+msgctxt "pi-tv-bu-vb-ss2:70.1"
+msgid "Paṇḍako ca tiracchānagato ca ubhinnaṃ vematiko … pe …"
+msgstr "It is a sexual eccentric and an animal, but he is unsure about both …"
+
+msgctxt "pi-tv-bu-vb-ss2:70.2"
+msgid "purisasaññī …"
+msgstr "but he perceives both as men …"
+
+msgctxt "pi-tv-bu-vb-ss2:70.3"
+msgid "tiracchā­na­gata­saññī …"
+msgstr "but he perceives both as animals …"
+
+msgctxt "pi-tv-bu-vb-ss2:70.4"
+msgid "itthisaññī sāratto ca."
+msgstr "but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:70.5"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:70.6"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1059" href="#ms-pa1059"></a><a class="sc" id="67"></a> 
+msgctxt "pi-tv-bu-vb-ss2:71.1"
+msgid "Puriso ca tiracchānagato ca ubhinnaṃ purisasaññī sāratto ca."
+msgstr "It is a man and an animal, but he perceives both as men, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:71.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:71.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct."
+
+#. </p><p><a class="sc" id="68"></a><a class="ms-pa" id="ms-pa1060" href="#ms-pa1060"></a> 
+msgctxt "pi-tv-bu-vb-ss2:72.1"
+msgid "Puriso ca tiracchānagato ca ubhinnaṃ vematiko … pe …"
+msgstr "It is a man and an animal, but he is unsure about both …"
+
+msgctxt "pi-tv-bu-vb-ss2:72.2"
+msgid "tiracchā­na­gata­saññī …"
+msgstr "but he perceives both as animals …"
+
+msgctxt "pi-tv-bu-vb-ss2:72.3"
+msgid "itthisaññī …"
+msgstr "but he perceives both as women …"
+
+msgctxt "pi-tv-bu-vb-ss2:72.4"
+msgid "paṇḍakasaññī sāratto ca."
+msgstr "but he perceives both as sexual eccentric, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:72.5"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk makes physical contact with both, body to body, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:72.6"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct."
+
+#. </p><p class="endsutta"><a class="sc" id="69"></a><a class="ms-pa" id="ms-pa1061" href="#ms-pa1061"></a> 
+msgctxt "pi-tv-bu-vb-ss2:73.1"
+msgid "Dumūlakaṃ niṭṭhitaṃ."
+msgstr "The section on two root items is finished."
+
+#. </p><p><a class="sc" id="70"></a><a class="pts-cs" id="bu-ss.2.3.4" href="#bu-ss.2.3.4"></a><a class="ms-pa" id="ms-pa1062" href="#ms-pa1062"></a> 
+msgctxt "pi-tv-bu-vb-ss2:74.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:74.2"
+msgid "Bhikkhu ca naṃ itthiyā kāyena kāyapaṭi­baddhaṃ āmasati parāmasati … pe …"
+msgstr "If the monk, with his own body, makes physical contact with something connected to her body, if he touches it …"
+
+msgctxt "pi-tv-bu-vb-ss2:74.3"
+msgid "gaṇhāti chupati, āpatti thullaccayassa … pe …."
+msgstr "takes hold of it, contacts it, he commits a serious offense. …"
+
+#. </p><p><a class="sc" id="71"></a><a class="pts-vp-pi" id="pts-vp-pi3.124"></a><a class="ms-pa" id="ms-pa1063" href="#ms-pa1063"></a> 
+msgctxt "pi-tv-bu-vb-ss2:75.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:75.2"
+msgid "Bhikkhu ca naṃ dvinnaṃ itthīnaṃ kāyena kāyapaṭi­baddhaṃ āmasati parāmasati … pe …"
+msgstr "If the monk, with his own body, makes physical contact with something connected to the body of both, if he touches it …"
+
+msgctxt "pi-tv-bu-vb-ss2:75.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ thullaccayānaṃ … pe …."
+msgstr "takes hold of it, contacts it, he commits two serious offenses. …"
+
+#. </p><p><a class="sc" id="72"></a><a class="pts-vp-pi" id="vin.3.124" href="#vin.3.124"></a><a class="ms-pa" id="ms-pa1064" href="#ms-pa1064"></a> 
+msgctxt "pi-tv-bu-vb-ss2:76.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:76.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyena kāyapaṭi­baddhaṃ āmasati parāmasati … pe …"
+msgstr "If the monk, with his own body, makes physical contact with something connected to the body of both, if he touches it …"
+
+msgctxt "pi-tv-bu-vb-ss2:76.3"
+msgid "gaṇhāti chupati, āpatti thullaccayena dukkaṭassa … pe …."
+msgstr "takes hold of it, contacts it, he commits one serious offense and one offense of wrong conduct. …"
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1065" href="#ms-pa1065"></a><a class="sc" id="73"></a> 
+msgctxt "pi-tv-bu-vb-ss2:77.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:77.2"
+msgid "Bhikkhu ca naṃ itthiyā kāyapaṭi­bad­dhena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk, with something connected to his own body, makes physical contact with her body, if he touches it …"
+
+msgctxt "pi-tv-bu-vb-ss2:77.3"
+msgid "gaṇhāti chupati, āpatti thullaccayassa … pe …."
+msgstr "takes hold of it, contacts it, he commits a serious offense. …"
+
+#. </p><p><a class="sc" id="74"></a><a class="ms-pa" id="ms-pa1066" href="#ms-pa1066"></a> 
+msgctxt "pi-tv-bu-vb-ss2:78.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:78.2"
+msgid "Bhikkhu ca naṃ dvinnaṃ itthīnaṃ kāyapaṭi­bad­dhena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk, with something connected to his own body, makes physical contact with both their bodies, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:78.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ thullaccayānaṃ … pe …."
+msgstr "takes hold of them, contacts them, he commits two serious offenses. …"
+
+#. </p><p><a class="sc" id="75"></a><a class="ms-pa" id="ms-pa1067" href="#ms-pa1067"></a> 
+msgctxt "pi-tv-bu-vb-ss2:79.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:79.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyapaṭi­bad­dhena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the monk, with something connected to his own body, makes physical contact with both their bodies, if he touches them …"
+
+msgctxt "pi-tv-bu-vb-ss2:79.3"
+msgid "gaṇhāti chupati, āpatti thullaccayena dukkaṭassa … pe …."
+msgstr "takes hold of them, contacts them, he commits one serious offense and one offense of wrong conduct. …"
+
+#. </p><p><a class="sc" id="76"></a><a class="ms-pa" id="ms-pa1068" href="#ms-pa1068"></a> 
+msgctxt "pi-tv-bu-vb-ss2:80.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:80.2"
+msgid "Bhikkhu ca naṃ itthiyā kāyapaṭi­bad­dhena kāyapaṭi­baddhaṃ āmasati parāmasati … pe …"
+msgstr "If the monk, with something connected to his own body, makes physical contact with something connected to her body, if he touches it …"
+
+msgctxt "pi-tv-bu-vb-ss2:80.3"
+msgid "gaṇhāti chupati, āpatti dukkaṭassa …"
+msgstr "takes hold of it, contacts it, he commits an offense of wrong conduct. … pe …."
+
+#. </p><p><a class="sc" id="77"></a><a class="pts-vp-en" id="bd.1.208" href="#bd.1.208"></a><a class="ms-pa" id="ms-pa1069" href="#ms-pa1069"></a> 
+msgctxt "pi-tv-bu-vb-ss2:81.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:81.2"
+msgid "Bhikkhu ca naṃ dvinnaṃ itthīnaṃ kāyapaṭi­bad­dhena kāyapaṭi­baddhaṃ āmasati parāmasati … pe …"
+msgstr "If the monk, with something connected to his own body, makes physical contact with something connected to both their bodies, if he touches those things …"
+
+msgctxt "pi-tv-bu-vb-ss2:81.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct. …"
+
+#. </p><p><a class="sc" id="78"></a><a class="ms-pa" id="ms-pa1070" href="#ms-pa1070"></a> 
+msgctxt "pi-tv-bu-vb-ss2:82.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:82.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ kāyapaṭi­bad­dhena kāyapaṭi­baddhaṃ āmasati parāmasati … pe …"
+msgstr "If the monk, with something connected to his own body, makes physical contact with something connected to both their bodies, if he touches those things …"
+
+msgctxt "pi-tv-bu-vb-ss2:82.3"
+msgid "gaṇhāti chupati, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "takes hold of them, contacts them, he commits two offenses of wrong conduct. …"
+
+#. </p><p><a class="sc" id="79"></a><a class="ms-pa" id="ms-pa1071" href="#ms-pa1071"></a> 
+msgctxt "pi-tv-bu-vb-ss2:83.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:83.2"
+msgid "Bhikkhu ca naṃ itthiyā nissaggiyena kāyaṃ āmasati āpatti dukkaṭassa … pe …."
+msgstr "If the monk, with something released by him, makes physical contact with her body, he commits an offense of wrong conduct. …"
+
+#. </p><p><a class="sc" id="80"></a><a class="ms-pa" id="ms-pa1072" href="#ms-pa1072"></a> 
+msgctxt "pi-tv-bu-vb-ss2:84.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:84.2"
+msgid "Bhikkhu ca naṃ dvinnaṃ itthīnaṃ nissaggiyena kāyaṃ āmasati, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "If the monk, with something released by him, makes physical contact with both their bodies, he commits two offenses of wrong conduct. …"
+
+#. </p><p><a class="sc" id="81"></a><a class="ms-pa" id="ms-pa1073" href="#ms-pa1073"></a> 
+msgctxt "pi-tv-bu-vb-ss2:85.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:85.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ nissaggiyena kāyaṃ āmasati, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "If the monk, with something released by him, makes physical contact with both their bodies, he commits two offenses of wrong conduct. …"
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1074" href="#ms-pa1074"></a><a class="sc" id="82"></a> 
+msgctxt "pi-tv-bu-vb-ss2:86.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:86.2"
+msgid "Bhikkhu ca naṃ itthiyā nissaggiyena kāyapaṭi­baddhaṃ āmasati, āpatti dukkaṭassa … pe …."
+msgstr "If the monk, with something released by him, makes physical contact with something connected to her body, he commits an offense of wrong conduct. …"
+
+#. </p><p><a class="sc" id="83"></a><a class="ms-pa" id="ms-pa1075" href="#ms-pa1075"></a> 
+msgctxt "pi-tv-bu-vb-ss2:87.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:87.2"
+msgid "Bhikkhu ca naṃ dvinnaṃ itthīnaṃ nissaggiyena kāyapaṭi­baddhaṃ āmasati, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "If the monk, with something released by him, makes physical contact with something connected to both their bodies, he commits two offenses of wrong conduct. …"
+
+#. </p><p><a class="sc" id="84"></a><a class="ms-pa" id="ms-pa1076" href="#ms-pa1076"></a> 
+msgctxt "pi-tv-bu-vb-ss2:88.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:88.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ nissaggiyena kāyapaṭi­baddhaṃ āmasati, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "If the monk, with something released by him, makes physical contact with something connected to both their bodies, he commits two offenses of wrong conduct. …"
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1077" href="#ms-pa1077"></a><a class="sc" id="85"></a> 
+msgctxt "pi-tv-bu-vb-ss2:89.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:89.2"
+msgid "Bhikkhu ca naṃ itthiyā nissaggiyena nissaggiyaṃ āmasati, āpatti dukkaṭassa … pe …."
+msgstr "If the monk, with something released by him, makes physical contact with something released by her, he commits an offense of wrong conduct. …"
+
+#. </p><p><a class="sc" id="86"></a><a class="ms-pa" id="ms-pa1078" href="#ms-pa1078"></a> 
+msgctxt "pi-tv-bu-vb-ss2:90.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:90.2"
+msgid "Bhikkhu ca naṃ dvinnaṃ itthīnaṃ nissaggiyena nissaggiyaṃ āmasati, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "If the monk, with something released by him, makes physical contact with something released by both of them, he commits two offenses of wrong conduct. …"
+
+#. </p><p><a class="sc" id="87"></a><a class="ms-pa" id="ms-pa1079" href="#ms-pa1079"></a> 
+msgctxt "pi-tv-bu-vb-ss2:91.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:91.2"
+msgid "Bhikkhu ca naṃ ubhinnaṃ nissaggiyena nissaggiyaṃ āmasati, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "If the monk, with something released by him, makes physical contact with something released by both of them, he commits two offenses of wrong conduct. …"
+#. </p><p class="endsutta"><a class="sc" id="88"></a><a class="ms-pa" id="ms-pa1080" href="#ms-pa1080"></a> 
+msgctxt "pi-tv-bu-vb-ss2:92.1"
+msgid "Bhikkhupeyyālo niṭṭhito."
+msgstr "The successive series on a monk is finished."
+
+#. </p><p><a class="sc" id="89"></a><a class="pts-cs" id="bu-ss.2.3.5" href="#bu-ss.2.3.5"></a><a class="ms-pa" id="ms-pa1081" href="#ms-pa1081"></a> 
+msgctxt "pi-tv-bu-vb-ss2:93.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+#. <a class="pts-vp-en" id="bd.1.209" href="#bd.1.209"></a> 
+msgctxt "pi-tv-bu-vb-ss2:93.2"
+msgid "Itthī ca naṃ bhikkhussa kāyena kāyaṃ āmasati parāmasati omasati ummasati olaṅgheti ullaṅgheti ākaḍḍhati patikaḍḍhati abhiniggaṇhāti abhinippīḷeti gaṇhāti chupati, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti saṃ­ghā­di­sesassa … pe …."
+msgstr "If the woman makes physical contact with the monk, body to body, if she touches him, strokes him downwards, strokes him upwards, pulls him down, raises him up, pulls him, pushes him, squeezes him, presses him, takes hold of him, contacts him, and he, aiming at association, makes an effort with the body and experiences contact, he commits an offense entailing suspension. …"
+
+#. </p><p><a class="sc" id="90"></a><a class="ms-pa" id="ms-pa1082" href="#ms-pa1082"></a> 
+msgctxt "pi-tv-bu-vb-ss2:94.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:94.2"
+msgid "Itthiyo ca naṃ bhikkhussa kāyena kāyaṃ āmasanti parāmasanti omasanti ummasanti olaṅghenti ullaṅghenti ākaḍḍhanti patikaḍḍhanti abhi­nig­gaṇhanti abhinippīḷenti gaṇhanti chupanti, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dvinnaṃ saṃ­ghādi­sesānaṃ … pe …."
+msgstr "If the women make physical contact with the monk, body to body, if they touch him, stroke him downwards, stroke him upwards, pull him down, raise him up, pull him, push him, squeeze him, press him, take hold of him, contact him, and he, aiming at association, makes an effort with the body and experiences contact, he commits two offenses entailing suspension. …"
+
+#. </p><p><a class="sc" id="91"></a><a class="pts-vp-pi" id="pts-vp-pi3.125"></a><a class="pts-vp-pi" id="vin.3.125" href="#vin.3.125"></a><a class="ms-pa" id="ms-pa1083" href="#ms-pa1083"></a> 
+msgctxt "pi-tv-bu-vb-ss2:95.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:95.2"
+msgid "Ubho ca naṃ bhikkhussa kāyena kāyaṃ āmasanti parāmasanti … pe …"
+msgstr "If they both make physical contact with the monk, body to body, if they touch him …"
+
+msgctxt "pi-tv-bu-vb-ss2:95.3"
+msgid "gaṇhanti chupanti, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti saṃghādisesena dukkaṭassa … pe …."
+msgstr "take hold of him, contact him, and he, aiming at association, makes an effort with the body and experiences contact, he commits one offense entailing suspension and one offense of wrong conduct. …"
+
+#. </p><p><a class="sc" id="92"></a><a class="ms-pa" id="ms-pa1084" href="#ms-pa1084"></a> 
+msgctxt "pi-tv-bu-vb-ss2:96.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:96.2"
+msgid "Itthī ca naṃ bhikkhussa kāyena kāyapaṭi­baddhaṃ āmasati parāmasati … pe …"
+msgstr "If the woman, with her own body, makes physical contact with something connected to his body, if she touches it …"
+
+msgctxt "pi-tv-bu-vb-ss2:96.3"
+msgid "gaṇhāti chupati, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti thullaccayassa … pe …."
+msgstr "takes hold of it, contacts it, and he, aiming at association, makes an effort with the body and experiences contact, he commits a serious offense. …"
+
+#. </p><p><a class="sc" id="93"></a><a class="ms-pa" id="ms-pa1085" href="#ms-pa1085"></a> 
+msgctxt "pi-tv-bu-vb-ss2:97.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:97.2"
+msgid "Itthiyo ca naṃ bhikkhussa kāyena kāyapaṭi­baddhaṃ āmasanti parāmasanti … pe …"
+msgstr "If the women, with their own bodies, make physical contact with something connected to his body, if they touch it …"
+
+msgctxt "pi-tv-bu-vb-ss2:97.3"
+msgid "gaṇhanti chupanti, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dvinnaṃ thullaccayānaṃ … pe …."
+msgstr "take hold of it, contact it, and he, aiming at association, makes an effort with the body and experiences contact, he commits two serious offenses. …"
+
+#. </p><p><a class="sc" id="94"></a><a class="ms-pa" id="ms-pa1086" href="#ms-pa1086"></a> 
+msgctxt "pi-tv-bu-vb-ss2:98.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:98.2"
+msgid "Ubho ca naṃ bhikkhussa kāyena kāyapaṭi­baddhaṃ āmasanti parāmasanti … pe …"
+msgstr "If they both, with their own bodies, make physical contact with something connected to his body, if they touch it …"
+
+msgctxt "pi-tv-bu-vb-ss2:98.3"
+msgid "gaṇhanti chupanti, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti thullaccayena dukkaṭassa … pe …."
+msgstr "take hold of it, contact it, and he, aiming at association, makes an effort with the body and experiences contact, he commits one serious offense and one offense of wrong conduct. …"
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1087" href="#ms-pa1087"></a><a class="sc" id="95"></a> 
+msgctxt "pi-tv-bu-vb-ss2:99.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:99.2"
+msgid "Itthī ca naṃ bhikkhussa kāyapaṭi­bad­dhena kāyaṃ āmasati parāmasati … pe …"
+msgstr "If the woman, with something connected to her own body, makes physical contact with his body, if she touches him …"
+
+msgctxt "pi-tv-bu-vb-ss2:99.3"
+msgid "gaṇhāti chupati, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti thullaccayassa … pe …."
+msgstr "takes hold of him, contacts him, and he, aiming at association, makes an effort with the body and experiences contact, he commits a serious offense. …"
+
+#. </p><p><a class="sc" id="96"></a><a class="ms-pa" id="ms-pa1088" href="#ms-pa1088"></a> 
+msgctxt "pi-tv-bu-vb-ss2:100.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:100.2"
+msgid "Itthiyo ca naṃ bhikkhussa kāyapaṭi­bad­dhena kāyaṃ āmasanti parāmasanti … pe …"
+msgstr "If the women, with something connected to their own bodies, make physical contact with his body, if they touch him …"
+
+msgctxt "pi-tv-bu-vb-ss2:100.3"
+msgid "gaṇhanti chupanti, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dvinnaṃ thullaccayānaṃ … pe …."
+msgstr "take hold of him, contact him, and he, aiming at association, makes an effort with the body and experiences contact, he commits two serious offenses. …"
+
+#. </p><p><a class="sc" id="97"></a><a class="ms-pa" id="ms-pa1089" href="#ms-pa1089"></a> 
+msgctxt "pi-tv-bu-vb-ss2:101.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:101.2"
+msgid "Ubho ca naṃ bhikkhussa kāyapaṭi­bad­dhena kāyaṃ āmasanti parāmasanti … pe …"
+msgstr "If they both, with something connected to their own bodies, make physical contact with his body, if they touch him …"
+
+msgctxt "pi-tv-bu-vb-ss2:101.3"
+msgid "gaṇhanti chupanti, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti thullaccayena dukkaṭassa … pe …."
+msgstr "take hold of him, contact him, and he, aiming at association, makes an effort with the body and experiences contact, he commits one serious offense and one offense of wrong conduct. …"
+
+#. </p><p><a class="ms-pa" id="ms-pa1090" href="#ms-pa1090"></a><a class="sc" id="98"></a> 
+msgctxt "pi-tv-bu-vb-ss2:102.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:102.2"
+msgid "Itthī ca naṃ bhikkhussa kāyapaṭi­bad­dhena kāyapaṭi­baddhaṃ āmasati parāmasati … pe …"
+msgstr "If the woman, with something connected to her own body, makes physical contact with something connected to his body, if she touches it …"
+
+msgctxt "pi-tv-bu-vb-ss2:102.3"
+msgid "gaṇhāti chupati, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dukkaṭassa … pe …."
+msgstr "takes hold of it, contacts it, and he, aiming at association, makes an effort with the body and experiences contact, he commits an offense of wrong conduct. …"
+
+#. </p><p><a class="sc" id="99"></a><a class="ms-pa" id="ms-pa1091" href="#ms-pa1091"></a> 
+msgctxt "pi-tv-bu-vb-ss2:103.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:103.2"
+msgid "Itthiyo ca naṃ bhikkhussa kāyapaṭi­bad­dhena kāyapaṭi­baddhaṃ āmasanti parāmasanti … pe …"
+msgstr "If the women, with something connected to their own bodies, make physical contact with something connected to his body, if they touch it …"
+
+msgctxt "pi-tv-bu-vb-ss2:103.3"
+msgid "gaṇhanti chupanti, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "take hold of it, contact it, and he, aiming at association, makes an effort with the body and experiences contact, he commits two offenses of wrong conduct. …"
+
+#. </p><p><a class="sc" id="100"></a><a class="ms-pa" id="ms-pa1092" href="#ms-pa1092"></a> 
+msgctxt "pi-tv-bu-vb-ss2:104.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:104.2"
+msgid "Ubho ca naṃ bhikkhussa kāyapaṭi­bad­dhena kāyapaṭi­baddhaṃ āmasanti parāmasanti … pe …"
+msgstr "If they both, with something connected to their own bodies, make physical contact with something connected to his body, if they touch it …"
+
+msgctxt "pi-tv-bu-vb-ss2:104.3"
+msgid "gaṇhanti chupanti, sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "take hold of it, contact it, and he, aiming at association, makes an effort with the body and experiences contact, he commits two offenses of wrong conduct. …"
+
+#. </p><p><a class="sc" id="101"></a><a class="ms-pa" id="ms-pa1093" href="#ms-pa1093"></a> 
+msgctxt "pi-tv-bu-vb-ss2:105.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:105.2"
+msgid "Itthī ca naṃ bhikkhussa nissaggiyena kāyaṃ āmasati."
+msgstr "If the woman, with something released by her, makes physical contact with his body,"
+
+msgctxt "pi-tv-bu-vb-ss2:105.3"
+msgid "Sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dukkaṭassa … pe …."
+msgstr "and he, aiming at association, makes an effort with the body and experiences contact, he commits an offense of wrong conduct. …"
+
+#. </p><p><a class="sc" id="102"></a><a class="pts-vp-en" id="bd.1.210" href="#bd.1.210"></a><a class="ms-pa" id="ms-pa1094" href="#ms-pa1094"></a> 
+msgctxt "pi-tv-bu-vb-ss2:106.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:106.2"
+msgid "Itthiyo ca naṃ bhikkhussa nissaggiyena kāyaṃ āmasanti."
+msgstr "If the women, with something released by them, make physical contact with his body,"
+
+msgctxt "pi-tv-bu-vb-ss2:106.3"
+msgid "Sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "and he, aiming at association, makes an effort with the body and experiences contact, he commits two offenses of wrong conduct. …"
+
+#. </p><p><a class="sc" id="103"></a><a class="ms-pa" id="ms-pa1095" href="#ms-pa1095"></a> 
+msgctxt "pi-tv-bu-vb-ss2:107.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:107.2"
+msgid "Ubho ca naṃ bhikkhussa nissaggiyena kāyaṃ āmasanti."
+msgstr "If they both, with something released by them, make physical contact with his body,"
+
+msgctxt "pi-tv-bu-vb-ss2:107.3"
+msgid "Sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "and he, aiming at association, makes an effort with the body and experiences contact, he commits two offenses of wrong conduct. …"
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1096" href="#ms-pa1096"></a><a class="sc" id="104"></a> 
+msgctxt "pi-tv-bu-vb-ss2:108.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:108.2"
+msgid "Itthī ca naṃ bhikkhussa nissaggiyena kāyapaṭi­baddhaṃ āmasati."
+msgstr "If the woman, with something released by her, makes physical contact with something connected to his body,"
+
+msgctxt "pi-tv-bu-vb-ss2:108.3"
+msgid "Sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dukkaṭassa … pe …."
+msgstr "and he, aiming at association, makes an effort with the body and experiences contact, he commits an offense of wrong conduct. …"
+
+#. </p><p><a class="sc" id="105"></a><a class="ms-pa" id="ms-pa1097" href="#ms-pa1097"></a> 
+msgctxt "pi-tv-bu-vb-ss2:109.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:109.2"
+msgid "Itthiyo ca naṃ bhikkhussa nissaggiyena kāyapaṭi­baddhaṃ āmasanti."
+msgstr "If the women, with something released by them, make physical contact with something connected to his body,"
+
+msgctxt "pi-tv-bu-vb-ss2:109.3"
+msgid "Sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "and he, aiming at association, makes an effort with the body and experiences contact, he commits two offenses of wrong conduct. …"
+
+#. </p><p><a class="sc" id="106"></a><a class="ms-pa" id="ms-pa1098" href="#ms-pa1098"></a> 
+msgctxt "pi-tv-bu-vb-ss2:110.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:110.2"
+msgid "Ubho ca naṃ bhikkhussa nissaggiyena kāyapaṭi­baddhaṃ āmasanti."
+msgstr "If they both, with something released by them, make physical contact with something connected to his body,"
+
+msgctxt "pi-tv-bu-vb-ss2:110.3"
+msgid "Sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "and he, aiming at association, makes an effort with the body and experiences contact, he commits two offenses of wrong conduct. …"
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1099" href="#ms-pa1099"></a><a class="sc" id="107"></a> 
+msgctxt "pi-tv-bu-vb-ss2:111.1"
+msgid "Itthī ca hoti itthisaññī sāratto ca."
+msgstr "It is a woman, he perceives her as a woman, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:111.2"
+msgid "Itthī ca naṃ bhikkhussa nissaggiyena nissaggiyaṃ āmasati."
+msgstr "If the woman, with something released by her, makes physical contact with something released by him,"
+
+msgctxt "pi-tv-bu-vb-ss2:111.3"
+msgid "Sevanādhippāyo kāyena vāyamati, na ca phassaṃ paṭivijānāti, āpatti dukkaṭassa … pe …."
+msgstr "and he, aiming at association, makes an effort with the body, but does not experience contact, he commits an offense of wrong conduct. …"
+
+#. </p><p><a class="sc" id="108"></a><a class="ms-pa" id="ms-pa1100" href="#ms-pa1100"></a> 
+msgctxt "pi-tv-bu-vb-ss2:112.1"
+msgid "Dve itthiyo dvinnaṃ itthīnaṃ itthisaññī sāratto ca."
+msgstr "It is two women, he perceives them both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:112.2"
+msgid "Itthiyo ca naṃ bhikkhussa nissaggiyena nissaggiyaṃ āmasanti."
+msgstr "If the women, with something released by them, make physical contact with something released by him,"
+
+msgctxt "pi-tv-bu-vb-ss2:112.3"
+msgid "Sevanādhippāyo kāyena vāyamati, na ca phassaṃ paṭivijānāti, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "and he, aiming at association, makes an effort with the body, but does not experience contact, he commits two offenses of wrong conduct. …"
+
+#. </p><p><a class="sc" id="109"></a><a class="ms-pa" id="ms-pa1101" href="#ms-pa1101"></a> 
+msgctxt "pi-tv-bu-vb-ss2:113.1"
+msgid "Itthī ca paṇḍako ca ubhinnaṃ itthisaññī sāratto ca."
+msgstr "It is a woman and a sexual eccentric, but he perceives both as women, and he has lust."
+
+msgctxt "pi-tv-bu-vb-ss2:113.2"
+msgid "Ubho ca naṃ bhikkhussa nissaggiyena nissaggiyaṃ āmasanti."
+msgstr "If they both, with something released by them, make physical contact with something released by him,"
+
+msgctxt "pi-tv-bu-vb-ss2:113.3"
+msgid "Sevanādhippāyo kāyena vāyamati, na ca phassaṃ paṭivijānāti, āpatti dvinnaṃ dukkaṭānaṃ … pe …."
+msgstr "and he, aiming at association, makes an effort with the body, but does not experience contact, he commits two offenses of wrong conduct. …"
+
+#. </p><h3>
+msgctxt "pi-tv-bu-vb-ss2:114.1"
+msgid ""
+msgstr "Permutations part 2"
+
+#. </h3><p><a class="sc" id="110"></a><a class="pts-cs" id="bu-ss.2.3.6" href="#bu-ss.2.3.6"></a><a class="ms-pa" id="ms-pa1102" href="#ms-pa1102"></a> 
+msgctxt "pi-tv-bu-vb-ss2:114.2"
+msgid "Sevanādhippāyo kāyena vāyamati phassaṃ paṭivijānāti, āpatti saṃ­ghā­di­sesassa."
+msgstr "If, aiming at association, he makes an effort with the body and experiences contact, he commits an offense entailing suspension."
+
+#. </p><p><a class="sc" id="111"></a><a class="ms-pa" id="ms-pa1103" href="#ms-pa1103"></a> 
+msgctxt "pi-tv-bu-vb-ss2:115.1"
+msgid "Sevanādhippāyo kāyena vāyamati, na ca phassaṃ paṭivijānāti, āpatti dukkaṭassa."
+msgstr "If, aiming at association, he makes an effort with the body, but does not experience contact, he commits an offense of wrong conduct."
+
+#. </p><p><a class="sc" id="112"></a><a class="ms-pa" id="ms-pa1104" href="#ms-pa1104"></a> 
+msgctxt "pi-tv-bu-vb-ss2:116.1"
+msgid "Sevanādhippāyo na ca kāyena vāyamati, phassaṃ paṭivijānāti, anāpatti."
+msgstr "If, aiming at association, he makes no effort with the body, but experiences contact, there is no offense."
+
+#. </p><p><a class="sc" id="113"></a><a class="ms-pa" id="ms-pa1105" href="#ms-pa1105"></a> 
+msgctxt "pi-tv-bu-vb-ss2:117.1"
+msgid "Sevanādhippāyo na ca kāyena vāyamati, na ca phassaṃ paṭivijānāti, anāpatti."
+msgstr "If, aiming at association, he makes no effort with the body and does not experience contact, there is no offense."
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1106" href="#ms-pa1106"></a><a class="sc" id="114"></a> 
+msgctxt "pi-tv-bu-vb-ss2:118.1"
+msgid "Mokkhādhippāyo kāyena vāyamati, phassaṃ paṭivijānāti, anāpatti."
+msgstr "If, aiming to free himself, he makes an effort with the body and experiences contact, there is no offense."
+
+#. </p><p><a class="sc" id="115"></a><a class="pts-vp-pi" id="pts-vp-pi3.126"></a><a class="ms-pa" id="ms-pa1107" href="#ms-pa1107"></a><a class="pts-vp-pi" id="vin.3.126" href="#vin.3.126"></a> 
+msgctxt "pi-tv-bu-vb-ss2:119.1"
+msgid "Mokkhādhippāyo kāyena vāyamati, na ca phassaṃ paṭivijānāti, anāpatti."
+msgstr "If, aiming to free himself, he makes an effort with the body, but does not experience contact, there is no offense."
+
+#. </p><p><a class="sc" id="116"></a><a class="ms-pa" id="ms-pa1108" href="#ms-pa1108"></a> 
+msgctxt "pi-tv-bu-vb-ss2:120.1"
+msgid "Mokkhādhippāyo na ca kāyena vāyamati, phassaṃ paṭivijānāti, anāpatti."
+msgstr "If, aiming to free himself, he makes no effort with the body, but experiences contact, there is no offense."
+
+#. </p><p><a class="sc" id="117"></a><a class="ms-pa" id="ms-pa1109" href="#ms-pa1109"></a> 
+msgctxt "pi-tv-bu-vb-ss2:121.1"
+msgid "Mokkhādhippāyo na ca kāyena vāyamati, na ca phassaṃ paṭivijānāti, anāpatti."
+msgstr "If, aiming to free himself, he makes no effort with the body and does not experience contact, there is no offense."
+
+#. </p><h2>
+msgctxt "pi-tv-bu-vb-ss2:122.1"
+msgid ""
+msgstr "Non-offenses"
+
+#. </h2><p><a class="sc" id="118"></a><a class="pts-cs" id="bu-ss.2.3.7" href="#bu-ss.2.3.7"></a><a class="pts-vp-en" id="bd.1.211" href="#bd.1.211"></a><a class="ms-pa" id="ms-pa1110" href="#ms-pa1110"></a> 
+msgctxt "pi-tv-bu-vb-ss2:122.2"
+msgid "Anāpatti—"
+msgstr "There is no offense:"
+
+msgctxt "pi-tv-bu-vb-ss2:122.3"
+msgid "asañcicca,"
+msgstr "if it is unintentional;"
+
+msgctxt "pi-tv-bu-vb-ss2:122.4"
+msgid "asatiyā,"
+msgstr "if he is not mindful;"
+
+msgctxt "pi-tv-bu-vb-ss2:122.5"
+msgid "ajānantassa,"
+msgstr "if he does not know;"
+
+msgctxt "pi-tv-bu-vb-ss2:122.6"
+msgid "asādiyantassa,"
+msgstr "if he does not consent;"
+
+msgctxt "pi-tv-bu-vb-ss2:122.7"
+msgid "ummattakassa,"
+msgstr "if he is insane;"
+
+msgctxt "pi-tv-bu-vb-ss2:122.8"
+msgid "khittacittassa,"
+msgstr "if he is deranged;"
+
+msgctxt "pi-tv-bu-vb-ss2:122.9"
+msgid "vedanāṭṭassa,"
+msgstr "if he is overwhelmed by pain;"
+
+msgctxt "pi-tv-bu-vb-ss2:122.10"
+msgid "ādi­kammi­kas­sāti."
+msgstr "if he is the first offender."
+
+#. </p><h2>
+msgctxt "pi-tv-bu-vb-ss2:123.1"
+msgid "2.1. Vinīta­vatthu­uddāna­gāthā"
+msgstr "Case rulings"
+
+#. </h2><div class="uddana"><h5>
+msgctxt "pi-tv-bu-vb-ss2:123.2"
+msgid ""
+msgstr "Mnemonic list"
+
+#. </h5><p><a class="sc" id="119"></a><a class="ms-pa" href="#ms-pa1111" id="ms-pa1111"></a> 
+msgctxt "pi-tv-bu-vb-ss2:124.1"
+msgid "Mātā dhītā bhaginī ca,"
+msgstr "Mother, daughter, and sister,"
+
+#. <br> 
+msgctxt "pi-tv-bu-vb-ss2:124.2"
+msgid "jāyā yakkhī ca paṇḍako;"
+msgstr "Wife, and female spirit, a sexual eccentric;"
+
+#. <br> 
+msgctxt "pi-tv-bu-vb-ss2:124.3"
+msgid "Suttā matā tiracchānā,"
+msgstr "Asleep, dead, female animal,"
+
+#. <br> 
+msgctxt "pi-tv-bu-vb-ss2:124.4"
+msgid "dāru­dhīta­likāya ca."
+msgstr "And with a wooden doll."
+
+#. </p><p><a class="sc" id="120"></a><a class="ms-pa" id="ms-pa1112" href="#ms-pa1112"></a> 
+msgctxt "pi-tv-bu-vb-ss2:125.1"
+msgid "Sampīḷe saṅkamo maggo,"
+msgstr "About oppression, bridge, road,"
+
+#. <br> 
+msgctxt "pi-tv-bu-vb-ss2:125.2"
+msgid "rukkho nāvā ca rajju ca;"
+msgstr "Tree, and boat, and rope;"
+
+#. <br> 
+msgctxt "pi-tv-bu-vb-ss2:125.3"
+msgid "Daṇḍo pattaṃ paṇāmesi,"
+msgstr "A stick, pushed with a bowl,"
+
+#. <br> 
+msgctxt "pi-tv-bu-vb-ss2:125.4"
+msgid "vande vāyami nacchupeti."
+msgstr "When paying respect, made an effort but did not touch."
+
+#. </p></div><h3>
+msgctxt "pi-tv-bu-vb-ss2:126.1"
+msgid "2.2. Vinītavatthu"
+msgstr "Case details"
+
+#. </h3><p><a class="sc" id="121"></a><a class="pts-cs-empty" id="bu-ss.2.4" href="#bu-ss.2.4"></a><a class="pts-cs" id="bu-ss.2.4.1" href="#bu-ss.2.4.1"></a><a class="ms-pa" id="ms-pa1113" href="#ms-pa1113"></a> 
+msgctxt "pi-tv-bu-vb-ss2:127.1"
+msgid "Tena kho pana samayena aññataro bhikkhu mātuyā mātupemena āmasi."
+msgstr "At one time, a monk touched his mother out of affection."
+
+msgctxt "pi-tv-bu-vb-ss2:127.2"
+msgid "Tassa kukkuccaṃ ahosi—"
+msgstr "He became remorseful, thinking,"
+
+msgctxt "pi-tv-bu-vb-ss2:127.3"
+msgid "“bhagavatā sikkhāpadaṃ paññattaṃ,"
+msgstr "“The Master has laid down a training rule."
+
+msgctxt "pi-tv-bu-vb-ss2:127.4"
+msgid "kacci nu kho ahaṃ saṃghādisesaṃ āpattiṃ āpanno”ti?"
+msgstr "Could it be that I’ve committed an offense entailing suspension?”"
+
+msgctxt "pi-tv-bu-vb-ss2:127.5"
+msgid "Bhagavato etamatthaṃ ārocesi."
+msgstr "He informed the Master, and the Master said,"
+
+msgctxt "pi-tv-bu-vb-ss2:127.6"
+msgid "“Anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:127.7"
+msgid "āpatti dukkaṭassā”ti."
+msgstr "but there’s an offense of wrong conduct.”"
+
+msgctxt "pi-tv-bu-vb-ss2:127.8"
+msgid "(1)"
+msgstr ""
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1114" href="#ms-pa1114"></a><a class="sc" id="122"></a> 
+msgctxt "pi-tv-bu-vb-ss2:128.1"
+msgid "Tena kho pana samayena aññataro bhikkhu dhītuyā dhītupemena āmasi … pe …"
+msgstr "At one time, a monk touched his daughter out of affection …"
+
+msgctxt "pi-tv-bu-vb-ss2:128.2"
+msgid "bhaginiyā bhaginipemena āmasi."
+msgstr "his sister out of affection."
+
+msgctxt "pi-tv-bu-vb-ss2:128.3"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:128.4"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:128.5"
+msgid "āpatti dukkaṭassā”ti."
+msgstr "but there’s an offense of wrong conduct.”"
+
+msgctxt "pi-tv-bu-vb-ss2:128.6"
+msgid "(2–‍3)"
+msgstr ""
+
+#. </p><hr><p><a class="pts-cs" id="bu-ss.2.4.2" href="#bu-ss.2.4.2"></a><a class="ms-pa" id="ms-pa1115" href="#ms-pa1115"></a><a class="sc" id="123"></a> 
+msgctxt "pi-tv-bu-vb-ss2:129.1"
+msgid "Tena kho pana samayena aññataro bhikkhu purāṇa­duti­yikāya kāyasaṃsaggaṃ samāpajji."
+msgstr "At one time, a monk made physical contact with his former wife."
+
+msgctxt "pi-tv-bu-vb-ss2:129.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:129.3"
+msgid "“āpattiṃ tvaṃ, bhikkhu, āpanno saṃghādisesan”ti."
+msgstr "“You’ve committed an offense entailing suspension.”"
+
+msgctxt "pi-tv-bu-vb-ss2:129.4"
+msgid "(4)"
+msgstr ""
+
+#. </p><hr><p><a class="pts-cs" id="bu-ss.2.4.3" href="#bu-ss.2.4.3"></a><a class="ms-pa" id="ms-pa1116" href="#ms-pa1116"></a><a class="sc" id="124"></a> 
+msgctxt "pi-tv-bu-vb-ss2:130.1"
+msgid "Tena kho pana samayena aññataro bhikkhu yakkhiniyā kāyasaṃsaggaṃ samāpajji."
+msgstr "At one time, a monk made physical contact with a female spirit."
+
+msgctxt "pi-tv-bu-vb-ss2:130.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+#. <a class="pts-vp-en" id="bd.1.212" href="#bd.1.212"></a> 
+msgctxt "pi-tv-bu-vb-ss2:130.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:130.4"
+msgid "āpatti thullaccayassā”ti."
+msgstr "but there’s a serious offense.”"
+
+msgctxt "pi-tv-bu-vb-ss2:130.5"
+msgid "(5)"
+msgstr ""
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1117" href="#ms-pa1117"></a><a class="sc" id="125"></a> 
+msgctxt "pi-tv-bu-vb-ss2:131.1"
+msgid "Tena kho pana samayena aññataro bhikkhu paṇḍakassa kāyasaṃsaggaṃ samāpajji."
+msgstr "At one time, a monk made physical contact with a sexual eccentric."
+
+msgctxt "pi-tv-bu-vb-ss2:131.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:131.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:131.4"
+msgid "āpatti thullaccayassā”ti."
+msgstr "but there’s a serious offense.”"
+
+msgctxt "pi-tv-bu-vb-ss2:131.5"
+msgid "(6)"
+msgstr ""
+
+#. </p><hr><p><a class="pts-cs" id="bu-ss.2.4.4" href="#bu-ss.2.4.4"></a><a class="ms-pa" id="ms-pa1118" href="#ms-pa1118"></a><a class="sc" id="126"></a> 
+msgctxt "pi-tv-bu-vb-ss2:132.1"
+msgid "Tena kho pana samayena aññataro bhikkhu suttitthiyā kāyasaṃsaggaṃ samāpajji."
+msgstr "At one time, a monk made physical contact with a sleeping woman."
+
+msgctxt "pi-tv-bu-vb-ss2:132.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:132.3"
+msgid "“āpattiṃ tvaṃ, bhikkhu, āpanno saṃghādisesan”ti."
+msgstr "“You’ve committed an offense entailing suspension.”"
+
+msgctxt "pi-tv-bu-vb-ss2:132.4"
+msgid "(7)"
+msgstr ""
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1119" href="#ms-pa1119"></a><a class="sc" id="127"></a> 
+msgctxt "pi-tv-bu-vb-ss2:133.1"
+msgid "Tena kho pana samayena aññataro bhikkhu matitthiyā kāyasaṃsaggaṃ samāpajji."
+msgstr "At one time, a monk made physical contact with a dead woman."
+
+msgctxt "pi-tv-bu-vb-ss2:133.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:133.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:133.4"
+msgid "āpatti thullaccayassā”ti."
+msgstr "but there’s a serious offense.”"
+
+msgctxt "pi-tv-bu-vb-ss2:133.5"
+msgid "(8)"
+msgstr ""
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1120" href="#ms-pa1120"></a><a class="sc" id="128"></a> 
+msgctxt "pi-tv-bu-vb-ss2:134.1"
+msgid "Tena kho pana samayena aññataro bhikkhu tiracchā­na­ga­titthiyā kāyasaṃsaggaṃ samāpajji."
+msgstr "At one time, a monk made physical contact with a female animal."
+
+msgctxt "pi-tv-bu-vb-ss2:134.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "…"
+
+msgctxt "pi-tv-bu-vb-ss2:134.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:134.4"
+msgid "āpatti dukkaṭassā”ti."
+msgstr "but there’s an offense of wrong conduct.”"
+
+msgctxt "pi-tv-bu-vb-ss2:134.5"
+msgid "(9)"
+msgstr ""
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1121" href="#ms-pa1121"></a><a class="sc" id="129"></a> 
+msgctxt "pi-tv-bu-vb-ss2:135.1"
+msgid "Tena kho pana samayena aññataro bhikkhu dāru­dhīta­likāya kāyasaṃsaggaṃ samāpajji."
+msgstr "At one time, a monk made physical contact with a wooden doll."
+
+msgctxt "pi-tv-bu-vb-ss2:135.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "…"
+
+msgctxt "pi-tv-bu-vb-ss2:135.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:135.4"
+msgid "āpatti dukkaṭassā”ti."
+msgstr "but there’s an offense of wrong conduct.”"
+
+msgctxt "pi-tv-bu-vb-ss2:135.5"
+msgid "(10)"
+msgstr ""
+
+#. </p><hr><p><a class="pts-cs" id="bu-ss.2.4.5" href="#bu-ss.2.4.5"></a><a class="ms-pa" id="ms-pa1122" href="#ms-pa1122"></a><a class="sc" id="130"></a> 
+msgctxt "pi-tv-bu-vb-ss2:136.1"
+msgid "Tena kho pana samayena sambahulā itthiyo aññataraṃ bhikkhuṃ sampīḷetvā bāhā­param­parāya ānesuṃ."
+msgstr "At one time, a number of women harassed a monk by leading him about arm-in-arm."
+
+msgctxt "pi-tv-bu-vb-ss2:136.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:136.3"
+msgid "“sādiyi tvaṃ, bhikkhū”ti?"
+msgstr "“Did you consent, monk?”"
+
+#. </p><p>
+msgctxt "pi-tv-bu-vb-ss2:136.4"
+msgid "“Nāhaṃ, bhagavā, sādiyin”ti."
+msgstr "“I didn’t consent, Master.”"
+
+#. </p><p>
+msgctxt "pi-tv-bu-vb-ss2:136.5"
+msgid "“Anāpatti, bhikkhu, asādiyantassā”ti."
+msgstr "“There’s no offense if one doesn’t consent.”"
+
+msgctxt "pi-tv-bu-vb-ss2:136.6"
+msgid "(11)"
+msgstr ""
+
+#. </p><hr><p><a class="pts-cs" id="bu-ss.2.4.6" href="#bu-ss.2.4.6"></a><a class="pts-vp-pi" id="vin.3.127" href="#vin.3.127"></a><a class="ms-pa" id="ms-pa1123" href="#ms-pa1123"></a><a class="sc" id="131"></a><a class="pts-vp-pi" id="pts-vp-pi3.127"></a> 
+msgctxt "pi-tv-bu-vb-ss2:137.1"
+msgid "Tena kho pana samayena aññataro bhikkhu itthiyā abhirūḷhaṃ saṅkamaṃ sāratto sañcālesi."
+msgstr "At one time, a monk, being lustful, shook the bridge on which a woman was standing."
+
+msgctxt "pi-tv-bu-vb-ss2:137.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:137.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:137.4"
+msgid "āpatti dukkaṭassā”ti."
+msgstr "but there’s an offense of wrong conduct.”"
+
+msgctxt "pi-tv-bu-vb-ss2:137.5"
+msgid "(12)"
+msgstr ""
+
+#. </p><hr><p><a class="pts-cs" id="bu-ss.2.4.7" href="#bu-ss.2.4.7"></a><a class="ms-pa" id="ms-pa1124" href="#ms-pa1124"></a><a class="sc" id="132"></a> 
+msgctxt "pi-tv-bu-vb-ss2:138.1"
+msgid "Tena kho pana samayena aññataro bhikkhu itthiṃ paṭipathe passitvā sāratto aṃsakūṭena pahāraṃ adāsi."
+msgstr "At one time, a monk saw a woman coming in the opposite direction, and being lustful, he gave her a blow with the shoulder."
+
+msgctxt "pi-tv-bu-vb-ss2:138.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:138.3"
+msgid "“āpattiṃ tvaṃ, bhikkhu, āpanno saṃghādisesan”ti."
+msgstr "“You’ve committed an offense entailing suspension.”"
+
+msgctxt "pi-tv-bu-vb-ss2:138.4"
+msgid "(13)"
+msgstr ""
+
+#. </p><hr><p><a class="pts-cs" id="bu-ss.2.4.8" href="#bu-ss.2.4.8"></a><a class="pts-vp-en" id="bd.1.213" href="#bd.1.213"></a><a class="ms-pa" id="ms-pa1125" href="#ms-pa1125"></a><a class="sc" id="133"></a> 
+msgctxt "pi-tv-bu-vb-ss2:139.1"
+msgid "Tena kho pana samayena aññataro bhikkhu itthiyā abhirūḷhaṃ rukkhaṃ sāratto sañcālesi."
+msgstr "At one time, a monk, being lustful, shook the tree that a woman had climbed."
+
+msgctxt "pi-tv-bu-vb-ss2:139.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:139.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:139.4"
+msgid "āpatti dukkaṭassā”ti."
+msgstr "but there’s an offense of wrong conduct.”"
+
+msgctxt "pi-tv-bu-vb-ss2:139.5"
+msgid "(14)"
+msgstr ""
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1126" href="#ms-pa1126"></a><a class="sc" id="134"></a> 
+msgctxt "pi-tv-bu-vb-ss2:140.1"
+msgid "Tena kho pana samayena aññataro bhikkhu itthiyā abhirūḷhaṃ nāvaṃ sāratto sañcālesi."
+msgstr "At one time, a monk, being lustful, shook the boat that a woman had boarded."
+
+msgctxt "pi-tv-bu-vb-ss2:140.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:140.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:140.4"
+msgid "āpatti dukkaṭassā”ti."
+msgstr "but there’s an offense of wrong conduct.”"
+
+msgctxt "pi-tv-bu-vb-ss2:140.5"
+msgid "(15)"
+msgstr ""
+
+#. </p><hr><p><a class="pts-cs" id="bu-ss.2.4.9" href="#bu-ss.2.4.9"></a><a class="ms-pa" id="ms-pa1127" href="#ms-pa1127"></a><a class="sc" id="135"></a> 
+msgctxt "pi-tv-bu-vb-ss2:141.1"
+msgid "Tena kho pana samayena aññataro bhikkhu itthiyā gahitaṃ rajjuṃ sāratto āviñchi."
+msgstr "At one time, a monk, being lustful, pulled the rope that a woman was holding."
+
+msgctxt "pi-tv-bu-vb-ss2:141.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:141.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:141.4"
+msgid "āpatti thullaccayassā”ti."
+msgstr "but there’s a serious offense.”"
+
+msgctxt "pi-tv-bu-vb-ss2:141.5"
+msgid "(16)"
+msgstr ""
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1128" href="#ms-pa1128"></a><a class="sc" id="136"></a> 
+msgctxt "pi-tv-bu-vb-ss2:142.1"
+msgid "Tena kho pana samayena aññataro bhikkhu itthiyā gahitaṃ daṇḍaṃ sāratto āviñchi."
+msgstr "At one time, a monk, being lustful, pulled the stick that a woman was holding."
+
+msgctxt "pi-tv-bu-vb-ss2:142.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:142.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:142.4"
+msgid "āpatti thullaccayassā”ti."
+msgstr "but there’s a serious offense.”"
+
+msgctxt "pi-tv-bu-vb-ss2:142.5"
+msgid "(17)"
+msgstr ""
+
+#. </p><hr><p><a class="pts-cs" id="bu-ss.2.4.10" href="#bu-ss.2.4.10"></a><a class="ms-pa" id="ms-pa1129" href="#ms-pa1129"></a><a class="sc" id="137"></a> 
+msgctxt "pi-tv-bu-vb-ss2:143.1"
+msgid "Tena kho pana samayena aññataro bhikkhu sāratto itthiṃ pattena paṇāmesi."
+msgstr "At one time, a monk, being lustful, pushed a woman with his bowl."
+
+msgctxt "pi-tv-bu-vb-ss2:143.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:143.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:143.4"
+msgid "āpatti thullaccayassā”ti."
+msgstr "but there’s a serious offense.”"
+
+msgctxt "pi-tv-bu-vb-ss2:143.5"
+msgid "(18)"
+msgstr ""
+
+#. </p><hr><p><a class="pts-cs" id="bu-ss.2.4.11" href="#bu-ss.2.4.11"></a><a class="ms-pa" id="ms-pa1130" href="#ms-pa1130"></a><a class="sc" id="138"></a> 
+msgctxt "pi-tv-bu-vb-ss2:144.1"
+msgid "Tena kho pana samayena aññataro bhikkhu itthiyā vandantiyā sāratto pādaṃ uccāresi."
+msgstr "At one time, a monk, being lustful, raised his foot when a woman was paying respect to him."
+
+msgctxt "pi-tv-bu-vb-ss2:144.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:144.3"
+msgid "“āpattiṃ tvaṃ, bhikkhu, āpanno saṃghādisesan”ti."
+msgstr "“You’ve committed an offense entailing suspension.”"
+
+msgctxt "pi-tv-bu-vb-ss2:144.4"
+msgid "(19)"
+msgstr ""
+
+#. </p><hr><p><a class="ms-pa" id="ms-pa1131" href="#ms-pa1131"></a><a class="sc" id="139"></a> 
+msgctxt "pi-tv-bu-vb-ss2:145.1"
+msgid "Tena kho pana samayena aññataro bhikkhu itthiṃ gahessāmīti vāyamitvā na chupi."
+msgstr "At one time, a monk, thinking, “I’ll take hold of a woman,” exerted himself, but did not make contact."
+
+msgctxt "pi-tv-bu-vb-ss2:145.2"
+msgid "Tassa kukkuccaṃ ahosi … pe …"
+msgstr "He became remorseful …"
+
+msgctxt "pi-tv-bu-vb-ss2:145.3"
+msgid "“anāpatti, bhikkhu, saṃ­ghā­di­sesassa;"
+msgstr "“There’s no offense entailing suspension,"
+
+msgctxt "pi-tv-bu-vb-ss2:145.4"
+msgid "āpatti dukkaṭassā”ti."
+msgstr "but there’s an offense of wrong conduct.”"
+
+msgctxt "pi-tv-bu-vb-ss2:145.5"
+msgid "(20)"
+msgstr ""
+
+#. </p><p class="endsutta"><a class="sc" id="140"></a><a class="ms-pa" id="ms-pa1132" href="#ms-pa1132"></a> 
+msgctxt "pi-tv-bu-vb-ss2:146.1"
+msgid "­Kāyasaṃ­sagga­sikkhā­padaṃ niṭṭhitaṃ dutiyaṃ."
+msgstr "The second rule, the training rule on physical contact, is finished."
+
+#. </p></article><aside id="metaarea"><p>Translated by <span class="author">Bhikkhu Brahmali.</span></p>
+#. <p>Digital edition prepared for SuttaCentral by <span class="editor">Ayya Vimala</span>.</p>
+#. <p>A digital edition of I.B. Hornerʼs translation, <cite class="book">The Book of the Discipline</cite>, can be downloaded <a href="/downloads#book_of_the_discipline">here</a>.</p>
+#. <hr><p>First published in 2014 by SuttaCentral, revised 2016</p>
+#. <p>The current digital edition is released under a Creative Commons Attribution-NonCommercial 3.0 licence (<a href="http://creativecommons.org/licenses/by-nc/3.0/">CC BY-NC 3.0</a>).</p>
+#. <p><strong>You are free to:</strong></p>
+#. <ul><li><strong>Share</strong> — copy and redistribute the material in any medium or format.</li>
+#. <li><strong>Adapt</strong> — remix, transform, and build upon the material.</li></ul>
+#. <p>The licensor cannot revoke these freedoms as long as you follow the license terms.</p>
+#. <p><strong>Under the following terms:</strong></p>
+#. <ul><li><strong>Attribution</strong> — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</li>
+#. <li><strong>NonCommercial</strong> — You may not use the material for commercial purposes.</li>
+#. <li><strong>No additional restrictions</strong> — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</li></ul></aside></section>
+#. </div></body></html>
