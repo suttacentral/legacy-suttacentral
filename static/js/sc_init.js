@@ -313,9 +313,6 @@ sc.init = function(reset)
     if (reset) scState.restore("clean");
     
     buildTextualInformation();
-    // if (sc.userPrefs.getPref("textInfo") === true) {
-    //     toggleTextualInfo(true);
-    // }
 
     if (localStorage.getItem('infomode.on')) {
         toggleTextualInfo(true);

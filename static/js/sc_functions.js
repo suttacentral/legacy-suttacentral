@@ -314,11 +314,6 @@ function toggleTextualInfo(force) {
     
     var showTextInfo = sc.userPrefs.getPref("textInfo");
     showTextInfo = !showTextInfo;
-    // if ($('body').hasClass('infomode')) {
-    //     showTextInfo = false;
-    // } else {
-    //     showTextInfo = true;
-    // }
 
     if (force === true) {showTextInfo = true;}
     else if (force === false) {showTextInfo = false;}
