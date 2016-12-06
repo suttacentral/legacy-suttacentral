@@ -139,6 +139,7 @@ sc.classes = {
         "wal80c": "Paragraph numbers in Waldschmidt, 1980c, “On a Sanskrit version of the Verahaccāni Sutta.”",
 	"wg": "Paragraph numbers in Wilhelm Geiger.",
         "wp": "Wisdom Publications paragraph number.",
+        "wp-verse": "Wisdom Publications verse number.",
         "wr": "Paragraph numbers in Walpola Rahula.",
         "yam72": "Paragraph numbers in Yamada, 1972."
     },

@@ -12,7 +12,7 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
     a.yam72, a.es, a.bm, a.bn, a.hh, a.jd, a.ks, a.nm, a.np, a.pl, a.wg, a.jsk, a.mt, a.sb, a.ss, a.tb,
     a.kl, a.bi, a.bjt, a.ttc, #text:lang(si) a.msdiv, a.bhaisv, a.msvii, a.mat96, a.kat, a.pand-v,
     a.msviii, a.say-v, a.adh-v, a.cps, a.sbvi, a.sbvii, a.ia, a.verse-num-sc, 
-    a.vagga-gatha-num-sc, a.ba, a.pts-s, a.fa, a.lh, a.apz, a.dhskd, a.dhskm, a.bv, a.thv
+    a.vagga-gatha-num-sc, a.ba, a.pts-s, a.fa, a.lh, a.apz, a.dhskd, a.dhskm, a.bv, a.thv, a.wp-verse
 {
     visibility:hidden;
     text-align:left;
@@ -47,7 +47,7 @@ div#text:not(.line-by-line) a.t {display: none;}
 a.wp, a.gbm, a.verse-num-sc, a.dhskm {color: saturated-color(plain-red);}
 a.pts {color: saturated-color(dark-yellow);}
 a.pts1ed, a.snp-vagga-section-verse, a.vagga-gatha-num-sc {color: saturated-color(dark-yellow);}
-a.pts2ed, a.snp-vagga-verse,a.pts-vp-en, a.pts-s {color: saturated-color(plain-red);}
+a.pts2ed, a.snp-vagga-verse,a.pts-vp-en, a.pts-s, a.wp-verse {color: saturated-color(plain-red);}
 a.vn, a.sht {color: saturated-color(plain-purple);}
 a.wal52,a.mat88,a.vai58,a.mat96 {color: saturated-color(plain-purple);}
 
@@ -145,6 +145,7 @@ a.vn
 a.wal48, a.wal50, a.wal52, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c
 a.wg
 a.wp
+a.wp-verse
 a.wr
 a.yam72
 a.snp-vagga-verse
