@@ -104,7 +104,7 @@ a.vn:before {content:"Vn "}
 a.wal48:before, a.wal50:before, a.wal52:before, a.wal57c:before, a.wal58:before, a.wal59a:before, a.wal60:before, a.wal61:before, a.wal68a:before, a.wal70a:before, a.wal70b:before, a.wal76:before, a.wal78:before, a.wal80c:before {content:"Wal "}
 a.wg:before {content:"WG "}
 a.wp:before {content:"WP "}
-a.wp:before {content:"WP verse "}
+a.wp-verse:before {content:"WP verse "}
 a.wr:before {content:"WR "}
 a.yam72:before {content:"Yam "}
 
