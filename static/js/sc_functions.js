@@ -287,6 +287,9 @@ sc.piLookup = {
         if (toggleLookupOn == false) {
             sc.sidebar.messageBox.show('The lookup dictionary is now disabled.', {timeout: 5000});
             $('.prime .lookup-active').removeClass('lookup-active').addClass('lookup-inactive');
+            localStorage.removeItem('palilookupmode.on');
+        } else {
+            localStorage.setItem('palilookupmode.on', true);
         }
     }
 }
@@ -308,12 +311,6 @@ function toggleTextualInfo(force) {
     }
     var showTextInfo = sc.userPrefs.getPref("textInfo");
     showTextInfo = !showTextInfo;
-    // if ($('body').hasClass('infomode')) {
-    //     showTextInfo = false;
-    // } else {
-    //     showTextInfo = true;
-    // }
-
     if (force === true) {showTextInfo = true;}
     else if (force === false) {showTextInfo = false;}
 
