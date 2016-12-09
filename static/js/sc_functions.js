@@ -289,12 +289,9 @@ sc.piLookup = {
         }
         sc.sidebar.messageBox.clear();
         sc.userPrefs.setPref("paliLookup", toggleLookupOn, true);
-        localStorage.setItem('palilookupmode.on', toggleLookupOn);
         if (toggleLookupOn == false) {
             sc.sidebar.messageBox.show('The lookup dictionary is now disabled.', {timeout: 5000});
             $('.prime .lookup-active').removeClass('lookup-active').addClass('lookup-inactive');
-            localStorage.removeItem('palilookupmode.on');
-        }
         }
     }
 }
@@ -302,6 +299,8 @@ sc.piLookup.scriptsByName = _.object(_.map(sc.piLookup.scripts, function(o){retu
 $(document).ready(function(){
     sc.piLookup.init();
 });
+
+
 
 function transliterateHandler()
 {
@@ -318,6 +317,7 @@ function toggleTextualInfo(force) {
 
     if (force === true) {showTextInfo = true;}
     else if (force === false) {showTextInfo = false;}
+    
 
     if (showTextInfo)
     {
