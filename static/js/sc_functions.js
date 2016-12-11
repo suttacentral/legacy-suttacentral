@@ -292,6 +292,9 @@ sc.piLookup = {
         if (toggleLookupOn == false) {
             sc.sidebar.messageBox.show('The lookup dictionary is now disabled.', {timeout: 5000});
             $('.prime .lookup-active').removeClass('lookup-active').addClass('lookup-inactive');
+            localStorage.removeItem('palilookupmode.on');
+        } else {
+            localStorage.setItem('palilookupmode.on', true);
         }
     }
 }

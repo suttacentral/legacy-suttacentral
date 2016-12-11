@@ -334,6 +334,9 @@ sc.init = function(reset)
                 wordMap[f] = {};
         
         if (!sc.mode.translitFunc) sc.mode.translitFunc = transFuncs[0][0];
+        if (localStorage.getItem('palilookupmode.on')) {
+            sc.userPrefs.setPref("paliLookup", localStorage.getItem('palilookupmode.on'), false)
+        };
         if (sc.userPrefs.getPref("paliLookup") === true)
         {
             if (sc.mode.translitFunc.name == 'toSyllables')
