@@ -2475,7 +2475,10 @@
               "parallels": ["mn79", "ma208"]
           },
           {
-              "parallels": ["mn8", "ma91"]
+              "parallels": ["mn8", "ma91", "~ea47.9"]
+          },
+          {
+              "parallels": ["~mn8", "~ma91", "ea47.9"]
           },
           {
               "parallels": ["mn80", "ma209", "t90"]
