@@ -2487,7 +2487,7 @@
               "parallels": ["mn81", "dq10", "ma63", "skt-mu-kd17#sbvii22-#sbvii30", "t197.10", "~skt-lo-mvu31"]
           },
           {
-              "parallels": ["mn82", "avs90", "dq60", "ma132", "sht-sutta18", "t68", "t69", "tib10", "~sf101", "~sf283", "~t1507.4", "~t199.18a", "~t199.18b"],
+              "parallels": ["mn82", "avs90", "dq60", "ma132", "sht-sutta18", "t68", "t69", "tib10", "~sf101", "~sf283", "~t1507.4", "~t199.18a", "~t199.18b", "~pi-tv-bu-vb-pj1#41-#59"],
               "mentions": ["mn82", "~tha-ap20"]
           },
           {
@@ -6593,7 +6593,13 @@
               "parallels": ["up9.008", "~mn43"]
           },
           {
-              "parallels": ["an8.11", "ma157", "t75", "~pi-tv-bu-vb-intro", "~pi-tv-bu-vb-pj1#3-#39"]
+              "parallels": ["an8.11", "ma157", "t75", "~pi-tv-bu-vb-pj1#2-#18"]
+          },
+          {
+              "parallels": ["mn82#3-#16", "pi-tv-bu-vb-pj1#41-#59"]
+          },
+          {
+              "parallels": ["pi-tv-bu-vb-pj1#141", "pi-tv-bu-vb-pj1#135"]
           },
           {
               "parallels": ["bo-mu-bi-pm#np30", "~pi-tv-bi-vb-np6", "~pi-tv-bi-pm#np6", "~pi-tv-pvr-bi#np6", "~lzh-dg-bi-vb-np20", "~lzh-dg-bi-pm#np20", "~lzh-mi-bi-vb-np25", "~lzh-mi-bi-pm#np25", "~lzh-sarv-bi-pm-dh#np27", "~lzh-sarv-bi-vb-np26", "~lzh-sarv-bi-pm#np26", "~lzh-mu-bi-vb-np30", "~lzh-mu-bi-pm#np30", "~bo-mu-bi-vb-np30", "~lzh-mg-bi-vb-np11", "~lzh-mg-bi-pm#np11", "~skt-lo-bi-vb-np11", "~pi-tv-bi-vb-np8", "~pi-tv-bi-pm#np8", "~pi-tv-pvr-bi#np8", "~lzh-dg-bi-vb-np20", "~lzh-dg-bi-pm#np20", "~lzh-mi-bi-vb-np25", "~lzh-mi-bi-pm#np25", "~lzh-sarv-bi-pm-dh#np27", "~lzh-sarv-bi-vb-np26", "~lzh-sarv-bi-pm#np26", "~lzh-mu-bi-vb-np30", "~lzh-mu-bi-pm#np30", "~bo-mu-bi-vb-np30", "~lzh-mg-bi-vb-np11", "~lzh-mg-bi-pm#np11", "~skt-lo-bi-vb-np11"]
@@ -9128,7 +9134,7 @@
               "parallels": ["pi-tv-bu-vb-ay2", "pi-tv-bu-pm#ay2", "pi-tv-pvr-bu#ay2", "lzh-sarv-bu-vb-ay2", "lzh-sarv-bu-pm#ay2", "lzh-sarv-bu-pm-2#ay2", "skt-sarv-bu-pm-tf11#ay2", "skt-sarv-bu-pm-finot#ay2", "lzh-mu-bu-vb-ay2", "lzh-mu-bu-pm#ay2", "bo-mu-bu-vb-ay2", "bo-mu-bu-pm#ay2", "skt-mu-bu-pm-gbm3#ay2", "skt-mu-mpt-bu-pm#ay2", "lzh-mi-bu-vb-ay2", "lzh-mi-bu-pm#ay2", "lzh-mg-bu-vb-ay2", "lzh-mg-bu-pm#ay2", "skt-mg-bu-pm#ay2", "skt-lo-bu-pm#ay2", "lzh-dg-bu-vb-ay2", "lzh-dg-bu-pm#ay2", "lzh-dg-bu-pm-2#ay2", "lzh-ka-bu-pm#ay2"]
           },
           {
-              "parallels": ["pi-tv-bu-vb-intro", "pi-tv-bu-vb-pj1#3-#39", "~an8.11", "~ma157", "~t75"]
+              "parallels": ["pi-tv-bu-vb-pj1#2-#18", "~an8.11", "~ma157", "~t75"]
           },
           {
               "parallels": ["pi-tv-bu-vb-np1", "pi-tv-bu-pm#np1", "pi-tv-pvr-bu#np1", "lzh-sarv-bu-vb-np1", "lzh-sarv-bu-pm#np1", "lzh-sarv-bu-pm-2#np1", "skt-sarv-bu-pm-tf11#np1", "skt-sarv-bu-pm-finot#np1", "lzh-mu-bu-vb-np1", "lzh-mu-bu-pm#np1", "bo-mu-bu-vb-np1", "bo-mu-bu-pm#np1", "skt-mu-bu-pm-gbm3#np1", "skt-mu-mpt-bu-pm#np1", "lzh-mi-bu-vb-np1", "lzh-mi-bu-pm#np1", "lzh-mg-bu-vb-np1", "lzh-mg-bu-pm#np1", "skt-mg-bu-pm#np1", "skt-lo-bu-pm#np1", "lzh-dg-bu-vb-np1", "lzh-dg-bu-pm#np1", "lzh-dg-bu-pm-2#np1", "lzh-ka-bu-pm#np1", "lzh-upali-bu-np1", "gr-pm-bf13#np1", "pi-tv-bi-vb-np13", "pi-tv-bi-pm#np13", "pi-tv-pvr-bi#np13", "lzh-dg-bi-vb-np1", "lzh-dg-bi-pm#np1", "lzh-mi-bi-vb-np1", "lzh-mi-bi-pm#np1", "lzh-sarv-bi-vb-np1", "lzh-sarv-bi-pm#np1", "lzh-mu-bi-vb-np1", "lzh-mu-bi-pm#np1", "bo-mu-bi-vb-np1", "bo-mu-bi-pm#np1", "lzh-mg-bi-vb-np1", "lzh-mg-bi-pm#np1", "skt-lo-bi-vb-np1"]
@@ -10313,7 +10319,7 @@
               "parallels": ["dhp#146", "gdhp#143", "pdhp#233", "skt-lo-mvu100#4", "t210.19#vagga-gatha-num-sc19.1", "t212.1#vagga-gatha-num-sc1.9", "t213.1#vagga-gatha-num-sc1.4", "uv1#1.4"]
           },
           {
-              "parallels": ["dhp#147", "mn82mn82#17", "t210.19#vagga-gatha-num-sc19.2", "t212.28#vagga-gatha-num-sc28.16", "t213.27#vagga-gatha-num-sc27.16", "thag16.4#verse-num-sc769", "uv27#27.20"]
+              "parallels": ["dhp#147", "mn82#17", "t210.19#vagga-gatha-num-sc19.2", "t212.28#vagga-gatha-num-sc28.16", "t213.27#vagga-gatha-num-sc27.16", "thag16.4#verse-num-sc769", "uv27#27.20"]
           },
           {
               "parallels": ["dhp#148", "gdhp#142", "pdhp#259", "t210.1#vagga-gatha-num-sc1.14", "t210.19#vagga-gatha-num-sc19.3", "t212.1#vagga-gatha-num-sc1.67", "uv1#1.34"]
@@ -15594,7 +15600,6 @@
               "parallels": ["pi-tv-bu-vb-pd4#8-#12", "pi-tv-bu-vb-np29#7-#10"]
           },
           {
-              "parallels": ["pi-tv-bu-vb-pj1#103", "~pi-tv-bu-vb-pj1#69"],
               "mentions": ["pi-tv-bu-vb-pj1#103", "mnd7#26", "mnd7#14"]
           },
           {
@@ -15602,9 +15607,6 @@
           },
           {
               "mentions": ["pi-tv-bu-vb-pj1#178", "mil5.2.6#1"]
-          },
-          {
-              "parallels": ["pi-tv-bu-vb-pj1#69", "~pi-tv-bu-vb-pj1#103"]
           },
           {
               "mentions": ["pi-tv-bu-vb-pj1#70", "~mil5.3.4#1"]
