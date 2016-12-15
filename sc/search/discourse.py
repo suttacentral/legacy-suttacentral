@@ -225,6 +225,7 @@ class DiscourseIndexer(ElasticIndexer):
             yield action
         
         for post in data['posts']:
+          try:
             action = {'_type': 'post',
                       '_id': post['id'],
                       '_source': post}
@@ -234,6 +235,9 @@ class DiscourseIndexer(ElasticIndexer):
             else:
                 action['_op_type'] = 'delete'
             yield action
+          except Exception as e:
+            logger.exception(e)
+            continue
      except:
          self.locs = locals()
          raise
