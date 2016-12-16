@@ -657,7 +657,7 @@
               "parallels": ["an3.48", "~an5.40", "~ea50.7"]
           },
           {
-              "parallels": ["an3.50", "~an5.103"]
+              "parallels": ["an3.50", "~an5.103", "~pi-tv-bu-vb-pj4#9-#13"]
           },
           {
               "parallels": ["an3.56", "ea-2.14"]
@@ -1007,7 +1007,10 @@
               "parallels": ["an5.1", "sa677-678"]
           },
           {
-              "parallels": ["an5.103", "~an3.50"]
+              "parallels": ["an5.103", "~an3.50", "~pi-tv-bu-vb-pj4#9-#13"]
+          },
+          {
+              "parallels": ["~an5.103", "~an3.50", "pi-tv-bu-vb-pj4#9-#13"]
           },
           {
               "parallels": ["an5.110", "ea-2.21"]
