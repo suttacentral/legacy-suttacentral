@@ -84,8 +84,13 @@
                 <ul>
                     {% for text_ref in text_refs %}
                     {% set offsite = text_ref.url[0] != '/' %}
+                    {% if sutta %}
+                    {% set is_root = text_ref.lang.uid == sutta.lang.uid %}
+                    {% elif division %}
+                    {% set is_root = text_ref.lang.uid == division.collection.lang.uid %}
+                    {% endif %}
                     {% set classes =  (['offsite'] if offsite else [])
-                                    + (['root'] if text_ref.lang.uid == (sutta if sutta else division.collection).lang.uid else [])
+                                    + (['root'] if is_root else [])
                                     + (['this'] if not offsite and lang_code == text_ref.lang.uid else []) %}
                     <li{% if classes %} class="{{ classes|join(' ') }}"{% endif %}>
                         <a href="{{ text_ref.url }}" title="{{ text_ref.abstract }}" {% if offsite %} target="_blank"{% endif %}>{{ text_ref.lang.name }}</a></li>
