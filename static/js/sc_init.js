@@ -29,6 +29,7 @@ sc.classes = {
         "eno89": "Paragraph numbers in Enomoto, 1989.",
 	"es": "Paragraph numbers in Ekkehard Saß.",
 	"fa": "Verse numbers in Falk 2015.",
+    "flw": "Paragraph numbers in Frank Lee Woodward",
         "fuk03": "Page numbers in Fukita, 2003",
         "fol": "Folio number in the manuscript.",
         "gatha-number": "Verse number.",

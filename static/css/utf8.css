@@ -29,6 +29,7 @@ a.gatha-number:before {content:"Verse "}
 a.hh:before {content:"HH "}
 /*a.gatn:before {content:" "}*/
 a.ia:before {content:"IA "}
+a.flw:before {content:"FLW "}
 a.gbm:before {content:"GBM "}
 a.gno78:before {content:"Gno "}
 a.har04:before {content:"Har "}
@@ -189,6 +190,8 @@ CSS Class	HTML Title
 .uv		"Chapter and verse numbers for the Udānavarga."
 
 .dp		"Verse numbers for Dhammapada."
+
+.flw    "Paragraph numbers in Frank Lee Woodward"
 
 .hoe16		"Verse numbers in Hoernle, 1916."
 
