@@ -231,7 +231,7 @@ class Html2Po:
     def recursive_deconstruct(self, element):
         
         self.add_token(TokenType.comment, self.make_open_tag(element))
-        if element.tag in {'p', 'h1', 'h2', 'h3', 'h4'}:
+        if element.tag in {'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'}:
             self.paragraph_count += 1
             self.segment_inner(element)
         else:
