@@ -1419,7 +1419,7 @@ sc.piLookup.register({script: 'zh', data: {
 'avajita':['以下的【過分】。'],
 'avajināti':['(ava + ji + nā), 擊敗， 再征服。avajini,【過】。'],
 'avajīyati':['(ava + ji + ya), 被減少，被取消。'],
-'avajja':['【形】 無法責備的，無瑕的。'],
+'anavajja':['【形】 無法責備的，無瑕的。'],
 'avajjha':['【形】 不被殺害的，不被處罰的。'],
 'avaññā':['【陰】 輕視，失禮，無禮。'],
 'avaññāta':['(avajānāti 的【過分】)。'],

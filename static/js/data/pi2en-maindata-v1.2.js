@@ -5106,7 +5106,7 @@ sc.piLookup.register({script: 'en', data: {
 'avajināti':["va + ji + nā","defeats; reconquers."],
 'avajini':["aor. of avajināti","defeated; reconquered."],
 'avajīyati':["va + ji + ya","is diminished or undone."],
-'avajja':["adj.","unblameable; faultless."],
+'anavajja':["adj.","unblameable; faultless."],
 'avajjha':["adj.","not to be killed or punished."],
 'avaññā':["f.","contempt; disrespect."],
 'avaññāta':["pp. of avajānāti","despised."],

@@ -2138,7 +2138,7 @@ sc.piLookup.register({script:'es', data: {
 'avajināti':["va + ji + nā","vence; derrota; reconquista."],
 'avajini':["aor. de avajināti","venció; derrotó; reconquistó."],
 'avajīyati':["va + ji + ya","es disminuido, desecho o inacabado."],
-'avajja':["adj.","intachable; irreprochable."],
+'anavajja':["adj.","intachable; irreprochable."],
 'avajjha':["adj.","que no debe ser ejecutado o castigado."],
 'avaññā':["f.","desprecio; irrespeto; desacato."],
 'avaññāta':["pp. de avajānāti","despreciado; menospreciado."],

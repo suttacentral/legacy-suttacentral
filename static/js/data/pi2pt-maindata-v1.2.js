@@ -2137,7 +2137,7 @@ sc.piLookup.register({script: 'pt', data: {
 "avajināti": ["va + ji + nā", "derrota; reconquista."],
 "avajini": ["p.aor. de avajināti", "derrotado; reconquistado."],
 "avajīyati": ["va + ji + ya", "é diminuído ou anulado."],
-"avajja": ["adj.", "irrepreensíveis; impecável."],
+"anavajja": ["adj.", "irrepreensíveis; impecável."],
 "avajjha": ["adj.", "não deve ser morto ou punido."],
 "avaññā": ["fem.", "desprezo; desrespeito."],
 "avaññāta": ["p.p. de avajānāti", "desprezado."],
