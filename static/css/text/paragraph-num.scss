@@ -1,4 +1,4 @@
-a.snp-vagga-verse, a.msdiv, a.ms, a.ms-pa, a.da, a.titus .infomode #text p a.ms, .infomode #text p a.ms-pa {display:none;}
+a.msdiv, a.ms, a.ms-pa, a.da, a.titus .infomode #text p a.ms, .infomode #text p a.ms-pa {display:none;}
 
 a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
     a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.pos-v, a.prava-v,
@@ -38,7 +38,7 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
     }
 }
 
-a.snp-vagga-verse, a.msdiv, a.ms, a.ms-pa, a.da, a.titus .infomode #text p a.ms, .infomode #text p a.ms-pa {display:none;}
+a.snp-vagga-section-verse, a.snp-vagga-verse {display:none;}
 
 a.sc {color: saturated-color(bright-purple);}
 a.msviv, a.msvwi, a.msvi, a.msvii, a.msviii {color: saturated-color(dark-yellow);}
@@ -47,7 +47,7 @@ a.t, a.t-linehead {color: saturated-color(plain-green);}
 div#text:not(.line-by-line) a.t {display: none;}
 a.wp, a.gbm, a.verse-num-sc, a.dhskm {color: saturated-color(plain-red);}
 a.pts {color: saturated-color(dark-yellow);}
-a.pts1ed, a.snp-vagga-section-verse, a.vagga-gatha-num-sc {color: saturated-color(dark-yellow);}
+a.pts1ed, a.vagga-gatha-num-sc {color: saturated-color(dark-yellow);}
 a.pts2ed, a.pts-vp-en, a.pts-s, a.wp-verse {color: saturated-color(plain-red);}
 a.vn, a.sht {color: saturated-color(plain-purple);}
 a.wal52,a.mat88,a.vai58,a.mat96 {color: saturated-color(plain-purple);}
