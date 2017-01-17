@@ -215,6 +215,9 @@ span.lookup {
         -o-transition: all 0.4s ease-out;
         -ms-transition: all 0.4s ease-out;
         transition: all 0.4s ease-out;
+        font-feature-settings: initial;
+        font-variant-caps: normal;
+        font-weight: normal;
 
         & > a {
             color: misc-color(dark-gray);
