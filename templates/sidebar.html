@@ -76,7 +76,7 @@
             {% endif %}
             {% if imm(uid) %}
             <div class="x1 button-row">
-                <a class="button" href="/{{ uid }}" id="text-details-button" title="Go to parallels and references">Textual Details ▶</a>
+                <a class="button" href="/ll/{{ uid }}" id="text-details-button" title="Go to parallels and references">Parallels & References <span class="triangle">▶</span></a>
             </div>
             {% endif %}
             <details class="x1 button-row languages">
@@ -100,13 +100,13 @@
             </details>
             <div class="x2 button-row">
                 {% if prev_data %}
-                    <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀ {{ prev_data.uid|uid_to_acro }}</a>
+                    <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}"><span class="triangle">◀</span> {{ prev_data.uid|uid_to_acro }}</a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}
                 
                 {% if next_data %}
-                    <a class="button" class="next" title="{{ next_data.name_striped }}" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }} ▶</a>
+                    <a class="button" class="next" title="{{ next_data.name_striped }}" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }} <span class="triangle">▶</span></a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}

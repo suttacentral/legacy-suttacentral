@@ -176,9 +176,12 @@ class ParallelsManager:
                     for other_location in locations:
                         if other_location == this_location:
                             continue
-                        if this_location.partial and other_location.partial:
+                        #if this_location.partial and other_location.partial:
                             # a partial is not parallel to a partial
-                            continue
+                            #continue
+                        if this_location.partial:
+                            # don't use inferred parallels
+                            continue                            
                         partial = this_location.partial or other_location.partial
                         relationships.append(Relationship(left=this_location, 
                                                          right=other_location,
