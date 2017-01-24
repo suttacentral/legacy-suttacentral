@@ -7,7 +7,7 @@ from collections import OrderedDict
 import sc.scimm
 from sc.util import humansortkey
 
-utf8_json_encoder = json.JSONEncoder(ensure_ascii=False, sort_keys=False, indent=2)
+utf8_json_encoder = json.JSONEncoder(ensure_ascii=False, indent=2)
 
 def json_handler(*args, **kwargs):
     value = cherrypy.serving.request._json_inner_handler(*args, **kwargs)
@@ -59,8 +59,8 @@ class API:
             if hasattr(thing, "uid"):
                 out.update((
                     ("uid", thing.uid),
-                    ("name", thing.name),
                     ("type", type(thing).__name__.lower())
+                    ("name", thing.name),
                 ))
             else:
                 for name in {'pitaka', 'lang', 'sect'}:
@@ -95,13 +95,13 @@ class API:
     @cherrypy.tools.json_out(handler=json_handler)
     def languages(self):
         return [
-            {
-                "uid": language.uid,
-                "iso_code": language.iso_code,
-                "is_root": bool(language.is_root),
-                "name": language.name,
-                "children": [division.uid for division in language.divisions],
-            }
+            OrderedDict((
+                ("uid", language.uid),
+                ("iso_code", language.iso_code),
+                ("is_root", bool(language.is_root)),
+                ("name", language.name),
+                ("children", [division.uid for division in language.divisions]),
+            ))
             for language in self.imm.languages
         ]
                 
@@ -135,31 +135,31 @@ class API:
             uid = obj["uid"]
             root_ref = self.imm.get_text_ref(uid, root_lang)
             if root_ref:
-                obj["root_ref"] = {
-                    "name": root_ref.name,
-                    "author": root_ref.abstract,
-                    "url": root_ref.url,
-                }
+                obj["root_ref"] = OrderedDict((
+                    ("name", root_ref.name),
+                    ("author", root_ref.abstract),
+                    ("url", root_ref.url),
+                ))
             if tr_lang:
                 tr_ref = self.imm.get_text_ref(uid, tr_lang)
                 if tr_ref:
-                    obj["tr_ref"] = {
-                        "name": tr_ref.name,
-                        "author": tr_ref.abstract,
-                        "url": tr_ref.url,
-                    }
+                    obj["tr_ref"] = OrderedDict((
+                        ("name", tr_ref.name),
+                        ("author", tr_ref.abstract),
+                        ("url", tr_ref.url),
+                    ))
             
         if "children" in obj:
             self.add_text_refs(obj["children"], root_lang, tr_lang)
                 
     def division(self, uid):
         division = self.imm.divisions[uid]
-        out = {
-            "type": "division",
-            "uid": uid,
-            "name": division.name,
-            "parents": [division.collection.pitaka.uid, division.collection.lang.uid]
-        }
+        out = OrderedDict((
+            ("uid", uid),
+            ("type", "division"),
+            ("name", division.name),
+            ("parents", [division.collection.pitaka.uid, division.collection.lang.uid])
+        ))
         
         children = [self.subdivision(subdivision.uid) for subdivision in division.subdivisions]
         if division.uid == division.subdivisions[0].uid:
@@ -169,31 +169,31 @@ class API:
     
     def subdivision(self, uid):
         subdivision = self.imm.subdivisions[uid]
-        return {
-            "type": "subdivision",
-            "uid": uid,
-            "name": subdivision.name,
-            "children": [
-                {
-                    "type": "vagga",
-                    "name": vagga.name,
-                    "suttas": [
+        return OrderedDict((
+            ("uid", uid),
+            ("type", "subdivision"),
+            ("name", subdivision.name),
+            ("children", [
+                OrderedDict((
+                    ("type", "vagga"),
+                    ("name", vagga.name),
+                    ("suttas", [
                         self.sutta(sutta.uid)
                         for sutta in vagga.suttas
-                    ],
-                }
+                    ]),
+                ))
                 for vagga in subdivision.vaggas
-            ],
-        }
+            ]),
+        ))
         
     def sutta(self, uid):
         sutta = self.imm.suttas[uid]
         
-        return {
-            "type": "sutta",
-            "uid": sutta.uid,
-            "name": sutta.name,
-        }
+        return OrderedDict((
+            ("uid", sutta.uid),
+            ("type", "sutta"),
+            ("name", sutta.name),
+        ))
 
 
             
