@@ -181,7 +181,7 @@ class ParallelsManager:
                             #continue
                         if this_location.partial:
                             # don't use inferred parallels
-                            continue                            
+                            continue
                         partial = this_location.partial or other_location.partial
                         relationships.append(Relationship(left=this_location, 
                                                          right=other_location,
