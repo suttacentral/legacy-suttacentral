@@ -5,6 +5,7 @@ import cherrypy
 import sc
 from sc import show, donations
 from sc.tools import webtools
+from sc.api import API
 
 # We expose everything we need to here.
 def get_cookie_or_param(name):
@@ -52,6 +53,8 @@ class Root(object):
             from sc.profiler import profiler
             self.profiler = profiler
             profiler.start()
+        
+        self.api = API()
 
     @cherrypy.expose
     def default(self, *args, **kwargs):
