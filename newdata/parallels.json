@@ -1563,7 +1563,7 @@
               "parallels": ["arv2", "dn33#172"]
           },
           {
-              "parallels": ["arv20", "~sn54.1", "~mn118#8-#13", "~mn62#13-#19", "~pi-tv-bu-vb-pj3#10-#13",  "~sa803"]
+              "parallels": ["arv20", "~sn54.1", "~mn118#8-#13", "~mn62#13-#19", "~pi-tv-bu-vb-pj3#10-#13", "~sa803"]
           },
           {
               "parallels": ["arv22", "~an10.21", "~ea46.4", "~sa684", "~sa701", "~t780a", "~t780b", "~t781", "~t802"]
@@ -1619,7 +1619,7 @@
           },
           {
               "parallels": ["dn1", "da21", "sht-sutta16", "t21", "tib110", "up3.050", "~sf41", "~sf48", "~t1548.126"],
-              "mentions": ["dn1", "sn41.3",  "pi-tv-kd21#26", "vb17#21"],
+              "mentions": ["dn1", "sn41.3", "pi-tv-kd21#26", "vb17#21"],
               "remarks": "sht-sutta16: Identified in <span class='author'>Wille</span> 2005:6."
           },
           {

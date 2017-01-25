@@ -182,7 +182,7 @@ class ParallelsManager:
                         if this_location.partial:
                             # don't use inferred parallels
                             continue
-                        partial = this_location.partial or other_location.partial
+                        partial = other_location.partial
                         relationships.append(Relationship(left=this_location, 
                                                          right=other_location,
                                                          relationship_type=relationship_type,
@@ -203,7 +203,7 @@ class ParallelsManager:
                                                             relationship_name=relationship_name,
                                                             partial=partial))
                     else:
-                        partial = this_location.partial or other_location.partial
+                        partial = this_location.partial
                         relationship_name = relationship_name=get_relationship_name(relationship_type, partial, inverse=True)
                         other_location = locations[0]
                         relationships.append(Relationship(this_location,
@@ -211,6 +211,7 @@ class ParallelsManager:
                                                         relationship_type=relationship_type,
                                                         relationship_name=relationship_name,
                                                         partial=partial))
+
         
         
         
