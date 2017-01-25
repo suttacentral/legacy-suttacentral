@@ -76,11 +76,11 @@
             {% endif %}
             {% if imm(uid) %}
             <div class="x1 button-row">
-                <a class="button" href="/ll/{{ uid }}" id="text-details-button" title="Go to parallels and references">Parallels & References <span class="triangle">▶</span></a>
+                <a class="button" href="/ll/{{ uid }}" id="text-details-button" title="Go to parallels and references">Parallels & References <span class="lrpointer">▶</span></a>
             </div>
             {% endif %}
             <details class="x1 button-row languages">
-                <summary class="button triangle"><span class="langs">Languages</span></summary>
+                <summary class="button" style="height: 1.8em; line-height: 1.8em; font-size: 1.4em;"><span class="langs">Languages</span></summary>
                 <ul>
                     {% for text_ref in text_refs %}
                     {% set offsite = text_ref.url[0] != '/' %}
@@ -100,13 +100,13 @@
             </details>
             <div class="x2 button-row">
                 {% if prev_data %}
-                    <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}"><span class="triangle">◀</span> {{ prev_data.uid|uid_to_acro }}</a>
+                    <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}"><span class="lrpointer">◀</span> {{ prev_data.uid|uid_to_acro }}</a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}
                 
                 {% if next_data %}
-                    <a class="button" class="next" title="{{ next_data.name_striped }}" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }} <span class="triangle">▶</span></a>
+                    <a class="button" class="next" title="{{ next_data.name_striped }}" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }} <span class="lrpointer">▶</span></a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}

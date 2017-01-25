@@ -290,7 +290,7 @@ $sidebar-tabs-vertical-padding: 0.4em;
 
 #navigation-tab {
     ul {
-        margin: 2.8em 0 2em 0;
+        margin: 2.5em 0 2em 0;
     }
     li ul {
         margin: 0 0 0 1em;
@@ -310,10 +310,6 @@ $sidebar-tabs-vertical-padding: 0.4em;
 
 
 .languages {
-    > .button {
-        font-family: 'Skolar Sutta Web',serif;
-        font-size: 1.1em;
-    }
     > ul {
         width:100%;
         position:absolute;
@@ -495,4 +491,5 @@ main.sidebar-pinned {
 .langs {
     font-family: 'Skolar Sans',sans-serif;
     font-size: 16px;
+    vertical-align: bottom;
 }
