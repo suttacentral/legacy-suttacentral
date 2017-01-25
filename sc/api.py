@@ -177,7 +177,7 @@ class API:
                 OrderedDict((
                     ("type", "vagga"),
                     ("name", vagga.name),
-                    ("suttas", [
+                    ("children", [
                         self.sutta(sutta.uid)
                         for sutta in vagga.suttas
                     ]),
