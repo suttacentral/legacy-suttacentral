@@ -194,6 +194,3 @@ class API:
             ("type", "sutta"),
             ("name", sutta.name),
         ))
-
-
-            
