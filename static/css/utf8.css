@@ -5,6 +5,7 @@ separate file for now.... */
 
 /*a.bl:before {content:"bl "}*/
 a.adh-v:before {content:"Adhik-v "}
+a.apz:before {content:"APZ "}
 a.ba:before {content:"BA "}
 a.bhaisv:before {content:"Bhais-v "}
 a.bi:before {content:"BI "}
@@ -12,6 +13,7 @@ a.bjt:before {content:"BJT "}
 a.bm:before {content:"BM "}
 a.bn:before {content:"BN "}
 a.bps:before {content:"BPS "}
+a.bv:before {content:"BV "}
 a.bjt:before {content:"BJT "}
 a.cps:before {content:"Cps "}
 a.d-vp:before {content:"D vp "}
@@ -27,6 +29,7 @@ a.gatha-number:before {content:"Verse "}
 a.hh:before {content:"HH "}
 /*a.gatn:before {content:" "}*/
 a.ia:before {content:"IA "}
+a.flw:before {content:"FLW "}
 a.gbm:before {content:"GBM "}
 a.gno78:before {content:"Gno "}
 a.har04:before {content:"Har "}
@@ -87,6 +90,7 @@ a.snp-vagga-section-verse:before, a.snp-vagga-verse:before {content:"SNP "}
 a.ss:before {content:"SS "}
 a.t:before, a.t-linehead:before {content:"T "}
 a.tb:before {content:"TB "}
+a.thv:before {content:"THV "}
 a.tri62:before, a.tri95:before {content:"Tri "}
 a.ud-sutta:before, a.ud-vagga-sutta:before {content:"Ud "}
 a.ttc:before {content:"TTC "}
@@ -101,6 +105,7 @@ a.vn:before {content:"Vn "}
 a.wal48:before, a.wal50:before, a.wal52:before, a.wal57c:before, a.wal58:before, a.wal59a:before, a.wal60:before, a.wal61:before, a.wal68a:before, a.wal70a:before, a.wal70b:before, a.wal76:before, a.wal78:before, a.wal80c:before {content:"Wal "}
 a.wg:before {content:"WG "}
 a.wp:before {content:"WP "}
+a.wp-verse:before {content:"WP verse "}
 a.wr:before {content:"WR "}
 a.yam72:before {content:"Yam "}
 
@@ -152,6 +157,8 @@ CSS Class	HTML Title
 
 .adh-v          "Paragraph numbers in Adhikaraṇavastu, Gnoli 1978"
 
+.apz		"Paragraph numbers in A.P. de Zoysa"
+
 .ba             "Paragraph numbers in The Book of Analysis, Thittila 1969"
 
 .bhaisv         "Paragraph numbers in Bhaiṣajyavastu, J. Chung und K. Wille"
@@ -163,6 +170,8 @@ CSS Class	HTML Title
 .bm     	"Paragraph numbers in Bhikkhu Mettiko."
 
 .bn     	"Paragraph numbers in Bhikkhu Ñāṇadassana."
+
+.bv		"Sutta numbers in buddha-vacana.org"
 
 .cps            "Paragraph numbers in Catuṣpariṣatsūtra, E. Waldschmidt, 1952-62"
 
@@ -181,6 +190,8 @@ CSS Class	HTML Title
 .uv		"Chapter and verse numbers for the Udānavarga."
 
 .dp		"Verse numbers for Dhammapada."
+
+.flw    "Paragraph numbers in Frank Lee Woodward"
 
 .hoe16		"Verse numbers in Hoernle, 1916."
 
@@ -259,6 +270,8 @@ CSS Class	HTML Title
 .ss             "Paragraph numbers in Shai Schwartz."
 
 .tb             "Paragraph numbers in Thanissaro Bhikkhu."
+
+.thv			"Sutta numbers in Thich Huyen-Vi"
 
 .tri62		"Sūtra and paragraph number in Tripāṭhī, 1962."
 
@@ -355,6 +368,8 @@ The following references are secondary. They appear in the same files as some of
 .sb		"Paragraph numbers in Fritz Schaefer / Raimund Beyerlein."
 
 .kl             "Paragraph numbers in Kåre A. Lie."
+
+.wp-verse "Wisdom Publications verse number."
 
 .skt-mg-bu-pm	"Rule numbers in the Sanskrit Mahāsaṅghika Bhikhhu Pātimokkha."
 In a few cases there are no paragraph numbers, these should be added as "SC" numbers. These texts are:

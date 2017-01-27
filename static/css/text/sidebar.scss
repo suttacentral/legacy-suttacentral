@@ -55,6 +55,18 @@ $sidebar-tabs-vertical-padding: 0.4em;
         padding:0;
     }
 
+    .languages li {
+        padding-left: 3em;
+        line-height: 180%;
+        &.offsite {
+            font-style: italic;
+        }
+    }
+
+    details[open] {
+        margin-top: -2em;
+    }
+
     .button-row {
         float:left;
         width:100%;

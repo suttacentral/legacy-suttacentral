@@ -4,12 +4,20 @@
     h1, h2 {
         width: 70%;
         float: right;
+        @include sans-serif;
+        color: misc-color(medium-gray);
+    }
+    
+        h1 strong {
+        color: misc-color(dark-gray);
+        @include serif;
     }
 
     .source {
         float: right;
         margin-right: 1em;
-        padding: 0.3em 0 0 0;
+        padding: 0.2em 0 0 0;
+        color: misc-color(medium-gray);
     }
 
     .this {
@@ -26,30 +34,52 @@
 
     .grammar, .grammar + dd {
         display: inline-block;
+        font-size: 0.85em;
+        color: misc-color(medium-gray);
+        @include sans-serif;
     }
-
+    
+    dfn {
+        font-style: normal;
+        font-weight: bold;
+        text-transform:lowercase;
+    }
+    
+    #sc_dppn dfn {
+        text-transform:capitalize;
+    }
+    
     dd {
-        margin: 1em 0;
+        margin: 0 0 0.75em;
     }
 
+    dd .term {
+        font-weight: normal;
+    }
 
     .book_entry + .book_entry {
         border-top: 1px solid #ccc;
     }
+    
+    .book_entry+.book_entry small {
+    padding-top: 1.5em;
+    }
 
     .eti {
-        color: grey;
+        color: misc-color(medium-gray);
+        font-size: 0.85em;
+        @include sans-serif;
     }
 
-    .entries {
-        width: 70%;
-        float: right;
+    .entries{
+        margin-bottom:48px
     }
-
+    
     .related_terms {
         width: 20%;
         float: left;
-        margin: 0 1em;
+        margin: 0 1em 48px;
+        @include sans-serif;
     }
     
     .near_terms ul,.fuzzy_terms ul {
@@ -57,7 +87,7 @@
     }
     
     .related_terms h3{
-        margin:1em 0;
+        margin:1em 0 0;
     }
     
     dd.info{
@@ -71,13 +101,27 @@
     
     .ref {
         @include sans-serif;
-        color:#565656;
+        color:misc-color(dark-medium-gray);
         font-size:0.8em;
-        background:rgb(215, 215, 215);
-        padding: 0.1em 0.2em 0 0.2em;
+        background:misc-color(light-light-gray);
+        padding: 0 .3em;
         border-radius: 3px;
-        border: 1px solid rgb(190, 190, 190);
+        border: 1px solid misc-color(light-gray);
         margin:0 0.1em;
+        white-space:nowrap;
+        display:inline-block
+    }
+    
+    abbr {
+        @include sans-serif;
+        color:white;
+        font-weight:bold;
+        font-size:0.8em;
+        background:misc-color(medium-gray);
+        padding: 0 .3em;
+        border-radius: 3px;
+        white-space:nowrap;
+        display:inline-block
     }
 
     .google-maps {
@@ -101,3 +145,92 @@
 
 }
 
+.advanced-search-link + p,
+#main_search_results label,
+#main_search_results select,
+#main_search_results button {
+    @include sans-serif;
+}
+
+.advanced-search-link+p, .advanced-search-link, .results small{
+    font-size:0.75em;
+    color:#767676;
+}
+dd {
+.inline-li {
+    @include sans-serif;
+    font-weight: bold;
+    color: #767676;
+    padding: 0 0.5em;
+}
+.case {
+    color: misc-color(medium-gray);
+    @include sans-serif;
+    display: block;
+    font-feature-settings: "smcp" 1;
+    letter-spacing: 0.03em;
+    font-size: 0.8rem
+}
+.square {
+    color: misc-color(medium-gray);
+}
+ol {
+    list-style-type: none;
+    counter-reset: step-counter;
+    margin: 0 0 0 1.5em
+}
+.little {
+    list-style-type: decimal;
+}
+.little li {
+    margin: 0 0 0 0
+}
+ul {
+    list-style-type: disc;
+    margin: 0 0 0.75em 1em!important
+}
+ol li {
+    counter-increment: step-counter;
+    margin: 0.25em 0 0 0
+}
+.lower-latin>li::before {
+    content: counter(step-counter, lower-latin);
+}
+.upper-latin>li::before {
+    content: counter(step-counter, upper-latin);
+}
+.decimal>li::before {
+    content: counter(step-counter, decimal);
+}
+.upper-roman>li::before {
+    content: counter(step-counter, upper-roman);
+}
+.lower-greek>li::before {
+    content: counter(step-counter, lower-greek);
+}
+li::before {
+    font-weight: bold;
+    @include sans-serif;
+    position: absolute;
+    text-align: right;
+    margin-left: -1.5em;
+}
+h3,
+h4 {
+    font-weight: normal
+}
+h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.2em;
+    line-height: 1.25em;
+}
+h4 {
+    margin: 0.85rem 0 0.75rem 0;
+    font-size: 1.1em;
+    line-height: 1.25em;
+}
+ol+h3,
+ol+p {
+    margin-top: .75em
+}
+}

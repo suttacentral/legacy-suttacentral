@@ -125,8 +125,13 @@ sc.piLookup = {
         {
             lang: 'en',
             name: 'English',
-            scriptUrl: 'data/pi2en-maindata-v1.js'
+            scriptUrl: 'data/pi2en-maindata-v1.2.js'
         }, 
+        {
+            lang: 'zh',
+            name: '汉语',
+            scriptUrl: 'data/pi2zh-maindata-v1.js'
+        },
         {
             lang: 'de',
             name: 'Deutsch',
@@ -309,10 +314,12 @@ function toggleTextualInfo(force) {
     if (localStorage.getItem('infomode.on')) {
         sc.userPrefs.setPref('textinfo', localStorage.getItem('infomode.on'), false)
     }
+    
     var showTextInfo = sc.userPrefs.getPref("textInfo");
     showTextInfo = !showTextInfo;
     if (force === true) {showTextInfo = true;}
     else if (force === false) {showTextInfo = false;}
+    
 
     if (showTextInfo)
     {
@@ -324,6 +331,7 @@ function toggleTextualInfo(force) {
     }
     sc.userPrefs.setPref("textInfo", showTextInfo, false);
     sc.text_image.init();
+    
 }
 
 function buildTextualInformation() {

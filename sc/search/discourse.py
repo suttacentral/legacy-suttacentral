@@ -149,7 +149,7 @@ class DiscourseIndexer(ElasticIndexer):
         def category_is_visible(category):
             if category['read_restricted']:
                 return False
-            if category['name'] == 'Meta':
+            if category['name'] in {'Meta', 'Feedback'}:
                 return False
             parent_id = category['parent_category_id']
             if parent_id:
@@ -225,6 +225,7 @@ class DiscourseIndexer(ElasticIndexer):
             yield action
         
         for post in data['posts']:
+          try:
             action = {'_type': 'post',
                       '_id': post['id'],
                       '_source': post}
@@ -234,6 +235,9 @@ class DiscourseIndexer(ElasticIndexer):
             else:
                 action['_op_type'] = 'delete'
             yield action
+          except Exception as e:
+            logger.exception(e)
+            continue
      except:
          self.locs = locals()
          raise

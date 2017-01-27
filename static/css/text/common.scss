@@ -1,4 +1,9 @@
 
+/* This rule prevents a problem with quote hanger */
+p > * {
+    text-indent: initial;
+}
+
 /* These rules always apply */
 .sutta {
     max-width: 40em;
@@ -253,14 +258,14 @@ Text hypothetically reconstructed by the editor or translator.
 Text hypothetically reconstructed by the editor or translator.
 */
 
-#text:lang(gr) .add, #text:lang(pi) .add, #text:lang(skt) .add, #text:lang(bo) .add, #text:lang(lzh) .add, #text:lang(pr) .add, .infomode .add {
+#text:lang(gr) .add, #text:lang(pi) .add, #text:lang(skt) .add, #text:lang(bo) .add, #text:lang(lzh) .add, #text:lang(pr) .add, #text:lang(en) .add, .infomode .add {
     border:1px solid rgb(215, 215, 215);
     display:inline;
-    padding: 0 0.3em;
+    padding: 0.2em .3em 0.1em;
     color:#767676;
     font-size: 100%;
     background:#fefefe;
-    box-shadow: 3px 3px 5px rgba(136, 136, 136, 0.25);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
 .skolar-font {

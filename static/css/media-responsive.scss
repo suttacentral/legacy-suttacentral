@@ -10,7 +10,7 @@
 //  These are the standard breakpoints
 $small-width:   480px;
 $med-width:     908px;
-$large-width:   1200px;
+$large-width:   1140px;
 
 //  These are breakpoints that fall between the standard breakpoints above
 $header-small-width:     550px;
@@ -45,7 +45,21 @@ $header-large-width:     800px;
     }
 }
 
+/*
+    FOR BREAKPOINT:  $large-width
+*/
+@include if-screen-wider($large-width) {        //  WIDER
+    .entries {
+        width: 70%;
+    }
+}
 
+@include if-screen-narrower($large-width) {           //  NARROWER
+    .entries {
+        width: 68%;
+        margin-right: 2%;
+    }
+}
 
 /*
     BETWEEN BREAKPOINTs:  $small-width and $med-width
@@ -58,6 +72,9 @@ $header-large-width:     800px;
     #home-methodology {
         margin: $tablet-main-top-margin 10%;
         max-width: inherit;
+    }
+    #main_search_results {
+        margin: $tablet-main-top-margin 10%;
     }
 
     #twocol {
@@ -114,6 +131,9 @@ $header-large-width:     800px;
             margin: 0 0 2em 2em;
         }
     }
+    .define .entries {
+        float: right;
+    }
     .abhidhamma {
         width: 60% !important;
         ul {
@@ -129,11 +149,31 @@ $header-large-width:     800px;
     #page-footer-push {
         height: $mobile-footer-height;
     }
+    ul.results li .type, .advanced-search-link, label, #page-main-search>button:last-of-type {
+        display:none
+    }
+
+    .define h1,
+    .define h2,
+    .define .entries {
+        float: left;
+        margin-left: 1rem;
+    }
+
+    .define .entries {
+        width: 95%;
+        margin-bottom: 0;
+    }
+
+
     #onecol article,
     #text article,
     #home-start,
     #home-read,
     #home-methodology {
+        margin: $mobile-main-top-margin $mobile-main-side-margin;
+    }
+    #main_search_results {
         margin: $mobile-main-top-margin $mobile-main-side-margin;
     }
     #twocol {
@@ -355,4 +395,18 @@ $header-large-width:     800px;
     }
 }
 
+/*
+    FOR BREAKPOINT:  $large-width
+*/
+@include if-screen-wider($large-width) {        //  WIDER
+    .entries {
+        width: 70%;
+    }
+}
 
+@include if-screen-narrower($large-width) {           //  NARROWER
+    .entries {
+        width: 68%;
+        margin-right: 2%;
+    }
+}

@@ -1,62 +1,14 @@
-{% extends "base.html" -%}
-{% block content %}
-
-<div id="epigraph-store" type="text/html" style="display:none">
-{% for epigraph in imm.epigraphs %}
-<div class="epigraph">
-<div class="epigraph-text">
-    {{ epigraph.content }}
-</div>
-
-<p class="epigraph-reference"><span class="reference">{{epigraph.sutta.name}}, {{ epigraph.sutta.uid|uid_to_name }} {% if epigraph.href %}</span></p><p class="read-this"><a href="{{ epigraph.href }}">Read this sutta ▶</a>{% endif %}</p>
-
-</div>
-
-{% endfor %}
-</div>
-
+{% extends "language/generic.html" %}
+{% block introduction %}
 <section id="home">
-
 <div class="hgroup">
 <h1>SuttaCentral</h1>
 <p class="subtitle">Early Buddhist texts, translations, and parallels</p>
 </div>
- 
-<div id="first-time-intro" style="display: none">
-<p>SuttaCentral is for anyone who has an interest in Buddhism and wants to delve deeper into the scriptures of the earliest period. We provide source texts and information for scholars, and translations for general readers.</p>
-<p>Check the Introduction on this page to learn more about what we do and how it works.</p>
-</div>
-
-<div id="epigraph"></div>
-<script>
-(function(){
-    if (!window.localStorage.getItem('sc.home.first_time_intro')) {
-        document.getElementById("first-time-intro").style.display = "block";
-        window.localStorage.setItem('sc.home.first_time_intro', 'seen')
-        return
-    }
-    var store = document.getElementById('epigraph-store').childNodes,
-        epigraphs = [],
-        i = store.length,
-        el,
-        sel;
-    while (i--) {
-        if (store[i].nodeType == 1)
-            epigraphs.push(store[i])
-    }
-    el = epigraphs.length;
-    sel = Math.floor(Math.random() * epigraphs.length);
-    document.getElementById('epigraph').appendChild(epigraphs[sel]);
-})();
-
-</script>
-</section> {# id=home #}
-
-
-<div id="introduction-push"></div>
+</section>
 <div id="intro">
 <details><summary>Introduction to SuttaCentral</summary>
-		<section class="introduction">
+<section class="introduction">
 <div class="wheel1">☸</div>
 <div class="wheel2">☸</div>
 <div class="wheel3">☸</div>
@@ -107,15 +59,6 @@
 <p>It is no trivial matter to discern what texts should be regarded as parallel. Texts often agree in many details, and disagree in others. When does a text stop being a full parallel and start being a partial parallel? And when does it become merely a text that bears certain similar features? There are no black and white answers to such questions. Rather, making these identifications draws on the accumulated learning and experience of a succession of scholars. Inevitably there will be disagreements in detail; yet in the main, there is a broad consensus as to what constitutes a parallel. Ultimately, the important point is that these identifications help the student to study and learn from related texts in diverse collections.</p>
 </section>
 </details>
-</div> {# id=intro #}
-
+</div> 
 {%- endblock %}
 
-{% block panel %}
-{{ panel_html }}
-<script>
-    localStorage.setItem('sc.panel-html', document.getElementById('panel-screen-wrap').innerHTML +
-                                          document.getElementById('panel').innerHTML);
-    localStorage.setItem('sc.panel-time', new Date().getTime());
-</script>
-{% endblock %}

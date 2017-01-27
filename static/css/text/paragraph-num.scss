@@ -1,4 +1,4 @@
-a.msdiv,a.ms, a.ms-pa, a.da, a.titus .infomode #text p a.ms, .infomode #text p a.ms-pa {display:none;}
+a.msdiv, a.ms, a.ms-pa, a.da, a.titus .infomode #text p a.ms, .infomode #text p a.ms-pa {display:none;}
 
 a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gatn, a.gbm,
     a.gno78, a.har04, a.hoe16, a.hos89a, a.hos89b, a.hos91, a.hs, a.kel, a.pos-v, a.prava-v,
@@ -12,7 +12,7 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
     a.yam72, a.es, a.bm, a.bn, a.hh, a.jd, a.ks, a.nm, a.np, a.pl, a.wg, a.jsk, a.mt, a.sb, a.ss, a.tb,
     a.kl, a.bi, a.bjt, a.ttc, #text:lang(si) a.msdiv, a.bhaisv, a.msvii, a.mat96, a.kat, a.pand-v,
     a.msviii, a.say-v, a.adh-v, a.cps, a.sbvi, a.sbvii, a.ia, a.verse-num-sc, 
-    a.vagga-gatha-num-sc, a.ba, a.pts-s, a.dhskd, a.dhskm
+    a.vagga-gatha-num-sc, a.ba, a.pts-s, a.fa, a.lh, a.apz, a.dhskd, a.dhskm, a.bv, a.thv, a.wp-verse, a.flw
 {
     visibility:hidden;
     text-align:left;
@@ -38,6 +38,7 @@ a.as, a.bl, a.bps, a.bjt, a.d-vp, a.eno89, a.fuk03, a.fol, a.gatha-number, a.gat
     }
 }
 
+a.snp-vagga-section-verse, a.snp-vagga-verse {display:none;}
 
 a.sc {color: saturated-color(bright-purple);}
 a.msviv, a.msvwi, a.msvi, a.msvii, a.msviii {color: saturated-color(dark-yellow);}
@@ -46,8 +47,8 @@ a.t, a.t-linehead {color: saturated-color(plain-green);}
 div#text:not(.line-by-line) a.t {display: none;}
 a.wp, a.gbm, a.verse-num-sc, a.dhskm {color: saturated-color(plain-red);}
 a.pts {color: saturated-color(dark-yellow);}
-a.pts1ed, a.snp-vagga-section-verse, a.vagga-gatha-num-sc {color: saturated-color(dark-yellow);}
-a.pts2ed, a.snp-vagga-verse,a.pts-vp-en, a.pts-s {color: saturated-color(plain-red);}
+a.pts1ed, a.vagga-gatha-num-sc {color: saturated-color(dark-yellow);}
+a.pts2ed, a.pts-vp-en, a.pts-s, a.wp-verse {color: saturated-color(plain-red);}
 a.vn, a.sht {color: saturated-color(plain-purple);}
 a.wal52,a.mat88,a.vai58,a.mat96 {color: saturated-color(plain-purple);}
 
@@ -64,6 +65,7 @@ main.header-pinned {
 
 /* TODO systematically do for all of them (alphabetical order)
 a.adh-v
+a.apz
 a.ba
 a.bhaisv
 a.bi
@@ -72,14 +74,16 @@ a.bl
 a.bm
 a.bn
 a.bps
+a.bv
 a.cps
 a.divy
-a.dhskm
 a.dhskd
+a.dhskm
 a.eno89
 a.es
 a.fuk03
 a.fol
+a.flw
 a.gbm
 a.gno78
 a.har04
@@ -126,6 +130,7 @@ a.snp-vagga-verse
 a.ss
 a.t,  a.t-linehead
 a.tb
+a.thv
 a.tri62,, a.tri95
 a.ttc
 a.ud-sutta
@@ -140,6 +145,7 @@ a.vn
 a.wal48, a.wal50, a.wal52, a.wal57c, a.wal58, a.wal59a, a.wal60, a.wal61, a.wal68a, a.wal70a, a.wal70b, a.wal76, a.wal78, a.wal80c
 a.wg
 a.wp
+a.wp-verse
 a.wr
 a.yam72
 a.snp-vagga-verse

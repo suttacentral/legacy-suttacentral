@@ -236,9 +236,10 @@ sc.lzh2enLookup = {
         if (sc.lzh2enData[graph])
         {
             var href = "http://www.buddhism-dict.net/cgi-bin/xpr-ddb.pl?q=" + encodeURI(graph);
-            return ('<tr><td class="ideograph"><a href="' + href + '">' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enData[graph][0] + ': ' + sc.lzh2enData[graph][1] + '</td></tr>');
+            return ('<tr><td class="ideograph"><a title="Go to full entry at the DDB. Login with user name ‘guest’" href="' + href + '" target="_blank">' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enData[graph][0] + ': ' + sc.lzh2enData[graph][1] + '</td></tr>');
         } else if (sc.lzh2enFallbackData[graph]) {
-            return ('<tr class="fallback"><td class="ideograph"><a>' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enFallbackData[graph][0] + ': ' + sc.lzh2enFallbackData[graph][1] + '</td></tr>')
+            var href = "http://www.buddhism-dict.net/cgi-bin/dealt-lookup?q=" + encodeURI(graph);
+            return ('<tr class="fallback"><td class="ideograph"><a title="Go to full entry at the CJKV. Login with user name ‘guest’" href="' + href + '" target="_blank">' + graph + '</a></td> <td class="meaning"> ' + sc.lzh2enFallbackData[graph][0] + ': ' + sc.lzh2enFallbackData[graph][1] + '</td></tr>')
         }
         return "";
     },

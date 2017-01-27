@@ -110,6 +110,9 @@ a.note:hover span.deets,
     display: inline-block;
     max-width: inherit;
     padding: 0em;
+    font-feature-settings: initial;
+    font-variant-caps: normal;
+    font-weight: normal;
     /*@include serif;*/
 
     td:first-child:not(:last-child) {
@@ -207,6 +210,14 @@ span.lookup {
         letter-spacing:0;
         word-spacing:0;
         text-transform: none;
+        -webkit-transition: all 0.4s ease-out;
+        -moz-transition: all 0.4s ease-out;
+        -o-transition: all 0.4s ease-out;
+        -ms-transition: all 0.4s ease-out;
+        transition: all 0.4s ease-out;
+        font-feature-settings: initial;
+        font-variant-caps: normal;
+        font-weight: normal;
 
         & > a {
             color: misc-color(dark-gray);
