@@ -46,6 +46,14 @@ def get_glyphs_from_table_data():
             extras.update(f.read())
     extras.difference_update('"')
     return ''.join(sorted(extras))
+
+def get_glyphs_from_template_data():
+    extras = set()
+    for file in sc.templates_dir.glob('**/*.html'):
+        with file.open() as f:
+            extras.update(f.read())
+    extras.difference_update('"')
+    return ''.join(sorted(extras))
         
 
 def sizeof_fmt(num, suffix='B'):
@@ -134,7 +142,7 @@ def compile_fonts(flavors=['woff', 'woff2']):
     valid_compiled_fonts = set()
     
     
-    extra_global_subset_glyphs = get_glyphs_from_table_data()
+    extra_global_subset_glyphs = ''.join(sorted(set(get_glyphs_from_table_data() + get_glyphs_from_template_data())))
     
     for file in sorted(fonts_dir.glob('**/*')):
         changed = False
