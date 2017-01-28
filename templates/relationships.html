@@ -54,7 +54,9 @@
     {% macro sutta_links(location, include_details_link) %}
         <div class="sutta-links">
 
-            {%- if include_details_link %}<a class="root-id" href="/ll/{{location.uid}}">{{ acronym(location) }}</a>
+            {%- if location.uid=="No known parallels" %}
+            <span class="root-id">{{ acronym(location) }}</span>
+            {%- elif include_details_link %}<a class="root-id" href="/ll/{{location.uid}}">{{ acronym(location) }}</a>
             {%- else -%}
             <span class="root-id">{{ acronym(location) }}</span>
             {%- endif -%}

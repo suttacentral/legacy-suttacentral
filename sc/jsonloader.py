@@ -14,18 +14,20 @@ logger = logging.getLogger(__name__)
 
 import sc
 
-relationship_types = ['parallels', 'mentions', 'retells']
+relationship_types = ['parallels', 'mentions', 'retells', 'none']
 
 forward_relationship_names = {
     'parallels': 'parallels',
     'mentions': 'is mentioned in',
-    'retells': 'is retold in'
+    'retells': 'is retold in',
+    'none': ' '
 }
 
 inverse_relationship_names = {
     'parallels': 'parallels',
     'mentions': 'mentions',
-    'retells': 'retells'
+    'retells': 'retells',
+    'none': ' '
 }
 
 
@@ -144,9 +146,7 @@ class ParallelsManager:
         relationships = []
         
         if not uid in uid_mapping:
-            return None
-        
-        
+            self.uid_mapping[uid] = [{'none': [uid, 'No known parallels']}]
         
         def append_relationship(relationship):
             key = tuple(sorted([relationship.left.uid, relationship.right.uid]) + [relationship.relationship_type])
@@ -190,7 +190,7 @@ class ParallelsManager:
                                                          partial=partial))
                 if relationship_type in {'mentions', 'retells'}:
                     if this_location == locations[0]:
-                        partial = this_location.partial or other_location.partial
+                        partial = this_location.partial
                         # this sutta is the one which is mentioned
                         for other_location in locations:
                             partial = this_location.partial or other_location.partial
@@ -211,8 +211,15 @@ class ParallelsManager:
                                                         relationship_type=relationship_type,
                                                         relationship_name=relationship_name,
                                                         partial=partial))
-
-        
+                if relationship_type == 'none':
+                    partial = False
+                    relationship_name = relationship_name=get_relationship_name(relationship_type, partial)
+                    other_location = locations[1]
+                    relationships.append(Relationship(this_location,
+                                                        other_location,
+                                                        relationship_type=relationship_type,
+                                                        relationship_name=relationship_name,
+                                                        partial=partial))
         
         
         seen = set()
