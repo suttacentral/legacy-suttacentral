@@ -80,7 +80,8 @@
                 <a class="button" href="/ll/{{ uid }}" id="text-details-button" title="Go to parallels and references">Parallels & References <span class="lrpointer">▶</span></a>
             </div>
             {% endif %}
-            <details class="x1 button-row languages">
+            <div class="x1 button-row languages">
+            <details>
                 <summary class="button"><span class="langs">Languages</span></summary>
                 <ul>
                     {% for text_ref in text_refs %}
@@ -98,7 +99,7 @@
                     {% endfor %}
                     
                 </ul>
-            </details>
+            </details></div>
             <div class="x2 button-row">
                 {% if prev_data %}
                     <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}"><span class="lrpointer">◀</span> {{ prev_data.uid|uid_to_acro }}</a>
