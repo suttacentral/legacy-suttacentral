@@ -219,3 +219,9 @@ tr.group-with-next {
         left: 100%;
     }
 }
+.no-parallels {
+    text-transform: lowercase;
+}
+.no-parallels:first-letter {
+    text-transform: uppercase;
+}

@@ -55,11 +55,13 @@ class Location:
             self.bookmark = bookmark
         self.node = None
         self.root_lang = None
+
     def __str__(self):
         if not self.bookmark:
             return self.uid
         else:
             return '{}{}'.format(self.uid, self.bookmark)
+
     def __repr__(self):
         return 'Location({}={}, {}={}, {}={})'.format(
             "uid", repr(self.uid),
@@ -89,6 +91,9 @@ class Relationship:
     def attach_nodes(self, imm):
         self.left.attach_node(imm)
         self.right.attach_node(imm)
+
+    def uid_in(self):
+        return self.left
         
     def __repr__(self):
         return '\nRelationship({}={},{}={},{}={},{}={})'.format(
@@ -159,18 +164,13 @@ class ParallelsManager:
             for relationship_type in relationship_types:
                 if relationship_type not in entry:
                     continue
-                
+                this_locations = []
                 locations = [Location(uid) for uid in entry[relationship_type]]
                 for location in locations:
-                    print(location.uid)
                     if location.uid == uid:
-                            this_location = location
-                            break
-                else:
-                    # It is possible a uid does not participate in every 
-                    # clause in a group
-                    continue                        
-                
+                        this_locations.append(location)
+                this_location = this_locations[0]
+
                 
                 if relationship_type == 'parallels':
                     for other_location in locations:
@@ -203,14 +203,21 @@ class ParallelsManager:
                                                             relationship_name=relationship_name,
                                                             partial=partial))
                     else:
-                        partial = this_location.partial
-                        relationship_name = relationship_name=get_relationship_name(relationship_type, partial, inverse=True)
-                        other_location = locations[0]
-                        relationships.append(Relationship(this_location,
-                                                        other_location,
-                                                        relationship_type=relationship_type,
-                                                        relationship_name=relationship_name,
-                                                        partial=partial))
+                        for x in range(len(this_locations)):
+                            doublecheck = False
+                            this_location = this_locations[x]
+                            partial = this_location.partial
+                            relationship_name = relationship_name=get_relationship_name(relationship_type, partial, inverse=True)
+                            other_location = locations[0]
+                            for y in range(len(relationships)):
+                                if str(this_location) == str(relationships[y].left):
+                                    doublecheck = True
+                            if not doublecheck:
+                                relationships.append(Relationship(this_location,
+                                                            other_location,
+                                                            relationship_type=relationship_type,
+                                                            relationship_name=relationship_name,
+                                                            partial=partial))
                 if relationship_type == 'none':
                     partial = False
                     relationship_name = relationship_name=get_relationship_name(relationship_type, partial)
