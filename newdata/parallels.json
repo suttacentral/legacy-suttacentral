@@ -936,7 +936,9 @@
               "parallels": ["an4.33", "sn22.78"]
           },
           {
-              "parallels": ["an4.34", "ea21.1", "an5.32#3-11", "iti90", "~sa902-904", "~sn45.139#1"],
+              "parallels": ["an4.34", "ea21.1", "an5.32#3-11", "iti90", "~sa902-904", "~sn45.139#1"]
+          },
+          {
               "mentions": ["an4.34", "~ne37#511", "~mil5.5.3#8"]
           },
           {
@@ -1575,11 +1577,15 @@
               "parallels": ["arv26", "~dn33", "~ma59", "~da9", "~sht-sutta10", "~t12"]
           },
           {
-              "parallels": ["arv3", "mn115#4", "~sn14.1", "~sa451"],
+              "parallels": ["arv3", "mn115#4", "~sn14.1", "~sa451"]
+          },
+          {
               "mentions": ["arv3", "pp1#5"]
           },
           {
-              "parallels": ["arv4", "~dn33#204-#205", "~mn137#3-#4", "~mn148#3-#4"],
+              "parallels": ["arv4", "~dn33#204-#205", "~mn137#3-#4", "~mn148#3-#4"]
+          },
+          {
               "mentions": ["arv4", "ds2.3.3#43", "vb18#4", "ya3.1.1#1"]
           },
           {
@@ -1619,8 +1625,10 @@
           },
           {
               "parallels": ["dn1", "da21", "sht-sutta16", "t21", "tib110", "up3.050", "~sf41", "~sf48", "~t1548.126"],
-              "mentions": ["dn1", "sn41.3", "pi-tv-kd21#26", "vb17#21"],
               "remarks": "sht-sutta16: Identified in <span class='author'>Wille</span> 2005:6."
+          },
+          {
+              "mentions": ["dn1", "sn41.3", "pi-tv-kd21#26", "vb17#21"]
           },
           {
               "parallels": ["dn10", "sht-sutta59", "~sf65"]
@@ -1656,8 +1664,10 @@
           },
           {
               "parallels": ["dn16#192", "ud8.5#20", "sf225#28.Y"],
-              "mentions": ["dn16#192", "~mil5.3.6#6"],
               "remarks": "sf225#28.Y: embedded parallel uid sf225.y"
+          },
+          {
+              "mentions": ["dn16#192", "~mil5.3.6#6"]
           },
           {
               "parallels": ["dn16#231-#232", "~an4.76"]
@@ -2158,7 +2168,9 @@
               "remarks": "pi-tv-kd10#15-#52: embedded parallel uid kosambakavivadakatha, lzh-mi-kd10b#t-linehead0159a02-#t-linehead0160b04: embedded parallel uid t1421.24, lzh-mg-bu-vb-pc4#t-linehead0335a01: embedded parallel uid t1425.13, lzh-dg-kd9#t-linehead0880b01: embedded parallel uid t1428.43"
           },
           {
-              "parallels": ["mn129", "ma199", "t86#t-linehead0909b02-#t-linehead0909a18", "~up2.033", "~skt-lo-mvu2"],
+              "parallels": ["mn129", "ma199", "t86#t-linehead0909b02-#t-linehead0909a18", "~up2.033", "~skt-lo-mvu2"]
+          },
+          {
               "mentions": ["mn129", "divy26"]
           },
           {
@@ -2238,8 +2250,10 @@
           },
           {
               "parallels": ["mn148", "sa304", "sht-sutta71", "up3.059", "sn35.60", "~sa323-327", "~sa330", "~sf18", "~mn38#5-#6", "~mn18#10-#12"],
-              "mentions": ["mn148", "~kv6.7#3", "~mnd11#86"],
               "remarks": "sa304: <span class='author'>Akanuma</span> p. 171 lists MA 86 at T i 562a as another parallel. In MA 86 Ānanda asks the Buddha how to instruct a group of young monks. The Buddha responds by discussing the five aggregates, the six senses, and a broad range of other topics. Thus, despite some overlap as regards the exposition of the six senses, MA 86 and MN 148 do not seem to be parallels., sa323-327: SA 323–327 and SA 330 form part of a series of short discourses, each of which treats just one aspect of the exposition given in MN 148. Thus, they are partial parallels, just like the Sanskrit fragments in <span class='author'>Enomoto</span> 1989."
+          },
+          {
+              "mentions": ["mn148", "~kv6.7#3", "~mnd11#86"]
           },
           {
               "parallels": ["mn149", "sa305"]
@@ -2274,7 +2288,9 @@
               "parallels": ["mn19", "ma102"]
           },
           {
-              "parallels": ["mn2", "an6.58", "ea40.6", "ma10", "t31", "up2.069"],
+              "parallels": ["mn2", "an6.58", "ea40.6", "ma10", "t31", "up2.069"]
+          },
+          {
               "mentions": ["mn2", "~mnd16#217"]
           },
           {
@@ -2283,8 +2299,10 @@
           },
           {
               "parallels": ["mn22", "ma200", "~ea43.5", "~ea50.8", "~lzh-mg-bu-vb-pc46", "~lzh-dg-bu-vb-pc68", "~lzh-sarv-bu-vb-pc55", "~t1442.39", "~up8.029"],
-              "mentions": ["mn22", "~lzh-mi-bu-vb-pc38#t-linehead0054a07"],
               "remarks": "lzh-mi-bu-vb-pc38#t-linehead0054a07: embedded parallel uid t1421.8a, lzh-mg-bu-vb-pc46: embedded parallel uid t1425.17b, lzh-dg-bu-vb-pc68: embedded parallel uid t1428.17, lzh-sarv-bu-vb-pc55: embedded parallel uid t1435.15"
+          },
+          {
+              "mentions": ["mn22", "~lzh-mi-bu-vb-pc38#t-linehead0054a07"]
           },
           {
               "parallels": ["mn23", "ea39.9", "sa-2.18", "sa1079", "t95"]
@@ -2428,13 +2446,17 @@
           },
           {
               "parallels": ["mn65", "ma194", "sht-sutta15", "~ea49.7"],
-              "mentions": ["ma194", "~lzh-mg-bu-vb-pc36#t-linehead0359b11-#t-linehead0359c15"],
               "remarks": "ea49.7: EA 49.7 is a partial parallel to M 65, as <span class='author'>Akanuma</span> p. 167 indicates. After reporting the Buddha’s instruction to Bhaddali (跋提婆羅) about taking only a single meal, EA 49.7 describes how Udayi (優陀夷) once went begging at night and so startled a pregnant woman that she miscarried, a tale related also in MN 66 and MA 192. In EA 49.7 the Buddha comes to hear of this and addresses the monks on the benefit of taking a single meal, after which EA 49.7 returns to the events relating to Bhaddali. We therefore reckon EA 49.7 as a partial parallel to both MN 65 and MN 66., lzh-mg-bu-vb-pc36#t-linehead0359b11-#t-linehead0359c15: embedded parallel uid t1425.17a"
           },
           {
+              "mentions": ["ma194", "~lzh-mg-bu-vb-pc36#t-linehead0359b11-#t-linehead0359c15"]
+          },
+          {
               "parallels": ["mn66", "ma192", "~ea49.7", "~lzh-mi-bu-vb-pc48", "~lzh-dg-bu-vb-pc37"],
-              "mentions": ["ma192", "lzh-mg-bu-vb-pc36#t0359b26"],
               "remarks": "ea49.7: EA 49.7 is a partial parallel to M 65, as <span class='author'>Akanuma</span> p. 167 indicates. After reporting the Buddha’s instruction to Bhaddali (跋提婆羅) about taking only a single meal, EA 49.7 describes how Udayi (優陀夷) once went begging at night and so startled a pregnant woman that she miscarried, a tale related also in MN 66 and MA 192. In EA 49.7 the Buddha comes to hear of this and addresses the monks on the benefit of taking a single meal, after which EA 49.7 returns to the events relating to Bhaddali. We therefore reckon EA 49.7 as a partial parallel to both MN 65 and MN 66., lzh-mi-bu-vb-pc48: embedded parallel uid t1421.8b, lzh-dg-bu-vb-pc37: embedded parallel uid t1428.14"
+          },
+          {
+              "mentions": ["ma192", "lzh-mg-bu-vb-pc36#t0359b26"]
           },
           {
               "parallels": ["mn67", "ea45.2", "t137"]
@@ -2490,7 +2512,9 @@
               "parallels": ["mn81", "dq10", "ma63", "skt-mu-kd17#sbvii22-#sbvii30", "t197.10", "~skt-lo-mvu31"]
           },
           {
-              "parallels": ["mn82", "avs90", "dq60", "ma132", "sht-sutta18", "t68", "t69", "tib10", "~sf101", "~sf283", "~t1507.4", "~t199.18a", "~t199.18b", "~pi-tv-bu-vb-pj1#41-#59"],
+              "parallels": ["mn82", "avs90", "dq60", "ma132", "sht-sutta18", "t68", "t69", "tib10", "~sf101", "~sf283", "~t1507.4", "~t199.18a", "~t199.18b", "~pi-tv-bu-vb-pj1#41-#59"]
+          },
+          {
               "mentions": ["mn82", "~tha-ap20"]
           },
           {
@@ -4006,7 +4030,9 @@
               "parallels": ["sn1.28", "sa-2.183", "sa589"]
           },
           {
-              "parallels": ["sn1.29", "sa-2.172", "sa588", "sn2.28"],
+              "parallels": ["sn1.29", "sa-2.172", "sa588", "sn2.28"]
+          },
+          {
               "mentions": ["sn1.29", "~pe5#15"]
           },
           {
@@ -4220,7 +4246,9 @@
               "parallels": ["sn11.4", "ea34.8", "sa-2.39", "sa1110", "~sf265"]
           },
           {
-              "parallels": ["sn11.5", "sa-2.38", "sa1109"],
+              "parallels": ["sn11.5", "sa-2.38", "sa1109"]
+          },
+          {
               "mentions": ["sn11.5", "ne37#405-#418"]
           },
           {
@@ -4306,7 +4334,9 @@
               "parallels": ["sn12.35-36", "sa297", "~sf164"]
           },
           {
-              "parallels": ["sn12.37", "sa358", "~sf162"],
+              "parallels": ["sn12.37", "sa358", "~sf162"]
+          },
+          {
               "mentions": ["sn12.37", "cnd19#42", "mnd15#170"]
           },
           {
@@ -4627,7 +4657,9 @@
               "parallels": ["sn2.5", "sa-2.310", "sa1311"]
           },
           {
-              "parallels": ["sn2.6", "sa-2.312", "sa1313"],
+              "parallels": ["sn2.6", "sa-2.312", "sa1313"]
+          },
+          {
               "mentions": ["sn2.6", "ne37#202-#309"]
           },
           {
@@ -4641,8 +4673,10 @@
           },
           {
               "parallels": ["sn20.1", "sf199#14.22"],
-              "mentions": ["sn20.1", "cnd7#6"],
               "remarks": "sf199#14.22: embedded parallel uid sf199.22-23"
+          },
+          {
+              "mentions": ["sn20.1", "cnd7#6"]
           },
           {
               "parallels": ["sn20.10", "sa1260"]
@@ -4702,7 +4736,9 @@
               "parallels": ["sn21.9", "sa-2.7", "sa1068"]
           },
           {
-              "parallels": ["sn22.1", "ea13.4", "sa107"],
+              "parallels": ["sn22.1", "ea13.4", "sa107"]
+          },
+          {
               "mentions": ["sn22.1", "kv17.4#4"]
           },
           {
@@ -4820,7 +4856,9 @@
               "parallels": ["sn22.43", "~sa36"]
           },
           {
-              "parallels": ["sn22.44", "sa69"],
+              "parallels": ["sn22.44", "sa69"]
+          },
+          {
               "mentions": ["sn22.44", "~ds2.3.1#23", "~ps1.2#42", "~ne20#395"]
           },
           {
@@ -5089,7 +5127,9 @@
               "parallels": ["sn3.3", "ea26.6", "sa-2.67", "sa1240"]
           },
           {
-              "parallels": ["sn3.4", "sa-2.55", "sa1228"],
+              "parallels": ["sn3.4", "sa-2.55", "sa1228"]
+          },
+          {
               "mentions": ["sn3.4", "ne37#422-#427"]
           },
           {
@@ -5129,7 +5169,9 @@
               "parallels": ["sn35.101", "sa274", "~sn35.102", "~sn35.138", "~sn35.139", "~sn22.33", "~sn22.34", "~sa269"]
           },
           {
-              "parallels": ["sn22.33", "~sa274", "~sn35.101", "~sn35.102", "~sn35.138", "~sn35.139", "~sn22.34"],
+              "parallels": ["sn22.33", "~sa274", "~sn35.101", "~sn35.102", "~sn35.138", "~sn35.139", "~sn22.34"]
+          },
+          {
               "mentions": ["sn22.33", "cnd19#49"]
           },
           {
@@ -5241,7 +5283,9 @@
               "parallels": ["sn35.21-22", "~sa192-193"]
           },
           {
-              "parallels": ["sn35.228", "sa217"],
+              "parallels": ["sn35.228", "sa217"]
+          },
+          {
               "mentions": ["sn35.228", "ne37#278-#282"]
           },
           {
@@ -5251,7 +5295,9 @@
               "parallels": ["sn35.23", "sa319"]
           },
           {
-              "parallels": ["sn35.230", "sa245"],
+              "parallels": ["sn35.230", "sa245"]
+          },
+          {
               "mentions": ["sn35.230", "ne37#284-#287"]
           },
           {
@@ -5279,7 +5325,9 @@
               "parallels": ["sn35.241", "ea43.3", "sa1174"]
           },
           {
-              "parallels": ["sn35.243", "sa1176", "~sf280"],
+              "parallels": ["sn35.243", "sa1176", "~sf280"]
+          },
+          {
               "mentions": ["sn35.243", "cnd23#269-#274"]
           },
           {
@@ -5289,7 +5337,9 @@
               "parallels": ["sn35.245", "sa1175"]
           },
           {
-              "parallels": ["sn35.246", "sa1169"],
+              "parallels": ["sn35.246", "sa1169"]
+          },
+          {
               "mentions": ["sn35.246", "cnd19#54"]
           },
           {
@@ -5374,7 +5424,9 @@
               "parallels": ["sn36.10", "sa466"]
           },
           {
-              "parallels": ["sn36.11", "sa473", "sa474", "~sn36.15", "~sn36.16", "~sn36.17", "~sn36.18", "~sn36.1"],
+              "parallels": ["sn36.11", "sa473", "sa474", "~sn36.15", "~sn36.16", "~sn36.17", "~sn36.18", "~sn36.1"]
+          },
+          {
               "mentions": ["sn36.11", "kv2.5#43-#44"]
           },
           {
@@ -5384,7 +5436,9 @@
               "parallels": ["sn36.14", "sa472"]
           },
           {
-              "parallels": ["sn36.15", "sn36.16", "sn36.17", "sn36.18", "~sa473", "~sa474", "~sa476", "~sn36.11", "~sn36.23"],
+              "parallels": ["sn36.15", "sn36.16", "sn36.17", "sn36.18", "~sa473", "~sa474", "~sa476", "~sn36.11", "~sn36.23"]
+          },
+          {
               "mentions": ["sn36.15", "~kv2.5#43-#44"]
           },
           {
@@ -5553,7 +5607,9 @@
               "parallels": ["sn42.5", "sa-2.124", "sa909"]
           },
           {
-              "parallels": ["sn42.6", "ma17"],
+              "parallels": ["sn42.6", "ma17"]
+          },
+          {
               "mentions": ["sn42.6", "ne10#18-#24"]
           },
           {
@@ -5672,14 +5728,18 @@
               "parallels": ["sn46.3", "~sa723", "~sa724", "~sa736", "~sa740"]
           },
           {
-              "parallels": ["sn46.4", "sa718"],
+              "parallels": ["sn46.4", "sa718"]
+          },
+          {
               "mentions": ["sn46.4", "ps2.3#39-#41"]
           },
           {
               "parallels": ["sn46.41", "sa730"]
           },
           {
-              "parallels": ["sn46.42", "ea39.7", "ma58", "sa721-722", "t38"],
+              "parallels": ["sn46.42", "ea39.7", "ma58", "sa721-722", "t38"]
+          },
+          {
               "mentions": ["sn46.42", "kv1.9#11-#12"]
           },
           {
@@ -5725,7 +5785,9 @@
               "parallels": ["sn47.10", "sa615"]
           },
           {
-              "parallels": ["sn47.11", "sa614"],
+              "parallels": ["sn47.11", "sa614"]
+          },
+          {
               "mentions": ["sn47.11", "cnd6#24-#25"]
           },
           {
@@ -5805,8 +5867,10 @@
           },
           {
               "parallels": ["sn47.9", "dn16#104-#106", "sf245#14.1-#14.26", "~da2", "~t1451.36", "~t5", "~t6"],
-              "mentions": ["sn47.9", "~mil5.2.2", "~mil5.2.7"],
               "remarks": "sf245#14.1-#14.26: embedded parallel uid sf245.14.1-26"
+          },
+          {
+              "mentions": ["sn47.9", "~mil5.2.2", "~mil5.2.7"]
           },
           {
               "parallels": ["sn48.1", "sa643"]
@@ -5830,7 +5894,9 @@
               "parallels": ["sn48.20", "sa649"]
           },
           {
-              "parallels": ["sn48.23", "~sa642"],
+              "parallels": ["sn48.23", "~sa642"]
+          },
+          {
               "mentions": ["sn48.23", "ne37#392"]
           },
           {
@@ -5894,7 +5960,9 @@
               "parallels": ["sn50.1", "~sa673"]
           },
           {
-              "parallels": ["sn51.1", "~ea29.7"],
+              "parallels": ["sn51.1", "~ea29.7"]
+          },
+          {
               "mentions": ["sn51.1", "ne37#355"]
           },
           {
@@ -5985,11 +6053,15 @@
               "parallels": ["sn55.20", "sa1135"]
           },
           {
-              "parallels": ["sn55.21", "~ea41.1"],
+              "parallels": ["sn55.21", "~ea41.1"]
+          },
+          {
               "mentions": ["sn55.21", "~pe8#55"]
           },
           {
-              "parallels": ["sn55.22", "sa-2.155", "sa930"],
+              "parallels": ["sn55.22", "sa-2.155", "sa930"]
+          },
+          {
               "mentions": ["sn55.22", "ne37#67-#68"]
           },
           {
@@ -6068,14 +6140,18 @@
               "parallels": ["sn55.54", "sa1122"]
           },
           {
-              "parallels": ["sn55.55", "~sa1125"],
+              "parallels": ["sn55.55", "~sa1125"]
+          },
+          {
               "mentions": ["sn55.55", "ps3.1#12"]
           },
           {
               "parallels": ["sn55.55-58", "~sa1128-1129"]
           },
           {
-              "parallels": ["sn55.6", "sa860"],
+              "parallels": ["sn55.6", "sa860"]
+          },
+          {
               "mentions": ["sn55.6", "ne37#75-#87"]
           },
           {
@@ -6095,8 +6171,10 @@
           },
           {
               "parallels": ["sn56.11", "pi-tv-kd1#68-#84", "dq95", "lal26", "skt-mu-kd17#sbvi134-#sbvi139", "t109", "lzh-mi-kd1#t-linehead0104b23", "lzh-dg-kd1#t-linehead0788a06-#t-linehead0788c08", "t1450.6", "~dq126", "~ea19.2", "~ma204", "~sa379", "~sf260", "~sn56.12", "~t110", "~lzh-sarv-kd18#t-linehead0448b19", "~skt-lo-mvu95"],
-              "mentions": ["sn56.11", "~ps2.7", "~kv20.6#2", "~ne14#16-#20", "~ne4#31-#33", "ps2.6#1-#15", "~ne4#41-43"],
               "remarks": "ps2.6#1-#15: embedded parallel uid ps2.7.1, lzh-mi-kd1#t-linehead0104b23: embedded parallel uid t1421.15b, lzh-dg-kd1#t-linehead0788a06-#t-linehead0788c08: embedded parallel uid t1428.32a, lzh-sarv-kd18#t-linehead0448b19: embedded parallel uid t1435.60, pi-tv-kd1#68-#84: embedded parallel uid pancavaggiyakatha"
+          },
+          {
+              "mentions": ["sn56.11", "~ps2.7", "~kv20.6#2", "~ne14#16-#20", "~ne4#31-#33", "ps2.6#1-#15", "~ne4#41-43"]
           },
           {
               "parallels": ["sn56.12", "dq126", "t110", "lzh-sarv-kd18#t-linehead0448b19", "sa379", "~sn56.11", "~pi-tv-kd1#68-#84", "~dq95", "~lal26", "~skt-mu-kd17#sbvi134-#sbvi139", "~t109", "~lzh-mi-kd1#t-linehead0104b23", "~lzh-dg-kd1#t-linehead0788a06-#t-linehead0788c08", "~t1450.6", "~pi-tv-kd1#68-#84"],
@@ -6112,7 +6190,9 @@
               "parallels": ["sn56.2", "sa428"]
           },
           {
-              "parallels": ["sn56.20", "sa417", "sn56.27"],
+              "parallels": ["sn56.20", "sa417", "sn56.27"]
+          },
+          {
               "mentions": ["sn56.20", "kv6.3#6", "ps2.2#1"]
           },
           {
@@ -6542,8 +6622,10 @@
           },
           {
               "parallels": ["sn51.10", "ud6.1", "~avs100", "~avs40", "~gf20", "~sf245#1.1-#33.3", "~sht-sutta5", "~t1451.35", "~an8.70", "~ma36", "~ea42.5", "~dn16#107-#177"],
-              "mentions": ["sn51.10", "~mil5.1.10", "~kv11.5#6"],
               "remarks": "sf245#1.1-#33.3: embedded parallel uid sf245.1.1-33.3, sht-sutta5: SHT i 184 is identified as not being a parallel to DN 16 in SHT viii p. 172. | SHT iv 412.62 is identified in SHT viii p. 174."
+          },
+          {
+              "mentions": ["sn51.10", "~mil5.1.10", "~kv11.5#6"]
           },
           {
               "parallels": ["ud8.5", "~dn16", "~avs100", "~avs40", "~gf20", "~sf245#1.1-#33.3", "~sht-sutta5", "~t1451.35"],
@@ -9182,7 +9264,9 @@
               "parallels": ["pi-tv-bu-vb-np22", "pi-tv-bu-pm#np22", "pi-tv-pvr-bu#np22", "lzh-sarv-bu-vb-np22", "lzh-sarv-bu-pm#np22", "lzh-sarv-bu-pm-2#np22", "skt-sarv-bu-pm-tf11#np22", "skt-sarv-bu-pm-finot#np22", "lzh-mu-bu-vb-np22", "lzh-mu-bu-pm#np22", "bo-mu-bu-vb-np22", "bo-mu-bu-pm#np22", "skt-mu-bu-pm-gbm3#np22", "skt-mu-mpt-bu-pm#np22", "lzh-mi-bu-vb-np19", "lzh-mi-bu-pm#np19", "lzh-mg-bu-vb-np22", "lzh-mg-bu-pm#np22", "skt-mg-bu-pm#np22", "skt-lo-bu-pm#np22", "lzh-dg-bu-vb-np22", "lzh-dg-bu-pm#np22", "lzh-dg-bu-pm-2#np22", "lzh-ka-bu-pm#np22", "lzh-upali-bu-np22", "pi-tv-bi-vb-np24", "pi-tv-bi-pm#np24", "pi-tv-pvr-bi#np24", "lzh-dg-bi-vb-np12", "lzh-dg-bi-pm#np12", "lzh-mi-bi-vb-np15", "lzh-mi-bi-pm#np15", "lzh-sarv-bi-pm-dh#np12", "lzh-sarv-bi-vb-np12", "lzh-sarv-bi-pm#np12", "lzh-mu-bi-vb-np14", "lzh-mu-bi-pm#np14", "bo-mu-bi-vb-np14", "bo-mu-bi-pm#np14", "lzh-mg-bi-vb-np22", "lzh-mg-bi-pm#np22", "skt-lo-bi-vb-np22"]
           },
           {
-              "parallels": ["pi-tv-bu-vb-np23", "pi-tv-kd6#43-#49", "pi-tv-bu-pm#np23", "pi-tv-pvr-bu#np23", "lzh-sarv-bu-vb-np30", "lzh-sarv-bu-pm#np30", "lzh-sarv-bu-pm-2#np30", "skt-sarv-bu-pm-tf11#np30", "skt-sarv-bu-pm-finot#np30", "lzh-mu-bu-vb-np30", "lzh-mu-bu-pm#np30", "bo-mu-bu-vb-np30", "bo-mu-bu-pm#np30", "skt-mu-bu-pm-gbm3#np30", "skt-mu-mpt-bu-pm#np30", "lzh-mi-bu-vb-np15", "lzh-mi-bu-pm#np15", "lzh-mg-bu-vb-np23", "lzh-mg-bu-pm#np23", "skt-mg-bu-pm#np23", "skt-lo-bu-pm#np23", "lzh-dg-bu-vb-np26", "lzh-dg-bu-pm#np26", "lzh-dg-bu-pm-2#np26", "lzh-ka-bu-pm#np30", "lzh-upali-bu-np30", "pi-tv-bi-vb-np25", "pi-tv-bi-pm#np25", "pi-tv-pvr-bi#np25", "lzh-dg-bi-vb-np16", "lzh-dg-bi-pm#np16", "lzh-mi-bi-vb-np13", "lzh-mi-bi-pm#np13", "lzh-sarv-bi-pm-dh#np18", "lzh-sarv-bi-vb-np18", "lzh-sarv-bi-pm#np18", "skt-sarv-bi-pm#np18", "lzh-mu-bi-vb-np19", "lzh-mu-bi-pm#np19", "bo-mu-bi-vb-np19", "bo-mu-bi-pm#np19", "lzh-mg-bi-vb-np23", "lzh-mg-bi-pm#np23", "skt-lo-bi-vb-np23"],
+              "parallels": ["pi-tv-bu-vb-np23", "pi-tv-kd6#43-#49", "pi-tv-bu-pm#np23", "pi-tv-pvr-bu#np23", "lzh-sarv-bu-vb-np30", "lzh-sarv-bu-pm#np30", "lzh-sarv-bu-pm-2#np30", "skt-sarv-bu-pm-tf11#np30", "skt-sarv-bu-pm-finot#np30", "lzh-mu-bu-vb-np30", "lzh-mu-bu-pm#np30", "bo-mu-bu-vb-np30", "bo-mu-bu-pm#np30", "skt-mu-bu-pm-gbm3#np30", "skt-mu-mpt-bu-pm#np30", "lzh-mi-bu-vb-np15", "lzh-mi-bu-pm#np15", "lzh-mg-bu-vb-np23", "lzh-mg-bu-pm#np23", "skt-mg-bu-pm#np23", "skt-lo-bu-pm#np23", "lzh-dg-bu-vb-np26", "lzh-dg-bu-pm#np26", "lzh-dg-bu-pm-2#np26", "lzh-ka-bu-pm#np30", "lzh-upali-bu-np30", "pi-tv-bi-vb-np25", "pi-tv-bi-pm#np25", "pi-tv-pvr-bi#np25", "lzh-dg-bi-vb-np16", "lzh-dg-bi-pm#np16", "lzh-mi-bi-vb-np13", "lzh-mi-bi-pm#np13", "lzh-sarv-bi-pm-dh#np18", "lzh-sarv-bi-vb-np18", "lzh-sarv-bi-pm#np18", "skt-sarv-bi-pm#np18", "lzh-mu-bi-vb-np19", "lzh-mu-bi-pm#np19", "bo-mu-bi-vb-np19", "bo-mu-bi-pm#np19", "lzh-mg-bi-vb-np23", "lzh-mg-bi-pm#np23", "skt-lo-bi-vb-np23"]
+          },
+          {
               "mentions": ["pi-tv-bu-vb-np23", "~kv21.4#6"]
           },
           {
@@ -9795,27 +9879,39 @@
               "parallels": ["pi-tv-bu-vb-ss9", "pi-tv-bu-pm#ss9", "pi-tv-pvr-bu#ss9", "lzh-sarv-bu-vb-ss9", "lzh-sarv-bu-pm#ss9", "lzh-sarv-bu-pm-2#ss9", "skt-sarv-bu-pm-tf11#ss9", "skt-sarv-bu-pm-finot#ss9", "lzh-mu-bu-vb-ss9", "lzh-mu-bu-pm#ss9", "bo-mu-bu-vb-ss9", "bo-mu-bu-pm#ss9", "skt-mu-bu-pm-gbm3#ss9", "skt-mu-bu-pm-gbm2#ss9", "skt-mu-mpt-bu-pm#ss9", "lzh-mi-bu-vb-ss9", "lzh-mi-bu-pm#ss9", "lzh-mg-bu-vb-ss9", "lzh-mg-bu-pm#ss9", "skt-mg-bu-pm#ss9", "skt-lo-bu-pm#ss9", "lzh-dg-bu-vb-ss9", "lzh-dg-bu-pm#ss9", "lzh-dg-bu-pm-2#ss9", "lzh-ka-bu-pm#ss9", "lzh-upali-bu-ss9", "skt-bu-pm-qizil#ss9", "pi-tv-bi-vb-ss9", "pi-tv-bi-pm#ss9", "pi-tv-pvr-bi#ss9", "lzh-dg-bi-vb-ss3", "lzh-dg-bi-pm#ss3", "lzh-mi-bi-vb-ss3", "lzh-mi-bi-pm#ss3", "lzh-sarv-bi-vb-ss3", "lzh-sarv-bi-pm#ss3", "skt-sarv-bi-pm#ss3", "lzh-mu-bi-vb-ss3", "lzh-mu-bi-pm#ss3", "bo-mu-bi-vb-ss3", "bo-mu-bi-pm#ss3", "lzh-mg-bi-vb-ss3", "lzh-mg-bi-pm#ss3", "skt-lo-bi-vb-ss3"]
           },
           {
-              "parallels": ["pi-tv-kd11#135", "~pi-tv-kd11#226", "~pi-tv-kd11#273", "~pi-tv-kd11#314", "~pi-tv-kd11#36", "~pi-tv-kd11#93"],
+              "parallels": ["pi-tv-kd11#135", "~pi-tv-kd11#226", "~pi-tv-kd11#273", "~pi-tv-kd11#314", "~pi-tv-kd11#36", "~pi-tv-kd11#93"]
+          },
+          {
               "mentions": ["pi-tv-kd11#135", "~pi-tv-pvr7#28"]
           },
           {
-              "parallels": ["pi-tv-kd11#226", "~pi-tv-kd11#135", "~pi-tv-kd11#273", "~pi-tv-kd11#314", "~pi-tv-kd11#36", "~pi-tv-kd11#93"],
+              "parallels": ["pi-tv-kd11#226", "~pi-tv-kd11#135", "~pi-tv-kd11#273", "~pi-tv-kd11#314", "~pi-tv-kd11#36", "~pi-tv-kd11#93"]
+          },
+          {
               "mentions": ["pi-tv-kd11#226", "~pi-tv-pvr7#28"]
           },
           {
-              "parallels": ["pi-tv-kd11#273", "~pi-tv-kd11#135", "~pi-tv-kd11#226", "~pi-tv-kd11#314", "~pi-tv-kd11#36", "~pi-tv-kd11#93"],
+              "parallels": ["pi-tv-kd11#273", "~pi-tv-kd11#135", "~pi-tv-kd11#226", "~pi-tv-kd11#314", "~pi-tv-kd11#36", "~pi-tv-kd11#93"]
+          },
+          {
               "mentions": ["pi-tv-kd11#273", "~pi-tv-pvr7#28"]
           },
           {
-              "parallels": ["pi-tv-kd11#314", "~pi-tv-kd11#135", "~pi-tv-kd11#226", "~pi-tv-kd11#273", "~pi-tv-kd11#36", "~pi-tv-kd11#93"],
+              "parallels": ["pi-tv-kd11#314", "~pi-tv-kd11#135", "~pi-tv-kd11#226", "~pi-tv-kd11#273", "~pi-tv-kd11#36", "~pi-tv-kd11#93"]
+          },
+          {
               "mentions": ["pi-tv-kd11#314", "~pi-tv-pvr7#28"]
           },
           {
-              "parallels": ["pi-tv-kd11#36", "~pi-tv-kd11#135", "~pi-tv-kd11#226", "~pi-tv-kd11#273", "~pi-tv-kd11#314", "~pi-tv-kd11#93"],
+              "parallels": ["pi-tv-kd11#36", "~pi-tv-kd11#135", "~pi-tv-kd11#226", "~pi-tv-kd11#273", "~pi-tv-kd11#314", "~pi-tv-kd11#93"]
+          },
+          {
               "mentions": ["pi-tv-kd11#36", "~pi-tv-pvr7#28"]
           },
           {
-              "parallels": ["pi-tv-kd11#93", "~pi-tv-kd11#135", "~pi-tv-kd11#226", "~pi-tv-kd11#273", "~pi-tv-kd11#314", "~pi-tv-kd11#36"],
+              "parallels": ["pi-tv-kd11#93", "~pi-tv-kd11#135", "~pi-tv-kd11#226", "~pi-tv-kd11#273", "~pi-tv-kd11#314", "~pi-tv-kd11#36"]
+          },
+          {
               "mentions": ["pi-tv-kd11#93", "~pi-tv-pvr7#28"]
           },
           {
@@ -10154,7 +10250,9 @@
               "parallels": ["an8.29#14", "~dhp#315", "~gdhp#131", "~pdhp#234", "~t210.30#vagga-gatha-num-sc30.12", "~t212.6#vagga-gatha-num-sc6.13-#vagga-gatha-num-sc6.14", "~t213.5#vagga-gatha-num-sc5.14-#vagga-gatha-num-sc5.15", "~thag17.2#verse-num-sc1005", "~uv5#5.16-#5.17"]
           },
           {
-              "parallels": ["dhp#1", "gdhp#201", "pdhp#1", "t210.9#vagga-gatha-num-sc9.1", "t212.32#vagga-gatha-num-sc32.13", "t213.31#vagga-gatha-num-sc31.13", "uv31#31.23", "~mkv#66"],
+              "parallels": ["dhp#1", "gdhp#201", "pdhp#1", "t210.9#vagga-gatha-num-sc9.1", "t212.32#vagga-gatha-num-sc32.13", "t213.31#vagga-gatha-num-sc31.13", "uv31#31.23", "~mkv#66"]
+          },
+          {
               "mentions": ["dhp#1", "ne37#10", "pe2#6"]
           },
           {
@@ -10164,7 +10262,9 @@
               "parallels": ["dhp#100", "gdhp#306", "mvu109#2", "pdhp#376", "t210.16#vagga-gatha-num-sc16.1", "t212.25#vagga-gatha-num-sc25.2", "t213.24#vagga-gatha-num-sc24.2", "uv24#24.1"]
           },
           {
-              "parallels": ["dhp#101", "gdhp#308", "mvu109#3", "t210.16#vagga-gatha-num-sc16.2", "t212.25#vagga-gatha-num-sc25.1", "t213.24#vagga-gatha-num-sc24.1"],
+              "parallels": ["dhp#101", "gdhp#308", "mvu109#3", "t210.16#vagga-gatha-num-sc16.2", "t212.25#vagga-gatha-num-sc25.1", "t213.24#vagga-gatha-num-sc24.1"]
+          },
+          {
               "mentions": ["dhp#101", "tha-ap538#40"]
           },
           {
@@ -10201,11 +10301,15 @@
               "parallels": ["dhp#111", "pdhp#391", "t212.25#vagga-gatha-num-sc25.3", "uv24#24.4"]
           },
           {
-              "parallels": ["dhp#112", "gdhp#316", "pdhp#392", "skt-lo-mvu109#20", "t210.16#vagga-gatha-num-sc16.13", "t212.25#vagga-gatha-num-sc25.4", "t213.24#vagga-gatha-num-sc24.5", "uv24#24.5"],
+              "parallels": ["dhp#112", "gdhp#316", "pdhp#392", "skt-lo-mvu109#20", "t210.16#vagga-gatha-num-sc16.13", "t212.25#vagga-gatha-num-sc25.4", "t213.24#vagga-gatha-num-sc24.5", "uv24#24.5"]
+          },
+          {
               "mentions": ["dhp#112", "thi-ap26#20"]
           },
           {
-              "parallels": ["dhp#113", "gdhp#317", "pdhp#393", "skt-lo-mvu109#23", "t210.16#vagga-gatha-num-sc16.14", "t212.25#vagga-gatha-num-sc25.5", "t213.24#vagga-gatha-num-sc24.6", "uv24#24.6"],
+              "parallels": ["dhp#113", "gdhp#317", "pdhp#393", "skt-lo-mvu109#23", "t210.16#vagga-gatha-num-sc16.14", "t212.25#vagga-gatha-num-sc25.5", "t213.24#vagga-gatha-num-sc24.6", "uv24#24.6"]
+          },
+          {
               "mentions": ["dhp#113", "thi-ap22#27"]
           },
           {
@@ -10254,11 +10358,15 @@
               "parallels": ["dhp#127", "divy#475.021", "t210.17#vagga-gatha-num-sc17.21", "t212.10#vagga-gatha-num-sc10.5", "t213.9#vagga-gatha-num-sc9.6", "uv9#9.5"]
           },
           {
-              "parallels": ["dhp#128", "t210.1#vagga-gatha-num-sc1.19", "t212.1#vagga-gatha-num-sc1.49", "t213.1#vagga-gatha-num-sc1.27", "uv1#1.25"],
+              "parallels": ["dhp#128", "t210.1#vagga-gatha-num-sc1.19", "t212.1#vagga-gatha-num-sc1.49", "t213.1#vagga-gatha-num-sc1.27", "uv1#1.25"]
+          },
+          {
               "mentions": ["dhp#128", "mil5.2.4#2"]
           },
           {
-              "parallels": ["dhp#129", "pdhp#202", "t210.18#vagga-gatha-num-sc18.1", "t212.6#vagga-gatha-num-sc6.16", "t213.5#vagga-gatha-num-sc5.17", "uv5#5.19", "~dhp#130", "~snp3.11#verse-num-sc711"],
+              "parallels": ["dhp#129", "pdhp#202", "t210.18#vagga-gatha-num-sc18.1", "t212.6#vagga-gatha-num-sc6.16", "t213.5#vagga-gatha-num-sc5.17", "uv5#5.19", "~dhp#130", "~snp3.11#verse-num-sc711"]
+          },
+          {
               "mentions": ["dhp#129", "~mil5.2.3"]
           },
           {
@@ -10268,7 +10376,9 @@
               "parallels": ["dhp#130", "~dhp#129", "~pdhp#202", "~t210.18#vagga-gatha-num-sc18.1", "~t212.6#vagga-gatha-num-sc6.16", "~t213.5#vagga-gatha-num-sc5.17", "~uv5#5.19"]
           },
           {
-              "parallels": ["dhp#131", "pdhp#203", "t212.31#vagga-gatha-num-sc31.3", "t213.30#vagga-gatha-num-sc30.3", "ud2.3#3", "uv30#30.3"],
+              "parallels": ["dhp#131", "pdhp#203", "t212.31#vagga-gatha-num-sc31.3", "t213.30#vagga-gatha-num-sc30.3", "ud2.3#3", "uv30#30.3"]
+          },
+          {
               "mentions": ["dhp#131", "ne37#18", "ne37#70", "ne9#7"]
           },
           {
@@ -10328,7 +10438,9 @@
               "parallels": ["dhp#149", "divy#475.023", "gdhp#154-155", "t212.1#vagga-gatha-num-sc1.11", "t213.1#vagga-gatha-num-sc1.5", "uv1#1.5"]
           },
           {
-              "parallels": ["dhp#15", "gdhp#205", "pdhp#3", "t210.9#vagga-gatha-num-sc9.17", "t212.29#vagga-gatha-num-sc29.32", "t213.28#vagga-gatha-num-sc28.31", "uv28#28.34"],
+              "parallels": ["dhp#15", "gdhp#205", "pdhp#3", "t210.9#vagga-gatha-num-sc9.17", "t212.29#vagga-gatha-num-sc29.32", "t213.28#vagga-gatha-num-sc28.31", "uv28#28.34"]
+          },
+          {
               "mentions": ["dhp#15", "pe1#49"]
           },
           {
@@ -10348,7 +10460,9 @@
               "parallels": ["dhp#154", "t210.19#vagga-gatha-num-sc19.9", "t212.32#vagga-gatha-num-sc32.7", "t213.31#vagga-gatha-num-sc31.7", "uv31#31.7", "~thag2.32#verse-num-sc184"]
           },
           {
-              "parallels": ["dhp#155", "pdhp#229", "t210.197#vagga-gatha-num-sc19.10", "t212.18#vagga-gatha-num-sc18.3", "t213.17#vagga-gatha-num-sc17.4", "uv17#17.3"],
+              "parallels": ["dhp#155", "pdhp#229", "t210.197#vagga-gatha-num-sc19.10", "t212.18#vagga-gatha-num-sc18.3", "t213.17#vagga-gatha-num-sc17.4", "uv17#17.3"]
+          },
+          {
               "mentions": ["dhp#155", "pe1#39"]
           },
           {
@@ -10370,11 +10484,15 @@
               "parallels": ["dhp#160", "pdhp#321", "t210.20#vagga-gatha-num-sc20.4", "t213.23#vagga-gatha-num-sc23.20", "uv23#23.11"]
           },
           {
-              "parallels": ["dhp#161", "pdhp#307", "t210.20#vagga-gatha-num-sc20.5", "t212.29#vagga-gatha-num-sc29.12", "t213.28#vagga-gatha-num-sc28.11", "~uv28#28.12"],
+              "parallels": ["dhp#161", "pdhp#307", "t210.20#vagga-gatha-num-sc20.5", "t212.29#vagga-gatha-num-sc29.12", "t213.28#vagga-gatha-num-sc28.11", "~uv28#28.12"]
+          },
+          {
               "mentions": ["dhp#161", "ne37#475"]
           },
           {
-              "parallels": ["dhp#162", "gdhp#330", "pdhp#306", "t210.20#vagga-gatha-num-sc20.6", "t212.12#vagga-gatha-num-sc12.11", "t213.11#vagga-gatha-num-sc11.10", "uv11#11.10"],
+              "parallels": ["dhp#162", "gdhp#330", "pdhp#306", "t210.20#vagga-gatha-num-sc20.6", "t212.12#vagga-gatha-num-sc12.11", "t213.11#vagga-gatha-num-sc11.10", "uv11#11.10"]
+          },
+          {
               "mentions": ["dhp#162", "ne37#473"]
           },
           {
@@ -10384,7 +10502,9 @@
               "parallels": ["dhp#164", "gdhp#258", "pdhp#315", "t210.20#vagga-gatha-num-sc20.8", "t212.9#vagga-gatha-num-sc9.8", "t213.8#vagga-gatha-num-sc8.8", "uv8#8.7"]
           },
           {
-              "parallels": ["dhp#165", "pdhp#308", "t210.20#vagga-gatha-num-sc20.9", "t212.29#vagga-gatha-num-sc29.11", "uv28#28.11-#28.12"],
+              "parallels": ["dhp#165", "pdhp#308", "t210.20#vagga-gatha-num-sc20.9", "t212.29#vagga-gatha-num-sc29.11", "uv28#28.11-#28.12"]
+          },
+          {
               "mentions": ["dhp#165", "cnd9#29", "kv16.1#7", "kv16.2#7", "mnd2#32"]
           },
           {
@@ -10394,18 +10514,24 @@
               "parallels": ["dhp#167", "gdhp#121", "pdhp#31", "t212.4#vagga-gatha-num-sc4.6", "t213.4#vagga-gatha-num-sc4.8-#vagga-gatha-num-sc4.9", "uv4#4.8"]
           },
           {
-              "parallels": ["dhp#168", "gdhp#110", "pdhp#27", "t212.5#vagga-gatha-num-sc5.31", "t213.4#vagga-gatha-num-sc4.37", "uv4#4.35", "~ja384#1"],
+              "parallels": ["dhp#168", "gdhp#110", "pdhp#27", "t212.5#vagga-gatha-num-sc5.31", "t213.4#vagga-gatha-num-sc4.37", "uv4#4.35", "~ja384#1"]
+          },
+          {
               "mentions": ["dhp#168", "~thi-ap28#88"]
           },
           {
-              "parallels": ["dhp#169", "avs#38.1", "gdhp#328", "pdhp#224", "t210.21#vagga-gatha-num-sc21.3", "t212.31#vagga-gatha-num-sc31.5", "t213.30#vagga-gatha-num-sc30.5", "uv30#30.5", "~ja384#1"],
+              "parallels": ["dhp#169", "avs#38.1", "gdhp#328", "pdhp#224", "t210.21#vagga-gatha-num-sc21.3", "t212.31#vagga-gatha-num-sc31.5", "t213.30#vagga-gatha-num-sc30.5", "uv30#30.5", "~ja384#1"]
+          },
+          {
               "mentions": ["dhp#169", "thi-ap28#89", "thi-ap30#51"]
           },
           {
               "parallels": ["dhp#17", "t210.9#vagga-gatha-num-sc9.19", "t212.29#vagga-gatha-num-sc29.35", "t213.28#vagga-gatha-num-sc28.33"]
           },
           {
-              "parallels": ["dhp#170", "pdhp#258", "t210.22#vagga-gatha-num-sc22.4", "t212.28#vagga-gatha-num-sc28.13", "t213.27#vagga-gatha-num-sc27.13", "uv27#27.15", "~snp5.16#verse-num-sc1126"],
+              "parallels": ["dhp#170", "pdhp#258", "t210.22#vagga-gatha-num-sc22.4", "t212.28#vagga-gatha-num-sc28.13", "t213.27#vagga-gatha-num-sc27.13", "uv27#27.15", "~snp5.16#verse-num-sc1126"]
+          },
+          {
               "mentions": ["dhp#170", "~cnd19#35", "~cnd19#67", "~cnd2#88", "~kv1.1#334", "~mnd15#172", "~tha-ap542#28"]
           },
           {
@@ -10448,7 +10574,9 @@
               "parallels": ["dhp#182", "gdhp#263", "pdhp#334", "t210.22#vagga-gatha-num-sc22.5"]
           },
           {
-              "parallels": ["dhp#183", "dn14#176", "pdhp#357", "t210.22#vagga-gatha-num-sc22.11", "t212.29#vagga-gatha-num-sc29.1", "t213.28#vagga-gatha-num-sc28.1", "uv28#28.1"],
+              "parallels": ["dhp#183", "dn14#176", "pdhp#357", "t210.22#vagga-gatha-num-sc22.11", "t212.29#vagga-gatha-num-sc29.1", "t213.28#vagga-gatha-num-sc28.1", "uv28#28.1"]
+          },
+          {
               "mentions": ["dhp#183", "ne10#11", "ne19#4", "ne37#397", "ne37#501", "pe2#157"]
           },
           {
@@ -10476,7 +10604,9 @@
               "parallels": ["dhp#190", "divy#101.019", "pdhp#218", "t210.22#vagga-gatha-num-sc22.16", "t212.28#vagga-gatha-num-sc28.30", "t213.27#vagga-gatha-num-sc27.27", "uv27#27.33"]
           },
           {
-              "parallels": ["dhp#191", "divy#101.021", "iti24#5", "sn15.10#6", "t210.22#vagga-gatha-num-sc22.17", "t212.28#vagga-gatha-num-sc28.31", "t213.27#vagga-gatha-num-sc27.28", "thag21.1#verse-num-sc1269", "thig7.2#5", "uv27#27.34"],
+              "parallels": ["dhp#191", "divy#101.021", "iti24#5", "sn15.10#6", "t210.22#vagga-gatha-num-sc22.17", "t212.28#vagga-gatha-num-sc28.31", "t213.27#vagga-gatha-num-sc27.28", "thag21.1#verse-num-sc1269", "thig7.2#5", "uv27#27.34"]
+          },
+          {
               "mentions": ["dhp#191", "ne37#156"]
           },
           {
@@ -10489,11 +10619,15 @@
               "parallels": ["dhp#194", "pdhp#68", "t210.22#vagga-gatha-num-sc22.21", "t212.31#vagga-gatha-num-sc31.27", "t213.30#vagga-gatha-num-sc30.23", "uv30#30.22"]
           },
           {
-              "parallels": ["dhp#195", "t210.22#vagga-gatha-num-sc22.12", "t212.22#vagga-gatha-num-sc22.4", "t213.21#vagga-gatha-num-sc21.4"],
+              "parallels": ["dhp#195", "t210.22#vagga-gatha-num-sc22.12", "t212.22#vagga-gatha-num-sc22.4", "t213.21#vagga-gatha-num-sc21.4"]
+          },
+          {
               "mentions": ["dhp#195", "tha-ap93#1"]
           },
           {
-              "parallels": ["dhp#196", "t210.22#vagga-gatha-num-sc22.13", "t212.31#vagga-gatha-num-sc31.14", "t213.30#vagga-gatha-num-sc30.13", "~uv30#30.11"],
+              "parallels": ["dhp#196", "t210.22#vagga-gatha-num-sc22.13", "t212.31#vagga-gatha-num-sc31.14", "t213.30#vagga-gatha-num-sc30.13", "~uv30#30.11"]
+          },
+          {
               "mentions": ["dhp#196", "tha-ap93#2"]
           },
           {
@@ -10506,7 +10640,9 @@
               "parallels": ["dhp#199", "gdhp#165", "pdhp#256", "t210.23#vagga-gatha-num-sc23.3", "uv30#30.43"]
           },
           {
-              "parallels": ["dhp#2", "gdhp#202", "pdhp#2", "t210.9#vagga-gatha-num-sc9.2", "t212.32#vagga-gatha-num-sc32.14", "t213.31#vagga-gatha-num-sc31.14", "uv31#31.24", "~mkv#66"],
+              "parallels": ["dhp#2", "gdhp#202", "pdhp#2", "t210.9#vagga-gatha-num-sc9.2", "t212.32#vagga-gatha-num-sc32.14", "t213.31#vagga-gatha-num-sc31.14", "uv31#31.24", "~mkv#66"]
+          },
+          {
               "mentions": ["dhp#2", "ne37#65", "pe2#6", "pe8#47"]
           },
           {
@@ -10543,7 +10679,9 @@
               "parallels": ["dhp#209", "gdhp#266", "pdhp#173", "t210.24#vagga-gatha-num-sc24.1", "uv5#5.9"]
           },
           {
-              "parallels": ["dhp#21", "gdhp#115", "ja520#1", "pdhp#14", "t210.10#vagga-gatha-num-sc10.1", "t212.4#vagga-gatha-num-sc4.1", "t213.4#vagga-gatha-num-sc4.1", "uv4#4.1"],
+              "parallels": ["dhp#21", "gdhp#115", "ja520#1", "pdhp#14", "t210.10#vagga-gatha-num-sc10.1", "t212.4#vagga-gatha-num-sc4.1", "t213.4#vagga-gatha-num-sc4.1", "uv4#4.1"]
+          },
+          {
               "mentions": ["dhp#21", "ne9#11", "~pe5#36"]
           },
           {
@@ -10571,15 +10709,21 @@
               "parallels": ["dhp#218", "t210.24#vagga-gatha-num-sc24.8", "t212.2#vagga-gatha-num-sc2.21", "uv2#2.9"]
           },
           {
-              "parallels": ["dhp#219", "t210.24#vagga-gatha-num-sc24.9", "t212.6#vagga-gatha-num-sc6.17", "t213.5#vagga-gatha-num-sc5.18", "uv5#5.20"],
+              "parallels": ["dhp#219", "t210.24#vagga-gatha-num-sc24.9", "t212.6#vagga-gatha-num-sc6.17", "t213.5#vagga-gatha-num-sc5.18", "uv5#5.20"]
+          },
+          {
               "mentions": ["dhp#219", "vv52#1"]
           },
           {
-              "parallels": ["dhp#22", "gdhp#116", "pdhp#15", "t210.10#vagga-gatha-num-sc10.2", "t212.4#vagga-gatha-num-sc4.2", "t213.4#vagga-gatha-num-sc4.2", "uv4#4.2"],
+              "parallels": ["dhp#22", "gdhp#116", "pdhp#15", "t210.10#vagga-gatha-num-sc10.2", "t212.4#vagga-gatha-num-sc4.2", "t213.4#vagga-gatha-num-sc4.2", "uv4#4.2"]
+          },
+          {
               "mentions": ["dhp#22", "pe5#59"]
           },
           {
-              "parallels": ["dhp#220", "t210.24#vagga-gatha-num-sc24.10", "t212.6#vagga-gatha-num-sc6.18", "t213.5#vagga-gatha-num-sc5.19", "uv5#5.21"],
+              "parallels": ["dhp#220", "t210.24#vagga-gatha-num-sc24.10", "t212.6#vagga-gatha-num-sc6.18", "t213.5#vagga-gatha-num-sc5.19", "uv5#5.21"]
+          },
+          {
               "mentions": ["dhp#220", "vv52#2"]
           },
           {
@@ -10622,7 +10766,9 @@
               "parallels": ["dhp#232", "pdhp#280", "t210.25#vagga-gatha-num-sc25.13", "t212.8#vagga-gatha-num-sc8.3", "t213.7#vagga-gatha-num-sc7.2", "uv7#7.2"]
           },
           {
-              "parallels": ["dhp#233", "pdhp#281", "t210.25#vagga-gatha-num-sc25.14", "t212.8#vagga-gatha-num-sc8.4", "t213.7#vagga-gatha-num-sc7.3", "uv7#7.3"],
+              "parallels": ["dhp#233", "pdhp#281", "t210.25#vagga-gatha-num-sc25.14", "t212.8#vagga-gatha-num-sc8.4", "t213.7#vagga-gatha-num-sc7.3", "uv7#7.3"]
+          },
+          {
               "mentions": ["dhp#233", "pe3#49"]
           },
           {
@@ -10641,14 +10787,18 @@
               "parallels": ["dhp#238", "t210.26#vagga-gatha-num-sc26.2", "t212.17#vagga-gatha-num-sc17.4", "t213.16#vagga-gatha-num-sc16.3", "~uv16#16.3"]
           },
           {
-              "parallels": ["dhp#239", "pdhp#163", "t210.26#vagga-gatha-num-sc26.3", "t212.2#vagga-gatha-num-sc2.22", "uv2#2.10"],
+              "parallels": ["dhp#239", "pdhp#163", "t210.26#vagga-gatha-num-sc26.3", "t212.2#vagga-gatha-num-sc2.22", "uv2#2.10"]
+          },
+          {
               "mentions": ["dhp#239", "kv1.4#18", "kv2.9#24"]
           },
           {
               "parallels": ["dhp#24", "gdhp#112", "pdhp#28", "t210.10#vagga-gatha-num-sc10.4", "t212.4#vagga-gatha-num-sc4.4", "t213.2#vagga-gatha-num-sc2.10", "t213.4#vagga-gatha-num-sc4.7", "uv4#4.6"]
           },
           {
-              "parallels": ["dhp#240", "pdhp#160", "t210.26#vagga-gatha-num-sc26.4", "t212.10#vagga-gatha-num-sc10.25", "t213.9#vagga-gatha-num-sc9.18", "uv9#9.19"],
+              "parallels": ["dhp#240", "pdhp#160", "t210.26#vagga-gatha-num-sc26.4", "t212.10#vagga-gatha-num-sc10.25", "t213.9#vagga-gatha-num-sc9.18", "uv9#9.19"]
+          },
+          {
               "mentions": ["dhp#240", "ne37#14", "pe1#64", "pe2#115"]
           },
           {
@@ -10667,11 +10817,15 @@
               "parallels": ["dhp#245", "gdhp#222", "pdhp#165", "t210.26#vagga-gatha-num-sc26.9", "t212.28#vagga-gatha-num-sc28.4", "t213.27#vagga-gatha-num-sc27.4", "uv27#27.4"]
           },
           {
-              "parallels": ["dhp#246", "an5.174#9", "t210.26#vagga-gatha-num-sc26.10"],
+              "parallels": ["dhp#246", "an5.174#9", "t210.26#vagga-gatha-num-sc26.10"]
+          },
+          {
               "mentions": ["dhp#246", "pe2#108", "pe3#10"]
           },
           {
-              "parallels": ["dhp#247", "t210.26#vagga-gatha-num-sc26.11", "~an5.174#9"],
+              "parallels": ["dhp#247", "t210.26#vagga-gatha-num-sc26.11", "~an5.174#9"]
+          },
+          {
               "mentions": ["dhp#247", "~pe2#109"]
           },
           {
@@ -10741,11 +10895,15 @@
               "parallels": ["dhp#267", "gdhp#68", "skt-lo-mvu107#36", "sn7.20#3", "t210.27#vagga-gatha-num-sc27.12", "t212.12#vagga-gatha-num-sc12.13", "t213.11#vagga-gatha-num-sc11.12", "uv11#11.12", "uv32#32.19"]
           },
           {
-              "parallels": ["dhp#268", "t210.27#vagga-gatha-num-sc27.13"],
+              "parallels": ["dhp#268", "t210.27#vagga-gatha-num-sc27.13"]
+          },
+          {
               "mentions": ["dhp#268", "cnd8#55", "mnd2#122"]
           },
           {
-              "parallels": ["dhp#269", "t210.27#vagga-gatha-num-sc27.14"],
+              "parallels": ["dhp#269", "t210.27#vagga-gatha-num-sc27.14"]
+          },
+          {
               "mentions": ["dhp#269", "cnd8#56", "mnd2#123"]
           },
           {
@@ -10761,11 +10919,15 @@
               "parallels": ["dhp#272", "gdhp#66", "pdhp#272", "skt-lo-mvu107#34", "t210.27#vagga-gatha-num-sc27.17", "uv32#32.32"]
           },
           {
-              "parallels": ["dhp#273", "gdhp#109", "pdhp#358", "t210.28#vagga-gatha-num-sc28.1", "t212.13#vagga-gatha-num-sc13.1", "t213.12#vagga-gatha-num-sc12.3-#vagga-gatha-num-sc12.4", "uv12#12.4", "~t212.13#vagga-gatha-num-sc13.4"],
+              "parallels": ["dhp#273", "gdhp#109", "pdhp#358", "t210.28#vagga-gatha-num-sc28.1", "t212.13#vagga-gatha-num-sc13.1", "t213.12#vagga-gatha-num-sc12.3-#vagga-gatha-num-sc12.4", "uv12#12.4", "~t212.13#vagga-gatha-num-sc13.4"]
+          },
+          {
               "mentions": ["dhp#273", "kv20.5#3", "ne37#509", "pe2#176"]
           },
           {
-              "parallels": ["dhp#274", "pdhp#360", "t210.28#vagga-gatha-num-sc28.2", "t212.13#vagga-gatha-num-sc13.13", "t213.12#vagga-gatha-num-sc12.12", "uv12#12.11"],
+              "parallels": ["dhp#274", "pdhp#360", "t210.28#vagga-gatha-num-sc28.2", "t212.13#vagga-gatha-num-sc13.13", "t213.12#vagga-gatha-num-sc12.12", "uv12#12.11"]
+          },
+          {
               "mentions": ["dhp#274", "pe2#140"]
           },
           {
@@ -10775,26 +10937,36 @@
               "parallels": ["dhp#276", "pdhp#359", "t210.28#vagga-gatha-num-sc28.22", "t210.28#vagga-gatha-num-sc28.3", "t212.13#vagga-gatha-num-sc13.9", "t212.7#vagga-gatha-num-sc7.29", "t213.12#vagga-gatha-num-sc12.10", "t213.6#vagga-gatha-num-sc6.21", "uv12#12.9", "uv6#6.20"]
           },
           {
-              "parallels": ["dhp#277", "gdhp#106", "pdhp#373", "t210.28#vagga-gatha-num-sc28.4", "t212.13#vagga-gatha-num-sc13.5", "t213.12#vagga-gatha-num-sc12.6", "thag15.1#verse-num-sc676", "uv12#12.5"],
+              "parallels": ["dhp#277", "gdhp#106", "pdhp#373", "t210.28#vagga-gatha-num-sc28.4", "t212.13#vagga-gatha-num-sc13.5", "t213.12#vagga-gatha-num-sc12.6", "thag15.1#verse-num-sc676", "uv12#12.5"]
+          },
+          {
               "mentions": ["dhp#277", "~cnd12#12", "~cnd16#23", "~cnd6#14", "kv16.4#13", "mnd4#42", "ne37#374", "ne4#17", "an3.136#1"]
           },
           {
-              "parallels": ["dhp#278", "gdhp#107", "t210.28#vagga-gatha-num-sc28.20", "t212.13#vagga-gatha-num-sc13.6", "t213.12#vagga-gatha-num-sc12.7", "thag15.1#verse-num-sc677", "uv12#12.6"],
+              "parallels": ["dhp#278", "gdhp#107", "t210.28#vagga-gatha-num-sc28.20", "t212.13#vagga-gatha-num-sc13.6", "t213.12#vagga-gatha-num-sc12.7", "thag15.1#verse-num-sc677", "uv12#12.6"]
+          },
+          {
               "mentions": ["dhp#278", "~cnd12#12", "~cnd16#23", "~cnd6#14", "kv16.4#14", "mnd4#42", "ne37#375", "ne4#18", "an3.136#1"]
           },
           {
-              "parallels": ["dhp#279", "gdhp#108", "pdhp#374", "t210.28#vagga-gatha-num-sc28.21", "t212.13#vagga-gatha-num-sc13.8", "t213.12#vagga-gatha-num-sc12.9", "thag15.1#verse-num-sc678", "uv12#12.8"],
+              "parallels": ["dhp#279", "gdhp#108", "pdhp#374", "t210.28#vagga-gatha-num-sc28.21", "t212.13#vagga-gatha-num-sc13.8", "t213.12#vagga-gatha-num-sc12.9", "thag15.1#verse-num-sc678", "uv12#12.8"]
+          },
+          {
               "mentions": ["dhp#279", "~cnd12#12", "~cnd16#23", "~cnd6#14", "kv16.4#15", "mnd4#42", "ne37#376", "ne4#19", "pe2#136", "pe2#62", "an3.136#1"]
           },
           {
-              "parallels": ["dhp#28", "gdhp#119", "pdhp#19", "t210.10#vagga-gatha-num-sc10.8-#vagga-gatha-num-sc10.9", "t213.4#vagga-gatha-num-sc4.4", "uv4#4.4", "~t212.4#t-linehead0637c13"],
+              "parallels": ["dhp#28", "gdhp#119", "pdhp#19", "t210.10#vagga-gatha-num-sc10.8-#vagga-gatha-num-sc10.9", "t213.4#vagga-gatha-num-sc4.4", "uv4#4.4", "~t212.4#t-linehead0637c13"]
+          },
+          {
               "mentions": ["dhp#28", "mil7.4.5#10"]
           },
           {
               "parallels": ["dhp#280", "gdhp#113", "pdhp#30", "t210.28#vagga-gatha-num-sc28.6", "t212.32#vagga-gatha-num-sc32.26", "t213.31#vagga-gatha-num-sc31.21", "uv31#31.32"]
           },
           {
-              "parallels": ["dhp#281", "pdhp#278", "t210.28#vagga-gatha-num-sc28.8", "t212.8#vagga-gatha-num-sc8.13", "t213.7#vagga-gatha-num-sc7.14", "uv7#7.12"],
+              "parallels": ["dhp#281", "pdhp#278", "t210.28#vagga-gatha-num-sc28.8", "t212.8#vagga-gatha-num-sc8.13", "t213.7#vagga-gatha-num-sc7.14", "uv7#7.12"]
+          },
+          {
               "mentions": ["dhp#281", "ne37#467", "pe3#52"]
           },
           {
@@ -10807,7 +10979,9 @@
               "parallels": ["dhp#284", "pdhp#362", "t210.28#vagga-gatha-num-sc28.10", "t210.32#vagga-gatha-num-sc32.32", "t212.19#vagga-gatha-num-sc19.5", "t213.18#vagga-gatha-num-sc18.5", "uv18#18.4", "~gdhp#94"]
           },
           {
-              "parallels": ["dhp#285", "gdhp#299", "pdhp#363", "t212.19#vagga-gatha-num-sc19.6", "t213.18#vagga-gatha-num-sc18.6", "uv18#18.5"],
+              "parallels": ["dhp#285", "gdhp#299", "pdhp#363", "t212.19#vagga-gatha-num-sc19.6", "t213.18#vagga-gatha-num-sc18.6", "uv18#18.5"]
+          },
+          {
               "mentions": ["dhp#285", "ne9#27"]
           },
           {
@@ -10817,7 +10991,9 @@
               "parallels": ["dhp#287", "pdhp#365", "t210.28#vagga-gatha-num-sc28.14", "t212.1#vagga-gatha-num-sc1.76", "uv1#1.39", "~gdhp#334"]
           },
           {
-              "parallels": ["dhp#288", "gdhp#261", "pdhp#366", "t210.1#vagga-gatha-num-sc1.17", "t212.1#vagga-gatha-num-sc1.37", "t213.1#vagga-gatha-num-sc1.38", "uv1#1.40"],
+              "parallels": ["dhp#288", "gdhp#261", "pdhp#366", "t210.1#vagga-gatha-num-sc1.17", "t212.1#vagga-gatha-num-sc1.37", "t213.1#vagga-gatha-num-sc1.38", "uv1#1.40"]
+          },
+          {
               "mentions": ["dhp#288", "thi-ap20#34"]
           },
           {
@@ -10833,15 +11009,21 @@
               "parallels": ["dhp#291", "gdhp#179", "pdhp#117", "t210.29#vagga-gatha-num-sc29.2", "t212.31#vagga-gatha-num-sc31.2", "t213.30#vagga-gatha-num-sc30.2", "uv30#30.2"]
           },
           {
-              "parallels": ["dhp#292", "pdhp#266", "t210.29#vagga-gatha-num-sc29.3", "t212.5#vagga-gatha-num-sc5.5", "thag13.1#verse-num-sc635", "uv4#4.19", "~gdhp#339"],
+              "parallels": ["dhp#292", "pdhp#266", "t210.29#vagga-gatha-num-sc29.3", "t212.5#vagga-gatha-num-sc5.5", "thag13.1#verse-num-sc635", "uv4#4.19", "~gdhp#339"]
+          },
+          {
               "mentions": ["dhp#292", "~pe8#151"]
           },
           {
-              "parallels": ["dhp#293", "pdhp#267", "thag13.1#verse-num-sc636", "uv4#4.20", "~gdhp#340"],
+              "parallels": ["dhp#293", "pdhp#267", "thag13.1#verse-num-sc636", "uv4#4.20", "~gdhp#340"]
+          },
+          {
               "mentions": ["dhp#293", "~ne8#4", "~pe5#31"]
           },
           {
-              "parallels": ["dhp#294", "gdhp#12", "pdhp#47", "t210.2#vagga-gatha-num-sc2.12", "t212.30#vagga-gatha-num-sc30.25", "t212.34#vagga-gatha-num-sc34.62", "t213.29#vagga-gatha-num-sc29.23", "t213.33#vagga-gatha-num-sc33.59-#vagga-gatha-num-sc33.60", "uv29#29.24"],
+              "parallels": ["dhp#294", "gdhp#12", "pdhp#47", "t210.2#vagga-gatha-num-sc2.12", "t212.30#vagga-gatha-num-sc30.25", "t212.34#vagga-gatha-num-sc34.62", "t213.29#vagga-gatha-num-sc29.23", "t213.33#vagga-gatha-num-sc33.59-#vagga-gatha-num-sc33.60", "uv29#29.24"]
+          },
+          {
               "mentions": ["dhp#294", "ne37#350"]
           },
           {
@@ -10870,7 +11052,9 @@
               "parallels": ["dhp#300", "gdhp#104", "pdhp#241", "t212.16#vagga-gatha-num-sc16.25", "t213.15#vagga-gatha-num-sc15.21", "uv15#15.17"]
           },
           {
-              "parallels": ["dhp#301", "gdhp#105", "pdhp#242", "t212.16#vagga-gatha-num-sc16.26", "t213.15#vagga-gatha-num-sc15.27-#vagga-gatha-num-sc15.28", "uv15#15.25"],
+              "parallels": ["dhp#301", "gdhp#105", "pdhp#242", "t212.16#vagga-gatha-num-sc16.26", "t213.15#vagga-gatha-num-sc15.27-#vagga-gatha-num-sc15.28", "uv15#15.25"]
+          },
+          {
               "mentions": ["dhp#301", "~ne37#205"]
           },
           {
@@ -10880,7 +11064,9 @@
               "parallels": ["dhp#303", "gdhp#323", "pdhp#331", "t210.29#vagga-gatha-num-sc29.13", "t210.4#vagga-gatha-num-sc4.8", "t212.11#vagga-gatha-num-sc11.8", "t213.10#vagga-gatha-num-sc10.8", "~uv10#10.8"]
           },
           {
-              "parallels": ["dhp#304", "t210.29#vagga-gatha-num-sc29.7", "t212.30#vagga-gatha-num-sc30.20", "t213.29#vagga-gatha-num-sc29.18", "uv29#29.19"],
+              "parallels": ["dhp#304", "t210.29#vagga-gatha-num-sc29.7", "t212.30#vagga-gatha-num-sc30.20", "t213.29#vagga-gatha-num-sc29.18", "uv29#29.19"]
+          },
+          {
               "mentions": ["dhp#304", "mnd16#21", "ne5#10"]
           },
           {
@@ -10929,47 +11115,63 @@
               "parallels": ["dhp#319", "t210.30#vagga-gatha-num-sc30.16"]
           },
           {
-              "parallels": ["dhp#32", "an4.37#8", "gdhp#73", "pdhp#22", "t213.4#vagga-gatha-num-sc4.31", "uv4#4.32", "~an6.32#4", "~an6.33#2", "~an7.32#5", "~an7.33#3", "~an7.34#3"],
+              "parallels": ["dhp#32", "an4.37#8", "gdhp#73", "pdhp#22", "t213.4#vagga-gatha-num-sc4.31", "uv4#4.32", "~an6.32#4", "~an6.33#2", "~an7.32#5", "~an7.33#3", "~an7.34#3"]
+          },
+          {
               "mentions": ["dhp#32", "mil7.7.3#2"]
           },
           {
               "parallels": ["dhp#320", "gdhp#329", "pdhp#215", "t210.31#vagga-gatha-num-sc31.1", "uv29#29.21"]
           },
           {
-              "parallels": ["dhp#321", "pdhp#90", "t210.31#vagga-gatha-num-sc31.2", "t212.20#vagga-gatha-num-sc20.5", "t213.19#vagga-gatha-num-sc19.7", "uv19#19.6"],
+              "parallels": ["dhp#321", "pdhp#90", "t210.31#vagga-gatha-num-sc31.2", "t212.20#vagga-gatha-num-sc20.5", "t213.19#vagga-gatha-num-sc19.7", "uv19#19.6"]
+          },
+          {
               "mentions": ["dhp#321", "cnd8#22", "mnd10#97"]
           },
           {
-              "parallels": ["dhp#322", "pdhp#91", "t210.31#vagga-gatha-num-sc31.3", "t212.20#vagga-gatha-num-sc20.6", "t213.19#vagga-gatha-num-sc19.8", "uv19#19.7", "~gdhp#341"],
+              "parallels": ["dhp#322", "pdhp#91", "t210.31#vagga-gatha-num-sc31.3", "t212.20#vagga-gatha-num-sc20.6", "t213.19#vagga-gatha-num-sc19.8", "uv19#19.7", "~gdhp#341"]
+          },
+          {
               "mentions": ["dhp#322", "cnd8#23", "mnd10#98"]
           },
           {
-              "parallels": ["dhp#323", "t210.31#vagga-gatha-num-sc31.4", "t212.20#vagga-gatha-num-sc20.7", "t213.19#vagga-gatha-num-sc19.9", "uv19#19.8", "~gdhp#342", "~pdhp#92"],
+              "parallels": ["dhp#323", "t210.31#vagga-gatha-num-sc31.4", "t212.20#vagga-gatha-num-sc20.7", "t213.19#vagga-gatha-num-sc19.9", "uv19#19.8", "~gdhp#342", "~pdhp#92"]
+          },
+          {
               "mentions": ["dhp#323", "cnd8#24", "mnd10#99"]
           },
           {
               "parallels": ["dhp#324", "t210.31#vagga-gatha-num-sc31.5"]
           },
           {
-              "parallels": ["dhp#325", "t210.31#vagga-gatha-num-sc31.6", "t212.30#vagga-gatha-num-sc30.13", "t213.29#vagga-gatha-num-sc29.13", "thag1.17", "uv29#29.13"],
+              "parallels": ["dhp#325", "t210.31#vagga-gatha-num-sc31.6", "t212.30#vagga-gatha-num-sc30.13", "t213.29#vagga-gatha-num-sc29.13", "thag1.17", "uv29#29.13"]
+          },
+          {
               "mentions": ["dhp#325", "ne37#12", "ne9#9"]
           },
           {
               "parallels": ["dhp#326", "t210.31#vagga-gatha-num-sc31.7", "t212.32#vagga-gatha-num-sc32.5", "t213.31#vagga-gatha-num-sc31.5", "thag1.77", "thag19.1#verse-num-sc1134", "uv31#31.5"]
           },
           {
-              "parallels": ["dhp#327", "gdhp#132", "pdhp#24", "t210.31#vagga-gatha-num-sc31.8", "t212.5#vagga-gatha-num-sc5.17", "t213.4#vagga-gatha-num-sc4.26", "uv4#4.27", "uv4#4.37"],
+              "parallels": ["dhp#327", "gdhp#132", "pdhp#24", "t210.31#vagga-gatha-num-sc31.8", "t212.5#vagga-gatha-num-sc5.17", "t213.4#vagga-gatha-num-sc4.26", "uv4#4.27", "uv4#4.37"]
+          },
+          {
               "mentions": ["dhp#327", "mil7.3.8#2"]
           },
           {
               "parallels": ["dhp#328", "?skt-mu", "ja428#8", "mn128#11", "pdhp#9", "pi-tv-kd10#44", "snp1.3#verse-num-sc45", "t210.31#vagga-gatha-num-sc31.9", "t212.15#vagga-gatha-num-sc15.11", "t213.14#vagga-gatha-num-sc14.11", "uv14#14.13"],
-              "mentions": ["dhp#328", "cnd23#134", "tha-ap2#20"],
               "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.185)"
           },
           {
+              "mentions": ["dhp#328", "cnd23#134", "tha-ap2#20"]
+          },
+          {
               "parallels": ["dhp#329", "?skt-mu", "ja428#9", "mn128#12", "pdhp#10", "pi-tv-kd10#45", "snp1.3#verse-num-sc46", "t210.31#vagga-gatha-num-sc31.10", "t212.15#vagga-gatha-num-sc15.12", "t213.14#vagga-gatha-num-sc14.12-#vagga-gatha-num-sc14.13", "uv14#14.14"],
-              "mentions": ["dhp#329", "cnd23#140", "tha-ap2#21"],
               "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.185)"
+          },
+          {
+              "mentions": ["dhp#329", "cnd23#140", "tha-ap2#21"]
           },
           {
               "parallels": ["dhp#33", "pdhp#342", "t210.11#vagga-gatha-num-sc11.1", "t212.32#vagga-gatha-num-sc32.9", "t213.31#vagga-gatha-num-sc31.9", "uv31#31.8", "~gdhp#136"]
@@ -10997,11 +11199,15 @@
               "parallels": ["dhp#336", "pdhp#139", "t210.32#vagga-gatha-num-sc32.3", "t212.3#vagga-gatha-num-sc3.10", "t213.3#vagga-gatha-num-sc3.12-#vagga-gatha-num-sc3.13", "thag6.5#verse-num-sc401", "uv3#3.10"]
           },
           {
-              "parallels": ["dhp#337", "t210.32#vagga-gatha-num-sc32.7", "t212.3#vagga-gatha-num-sc3.11", "t212.3#vagga-gatha-num-sc3.13", "thag6.5#verse-num-sc402", "~gdhp#126", "~ja475#12", "~ja516#45", "~pdhp#140", "~uv3#3.11"],
+              "parallels": ["dhp#337", "t210.32#vagga-gatha-num-sc32.7", "t212.3#vagga-gatha-num-sc3.11", "t212.3#vagga-gatha-num-sc3.13", "thag6.5#verse-num-sc402", "~gdhp#126", "~ja475#12", "~ja516#45", "~pdhp#140", "~uv3#3.11"]
+          },
+          {
               "mentions": ["dhp#337", "~pv19#17"]
           },
           {
-              "parallels": ["dhp#338", "pdhp#156", "t210.32#vagga-gatha-num-sc32.8", "t212.3#vagga-gatha-num-sc3.17", "t213.3#vagga-gatha-num-sc3.13-#vagga-gatha-num-sc3.14", "uv3#3.16"],
+              "parallels": ["dhp#338", "pdhp#156", "t210.32#vagga-gatha-num-sc32.8", "t212.3#vagga-gatha-num-sc3.17", "t213.3#vagga-gatha-num-sc3.13-#vagga-gatha-num-sc3.14", "uv3#3.16"]
+          },
+          {
               "mentions": ["dhp#338", "ne10#8"]
           },
           {
@@ -11026,29 +11232,39 @@
               "parallels": ["dhp#344", "pdhp#151", "t210.32#vagga-gatha-num-sc32.9", "t212.28#vagga-gatha-num-sc28.24", "t213.27#vagga-gatha-num-sc27.22", "uv27#27.29", "~gdhp#92"]
           },
           {
-              "parallels": ["dhp#345", "gdhp#169", "ja201#1", "pdhp#143", "sn3.10#4", "t210.32#vagga-gatha-num-sc32.14", "t212.2#vagga-gatha-num-sc2.16", "t213.2#vagga-gatha-num-sc2.5", "uv2#2.5"],
+              "parallels": ["dhp#345", "gdhp#169", "ja201#1", "pdhp#143", "sn3.10#4", "t210.32#vagga-gatha-num-sc32.14", "t212.2#vagga-gatha-num-sc2.16", "t213.2#vagga-gatha-num-sc2.5", "uv2#2.5"]
+          },
+          {
               "mentions": ["dhp#345", "ne37#270", "ne9#21", "pe2#19"]
           },
           {
-              "parallels": ["dhp#346", "gdhp#170", "ja201#2", "pdhp#144", "sn3.10#5", "t210.32#vagga-gatha-num-sc32.15", "t212.2#vagga-gatha-num-sc2.18", "uv2#2.6", "~thag2.34"],
+              "parallels": ["dhp#346", "gdhp#170", "ja201#2", "pdhp#144", "sn3.10#5", "t210.32#vagga-gatha-num-sc32.15", "t212.2#vagga-gatha-num-sc2.18", "uv2#2.6", "~thag2.34"]
+          },
+          {
               "mentions": ["dhp#346", "ne37#272", "ne9#23", "pe2#20"]
           },
           {
-              "parallels": ["dhp#347", "gdhp#171", "t210.32#vagga-gatha-num-sc32.17"],
+              "parallels": ["dhp#347", "gdhp#171", "t210.32#vagga-gatha-num-sc32.17"]
+          },
+          {
               "mentions": ["dhp#347", "thi-ap18#70"]
           },
           {
               "parallels": ["dhp#348", "gdhp#161", "pdhp#150", "t212.30#vagga-gatha-num-sc30.45", "t213.29#vagga-gatha-num-sc29.49", "uv29#29.57"]
           },
           {
-              "parallels": ["dhp#349", "t210.32#vagga-gatha-num-sc32.18", "t212.3#vagga-gatha-num-sc3.1", "t213.3#vagga-gatha-num-sc3.1", "uv3#3.1"],
+              "parallels": ["dhp#349", "t210.32#vagga-gatha-num-sc32.18", "t212.3#vagga-gatha-num-sc3.1", "t213.3#vagga-gatha-num-sc3.1", "uv3#3.1"]
+          },
+          {
               "mentions": ["dhp#349", "pe3#4"]
           },
           {
               "parallels": ["dhp#35", "pdhp#345", "t210.11#vagga-gatha-num-sc11.2", "t212.32#vagga-gatha-num-sc32.1", "t213.31#vagga-gatha-num-sc31.1", "uv31#31.1"]
           },
           {
-              "parallels": ["dhp#350", "t210.32#vagga-gatha-num-sc32.19", "t212.3#vagga-gatha-num-sc3.2", "t213.3#vagga-gatha-num-sc3.2", "~uv3#3.2"],
+              "parallels": ["dhp#350", "t210.32#vagga-gatha-num-sc32.19", "t212.3#vagga-gatha-num-sc3.2", "t213.3#vagga-gatha-num-sc3.2", "~uv3#3.2"]
+          },
+          {
               "mentions": ["dhp#350", "mil7.4.10#3"]
           },
           {
@@ -11058,7 +11274,9 @@
               "parallels": ["dhp#352", "pdhp#147", "t210.32#vagga-gatha-num-sc32.21", "t212.27#vagga-gatha-num-sc27.29", "t213.26#vagga-gatha-num-sc26.33", "~uv26#26.29"]
           },
           {
-              "parallels": ["dhp#353", "mn26#48", "mn85#51", "pi-tv-kd1#57", "skt-lo-mvu75#169", "t210.32#vagga-gatha-num-sc32.23", "t212.22#vagga-gatha-num-sc22.1", "t213.21#vagga-gatha-num-sc21.1", "uv21#21.1"],
+              "parallels": ["dhp#353", "mn26#48", "mn85#51", "pi-tv-kd1#57", "skt-lo-mvu75#169", "t210.32#vagga-gatha-num-sc32.23", "t212.22#vagga-gatha-num-sc22.1", "t213.21#vagga-gatha-num-sc21.1", "uv21#21.1"]
+          },
+          {
               "mentions": ["dhp#353", "kv4.8#16"]
           },
           {
@@ -11086,7 +11304,9 @@
               "parallels": ["dhp#360", "skt-lo-mvu107#39", "~t210.34#vagga-gatha-num-sc34.1", "~t212.8#vagga-gatha-num-sc8.12", "~t213.7#vagga-gatha-num-sc7.13"]
           },
           {
-              "parallels": ["dhp#361", "gdhp#52", "pdhp#51", "skt-lo-mvu107#40", "sn3.5#3", "t210.34#vagga-gatha-num-sc34.1", "t212.8#vagga-gatha-num-sc8.12", "t213.7#vagga-gatha-num-sc7.13", "uv7#7.11"],
+              "parallels": ["dhp#361", "gdhp#52", "pdhp#51", "skt-lo-mvu107#40", "sn3.5#3", "t210.34#vagga-gatha-num-sc34.1", "t212.8#vagga-gatha-num-sc8.12", "t213.7#vagga-gatha-num-sc7.13", "uv7#7.11"]
+          },
+          {
               "mentions": ["dhp#361", "~mil5.3.3#2", "mil7.5.10#6", "pe2#179"]
           },
           {
@@ -11105,7 +11325,9 @@
               "parallels": ["dhp#366", "gdhp#62", "pdhp#56", "t210.34#vagga-gatha-num-sc34.6", "t212.33#vagga-gatha-num-sc33.1", "t213.32#vagga-gatha-num-sc32.1", "~uv13#13.12"]
           },
           {
-              "parallels": ["dhp#367", "gdhp#79", "snp4.15#verse-num-sc957", "t210.34#vagga-gatha-num-sc34.8", "t212.33#vagga-gatha-num-sc33.12", "t213.32#vagga-gatha-num-sc32.11", "uv32#32.17"],
+              "parallels": ["dhp#367", "gdhp#79", "snp4.15#verse-num-sc957", "t210.34#vagga-gatha-num-sc34.8", "t212.33#vagga-gatha-num-sc33.12", "t213.32#vagga-gatha-num-sc32.11", "uv32#32.17"]
+          },
+          {
               "mentions": ["dhp#367", "mnd15#155"]
           },
           {
@@ -11118,7 +11340,9 @@
               "parallels": ["dhp#37", "pdhp#344", "t210.11#vagga-gatha-num-sc11.4", "t212.34#vagga-gatha-num-sc34.58", "t213.33#vagga-gatha-num-sc33.55", "uv31#31.8A", "~gdhp#137", "~t212.32#vagga-gatha-num-sc32.8", "~t213.31#vagga-gatha-num-sc31.8", "~uv33#33.55"]
           },
           {
-              "parallels": ["dhp#370", "gdhp#78", "sn1.5#3", "t210.34#vagga-gatha-num-sc34.10", "thag1.15"],
+              "parallels": ["dhp#370", "gdhp#78", "sn1.5#3", "t210.34#vagga-gatha-num-sc34.10", "thag1.15"]
+          },
+          {
               "mentions": ["dhp#370", "ne37#391"]
           },
           {
@@ -11170,7 +11394,9 @@
               "parallels": ["dhp#385", "gdhp#35", "pdhp#40", "t210.35#vagga-gatha-num-sc35.3", "t212.34#vagga-gatha-num-sc34.25", "t213.33#vagga-gatha-num-sc33.23", "uv33#33.24"]
           },
           {
-              "parallels": ["dhp#386", "gdhp#48", "pdhp#49", "snp5.14#verse-num-sc1112", "t210.35#vagga-gatha-num-sc35.4", "uv33#33.32", "~gdhp#25", "~mn98#34", "~snp3.9#verse-num-sc633"],
+              "parallels": ["dhp#386", "gdhp#48", "pdhp#49", "snp5.14#verse-num-sc1112", "t210.35#vagga-gatha-num-sc35.4", "uv33#33.32", "~gdhp#25", "~mn98#34", "~snp3.9#verse-num-sc633"]
+          },
+          {
               "mentions": ["dhp#386", "~cnd17#1", "~cnd17#17", "~cnd2#74"]
           },
           {
@@ -11189,14 +11415,18 @@
               "parallels": ["dhp#390", "gdhp#15", "t212.34#vagga-gatha-num-sc34.71", "t213.33#vagga-gatha-num-sc33.69", "uv33#33.75"]
           },
           {
-              "parallels": ["dhp#391", "gdhp#23", "pdhp#45", "t210.35#vagga-gatha-num-sc35.9", "t212.34#vagga-gatha-num-sc34.17", "t213.33#vagga-gatha-num-sc33.16", "uv33#33.16", "~iti97#7", "~ja348#3", "~ja435#4"],
+              "parallels": ["dhp#391", "gdhp#23", "pdhp#45", "t210.35#vagga-gatha-num-sc35.9", "t212.34#vagga-gatha-num-sc34.17", "t213.33#vagga-gatha-num-sc33.16", "uv33#33.16", "~iti97#7", "~ja348#3", "~ja435#4"]
+          },
+          {
               "mentions": ["dhp#391", "ne37#469"]
           },
           {
               "parallels": ["dhp#392", "pdhp#35", "t210.35#vagga-gatha-num-sc35.10", "t212.34#vagga-gatha-num-sc34.64-#vagga-gatha-num-sc34.65", "t213.33#vagga-gatha-num-sc33.61", "uv33#33.66"]
           },
           {
-              "parallels": ["dhp#393", "t210.35#vagga-gatha-num-sc35.11", "uv33#33.7", "~gdhp#1", "~pdhp#37", "~ud1.9#4"],
+              "parallels": ["dhp#393", "t210.35#vagga-gatha-num-sc35.11", "uv33#33.7", "~gdhp#1", "~pdhp#37", "~ud1.9#4"]
+          },
+          {
               "mentions": ["dhp#393", "~ne37#243"]
           },
           {
@@ -11222,7 +11452,9 @@
               "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
           },
           {
-              "parallels": ["dhp#40", "pdhp#350", "t210.11#vagga-gatha-num-sc11.12", "t212.32#vagga-gatha-num-sc32.29", "t213.31#vagga-gatha-num-sc31.24", "uv31#31.35", "~gdhp#138"],
+              "parallels": ["dhp#40", "pdhp#350", "t210.11#vagga-gatha-num-sc11.12", "t212.32#vagga-gatha-num-sc32.29", "t213.31#vagga-gatha-num-sc31.24", "uv31#31.35", "~gdhp#138"]
+          },
+          {
               "mentions": ["dhp#40", "pe1#115"]
           },
           {
@@ -11238,7 +11470,9 @@
               "parallels": ["dhp#403", "gdhp#49", "mn98#39", "pdhp#48", "snp3.9#verse-num-sc633", "t210.35#vagga-gatha-num-sc35.21", "t212.34#vagga-gatha-num-sc34.35", "t213.33#vagga-gatha-num-sc33.33", "uv33#33.33", "~gdhp#25"]
           },
           {
-              "parallels": ["dhp#404", "gdhp#32", "mn98#40", "pdhp#44", "snp3.9#verse-num-sc634", "t210.35#vagga-gatha-num-sc35.22", "t212.34#vagga-gatha-num-sc34.27", "t213.33#vagga-gatha-num-sc33.25", "uv33#33.20"],
+              "parallels": ["dhp#404", "gdhp#32", "mn98#40", "pdhp#44", "snp3.9#verse-num-sc634", "t210.35#vagga-gatha-num-sc35.22", "t212.34#vagga-gatha-num-sc34.27", "t213.33#vagga-gatha-num-sc33.25", "uv33#33.20"]
+          },
+          {
               "mentions": ["dhp#404", "mil7.4.5#4"]
           },
           {
@@ -11323,7 +11557,9 @@
               "parallels": ["dhp#48", "pdhp#129", "t210.12#vagga-gatha-num-sc12.6", "t212.19#vagga-gatha-num-sc19.15", "t213.18#vagga-gatha-num-sc18.16", "uv18#18.15"]
           },
           {
-              "parallels": ["dhp#49", "gdhp#292", "pdhp#127", "t210.12#vagga-gatha-num-sc12.7", "t212.19#vagga-gatha-num-sc19.9", "t213.18#vagga-gatha-num-sc18.9", "uv18#18.8"],
+              "parallels": ["dhp#49", "gdhp#292", "pdhp#127", "t210.12#vagga-gatha-num-sc12.7", "t212.19#vagga-gatha-num-sc19.9", "t213.18#vagga-gatha-num-sc18.9", "uv18#18.8"]
+          },
+          {
               "mentions": ["dhp#49", "ne37#486"]
           },
           {
@@ -11343,15 +11579,21 @@
               "parallels": ["dhp#53", "gdhp#293", "pdhp#130", "t210.12#vagga-gatha-num-sc12.11", "t213.18#vagga-gatha-num-sc18.13", "uv18#18.10", "~t212.19#t-linehead0709b08"]
           },
           {
-              "parallels": ["dhp#54", "an3.79#7", "gdhp#295", "pdhp#121", "t210.12#vagga-gatha-num-sc12.12", "t212.7#vagga-gatha-num-sc7.20", "t213.6#vagga-gatha-num-sc6.18", "uv6#6.16"],
+              "parallels": ["dhp#54", "an3.79#7", "gdhp#295", "pdhp#121", "t210.12#vagga-gatha-num-sc12.12", "t212.7#vagga-gatha-num-sc7.20", "t213.6#vagga-gatha-num-sc6.18", "uv6#6.16"]
+          },
+          {
               "mentions": ["dhp#54", "mil6.4.1#10"]
           },
           {
-              "parallels": ["dhp#55", "pdhp#122", "t210.12#vagga-gatha-num-sc12.13", "t212.7#vagga-gatha-num-sc7.26", "t213.6#vagga-gatha-num-sc6.19", "uv6#6.17", "~gdhp#296"],
+              "parallels": ["dhp#55", "pdhp#122", "t210.12#vagga-gatha-num-sc12.13", "t212.7#vagga-gatha-num-sc7.26", "t213.6#vagga-gatha-num-sc6.19", "uv6#6.17", "~gdhp#296"]
+          },
+          {
               "mentions": ["dhp#55", "mil6.4.1#11"]
           },
           {
-              "parallels": ["dhp#56", "pdhp#123", "t210.12#vagga-gatha-num-sc12.14", "t212.7#vagga-gatha-num-sc7.27", "uv6#6.18"],
+              "parallels": ["dhp#56", "pdhp#123", "t210.12#vagga-gatha-num-sc12.14", "t212.7#vagga-gatha-num-sc7.27", "uv6#6.18"]
+          },
+          {
               "mentions": ["dhp#56", "mil6.4.1#12"]
           },
           {
@@ -11387,11 +11629,15 @@
               "parallels": ["dhp#65", "gdhp#234", "pdhp#192", "t210.13#vagga-gatha-num-sc13.8", "t212.26#vagga-gatha-num-sc26.13", "t213.25#vagga-gatha-num-sc25.14", "uv25#25.14"]
           },
           {
-              "parallels": ["dhp#66", "pdhp#174", "sn2.22#2", "t210.13#vagga-gatha-num-sc13.9", "t210.17#vagga-gatha-num-sc17.2", "t212.10#vagga-gatha-num-sc10.18", "uv9#9.13"],
+              "parallels": ["dhp#66", "pdhp#174", "sn2.22#2", "t210.13#vagga-gatha-num-sc13.9", "t210.17#vagga-gatha-num-sc17.2", "t212.10#vagga-gatha-num-sc10.18", "uv9#9.13"]
+          },
+          {
               "mentions": ["dhp#66", "ne37#44"]
           },
           {
-              "parallels": ["dhp#67", "pdhp#175", "sn2.22#3", "t210.13#vagga-gatha-num-sc13.10", "t212.10#vagga-gatha-num-sc10.19", "uv9#9.14"],
+              "parallels": ["dhp#67", "pdhp#175", "sn2.22#3", "t210.13#vagga-gatha-num-sc13.10", "t212.10#vagga-gatha-num-sc10.19", "uv9#9.14"]
+          },
+          {
               "mentions": ["dhp#67", "ne37#45"]
           },
           {
@@ -11407,7 +11653,9 @@
               "parallels": ["dhp#70", "mvu109#15", "pdhp#388", "t210.13#vagga-gatha-num-sc13.15", "t212.25#vagga-gatha-num-sc25.8", "t213.24#vagga-gatha-num-sc24.20", "t213.24#vagga-gatha-num-sc24.23", "uv24#24.17", "uv24#24.20E", "~t212.25#t-linehead0726b14"]
           },
           {
-              "parallels": ["dhp#71", "pdhp#107", "t210.17#vagga-gatha-num-sc17.13", "t212.10#vagga-gatha-num-sc10.22", "t213.9#vagga-gatha-num-sc9.15", "uv9#9.17"],
+              "parallels": ["dhp#71", "pdhp#107", "t210.17#vagga-gatha-num-sc17.13", "t212.10#vagga-gatha-num-sc10.22", "t213.9#vagga-gatha-num-sc9.15", "uv9#9.17"]
+          },
+          {
               "mentions": ["dhp#71", "ne37#323", "pe2#98"]
           },
           {
@@ -11423,11 +11671,15 @@
               "parallels": ["dhp#75", "pdhp#180-181", "t210.13#vagga-gatha-num-sc13.20-#vagga-gatha-num-sc13.21", "t210.33#vagga-gatha-num-sc33.8", "t212.14#vagga-gatha-num-sc14.7", "t213.13#vagga-gatha-num-sc13.6", "uv13#13.5-#13.6"]
           },
           {
-              "parallels": ["dhp#76", "gdhp#231", "pdhp#206", "t210.14#vagga-gatha-num-sc14.1", "t212.29#vagga-gatha-num-sc29.7", "t213.28#vagga-gatha-num-sc28.7", "thag17.2#verse-num-sc993", "uv28#28.7"],
+              "parallels": ["dhp#76", "gdhp#231", "pdhp#206", "t210.14#vagga-gatha-num-sc14.1", "t212.29#vagga-gatha-num-sc29.7", "t213.28#vagga-gatha-num-sc28.7", "thag17.2#verse-num-sc993", "uv28#28.7"]
+          },
+          {
               "mentions": ["dhp#76", "mnd16#254"]
           },
           {
-              "parallels": ["dhp#77", "gdhp#230", "pdhp#207", "t212.6#vagga-gatha-num-sc6.23", "t213.5#vagga-gatha-num-sc5.24", "thag17.2#verse-num-sc994", "uv5#5.26"],
+              "parallels": ["dhp#77", "gdhp#230", "pdhp#207", "t212.6#vagga-gatha-num-sc6.23", "t213.5#vagga-gatha-num-sc5.24", "thag17.2#verse-num-sc994", "uv5#5.26"]
+          },
+          {
               "mentions": ["dhp#77", "mnd16#255"]
           },
           {
@@ -11437,14 +11689,18 @@
               "parallels": ["dhp#79", "gdhp#224", "t212.31#vagga-gatha-num-sc31.17", "t213.30#vagga-gatha-num-sc30.15"]
           },
           {
-              "parallels": ["dhp#8", "gdhp#218", "pdhp#8", "t210.9#vagga-gatha-num-sc9.8", "t212.30#vagga-gatha-num-sc30.17", "t213.29#vagga-gatha-num-sc29.16", "uv29#29.16"],
+              "parallels": ["dhp#8", "gdhp#218", "pdhp#8", "t210.9#vagga-gatha-num-sc9.8", "t212.30#vagga-gatha-num-sc30.17", "t213.29#vagga-gatha-num-sc29.16", "uv29#29.16"]
+          },
+          {
               "mentions": ["dhp#8", "pe3#25"]
           },
           {
               "parallels": ["dhp#80", "dhp#145", "mn86#31", "t210.14#vagga-gatha-num-sc14.7", "t212.18#vagga-gatha-num-sc18.9", "t213.17#vagga-gatha-num-sc17.10", "thag1.19#verse-num-sc19", "thag16.8#verse-num-sc877", "uv17#17.10"]
           },
           {
-              "parallels": ["dhp#81", "gdhp#239", "pdhp#93", "t210.14#vagga-gatha-num-sc14.8", "t212.30#vagga-gatha-num-sc30.39", "t213.29#vagga-gatha-num-sc29.43", "uv29#29.49", "~thag13.1#verse-num-sc643"],
+              "parallels": ["dhp#81", "gdhp#239", "pdhp#93", "t210.14#vagga-gatha-num-sc14.8", "t212.30#vagga-gatha-num-sc30.39", "t213.29#vagga-gatha-num-sc29.43", "uv29#29.49", "~thag13.1#verse-num-sc643"]
+          },
+          {
               "mentions": ["dhp#81", "mil7.4.5#2"]
           },
           {
@@ -11487,7 +11743,9 @@
               "parallels": ["dhp#93", "pdhp#270", "t210.9#vagga-gatha-num-sc15.4", "t212.30#vagga-gatha-num-sc30.28", "t213.29#vagga-gatha-num-sc29.26", "t213.29#vagga-gatha-num-sc29.30", "thag1.92", "uv29#29.29"]
           },
           {
-              "parallels": ["dhp#94", "pdhp#89", "t210.15#vagga-gatha-num-sc15.5", "t210.31#vagga-gatha-num-sc31.16", "t212.20#vagga-gatha-num-sc20.2", "t213.19#vagga-gatha-num-sc19.3-#vagga-gatha-num-sc19.4", "uv19#19.3", "~thag2.43#verse-num-sc205"],
+              "parallels": ["dhp#94", "pdhp#89", "t210.15#vagga-gatha-num-sc15.5", "t210.31#vagga-gatha-num-sc31.16", "t212.20#vagga-gatha-num-sc20.2", "t213.19#vagga-gatha-num-sc19.3-#vagga-gatha-num-sc19.4", "uv19#19.3", "~thag2.43#verse-num-sc205"]
+          },
+          {
               "mentions": ["dhp#94", "ne37#328", "pe2#101"]
           },
           {
@@ -11497,7 +11755,9 @@
               "parallels": ["dhp#96", "pdhp#88", "t210.15#vagga-gatha-num-sc15.7", "t212.32#vagga-gatha-num-sc32.39", "t213.31#vagga-gatha-num-sc31.33", "uv31#31.45", "~sn7.2#4", "~thag6.12#verse-num-sc441"]
           },
           {
-              "parallels": ["dhp#97", "pdhp#333", "t210.15#vagga-gatha-num-sc15.8", "t212.30#vagga-gatha-num-sc30.24", "t213.29#vagga-gatha-num-sc29.22", "uv29#29.23"],
+              "parallels": ["dhp#97", "pdhp#333", "t210.15#vagga-gatha-num-sc15.8", "t212.30#vagga-gatha-num-sc30.24", "t213.29#vagga-gatha-num-sc29.22", "uv29#29.23"]
+          },
+          {
               "mentions": ["dhp#97", "mnd10#75"]
           },
           {
@@ -11667,7 +11927,9 @@
               "parallels": ["sn10.9#2-#3", "thig3.6#1-#2"]
           },
           {
-              "parallels": ["sn14.16#9-#11", "thag2.14#verse-num-sc147-#verse-num-sc148", "thag3.16#verse-num-sc265-#verse-num-sc266", "sa446", "sa448", "iti78#6-#8"],
+              "parallels": ["sn14.16#9-#11", "thag2.14#verse-num-sc147-#verse-num-sc148", "thag3.16#verse-num-sc265-#verse-num-sc266", "sa446", "sa448", "iti78#6-#8"]
+          },
+          {
               "mentions": ["sn14.16#9-#11", "~mil7.7.4#6"]
           },
           {
@@ -13458,11 +13720,15 @@
               "mentions": ["an1.268-277#271.1", "ne21#14"]
           },
           {
-              "parallels": ["an1.268-277#277.1", "dn28#37", "mn115#14"],
+              "parallels": ["an1.268-277#277.1", "dn28#37", "mn115#14"]
+          },
+          {
               "mentions": ["an1.268-277#277.1", "mil6.1.1#1", "ne21#16", "vb16#355"]
           },
           {
-              "parallels": ["an1.306-315#314.1", "an10.104", "sa787-788"],
+              "parallels": ["an1.306-315#314.1", "an10.104", "sa787-788"]
+          },
+          {
               "mentions": ["an1.306-315#314.1", "kv14.8#8"]
           },
           {
@@ -13472,11 +13738,15 @@
               "parallels": ["an1.394-574#439.1", "dn16#129", "mn77#37", "an8.119#1", "~an10.29#6", "~an8.65#1"]
           },
           {
-              "parallels": ["an1.41-50#43.1", "iti20#2"],
+              "parallels": ["an1.41-50#43.1", "iti20#2"]
+          },
+          {
               "mentions": ["an1.41-50#43.1", "ne37#29"]
           },
           {
-              "parallels": ["an1.41-50#44.1", "iti21#2"],
+              "parallels": ["an1.41-50#44.1", "iti21#2"]
+          },
+          {
               "mentions": ["an1.41-50#44.1", "ne37#109"]
           },
           {
@@ -13516,15 +13786,21 @@
               "mentions": ["an10.177#2", "mil6.3.4#1"]
           },
           {
-              "parallels": ["an10.19#1", "dn33#342", "dn34#213"],
+              "parallels": ["an10.19#1", "dn33#342", "dn34#213"]
+          },
+          {
               "mentions": ["an10.19#1", "mnd1#81"]
           },
           {
-              "parallels": ["an10.2#1", "an11.2#1"],
+              "parallels": ["an10.2#1", "an11.2#1"]
+          },
+          {
               "mentions": ["an10.2#1", "ne37#165"]
           },
           {
-              "parallels": ["an10.21#3", "an6.64#1", "mn12#9"],
+              "parallels": ["an10.21#3", "an6.64#1", "mn12#9"]
+          },
+          {
               "mentions": ["an10.21#3", "ps2.9#29", "vb16#171"]
           },
           {
@@ -13552,7 +13828,9 @@
               "mentions": ["an10.31#2", "pi-tv-pvr1.1#61", "pi-tv-pvr9#1"]
           },
           {
-              "parallels": ["an10.33#1", "pi-tv-kd14#160"],
+              "parallels": ["an10.33#1", "pi-tv-kd14#160"]
+          },
+          {
               "mentions": ["an10.33#1", "pi-tv-pvr7#135"]
           },
           {
@@ -13562,14 +13840,18 @@
               "parallels": ["an10.38#1", "pi-tv-kd17#124"]
           },
           {
-              "parallels": ["an10.39#3", "iti18#3", "pi-tv-kd17#145"],
+              "parallels": ["an10.39#3", "iti18#3", "pi-tv-kd17#145"]
+          },
+          {
               "mentions": ["an10.39#3", "kv13.1#5", "kv20.1#11"]
           },
           {
               "parallels": ["an10.40#3", "iti19#3", "pi-tv-kd17#147"]
           },
           {
-              "parallels": ["an10.44#2", "pi-tv-bu-vb-ss13#6", "pi-tv-kd19#76"],
+              "parallels": ["an10.44#2", "pi-tv-bu-vb-ss13#6", "pi-tv-kd19#76"]
+          },
+          {
               "mentions": ["an10.44#2", "pi-tv-pvr17#87"]
           },
           {
@@ -13582,7 +13864,9 @@
               "parallels": ["an10.61#4", "an3.95#6", "an10.61#8", "an10.62#4", "an10.62#8", "an4.147#2", "sn55.38", "sn12.23#7"]
           },
           {
-              "parallels": ["an10.69#1", "dn1#41", "dn2#64", "mn76#2", "pi-tv-bu-vb-pc85#1", "sn56.10#1", "pi-tv-kd5#31"],
+              "parallels": ["an10.69#1", "dn1#41", "dn2#64", "mn76#2", "pi-tv-bu-vb-pc85#1", "sn56.10#1", "pi-tv-kd5#31"]
+          },
+          {
               "mentions": ["an10.69#1", "cnd23#161", "mnd14#128"]
           },
           {
@@ -13616,15 +13900,21 @@
               "mentions": ["an10.72#6", "kv2.5#46"]
           },
           {
-              "parallels": ["an10.79#1", "an9.29#1", "an10.80#1", "an9.30#1", "dn33#305", "dn34#189"],
+              "parallels": ["an10.79#1", "an9.29#1", "an10.80#1", "an9.30#1", "dn33#305", "dn34#189"]
+          },
+          {
               "mentions": ["an10.79#1", "cnd7#62", "ds2.3.2#87", "mnd10#17", "vb17#308", "vb17#316"]
           },
           {
-              "parallels": ["an10.89#15", "snp3.10#8", "sn6.10#6"],
+              "parallels": ["an10.89#15", "snp3.10#8", "sn6.10#6"]
+          },
+          {
               "mentions": ["an10.89#15", "ne37#437"]
           },
           {
-              "parallels": ["an10.90", "an8.28", "~sn50.1-12", "~sa694-698"],
+              "parallels": ["an10.90", "an8.28", "~sn50.1-12", "~sa694-698"]
+          },
+          {
               "mentions": ["an10.90", "ps2.9#1-#27"]
           },
           {
@@ -13646,29 +13936,39 @@
               "parallels": ["an10.99#6-#7", "mn38#wp28-#wp29"]
           },
           {
-              "parallels": ["an11.11#3", "an6.10#2"],
+              "parallels": ["an11.11#3", "an6.10#2"]
+          },
+          {
               "mentions": ["an11.11#3", "ne13#8"]
           },
           {
               "parallels": ["an11.12#4", "an6.8#1", "dn33#232"]
           },
           {
-              "parallels": ["an11.15#1", "an8.1#1"],
+              "parallels": ["an11.15#1", "an8.1#1"]
+          },
+          {
               "mentions": ["an11.15#1", "mil5.4.6#1", "pi-tv-pvr7#144", "ps2.4#1"]
           },
           {
-              "parallels": ["an11.2#7", "sn22.5#1", "sn35.99#1", "sn56.1#1"],
+              "parallels": ["an11.2#7", "sn22.5#1", "sn35.99#1", "sn56.1#1"]
+          },
+          {
               "mentions": ["an11.2#7", "mil3.1.14#3", "ne14#8", "pe5#51"]
           },
           {
-              "parallels": ["an2.1-10#1.3", "mn129#4", "mn13#11"],
+              "parallels": ["an2.1-10#1.3", "mn129#4", "mn13#11"]
+          },
+          {
               "mentions": ["an2.1-10#1.3", "mnd15#6", "mnd7#56", "cnd20#10", "cnd23#31"]
           },
           {
               "mentions": ["an2.1-10#2.1", "ne37#312"]
           },
           {
-              "parallels": ["an2.1-10#5.1", "mn70#25", "sn12.22#2"],
+              "parallels": ["an2.1-10#5.1", "mn70#25", "sn12.22#2"]
+          },
+          {
               "mentions": ["an2.1-10#5.1", "mnd16#134", "mnd3#17", "cnd23#306"]
           },
           {
@@ -13684,7 +13984,9 @@
               "mentions": ["an2.280-309#280.1", "pi-tv-pvr21#18"]
           },
           {
-              "parallels": ["an2.32-41#36.2", "dn2#49", "mn6#2", "sn47.46#2"],
+              "parallels": ["an2.32-41#36.2", "dn2#49", "mn6#2", "sn47.46#2"]
+          },
+          {
               "mentions": ["an2.32-41#36.2", "mil7.3.2#3", "vb12#1"]
           },
           {
@@ -13703,11 +14005,15 @@
               "mentions": ["an3.111#1", "cnd7#4"]
           },
           {
-              "parallels": ["an3.116#1", "an4.123#1"],
+              "parallels": ["an3.116#1", "an4.123#1"]
+          },
+          {
               "mentions": ["an3.116#1", "kv13.7#5", "pp2.4#21"]
           },
           {
-              "parallels": ["an3.122#4", "iti67#3"],
+              "parallels": ["an3.122#4", "iti67#3"]
+          },
+          {
               "mentions": ["an3.122#4", "cnd8#52-#53", "mnd2#119-#120", "mnd13#149-#150"]
           },
           {
@@ -13726,15 +14032,21 @@
               "mentions": ["an3.26#2", "pp2.3#44"]
           },
           {
-              "parallels": ["an3.28#1", "mn114#8", "mn41#9"],
+              "parallels": ["an3.28#1", "mn114#8", "mn41#9"]
+          },
+          {
               "mentions": ["an3.28#1", "cnd22#7", "mnd14#202", "mnd7#48", "pp2.3#15"]
           },
           {
-              "parallels": ["an3.3#1", "mn129#2"],
+              "parallels": ["an3.3#1", "mn129#2"]
+          },
+          {
               "mentions": ["an3.3#1", "ne37#399", "pe3#14"]
           },
           {
-              "parallels": ["an3.3#2", "mn129#22"],
+              "parallels": ["an3.3#2", "mn129#22"]
+          },
+          {
               "mentions": ["an3.3#2", "ne37#400"]
           },
           {
@@ -13756,18 +14068,24 @@
               "parallels": ["an3.36#1", "mn130#7"]
           },
           {
-              "parallels": ["an3.36#16-#17", "mn129#10-#11", "mn130#24-#25", "ja530#18-#19"],
+              "parallels": ["an3.36#16-#17", "mn129#10-#11", "mn130#24-#25", "ja530#18-#19"]
+          },
+          {
               "mentions": ["an3.36#16-#17", "pv10#13-#14", "mnd15#9-#10", "cnd23#35-#36", "kv20.3#8-#9", "pv19#14-#15", "pv38#37-#38"]
           },
           {
-              "parallels": ["an3.47", "~ea22.5"],
+              "parallels": ["an3.47", "~ea22.5"]
+          },
+          {
               "mentions": ["an3.47", "kv1.1#319-#320"]
           },
           {
               "parallels": ["an3.51#3", "~sn2.19#2-#3", "~sn1.3#2-#3"]
           },
           {
-              "parallels": ["an3.60#8", "dn11#4-#5"],
+              "parallels": ["an3.60#8", "dn11#4-#5"]
+          },
+          {
               "mentions": ["an3.60#8", "ps3.6#1-#2"]
           },
           {
@@ -13777,15 +14095,21 @@
               "mentions": ["an3.66#47", "kv1.6#97"]
           },
           {
-              "parallels": ["an3.67#1", "dn33#103"],
+              "parallels": ["an3.67#1", "dn33#103"]
+          },
+          {
               "mentions": ["an3.67#1", "kv15.3#7"]
           },
           {
-              "parallels": ["an3.69#1", "sn45.1#2"],
+              "parallels": ["an3.69#1", "sn45.1#2"]
+          },
+          {
               "mentions": ["an3.69#1", "ne37#479", "~pi-tv-pvr7#33"]
           },
           {
-              "parallels": ["an3.69#9", "sn45.1#3"],
+              "parallels": ["an3.69#9", "sn45.1#3"]
+          },
+          {
               "mentions": ["an3.69#9", "ne37#471", "~pi-tv-pvr7#33"]
           },
           {
@@ -13798,11 +14122,15 @@
               "parallels": ["an3.85#3-#4", "iti102#3-#4", "iti62#3-#4"]
           },
           {
-              "parallels": ["an3.86", "sa821"],
+              "parallels": ["an3.86", "sa821"]
+          },
+          {
               "mentions": ["an3.86", "~cnd5#44-#47", "~mnd2#55-#59"]
           },
           {
-              "parallels": ["an3.90#6-#7", "thag6.4#verse-num-sc397"],
+              "parallels": ["an3.90#6-#7", "thag6.4#verse-num-sc397"]
+          },
+          {
               "mentions": ["an3.90#6-#7", "ne5#34"]
           },
           {
@@ -13857,19 +14185,27 @@
               "mentions": ["an4.161#1", "pe9#30"]
           },
           {
-              "parallels": ["an4.17#1", "dn33#137"],
+              "parallels": ["an4.17#1", "dn33#137"]
+          },
+          {
               "mentions": ["an4.17#1", "pi-tv-pvr7#52", "vb17#223"]
           },
           {
-              "parallels": ["an4.17#2", "dn31#9"],
+              "parallels": ["an4.17#2", "dn31#9"]
+          },
+          {
               "mentions": ["an4.17#2", "ne37#8", "pe3#22"]
           },
           {
-              "parallels": ["an4.170", "sa560"],
+              "parallels": ["an4.170", "sa560"]
+          },
+          {
               "mentions": ["an4.170", "ps2.1#1-#7"]
           },
           {
-              "parallels": ["an4.171#1-#5", "sn12.25#10-#14"],
+              "parallels": ["an4.171#1-#5", "sn12.25#10-#14"]
+          },
+          {
               "mentions": ["an4.171#1-#5", "~kv8.9#38"]
           },
           {
@@ -13900,7 +14236,9 @@
               "mentions": ["an4.199#3", "vb17#323"]
           },
           {
-              "parallels": ["an4.200#9", "mn109#9", "mn44#8", "sn22.44#1", "sn41.3#5"],
+              "parallels": ["an4.200#9", "mn109#9", "mn44#8", "sn22.44#1", "sn41.3#5"]
+          },
+          {
               "mentions": ["an4.200#9", "ne20#4", "ps1.2#65", "vb17#136"]
           },
           {
@@ -13922,7 +14260,9 @@
               "parallels": ["an4.23#2-#5", "dn29#46", "iti112#3-#6"]
           },
           {
-              "parallels": ["an4.232", "dn33#147", "mn57#6"],
+              "parallels": ["an4.232", "dn33#147", "mn57#6"]
+          },
+          {
               "mentions": ["an4.232", "ne37#305"]
           },
           {
@@ -13932,25 +14272,33 @@
               "parallels": ["an4.25#2-#3", "iti35#3-#4"]
           },
           {
-              "parallels": ["an4.250#1", "dn33#161"],
+              "parallels": ["an4.250#1", "dn33#161"]
+          },
+          {
               "mentions": ["an4.250#1", "pi-tv-pvr7#47", "vb17#225"]
           },
           {
               "parallels": ["an4.256", "an4.32#1", "an8.24#1", "dn33#158"]
           },
           {
-              "parallels": ["an4.26", "iti108"],
+              "parallels": ["an4.26", "iti108"]
+          },
+          {
               "mentions": ["an4.26", "mnd6#44-#46"]
           },
           {
-              "parallels": ["an4.28#1-#3", "dn33#121-#123"],
+              "parallels": ["an4.28#1-#3", "dn33#121-#123"]
+          },
+          {
               "mentions": ["an4.28#1-#3", "mnd16#222-#224"]
           },
           {
               "mentions": ["an4.29#1-#4", "ne37#390"]
           },
           {
-              "parallels": ["an4.30#8", "mn117#16", "sn22.62#13"],
+              "parallels": ["an4.30#8", "mn117#16", "sn22.62#13"]
+          },
+          {
               "mentions": ["an4.30#8", "kv1.6#94"]
           },
           {
@@ -13966,7 +14314,9 @@
               "parallels": ["sn35.120#3-#5", "mn39#8-#10", "sn35.127#4", "sn35.240#2", "an3.16#2-#4", "an4.37#3-#5"]
           },
           {
-              "parallels": ["sn35.120#3", "dn2#76", "dn3#39", "dn4#62", "dn5#96", "dn6#23", "dn7#2", "dn8#42", "dn9#13", "dn10#17", "dn11#15", "dn12#20", "dn13#59", "mn27#33", "mn38#105", "mn51#17", "mn53#4", "mn60#27", "mn76#22", "mn79#40", "mn94#22", "mn101#41", "mn107#4", "mn112#15", "an4.14#1", "an4.165#4", "an4.198#11", "an5.76#18", "an5.140#11", "an10.99#20", "an11.17#6", "mn39#8", "sn35.127#4", "sn35.240#2", "an3.16#2", "an4.37#3", "mn33#20"],
+              "parallels": ["sn35.120#3", "dn2#76", "dn3#39", "dn4#62", "dn5#96", "dn6#23", "dn7#2", "dn8#42", "dn9#13", "dn10#17", "dn11#15", "dn12#20", "dn13#59", "mn27#33", "mn38#105", "mn51#17", "mn53#4", "mn60#27", "mn76#22", "mn79#40", "mn94#22", "mn101#41", "mn107#4", "mn112#15", "an4.14#1", "an4.165#4", "an4.198#11", "an5.76#18", "an5.140#11", "an10.99#20", "an11.17#6", "mn39#8", "sn35.127#4", "sn35.240#2", "an3.16#2", "an4.37#3", "mn33#20"]
+          },
+          {
               "mentions": ["sn35.120#3", "mnd14#100", "mnd14#103", "kv18.9#4", "kv10.3#6"]
           },
           {
@@ -14006,7 +14356,9 @@
               "mentions": ["an4.51#1-#4", "kv7.5#12"]
           },
           {
-              "parallels": ["an4.52#5-#7", "an5.47#7-#9", "sn11.14#4-#6", "sn55.26#20-#22", "thag8.2#verse-num-sc507-#verse-num-sc509"],
+              "parallels": ["an4.52#5-#7", "an5.47#7-#9", "sn11.14#4-#6", "sn55.26#20-#22", "thag8.2#verse-num-sc507-#verse-num-sc509"]
+          },
+          {
               "mentions": ["an4.52#5-#7", "pe3#57-#59", "~tha-ap65#3"]
           },
           {
@@ -14019,18 +14371,24 @@
               "parallels": ["an4.67#5-#10", "ja203", "pi-tv-kd15#27-#32"]
           },
           {
-              "parallels": ["an4.68#6", "pi-tv-kd17#29", "sn17.35#7", "sn6.12#2"],
+              "parallels": ["an4.68#6", "pi-tv-kd17#29", "sn17.35#7", "sn6.12#2"]
+          },
+          {
               "mentions": ["an4.68#6", "ne37#25"]
           },
           {
-              "parallels": ["an4.70#3-#4", "ja334#3-#4"],
+              "parallels": ["an4.70#3-#4", "ja334#3-#4"]
+          },
+          {
               "mentions": ["an4.70#3-#4", "ne37#20-#21", "ne37#72-#73"]
           },
           {
               "parallels": ["an4.76#2-#6", "dn16#232"]
           },
           {
-              "parallels": ["an4.85", "sn3.21#1-#9"],
+              "parallels": ["an4.85", "sn3.21#1-#9"]
+          },
+          {
               "mentions": ["an4.85", "ne37#268", "pe8#163-#167", "pp2.4#88-#91"]
           },
           {
@@ -14043,7 +14401,9 @@
               "mentions": ["an4.88#2-#5", "pp2.4#148-#151"]
           },
           {
-              "parallels": ["an4.9#2-#3", "iti105#3-#4", "iti15#3-#4", "snp3.12#verse-num-sc746-#verse-num-sc747"],
+              "parallels": ["an4.9#2-#3", "iti105#3-#4", "iti15#3-#4", "snp3.12#verse-num-sc746-#verse-num-sc747"]
+          },
+          {
               "mentions": ["an4.9#2-#3", "cnd22#41-#42", "mnd16#42-#43", "~cnd23#159", "cnd23#9-#10"]
           },
           {
@@ -14065,7 +14425,9 @@
               "parallels": ["an5.121#3", "an9.16#1"]
           },
           {
-              "parallels": ["an5.130", "dn33#181-#182"],
+              "parallels": ["an5.130", "dn33#181-#182"]
+          },
+          {
               "mentions": ["an5.130", "~pi-tv-pvr7#63", "pi-tv-pvr17#142-#143"]
           },
           {
@@ -14075,7 +14437,9 @@
               "parallels": ["an5.143#5", "an5.195#5"]
           },
           {
-              "parallels": ["an5.149", "an5.150"],
+              "parallels": ["an5.149", "an5.150"]
+          },
+          {
               "mentions": ["an5.149", "kv1.2#125"]
           },
           {
@@ -14091,7 +14455,9 @@
               "parallels": ["an5.209", "pi-tv-kd15#20"]
           },
           {
-              "parallels": ["an5.210", "pi-tv-kd8#114-#115"],
+              "parallels": ["an5.210", "pi-tv-kd8#114-#115"]
+          },
+          {
               "mentions": ["an5.210", "kv2.1#42"]
           },
           {
@@ -14128,18 +14494,24 @@
               "parallels": ["an5.50#17", "~an5.48#7-#10", "~ja368#2-#5"]
           },
           {
-              "parallels": ["an6.1#2", "dn33#214", "mn140#9"],
+              "parallels": ["an6.1#2", "dn33#214", "mn140#9"]
+          },
+          {
               "mentions": ["an6.1#2", "ps3.2#24", "mnd13#126", "cnd8#15"]
           },
           {
-              "parallels": ["an6.11", "dn33#217-#222", "an6.12", "ea37.1", "t1536.15d"],
+              "parallels": ["an6.11", "dn33#217-#222", "an6.12", "ea37.1", "t1536.15d"]
+          },
+          {
               "mentions": ["an6.11", "pi-tv-pvr4#18-#23"]
           },
           {
               "parallels": ["an6.2", "ea37.5", "dn34#91-#71"]
           },
           {
-              "parallels": ["an6.36", "t1536.15c", "dn33#223-#224", "mn104#6-#7", "pi-tv-kd14#108-#109"],
+              "parallels": ["an6.36", "t1536.15c", "dn33#223-#224", "mn104#6-#7", "pi-tv-kd14#108-#109"]
+          },
+          {
               "mentions": ["an6.36", "pi-tv-pvr4#14-#15"]
           },
           {
@@ -14155,11 +14527,15 @@
               "mentions": ["an6.54#28-#29", "pe3#74"]
           },
           {
-              "parallels": ["an6.55#20-#22", "pi-tv-kd5#18-#20"],
+              "parallels": ["an6.55#20-#22", "pi-tv-kd5#18-#20"]
+          },
+          {
               "mentions": ["an6.55#20-#22", "kv1.2#121-#123"]
           },
           {
-              "parallels": ["an6.57", "t1536.16d", "~dn33#235"],
+              "parallels": ["an6.57", "t1536.16d", "~dn33#235"]
+          },
+          {
               "mentions": ["an6.57", "~ne37#301"]
           },
           {
@@ -14175,7 +14551,9 @@
               "parallels": ["an6.63#8", "~mn13#4-#12", "~mn14#5-#13"]
           },
           {
-              "parallels": ["an6.63#9", "~sn1.34#4"],
+              "parallels": ["an6.63#9", "~sn1.34#4"]
+          },
+          {
               "mentions": ["an6.63#9", "kv8.4#4"]
           },
           {
@@ -14203,18 +14581,24 @@
               "parallels": ["an7.40", "~an6.72#1", "~an6.24"]
           },
           {
-              "parallels": ["an7.44", "ea39.5", "dn33#248-#254", "dn34#98-#107"],
+              "parallels": ["an7.44", "ea39.5", "dn33#248-#254", "dn34#98-#107"]
+          },
+          {
               "mentions": ["an7.44", "cnd18#22-#28"]
           },
           {
-              "parallels": ["an7.58#2-#3", "dn33#76"],
+              "parallels": ["an7.58#2-#3", "dn33#76"]
+          },
+          {
               "mentions": ["an7.58#2-#3", "mil5.3.4#1"]
           },
           {
               "mentions": ["an7.61#11", "mnd14#198"]
           },
           {
-              "parallels": ["an7.62#1-#2", "iti22#2-#3"],
+              "parallels": ["an7.62#1-#2", "iti22#2-#3"]
+          },
+          {
               "mentions": ["an7.62#1-#2", "~ne37#464"]
           },
           {
@@ -14242,7 +14626,9 @@
               "mentions": ["an7.85", "cnd5#64", "mnd3#27"]
           },
           {
-              "parallels": ["an8.1#4-#7", "iti27#7-#10", "~ja451#10"],
+              "parallels": ["an8.1#4-#7", "iti27#7-#10", "~ja451#10"]
+          },
+          {
               "mentions": ["an8.1#4-#7", "~pe3#29", "~mil7.6.2#4"]
           },
           {
@@ -14252,11 +14638,15 @@
               "mentions": ["an8.14#10-#17", "vb17#297-#304"]
           },
           {
-              "parallels": ["an8.16", "pi-tv-kd17#88-#91"],
+              "parallels": ["an8.16", "pi-tv-kd17#88-#91"]
+          },
+          {
               "mentions": ["an8.16", "pe5#16-#18"]
           },
           {
-              "parallels": ["an8.19#10-#18", "pi-tv-kd19#16-#23", "ud5.5#9-#26", "an8.20#7-#9"],
+              "parallels": ["an8.19#10-#18", "pi-tv-kd19#16-#23", "ud5.5#9-#26", "an8.20#7-#9"]
+          },
+          {
               "mentions": ["an8.19#10-#18", "~mil7.3.10#5", "~kv2.9#22", "~kv12.8#5"]
           },
           {
@@ -14293,14 +14683,18 @@
               "mentions": ["an8.40", "kv22.7#1-#2"]
           },
           {
-              "parallels": ["an8.5#1", "dn33#286"],
+              "parallels": ["an8.5#1", "dn33#286"]
+          },
+          {
               "mentions": ["an8.5#1", "ne37#326"]
           },
           {
               "parallels": ["an8.51#11-#18", "pi-tv-bu-vb-pc21#18", "pi-tv-kd20#7-#14"]
           },
           {
-              "parallels": ["an8.51#26", "pi-tv-kd20#28"],
+              "parallels": ["an8.51#26", "pi-tv-kd20#28"]
+          },
+          {
               "mentions": ["an8.51#26", "mil5.1.7#1"]
           },
           {
@@ -14313,7 +14707,9 @@
               "parallels": ["an8.54#15-#18", "an8.75#2-#5"]
           },
           {
-              "parallels": ["an8.56", "ea-2.28", "~an6.23"],
+              "parallels": ["an8.56", "ea-2.28", "~an6.23"]
+          },
+          {
               "mentions": ["an8.56", "cnd23#179-#182"]
           },
           {
@@ -14326,11 +14722,15 @@
               "parallels": ["an8.65#1", "~an1.394-574#439.1", "~dn16#129", "~mn77#37", "~an8.119#1"]
           },
           {
-              "parallels": ["an8.7#2-#6", "pi-tv-kd17#92-#93", "~an6.62#2"],
+              "parallels": ["an8.7#2-#6", "pi-tv-kd17#92-#93", "~an6.62#2"]
+          },
+          {
               "mentions": ["an8.7#2-#6", "~pi-tv-pvr7#113"]
           },
           {
-              "parallels": ["an8.70", "ma36", "ea42.5", "dn16#107-#177", "~sn51.10", "~ud6.1"],
+              "parallels": ["an8.70", "ma36", "ea42.5", "dn16#107-#177", "~sn51.10", "~ud6.1"]
+          },
+          {
               "mentions": ["an8.70", "~mil5.1.10", "~kv11.5#6", "~mil5.1.4#1-#2"]
           },
           {
@@ -14361,14 +14761,18 @@
               "parallels": ["an9.28#1", "sn55.29", "sa845"]
           },
           {
-              "parallels": ["an9.31", "dn33#326"],
+              "parallels": ["an9.31", "dn33#326"]
+          },
+          {
               "mentions": ["an9.31", "kv2.5#44"]
           },
           {
               "parallels": ["an9.32", "dn34#176-#178", "~dn33#326"]
           },
           {
-              "parallels": ["mn64#17-#21", "mn52#7-#15", "an9.36#2-#9", "an11.16#4-#9"],
+              "parallels": ["mn64#17-#21", "mn52#7-#15", "an9.36#2-#9", "an11.16#4-#9"]
+          },
+          {
               "mentions": ["an9.36#2", "cnd5#564", "mnd14#11", "cnd15#7"]
           },
           {
@@ -14543,7 +14947,9 @@
               "mentions": ["dn1#7", "~mil5.3.10#1"]
           },
           {
-              "parallels": ["dn10#43-#44", "mn77#51"],
+              "parallels": ["dn10#43-#44", "mn77#51"]
+          },
+          {
               "mentions": ["dn10#43-#44", "ps3.2#16"]
           },
           {
@@ -14554,14 +14960,18 @@
           },
           {
               "parallels": ["dn14#136-#153", "sn6.1", "ea19.1", "mn26#34-#43", "mn85#36-#46", "~pi-tv-kd1#25-#51", "~lal16", "~ma204", "~sht-sutta60", "~skt-mu-kd17#sbvi128-#sbvi136", "~mn85", "~sht-sutta33", "~lzh-mi-bu-vb-sk1-100#t-linehead0074b12", "~skt-lo-mvu94"],
-              "mentions": ["dn14#136-#153", "~cnd19#14-#15", "~mnd14#65", "~kv19.8#9", "~mil5.5.10#1", "~mnd16#31-#32"],
               "remarks": "lal16: In addition to the Chinese counterparts to the Lalitavistara and the Saṅghabhedavastu, T 186 at T iii 527a, T 187 at T iii 603a, and T 191 at T iii 952c, several other Buddha biographies parallel some of the events described in MN 26; e.g. T 188 at T iii 620b, T 189 at T iii 642c, T 190 at T iii 806a, T 196 at T iv 147c. | New edition <span class='author'>Vaidya</span> 1958b. sht-sutta33: Folio 35 identified in SHT viii p. 162., lzh-mi-bu-vb-sk1-100#t-linehead0074b12: embedded parallel uid t1421.10"
+          },
+          {
+              "mentions": ["dn14#136-#153", "~cnd19#14-#15", "~mnd14#65", "~kv19.8#9", "~mil5.5.10#1", "~mnd16#31-#32"]
           },
           {
               "parallels": ["dn14#138-#139", "mn85#37-#38", "mn26#35-#36", "sn6.1#2-#3", "pi-tv-kd1#26-#27"]
           },
           {
-              "parallels": ["dn14#149-#150", "mn85#42-#43", "mn26#39-#40", "iti38#8", "pi-tv-kd1#31-#32", "sn6.1#7-#8"],
+              "parallels": ["dn14#149-#150", "mn85#42-#43", "mn26#39-#40", "iti38#8", "pi-tv-kd1#31-#32", "sn6.1#7-#8"]
+          },
+          {
               "mentions": ["dn14#149-#150", "mnd14#66", "~mnd16#32", "~cnd19#15"]
           },
           {
@@ -14571,7 +14981,9 @@
               "mentions": ["dn14#178", "~kv18.1#3"]
           },
           {
-              "parallels": ["dn16#117", "an8.70#11", "sn51.10#18", "ud6.1#17"],
+              "parallels": ["dn16#117", "an8.70#11", "sn51.10#18", "ud6.1#17"]
+          },
+          {
               "mentions": ["dn16#117", "ne14#22", "pe3#38"]
           },
           {
@@ -14581,15 +14993,21 @@
               "parallels": ["dn16#165-#170", "~pi-tv-kd6#170-#173"]
           },
           {
-              "parallels": ["dn16#174-#175", "ud8.5#8-#9"],
+              "parallels": ["dn16#174-#175", "ud8.5#8-#9"]
+          },
+          {
               "mentions": ["dn16#174-#175", "~mil5.3.6#2"]
           },
           {
-              "parallels": ["dn16#187-#193", "ud8.5#14-#23"],
+              "parallels": ["dn16#187-#193", "ud8.5#14-#23"]
+          },
+          {
               "mentions": ["dn16#187-#193", "~mil5.3.6#3"]
           },
           {
-              "parallels": ["dn16#193", "ud8.5#23"],
+              "parallels": ["dn16#193", "ud8.5#23"]
+          },
+          {
               "mentions": ["dn16#193", "pe2#30", "~pe8#281"]
           },
           {
@@ -14608,7 +15026,9 @@
               "mentions": ["dn16#228", "~mil5.1.7#1"]
           },
           {
-              "parallels": ["dn16#231", "~pi-tv-kd21#27-#33"],
+              "parallels": ["dn16#231", "~pi-tv-kd21#27-#33"]
+          },
+          {
               "mentions": ["dn16#231", "~mil5.1.1#12", "~mil5.2.1"]
           },
           {
@@ -14621,7 +15041,9 @@
               "parallels": ["dn16#257-#258", "pi-tv-kd21#2-#4"]
           },
           {
-              "parallels": ["dn16#56-#84", "pi-tv-kd6#95-#114", "~ud8.6", "~dn33#183-#184", "~an5.213"],
+              "parallels": ["dn16#56-#84", "pi-tv-kd6#95-#114", "~ud8.6", "~dn33#183-#184", "~an5.213"]
+          },
+          {
               "mentions": ["dn16#56-#84", "~kv5.8#5", "~ne37#367-#369"]
           },
           {
@@ -14676,22 +15098,30 @@
               "parallels": ["sn22.4", "sa552"]
           },
           {
-              "parallels": ["dn22#132", "mn10#131", "sn47.1#2"],
+              "parallels": ["dn22#132", "mn10#131", "sn47.1#2"]
+          },
+          {
               "mentions": ["dn22#132", "kv1.9#10"]
           },
           {
-              "parallels": ["dn22#15", "mn10#13"],
+              "parallels": ["dn22#15", "mn10#13"]
+          },
+          {
               "mentions": ["dn22#15", "ne17#22", "vb7#2"]
           },
           {
               "parallels": ["dn22#81", "mn10#80", "mn9#11"]
           },
           {
-              "parallels": ["dn22#82-#127", "~mn9#11"],
+              "parallels": ["dn22#82-#127", "~mn9#11"]
+          },
+          {
               "mentions": ["dn22#82-#127", "ps1.1#180-#202", "vb4#2-#51", "~mnd6#39"]
           },
           {
-              "parallels": ["dn22#95", "~pi-tv-kd1#72"],
+              "parallels": ["dn22#95", "~pi-tv-kd1#72"]
+          },
+          {
               "mentions": ["dn22#95", "~kv13.10#6", "~kv13.9#8"]
           },
           {
@@ -14719,11 +15149,15 @@
               "mentions": ["dn30#97", "~mil5.5.5#1"]
           },
           {
-              "parallels": ["dn31#9-#10", "an4.19#3-#4", "~an4.18#2"],
+              "parallels": ["dn31#9-#10", "an4.19#3-#4", "~an4.18#2"]
+          },
+          {
               "mentions": ["dn31#9-#10", "~ne37#8", "~pe3#22"]
           },
           {
-              "parallels": ["dn33#118", "arv10"],
+              "parallels": ["dn33#118", "arv10"]
+          },
+          {
               "mentions": ["dn33#118", "cnd23#94"]
           },
           {
@@ -14757,7 +15191,9 @@
               "mentions": ["dn34#17-#19", "pe6#27"]
           },
           {
-              "parallels": ["dn34#29", "~dn33#51"],
+              "parallels": ["dn34#29", "~dn33#51"]
+          },
+          {
               "mentions": ["dn34#29", "kv18.7#16", "kv9.7#3"]
           },
           {
@@ -14809,7 +15245,9 @@
               "parallels": ["mn31#1-#7", "mn128#15-#19"]
           },
           {
-              "parallels": ["iti100#2", "~mn92#23", "~snp3.7#verse-num-sc560"],
+              "parallels": ["iti100#2", "~mn92#23", "~snp3.7#verse-num-sc560"]
+          },
+          {
               "mentions": ["iti100#2", "mil5.5.3#1", "mil5.5.8#1", "~mil5.3.10#2"]
           },
           {
@@ -14840,11 +15278,15 @@
               "mentions": ["iti62#2", "~pe3#35"]
           },
           {
-              "parallels": ["iti88#1-#10", "~an7.64#12-#13"],
+              "parallels": ["iti88#1-#10", "~an7.64#12-#13"]
+          },
+          {
               "mentions": ["iti88#1-#10", "mnd1#56-#62", "mnd16#99-#105", "mnd14#78-#84", "cnd23#104-#110"]
           },
           {
-              "parallels": ["iti89", "pi-tv-kd17#94-#101"],
+              "parallels": ["iti89", "pi-tv-kd17#94-#101"]
+          },
+          {
               "mentions": ["iti89", "~pi-tv-pvr7#33"]
           },
           {
@@ -14863,7 +15305,9 @@
               "parallels": ["ja197#2", "ja473#6"]
           },
           {
-              "parallels": ["ja222#2", "ja353#2"],
+              "parallels": ["ja222#2", "ja353#2"]
+          },
+          {
               "mentions": ["ja222#2", "pe2#83"]
           },
           {
@@ -14897,7 +15341,9 @@
               "parallels": ["ja309", "~pi-tv-bu-vb-sk69#4-#7"]
           },
           {
-              "parallels": ["ja310", "ja433#2-#5"],
+              "parallels": ["ja310", "ja433#2-#5"]
+          },
+          {
               "mentions": ["ja310", "~mil5.5.5#4"]
           },
           {
@@ -14923,7 +15369,9 @@
               "mentions": ["ja351#1-#3", "mnd15#161-#163", "mnd6#40-#41"]
           },
           {
-              "parallels": ["ja352#5-#7", "ja372#5-#7", "ja410#7-#9", "ja449#8-#10"],
+              "parallels": ["ja352#5-#7", "ja372#5-#7", "ja410#7-#9", "ja449#8-#10"]
+          },
+          {
               "mentions": ["ja352#5-#7", "pv8#5-#7", "vv83#8-#10", "pv17#8-#10"]
           },
           {
@@ -14966,7 +15414,9 @@
               "mentions": ["ja451#9", "~mil5.3.11#1"]
           },
           {
-              "parallels": ["ja452#7", "ja493#17", "ja528#30", "ja538#10", "ja546#233"],
+              "parallels": ["ja452#7", "ja493#17", "ja528#30", "ja538#10", "ja546#233"]
+          },
+          {
               "mentions": ["ja452#7", "pv21#3"]
           },
           {
@@ -14980,7 +15430,9 @@
               "retells": ["ja457", "cp18"]
           },
           {
-              "parallels": ["ja458#13-#14", "sn1.75", "sa-2.314", "sa1315"],
+              "parallels": ["ja458#13-#14", "sn1.75", "sa-2.314", "sa1315"]
+          },
+          {
               "mentions": ["ja458#13-#14", "ne37#498-#499"]
           },
           {
@@ -15011,7 +15463,9 @@
               "retells": ["ja488", "cp24"]
           },
           {
-              "parallels": ["ja489#14", "thig2.7#1-#2"],
+              "parallels": ["ja489#14", "thig2.7#1-#2"]
+          },
+          {
               "mentions": ["ja489#14", "vv15#6-#7"]
           },
           {
@@ -15138,11 +15592,15 @@
               "mentions": ["mn1#25", "kv9.2#13"]
           },
           {
-              "parallels": ["mn100#8-#31", "mn26#16-#25", "mn36#2-#34", "~mn85", "~mn20", "~mn4#18-#21", "~ma101"],
+              "parallels": ["mn100#8-#31", "mn26#16-#25", "mn36#2-#34", "~mn85", "~mn20", "~mn4#18-#21", "~ma101"]
+          },
+          {
               "mentions": ["mn100#8-#31", "~mil5.5.11#3"]
           },
           {
-              "parallels": ["mn101#43-#50", "mn27#35-#42", "mn38#107-#108", "mn51#19-#23", "mn94#24-#28", "~an4.198#13-#14"],
+              "parallels": ["mn101#43-#50", "mn27#35-#42", "mn38#107-#108", "mn51#19-#23", "mn94#24-#28", "~an4.198#13-#14"]
+          },
+          {
               "mentions": ["mn101#43-#50", "pp2.4#127-#131"]
           },
           {
@@ -15189,15 +15647,21 @@
               "mentions": ["mn129#5", "ne37#450"]
           },
           {
-              "parallels": ["mn13#4-#12", "mn14#5-#13", "~mn139#17", "~sn36.20#2", "~sn36.19#6", "~an6.63#8"],
+              "parallels": ["mn13#4-#12", "mn14#5-#13", "~mn139#17", "~sn36.20#2", "~sn36.19#6", "~an6.63#8"]
+          },
+          {
               "mentions": ["mn13#4-#12", "~kv8.3#9", "~cnd23#166"]
           },
           {
-              "parallels": ["mn130#23", "an3.36#13-#15"],
+              "parallels": ["mn130#23", "an3.36#13-#15"]
+          },
+          {
               "mentions": ["mn130#23", "cnd23#32-#33", "mnd15#7-#8", "~mil3.4.6#2"]
           },
           {
-              "parallels": ["mn131#2-#5", "mn132#4-#7", "mn133#5-#8", "mn134#2-#5"],
+              "parallels": ["mn131#2-#5", "mn132#4-#7", "mn133#5-#8", "mn134#2-#5"]
+          },
+          {
               "mentions": ["mn131#2-#5", "ne37#216-#219", "tha-ap550#20-#23"]
           },
           {
@@ -15225,21 +15689,27 @@
               "mentions": ["mn14#18", "kv11.6#4"]
           },
           {
-              "parallels": ["mn140#33", "sn35.248#3"],
+              "parallels": ["mn140#33", "sn35.248#3"]
+          },
+          {
               "mentions": ["mn140#33", "mnd6#89"]
           },
           {
               "mentions": ["mn142#1", "kv17.9#3", "mil6.1.2#1"]
           },
           {
-              "parallels": ["mn142#11-#17", "an4.78"],
+              "parallels": ["mn142#11-#17", "an4.78"]
+          },
+          {
               "mentions": ["mn142#11-#17", "~kv17.11#6"]
           },
           {
               "mentions": ["mn142#19", "mil6.1.8#9"]
           },
           {
-              "parallels": ["mn143#16-19", "sn2.20#2-#5", "sn1.48"],
+              "parallels": ["mn143#16-19", "sn2.20#2-#5", "sn1.48"]
+          },
+          {
               "mentions": ["mn143#16-19", "ne37#211-#214"]
           },
           {
@@ -15258,7 +15728,9 @@
               "mentions": ["mn19#11", "kv1.1#220"]
           },
           {
-              "parallels": ["mn2#2", "sn12.23#1", "iti102#2", "sn22.101#1", "sn56.25#1"],
+              "parallels": ["mn2#2", "sn12.23#1", "iti102#2", "sn22.101#1", "sn56.25#1"]
+          },
+          {
               "mentions": ["mn2#2", "kv2.3#16", "kv2.2#27"]
           },
           {
@@ -15274,7 +15746,9 @@
               "parallels": ["mn22#1-#10", "pi-tv-bu-vb-pc68#1-#4", "pi-tv-kd11#297-#302"]
           },
           {
-              "parallels": ["mn22#14", "pi-tv-bu-vb-pc68#4", "pi-tv-kd11#302"],
+              "parallels": ["mn22#14", "pi-tv-bu-vb-pc68#4", "pi-tv-kd11#302"]
+          },
+          {
               "mentions": ["mn22#14", "cnd23#248"]
           },
           {
@@ -15290,7 +15764,9 @@
               "parallels": ["mn26#44-#61", "mn85#47-#63", "pi-tv-kd1#53-#68"]
           },
           {
-              "parallels": ["mn26#49-#51", "mn85#52-#54", "pi-tv-kd1#58-#60"],
+              "parallels": ["mn26#49-#51", "mn85#52-#54", "pi-tv-kd1#58-#60"]
+          },
+          {
               "mentions": ["mn26#49-#51", "kv4.8#17-#19", "~mil5.5.11#2"]
           },
           {
@@ -15309,7 +15785,9 @@
               "mentions": ["mn33#6", "kv12.1#7"]
           },
           {
-              "parallels": ["mn35#5", "~sn22.15", "~sa10", "~sa9", "~sn22.16", "~sn22.17", "~up6.005"],
+              "parallels": ["mn35#5", "~sn22.15", "~sa10", "~sa9", "~sn22.16", "~sn22.17", "~up6.005"]
+          },
+          {
               "mentions": ["mn35#5", "~kv23.5#2", "~kv2.8#7", "~kv1.1#340"]
           },
           {
@@ -15334,7 +15812,9 @@
               "mentions": ["mn54#17", "mnd1#23", "mnd1#76"]
           },
           {
-              "parallels": ["dn8#15-#17", "dn25#11", "mn12#42-#44", "mn45#5-#7", "mn51#9-#11", "mn60#24", "an3.156-162#2-#4", "an4.198#2-#4"],
+              "parallels": ["dn8#15-#17", "dn25#11", "mn12#42-#44", "mn45#5-#7", "mn51#9-#11", "mn60#24", "an3.156-162#2-#4", "an4.198#2-#4"]
+          },
+          {
               "mentions": ["an3.156-162#2-#4", "mnd15#68", "pp2.4#110"]
           },
           {
@@ -15362,7 +15842,9 @@
               "mentions": ["mn66#1", "kv16.3#3"]
           },
           {
-              "parallels": ["mn67#1", "ud3.3#1-#4"],
+              "parallels": ["mn67#1", "ud3.3#1-#4"]
+          },
+          {
               "mentions": ["mn67#1", "~mil5.3.12#1"]
           },
           {
@@ -15414,7 +15896,9 @@
               "parallels": ["mn85#41", "mn26#38", "pi-tv-kd1#30", "sn6.1#6"]
           },
           {
-              "parallels": ["mn85#56", "mn26#53", "pi-tv-kd1#62"],
+              "parallels": ["mn85#56", "mn26#53", "pi-tv-kd1#62"]
+          },
+          {
               "mentions": ["mn85#56", "kv4.8#21", "ne37#441"]
           },
           {
@@ -15427,11 +15911,15 @@
               "parallels": ["mn9#11", "~dn22#82-#127"]
           },
           {
-              "parallels": ["mn92#17-#46", "snp3.7#verse-num-sc554-#verse-num-sc579", "thag16.6#verse-num-sc818-#verse-num-sc837", "~pi-tv-kd6#160-#161"],
+              "parallels": ["mn92#17-#46", "snp3.7#verse-num-sc554-#verse-num-sc579", "thag16.6#verse-num-sc818-#verse-num-sc837", "~pi-tv-kd6#160-#161"]
+          },
+          {
               "mentions": ["mn92#17-#46", "~pe2#127"]
           },
           {
-              "parallels": ["mn92#23", "snp3.7#verse-num-sc560", "~iti100#2"],
+              "parallels": ["mn92#23", "snp3.7#verse-num-sc560", "~iti100#2"]
+          },
+          {
               "mentions": ["mn92#23", "mil5.3.10#2", "~mil5.5.8#1"]
           },
           {
@@ -15441,11 +15929,15 @@
               "parallels": ["mn95#4-#22", "~dn4#17-#45", "~dn5#22-#50"]
           },
           {
-              "parallels": ["mn98#65", "snp3.9#verse-num-sc659", "ud3.10#8"],
+              "parallels": ["mn98#65", "snp3.9#verse-num-sc659", "ud3.10#8"]
+          },
+          {
               "mentions": ["mn98#65", "ne37#295", "pe2#25"]
           },
           {
-              "parallels": ["mn98#66", "snp3.9#verse-num-sc660"],
+              "parallels": ["mn98#66", "snp3.9#verse-num-sc660"]
+          },
+          {
               "mentions": ["mn98#66", "kv17.3#5"]
           },
           {
@@ -15566,7 +16058,9 @@
               "mentions": ["pi-tv-bu-vb-np15#2", "~mil6.4.2#57"]
           },
           {
-              "parallels": ["pi-tv-bu-vb-pc1#9-#13", "pi-tv-bu-vb-pj4#52-#56"],
+              "parallels": ["pi-tv-bu-vb-pc1#9-#13", "pi-tv-bu-vb-pj4#52-#56"]
+          },
+          {
               "mentions": ["pi-tv-bu-vb-pc1#9-#13", "~mnd7#49"]
           },
           {
@@ -15636,25 +16130,33 @@
               "parallels": ["pi-tv-bu-vb-ss10#1-#6", "pi-tv-kd17#68-#73"]
           },
           {
-              "parallels": ["pi-tv-bu-vb-ss13#1", "pi-tv-kd11#118", "pi-tv-kd15#195"],
+              "parallels": ["pi-tv-bu-vb-ss13#1", "pi-tv-kd11#118", "pi-tv-kd15#195"]
+          },
+          {
               "mentions": ["pi-tv-bu-vb-ss13#1", "cnd23#86", "mnd14#144"]
           },
           {
               "parallels": ["pi-tv-bu-vb-ss8#1-#17", "pi-tv-kd14#23-#36"]
           },
           {
-              "parallels": ["pi-tv-kd1#12", "ud1.3#5"],
+              "parallels": ["pi-tv-kd1#12", "ud1.3#5"]
+          },
+          {
               "mentions": ["pi-tv-kd1#12", "ne37#245", "kv2.3#24"]
           },
           {
               "parallels": ["pi-tv-kd1#14", "ud1.4#1-#3"]
           },
           {
-              "parallels": ["pi-tv-kd1#15", "ud1.4#4"],
+              "parallels": ["pi-tv-kd1#15", "ud1.4#4"]
+          },
+          {
               "mentions": ["pi-tv-kd1#15", "ne37#232"]
           },
           {
-              "parallels": ["pi-tv-kd1#18-#19", "ud2.1#5-#6"],
+              "parallels": ["pi-tv-kd1#18-#19", "ud2.1#5-#6"]
+          },
+          {
               "mentions": ["pi-tv-kd1#18-#19", "kv2.8#13-#15", "pe2#123-#124"]
           },
           {
@@ -15667,11 +16169,15 @@
               "parallels": ["pi-tv-kd1#218", "pi-tv-kd16#68-#69"]
           },
           {
-              "parallels": ["pi-tv-kd1#226", "pi-tv-kd1#232"],
+              "parallels": ["pi-tv-kd1#226", "pi-tv-kd1#232"]
+          },
+          {
               "mentions": ["pi-tv-kd1#226", "tha-ap3#151"]
           },
           {
-              "parallels": ["pi-tv-kd1#230", "pi-tv-kd1#224"],
+              "parallels": ["pi-tv-kd1#230", "pi-tv-kd1#224"]
+          },
+          {
               "mentions": ["pi-tv-kd1#230", "pe1#90", "tha-ap3#148"]
           },
           {
@@ -15693,28 +16199,36 @@
               "parallels": ["pi-tv-kd1#336-#350", "pi-tv-kd18#102-#113"]
           },
           {
-              "parallels": ["pi-tv-kd1#377-#379", "~pi-tv-kd1#387-#399"],
+              "parallels": ["pi-tv-kd1#377-#379", "~pi-tv-kd1#387-#399"]
+          },
+          {
               "mentions": ["pi-tv-kd1#377-#379", "pi-tv-pvr17#6-#7"]
           },
           {
               "parallels": ["pi-tv-kd1#387-#399", "~pi-tv-kd1#377-#379"]
           },
           {
-              "parallels": ["pi-tv-kd1#6", "ud1.1#4"],
+              "parallels": ["pi-tv-kd1#6", "ud1.1#4"]
+          },
+          {
               "mentions": ["pi-tv-kd1#6", "ne37#167", "kv2.3#22"]
           },
           {
               "parallels": ["pi-tv-kd1#72", "~dn22#95"]
           },
           {
-              "parallels": ["pi-tv-kd1#9", "ud1.2#4"],
+              "parallels": ["pi-tv-kd1#9", "ud1.2#4"]
+          },
+          {
               "mentions": ["pi-tv-kd1#9", "ne37#169", "kv2.3#23"]
           },
           {
               "parallels": ["pi-tv-kd10#48-#52", "~mn31", "~ma185"]
           },
           {
-              "parallels": ["pi-tv-kd11#104", "pi-tv-kd11#155", "pi-tv-kd11#200", "pi-tv-kd11#237", "pi-tv-kd11#284", "pi-tv-kd11#326", "pi-tv-kd11#47"],
+              "parallels": ["pi-tv-kd11#104", "pi-tv-kd11#155", "pi-tv-kd11#200", "pi-tv-kd11#237", "pi-tv-kd11#284", "pi-tv-kd11#326", "pi-tv-kd11#47"]
+          },
+          {
               "mentions": ["pi-tv-kd11#104", "pi-tv-pvr17#24"]
           },
           {
@@ -15733,7 +16247,9 @@
               "parallels": ["pi-tv-kd12#96", "~pi-tv-kd9#33"]
           },
           {
-              "parallels": ["pi-tv-kd14#102-#224", "~pi-tv-kd14#152-159"],
+              "parallels": ["pi-tv-kd14#102-#224", "~pi-tv-kd14#152-159"]
+          },
+          {
               "mentions": ["pi-tv-kd14#102-#224", "pi-tv-pvr11", "~pi-tv-pvr5#5-#155", "~pi-tv-pvr4#14-#26"]
           },
           {
@@ -15776,7 +16292,9 @@
               "mentions": ["pi-tv-kd2#65", "~mil5.4.2#1"]
           },
           {
-              "parallels": ["pi-tv-kd21#27-#33", "an3.125#2", "~dn16#231"],
+              "parallels": ["pi-tv-kd21#27-#33", "an3.125#2", "~dn16#231"]
+          },
+          {
               "mentions": ["pi-tv-kd21#27-#33", "mil5.2.1", "kv18.2#4", "mnd11#61"]
           },
           {
@@ -15865,7 +16383,9 @@
               "retells": ["skt-lo-mvu51", "cp13"]
           },
           {
-              "parallels": ["sn1.1#2", "sn2.18#6"],
+              "parallels": ["sn1.1#2", "sn2.18#6"]
+          },
+          {
               "mentions": ["sn1.1#2", "mnd15#165"]
           },
           {
@@ -15875,11 +16395,15 @@
               "mentions": ["sn1.17#1", "ne37#47"]
           },
           {
-              "parallels": ["sn1.17#3", "sn35.240#3"],
+              "parallels": ["sn1.17#3", "sn35.240#3"]
+          },
+          {
               "mentions": ["sn1.17#3", "mil7.2.6#7"]
           },
           {
-              "parallels": ["sn1.21#2", "thag1.39#verse-num-sc39", "sn2.16#2", "thag1.40#verse-num-sc40", "thag20.1#verse-num-sc1172"],
+              "parallels": ["sn1.21#2", "thag1.39#verse-num-sc39", "sn2.16#2", "thag1.40#verse-num-sc40", "thag20.1#verse-num-sc1172"]
+          },
+          {
               "mentions": ["sn1.21#2", "pe2#104", "ne37#181"]
           },
           {
@@ -15895,11 +16419,15 @@
               "mentions": ["sn1.66#1", "ne6#4"]
           },
           {
-              "parallels": ["sn1.66#2", "thag6.13#verse-num-sc448"],
+              "parallels": ["sn1.66#2", "thag6.13#verse-num-sc448"]
+          },
+          {
               "mentions": ["sn1.66#2", "ne6#6", "mnd15#43"]
           },
           {
-              "parallels": ["sn1.72#2", "ja547#189"],
+              "parallels": ["sn1.72#2", "ja547#189"]
+          },
+          {
               "mentions": ["sn1.72#2", "cnd22#54"]
           },
           {
@@ -15933,7 +16461,9 @@
               "mentions": ["sn12.20#2", "kv6.2#3"]
           },
           {
-              "parallels": ["sn12.38", "sa359"],
+              "parallels": ["sn12.38", "sa359"]
+          },
+          {
               "mentions": ["sn12.38", "ne37#274-#276"]
           },
           {
@@ -15985,7 +16515,9 @@
               "parallels": ["sn14.15#3-#5", "iti78#2-#5"]
           },
           {
-              "parallels": ["sn14.16#11", "iti78#8", "thag2.14#verse-num-sc148", "thag3.16#verse-num-sc264"],
+              "parallels": ["sn14.16#11", "iti78#8", "thag2.14#verse-num-sc148", "thag3.16#verse-num-sc264"]
+          },
+          {
               "mentions": ["sn14.16#11", "mil7.7.4#6"]
           },
           {
@@ -16016,7 +16548,9 @@
               "mentions": ["sn2.15#4", "ne37#188"]
           },
           {
-              "parallels": ["sn2.19#2-#3", "sn1.3#2-#3", "~an3.51#3"],
+              "parallels": ["sn2.19#2-#3", "sn1.3#2-#3", "~an3.51#3"]
+          },
+          {
               "mentions": ["sn2.19#2-#3", "~ne37#184-#185"]
           },
           {
@@ -16032,7 +16566,9 @@
               "mentions": ["sn21.12#3-#4", "ne37#251-#252"]
           },
           {
-              "parallels": ["sn21.4#5-#6", "thag20.1#verse-num-sc1175-#verse-num-sc1176"],
+              "parallels": ["sn21.4#5-#6", "thag20.1#verse-num-sc1175-#verse-num-sc1176"]
+          },
+          {
               "mentions": ["sn21.4#5-#6", "ne37#254-#255"]
           },
           {
@@ -16042,7 +16578,9 @@
               "mentions": ["sn21.9#3", "ne37#171"]
           },
           {
-              "parallels": ["sn22.25", "sa77", "sn23.9"],
+              "parallels": ["sn22.25", "sa77", "sn23.9"]
+          },
+          {
               "mentions": ["sn22.25", "cnd11#53", "mnd11#91", "mnd2#106", "mnd2#114"]
           },
           {
@@ -16064,19 +16602,27 @@
               "mentions": ["sn22.49#2-#3", "ne37#377-#378"]
           },
           {
-              "parallels": ["sn22.54#2", "sn22.53#1"],
+              "parallels": ["sn22.54#2", "sn22.53#1"]
+          },
+          {
               "mentions": ["sn22.54#2", "mnd2#7", "cnd18#21"]
           },
           {
-              "parallels": ["sn22.58#5", "~mn108", "~ma145"],
+              "parallels": ["sn22.58#5", "~mn108", "~ma145"]
+          },
+          {
               "mentions": ["sn22.58#5", "cnd19#7-#8", "mnd8#78-#79", "mnd14#60-#61", "mil5.4.10#1", "ps3.1#24-#25", "mil5.5.4#1", "mnd16#26-#27", "ne37#263"]
           },
           {
-              "parallels": ["sn22.58", "sa75"],
+              "parallels": ["sn22.58", "sa75"]
+          },
+          {
               "mentions": ["sn22.58", "ne37#260-#263"]
           },
           {
-              "parallels": ["sn22.59#2-#5", "pi-tv-kd1#89-#93"],
+              "parallels": ["sn22.59#2-#5", "pi-tv-kd1#89-#93"]
+          },
+          {
               "mentions": ["sn22.59#2-#5", "cnd19#37-#41"]
           },
           {
@@ -16104,7 +16650,9 @@
               "mentions": ["sn3.2#2", "cnd23#112", "mnd1#64", "mnd16#107", "mnd14#86"]
           },
           {
-              "parallels": ["sn3.2#3", "iti50#3"],
+              "parallels": ["sn3.2#3", "iti50#3"]
+          },
+          {
               "mentions": ["sn3.2#3", "cnd23#113", "mnd1#65", "mnd16#108", "mnd14#87"]
           },
           {
@@ -16114,7 +16662,9 @@
               "mentions": ["sn3.4#4-#5", "ne37#425-#426", "ne37#447-#448"]
           },
           {
-              "parallels": ["sn3.8#4", "ud5.1#6"],
+              "parallels": ["sn3.8#4", "ud5.1#6"]
+          },
+          {
               "mentions": ["sn3.8#4", "ne37#337"]
           },
           {
@@ -16139,7 +16689,9 @@
               "mentions": ["sn35.114#1", "mnd2#6"]
           },
           {
-              "parallels": ["sn35.135", "sa210"],
+              "parallels": ["sn35.135", "sa210"]
+          },
+          {
               "mentions": ["sn35.135", "ne37#454-#456", "kv2.8#5-#6", "~pe2#113"]
           },
           {
@@ -16149,11 +16701,15 @@
               "mentions": ["sn35.151#1-#3", "cnd23#102-#103", "mnd1#53-#54", "mnd14#76-#77", "mnd16#96-#97"]
           },
           {
-              "parallels": ["sn35.26#1", "iti7#2"],
+              "parallels": ["sn35.26#1", "iti7#2"]
+          },
+          {
               "mentions": ["sn35.26#1", "kv2.2#29"]
           },
           {
-              "parallels": ["sn35.28", "sa197", "sn22.61", "pi-tv-kd1#198", "~sf270"],
+              "parallels": ["sn35.28", "sa197", "sn22.61", "pi-tv-kd1#198", "~sf270"]
+          },
+          {
               "mentions": ["sn35.28", "kv2.8#3"]
           },
           {
@@ -16166,11 +16722,15 @@
               "mentions": ["sn35.83#2", "kv1.6#95"]
           },
           {
-              "parallels": ["sn35.85", "sa232"],
+              "parallels": ["sn35.85", "sa232"]
+          },
+          {
               "mentions": ["sn35.85", "mnd15#183", "cnd19#50", "kv1.1#347", "ps2.10#2"]
           },
           {
-              "parallels": ["sn35.87#11", "ud8.4#3"],
+              "parallels": ["sn35.87#11", "ud8.4#3"]
+          },
+          {
               "mentions": ["sn35.87#11", "pe5#76", "pe1#135", "ne15#14"]
           },
           {
@@ -16183,7 +16743,9 @@
               "parallels": ["sn36.19#6", "~mn13#4-#12", "~mn14#5-#13"]
           },
           {
-              "parallels": ["sn36.20#2", "~mn13#4-#12", "~mn14#5-#13"],
+              "parallels": ["sn36.20#2", "~mn13#4-#12", "~mn14#5-#13"]
+          },
+          {
               "mentions": ["sn36.20#2", "kv2.8#4"]
           },
           {
@@ -16199,7 +16761,9 @@
               "mentions": ["sn4.18#1", "mil5.2.5#1"]
           },
           {
-              "parallels": ["sn4.20#4", "sn4.21#4"],
+              "parallels": ["sn4.20#4", "sn4.21#4"]
+          },
+          {
               "mentions": ["sn4.20#4", "pe1#121", "ne14#24"]
           },
           {
@@ -16212,7 +16776,9 @@
               "parallels": ["~sn4.9#2", "dn19#87-#91"]
           },
           {
-              "parallels": ["sn4.9#2", "~dn19#87-#91"],
+              "parallels": ["sn4.9#2", "~dn19#87-#91"]
+          },
+          {
               "mentions": ["sn4.9#2", "mnd6#17", "mnd2#79"]
           },
           {
@@ -16246,14 +16812,18 @@
               "mentions": ["sn46.53#15", "mil3.1.13#4"]
           },
           {
-              "parallels": ["sn47.18#6", "sn47.43#6"],
+              "parallels": ["sn47.18#6", "sn47.43#6"]
+          },
+          {
               "mentions": ["sn47.18#6", "cnd23#14", "mnd16#47", "cnd22#46", "ne37#516"]
           },
           {
               "mentions": ["sn47.2#2", "mil7.3.7#1"]
           },
           {
-              "parallels": ["sn47.46#3", "sn47.3#2"],
+              "parallels": ["sn47.46#3", "sn47.3#2"]
+          },
+          {
               "mentions": ["sn47.46#3", "ne8#6"]
           },
           {
@@ -16278,7 +16848,9 @@
               "mentions": ["sn48.44", "mnd10#72-#74"]
           },
           {
-              "parallels": ["sn48.6", "~sn48.34"],
+              "parallels": ["sn48.6", "~sn48.34"]
+          },
+          {
               "mentions": ["sn48.6", "ps1.4#8-#10"]
           },
           {
@@ -16300,7 +16872,9 @@
               "mentions": ["sn56.2#1", "mil7.6.5#1"]
           },
           {
-              "parallels": ["sn56.21#4-#5", "dn16#83-#84", "pi-tv-kd6#113-#114"],
+              "parallels": ["sn56.21#4-#5", "dn16#83-#84", "pi-tv-kd6#113-#114"]
+          },
+          {
               "mentions": ["sn56.21#4-#5", "ne37#368-#369"]
           },
           {
@@ -16319,7 +16893,9 @@
               "mentions": ["sn56.7#2", "mil7.3.5#4"]
           },
           {
-              "parallels": ["sn6.10", "sa1278", "sa-2.276", "ea21.5", "sn6.9", "snp3.10#1-#verse-num-sc666", "an10.89#1-#10", "~an4.3#3-#5"],
+              "parallels": ["sn6.10", "sa1278", "sa-2.276", "ea21.5", "sn6.9", "snp3.10#1-#verse-num-sc666", "an10.89#1-#10", "~an4.3#3-#5"]
+          },
+          {
               "mentions": ["sn6.10", "~ne37#53-#58"]
           },
           {
@@ -16347,29 +16923,39 @@
               "parallels": ["sn7.6#2-#5", "sn1.23", "sa-2.173", "sa599"]
           },
           {
-              "parallels": ["sn7.6#3", "sn1.23#2"],
+              "parallels": ["sn7.6#3", "sn1.23#2"]
+          },
+          {
               "mentions": ["sn7.6#3", "pe2#69", "mil3.1.9#6"]
           },
           {
               "mentions": ["sn7.9#14", "cnd7#61"]
           },
           {
-              "parallels": ["sn8.10#3", "thag21.1#verse-num-sc1259"],
+              "parallels": ["sn8.10#3", "thag21.1#verse-num-sc1259"]
+          },
+          {
               "mentions": ["sn8.10#3", "cnd17#7", "cnd22#50"]
           },
           {
               "parallels": ["sn8.2#2-#6", "thag21.1#verse-num-sc1224-#verse-num-sc1228"]
           },
           {
-              "parallels": ["snp1.10#verse-num-sc186", "sn10.12#5"],
+              "parallels": ["snp1.10#verse-num-sc186", "sn10.12#5"]
+          },
+          {
               "mentions": ["snp1.10#verse-num-sc186", "~mil3.1.10", "~mil3.1.11#3"]
           },
           {
-              "parallels": ["snp1.10#verse-num-sc188-#verse-num-sc189", "sn10.12#7-#8"],
+              "parallels": ["snp1.10#verse-num-sc188-#verse-num-sc189", "sn10.12#7-#8"]
+          },
+          {
               "mentions": ["snp1.10#verse-num-sc188-#verse-num-sc189", "ne37#190-#191"]
           },
           {
-              "parallels": ["snp1.10#verse-num-sc194", "sn10.12#13"],
+              "parallels": ["snp1.10#verse-num-sc194", "sn10.12#13"]
+          },
+          {
               "mentions": ["snp1.10#verse-num-sc194", "tha-ap8#153", "tha-ap420#17"]
           },
           {
@@ -16382,7 +16968,9 @@
               "mentions": ["snp1.2#verse-num-sc29", "mil7.2.4#2"]
           },
           {
-              "parallels": ["snp1.2#verse-num-sc33-#verse-num-sc34", "sn4.8#2-#3", "sn1.12#2-#3"],
+              "parallels": ["snp1.2#verse-num-sc33-#verse-num-sc34", "sn4.8#2-#3", "sn1.12#2-#3"]
+          },
+          {
               "mentions": ["snp1.2#verse-num-sc33-#verse-num-sc34", "ne9#14-#16", "pe2#165-#166"]
           },
           {
@@ -16425,7 +17013,9 @@
               "mentions": ["snp1.3#verse-num-sc49", "cnd23#157", "tha-ap2#24"]
           },
           {
-              "parallels": ["snp1.3#verse-num-sc50", "thag16.4#verse-num-sc787", "mn82#48"],
+              "parallels": ["snp1.3#verse-num-sc50", "thag16.4#verse-num-sc787", "mn82#48"]
+          },
+          {
               "mentions": ["snp1.3#verse-num-sc50", "cnd23#165", "tha-ap2#25", "~pe2#94"]
           },
           {
@@ -16513,7 +17103,9 @@
               "mentions": ["snp1.7#verse-num-sc116", "ps1.2#117"]
           },
           {
-              "parallels": ["snp1.9#verse-num-sc173", "sn1.30#2"],
+              "parallels": ["snp1.9#verse-num-sc173", "sn1.30#2"]
+          },
+          {
               "mentions": ["snp1.9#verse-num-sc173", "kv8.3#4"]
           },
           {
@@ -16538,11 +17130,15 @@
               "mentions": ["snp2.13#verse-num-sc368", "pe2#146"]
           },
           {
-              "parallels": ["snp2.5#verse-num-sc273-#verse-num-sc276", "sn10.3#3-#6"],
+              "parallels": ["snp2.5#verse-num-sc273-#verse-num-sc276", "sn10.3#3-#6"]
+          },
+          {
               "mentions": ["snp2.5#verse-num-sc273-#verse-num-sc276", "ne37#197-#200", "~mnd14#90"]
           },
           {
-              "parallels": ["snp2.5#verse-num-sc274", "sn10.3#4"],
+              "parallels": ["snp2.5#verse-num-sc274", "sn10.3#4"]
+          },
+          {
               "mentions": ["snp2.5#verse-num-sc274", "cnd23#116", "mnd1#68", "mnd16#111", "ne37#198"]
           },
           {
@@ -16567,14 +17163,18 @@
               "mentions": ["snp3.2#verse-num-sc439-#verse-num-sc442", "cnd11#11-#13", "mnd4#49-##52", "~mnd13#142", "mnd8#67"]
           },
           {
-              "parallels": ["snp3.3#verse-num-sc453", "sn8.5#3"],
+              "parallels": ["snp3.3#verse-num-sc453", "sn8.5#3"]
+          },
+          {
               "mentions": ["snp3.3#verse-num-sc453", "pe3#46"]
           },
           {
               "parallels": ["snp3.4#verse-num-sc467-#verse-num-sc468", "sn7.9#3-#4"]
           },
           {
-              "parallels": ["snp3.4#verse-num-sc485-#verse-num-sc486", "snp1.4#verse-num-sc81-#verse-num-sc82", "sn7.11#9-#10", "sn7.8#8-#9", "sn7.9#7-#8"],
+              "parallels": ["snp3.4#verse-num-sc485-#verse-num-sc486", "snp1.4#verse-num-sc81-#verse-num-sc82", "sn7.11#9-#10", "sn7.8#8-#9", "sn7.9#7-#8"]
+          },
+          {
               "mentions": ["snp3.4#verse-num-sc485-#verse-num-sc486", "~mil5.5.9#2"]
           },
           {
@@ -16602,7 +17202,9 @@
               "mentions": ["snp3.8#verse-num-sc583-#verse-num-sc587", "mnd6#23-#27"]
           },
           {
-              "parallels": ["snp4.1#verse-num-sc773", "ja467#1"],
+              "parallels": ["snp4.1#verse-num-sc773", "ja467#1"]
+          },
+          {
               "mentions": ["snp4.1#verse-num-sc773", "mnd1#2", "ne15#40", "ne4#3", "pe2#75", "mnd1#12"]
           },
           {
@@ -17221,7 +17823,9 @@
               "mentions": ["snp4.9#verse-num-sc850", "mnd9#62", "mnd9#68"]
           },
           {
-              "parallels": ["snp4.9#verse-num-sc851", "sn22.3#2"],
+              "parallels": ["snp4.9#verse-num-sc851", "sn22.3#2"]
+          },
+          {
               "mentions": ["snp4.9#verse-num-sc851", "mnd9#69", "mnd9#88"]
           },
           {
@@ -17288,11 +17892,15 @@
               "mentions": ["snp5.13#verse-num-sc1111", "cnd16#22", "cnd2#73"]
           },
           {
-              "parallels": ["snp5.14#verse-num-sc1113", "an3.33#4"],
+              "parallels": ["snp5.14#verse-num-sc1113", "an3.33#4"]
+          },
+          {
               "mentions": ["snp5.14#verse-num-sc1113", "cnd17#18", "cnd2#75"]
           },
           {
-              "parallels": ["snp5.14#verse-num-sc1114", "an3.33#5"],
+              "parallels": ["snp5.14#verse-num-sc1114", "an3.33#5"]
+          },
+          {
               "mentions": ["snp5.14#verse-num-sc1114", "cnd17#26", "cnd2#76"]
           },
           {
@@ -17449,7 +18057,9 @@
               "mentions": ["snp5.2#verse-num-sc1044", "cnd2#6", "cnd5#35", "ne16#10", "ne5#26", "pe5#10"]
           },
           {
-              "parallels": ["snp5.2#verse-num-sc1045", "sn12.31#2"],
+              "parallels": ["snp5.2#verse-num-sc1045", "sn12.31#2"]
+          },
+          {
               "mentions": ["snp5.2#verse-num-sc1045", "cnd2#7", "ne5#37", "cnd5#41", "pe5#12"]
           },
           {
@@ -17462,7 +18072,9 @@
               "mentions": ["snp5.3#verse-num-sc1048", "cnd2#10", "cnd6#10"]
           },
           {
-              "parallels": ["snp5.3#verse-num-sc1049", "~an6.61#2"],
+              "parallels": ["snp5.3#verse-num-sc1049", "~an6.61#2"]
+          },
+          {
               "mentions": ["snp5.3#verse-num-sc1049", "cnd2#11", "cnd6#18"]
           },
           {
@@ -17481,7 +18093,9 @@
               "mentions": ["snp5.4#verse-num-sc1054", "cnd2#16", "cnd7#50"]
           },
           {
-              "parallels": ["snp5.4#verse-num-sc1055", "an3.32#6", "an4.41#6"],
+              "parallels": ["snp5.4#verse-num-sc1055", "an3.32#6", "an4.41#6"]
+          },
+          {
               "mentions": ["snp5.4#verse-num-sc1055", "cnd2#17", "cnd7#57"]
           },
           {
@@ -17662,11 +18276,15 @@
               "mentions": ["thag10.6#verse-num-sc577", "mil7.2.6#5"]
           },
           {
-              "parallels": ["thag11.1#verse-num-sc606-#verse-num-sc607", "thag14.1#verse-num-sc654-#verse-num-sc655", "~thag2.38#verse-num-sc196"],
+              "parallels": ["thag11.1#verse-num-sc606-#verse-num-sc607", "thag14.1#verse-num-sc654-#verse-num-sc655", "~thag2.38#verse-num-sc196"]
+          },
+          {
               "mentions": ["thag11.1#verse-num-sc606-#verse-num-sc607", "mil3.2.4#3-#4"]
           },
           {
-              "parallels": ["thag16.4#verse-num-sc786", "mn82#47"],
+              "parallels": ["thag16.4#verse-num-sc786", "mn82#47"]
+          },
+          {
               "mentions": ["thag16.4#verse-num-sc786", "ne37#16", "ne9#5"]
           },
           {
@@ -17688,7 +18306,9 @@
               "mentions": ["thag18.1#verse-num-sc1058-#verse-num-sc1060", "mil7.5.6#2-#4"]
           },
           {
-              "parallels": ["thag2.11#verse-num-sc142", "sn6.13#2"],
+              "parallels": ["thag2.11#verse-num-sc142", "sn6.13#2"]
+          },
+          {
               "mentions": ["thag2.11#verse-num-sc142", "mil7.6.3#3"]
           },
           {
@@ -17701,27 +18321,39 @@
               "mentions": ["thag21.1#verse-num-sc1235", "~thi-ap36#16"]
           },
           {
-              "parallels": ["thag21.1#verse-num-sc1241-#verse-num-sc1243", "sn8.6#3-#5"],
+              "parallels": ["thag21.1#verse-num-sc1241-#verse-num-sc1243", "sn8.6#3-#5"]
+          },
+          {
               "mentions": ["thag21.1#verse-num-sc1241-#verse-num-sc1243", "~mil2#68"]
           },
           {
-              "parallels": ["thag3.13#verse-num-sc256-#verse-num-sc257", "sn6.14#6-#7"],
+              "parallels": ["thag3.13#verse-num-sc256-#verse-num-sc257", "sn6.14#6-#7"]
+          },
+          {
               "mentions": ["thag3.13#verse-num-sc256-#verse-num-sc257", "kv2.5#48-#49", "~pe3#62", "~mil6.1.4#2", "~ne10#2"]
           },
           {
-              "parallels": ["thag3.3", "thag3.15"],
+              "parallels": ["thag3.3", "thag3.15"]
+          },
+          {
               "mentions": ["thag3.3", "~ne37#347"]
           },
           {
-              "parallels": ["thag4.10#verse-num-sc303", "ja447#11", "ja510#23"],
+              "parallels": ["thag4.10#verse-num-sc303", "ja447#11", "ja510#23"]
+          },
+          {
               "mentions": ["thag4.10#verse-num-sc303", "ne4#15", "ne9#3", "ne10#16", "pe2#59"]
           },
           {
-              "parallels": ["thag4.10#verse-num-sc304", "ja510#24"],
+              "parallels": ["thag4.10#verse-num-sc304", "ja510#24"]
+          },
+          {
               "mentions": ["thag4.10#verse-num-sc304", "ne37#462"]
           },
           {
-              "parallels": ["thag6.13#verse-num-sc447", "pi-tv-kd19#25", "ud5.5#28"],
+              "parallels": ["thag6.13#verse-num-sc447", "pi-tv-kd19#25", "ud5.5#28"]
+          },
+          {
               "mentions": ["thag6.13#verse-num-sc447", "pi-tv-pvr10#79", "ne37#266", "pe2#16"]
           },
           {
@@ -17764,7 +18396,9 @@
               "retells": ["thig16.1", "thi-ap1"]
           },
           {
-              "parallels": ["thig2.1#1", "thig5.4#1"],
+              "parallels": ["thig2.1#1", "thig5.4#1"]
+          },
+          {
               "mentions": ["thig2.1#1", "thi-ap36#15", "~thi-ap18#66"]
           },
           {
@@ -17885,7 +18519,9 @@
               "mentions": ["ud4.2#5", "ne10#25", "ne22#2", "ne35#2"]
           },
           {
-              "parallels": ["ud4.4#10", "thag2.36#verse-num-sc191"],
+              "parallels": ["ud4.4#10", "thag2.36#verse-num-sc191"]
+          },
+          {
               "mentions": ["ud4.4#10", "ne37#228", "pe2#13", "pe8#90"]
           },
           {
@@ -17895,7 +18531,9 @@
               "parallels": ["ud4.5", "pi-tv-kd10#53-#57"]
           },
           {
-              "parallels": ["ud4.8", "~ud2.4"],
+              "parallels": ["ud4.8", "~ud2.4"]
+          },
+          {
               "mentions": ["ud4.8", "~mil5.2.5#1"]
           },
           {
