@@ -44,7 +44,11 @@
     {% set text_ref = location.node.text_ref %}
     {% set lang = location.root_lang %}
     {% if text_ref %}
-    <a class="root-text" href="{{text_ref.url}}" title="{{lang.name}} text">{{text_ref.lang.uid}}</a>
+        {% if location.bookmark %}
+        <a class="root-text" href="{{text_ref.url}}{{location.bookmark}}" title="{{lang.name}} text">{{text_ref.lang.uid}}</a>
+        {% else %}
+        <a class="root-text" href="{{text_ref.url}}" title="{{lang.name}} text">{{text_ref.lang.uid}}</a>
+        {% endif %}
     {% else %}
     <span class="root-text" title="{{lang.name}} (no text available)">{{location.root_lang.uid}}</span>
     {% endif %}
