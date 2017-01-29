@@ -55,7 +55,7 @@
         <div class="sutta-links">
 
             {%- if location.uid=="No known parallels" %}
-            <span class="root-id">{{ acronym(location) }}</span>
+            <span class="root-id no-parallels">{{ acronym(location) }}</span>
             {%- elif include_details_link %}<a class="root-id" href="/ll/{{location.uid}}">{{ acronym(location) }}</a>
             {%- else -%}
             <span class="root-id">{{ acronym(location) }}</span>

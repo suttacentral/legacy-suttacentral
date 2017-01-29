@@ -4,11 +4,8 @@
 {%- block content -%}
 <div id='onecol'>
 <table>
-<caption>Collection: <strong>{{division.collection.name}}</strong>
-<br>Division: 
-<strong>
-<a href='/{{division.uid}}/full'>{{division.name}}</a> ({{division.acronym}})
-</strong>
+<caption><div title="collection">{{division.collection.name}}</div>
+<div title="division"><a href='/{{division.uid}}/full'>{{division.name}}</a> ({{division.acronym}})</div>
 </caption>
 <thead>
 <tr>
