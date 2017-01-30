@@ -87,10 +87,10 @@ No parallel
 {%- if parallel.sutta.alt_volpage_info %} <span class='altVolPage'>{{parallel.sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
 {%- endif -%}
 {%- if parallel.footnote %}
-<a class='note'><div class='tri'>&nbsp;▶</div><span class='deets'>{{parallel.footnote}}</span></a>
+<a class='note'>&nbsp;<div class='tri'>↳</div><span class='deets'>{{parallel.footnote}}</span></a>
 {%- endif -%}
 {%- if parallel.sutta.biblio_entry %}
-<a class='bib'><div class='tri'>&nbsp;▶</div><span class='deets'>{{parallel.sutta.biblio_entry.text}}</span></a>
+<a class='bib'>&nbsp;<div class='tri'>↳</div><span class='deets'>{{parallel.sutta.biblio_entry.text}}</span></a>
 {%- endif -%}
 </td>
 <td>
@@ -139,10 +139,10 @@ Details for <strong><a href="{{sutta.url}}">{{sutta.acronym}}</a> {{sutta.name}}
 {%- if parallel.sutta.alt_volpage_info %} <span class='altVolPage'>{{parallel.sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
 {%- endif -%}
 {%- if parallel.footnote %}
-<a class='note'><div class='tri'>&nbsp;▶</div><span class='deets'>{{parallel.footnote}}</span></a>
+<a class='note'>&nbsp;<div class='tri'>↳</div><span class='deets'>{{parallel.footnote}}</span></a>
 {%- endif -%}
 {%- if parallel.sutta.biblio_entry %}
-<a class='bib'><div class='tri'>&nbsp;▶</div><span class='deets'>{{parallel.sutta.biblio_entry.text}}</span></a>
+<a class='bib'>&nbsp;<div class='tri'>↳</div><span class='deets'>{{parallel.sutta.biblio_entry.text}}</span></a>
 {%- endif -%}
 </td>
 <td>
