@@ -51,7 +51,7 @@ a.bib:hover .deets,
     z-index: 20;
     margin-top: 1.5em;
     margin-left: -22em;
-    max-width: 20em;
+    width: 20em;
     color: misc-color(dark-gray);
     padding: 0.3em 0.6em;
     font-size: 0.8rem;
@@ -149,14 +149,14 @@ a.note:hover span.deets,
 }
 
 .cross table.deets {
-	td:first-child {
-		white-space: nowrap;
-	}
+    td:first-child {
+        white-space: nowrap;
+    }
 
 }
 
 body:not(.infomode) .cross {
-	display: none;
+    display: none;
 }
 
 
