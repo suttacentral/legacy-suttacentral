@@ -9,8 +9,12 @@
 }
 
 a.note {
-    position:relative;
-    color:#EE1700;
+  position: relative;
+  color: pastel-color(dirty-green);
+  @include sans-serif;
+  cursor: help;
+  font-size: 0.8rem;
+  vertical-align:super;
 
     .deets {
         background-color: #F7DBD0;
@@ -18,8 +22,10 @@ a.note {
 }
 
 a.bib {
-    position:relative;
-    color:#EED900;
+  position: relative;
+  color: pastel-color(dirty-green);
+  @include sans-serif;
+  cursor: help;
 
     .deets {
         background-color: #F7F2C2;

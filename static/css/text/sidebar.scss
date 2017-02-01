@@ -75,13 +75,21 @@ $sidebar-tabs-vertical-padding: 0.4em;
                     }
                 }
                 &.offsite {
-                font-style: italic;
-                &:after {
-                    content: "";
-                    background: url(https://upload.wikimedia.org/wikipedia/commons/4/44/External.png)  center right no-repeat;
-                    padding-right:14px;
+                    font-style: italic;
+                    &:after {
+                        content: "";
+                        background: url(https://upload.wikimedia.org/wikipedia/commons/4/44/External.png)  center right no-repeat;
+                        padding-right:14px;
+                    }
+                } 
+                /* The currently loaded text */
+                &.this > a{
+                    background: pastel-color(light-green);
                 }
-            } 
+                /* The root language for the text */
+                &.root > a {
+                    font-weight: bold;
+                }
             }
         }
     }
@@ -89,6 +97,8 @@ $sidebar-tabs-vertical-padding: 0.4em;
     details summary::-webkit-details-marker {
         display: none;
     }
+
+    summary {display: block;}
 
     .button-row {
         float:left;
@@ -329,46 +339,8 @@ $sidebar-tabs-vertical-padding: 0.4em;
 > .post-blurb{
 	
 }
-
-
-
 }
 
-
-
-.languages {
-    > ul {
-        width:100%;
-        position:absolute;
-        background:white;
-        box-shadow:0 2px 2px rgba(0,0,0,0.2);
-        > li {        
-            > a {
-                padding: 0.5em 0 0.5em 4em;
-                display: block;
-                &:hover {
-                    background: misc-color(light-light-gray);
-                }
-            }
-            &.offsite > a {
-                font-style: italic;
-                &:after {
-                    content: "";
-                    background: url(https://upload.wikimedia.org/wikipedia/commons/4/44/External.png)  center right no-repeat;
-                    padding-right:14px;
-                }
-            } 
-            /* The currently loaded text */
-            &.this > a{
-                background: pastel-color(light-green);
-            }
-            /* The root language for the text */
-            &.root > a {
-                font-weight: bold;
-            }
-        }
-    }
-}
 
 #table-of-contents {
     float: left;
