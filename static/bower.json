@@ -1,0 +1,23 @@
+{
+  "name": "sc",
+  "homepage": "https://github.com/suttacentral/suttacentral",
+  "authors": [
+    "Blake Walsh <blakeofthepath@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.5.0",
+    "paper-listbox": "PolymerElements/paper-listbox#^1.1.2",
+    "paper-item": "PolymerElements/paper-item#^1.2.1"
+  }
+}

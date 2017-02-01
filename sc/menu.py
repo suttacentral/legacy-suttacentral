@@ -17,33 +17,26 @@ Example:
     'Śrīghanācārasaṁgrahaṭīkā'
 """
 
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 
 import sc.scimm
-
 
 class Menu(list):
     pass
 
-
 class PitakaMenu(list):
-
     def __init__(self, pitaka):
         self.pitaka = pitaka
 
-
 class LanguageMenu(list):
-
     def __init__(self, lang):
         self.lang = lang
 
 
 class SectMenu(list):
-
     def __init__(self, sect, divisions):
         self.sect = sect
         super().__init__(divisions)
-
 
 def build_menu():
     """Build and return the SuttaCentral menu."""
@@ -70,3 +63,14 @@ def get_menu():
     if _menu is None:
         _menu = build_menu()
     return _menu
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    

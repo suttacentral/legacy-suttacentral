@@ -29,7 +29,7 @@ def div_translation_count(lang):
     }
     try:
         result = es.search(index=lang, doc_type='text', search_type='count', body=body)
-    except elasticsearch.exceptions.NotFoundError:
+    except (elasticsearch.exceptions.NotFoundError, elasticsearch.exceptions.ConnectionError):
         return None
     mapping = {d['key']: d['doc_count']
             for d
