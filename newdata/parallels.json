@@ -1684,7 +1684,9 @@
               "parallels": ["dn18", "da4", "sht-sutta37", "t9"]
           },
           {
-              "parallels": ["dn19", "da3", "sht-sutta38", "skt-lo-mvu85", "t8", "~sf144", "~sf292", "~sf39", "~sf53"],
+              "parallels": ["dn19", "da3", "sht-sutta38", "skt-lo-mvu85", "t8", "~sf144", "~sf292", "~sf39", "~sf53"]
+          },
+          {
               "retells": ["dn19", "cp5"]
           },
           {
@@ -2518,7 +2520,9 @@
               "mentions": ["mn82", "~tha-ap20"]
           },
           {
-              "parallels": ["mn83", "dq30", "ea50.4", "ja541", "ja9", "ma67", "t152.87", "t211.38", "up2.050", "~ea1.1", "~t744"],
+              "parallels": ["mn83", "dq30", "ea50.4", "ja541", "ja9", "ma67", "t152.87", "t211.38", "up2.050", "~ea1.1", "~t744"]
+          },
+          {
               "retells": ["ja9", "cp6"]
           },
           {
@@ -15362,7 +15366,9 @@
               "parallels": ["ja348", "ja435#2-#6"]
           },
           {
-              "mentions": ["ja35", "cp29#10"],
+              "mentions": ["ja35", "cp29#10"]
+          },
+          {
               "retells": ["ja35", "cp28"]
           },
           {
@@ -15426,7 +15432,9 @@
               "retells": ["ja455", "cp11"]
           },
           {
-              "mentions": ["ja457", "~mil5.4.7#28"],
+              "mentions": ["ja457", "~mil5.4.7#28"]
+          },
+          {
               "retells": ["ja457", "cp18"]
           },
           {
@@ -15484,7 +15492,9 @@
               "retells": ["ja505", "cp22"]
           },
           {
-              "mentions": ["ja510", "~pe1#36"],
+              "mentions": ["ja510", "~pe1#36"]
+          },
+          {
               "retells": ["ja510", "cp23"]
           },
           {
@@ -15554,8 +15564,12 @@
               "retells": ["ja75", "cp29#7", "cp30#7"]
           },
           {
-              "parallels": ["ja95", "dn17#59", "dn16#240", "sn15.20#8", "sn6.15#6", "thag20.1#verse-num-sc1169"],
-              "mentions": ["ja95", "tha-ap21#4", "tha-ap429#13", "tha-ap341#13"],
+              "parallels": ["ja95", "dn17#59", "dn16#240", "sn15.20#8", "sn6.15#6", "thag20.1#verse-num-sc1169"]
+          },
+          {
+              "mentions": ["ja95", "tha-ap21#4", "tha-ap429#13", "tha-ap341#13"]
+          },
+          {
               "retells": ["ja95", "cp4"]
           },
           {
@@ -16379,7 +16393,9 @@
               "parallels": ["sf270", "~sn35.28", "~sa197", "~sn22.61", "~pi-tv-kd1#198"]
           },
           {
-              "parallels": ["skt-lo-mvu51", "ja506"],
+              "parallels": ["skt-lo-mvu51", "ja506"]
+          },
+          {
               "retells": ["skt-lo-mvu51", "cp13"]
           },
           {
