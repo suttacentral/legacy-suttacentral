@@ -3,7 +3,7 @@
 from tasks.helpers import *
 
 @task
-def build(minify=False, download=False, verbose=False, quiet=False):
+def build(ctx, minify=False, download=False, verbose=False, quiet=False):
     """Build the JavaScript data script files used by zh2en dictionary."""
     blurb(build)
     cmd = 'python utility/dicts/build_lzh2en_data.py'

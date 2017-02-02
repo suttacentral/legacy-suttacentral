@@ -1,14 +1,14 @@
 from tasks.helpers import *
 
 @task
-def ensure_up_to_date():
+def ensure_up_to_date(ctx):
     """ Ensure the TextInfoModel is up to date """
     blurb(ensure_up_to_date)
     import sc.textdata
     sc.textdata.ensure_up_to_date()
 
 @task
-def deletelang(lang):
+def deletelang(ctx, lang):
     from sc import textdata
     tim = textdata.SqliteBackedTIM()
     con = tim._con
@@ -20,7 +20,7 @@ def deletelang(lang):
     notice('Done')
     
 @task
-def ensure_loads():
+def ensure_loads(ctx):
     "Updating creation and modification dates database"
     from sc import textdata
     textdata.ensure_up_to_date()
