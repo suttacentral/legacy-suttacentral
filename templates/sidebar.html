@@ -21,10 +21,6 @@
     document.getElementsByTagName('main')[0].style.visibility = 'hidden';
     {% endif %}
 
-    // console.log('Infomode = ' + localStorage.getItem('infomode.on'));
-    // if (localStorage.getItem('infomode.on')) {
-    //     document.getElementsByTagName('body')[0].classList.add('infomode');
-    // }
     </script>
       <div id="darkness"></div>
       <ul class='tabs'>
@@ -48,7 +44,7 @@
             {% endif %}
             {% if lang_code == 'lzh' %}
             <div class="x1 button-row">
-                <a class="button" id="lzh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
+                <a class="button" id="lzh2en" title="Activate Chinese lookup">Chinese <span class="lookup_arrow">→</span> English Lookup</a>
             </div>
             {% endif %}
 
@@ -77,12 +73,13 @@
             {% endif %}
             {% if imm(uid) %}
             <div class="x1 button-row">
-                <a class="button" href="/ll/{{ uid }}" id="text-details-button" title="Go to parallels and references">Parallels & References <span class="lrpointer">▶</span></a>
+                <a class="button" href="/ll/{{ uid }}" id="text-details-button" title="Go to parallels and references">Parallels & References <span class="pr_arrow">↗</span></a>
             </div>
             {% endif %}
-            <details class="x1 button-row languages">
-                <summary class="button"><span class="langs">Languages</span></summary>
-                <ul>
+            <div class="x1 button-row languages">
+            <details>
+                <summary class="button">Languages <span class="dropdown_arrow">▼</span></summary>
+                <div class="language-dropdown"><ul>
                     {% for text_ref in text_refs %}
                     {% set offsite = text_ref.url[0] != '/' %}
                     {% if sutta %}
@@ -97,17 +94,17 @@
                         <a href="{{ text_ref.url }}" title="{{ text_ref.abstract }}" {% if offsite %} target="_blank"{% endif %}>{{ text_ref.lang.name }}</a></li>
                     {% endfor %}
                     
-                </ul>
-            </details>
+                </ul></div>
+            </details></div>
             <div class="x2 button-row">
                 {% if prev_data %}
-                    <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}"><span class="lrpointer">◀</span> {{ prev_data.uid|uid_to_acro }}</a>
+                    <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}"><span class="nextprev_arrow">←</span> {{ prev_data.uid|uid_to_acro }}</a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}
                 
                 {% if next_data %}
-                    <a class="button" class="next" title="{{ next_data.name_striped }}" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }} <span class="lrpointer">▶</span></a>
+                    <a class="button" class="next" title="{{ next_data.name_striped }}" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }} <span class="nextprev_arrow">→</span></a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}

@@ -14,18 +14,20 @@ logger = logging.getLogger(__name__)
 
 import sc
 
-relationship_types = ['parallels', 'mentions', 'retells']
+relationship_types = ['parallels', 'mentions', 'retells', 'none']
 
 forward_relationship_names = {
     'parallels': 'parallels',
     'mentions': 'is mentioned in',
-    'retells': 'is retold in'
+    'retells': 'is retold in',
+    'none': ' '
 }
 
 inverse_relationship_names = {
     'parallels': 'parallels',
     'mentions': 'mentions',
-    'retells': 'retells'
+    'retells': 'retells',
+    'none': ' '
 }
 
 
@@ -53,11 +55,13 @@ class Location:
             self.bookmark = bookmark
         self.node = None
         self.root_lang = None
+
     def __str__(self):
         if not self.bookmark:
             return self.uid
         else:
             return '{}{}'.format(self.uid, self.bookmark)
+
     def __repr__(self):
         return 'Location({}={}, {}={}, {}={})'.format(
             "uid", repr(self.uid),
@@ -87,6 +91,9 @@ class Relationship:
     def attach_nodes(self, imm):
         self.left.attach_node(imm)
         self.right.attach_node(imm)
+
+    def uid_in(self):
+        return self.left
         
     def __repr__(self):
         return '\nRelationship({}={},{}={},{}={},{}={})'.format(
@@ -144,9 +151,7 @@ class ParallelsManager:
         relationships = []
         
         if not uid in uid_mapping:
-            return None
-        
-        
+            self.uid_mapping[uid] = [{'none': [uid, 'No known parallels']}]
         
         def append_relationship(relationship):
             key = tuple(sorted([relationship.left.uid, relationship.right.uid]) + [relationship.relationship_type])
@@ -159,20 +164,17 @@ class ParallelsManager:
             for relationship_type in relationship_types:
                 if relationship_type not in entry:
                     continue
-                
+                this_locations = []
                 locations = [Location(uid) for uid in entry[relationship_type]]
                 for location in locations:
-                    print(location.uid)
                     if location.uid == uid:
-                            this_location = location
-                            break
-                else:
-                    # It is possible a uid does not participate in every 
-                    # clause in a group
-                    continue                        
+                        this_locations.append(location)
+
                 
+
                 
                 if relationship_type == 'parallels':
+                    this_location = this_locations[0]
                     for other_location in locations:
                         if other_location == this_location:
                             continue
@@ -189,8 +191,9 @@ class ParallelsManager:
                                                          relationship_name=get_relationship_name(relationship_type, partial),
                                                          partial=partial))
                 if relationship_type in {'mentions', 'retells'}:
+                    this_location = this_locations[0]
                     if this_location == locations[0]:
-                        partial = this_location.partial or other_location.partial
+                        partial = this_location.partial
                         # this sutta is the one which is mentioned
                         for other_location in locations:
                             partial = this_location.partial or other_location.partial
@@ -203,16 +206,30 @@ class ParallelsManager:
                                                             relationship_name=relationship_name,
                                                             partial=partial))
                     else:
-                        partial = this_location.partial
-                        relationship_name = relationship_name=get_relationship_name(relationship_type, partial, inverse=True)
-                        other_location = locations[0]
-                        relationships.append(Relationship(this_location,
+                        for x in range(len(this_locations)):
+                            doublecheck = False
+                            this_location = this_locations[x]
+                            partial = this_location.partial
+                            relationship_name = relationship_name=get_relationship_name(relationship_type, partial, inverse=True)
+                            other_location = locations[0]
+                            for y in range(len(relationships)):
+                                if str(this_location) == str(relationships[y].left):
+                                    doublecheck = True
+                            if not doublecheck:
+                                relationships.append(Relationship(this_location,
+                                                            other_location,
+                                                            relationship_type=relationship_type,
+                                                            relationship_name=relationship_name,
+                                                            partial=partial))
+                if relationship_type == 'none':
+                    partial = False
+                    relationship_name = relationship_name=get_relationship_name(relationship_type, partial)
+                    other_location = locations[1]
+                    relationships.append(Relationship(this_location,
                                                         other_location,
                                                         relationship_type=relationship_type,
                                                         relationship_name=relationship_name,
                                                         partial=partial))
-
-        
         
         
         seen = set()
