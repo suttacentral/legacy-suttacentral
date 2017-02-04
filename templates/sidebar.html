@@ -22,6 +22,16 @@
     {% endif %}
 
     </script>
+<style is="custom-style">
+  paper-dropdown-menu, paper-listbox {
+    width: 250px;
+  }
+  paper-dropdown-menu {
+    margin: auto;
+    display: block;
+  }
+
+</style>
       <div id="darkness"></div>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
@@ -49,7 +59,7 @@
             {% endif %}
 
             <div class="x1 button-row">
-                <a class="button" id="text-info" title="View reference numbers, variant readings, etc.">Textual Information</a>
+            <a class="button" id="text-info" title="View reference numbers, variant readings, etc." style="padding-left: 50px"><paper-toggle-button checked>Textual Information</paper-toggle-button></a>
             </div>
             {% if lang_code == 'lzh' %}
             <div class="x1 button-row">
@@ -76,10 +86,11 @@
                 <a class="button" href="/ll/{{ uid }}" id="text-details-button" title="Go to parallels and references">Parallels & References <span class="pr_arrow">↗</span></a>
             </div>
             {% endif %}
-            <div class="x1 button-row languages">
-            <details>
-                <summary class="button">Languages <span class="dropdown_arrow">▼</span></summary>
-                <div class="language-dropdown"><ul>
+
+<div class="x1 button-row languages" style="height: 60px">
+  <paper-dropdown-menu label="Languages">
+  <paper-listbox class="dropdown-content" selected="0">
+
                     {% for text_ref in text_refs %}
                     {% set offsite = text_ref.url[0] != '/' %}
                     {% if sutta %}
@@ -90,12 +101,12 @@
                     {% set classes =  (['offsite'] if offsite else [])
                                     + (['root'] if is_root else [])
                                     + (['this'] if not offsite and lang_code == text_ref.lang.uid else []) %}
-                    <li{% if classes %} class="{{ classes|join(' ') }}"{% endif %}>
-                        <a href="{{ text_ref.url }}" title="{{ text_ref.abstract }}" {% if offsite %} target="_blank"{% endif %}>{{ text_ref.lang.name }}</a></li>
+                    <paper-item{% if classes %} class="{{ classes|join(' ') }}"{% endif %}>
+                        <a href="{{ text_ref.url }}" title="{{ text_ref.abstract }}" {% if offsite %} target="_blank"{% endif %}>{{ text_ref.lang.name }}</a></paper-item>
                     {% endfor %}
-                    
-                </ul></div>
-            </details></div>
+  </paper-listbox>
+</paper-dropdown-menu>
+</div>
             <div class="x2 button-row">
                 {% if prev_data %}
                     <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}"><span class="nextprev_arrow">←</span> {{ prev_data.uid|uid_to_acro }}</a>

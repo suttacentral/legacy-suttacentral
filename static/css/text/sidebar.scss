@@ -487,3 +487,29 @@ main.sidebar-pinned {
     }
 }
 
+paper-item {
+    text-align: center;
+    & a {
+        display:block;
+        width: 100%;
+        &:hover {
+            background: misc-color(light-light-gray);
+        }
+    }
+    &.offsite {
+        font-style: italic;
+        &:after {
+            content: "";
+            background: url(https://upload.wikimedia.org/wikipedia/commons/4/44/External.png)  center right no-repeat;
+            padding-right:14px;
+            }
+        } 
+
+        &.this > a{
+                    background: pastel-color(light-green);
+                }
+
+        &.root > a {
+                    font-weight: bold;
+                }
+  }
