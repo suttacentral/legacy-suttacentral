@@ -21,105 +21,7 @@
     document.getElementsByTagName('main')[0].style.visibility = 'hidden';
     {% endif %}
 
-</script>
-<style>
-.switch {
-  position: relative;
-  vertical-align: middle;
-  display: inline-block;
-  width: 30px;
-  height: 17px;
-}
-
-.switch input {display:none;}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 13px;
-  width: 13px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #9B0F00;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(13px);
-  -ms-transform: translateX(13px);
-  transform: translateX(13px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 16px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-input[type=checkbox] {
-    visibility: hidden;
-}
-
-.checkboxFive {
-    margin: 0px 10px;
-    position: relative;
-}
-
-.checkboxFive label {
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #EEE8AA;
-    
-    border-radius: 20%
-}
-.checkboxFive label:after {
-    opacity: 0.2;
-    content: '';
-    position: absolute;
-    width: 9px;
-    height: 5px;
-    background: transparent;
-    top: 2px;
-    left: 3px;
-    border: 3px solid #9B0F00;
-    border-top: none;
-    border-right: none;
-    transform: rotate(-45deg);
-}
-.checkboxFive label:hover::after {
-    opacity: 0.5;
-}
-.checkboxFive input[type=checkbox]:checked + label:after {
-    opacity: 1;
-}
-
-    </style>
+    </script>
       <div id="darkness"></div>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
@@ -146,21 +48,15 @@ input[type=checkbox] {
             </div>
             {% endif %}
 
-
             <div class="x1 button-row">
-                <a class="button">Textual Information&nbsp;&nbsp;&nbsp;<label class="switch" title="View reference numbers, variant readings, etc."><input type="checkbox"><span class="slider round" id="text-info"></span></label></a>
+                <a class="button" id="text-info" title="View reference numbers, variant readings, etc.">Textual Information</a>
             </div>
             {% if lang_code == 'lzh' %}
             <div class="x1 button-row">
                 <a class="button" id="t-line-by-line" title="View line-by-line as in CBETA">View line-by-line</a>
             </div>
             {% endif %}
-            <div id="pin-sidebar">Keep Extended:<span class="checkboxFive"><input type="checkbox" value="1" id="checkboxFiveInput" name="sidebar-pinned"><label for="checkboxFiveInput"></label></span>Sidebar<span class="checkboxFive"><input type="checkbox" id="checkboxFiveInput1" name="header-pinned"><label for="checkboxFiveInput1"></label></span>Header</div>
-
-
-
-
-
+            <div id="pin-sidebar">Keep Extended:<label><input type="checkbox" name="sidebar-pinned"> Sidebar</label><label><input type="checkbox" name="header-pinned"> Header</label></div>
             <script>
             document.getElementsByName('sidebar-pinned')[0].checked = localStorage.getItem('sc.sidebar.pinned') == "true";
             document.getElementsByName('header-pinned')[0].checked = localStorage.getItem('sc.headerMenu.pinned') == "true";
