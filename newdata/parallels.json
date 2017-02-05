@@ -10416,12 +10416,12 @@
               "parallels": ["dhp#140", "t210.18#vagga-gatha-num-sc18.8", "t212.29#vagga-gatha-num-sc29.29", "t213.28#vagga-gatha-num-sc28.28", "uv28#28.29", "~an5.174#10", "~gdhp#211", "~iti30#4"]
           },
           {
-              "parallels": ["dhp#141", "?skt-mu", "divy#210.003", "pdhp#195", "skt-lo-mvu104#23", "t210.18#vagga-gatha-num-sc18.9", "t212.34#vagga-gatha-num-sc34.1", "t213.33#vagga-gatha-num-sc33.1", "uv33#33.1", "~ja528#37"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.iv.40)"
+              "parallels": ["dhp#141", "skt-mu-iv.40", "divy#210.003", "pdhp#195", "skt-lo-mvu104#23", "t210.18#vagga-gatha-num-sc18.9", "t212.34#vagga-gatha-num-sc34.1", "t213.33#vagga-gatha-num-sc33.1", "uv33#33.1", "~ja528#37"],
+              "remarks": "skt-mu-iv.40: Mūlasarvāstivādivinaya (Gilgit III.iv.40)"
           },
           {
-              "parallels": ["dhp#142", "?skt-mu", "divy#210.007", "gdhp#80", "pdhp#196", "skt-lo-mvu104#24", "t210.18#vagga-gatha-num-sc18.13", "uv33#33.2"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.iv.40 41)"
+              "parallels": ["dhp#142", "skt-mu-iv.40.41", "divy#210.007", "gdhp#80", "pdhp#196", "skt-lo-mvu104#24", "t210.18#vagga-gatha-num-sc18.13", "uv33#33.2"],
+              "remarks": "skt-mu-iv.40.41: Mūlasarvāstivādivinaya (Gilgit III.iv.40 41)"
           },
           {
               "parallels": ["dhp#143", "sn1.18#1", "t210.181#vagga-gatha-num-sc18.11", "t212.20#vagga-gatha-num-sc20.4", "t213.19#vagga-gatha-num-sc19.6", "~uv19#19.5"]
@@ -11046,8 +11046,8 @@
               "parallels": ["dhp#299", "gdhp#103", "pdhp#243", "t210.6#vagga-gatha-num-sc6.12", "t212.16#vagga-gatha-num-sc16.24", "t213.15#vagga-gatha-num-sc15.16-#vagga-gatha-num-sc15.19", "uv15#15.15"]
           },
           {
-              "parallels": ["dhp#3", "?skt-mu", "ja371#4", "ja428#3", "mn128#6", "pdhp#5", "pi-tv-kd10#38", "t212.15#vagga-gatha-num-sc15.9", "t213.14#vagga-gatha-num-sc14.10", "uv14#14.9"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
+              "parallels": ["dhp#3", "skt-mu-ii.184", "ja371#4", "ja428#3", "mn128#6", "pdhp#5", "pi-tv-kd10#38", "t212.15#vagga-gatha-num-sc15.9", "t213.14#vagga-gatha-num-sc14.10", "uv14#14.9"],
+              "remarks": "skt-mu-ii.184: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
           },
           {
               "parallels": ["dhp#30", "gdhp#120", "t213.4#vagga-gatha-num-sc4.23", "uv4#4.24", "~t212.5#t-linehead0645a18"]
@@ -11164,15 +11164,15 @@
               "mentions": ["dhp#327", "mil7.3.8#2"]
           },
           {
-              "parallels": ["dhp#328", "?skt-mu", "ja428#8", "mn128#11", "pdhp#9", "pi-tv-kd10#44", "snp1.3#verse-num-sc45", "t210.31#vagga-gatha-num-sc31.9", "t212.15#vagga-gatha-num-sc15.11", "t213.14#vagga-gatha-num-sc14.11", "uv14#14.13"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.185)"
+              "parallels": ["dhp#328", "skt-mu.ii.185", "ja428#8", "mn128#11", "pdhp#9", "pi-tv-kd10#44", "snp1.3#verse-num-sc45", "t210.31#vagga-gatha-num-sc31.9", "t212.15#vagga-gatha-num-sc15.11", "t213.14#vagga-gatha-num-sc14.11", "uv14#14.13"],
+              "remarks": "skt-mu.ii.185: Mūlasarvāstivādivinaya (Gilgit III.ii.185)"
           },
           {
               "mentions": ["dhp#328", "cnd23#134", "tha-ap2#20"]
           },
           {
-              "parallels": ["dhp#329", "?skt-mu", "ja428#9", "mn128#12", "pdhp#10", "pi-tv-kd10#45", "snp1.3#verse-num-sc46", "t210.31#vagga-gatha-num-sc31.10", "t212.15#vagga-gatha-num-sc15.12", "t213.14#vagga-gatha-num-sc14.12-#vagga-gatha-num-sc14.13", "uv14#14.14"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.185)"
+              "parallels": ["dhp#329", "skt-mu.ii.185", "ja428#9", "mn128#12", "pdhp#10", "pi-tv-kd10#45", "snp1.3#verse-num-sc46", "t210.31#vagga-gatha-num-sc31.10", "t212.15#vagga-gatha-num-sc15.12", "t213.14#vagga-gatha-num-sc14.12-#vagga-gatha-num-sc14.13", "uv14#14.14"],
+              "remarks": "skt-mu.ii.185: Mūlasarvāstivādivinaya (Gilgit III.ii.185)"
           },
           {
               "mentions": ["dhp#329", "cnd23#140", "tha-ap2#21"]
@@ -11181,8 +11181,8 @@
               "parallels": ["dhp#33", "pdhp#342", "t210.11#vagga-gatha-num-sc11.1", "t212.32#vagga-gatha-num-sc32.9", "t213.31#vagga-gatha-num-sc31.9", "uv31#31.8", "~gdhp#136"]
           },
           {
-              "parallels": ["dhp#330", "?skt-mu", "ja428#10", "mn128#13", "pdhp#11", "pi-tv-kd10#46", "t210.2#vagga-gatha-num-sc2.14", "t210.31#vagga-gatha-num-sc31.11", "t212.15#vagga-gatha-num-sc15.21", "t213.14#vagga-gatha-num-sc14.14", "uv14#14.16"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.185)"
+              "parallels": ["dhp#330", "skt-mu.ii.185", "ja428#10", "mn128#13", "pdhp#11", "pi-tv-kd10#46", "t210.2#vagga-gatha-num-sc2.14", "t210.31#vagga-gatha-num-sc31.11", "t212.15#vagga-gatha-num-sc15.21", "t213.14#vagga-gatha-num-sc14.14", "uv14#14.16"],
+              "remarks": "skt-mu.ii.185: Mūlasarvāstivādivinaya (Gilgit III.ii.185)"
           },
           {
               "parallels": ["dhp#331", "pdhp#65", "t210.31#vagga-gatha-num-sc31.12", "t212.31#vagga-gatha-num-sc31.41", "t213.30#vagga-gatha-num-sc30.35", "uv30#30.34"]
@@ -11452,8 +11452,8 @@
               "parallels": ["dhp#399", "gdhp#28", "mn98#35", "snp3.9#verse-num-sc629", "t210.35#vagga-gatha-num-sc35.17", "t212.34#vagga-gatha-num-sc34.18", "t213.33#vagga-gatha-num-sc33.17", "uv33#33.18"]
           },
           {
-              "parallels": ["dhp#4", "?skt-mu", "ja371#5", "ja428#4", "mn128#7", "pdhp#6", "pi-tv-kd10#39", "uv14#14.10", "~t212.15#vagga-gatha-num-sc15.9", "~t213.14#vagga-gatha-num-sc14.10"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
+              "parallels": ["dhp#4", "skt-mu.ii.184", "ja371#5", "ja428#4", "mn128#7", "pdhp#6", "pi-tv-kd10#39", "uv14#14.10", "~t212.15#vagga-gatha-num-sc15.9", "~t213.14#vagga-gatha-num-sc14.10"],
+              "remarks": "skt-mu.ii.184: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
           },
           {
               "parallels": ["dhp#40", "pdhp#350", "t210.11#vagga-gatha-num-sc11.12", "t212.32#vagga-gatha-num-sc32.29", "t213.31#vagga-gatha-num-sc31.24", "uv31#31.35", "~gdhp#138"]
@@ -11567,8 +11567,8 @@
               "mentions": ["dhp#49", "ne37#486"]
           },
           {
-              "parallels": ["dhp#5", "?skt-mu", "ja371#6", "ja428#5", "mn128#8", "pdhp#253", "pi-tv-kd10#40", "t210.9#vagga-gatha-num-sc9.5", "t212.15#vagga-gatha-num-sc15.10", "t213.14#vagga-gatha-num-sc14.9", "uv14#14.11"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
+              "parallels": ["dhp#5", "skt-mu.ii.184", "ja371#6", "ja428#5", "mn128#8", "pdhp#253", "pi-tv-kd10#40", "t210.9#vagga-gatha-num-sc9.5", "t212.15#vagga-gatha-num-sc15.10", "t213.14#vagga-gatha-num-sc14.9", "uv14#14.11"],
+              "remarks": "skt-mu.ii.184: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
           },
           {
               "parallels": ["dhp#50", "gdhp#271", "pdhp#309", "t210.12#vagga-gatha-num-sc12.8", "t213.18#vagga-gatha-num-sc18.10", "uv18#18.9"]
@@ -11610,15 +11610,15 @@
               "parallels": ["dhp#59", "gdhp#304", "pdhp#136", "t210.12#vagga-gatha-num-sc12.17", "t212.19#vagga-gatha-num-sc19.13", "t213.18#vagga-gatha-num-sc18.12", "uv18#18.13"]
           },
           {
-              "parallels": ["dhp#6", "?skt-mu", "ja428#6", "mn128#9", "pdhp#254", "pi-tv-kd10#41", "t210.9#vagga-gatha-num-sc9.6", "t213.14#vagga-gatha-num-sc14.7", "thag4.3#verse-num-sc275", "thag8.1#verse-num-sc498", "uv14#14.8"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.183)"
+              "parallels": ["dhp#6", "skt-mu.ii.183", "ja428#6", "mn128#9", "pdhp#254", "pi-tv-kd10#41", "t210.9#vagga-gatha-num-sc9.6", "t213.14#vagga-gatha-num-sc14.7", "thag4.3#verse-num-sc275", "thag8.1#verse-num-sc498", "uv14#14.8"],
+              "remarks": "skt-mu.ii.183: Mūlasarvāstivādivinaya (Gilgit III.ii.183)"
           },
           {
               "parallels": ["dhp#60", "pdhp#185", "t210.13#vagga-gatha-num-sc13.1", "t212.1#vagga-gatha-num-sc1.36", "t213.1#vagga-gatha-num-sc1.20", "uv1#1.19"]
           },
           {
-              "parallels": ["dhp#61", "?skt-mu", "t210.2#vagga-gatha-num-sc2.13", "t212.15#vagga-gatha-num-sc15.20", "t213.14#vagga-gatha-num-sc14.13", "uv14#14.15"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.185)"
+              "parallels": ["dhp#61", "skt-mu.ii.185", "t210.2#vagga-gatha-num-sc2.13", "t212.15#vagga-gatha-num-sc15.20", "t213.14#vagga-gatha-num-sc14.13", "uv14#14.15"],
+              "remarks": "skt-mu.ii.185: Mūlasarvāstivādivinaya (Gilgit III.ii.185)"
           },
           {
               "parallels": ["dhp#62", "t210.13#vagga-gatha-num-sc13.4", "t212.1#vagga-gatha-num-sc1.78", "t213.1#vagga-gatha-num-sc1.21", "uv1#1.20"]
@@ -11879,8 +11879,8 @@
               "parallels": ["ja516#45", "~dhp#337", "~t210.32#vagga-gatha-num-sc32.7", "~t212.3#vagga-gatha-num-sc3.11", "~t212.3#vagga-gatha-num-sc3.13", "~thag6.5#verse-num-sc402"]
           },
           {
-              "parallels": ["ja528#37", "~dhp#141", "~?skt-mu", "~divy#210.003", "~pdhp#195", "~skt-lo-mvu104#23", "~t210.18#vagga-gatha-num-sc18.9", "~t212.34#vagga-gatha-num-sc34.1", "~t213.33#vagga-gatha-num-sc33.1", "~uv33#33.1"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.iv.40)"
+              "parallels": ["ja528#37", "~dhp#141", "~skt-mu.iv.40", "~divy#210.003", "~pdhp#195", "~skt-lo-mvu104#23", "~t210.18#vagga-gatha-num-sc18.9", "~t212.34#vagga-gatha-num-sc34.1", "~t213.33#vagga-gatha-num-sc33.1", "~uv33#33.1"],
+              "remarks": "skt-mu.iv.40: Mūlasarvāstivādivinaya (Gilgit III.iv.40)"
           },
           {
               "parallels": ["mkv#66", "~dhp#1", "~gdhp#201", "~pdhp#1", "~t210.9#vagga-gatha-num-sc9.1", "~t212.32#vagga-gatha-num-sc32.13", "~t213.31#vagga-gatha-num-sc31.13", "~uv31#31.23", "~dhp#2", "~gdhp#202", "~pdhp#2", "~t210.9#vagga-gatha-num-sc9.2", "~t212.32#vagga-gatha-num-sc32.14", "~t213.31#vagga-gatha-num-sc31.14", "~uv31#31.24"]
@@ -12081,8 +12081,8 @@
               "parallels": ["t212.13#vagga-gatha-num-sc13.9", "~dhp#275", "~pdhp#359-360"]
           },
           {
-              "parallels": ["t212.15#vagga-gatha-num-sc15.9", "~dhp#4", "~?skt-mu", "~ja371#5", "~ja428#4", "~mn128#7", "~pdhp#6", "~pi-tv-kd10#39", "~uv14#14.10"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
+              "parallels": ["t212.15#vagga-gatha-num-sc15.9", "~dhp#4", "~skt-mu.ii.184", "~ja371#5", "~ja428#4", "~mn128#7", "~pdhp#6", "~pi-tv-kd10#39", "~uv14#14.10"],
+              "remarks": "skt-mu.ii.184: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
           },
           {
               "parallels": ["t212.17#vagga-gatha-num-sc17.16", "~dhp#88", "~an10.117#5", "~an10.118#6", "~an10.169#6", "~an10.170#5", "~pdhp#264", "~sn45.34#6", "~t210.14#vagga-gatha-num-sc14.16"]
@@ -12208,8 +12208,8 @@
               "parallels": ["t213.13#vagga-gatha-num-sc13.4", "t210.13#vagga-gatha-num-sc13.19", "t210.33#vagga-gatha-num-sc33.6", "t212.14#vagga-gatha-num-sc14.5"]
           },
           {
-              "parallels": ["t213.14#vagga-gatha-num-sc14.10", "~dhp#4", "~?skt-mu", "~ja371#5", "~ja428#4", "~mn128#7", "~pdhp#6", "~pi-tv-kd10#39", "~uv14#14.10"],
-              "remarks": "?skt-mu: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
+              "parallels": ["t213.14#vagga-gatha-num-sc14.10", "~dhp#4", "~skt-mu.ii.184", "~ja371#5", "~ja428#4", "~mn128#7", "~pdhp#6", "~pi-tv-kd10#39", "~uv14#14.10"],
+              "remarks": "skt-mu.ii.184: Mūlasarvāstivādivinaya (Gilgit III.ii.184)"
           },
           {
               "parallels": ["t213.16#vagga-gatha-num-sc16.11", "~dhp#88", "~an10.117#5", "~an10.118#6", "~an10.169#6", "~an10.170#5", "~pdhp#264", "~sn45.34#6", "~t210.14#vagga-gatha-num-sc14.16"]
