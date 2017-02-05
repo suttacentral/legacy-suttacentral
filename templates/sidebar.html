@@ -21,6 +21,14 @@
     document.getElementsByTagName('main')[0].style.visibility = 'hidden';
     {% endif %}
 
+    // if (document.getElementsByTagName("body")[0].className.match('infomode')) {
+    //     console.log("checked = true")
+    //     document.getElementsById('text-info').checked = true;
+    // else {
+    //     console.log("checked = false")
+    //     document.getElementsById('text-info').checked = false;
+    // }
+    // }
 </script>
 <style>
 .switch {
@@ -71,7 +79,6 @@ input:checked + .slider:before {
   transform: translateX(13px);
 }
 
-/* Rounded sliders */
 .slider.round {
   border-radius: 16px;
 }
@@ -84,12 +91,12 @@ input[type=checkbox] {
     visibility: hidden;
 }
 
-.checkboxFive {
+.checkextended {
     margin: 0px 10px;
     position: relative;
 }
 
-.checkboxFive label {
+.checkextended label {
     cursor: pointer;
     position: absolute;
     top: 0;
@@ -98,7 +105,7 @@ input[type=checkbox] {
     
     border-radius: 20%
 }
-.checkboxFive label:after {
+.checkextended label:after {
     opacity: 0.2;
     content: '';
     position: absolute;
@@ -112,10 +119,10 @@ input[type=checkbox] {
     border-right: none;
     transform: rotate(-45deg);
 }
-.checkboxFive label:hover::after {
+.checkextended label:hover::after {
     opacity: 0.5;
 }
-.checkboxFive input[type=checkbox]:checked + label:after {
+.checkextended input[type=checkbox]:checked + label:after {
     opacity: 1;
 }
 
@@ -148,18 +155,14 @@ input[type=checkbox] {
 
 
             <div class="x1 button-row">
-                <a class="button">Textual Information&nbsp;&nbsp;&nbsp;<label class="switch" title="View reference numbers, variant readings, etc."><input type="checkbox"><span class="slider round" id="text-info"></span></label></a>
+                <span class="button">Textual Information&nbsp;&nbsp;&nbsp;<label class="switch" title="View reference numbers, variant readings, etc."><input type="checkbox" id="text-info"><span class="slider round"></span></label></span>
             </div>
             {% if lang_code == 'lzh' %}
             <div class="x1 button-row">
                 <a class="button" id="t-line-by-line" title="View line-by-line as in CBETA">View line-by-line</a>
             </div>
             {% endif %}
-            <div id="pin-sidebar">Keep Extended:<span class="checkboxFive"><input type="checkbox" value="1" id="checkboxFiveInput" name="sidebar-pinned"><label for="checkboxFiveInput"></label></span>Sidebar<span class="checkboxFive"><input type="checkbox" id="checkboxFiveInput1" name="header-pinned"><label for="checkboxFiveInput1"></label></span>Header</div>
-
-
-
-
+            <div id="pin-sidebar">Keep Extended:<span class="checkextended"><input type="checkbox" value="1" id="checkextendedInput" name="sidebar-pinned"><label for="checkextendedInput"></label></span>Sidebar<span class="checkextended"><input type="checkbox" id="checkextendedInput1" name="header-pinned"><label for="checkextendedInput1"></label></span>Header</div>
 
             <script>
             document.getElementsByName('sidebar-pinned')[0].checked = localStorage.getItem('sc.sidebar.pinned') == "true";
