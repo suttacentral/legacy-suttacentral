@@ -8,7 +8,7 @@
     } else {
         document.getElementById('sidebar').style.visibility = 'hidden';
     }
-    
+
     console.log('Main: ', document.getElementsByTagName('main'));
     setTimeout(function(){
         document.getElementById('sidebar').style.visibility = 'visible';
@@ -20,113 +20,8 @@
     {% if has_quotes %}
     document.getElementsByTagName('main')[0].style.visibility = 'hidden';
     {% endif %}
-
-    // if (document.getElementsByTagName("body")[0].className.match('infomode')) {
-    //     console.log("checked = true")
-    //     document.getElementsById('text-info').checked = true;
-    // else {
-    //     console.log("checked = false")
-    //     document.getElementsById('text-info').checked = false;
-    // }
-    // }
 </script>
-<style>
-.switch {
-  position: relative;
-  vertical-align: middle;
-  display: inline-block;
-  width: 30px;
-  height: 17px;
-}
 
-.switch input {display:none;}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 13px;
-  width: 13px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #9B0F00;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(13px);
-  -ms-transform: translateX(13px);
-  transform: translateX(13px);
-}
-
-.slider.round {
-  border-radius: 16px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-input[type=checkbox] {
-    visibility: hidden;
-}
-
-.checkextended {
-    margin: 0px 10px;
-    position: relative;
-}
-
-.checkextended label {
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #EEE8AA;
-    
-    border-radius: 20%
-}
-.checkextended label:after {
-    opacity: 0.2;
-    content: '';
-    position: absolute;
-    width: 9px;
-    height: 5px;
-    background: transparent;
-    top: 2px;
-    left: 3px;
-    border: 3px solid #9B0F00;
-    border-top: none;
-    border-right: none;
-    transform: rotate(-45deg);
-}
-.checkextended label:hover::after {
-    opacity: 0.5;
-}
-.checkextended input[type=checkbox]:checked + label:after {
-    opacity: 1;
-}
-
-    </style>
       <div id="darkness"></div>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
@@ -155,8 +50,13 @@ input[type=checkbox] {
 
 
             <div class="x1 button-row">
-                <span class="button">Textual Information&nbsp;&nbsp;&nbsp;<label class="switch" title="View reference numbers, variant readings, etc."><input type="checkbox" id="text-info"><span class="slider round"></span></label></span>
+                <span class="button">Textual Information&nbsp;&nbsp;&nbsp;<label class="switch" title="View reference numbers, variant readings, etc."><input type="checkbox" class="testing123" id="text-info"><span class="slider round"></span></label></span>
             </div>
+            <script>
+            if (localStorage.getItem('infomode.on')) {
+                document.getElementById("text-info").checked=true;
+            }
+            </script>
             {% if lang_code == 'lzh' %}
             <div class="x1 button-row">
                 <a class="button" id="t-line-by-line" title="View line-by-line as in CBETA">View line-by-line</a>
