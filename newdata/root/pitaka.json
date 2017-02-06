@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Sutta",
+    "uid": "su"
+  },
+  {
+    "name": "Vinaya",
+    "uid": "vi"
+  },
+  {
+    "name": "Abhidhamma",
+    "uid": "ab"
+  }
+]

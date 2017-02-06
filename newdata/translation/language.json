@@ -1,0 +1,171 @@
+[
+  {
+    "uid": "en",
+    "name": "English",
+    "iso_code": "en"
+  },
+  {
+    "uid": "si",
+    "name": "සිංහල",
+    "search_priority": "10.5",
+    "iso_code": "si"
+  },
+  {
+    "uid": "hi",
+    "name": "हिन्दी",
+    "iso_code": "hi"
+  },
+  {
+    "uid": "mr",
+    "name": "मराठी",
+    "iso_code": "mr"
+  },
+  {
+    "uid": "ta",
+    "name": "தமிழ்",
+    "search_priority": "10.5",
+    "iso_code": "ta"
+  },
+  {
+    "uid": "zh",
+    "name": "汉语",
+    "search_priority": "5.5",
+    "iso_code": "zh"
+  },
+  {
+    "uid": "es",
+    "name": "Español",
+    "iso_code": "es"
+  },
+  {
+    "uid": "fi",
+    "name": "Suomi",
+    "iso_code": "fi"
+  },
+  {
+    "uid": "fr",
+    "name": "Français",
+    "search_priority": "6.5",
+    "iso_code": "fr"
+  },
+  {
+    "uid": "id",
+    "name": "Indonesian",
+    "iso_code": "id"
+  },
+  {
+    "uid": "my",
+    "name": "မြန်မာဘာသာ",
+    "iso_code": "my"
+  },
+  {
+    "uid": "nl",
+    "name": "Nederlands",
+    "iso_code": "nl"
+  },
+  {
+    "uid": "no",
+    "name": "Norsk",
+    "search_priority": "14.5",
+    "iso_code": "no"
+  },
+  {
+    "uid": "th",
+    "name": "ไทย",
+    "iso_code": "th"
+  },
+  {
+    "uid": "af",
+    "name": "Afrikaans",
+    "search_priority": "20.5",
+    "iso_code": "af"
+  },
+  {
+    "uid": "de",
+    "name": "Deutsch",
+    "iso_code": "de"
+  },
+  {
+    "uid": "he",
+    "name": "Hebrew",
+    "iso_code": "he"
+  },
+  {
+    "uid": "ro",
+    "name": "Română",
+    "iso_code": "ro"
+  },
+  {
+    "uid": "sr",
+    "name": "Srpski",
+    "search_priority": "19.5",
+    "iso_code": "sr"
+  },
+  {
+    "uid": "sv",
+    "name": "Svenska",
+    "iso_code": "sv"
+  },
+  {
+    "uid": "jp",
+    "name": "日本語",
+    "search_priority": "12.5",
+    "iso_code": "jp"
+  },
+  {
+    "uid": "ko",
+    "name": "한국어/조선말",
+    "iso_code": "ko"
+  },
+  {
+    "uid": "cs",
+    "name": "Čeština",
+    "iso_code": "cs"
+  },
+  {
+    "uid": "vn",
+    "name": "Tiếng Việt",
+    "iso_code": "vn"
+  },
+  {
+    "uid": "ca",
+    "name": "Català",
+    "iso_code": "ca"
+  },
+  {
+    "uid": "fa",
+    "name": "Farsi",
+    "iso_code": "fa"
+  },
+  {
+    "uid": "hu",
+    "name": "Magyar",
+    "iso_code": "hu"
+  },
+  {
+    "uid": "it",
+    "name": "Italiano",
+    "iso_code": "it"
+  },
+  {
+    "uid": "pl",
+    "name": "Polski",
+    "iso_code": "pl"
+  },
+  {
+    "uid": "pt",
+    "name": "Português",
+    "iso_code": "pt"
+  },
+  {
+    "uid": "ru",
+    "name": "ру́сский язы́к",
+    "iso_code": "ru"
+  },
+  {
+    "uid": "ug",
+    "name": "Uighur",
+    "search_priority": "15.5",
+    "iso_code": "ug"
+  }
+]
