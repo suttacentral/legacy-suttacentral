@@ -1,0 +1,91 @@
+{% extends "base.html" -%}
+{% import 'macros.html' as macros with context %}
+
+
+{%- block content -%}
+
+{% macro joiner(inner) %}
+<span class="connector">{{inner}}</span>
+{% endmacro %}
+
+
+<div id="onecol" class="relationships-page">
+    
+    
+    {% set location = relationships[0].left %}
+    <table>
+        <caption><span class="caption-id">{{location.node.acronym}}</span> <span class="caption-title">{{location.node.name}}</span> <span class="caption-volpage" title="PTS volume/page reference.">{{location.node.volpage}}</span></caption>
+      <colgroup>
+      <col>
+      <col>
+        <col span="4" style="box-shadow: 0 1px 3px 1px rgba(0,0,0,0.12),">
+      </colgroup>
+    <tr>
+
+
+<tbody>
+    
+    {% macro acronym(location) %}
+    {% set node = location.node %}
+     {{- node.acronym or location.uid|uid_to_acro }}{% if location.bookmark %} {{location.bookmark}} {% endif -%}
+    {% endmacro %}
+    
+    {% macro translation_link(location) %}
+    {% if location.node.translations %}
+    <div class="translated-text">
+    {% set text_ref = location.node.translations[0] %}
+    <a class="translation-link" href="{{text_ref.url}}">{{text_ref.lang.iso_code}}</a>
+    <a class="translation-dropdown">▾</a>
+    </div>
+    {% endif %}
+    {% endmacro %}
+    
+    {% macro root_link(location) %}
+    {% set text_ref = location.node.text_ref %}
+    {% set lang = location.root_lang %}
+    {% if text_ref %}
+        {% if location.bookmark %}
+        <a class="root-text" href="{{text_ref.url}}{{location.bookmark}}" title="{{lang.name}} text">{{text_ref.lang.uid}}</a>
+        {% else %}
+        <a class="root-text" href="{{text_ref.url}}" title="{{lang.name}} text">{{text_ref.lang.uid}}</a>
+        {% endif %}
+    {% else %}
+    <span class="root-text" title="{{lang.name}} (no text available)">{{location.root_lang.uid}}</span>
+    {% endif %}
+    {% endmacro %}
+    
+    
+    {% macro sutta_links(location, include_details_link) %}
+        <div class="sutta-links">
+
+            {%- if location.uid=="No known parallels" %}
+            <span class="root-id no-parallels">{{ acronym(location) }}</span>
+            {%- elif include_details_link %}<a class="root-id" href="/ll/{{location.uid}}">{{ acronym(location) }}</a>
+            {%- else -%}
+            <span class="root-id">{{ acronym(location) }}</span>
+            {%- endif -%}
+        {{root_link(location) }} {{translation_link(location) }}</div>
+    </div>
+
+    {% endmacro %}
+    {% for group in relationships|groupby('left.sort_key') %}
+    {% for relationship in group.list %}
+    {% set left = relationship.left %}
+    {% set right = relationship.right %}
+<tr>
+{% if loop.first %}<td class="root" rowspan={{group.list|length}}>{{sutta_links(left, false)}}</td>{% endif %}
+<td class="relation">{{joiner(relationship.relationship_name)}}</td>
+<td class="related" title="SuttaCentral ID">{{sutta_links(right, true)}}</td>
+<td class="related" title="Sutta title in original language">{{right.node.name}}</td>
+<td class="related"><span class="volpage" title="volume/page reference">{{right.node.volpage}}</span>{% if right.alt_volpage %}<br><span class="volpage" title="volume/page reference">{{right.node.alt_volpage}}</span>{% endif %}
+
+</td>
+
+</tr>
+{% endfor %}
+{% endfor %}
+</table>
+        
+
+</div>
+{%- endblock -%}

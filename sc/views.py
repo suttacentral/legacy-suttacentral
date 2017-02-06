@@ -332,6 +332,23 @@ class DownloadsView(InfoView):
     def __offline_data(self):
         return self.__file_data('sc-offline', sc.exports_dir)
 
+class RelationshipsView(ViewBase):
+    template_name = 'relationships'
+    
+    def __init__(self, uid):
+        self.uid = uid
+    
+    def setup_context(self, context):
+        from sc import jsonloader
+        imm = context.imm
+        pm = jsonloader.parallels_manager
+        context.uid = self.uid
+        context.relationships = pm.get_relationships(self.uid)
+        
+        for relationship in context.relationships:
+            relationship.attach_nodes(imm)
+        context.seen = set()
+
 class ParallelView(ViewBase):
     """The view for the sutta parallels page."""
 
@@ -740,6 +757,7 @@ class DefinitionView(ViewBase):
         else:
             context.near_terms = []
             context.fuzzy_terms = dicts.get_fuzzy_terms(term)
+
 
 class ElasticSearchResultsView(ViewBase):
     template_name = 'elasticsearch_results'

@@ -70,4 +70,158 @@ tr.group-with-next {
     }
 }
 
+.relationships-page {
 
+
+    body {
+        color: #2b2b2b;
+        background: #fcfcfc;
+        font-family: "Skolar Sans PE";
+        line-height: 1.5;
+    }
+    table {
+        border-collapse: separate;
+        border-spacing: 0 0.5em;
+        margin: 5em auto;
+    }
+    caption {
+        margin-bottom: 1em
+    }
+
+
+    .caption-volpage,
+    td:nth-last-of-type(1),
+    td.relation {
+        font-size: 80%;
+        color: #767676;
+    }
+    .caption-id,
+    .caption-title {
+        font-weight: bold;
+    }
+    .caption-volpage {
+        margin: 0 1rem;
+    }
+    td {
+        padding: 0.4em 0.5em;
+      
+    }
+    /* all cells have top and bottom border */
+    td {
+        border-radius: 2px;
+        border-top: 1px solid rgb(215, 215, 215);
+        border-bottom: 1px solid rgb(215, 215, 215);
+    }
+    
+    
+    td.root, td.relation + td.related {
+        border-left: 1px solid rgb(215, 215, 215);
+    }
+    
+    td.root, td:last-child {
+        border-right: 1px solid rgb(215, 215, 215);
+    }
+    
+    
+    /* except relation which has none */
+    td.relation {
+        border: none;
+    }
+    
+    td.relation +
+    
+    td.relation + td.relation {
+        border-left: none;
+        border-right: none;
+    }
+
+/*
+    td:nth-child(3){
+        border-top: 1px solid rgb(215, 215, 215);
+        border-left: 0 solid rgb(215, 215, 215);
+        border-right: 0 solid rgb(215, 215, 215);
+        border-bottom: 1px solid rgb(215, 215, 215);
+
+    }
+    td:nth-last-of-type(1) {
+        border-radius: 0 2px 2px 0;
+        border-top: 1px solid rgb(215, 215, 215);
+        border-left: 0 solid rgb(215, 215, 215);
+        border-right: 1px solid rgb(215, 215, 215);
+        border-bottom: 1px solid rgb(215, 215, 215);
+            
+    }
+*/
+
+    td.related,
+    td.root {
+        background: #f5f5f5;
+    }
+
+    .root-id, .root-text,.translated-text{
+        border-radius: 2px;
+        padding:0.2rem 1rem 0.1rem;
+        margin:0.1rem;
+    }
+    a.root-id:hover, a.root-text:hover, a.translated-text:hover
+    {
+        background: rgb(235, 235, 235)
+    }
+    .root-id{
+        display:block;
+    }
+    .root-text,.translated-text{
+        display:inline-block;
+        font-family:"skolar sans pe sb";
+        font-size:0.8rem;
+/*
+            color: #007AFE;
+*/
+    }
+
+    td:nth-last-of-type(2){
+        vertical-align: top;
+        padding-top:0.7rem;
+    }
+    td:nth-last-of-type(1){
+        vertical-align: top;
+        line-height: 1.25;
+        font-size: 0.7rem;
+        padding:0.8rem 1.5rem;
+    }
+    
+    /* This code controls the joiner */
+    
+    td.relation {
+        font-style: italic;
+        text-align: center;
+        padding-left: 1em;
+        padding-right: 1em
+    }
+    .connector:before,
+    .connector:after {
+        content: '';
+        width: 80%;
+        position: absolute;
+        top: 40%;
+        margin: 0 0.2em;
+        z-index: -5;
+        border-bottom: solid 3px rgb(215, 215, 215);
+    }
+    .connector {
+        position: relative;
+        white-space: nowrap;
+    }
+    .connector:before {
+        right: 100%;
+    }
+    .connector:after {
+        left: 100%;
+    }
+}
+.no-parallels {
+    text-transform: lowercase;
+}
+.no-parallels:first-letter {
+    text-transform: uppercase;
+}
