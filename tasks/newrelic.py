@@ -7,7 +7,7 @@ from tasks.helpers import *
 
 
 @task
-def update_ini():
+def update_ini(ctx):
     """Update the newrelic.ini file."""
     blurb(update_ini)
     if not config.newrelic_license_key:

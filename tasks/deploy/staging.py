@@ -20,7 +20,7 @@ def _staging_run(*commands):
 
 
 @task
-def checkout_branch(code=None, data=None):
+def checkout_branch(ctx, code=None, data=None):
     "Check out specified branch"
     blurb(checkout_branch)
     commands = []
@@ -35,7 +35,7 @@ def checkout_branch(code=None, data=None):
         
 
 @task
-def full():
+def full(ctx):
     """Deploy to the staging server."""
     blurb(full)
     _staging_run(
@@ -53,7 +53,7 @@ def full():
     )
 
 @task
-def quick():
+def quick(ctx):
     """Deploy simple changes to the staging server."""
     blurb(quick)
     _staging_run(
@@ -67,7 +67,7 @@ def quick():
     )
 
 @task
-def push_fonts(delete=False):
+def push_fonts(ctx, delete=False):
     """Copy local fonts to the staging server."""
     blurb(push_fonts)
     run(' '.join([
@@ -83,7 +83,7 @@ def push_fonts(delete=False):
         fg=True)
 
 @task
-def pull_fonts(delete=False):
+def pull_fonts(ctx, delete=False):
     """Copy fonts from the staging server to local"""
     blurb(pull_fonts)
     run(' ' .join([
@@ -106,7 +106,7 @@ def rebuild_tim():
     
 
 @task
-def update_data(branch=None):
+def update_data(ctx, branch=None):
     """Deploy data changes to the staging server."""
     blurb(update_data)
     _staging_run(
@@ -116,7 +116,7 @@ def update_data(branch=None):
 
 
 @task
-def nuke_search():
+def nuke_search(ctx):
     """Update dictionary and search index on the staging server."""
     blurb(update_search)
     _staging_run(

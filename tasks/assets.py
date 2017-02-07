@@ -6,7 +6,7 @@ from tasks.helpers import *
 
 
 @task
-def clean(older=False):
+def clean(ctx, older=False):
     """Delete compiled (CSS/JS) assets and cache files."""
     blurb(clean)
     if older:

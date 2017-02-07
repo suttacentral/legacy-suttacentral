@@ -10,7 +10,7 @@ from tasks.helpers import *
 
 
 @task
-def clean(aggressive=False):
+def clean(ctx, aggressive=False):
     """Remove unnecessary files."""
     tasks.log.clean()
     tasks.tmp.clean()
@@ -28,7 +28,7 @@ def clean(aggressive=False):
 
 
 @task
-def reset():
+def reset(ctx):
     """Reset the environment."""
     blurb(reset)
     clean(aggressive=True)
@@ -37,7 +37,7 @@ def reset():
     tasks.search.index()
 
 @task
-def server(v=False):
+def server(ctx, v=False):
     """Run the server."""
     blurb(server)
     if config.newrelic_license_key:
@@ -50,20 +50,20 @@ def server(v=False):
         os.execlp('cherryd', 'cherryd', '-i', 'sc.server')
 
 @task
-def elastic_indexer():
+def elastic_indexer(ctx):
     """Run the Elasticsearch Indexer Daemon """
     blurb(elastic_indexer)
     import sc.search.updater
     sc.search.updater.start()
 
 @task
-def test_server():
+def test_server(ctx):
     """Run test server to validate code."""
     blurb(test_server)
     os.execlp('cherryd', 'cherryd', '-i', 'sc.test_server')
 
 @task
-def update_data():
+def update_data(ctx):
     """Update the data repository."""
     blurb(update_data)
     with local.cwd(sc.data_dir):

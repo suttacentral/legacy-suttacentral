@@ -4,7 +4,7 @@ from tasks.helpers import *
 
 
 @task
-def delete(index='_all'):
+def delete(ctx, index='_all'):
     """Deleting specified Elasticsearch indexes"""
     blurb(delete)
     result = http_request(domain='localhost:9200', path='/{}'.format(index), method='DELETE')
@@ -12,7 +12,7 @@ def delete(index='_all'):
 
 
 @task
-def index():
+def index(ctx):
     """Create the search index SQLite databases."""
     blurb(index)
     import sc.search.texts

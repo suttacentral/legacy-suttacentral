@@ -4,7 +4,7 @@ from tasks.helpers import *
 
 
 @task
-def clean(older=False):
+def clean(ctx, older=False):
     """Delete offline SuttaCentral export files."""
     blurb(clean)
     if older:
@@ -15,7 +15,7 @@ def clean(older=False):
 
 
 @task
-def create(host='localhost:8800', basestem='sc-offline', force=False, quiet=False, wait=None, omit=None):
+def create(ctx, host='localhost:8800', basestem='sc-offline', force=False, quiet=False, wait=None, omit=None):
     """Create an offline SuttaCentral export."""
     blurb(create)
     command = 'utility/export/offline.py'
@@ -33,13 +33,13 @@ def create(host='localhost:8800', basestem='sc-offline', force=False, quiet=Fals
 
 
 @task
-def create_dev():
+def create_dev(ctx):
     """Create an offline SuttaCentral export for a development environment."""
     create(force=True)
 
 
 @task
-def create_production():
+def create_production(ctx):
     """Create an offline SuttaCentral export for the production environment."""
     create(host='suttacentral.net', quiet=True, wait=0.15)
     #create(host='suttacentral.net', quiet=True, wait=0.15,

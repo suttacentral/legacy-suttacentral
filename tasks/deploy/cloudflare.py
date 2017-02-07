@@ -28,7 +28,7 @@ def get_request_data(r):
     return d
 
 @task
-def purge_cache(force=False):
+def purge_cache(ctx, force=False):
     """Send fpurge_ts POST request to Cloudflare to purge cache"""
     api_key = sc.config.cloudflare['api_key']
     email = sc.config.cloudflare['email']

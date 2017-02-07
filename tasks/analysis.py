@@ -49,6 +49,6 @@ def analyze_path(path):
 
 
 @task
-def texts():
+def texts(ctx):
     tag_class_data = analyze_path(sc.text_dir)
     json.dump(tag_class_data, data_file_json.open('w'), indent=4, sort_keys=1)
