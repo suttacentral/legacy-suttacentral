@@ -5533,6 +5533,9 @@
               "parallels": ["sn4.24", "sa246"]
           },
           {
+              "parallels": ["sn4.24#verse-num-sc504-#verse-num-sc505", "snp3.2#verse-num-sc450-#verse-num-sc451"]
+          },
+          {
               "parallels": ["sn4.25", "lal21", "sa-2.31", "sa1092", "~skt-lo-mvu89"]
           },
           {

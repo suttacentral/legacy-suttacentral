@@ -169,12 +169,11 @@ class ParallelsManager:
                 for location in locations:
                     if location.uid == uid:
                         this_locations.append(location)
-
+                this_location = this_locations[0]
                 
 
                 
                 if relationship_type == 'parallels':
-                    this_location = this_locations[0]
                     for other_location in locations:
                         if other_location == this_location:
                             continue
@@ -191,7 +190,6 @@ class ParallelsManager:
                                                          relationship_name=get_relationship_name(relationship_type, partial),
                                                          partial=partial))
                 if relationship_type in {'mentions', 'retells'}:
-                    this_location = this_locations[0]
                     if this_location == locations[0]:
                         partial = this_location.partial
                         # this sutta is the one which is mentioned
