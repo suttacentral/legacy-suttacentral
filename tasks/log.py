@@ -4,7 +4,7 @@ from tasks.helpers import *
 
 
 @task
-def clean():
+def clean(ctx):
     """Delete log files."""
     blurb(clean)
     rm_rf('log/*.log')

@@ -126,7 +126,7 @@ class TIMManager:
                 components[lang_uid] = lang_tim
                 files_used.add(db_file)
         
-        build_logger.info('Removing unused db files'.format(lang_uid))
+        build_logger.info('Removing unused db files')
         # Delete Unused Files:
         for file in sc.db_dir.glob(self.db_name_tmpl.format(lang='*', hash='*')):
             if file not in files_used:
@@ -135,7 +135,7 @@ class TIMManager:
         # Now we need to splice the individual languages
         tim = TextInfoModel('Oneness')
         
-        build_logger.info('Splicing TIM data'.format(lang_uid))
+        build_logger.info('Splicing TIM data')
         for lang_uid, baby_tim in components.items():
             sc.util.recursive_merge(tim._by_lang, baby_tim._by_lang)
             sc.util.recursive_merge(tim._by_uid, baby_tim._by_uid)
@@ -143,7 +143,7 @@ class TIMManager:
             sc.util.recursive_merge(tim._codepoints, baby_tim._codepoints)
         
         self._set_instance(tim)
-        build_logger.info('TIM is ready'.format(lang_uid))
+        build_logger.info('TIM is ready')
     
     def get(self):
         if self.instance:

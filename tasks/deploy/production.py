@@ -10,7 +10,7 @@ def _production_run(*commands):
     ] + list(commands))
 
 @task
-def push_fonts(delete=False):
+def push_fonts(ctx, delete=False):
     """Copy local fonts to the production server."""
     blurb(push_fonts)
     run(' '.join([
@@ -26,7 +26,7 @@ def push_fonts(delete=False):
         fg=True)
 
 @task
-def pull_fonts(delete=False):
+def pull_fonts(ctx, delete=False):
     """Copy fonts from the production server to local"""
     blurb(pull_fonts)
     run(' ' .join([
@@ -42,7 +42,7 @@ def pull_fonts(delete=False):
         fg=True)
 
 @task
-def quick():
+def quick(ctx):
     """Deploy simple changes to the production server."""
     blurb(quick)
     _production_run(
@@ -56,7 +56,7 @@ def quick():
     )
 
 @task
-def full(branch=None):
+def full(ctx, branch=None):
     """Deploy to the staging server."""
     blurb(full)
     _production_run(
@@ -73,7 +73,7 @@ def full(branch=None):
     )
 
 @task
-def test():
+def test(ctx):
     _production_run(
         'git pull',
         'cd data',
@@ -87,7 +87,7 @@ def test():
     )
 
 @task
-def rebuild_tim():
+def rebuild_tim(ctx):
     """ Rebuild TIM on the production server """
     blurb(rebuild_tim)
     _production_run(
@@ -96,7 +96,7 @@ def rebuild_tim():
     
 
 @task
-def update_data():
+def update_data(ctx):
     """Deploy data changes to the production server."""
     blurb(update_data)
     _production_run(
@@ -106,7 +106,7 @@ def update_data():
 
 
 @task
-def update_search():
+def update_search(ctx):
     """Update dictionary and search index on the production server."""
     blurb(update_search)
     _production_run(
@@ -115,7 +115,7 @@ def update_search():
     )
 
 @task
-def elastic_restart():
+def elastic_restart(ctx):
     """Restart elasticsearch service"""
     blurb(elastic_restart)
     _production_run(
@@ -123,7 +123,7 @@ def elastic_restart():
     )
 
 @task
-def elastic_nuke():
+def elastic_nuke(ctx):
     """Nuke elasticsearch search indexes"""
     blurb(elastic_nuke)
     _production_run(

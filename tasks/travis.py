@@ -18,7 +18,7 @@ TRAVIS_LOCAL_CONF = """\
 
 
 @task
-def prepare():
+def prepare(ctx):
     """Prepare the travis environment."""
     blurb(prepare)
     assert not sc.local_config_path.exists()
@@ -29,7 +29,7 @@ def prepare():
 
 
 @task
-def start_server():
+def start_server(ctx):
     """Start a background server for the travis environment."""
     blurb(start_server)
     run('invoke server &', fg=True)
@@ -39,7 +39,7 @@ def start_server():
 
 
 @task
-def stop_server():
+def stop_server(ctx):
     """Stop the background server for the travis environment."""
     blurb(stop_server)
     run('pkill -f cherryd')
