@@ -1,42 +1,12 @@
-[
-  {
-    "name": "Theravāda",
-    "uid": "tv"
-  },
-  {
-    "name": "Sarvāstivāda",
-    "uid": "sarv"
-  },
-  {
-    "name": "Dharmaguptaka",
-    "uid": "dg"
-  },
-  {
-    "name": "Lokuttaravāda",
-    "uid": "lo"
-  },
-  {
-    "name": "Mahāsaṅghika",
-    "uid": "mg"
-  },
-  {
-    "name": "Mahīśāsaka",
-    "uid": "mi"
-  },
-  {
-    "name": "Mūlasarvāstivāda",
-    "uid": "mu"
-  },
-  {
-    "name": "Prākrit",
-    "uid": "pr"
-  },
-  {
-    "name": "Gāndhārī",
-    "uid": "gr"
-  },
-  {
-    "name": "Other",
-    "uid": "other"
-  }
-]
+{
+  "tv": "Theravāda",
+  "sarv": "Sarvāstivāda",
+  "dg": "Dharmaguptaka",
+  "lo": "Lokuttaravāda",
+  "mg": "Mahāsaṅghika",
+  "mi": "Mahīśāsaka",
+  "mu": "Mūlasarvāstivāda",
+  "pr": "Prākrit",
+  "gr": "Gāndhārī",
+  "other": "Other"
+}
