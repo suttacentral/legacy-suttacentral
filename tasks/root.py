@@ -12,36 +12,36 @@ from tasks.helpers import *
 @task
 def clean(ctx, aggressive=False):
     """Remove unnecessary files."""
-    tasks.log.clean()
-    tasks.tmp.clean()
+    tasks.log.clean(ctx)
+    tasks.tmp.clean(ctx)
     if aggressive:
-        tasks.assets.clean(older=False)
-        tasks.dictionary.clean()
-        tasks.exports.offline.clean(older=False)
-        tasks.search.clean()
+        tasks.assets.clean(ctx, older=False)
+        tasks.dictionary.clean(ctx)
+        tasks.exports.offline.clean(ctx, older=False)
+        tasks.search.clean(ctx)
         for file in sc.db_dir.glob('*'):
             if not file.isdir():
                 file.unlink()
     else:
-        tasks.assets.clean(older=True)
-        tasks.exports.offline.clean(older=True)
+        tasks.assets.clean(ctx, older=True)
+        tasks.exports.offline.clean(ctx, older=True)
 
 
 @task
 def reset(ctx):
     """Reset the environment."""
     blurb(reset)
-    clean(aggressive=True)
-    update_data()
-    tasks.dictionary.build()
-    tasks.search.index()
+    clean(ctx, aggressive=True)
+    update_data(ctx)
+    tasks.dictionary.build(ctx)
+    tasks.search.index(ctx)
 
 @task
 def server(ctx, v=False):
     """Run the server."""
     blurb(server)
     if config.newrelic_license_key:
-        tasks.newrelic.update_ini()
+        tasks.newrelic.update_ini(ctx)
         os.environ['NEW_RELIC_ENVIRONMENT'] = config.newrelic_environment
         os.environ['NEW_RELIC_CONFIG_FILE'] = str(sc.base_dir / 'newrelic.ini')
         os.execlp('newrelic-admin', 'newrelic-admin', 'run-program', 'cherryd',
