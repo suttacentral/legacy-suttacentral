@@ -74,8 +74,11 @@ class API:
     @cherrypy.expose
     @cherrypy.tools.allow(methods=['GET'])
     @cherrypy.tools.json_out(handler=json_handler)
-    def uid(self, *uids):
+    @cherrypy.tools.validate_etags()
+    def uid(self, *uids, subtree_hash=None):
         result = self.forest.api.uids(*uids)
+        
+        
         if result:
             return result
         else:

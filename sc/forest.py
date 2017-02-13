@@ -213,6 +213,7 @@ class Forest:
 class API:
     def __init__(self, forest):
         self.forest = forest
+        self._subtree_hash_cache = {}
     
     def uids(self, *uids):
         if not uids:
@@ -251,6 +252,15 @@ class API:
                 else:
                     results.append(obj)
         return results
+    
+    def get_subtree_hash(self, *uids):
+        key = tuple(uids)
+        if key not in self._subtree_hash_cache:
+            subtree = self.get_by_uids(*uids)
+            self._subtree_hash_cache[key] = hashlib.blake2s(json.dumps(subtree, sort_keys=1, ensure_ascii=0).encode(encoding='utf8')).hexdigest()[:12]
+            
+        return self._subtree_hash_cache[key]
+        
             
 forest = Forest(source_dir=source_dir, db_dir=db_dir)
 api = API(forest=forest)
