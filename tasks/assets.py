@@ -16,7 +16,7 @@ def clean(ctx, older=False):
 
 
 @task(aliases=('build',))
-def compile(precompress=False):
+def compile(ctx, precompress=False):
     """Compile the (CSS/JS) assets."""
     blurb(compile)
     assets.compile()
