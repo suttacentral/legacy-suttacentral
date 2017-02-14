@@ -1,3 +1,4 @@
+    
 {% if not embed %}
 <div id="sidebar">
     <script>
@@ -7,7 +8,7 @@
     } else {
         document.getElementById('sidebar').style.visibility = 'hidden';
     }
-    
+
     console.log('Main: ', document.getElementsByTagName('main'));
     setTimeout(function(){
         document.getElementById('sidebar').style.visibility = 'visible';
@@ -19,7 +20,8 @@
     {% if has_quotes %}
     document.getElementsByTagName('main')[0].style.visibility = 'hidden';
     {% endif %}
-    </script>
+</script>
+
       <div id="darkness"></div>
       <ul class='tabs'>
         <li><a href="#controls-tab">Controls</a></li>
@@ -42,18 +44,26 @@
             {% endif %}
             {% if lang_code == 'lzh' %}
             <div class="x1 button-row">
-                <a class="button" id="lzh2en" title="Activate Chinese lookup">Chinese → English Lookup</a>
+                <a class="button" id="lzh2en" title="Activate Chinese lookup">Chinese <span class="lookup_arrow">→</span> English Lookup</a>
             </div>
             {% endif %}
+
+
             <div class="x1 button-row">
-                <a class="button" id="text-info" title="View reference numbers, variant readings, etc.">Textual Information</a>
+                <span class="button">Textual Information&nbsp;&nbsp;&nbsp;<label class="switch" title="View reference numbers, variant readings, etc."><input type="checkbox" id="text-info"><span class="slider round"></span></label></span>
             </div>
+            <script>
+            if (localStorage.getItem('infomode.on')) {
+                document.getElementById("text-info").checked=true;
+            }
+            </script>
             {% if lang_code == 'lzh' %}
             <div class="x1 button-row">
                 <a class="button" id="t-line-by-line" title="View line-by-line as in CBETA">View line-by-line</a>
             </div>
             {% endif %}
-            <div id="pin-sidebar">Keep Extended:<label><input type="checkbox" name="sidebar-pinned"> Sidebar</label><label><input type="checkbox" name="header-pinned"> Header</label></div>
+            <div id="pin-sidebar">Keep Extended:<span class="checkextended"><input type="checkbox" value="1" id="checkextendedInput" name="sidebar-pinned"><label for="checkextendedInput"></label></span>Sidebar<span class="checkextended"><input type="checkbox" id="checkextendedInput1" name="header-pinned"><label for="checkextendedInput1"></label></span>Header</div>
+
             <script>
             document.getElementsByName('sidebar-pinned')[0].checked = localStorage.getItem('sc.sidebar.pinned') == "true";
             document.getElementsByName('header-pinned')[0].checked = localStorage.getItem('sc.headerMenu.pinned') == "true";
@@ -70,39 +80,38 @@
             {% endif %}
             {% if imm(uid) %}
             <div class="x1 button-row">
-                <a class="button" href="/{{ uid }}" id="text-details-button" title="Go to parallels and references">Parallels & References ▶</a>
+                <a class="button" href="/{{ uid }}" id="text-details-button" title="Go to parallels and references">Parallels & References <span class="pr_arrow">↗</span></a>
             </div>
             {% endif %}
             <div class="x1 button-row languages">
             <details>
-                <summary class="button">Languages</summary>
-                <ul>
+                <summary class="button">Languages <span class="dropdown_arrow">▼</span></summary>
+                <div class="language-dropdown"><ul>
                     {% for text_ref in text_refs %}
                     {% set offsite = text_ref.url[0] != '/' %}
-                    {% set classes =  (['offsite'] if offsite else []) %}
-                    {% if text_ref.lang.uid == root_lang.uid %}
-                        {% set classes = classes + ['root'] %}
+                    {% if sutta %}
+                    {% set is_root = text_ref.lang.uid == sutta.lang.uid %}
+                    {% elif division %}
+                    {% set is_root = text_ref.lang.uid == division.collection.lang.uid %}
                     {% endif %}
-                    
-                    {% if not offsite and lang_code == text_ref.lang.uid %}
-                        {% set classes = classes + ['this'] %}
-                    {% endif %}
-                    
+                    {% set classes =  (['offsite'] if offsite else [])
+                                    + (['root'] if is_root else [])
+                                    + (['this'] if not offsite and lang_code == text_ref.lang.uid else []) %}
                     <li{% if classes %} class="{{ classes|join(' ') }}"{% endif %}>
                         <a href="{{ text_ref.url }}" title="{{ text_ref.abstract }}" {% if offsite %} target="_blank"{% endif %}>{{ text_ref.lang.name }}</a></li>
                     {% endfor %}
                     
-                </ul>
+                </ul></div>
             </details></div>
             <div class="x2 button-row">
                 {% if prev_data %}
-                    <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}">◀ {{ prev_data.uid|uid_to_acro }}</a>
+                    <a class="button" class="previous" title="{{ prev_data.name_striped }}" href="{{ prev_data.url }}"><span class="nextprev_arrow">←</span> {{ prev_data.uid|uid_to_acro }}</a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}
                 
                 {% if next_data %}
-                    <a class="button" class="next" title="{{ next_data.name_striped }}" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }} ▶</a>
+                    <a class="button" class="next" title="{{ next_data.name_striped }}" href="{{ next_data.url }}">{{ next_data.uid|uid_to_acro }} <span class="nextprev_arrow">→</span></a>
                 {% else %}
                     <a class="button empty"></a>
                 {% endif %}
