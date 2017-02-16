@@ -18607,16 +18607,16 @@
               "parallels": ["vv6", "vv7", "vv8", "~ne37#115"]
           },
           {
-              "parallels": ["sa801", "an5.96-98"]
+              "mentions": ["sa1202", "t1670b2.1"]
           },
           {
-              "parallels": ["mil3.1.1", "t1670b2.1"]
+              "parallels": ["sa801", "an5.96-98"]
           },
           {
               "mentions": ["sa-2.218", "t1670b2.1"]
           },
           {
-              "mentions": ["sa1202", "t1670b2.1"]
+              "parallels": ["mil3.1.1", "t1670b2.1"]
           },
           {
               "parallels": ["mil3.1.3#1", "t1670b2.2"]
@@ -18643,10 +18643,10 @@
               "mentions": ["sa-2.100", "t1670b2.10"]
           },
           {
-              "mentions": ["sa1186-1187", "t1670b2.10"]
+              "parallels": ["~mil3.1.9", "t1670b2.10"]
           },
           {
-              "parallels": ["~mil3.1.9", "t1670b2.10"]
+              "mentions": ["sa1186-1187", "t1670b2.10"]
           },
           {
               "parallels": ["mil3.1.10", "t1670b2.8"]
