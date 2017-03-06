@@ -5554,9 +5554,6 @@
               "parallels": ["sn4.7", "sa-2.26", "sa1087"]
           },
           {
-              "parallels": ["sn4.9", "sa-2.23", "sa1084", "snp1.2(33-34)"]
-          },
-          {
               "parallels": ["sn40.10", "sa506", "sa988-989", "~ea36.5"]
           },
           {
@@ -16987,7 +16984,10 @@
               "mentions": ["snp1.2#verse-num-sc29", "mil7.2.4#2"]
           },
           {
-              "parallels": ["snp1.2#verse-num-sc33-#verse-num-sc34", "sn4.8#2-#3", "sn1.12#2-#3"]
+              "parallels": ["sn4.9", "sa-2.23", "sa1084"]
+          },
+          {
+              "parallels": ["snp1.2#verse-num-sc33-#verse-num-sc34", "sn4.8#2-#3", "sn1.12#2-#3", "sa1004#t-linehead0263a17-#t-linehead0263a20", "sa-2.142#t-linehead0428a16-#t-linehead0428a24"]
           },
           {
               "mentions": ["snp1.2#verse-num-sc33-#verse-num-sc34", "ne9#14-#16", "pe2#165-#166"]
