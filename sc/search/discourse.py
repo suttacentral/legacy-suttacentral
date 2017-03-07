@@ -149,7 +149,7 @@ class DiscourseIndexer(ElasticIndexer):
         def category_is_visible(category):
             if category['read_restricted']:
                 return False
-            if category['name'] in {'Meta', 'Feedback'}:
+            if category['name'] in {'Meta', 'Feedback', 'Uncategorized'}:
                 return False
             parent_id = category['parent_category_id']
             if parent_id:
