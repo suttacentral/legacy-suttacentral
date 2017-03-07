@@ -4,7 +4,7 @@ from elasticsearch.exceptions import NotFoundError, ConnectionError
 import time
 import regex
 import lxml.html
-
+import json
 import sc
 import sc.logger
 from sc.search.indexer import ElasticIndexer
@@ -86,7 +86,11 @@ class DiscourseIndexer(ElasticIndexer):
                          cookies={'_forum_session': self.session_cookie}
                          )
         self.r = r
-        return r.json()
+        try:
+            return r.json()
+        except json.decoder.JSONDecodeError:
+            # No data was returned
+            return None
     
     def update_data(self):
         most_recent = None
@@ -94,6 +98,8 @@ class DiscourseIndexer(ElasticIndexer):
         if most_recent:
             params['since'] = most_recent
         data = self.get_data(params)
+        if not data:
+            return
         logger.info('New categories: {}, new topics: {}, new posts: {}'.format(len(data['categories']),
                                                                                len(data['topics']),
                                                                                len(data['posts'])))
@@ -275,7 +281,7 @@ def get_category(category_id):
 def search(uid):
     if not discourse_is_available:
         return None
-    uid = uid.lower()
+    uid = uid.lower().split('-')[0]
     body = {
       "query": {
         "function_score": {
@@ -293,7 +299,7 @@ def search(uid):
                     },
                     "inner_hits": {
                         "size": 1,
-                        "_source": ["post_number", "id"],
+                       # "_source": ["post_number", "id"],
                         "highlight": {
                             "fields": {
                                 "plain": {}
@@ -349,13 +355,9 @@ def search(uid):
             first_post_query = {
                                   "size": 1,
                                   "query": {
-                                    "filtered": {
-                                      "filter": {
                                         "term": {
                                           "topic_id": hit['_source']['id']
                                         }
-                                      }
-                                    }
                                   },
                                   "sort": [
                                     {

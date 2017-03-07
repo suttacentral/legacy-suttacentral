@@ -9,38 +9,6 @@ logger = logging.getLogger(__name__)
 
 import sc.util
 
-def div_translation_count(lang):
-    " Returns the count of translations per subdivision "
-    body = {
-        'aggregations': {
-            'div_uids': {
-                'terms': {
-                    'field': 'division',
-                    'size': 0 # Unlimited
-                }
-            },
-            'subdiv_uids': {
-                'terms': {
-                    'field': 'subdivision',
-                    'size': 0 # Unlimited
-                }
-            }
-        }
-    }
-    try:
-        result = es.search(index=lang, doc_type='text', search_type='count', body=body)
-    except elasticsearch.exceptions.NotFoundError:
-        return None
-    mapping = {d['key']: d['doc_count']
-            for d
-            in result['aggregations']['subdiv_uids']['buckets']}
-
-    # If division and subdiv is shared, clobber with div value.
-    mapping.update({d['key']: d['doc_count']
-            for d
-            in result['aggregations']['div_uids']['buckets']})
-    return mapping
-
 def text_search(query, lang=None, **kwargs):
     import langid
     lang_guess = langid.identifier
@@ -219,7 +187,7 @@ def search(query, highlight=True, offset=0, limit=10,
                 "query": inner_query,
                 "functions": [
                     {
-                        "boost_factor": "1.2",
+                        "weight": "1.2",
                         "filter": {
                             "term": {
                                 "lang": "en"
@@ -233,7 +201,7 @@ def search(query, highlight=True, offset=0, limit=10,
                         }
                     },                            
                     {
-                        "boost_factor": "0.25",
+                        "weight": "0.25",
                         "filter": {
                           "type": {
                               "value": "definition"
@@ -241,7 +209,7 @@ def search(query, highlight=True, offset=0, limit=10,
                         }
                     },
                     {
-                        "boost_factor": "2",
+                        "weight": "2",
                         "filter": {
                             "term": {
                                 "uid": query.replace(' ', '').lower()
@@ -249,7 +217,7 @@ def search(query, highlight=True, offset=0, limit=10,
                         }
                     },
                     {
-                        "boost_factor": "1.2",
+                        "weight": "1.2",
                         "filter": {
                             "term": {
                                 "is_root": True
