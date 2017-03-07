@@ -12,7 +12,7 @@ CherryPy==3.5.0
 colorama==0.3.3
 cssmin==0.2.0
 cssselect==0.9.1
-elasticsearch==2.1.0
+elasticsearch==5.2.0
 fonttools==3.0
 invoke==0.14.0
 Jinja2==2.8
