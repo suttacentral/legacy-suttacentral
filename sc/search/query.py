@@ -197,7 +197,8 @@ def search(query, highlight=True, offset=0, limit=10,
                     {
                         "field_value_factor": {
                             "field": "boost",
-                            "factor": 1
+                            "factor": 1.0,
+                            "missing": 1.0
                         }
                     },                            
                     {
