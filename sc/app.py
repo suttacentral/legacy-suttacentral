@@ -5,6 +5,13 @@ import time
 import sc
 from sc import config, logger, root
 
+_approot = None
+
+def get_root():
+    global _approot
+    if not _approot:
+        _approot = root.Root()
+    return _approot
 
 def mount():
     """Mount the application on cherrypy."""
@@ -12,7 +19,8 @@ def mount():
     cherrypy_config = config.for_cherrypy()
     # For some reason, the global settings need to be explicitly injected.
     cherrypy.config.update(cherrypy_config['global'])
-    cherrypy.tree.mount(root.Root(), config=cherrypy_config)
+    
+    cherrypy.tree.mount(get_root(), config=cherrypy_config)
 
 
 def setup(test=False):

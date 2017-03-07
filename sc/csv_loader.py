@@ -36,5 +36,11 @@ def table_reader(tablename):
                 raise TypeError('Error on line {} in table {}, ({})'.format(
                     lineno, tablename, e))
 
+def csv_dict_reader(file):
+    with file.open('r') as f:
+        reader = csv.DictReader(f, dialect=ScCsvDialect)
+        yield from reader
+    
+
 def load_table(tablename):
     return {row.uid: row for row in table_reader(tablename)}

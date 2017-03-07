@@ -4,24 +4,26 @@ import hashlib
 import logging
 from colorama import Fore, Back
 from collections import OrderedDict, defaultdict
-
+from itertools import tee
 
 import sc
 import sc.tools.html
 from sc.util import humansortkey
+from sc.csv_loader import csv_dict_reader
 
 logger = logging.getLogger(__name__)
 
 source_dir = sc.base_dir / 'newdata'
 db_dir = sc.db_dir / 'forest'
 
+def pairwise(iterable):
+    a,b = tee(iterable)
+    next(b, None)
+    return list(zip(a, b))
+    
+
 if not db_dir.exists():
     db_dir.mkdir()
-
-
-def make_file_key(file):
-    key = str(file) + str(file.stat().st_mtime)
-    return hashlib.sha1(key.encode()).hexdigest()[:12]
 
 class Node(dict):
     """ A Node is dict with properties
@@ -38,6 +40,13 @@ class Node(dict):
         self.parent = None
         self.depth = 0
         self.types = {}
+        self.children_type = None
+    
+    def ancestors(self, uid):
+        if not self.parent:
+            return
+        yield self.parent
+        yield from self.parent.ancestors
     
     def has_as_ancestor(self, uid):
         if not self.parent:
@@ -50,6 +59,7 @@ class Node(dict):
             return False
 
 class Forest:        
+    version = 5
     def __init__(self, source_dir, db_dir):
         self.print('Loading Data Trees')
         self.mapping = defaultdict(list)
@@ -67,6 +77,11 @@ class Forest:
         self.print('Assigning types and properties')
         self.add_types(self._root)
         self.print('Everything Okay')
+        
+    
+    def make_file_key(self, file):
+        key = str(file) + str(file.stat().st_mtime) + str(self.version)
+        return hashlib.sha1(key.encode()).hexdigest()[:12]
     
     def print(self, *args, **kwargs):
         print(Fore.WHITE + Back.GREEN + 'Forest:' + Fore.RESET + Back.RESET, *args, **kwargs)
@@ -75,13 +90,17 @@ class Forest:
         uid = target.stem
         out = Node(depth=depth)
         out['uid'] = uid
-            
+        
+        
         if target.is_dir():
+            # A DIR becomes a new level, with the contents being the children
             children = [self.load_tree(target=child, parent=out, depth=depth+1) 
                         for child in sorted(target.iterdir(), key=lambda f: humansortkey(f.stem))
                         if child.stem not in self.root_level_stems]
             out['children'] = [child for child in children if child]
+        
         elif target.suffix == '.json':
+            # JSON is treated variably depending whether it is Array or Object
             with target.open('r', encoding='utf8') as f:
                 data = json.load(f)
             if isinstance(data, list):
@@ -92,9 +111,20 @@ class Forest:
                 return None
             else:
                 raise ValueError('Malformed JSON Data in {}'.format(target.relative_to(self.source_dir)))
+        # CSV
+        elif target.suffix == '.csv':
+            # CSV files are treated the same as JSON Object
+            type_name = target.stem
+            data = csv_dict_reader(target)
+            parent.types[type_name] = {d.pop('uid'): d for d  in data}
+            
+            
+            
+        # HTML
         elif target.suffix == '.html':
             out['file'] = str(target.relative_to(self.source_dir))
             self._file_to_object_mapping[target] = out
+
         return out
     
     def promote_json_types(self, data):
@@ -107,7 +137,6 @@ class Forest:
             return node
         else:
             return data
-        
     
     def build_mapping(self, obj):
         if 'uid' in obj:
@@ -152,7 +181,7 @@ class Forest:
         try:
             with data_cache_file.open('r', encoding='utf8') as f:
                 file_data_cache = json.load(f)
-        except (FileNotFoundError, json.decoder.JSONDecodeError) as e:
+        except (FileNotFoundError, json.decoder.JSONDecodeError, RecursionError) as e:
             pass
         
         if not type(file_data_cache) == dict:
@@ -164,9 +193,10 @@ class Forest:
         unexamined_files = []
         
         for file, obj in self._file_to_object_mapping.items():
-            file_key = make_file_key(file)
+            file_key = self.make_file_key(file)
             if file_key in file_data_cache:
-                obj.update(file_data_cache[file_key])
+                obj.update(self.promote_json_types(file_data_cache[file_key]))
+                
                 seen.add(file_key)
             else:
                 unexamined_files.append( (file_key, file) )
@@ -189,6 +219,9 @@ class Forest:
                 file_data = {
                     'name': name
                 }
+                children = self._get_children(root, file)
+                if children:
+                    file_data['children'] = children
                 
                 self._file_to_object_mapping[file].update(file_data)
                 
@@ -208,7 +241,60 @@ class Forest:
         except Exception as e:
             logger.warn('Could not determine name for {!s}'.format(file.relative_to(self.source_dir)))
             return ''
+    
+    def _get_children(self, root, file):
+        elements = root.cssselect('[data-uid]')
+        
+        children = []
+        
+        mapping = OrderedDict()
+        
+        for element in elements:
+            uid = element.get('data-uid') or element.get('id')
+            if not uid:
+                logger.warn('Could not determine uid in {!s} in element {!r}'.format(file.relative_to(self.source_dir), element.attrib))
+                continue
+            name = element.get('data-name')
+            if name is None:
+                name = element.text_content()
+                if name.isspace():
+                    name = ""
             
+            type_ = element.get('data-type') or ""
+            
+            mapping[uid] = Node()
+            mapping[uid].update({"uid": uid, 
+                            "name": name,
+                            "type": type_,
+                            "bookmark": element.get('id'),
+                            })
+        
+        # Now assign children
+        
+        # use divide and conquer to form into groups by type
+        def determine_children(*, objs):
+            if len(objs) == 0:
+                return None
+            if len(objs) == 1:
+                return objs
+                
+            children = []
+            children_type = objs[0]['type']
+            children_indexes = []
+            for i, child_obj in enumerate(objs):
+                if child_obj['type'] == children_type:
+                    children.append(child_obj)
+                    children_indexes.append(i)
+                    
+            children_indexes.append(len(objs))
+            
+            for start, end in pairwise(children_indexes):
+                grandchildren = determine_children(objs=objs[start+1:end])
+                if grandchildren:
+                    objs[start]['children'] = grandchildren
+            
+            return children
+        return determine_children(objs=list(mapping.values()))
             
 class API:
     def __init__(self, forest):
@@ -225,9 +311,14 @@ class API:
         
         results = self.get_by_uids(*uids)
         
-        return [self.make_pruned_subtree(obj=obj, depth=depth) for obj in results]
+        pruned_results = [self.make_pruned_subtree(obj=obj, depth=depth) for obj in results]
+        for obj, result in zip(results, pruned_results):
+            result['ancestors'] = self.get_ancestors(obj)
+            
+        return pruned_results
     
     def make_pruned_subtree(self, obj, depth):
+        parent_obj = obj.parent
         obj = dict(obj)
         if 'children' in obj:            
             if depth == 0:
@@ -236,7 +327,21 @@ class API:
                 if depth is not None:
                     depth = depth - 1
                 obj['children'] = [self.make_pruned_subtree(child, depth) for child in obj['children']]
-        return obj        
+
+        return obj
+    
+    def get_ancestors(self, obj):
+        ancestors = []
+        
+        parent_obj = obj.parent
+        while parent_obj:
+            parent_copy = dict(parent_obj)
+            del parent_copy['children']
+            ancestors.append(parent_copy)
+            if parent_obj['uid'] == 'root':
+                break
+            parent_obj = parent_obj.parent
+        return ancestors
     
     def get_by_uids(self, *uids):
         uids = set(uids)

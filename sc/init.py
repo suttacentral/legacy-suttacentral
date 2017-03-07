@@ -55,12 +55,15 @@ def init():
         import sc.textdata
         import sc.text_image_index
         
+        print("Building Forest")
+        import sc.forest        
         print("Building TIM")
         sc.textdata.build()
         print("Building IMM")
         sc.scimm.build()
         print("Building Text Image Index")
         sc.text_image_index.build()
+
         print("Components are now ready")
         
         if sc.config.app['update_search']:
