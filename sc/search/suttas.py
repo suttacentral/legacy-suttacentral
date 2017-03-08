@@ -2,6 +2,7 @@ import json
 import time
 import regex
 import logging
+import hashlib
 import lxml.html
 from math import log
 from copy import deepcopy
