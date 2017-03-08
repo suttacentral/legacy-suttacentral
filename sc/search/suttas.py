@@ -105,7 +105,7 @@ class SuttaIndexer(ElasticIndexer):
 
     def get_extra_state(self):
         try:
-            with open(sutta_dump_file, 'rb') as f:
+            with sutta_dump_file.open('rb') as f:
                 return hashlib.md5(f.read()).hexdigest()
         except FileNotFoundError:
             return None
