@@ -65,6 +65,9 @@
                     },
                     "boost": {
                         "type": "float"
+                    },
+                    "ordering": {
+                        "type": "keyword"
                     }
                 }
             }

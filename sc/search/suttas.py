@@ -17,6 +17,7 @@ sutta_dump_file = sc.db_dir / 'suttas.json'
 class SuttaDumper:
     def __init__(self):
         self.volpage_mapping = self.calculate_sutta_volpages()
+        self.last_imm_timestamp = None
     
     def calculate_sutta_volpages(self):
         rex = regex.compile(r'^(?<vol>\D+)(?<page>\d+)$')
@@ -40,31 +41,36 @@ class SuttaDumper:
     
     def extract_fields(self, sutta):
         boost = log(3 + sum(2 - p.partial for p in sutta.parallels), 10)
-        
-        return {
-            "uid": sutta.uid,
-            "volpage": [sutta.volpage] + ([sutta.alt_volpage_info]
-                                            if sutta.alt_volpage_info else []),
-            "volpage_extra": self.volpage_mapping.get(sutta.uid) or [sutta.volpage],
-            "division": sutta.subdivision.division.uid,
-            "subdivision": sutta.subdivision.uid,
-            "lang": sutta.lang.uid,
-            "name": sutta.name,
-            "ordering": '{:04}.{:04}.{:04}'.format(
-                         sutta.subdivision.division.menu_seq,
-                         sutta.subdivision.order,
-                         sutta.number),
-            "boost": boost
-        }
+        try:
+            return {
+                "uid": sutta.uid,
+                "volpage": [sutta.volpage] + ([sutta.alt_volpage_info]
+                                                if sutta.alt_volpage_info else []),
+                "volpage_extra": self.volpage_mapping.get(sutta.uid) or [sutta.volpage],
+                "division": sutta.subdivision.division.uid,
+                "subdivision": sutta.subdivision.uid,
+                "lang": sutta.lang.uid,
+                "name": sutta.name,
+                "ordering": '{:04}.{:04}.{:04}'.format(
+                             sutta.subdivision.division.menu_seq,
+                             sutta.subdivision.order,
+                             sutta.number),
+                "boost": boost
+            }
+        except Exception as e:
+            logger.exception('')
+            return None
     
     def dump_suttas(self):
         imm = sc.scimm.imm()
         
-        out = [self.extra_fields(sutta) for sutta in imm.suttas.values()]
-        out.sort(key=lambda s: s['ordering'])
-        
-        with sutta_dump_file.open('w') as f:
-            json.dump(out, f)
+        if imm.timestamp != self.last_imm_timestamp:
+            self.last_imm_timestamp = imm.timestamp                
+            
+            out = sorted(filter(None, (self.extract_fields(sutta) for sutta in imm.suttas.values())), key=lambda s: s['ordering'])
+            
+            with sutta_dump_file.open('w') as f:
+                json.dump(out, f, sort_keys=True)
 
 class SuttaIndexer(ElasticIndexer):
     doc_type = 'sutta'
@@ -84,7 +90,7 @@ class SuttaIndexer(ElasticIndexer):
         
         for sutta in suttas:
             action = {
-                '_id': sutta.uid
+                '_id': sutta['uid']
             }
             action.update(sutta)
             chunk.append(action)
@@ -99,7 +105,8 @@ class SuttaIndexer(ElasticIndexer):
 
     def get_extra_state(self):
         try:
-            return sutta_dump_file.stat().st_mtime_ns
+            with open(sutta_dump_file, 'rb') as f:
+                return hashlib.md5(f.read()).hexdigest()
         except FileNotFoundError:
             return None
         
@@ -114,8 +121,16 @@ class SuttaIndexer(ElasticIndexer):
     def update_data(self, force=False):
         self.process_chunks(self.yield_suttas(size=500000))
 
-def update():
-    indexer = SuttaIndexer('suttas')
+def update(_cache={}):
+    if 'dumper' not in _cache:
+        _cache['dumper'] = SuttaDumper()
+    
+    if 'indexer' not in _cache:
+        _cache['indexer'] = SuttaIndexer('suttas')
+    
+    dumper = _cache['dumper']
+    indexer = _cache['indexer']
+    dumper.dump_suttas()
     indexer.update()
 
 def filter_search(query):
