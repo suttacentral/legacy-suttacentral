@@ -118,15 +118,22 @@ def search(query, highlight=True, offset=0, limit=10,
 
 def get_available_indexes(indexes, _cache=sc.util.TimedCache(lifetime=30)):
     key = tuple(indexes)
+    
+    
     try:
         available = _cache[key]
     except KeyError:
+        available = None
+    
+    if available is None:
         available = []
         for index in indexes:
             try:
-                if es.cluster.health(index, timeout='0.05s')['status'] in {'green', 'yellow'}:
+                if es.cluster.health(index, timeout='100ms')['status'] in {'green', 'yellow'}:
                     available.append(index)
-            except:
+            except Exception as e:
+                logger.error('An exception occured while checking cluster health for index: {}'.format(index))
+                logger.exception(index)
                 pass
         _cache[key] = available
     return available
@@ -231,6 +238,7 @@ def search(query, highlight=True, offset=0, limit=10,
         }
     }
     import json
+    print('searching index: {}'.format(index_string))
     print(json.dumps(body, indent=2))
     
     if highlight:
