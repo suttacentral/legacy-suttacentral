@@ -18295,7 +18295,16 @@
               "mentions": ["thag10.6#verse-num-sc577", "mil7.2.6#5"]
           },
           {
-              "parallels": ["thag11.1#verse-num-sc606-#verse-num-sc607", "thag14.1#verse-num-sc654-#verse-num-sc655", "~thag2.38#verse-num-sc196"]
+              "parallels": ["thag11.1#verse-num-sc606", "thag14.1#verse-num-sc654", "thag17.2#verse-num-sc1003", "~thag2.38#verse-num-sc196"]
+          },
+          {
+              "parallels": ["thag11.1#verse-num-sc607", "thag14.1#verse-num-sc655", "~thag17.2#verse-num-sc1002", "~thag2.38#verse-num-sc196"]
+          },
+          {
+              "parallels": ["thag2.38#verse-num-sc196", "~thag11.1#verse-num-sc606-#verse-num-sc607", "~thag14.1#verse-num-sc654-#verse-num-sc655", "~thag17.2#verse-num-sc1002-#verse-num-sc1003"]
+          },
+          {
+              "parallels": ["~thag2.38#verse-num-sc196", "~thag11.1#verse-num-sc607", "~thag14.1#verse-num-sc655", "thag17.2#verse-num-sc1002"]
           },
           {
               "mentions": ["thag11.1#verse-num-sc606-#verse-num-sc607", "mil3.2.4#3-#4"]
@@ -18332,9 +18341,6 @@
           },
           {
               "parallels": ["thag2.14#verse-num-sc147", "thag3.16#verse-num-sc265"]
-          },
-          {
-              "parallels": ["thag2.38#verse-num-sc196", "~thag11.1#verse-num-sc606-#verse-num-sc607", "~thag14.1#verse-num-sc654-#verse-num-sc655"]
           },
           {
               "mentions": ["thag21.1#verse-num-sc1235", "~thi-ap36#16"]
