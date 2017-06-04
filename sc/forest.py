@@ -36,9 +36,10 @@ class Node(dict):
     
     """
     
-    def __init__(self, *, parent=None, depth=0):
-        self.parent = None
-        self.depth = 0
+    def __init__(self, *, parent=None, depth=0, raw=False):
+        self.parent = parent
+        self.raw = raw
+        self.depth = depth
         self.types = {}
         self.children_type = None
     
@@ -77,6 +78,8 @@ class Forest:
         self.print('Assigning types and properties')
         self.add_types(self._root)
         self.print('Everything Okay')
+        self.mapping = dict(self.mapping)
+        self.parents = dict(self.parents)
         
     
     def make_file_key(self, file):
@@ -85,6 +88,17 @@ class Forest:
     
     def print(self, *args, **kwargs):
         print(Fore.WHITE + Back.GREEN + 'Forest:' + Fore.RESET + Back.RESET, *args, **kwargs)
+        
+    def load_raw(self, *, target, parent=None, depth=0):
+        if target.suffix == '.json':
+            with target.open('r', encoding='utf8') as f:
+                data = json.load(f)
+            out = Node(depth=depth)
+            out['uid'] = target.stem
+            out['data'] = data
+            out.parent = parent
+            out.raw = True
+            return out
 
     def load_tree(self, *, target, parent=None, depth=0):
         uid = target.stem
@@ -94,16 +108,22 @@ class Forest:
         
         if target.is_dir():
             # A DIR becomes a new level, with the contents being the children
-            children = [self.load_tree(target=child, parent=out, depth=depth+1) 
-                        for child in sorted(target.iterdir(), key=lambda f: humansortkey(f.stem))
-                        if child.stem not in self.root_level_stems]
+            children = []
+            for child in sorted(target.iterdir(), key=lambda f: humansortkey(f.stem)):
+                if child.stem in self.root_level_stems:
+                    children.append(self.load_raw(target=child, parent=out, depth=depth+1))
+                else:
+                    children.append(self.load_tree(target=child, parent=out, depth=depth+1))
+            
             out['children'] = [child for child in children if child]
         
         elif target.suffix == '.json':
+            print('{} is json data'.format(target.name))
             # JSON is treated variably depending whether it is Array or Object
             with target.open('r', encoding='utf8') as f:
                 data = json.load(f)
             if isinstance(data, list):
+                
                 out['children'] = self.promote_json_types(data)
             elif isinstance(data, dict):
                 type_name = target.stem
@@ -142,7 +162,10 @@ class Forest:
         if 'uid' in obj:
             self.mapping[obj['uid']].append(obj)
         if 'children' in obj:
-            for child in obj['children']:
+            for i, child in enumerate(obj['children']):
+                if isinstance(child, str):
+                    child = self.mapping[child]
+                    obj[i] = child
                 try:
                     child.parent = obj
                 except AttributeError:
@@ -356,6 +379,27 @@ class API:
                         break
                 else:
                     results.append(obj)
+        return results
+        
+    def get_by_uids_wildcard(self, *uids):
+        keys = self.forest.mapping.keys()
+        wildcard_uids = None
+        filter_uids = []
+        for uid in uids:
+            if '*' in uid:
+                if wildcard_uids is not None:
+                    raise ValueError('In a wildcard query only one entry may contain wildcards')
+                
+                rex = regex.compile(uid.replace('*', '.*'))
+                wildcard_uids = [u for u in keys if rex.fullmatch(uid)]
+            else:
+                filter_uids.append(uid)
+        
+        results = []
+        
+        for uid in wildcard_uids:
+            results.extend(self.get_by_uids(uid, *filter_uids))
+        
         return results
     
     def get_subtree_hash(self, *uids):

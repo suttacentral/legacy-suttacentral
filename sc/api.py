@@ -34,29 +34,48 @@ class API:
     @cherrypy.tools.allow(methods=['GET'])
     @cherrypy.tools.json_out(handler=json_handler)
     def menu(self):
-        def to_json(thing):
-            out = OrderedDict()
-            
-            if hasattr(thing, "uid"):
-                out.update((
-                    ("uid", thing.uid),
-                    ("type", type(thing).__name__.lower())
-                    ("name", thing.name),
-                ))
-            else:
-                for name in {'pitaka', 'lang', 'sect'}:
-                    if hasattr(thing, name):
-                        out.update(to_json(getattr(thing, name)))
-                        break
-
-            if isinstance(thing, list):
-                children = [to_json(child) for child in thing]
-                out["children"] = children
-
-            
-            return out
+        forest = self.forest
         
-        return to_json(sc.menu.get_menu())
+        menu = self.forest.api.get_by_uids('menu')[0]
+                
+        
+        def expand_entry(obj, parent=None):
+            if 'children' in obj:
+                children = []
+                for child in obj['children']:
+                    if isinstance(child, str):
+                        if '*' in child:
+                            subtrees = forest.api.get_by_uids_wildcard('root', child)
+                            if subtrees:
+                                for subtree in subtrees:
+                                    children.append(expand_entry(subtree))
+                        else:
+                            subtrees = forest.api.get_by_uids('root', child)
+                            if subtrees:
+                                children.append(expand_entry(subtrees[0], parent=obj))
+                    else:
+                        children.append(expand_entry(child, parent=obj))
+                obj['children'] = children
+            return obj
+            
+        def prune(obj):
+            if 'children' in obj:
+                children = []
+                
+                for child in obj['children']:
+                    if child.get('children') or (child.get('type') == 'division'):
+                        children.append(child)
+                        prune(child)
+                
+                if children:
+                    obj['children'] = children
+                else:
+                    del obj['children']
+
+    
+        result = {'uid': 'menu', 'children': [expand_entry(child) for child in menu['data']]}
+        prune(result)
+        return result
     
     @cherrypy.expose
     @cherrypy.tools.allow(methods=['GET'])
