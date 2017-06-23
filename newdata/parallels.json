@@ -282,7 +282,13 @@
               "parallels": ["an10.26", "sa549"]
           },
           {
-              "parallels": ["an10.27", "ea46.8", "~sa486-489"]
+              "parallels": ["an10.27", "ea46.8", "~sa486-489", "~kp4"]
+          },
+          {
+              "parallels": ["an10.28", "~kp4"]
+          },
+          {
+              "parallels": ["~an10.28", "kp4", "~an10.27", "~ea46.8", "~sa486-489"]
           },
           {
               "parallels": ["an10.29", "ma215"]
@@ -2975,7 +2981,7 @@
               "parallels": ["sa465", "~an4.177"]
           },
           {
-              "parallels": ["sa486-489", "~an10.27", "~ea46.8"]
+              "parallels": ["sa486-489", "~an10.27", "~ea46.8", "~kp4"]
           },
           {
               "parallels": ["sa535", "~sn52.2"]
@@ -15573,7 +15579,10 @@
               "retells": ["ja95", "cp4"]
           },
           {
-              "mentions": ["kp7", "pv5", "~kv7.6#5-#7"]
+              "mentions": ["kp7#6-#9", "~kv7.6#4-#7"]
+          },
+          {
+              "parallels": ["kp7", "pv5"]
           },
           {
               "mentions": ["kp8#9", "kv7.7#7"]
