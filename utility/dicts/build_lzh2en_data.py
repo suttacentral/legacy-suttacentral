@@ -26,6 +26,7 @@ import webassets
 import gzip
 import time
 from urllib.request import urlopen
+from urllib.error import HTTPError
 from zipfile import ZipFile
 
 # Paths and urls, these are quite close to being static.
@@ -247,24 +248,28 @@ if args.minify:
 from urllib.request import urlopen
 
 def dl_file(url, target_file):
-    logging.info('Downloading {}'.format(target_file.name))
-    with urlopen(url) as response:
-        try:
-            outf = target_file.open('wb')
-            while True:
-                chunk = response.read(4096)
-                if not chunk:
-                    break
-                outf.write(chunk)
-                
-            outf.close()
-            logging.info('{} downloaded okay'.format(target_file.name))
-        except:
-            target_file.unlink()
-            raise
-            
+    try:
+        logging.info('Downloading {}'.format(target_file.name))
+        with urlopen(url) as response:
+            try:
+                outf = target_file.open('wb')
+                while True:
+                    chunk = response.read(4096)
+                    if not chunk:
+                        break
+                    outf.write(chunk)
+                    
+                outf.close()
+                logging.info('{} downloaded okay'.format(target_file.name))
+            except:
+                target_file.unlink()
+                raise
+    except HTTPError as e:
+        logging.error('{code}: Failed to download file {url}, previously built script data will still be used'.format(url=url, code=e.code))
+        exit(0)    
 
 dl_file(buddhdic_url, buddhdic_file)
+    
 
 with gzip.open(str(buddhdic_file), 'rt', encoding='utf8') as srcfo:
     bdstr = bdbuilder.process(srcfo)
