@@ -259,12 +259,7 @@ Text hypothetically reconstructed by the editor or translator.
 */
 
 #text:lang(gr) .add, #text:lang(pi) .add, #text:lang(skt) .add, #text:lang(bo) .add, #text:lang(lzh) .add, #text:lang(pr) .add, #text:lang(en) .add, .infomode .add {
-    border:1px solid rgb(215, 215, 215);
-    padding: 0.2em .3em 0.1em;
     color:#767676;
-    font-size: 100%;
-    background:#fefefe;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
 .skolar-font {
@@ -272,7 +267,7 @@ Text hypothetically reconstructed by the editor or translator.
         @include sans-serif-all-small-caps;
     }
     
-    p.add, p .add {
+    p.add, p .add, h2.add, h2 .add, h3.add, h3 .add, h4.add, h4 .add, h5.add, h5 .add, h6.add, h6 .add {
         @include sans-serif;
     }
 }
