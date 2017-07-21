@@ -28489,7 +28489,7 @@ sc.piLookup.register({script: 'en', data: {
 "ādima": ["adj.", "first; original; foremost."],
 "ādinna": ["pp mfn.","1. taken, grasped; taken up, undertaken; 2. used, employed (of the distinguishing mark on a robe)."],
 "ādinnadaṇḍa": ["mfn.","who has taken a stick in hand; who administers justice; who has embraced violence"],
-"ādippati": ["pr. 3 sg.","administers justice; who has embraced violence."],
+"ādippati": ["pr. 3 sg.","blazing, burning; red-hot"],
 "ādisanta": ["part. pr. mfn.","aims at; points out, indicates; relates, declares, foretells; dedicates; assigns (one's own puñña to someone else)."],
 "ādisanā": ["f.", "prophesy; guessing; pointing out."],
 "ādisati": ["pr. 3 sg.","aims at; points out, indicates; relates, declares, foretells; dedicates; assigns (one's own puñña to someone else)."],
