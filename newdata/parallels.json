@@ -10614,7 +10614,7 @@
               "parallels": ["dhp#190", "divy#101.019", "pdhp#218", "t210.22#vagga-gatha-num-sc22.16", "t212.28#vagga-gatha-num-sc28.30", "t213.27#vagga-gatha-num-sc27.27", "uv27#27.33"]
           },
           {
-              "parallels": ["dhp#191", "divy#101.021", "iti24#5", "sn15.10#6", "t210.22#vagga-gatha-num-sc22.17", "t212.28#vagga-gatha-num-sc28.31", "t213.27#vagga-gatha-num-sc27.28", "thag21.1#verse-num-sc1269", "thig7.2#5", "uv27#27.34"]
+              "parallels": ["dhp#191", "divy#101.021", "iti24#5", "sn15.10#6", "t210.22#vagga-gatha-num-sc22.17", "t212.28#vagga-gatha-num-sc28.31", "t213.27#vagga-gatha-num-sc27.28", "thag21.1#verse-num-sc1268", "thig7.2#5", "uv27#27.34"]
           },
           {
               "mentions": ["dhp#191", "ne37#156"]
@@ -15570,7 +15570,7 @@
               "retells": ["ja75", "cp29#7", "cp30#7"]
           },
           {
-              "parallels": ["ja95", "dn17#59", "dn16#240", "sn15.20#8", "sn6.15#6", "thag20.1#verse-num-sc1169"]
+              "parallels": ["ja95", "dn17#59", "dn16#240", "sn15.20#8", "sn6.15#6", "thag20.1#verse-num-sc1168"]
           },
           {
               "mentions": ["ja95", "tha-ap21#4", "tha-ap429#13", "tha-ap341#13"]
@@ -15823,7 +15823,7 @@
               "mentions": ["mn40#9", "mil5.3.9#1"]
           },
           {
-              "parallels": ["mn50#21", "thag20.1#verse-num-sc1197"]
+              "parallels": ["mn50#21", "thag20.1#verse-num-sc1196"]
           },
           {
               "parallels": ["mn16#24", "~mn53#9"]
@@ -16426,7 +16426,7 @@
               "mentions": ["sn1.17#3", "mil7.2.6#7"]
           },
           {
-              "parallels": ["sn1.21#2", "thag1.39#verse-num-sc39", "sn2.16#2", "thag1.40#verse-num-sc40", "thag20.1#verse-num-sc1172"]
+              "parallels": ["sn1.21#2", "thag1.39#verse-num-sc39", "sn2.16#2", "thag1.40#verse-num-sc40", "thag20.1#verse-num-sc1171"]
           },
           {
               "mentions": ["sn1.21#2", "pe2#104", "ne37#181"]
@@ -16591,7 +16591,7 @@
               "mentions": ["sn21.12#3-#4", "ne37#251-#252"]
           },
           {
-              "parallels": ["sn21.4#5-#6", "thag20.1#verse-num-sc1175-#verse-num-sc1176"]
+              "parallels": ["sn21.4#5-#6", "thag20.1#verse-num-sc1174-#verse-num-sc1175"]
           },
           {
               "mentions": ["sn21.4#5-#6", "ne37#254-#255"]
@@ -16957,13 +16957,13 @@
               "mentions": ["sn7.9#14", "cnd7#61"]
           },
           {
-              "parallels": ["sn8.10#3", "thag21.1#verse-num-sc1259"]
+              "parallels": ["sn8.10#3", "thag21.1#verse-num-sc1258"]
           },
           {
               "mentions": ["sn8.10#3", "cnd17#7", "cnd22#50"]
           },
           {
-              "parallels": ["sn8.2#2-#6", "thag21.1#verse-num-sc1224-#verse-num-sc1228"]
+              "parallels": ["sn8.2#2-#6", "thag21.1#verse-num-sc1223-#verse-num-sc1227"]
           },
           {
               "parallels": ["snp1.10#verse-num-sc186", "sn10.12#5"]
@@ -17152,7 +17152,7 @@
               "parallels": ["snp2.10#verse-num-sc337", "thag6.5#verse-num-sc404"]
           },
           {
-              "parallels": ["snp2.12#verse-num-sc346-#verse-num-sc361", "thag21.1#verse-num-sc1273-#verse-num-sc1288"]
+              "parallels": ["snp2.12#verse-num-sc346-#verse-num-sc361", "thag21.1#verse-num-sc1272-#verse-num-sc1287"]
           },
           {
               "mentions": ["snp2.13#verse-num-sc368", "pe2#146"]
@@ -18352,13 +18352,13 @@
               "parallels": ["thag2.14#verse-num-sc147", "thag3.16#verse-num-sc265"]
           },
           {
-              "mentions": ["thag21.1#verse-num-sc1235", "~thi-ap36#16"]
+              "mentions": ["thag21.1#verse-num-sc1234", "~thi-ap36#16"]
           },
           {
-              "parallels": ["thag21.1#verse-num-sc1241-#verse-num-sc1243", "sn8.6#3-#5"]
+              "parallels": ["thag21.1#verse-num-sc1240-#verse-num-sc1242", "sn8.6#3-#5"]
           },
           {
-              "mentions": ["thag21.1#verse-num-sc1241-#verse-num-sc1243", "~mil2#68"]
+              "mentions": ["thag21.1#verse-num-sc1240-#verse-num-sc1242", "~mil2#68"]
           },
           {
               "parallels": ["thag3.13#verse-num-sc256-#verse-num-sc257", "sn6.14#6-#7"]
