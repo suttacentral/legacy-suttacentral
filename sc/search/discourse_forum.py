@@ -6,7 +6,6 @@ import functools
 
 import sc
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -17,8 +16,6 @@ discourse_is_available = (sc.search.is_available()
 
 class BadResponseError(Exception):
     pass
-
-
 
 def cached(*lru_args, **lru_kwargs):
     def decorator(func):
@@ -87,12 +84,9 @@ class Discourse:
     
     @cached()
     def categories(self):
-        if 'categories' not in self._cache:
-            site = self.site()
-            raw_categories = {e['id']: e for e in site['categories'] }
-            self._cache['categories'] = {e['id']: e for e in raw_categories.values() if self.category_is_visible(e, raw_categories)}
-        
-        return self._cache['categories']
+        site = self.site()
+        raw_categories = {e['id']: e for e in site['categories'] }
+        return {e['id']: e for e in raw_categories.values() if self.category_is_visible(e, raw_categories)}
     
     @cached()
     def site(self):
@@ -146,29 +140,15 @@ class Discourse:
         
         posts = post_stream['posts']
         if posts:
-            out['first_post'] = posts[0]['cooked']
+            out['posts'] = [posts[0]['cooked']]
             
         return out
 
 
-
-discourse = Discourse(forum_url=sc.config.discourse['forum_url'],
+def get_discourse():
+    return Discourse(forum_url=sc.config.discourse['forum_url'],
                         username=sc.config.discourse['username'],
                         api_key=sc.config.discourse['api_key'])
-                      
-categories = discourse.categories()
-
-topics = []
-
-for category_id in discourse.categories():
-    topics.extend(discourse.get_topics_in_category(category_id))
-    break
-
-time.sleep(1)
-for i, topic in enumerate(topics):
-    if i % 100 == 0:
-        print(f'Processing topic {i+1}/{len(topics)+1}')
-    discourse.process_topic(topic["id"])
     
     
     

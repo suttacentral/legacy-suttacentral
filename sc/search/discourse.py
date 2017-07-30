@@ -1,5 +1,4 @@
 import logging
-import requests
 from elasticsearch.exceptions import NotFoundError, ConnectionError
 import time
 import regex
@@ -10,117 +9,55 @@ import sc.logger
 from sc.search.indexer import ElasticIndexer
 from sc.search import es
 
+from sc.search.discourse_forum import Discourse
+
 logger = sc.logger.get_named_logger(__name__)
 
 discourse_index = 'discourse'
 es = ElasticIndexer.es
 
-discourse_is_available = (sc.search.is_available()
-                          and sc.config.discourse['api_key']
-                          and sc.config.discourse['username']
-                          and sc.config.discourse['forum_url'])
-        
+
 
 class DiscourseIndexer(ElasticIndexer):
     # Different doc types are possible.
     doc_type = None 
     version = 1
     suppress_elasticsearch_errors = True
-    def __init__(self):
+    def __init__(self, forum):
         super().__init__(config_name=discourse_index)
-        self.latest_timestamp = ''
-        self.forum_url = sc.config.discourse['forum_url']    
-        if not self.forum_url.endswith('/'):
-            self.forum_url += '/'
-        
-        self.qs_params = {
-            "api_key": sc.config.discourse['api_key'],
-            "api_username": sc.config.discourse['username']
-        }
-        self.connect()
+        self.forum = forum
     
     def to_plain_text(self, html_string):
         root = lxml.html.fromstring(html_string)
         return root.text_content().strip()
     
     def get_extra_state(self):
-        stamp = time.time() // sc.config.discourse['rebuild_period']
-        return {"rebuild_number": stamp}
+        stamp = time.time()
+        return {"rebuild_time": stamp}
     
-    def connect(self):
-        r = requests.get(self.forum_url, params=self.qs_params)
-        self.session_cookie = r.cookies['_forum_session']
-    
-    latest_update_query =   {
-                                "query": {
-                                    "match_all": {}
-                                },
-                                "size": 1,
-                                "sort": [
-                                    {
-                                        "updated_at": {
-                                            "order": "desc"
-                                        }
-                                    }
-                                ]
-                            }
-    
-    def get_data(self, params=None):
-        if not params:
-            params = {}
-        
-        if 'since' not in params:
-            if self.latest_timestamp:
-                params['since'] = self.latest_timestamp
-            else:
-                try:
-                    r = self.es.search(self.index_name,body=self.latest_update_query, _source='updated_at')
-                    params["since"] = r['hits']['hits'][0]['_source']['updated_at']
-                except Exception as e:
-                    params["since"] = '1900-01-01T00:00:00.000Z'
-        
-        params.update(self.qs_params)
-        
-        r = requests.get(self.forum_url + 'sutcen/data.json', 
-                         params=params,
-                         cookies={'_forum_session': self.session_cookie}
-                         )
-        self.r = r
-        try:
-            return r.json()
-        except json.decoder.JSONDecodeError:
-            # No data was returned
-            return None
-    
-    def update_data(self):
-        most_recent = None
-        params = {}
-        if most_recent:
-            params['since'] = most_recent
-        data = self.get_data(params)
-        if not data:
-            return
-        logger.info('New categories: {}, new topics: {}, new posts: {}'.format(len(data['categories']),
-                                                                               len(data['topics']),
-                                                                               len(data['posts'])))
-        actions = self.yield_actions(data)
+    def update_data(self, save_to_disk=False):
+        categories = list(self.forum.categories())
+        topics = []
+        for category_id in categories:
+            topics.extend(self.forum.get_topics_in_category(category_id))
+            break
+        posts = []
+        time.sleep(1)
+        for i, topic in enumerate(topics):
+            if i % 100 == 0:
+                print(f'Processing topic {i+1}/{len(topics)+1}')
+            posts.append(self.forum.process_topic(topic["id"]))
+            
         actions = self.log_and_reyield_actions(actions)
-        actions = self.update_time_stamp_and_reyield_actions(actions)
         self.actions = actions
-        self.process_actions(actions)                    
-    
-    def update_time_stamp_and_reyield_actions(self, actions):
-        for action in actions:
-            updated_at = action['_source'].get('updated_at')
-            deleted_at = action['_source'].get('deleted_at')
-            if updated_at:
-                if updated_at > self.latest_timestamp:
-                    self.latest_timestamp = updated_at
-            if deleted_at:
-                if deleted_at > self.latest_timestamp:
-                    self.latest_timestamp = deleted_at
-            yield action
-                    
+        self.process_actions(actions)
+        if save_to_disk:
+            with pathlib.Path("data.json").open('w') as f:
+                json.dump({
+                    "categories": categories,
+                    "topics": topics,
+                    "posts": posts
+                }, f, ensure_ascii=1)
     
     def log_and_reyield_actions(self, actions):
         for action in actions:
@@ -138,122 +75,14 @@ class DiscourseIndexer(ElasticIndexer):
         categories = {c['id']: c for c in data['categories']}
         topics = {t['id']: t for t in data['topics']}
         posts = {p['id']: p for p in data['posts']}
-        
-        def is_visible(obj):
-            if 'deleted_at' in obj and obj['deleted_at']:
-                return False
-            if 'hidden' in obj and obj['hidden']:
-                return False
-            
-            if 'topic_id' in obj:
-                topic = topics[obj['topic_id']]
-                if topic['deleted_at']:
-                    return False
-                elif topic['read_restricted']:
-                    return False
-        
-        def category_is_visible(category):
-            if category['read_restricted']:
-                return False
-            if category['name'] in {'Meta', 'Feedback', 'Uncategorized'}:
-                return False
-            parent_id = category['parent_category_id']
-            if parent_id:
-                try:
-                    parent = categories[parent_id]
-                except KeyError:
-                    try:
-                        parent = self.es.get(index=self.index_name, doc_type='category', id=parent_id)['_source']
-                    except NotFoundError:
-                        return False
-                return category_is_visible(parent)
-            else:
-                return True
-        
-        def topic_is_visible(topic):
-            if topic['deleted_at']:
-                return False
-            try:
-                category = categories[topic['category_id']]
-            except KeyError:
-                try:
-                    category = self.es.get(index=self.index_name, doc_type='category', id=topic['category_id'])['_source']
-                except NotFoundError:
-                    return False
-            #category = categories[topic['category_id']]
-            return category_is_visible(category)
-        
-        def post_is_visible(post):
-            if post['deleted_at'] or post['hidden']:
-                return False
-            try:
-                topic = topics[post['topic_id']]
-            except KeyError:
-                try:
-                    topic = self.es.get(index=self.index_name, doc_type='topic', id=post['topic_id'])['_source']
-                except NotFoundError:
-                    return False
-            return topic_is_visible(topic)
-        
-        def delete_posts(topic_id):
-            query = {
-                        "query": {
-                            "term": {
-                                "topic_id": topic_id
-                            }
-                        }
-                    }
-            results = self.es.search(self.index_name, 'post', body=query, source=['id'])
-            for hit in results['hits']:
-                post_id = hit['_source']['id']
-                action = {'_type': 'post', '_id': post_id}
-                action['_op_type'] = 'delete'
-                yield action
-            
-        
-        for category in data['categories']:
-            action = {'_type': 'category', 
-                      '_id': category['id'],
-                      '_source': category}
-            if not category_is_visible(category):
-                action['_op_type'] = 'delete'
-            yield action
-            
-        for topic in data['topics']:
-            if topic['category_id'] is None:
-                topic['category_id'] = 1
-            action = {'_type': 'topic',
-                      '_id': topic['id'],
-                      '_source': topic}
-            if not topic_is_visible(topic):
-                action['_op_type'] = 'delete'
-                delete_posts(topic['id'])
-            yield action
-        
-        for post in data['posts']:
-          try:
-            action = {'_type': 'post',
-                      '_id': post['id'],
-                      '_source': post}
-            if post_is_visible(post):
-                post['plain'] = self.to_plain_text(post['cooked'])
-                action['_parent'] = post['topic_id']
-            else:
-                action['_op_type'] = 'delete'
-            yield action
-          except Exception as e:
-            logger.exception(e)
-            continue
-     except:
-         self.locs = locals()
-         raise
+  
+  
 
 def update(force=False, _indexer=[]):
     if not discourse_is_available:
         return
-    if not _indexer:
-        _indexer.append(DiscourseIndexer())
-    _indexer[0].update()
+    forum = sc.search.discourse_forum.get_discourse()
+    indexer = DiscourseIndexer(forum=forum)
 
 def make_snippet(plain_string, length=250):
     pattern = r'.{,%i}(?:[.!?,:;]|$)' % (length, )
