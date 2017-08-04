@@ -709,6 +709,42 @@ class _Imm:
             else:
                 return None                
             
+    def translation_count(self, *, lang):
+        key = 'trans_count'
+        
+        if key not in self._cache:
+            counts = {language.uid: defaultdict(int) for language in self.languages.values()}
+            
+            for subdivision in self.subdivisions.values():
+                uniques = set()
+                for sutta in subdivision.suttas:
+                    for translation in sutta.translations:
+                        uniques.add((translation.lang.uid, sutta.uid))
+                
+                for lang, uid in uniques:
+                    counts[lang][subdivision.uid] += 1
+            
+            for division in self.divisions.values():
+                counts[lang][division.uid] = sum(counts[lang].get(subdivision.uid, 0) for subdivision in division.subdivisions)
+        
+            self._cache[key] = counts
+        else:
+            counts = self._cache[key]
+        
+        return counts.get(lang)
+    
+    def _div_translation_count(self, *, language, division):
+        total = sum(self._subdiv_translation_count(language=language, subdivision=subdivision) for subdivision in division.subdivisions)
+        return total
+        
+    def _subdiv_translation_count(self, *, language, subdivision):
+        found = set()
+        
+        for sutta in subdivisions.suttas:
+            for translation in sutta.translations:
+                if translation.lang == language:
+                    found.add(translation.url)
+        return len(found)
     
     @staticmethod
     def get_text_author(filepath):

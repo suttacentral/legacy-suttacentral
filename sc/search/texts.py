@@ -194,10 +194,10 @@ class TextIndexer(ElasticIndexer):
 
     def update_data(self):
         lang_uid = self.lang_dir.stem
-        stored_mtimes = {hit["_id"]: hit["fields"]["mtime"][0] for hit in scan(self.es,
+        stored_mtimes = {hit["_id"]: hit["_source"]["mtime"] for hit in scan(self.es,
             index=self.index_name,
             doc_type="text",
-            fields="mtime",
+            _source_include=["mtime"],
             query=None,
             size=500)}
         current_mtimes = {file.stem: int(file.stat().st_mtime) for file in self.lang_dir.glob('**/*.html')}

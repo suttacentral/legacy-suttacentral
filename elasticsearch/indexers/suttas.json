@@ -26,45 +26,48 @@
             "sutta": {
                 "properties": {
                     "uid": {
-                        "type": "string",
+                        "type": "text",
                         "analyzer": "uid_standard",
                         "search_analyzer": "uid_globbing",
                         "fields": {
                             "division": {
-                                "type": "string",
+                                "type": "text",
                                 "analyzer": "uid_prefix",
                                 "search_analyzer": "standard"
                             }
                         }
                     },
                     "volpage": {
-                        "type": "string",
+                        "type": "text",
                         "analyzer": "uid_standard"
                     },
                     "volpage_extra": {
-                        "type": "string",
+                        "type": "text",
                         "analyzer": "uid_standard"
                     },
                     "lang": {
-                        "type": "string",
+                        "type": "text",
                         "index": "not_analyzed"
                     },
                     "name": {
-                        "type": "string",
+                        "type": "text",
                         "fields": {
                             "plain": {
-                                "type": "string",
+                                "type": "text",
                                 "analyzer": "folding_analyzer",
                                 "search_analyzer": "folding_shingle_analyzer"
                             },
                             "coded": {
-                                "type": "string",
+                                "type": "text",
                                 "analyzer": "coded_analyzer"
                             }
                         }
                     },
                     "boost": {
                         "type": "float"
+                    },
+                    "ordering": {
+                        "type": "keyword"
                     }
                 }
             }

@@ -6,12 +6,7 @@ import sc.search.query
 class Data:
     def translation_count(self, lang, **kwargs):
         imm = sc.scimm.imm()
-        key = 'trcount_{}'.format(lang)
-        cache = imm._cache
-        if key not in cache:
-            value = sc.search.query.div_translation_count(lang)
-            cache[key] = value
-        return cache[key]
+        return imm.translation_count(lang=lang)
 
     def langs(self, **kwargs):
         imm = sc.scimm.imm()
