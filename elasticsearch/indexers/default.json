@@ -5,19 +5,19 @@
             "text": {
                 "properties": {
                     "uid": {
-                        "type": "string",
+                        "type": "keyword",
                         "index": "not_analyzed"
                     },
                     "path": {
-                        "type": "string",
+                        "type": "keyword",
                         "index": "not_analyzed"
                     },
                     "lang": {
-                        "type": "string",
+                        "type": "keyword",
                         "index": "not_analyzed"
                     },
                     "root_lang": {
-                        "type": "string",
+                        "type": "text",
                         "analyzer": "uid_standard"
                     },
                     "is_root": {
@@ -27,20 +27,20 @@
                     "heading": {
                         "properties": {
                              "division": {
-                                "type": "string"
+                                "type": "keyword"
                              },
                              "subhead": {
-                                "type": "string"
+                                "type": "keyword"
                              },
                              "title": {
-                                "type": "string",
+                                "type": "text",
                                 "fields": {
                                     "plain": {
-                                        "type": "string",
+                                        "type": "text",
                                         "analyzer": "folding_analyzer"
                                     },
                                     "shingle": {
-                                        "type": "string",
+                                        "type": "text",
                                         "analyzer": "folding_analyzer",
                                         "search_analyzer": "folding_shingle_analyzer"
                                     }
@@ -49,11 +49,11 @@
                         }
                    },
                     "author": {
-                        "type": "string",
+                        "type": "text",
                         "analyzer": "folding_analyzer"
                     },
                     "content": {
-                        "type": "string",
+                        "type": "text",
                         "term_vector": "with_positions_offsets",
                         "analyzer": "minimal"
                     },
@@ -69,7 +69,7 @@
             "definition": {
                 "properties": {
                     "content": {
-                        "type": "string",
+                        "type": "text",
                         "term_vector": "with_positions_offsets",
                         "analyzer": "minimal"
                     },
@@ -80,27 +80,27 @@
                                 "type": "integer"
                             },
                             "source": {
-                                "type": "string",
+                                "type": "keyword",
                                 "index": "not_analyzed"
                             },
                             "html_content": {
-                                "type": "string",
+                                "type": "text",
                                 "index": "no"
                             }
                         }
                     },
                     "term": {
-                        "type": "string",
+                        "type": "keyword",
                         "index": "not_analyzed",
                         "fields": {
                             "folded": {                            
-                                "type": "string",
+                                "type": "text",
                                 "analyzer": "folding_analyzer"
                             }
                         }
                     },
                     "gloss": {
-                        "type": "string",
+                        "type": "text",
                         "index": "not_analyzed"
                     },
                     "number": {

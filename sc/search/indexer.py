@@ -134,7 +134,7 @@ class ElasticIndexer:
     
     def update_aliases(self):
         try:
-            indexes_to_alias = list(self.es.indices.get_aliases(self.index_alias))
+            indexes_to_alias = list(self.es.indices.get_alias(self.index_alias))
         except NotFoundError:
             indexes_to_alias = {}
         alias_actions = []

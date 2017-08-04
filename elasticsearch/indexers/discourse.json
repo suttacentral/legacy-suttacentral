@@ -57,17 +57,17 @@
         },
         "mappings": {
          "post": {
-             "_parent": {
-                 "type": "topic"
-             },
+            "_parent": {
+               "type": "topic"
+            },
             "properties": {
                "plain": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "acro_uid_analyzer",
                   "term_vector": "with_positions_offsets"
                },
                "cooked": {
-                   "type": "string"
+                   "type": "text"
                },
                "hidden": {
                   "type": "boolean"
@@ -102,13 +102,13 @@
                   "type": "long"
                },
                "slug": {
-                  "type": "string"
+                  "type": "keyword"
                },
                "tags": {
-                  "type": "string"
+                  "type": "keyword"
                },
                "title": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "acro_uid_analyzer"
                },
                "updated_at": {
@@ -123,25 +123,25 @@
          "category": {
             "properties": {
                "color": {
-                  "type": "string"
+                  "type": "keyword"
                },
                "description": {
-                  "type": "string"
+                  "type": "text"
                },
                "id": {
                   "type": "long"
                },
                "name": {
-                  "type": "string"
+                  "type": "keyword"
                },
                "read_restricted": {
                   "type": "boolean"
                },
                "slug": {
-                  "type": "string"
+                  "type": "keyword"
                },
                "text_color": {
-                  "type": "string"
+                  "type": "keyword"
                },
                "updated_at": {
                   "type": "date",

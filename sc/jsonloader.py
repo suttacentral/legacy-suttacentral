@@ -171,8 +171,6 @@ class ParallelsManager:
                         this_locations.append(location)
                 this_location = this_locations[0]
                 
-
-                
                 if relationship_type == 'parallels':
                     for other_location in locations:
                         if other_location == this_location:
@@ -204,6 +202,7 @@ class ParallelsManager:
                                                             relationship_name=relationship_name,
                                                             partial=partial))
                     else:
+
                         for x in range(len(this_locations)):
                             doublecheck = False
                             this_location = this_locations[x]
@@ -211,7 +210,7 @@ class ParallelsManager:
                             relationship_name = relationship_name=get_relationship_name(relationship_type, partial, inverse=True)
                             other_location = locations[0]
                             for y in range(len(relationships)):
-                                if str(this_location) == str(relationships[y].left):
+                                if (str(this_location) == str(relationships[y].left)) and (str(other_location) == str(relationships[y].right)):
                                     doublecheck = True
                             if not doublecheck:
                                 relationships.append(Relationship(this_location,

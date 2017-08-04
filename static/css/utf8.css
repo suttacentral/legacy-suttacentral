@@ -61,6 +61,7 @@ a.np:before {content:"NP "}
 a.nst:before {content:"NST "}
 a.of:before {content:"OF "}
 a.pand-v:before {content:"Pand-v "}
+a.pb:before{content:"Pb "}
 a.pl:before {content:"PL "}
 a.pos-v:before {content:"Pos-v "}
 a.prava-v:before {content:"Prava-v "}
@@ -240,6 +241,8 @@ CSS Class	HTML Title
 .nst            "Paragraph numbers in Ven. Nilwakke Somananda Thera."
 
 .pand-v         "Paragraph numbers in Pāṇḍulohitakavastu Nobuyuki Yamagiwa"
+
+.pb              "Paragraph numbers in Waldschmidt, 1926"
 
 .pos-v          "Paragraph numbers in Posadhavastu von Hinüber"
 
