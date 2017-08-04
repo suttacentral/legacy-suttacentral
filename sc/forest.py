@@ -60,7 +60,7 @@ class Node(dict):
             return False
 
 class Forest:        
-    version = 5
+    version = 6
     def __init__(self, source_dir, db_dir):
         self.print('Loading Data Trees')
         self.mapping = defaultdict(list)
@@ -260,7 +260,10 @@ class Forest:
         try:
             hgroup = root.select_one('.hgroup')
             h1 = hgroup.select_one('h1')
-            return regex.sub(r'^\P{alpha}*', '', h1.text_content())
+            name = regex.sub(r'^\P{alpha}*', '', h1.text_content())
+            if len(name) > 81:
+                name = name[:80] + '…'
+            return name
         except Exception as e:
             logger.warn('Could not determine name for {!s}'.format(file.relative_to(self.source_dir)))
             return ''
