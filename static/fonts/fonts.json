@@ -46,7 +46,8 @@
     "weights": {
         "bold": "bold",
         "bd": "bold",
-        "semibold": "600"
+        "semibold": "600",
+        "light": "200"
     },
     "styles": {
         "italic": "italic",
