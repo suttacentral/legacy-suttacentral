@@ -384,8 +384,8 @@ class TextDiscussionView(ViewBase):
         if not sc.config.discourse['forum_url']:
             return
 
-        query = '%22{}%22|{}'.format(uid_to_acro(self.uid).replace(' ', ' '), self.uid)
-        context.discourse_link = '{}?search={}'.format(sc.config.discourse['forum_url'], query)
+        query = '%22{}%20%22'.format(uid_to_acro(self.uid).replace(' ', ' '), self.uid)
+        context.discourse_link = '{}search?q={}'.format(sc.config.discourse['forum_url'], query)
         context.discourse_url = sc.config.discourse['forum_url']
         context.embed = self.embed
         try:
@@ -439,8 +439,8 @@ class TextView(ViewBase):
                 sc.config.discourse['forum_url'] and
                 self.lang_code == 'en' or imm.languages[self.lang_code].isroot):
             sutta = imm.suttas
-            query = '%22{}%22|{}'.format(uid_to_acro(self.uid).replace(' ', ' '), self.uid)
-            context.discourse_link = '{}?search={}'.format(sc.config.discourse['forum_url'], query)
+            query = '%22{}%20%22'.format(uid_to_acro(self.uid).replace(' ', ' '), self.uid)
+            context.discourse_link = '{}search?q={}'.format(sc.config.discourse['forum_url'], query)
             context.discourse_url = sc.config.discourse['forum_url']
             try:
                 context.discourse_results = sc.search.discourse.search(self.uid)
