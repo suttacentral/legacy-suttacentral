@@ -26,6 +26,7 @@ import webassets
 import gzip
 import time
 from urllib.request import urlopen
+from urllib.error import HTTPError
 from zipfile import ZipFile
 
 # Paths and urls, these are quite close to being static.
@@ -41,6 +42,9 @@ buddhdic_url = 'http://www.acmuller.net/download/buddhdic.txt.gz'
 unihanzip_file = sc.tmp_dir / 'Unihan.zip'
 unihanzip_url = 'http://www.unicode.org/Public/zipped/6.3.0/Unihan.zip'
 unihan_readings_filename = 'Unihan_Readings.txt'
+
+fallback_data_dir = Path(__file__).parent / 'fallback_data'
+assert fallback_data_dir.exists()
 
 if buddhdic_file.exists() and unihanzip_file.exists():
     age = max(time.time() - buddhdic_file.stat().st_mtime, time.time() - unihanzip_file.stat().st_mtime)
@@ -246,25 +250,32 @@ if args.minify:
 
 from urllib.request import urlopen
 
-def dl_file(url, target_file):
-    logging.info('Downloading {}'.format(target_file.name))
-    with urlopen(url) as response:
-        try:
-            outf = target_file.open('wb')
-            while True:
-                chunk = response.read(4096)
-                if not chunk:
-                    break
-                outf.write(chunk)
-                
-            outf.close()
-            logging.info('{} downloaded okay'.format(target_file.name))
-        except:
-            target_file.unlink()
-            raise
-            
+def dl_file(url, target_file, fallback_dir):
+    try:
+        logging.info('Downloading {}'.format(target_file.name))
+        with urlopen(url) as response:
+            try:
+                outf = target_file.open('wb')
+                while True:
+                    chunk = response.read(4096)
+                    if not chunk:
+                        break
+                    outf.write(chunk)
+                    
+                outf.close()
+                logging.info('{} downloaded okay'.format(target_file.name))
+            except:
+                target_file.unlink()
+                raise
+    except HTTPError as e:
+        logging.error('{code}: Failed to download file {url}, previously built script data will still be used'.format(url=url, code=e.code))
+        fallback_file = (fallback_dir / target_file.name)
+        if fallback_file.exists():
+            target_file.symlink_to(fallback_file.absolute())
+            return
+        exit(0)    
 
-dl_file(buddhdic_url, buddhdic_file)
+dl_file(buddhdic_url, buddhdic_file, fallback_data_dir)
 
 with gzip.open(str(buddhdic_file), 'rt', encoding='utf8') as srcfo:
     bdstr = bdbuilder.process(srcfo)
@@ -272,7 +283,7 @@ with gzip.open(str(buddhdic_file), 'rt', encoding='utf8') as srcfo:
 maindata_file = writeout_js(maindata_stem, bdstr, js_process_fn)
 
 
-dl_file(unihanzip_url, unihanzip_file)
+dl_file(unihanzip_url, unihanzip_file, fallback_data_dir)
 with ZipFile(str(unihanzip_file)) as zipf:
     with tempfile.TemporaryDirectory() as tmpdir_name:
         filename = zipf.extract(unihan_readings_filename, tmpdir_name)

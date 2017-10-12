@@ -123,6 +123,7 @@ sc.classes = {
         "verse-num-pts": "Verse number in the Pali Text Society edition.",
         "vimula": "",
         "vn": "Vietnamese translation paragraph number.",
+        "pb": "Paragraph numbers in Waldschmidt, 1926",
         "wal48": "Paragraph numbers for sondertext in Waldschmidt, 1948 (ST.ii).",
         "wal50": "Paragraph numbers in Waldschmidt, 1950 (etc.).",
         "wal52": "Paragraph numbers in Waldschmidt, 1952, 1956, 1960.",

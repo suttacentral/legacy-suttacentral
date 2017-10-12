@@ -29,7 +29,7 @@ selenium==2.47.3
 six==1.9.0
 stripe==1.27.0
 urllib3==1.12
-webassets==0.11.1
+webassets==0.12.1
 yappi==0.94
 langid==1.1.5
 git+https://github.com/google/brotli.git

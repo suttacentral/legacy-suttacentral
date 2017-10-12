@@ -17,6 +17,7 @@
         "skolar-devanagari": "Skolar Devanagari",
         "noto-sans-hebrew": "Noto Sans Hebrew",
         "NotoSansTibetan": "Noto Sans Tibetan",
+        "NotoNaskhArabic": "Noto Naskh Arabic",
         "noto-sans": {
             "name": "Noto Sans",
             "subset_languages": "*"
@@ -45,7 +46,8 @@
     "weights": {
         "bold": "bold",
         "bd": "bold",
-        "semibold": "600"
+        "semibold": "600",
+        "light": "200"
     },
     "styles": {
         "italic": "italic",
@@ -53,6 +55,7 @@
     },
     "css_font_class": {
         "default": "skolar-font",
+        "ar": "noto-sans-font",
         "bo": "noto-sans-font",
         "ko": "noto-sans-font",
         "jp": "noto-sans-font",
