@@ -5585,6 +5585,7 @@ sc.piLookup.register({script: 'en', data: {
 "bhikkhubhāva": ["m.", "monkshood."],
 "bhikkhusaṅgha": ["m.", "congregation of monks."],
 "bhikkhuṇī": ["f.", "a Buddhist nun."],
+"bhikkhunī": ["f.", "a Buddhist nun."],
 "bhikkhā": ["f.", "alms; food."],
 "bhikkhācariyā": ["f.", "going about for alms."],
 "bhikkhācāra": ["m.", "going about for alms."],
