@@ -14,20 +14,11 @@
 <p>You are setting up a regular donation of <strong class="dollars">${{dollar_amount}} AUD per month</strong>.</p>
 {% endif %}
 <form id="stripe-form" action="/donate/confirm" method="post">
-{% if not free_gift_eligable %}
 <input type="hidden" name="free_gift" value="not_eligable">
-{% endif %}
 <input type="hidden" name="idempotent_key" value="{{idempotent_key}}">
 <input type="hidden" name="dollar_amount" value="{{dollar_amount}}">
 <input type="hidden" name="amount" value="{{amount}}">
 <input type="hidden" name="frequency" value="{{frequency}}">
-{% if free_gift_eligable %}
-<p>You are eligible to receive a free copy of <cite class="book">Verses of the Senior Monks</cite></p>
-<div class="fancy-tick">
-<label><input data-required="Please select whether you would like to receive the free gift" type="radio" name="free_gift" value="accepted" required><span><span></span></span>Yes Please</label>
-<label><input type="radio" name="free_gift" value="declined" required><span><span></span></span>No Thanks</label>
-</div>
-{% endif %}
 <input name="name" data-required="Please enter your name" placeholder="Name (optional)">
 <input name="address" data-required="Please enter your address" placeholder="Address (optional)">
 <input name="message" placeholder="Message (optional)">
