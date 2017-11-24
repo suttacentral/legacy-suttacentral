@@ -42,11 +42,11 @@ No parallel
 <td>{{parallel.sutta.volpage_info | sht_expansion }}
 {%- if parallel.sutta.alt_volpage_info %} <span class='altVolPage'>{{parallel.sutta.alt_volpage_info|replace(" ", "&nbsp;")}}</span>
 {%- endif -%}
-{%- if parallel.sutta.biblio_entry %}
-<a class='bib'>&nbsp;<div class='tri'>…</div><span class='deets'>{{parallel.sutta.biblio_entry.text}}</span></a>
-{%- endif -%}
 {%- if parallel.footnote %}
-<a class='note'>&nbsp;<div class='tri'>note</div><span class='deets'>{{parallel.footnote}}</span></a>
+<a class='note'>&nbsp;<div class='tri'>↳</div><span class='deets'>{{parallel.footnote}}</span></a>
+{%- endif -%}
+{%- if parallel.sutta.biblio_entry %}
+<a class='bib'>&nbsp;<div class='tri'>↳</div><span class='deets'>{{parallel.sutta.biblio_entry.text}}</span></a>
 {%- endif -%}
 </td>
 <td>

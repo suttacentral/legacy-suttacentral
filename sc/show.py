@@ -47,6 +47,10 @@ def default(*args, **kwargs):
 
     full = len(args) == 2 and args[1] == 'full'
     
+    if args[0] == 'll':
+        uid = args[1]
+        return RelationshipsView(uid).render()
+    
     if args[-1] == 'discussion':
         uid = args[-2]
         lang_code = None if len(args) == 2 else args[-3]
