@@ -1,3 +1,4 @@
+import json
 import regex
 import threading
 from collections import namedtuple
@@ -23,6 +24,7 @@ def build(n=0):
 
 cache_filename_template = 'text-image-index_{}.pklz'
 
+
 def create_index_and_update_symlinks() -> Mapping[NormalizedId, str]:
     """ Symlinks are used mainly for the ease of serving with Nginx """
     
@@ -34,7 +36,11 @@ def create_index_and_update_symlinks() -> Mapping[NormalizedId, str]:
     
     combined_md5 = symlink_md5
     combined_md5.update(symlink_md5.digest())
+    combined_md5.update(b'v1.1.1')
     cache_file = sc.db_dir / cache_filename_template.format(combined_md5.hexdigest()[:10])
+    
+    original_links = []
+    
     if cache_file.exists():
         try:
             cached = sc.util.lz4_pickle_load(cache_file)
@@ -47,7 +53,7 @@ def create_index_and_update_symlinks() -> Mapping[NormalizedId, str]:
     tmp_index = {}
     
     source_files = [f for 
-             f in sc.text_image_source_dir.glob('**/*') 
+             f in sc.text_image_source_dir.glob('*/**/*') 
              if f.suffix in {'.png', '.jpg'}]
     source_files.sort(key=str)
 
@@ -63,9 +69,20 @@ def create_index_and_update_symlinks() -> Mapping[NormalizedId, str]:
                 continue
             else:
                 symlink.unlink()
-
+        
         symlink.parent.mkdir(parents=True, exist_ok=True)
         symlink.symlink_to(file)
+    
+    for file in source_files:        
+        original_name_symlink = symlink_dir / file.name
+        if not original_name_symlink.exists():
+            original_name_symlink.symlink_to(file)
+        original_links.append(file.name)
+    
+    with (symlink_dir / 'contents.txt').open('w') as f:
+        f.write('\n'.join(original_links))
+        
+    
     print('Saving Text Image Index to disk')
     sc.util.lz4_pickle_dump(tmp_index, cache_file)
     clear_old_cache_files(newest=cache_file)
