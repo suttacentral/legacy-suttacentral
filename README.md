@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/suttacentral/suttacentral.png?branch=master)](https://travis-ci.org/suttacentral/suttacentral)
 
-Source code to [suttacentral.net](http://suttacentral.net/): early Buddhist texts, translations, and parallels.
+Source code to [suttacentral.net](https://legacy.suttacentral.net/): early Buddhist texts, translations, and parallels.
 
 ## Setup
 

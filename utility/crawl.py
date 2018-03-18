@@ -137,7 +137,7 @@ def process(host, url, omit_codes=None, omit_rex=None, timeout=30):
         # If omit_rex is defined, and matches href, then absolutize link
         # and do not crawl target page.
         if omit_rex and omit_rex.search(href) or omit_rex.search(a.text_content()):
-            a.set(attr, 'http://suttacentral.net/' + a.get(attr))
+            a.set(attr, 'https://legacy.suttacentral.net/' + a.get(attr))
             continue
         if not href or not href.startswith('/'):
             continue

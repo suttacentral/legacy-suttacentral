@@ -1,7 +1,7 @@
 //Google Analytics//
 var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-39277629-1']);
-  _gaq.push(['_setDomainName', 'suttacentral.net']);
+  _gaq.push(['_setDomainName', 'legacy.suttacentral.net']);
   _gaq.push(['_trackPageview']);
 
   (function() {

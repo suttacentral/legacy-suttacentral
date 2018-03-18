@@ -1,7 +1,7 @@
 SuttaCentral Copyright
 ======================
 
-<http://suttacentral.net/copyright>
+<https://legacy.suttacentral.net/copyright>
 
 Material on SuttaCentral falls in three distinct categories in relation to
 copyright, which are detailed below. If you wish to assert copyright over any

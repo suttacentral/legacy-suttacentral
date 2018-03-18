@@ -500,7 +500,7 @@ class TextView(ViewBase):
             to_drop.drop_tree()
         root.select('article')[-1].append(sc.tools.html.fromstring(
             '<p><a href="{href}">…continue reading…</a>'.format(
-                href='http://suttacentral.net/{}/{}#{}'.format(
+                href='https://legacy.suttacentral.net/{}/{}#{}'.format(
                     self.lang_code, self.uid, bookmark))))
         return sc.tools.html.tostring(root, encoding='unicode')
     

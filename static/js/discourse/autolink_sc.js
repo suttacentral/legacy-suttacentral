@@ -325,7 +325,7 @@ var scUrlCreator = (function(){
         text.replace(rex, function(match, div_uid, num) {
             console.log(match, div_uid, num);
             if (div_uid in _data) {
-                var url = 'http://suttacentral.net/' + match.replace(' ', '').toLowerCase();
+                var url = 'https://legacy.suttacentral.net/' + match.replace(' ', '').toLowerCase();
                 return '[' + match.toUpperCase() + '](' + url + ')'
             } else {
                 return match
