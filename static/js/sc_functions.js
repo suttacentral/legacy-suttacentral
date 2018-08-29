@@ -133,11 +133,6 @@ sc.piLookup = {
             scriptUrl: 'data/pi2zh-maindata-v1.js'
         },
         {
-            lang: 'de',
-            name: 'Deutsch',
-            scriptUrl: 'data/pi2de-maindata-v1.2.js'
-        }, 
-        {
             
             lang: 'es',
             name: 'Español',
