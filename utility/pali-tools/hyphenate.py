@@ -83,7 +83,7 @@ segments = {
 }
 
 
-cons = "(?:br|[kgcjtṭdḍbp]h|[kgcjtṭdḍp](?!h)|[mnyrlvshṅṇṃṃñḷ]|b(?![rh]))";
+cons = "(?:br|[kgcjtṭdḍbp]h|[kgcjtṭdḍp](?!h)|[mnyrlvshṅṇṃṁñḷ]|b(?![rh]))";
 vowel_chars = 'aioueāīū'
 vowel_pattern = '[' + vowel_chars.lower() + ']'
 vowel_antipattern = '[^' + vowel_chars.lower() + '-]'
