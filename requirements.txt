@@ -15,7 +15,7 @@ cssselect==0.9.1
 elasticsearch==5.2.0
 fonttools==3.0
 invoke==0.14.0
-Jinja2==2.8
+Jinja2==2.11.3
 jsmin==2.1.4
 MarkupSafe==0.23
 newrelic==2.54.0.41
