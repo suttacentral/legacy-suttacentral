@@ -1,7 +1,7 @@
 # Install these requirements with pip install -r requirements.txt
 
 # Put compiled packages first as there may be missing dependencies
-lxml==3.4.4
+lxml==4.9.1
 regex==2015.9.15
 lz4==0.7.0
 
