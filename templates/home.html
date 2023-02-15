@@ -1,6 +1,13 @@
 {% extends "base.html" -%}
 {% block content %}
 
+<a href="https://suttacentral.net/">
+<section id="deprecation-notice" style="background-color:red;font-size:2em;padding:1em;margin:1em;text-align:center;color:white;font-weight:bold">
+This is the old SuttaCentral. It is out of date and has many mistakes. This site will go away soon, do not rely on it.<br>
+Click on this banner to use the new SuttaCentral. 
+</section>
+</a>
+
 <div id="epigraph-store" type="text/html" style="display:none">
 {% for epigraph in imm.epigraphs %}
 <div class="epigraph">
